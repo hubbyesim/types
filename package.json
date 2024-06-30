@@ -1,7 +1,7 @@
 {
   "name": "@hubbyesim/types",
-  "version": "1.0.1",
-  "description": "The type definitions for the hubbyesim project", 
+  "version": "1.0.2",
+  "description": "The type definitions for the hubbyesim project",
   "main": "types/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
