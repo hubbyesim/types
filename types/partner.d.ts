@@ -1,3 +1,20 @@
+export type Partner = {
+    id: string;
+    administration_fee: number;
+    email: string;
+    income_per_gb: number;
+    last_invoice: string; // ISO 8601 date string
+    name: string;
+    next_invoice: string; // ISO 8601 date string
+    requires_card: boolean;
+    type: string;
+    schedules: Schedule[];
+    pricingStrategy?: PricingStrategy;
+    packageStrategy?: PackageStrategy;
+    travelSpiritConfig?: TravelSpiritConfig;
+}
+
+
 export type PricingStrategy = {
     name: string;
     parameters: any;
@@ -37,17 +54,3 @@ export type TravelSpiritConfig = {
     schedule: string;
 }
 
-export type Partner = {
-    administration_fee: number;
-    email: string;
-    income_per_gb: number;
-    last_invoice: string; // ISO 8601 date string
-    name: string;
-    next_invoice: string; // ISO 8601 date string
-    requires_card: boolean;
-    type: string;
-    schedules: Schedule[];
-    pricingStrategy?: PricingStrategy;
-    packageStrategy?: PackageStrategy;
-    travelSpiritConfig?: TravelSpiritConfig;
-}
