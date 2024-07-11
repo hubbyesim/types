@@ -10,6 +10,7 @@
   "author": "Daniel Fortuyn",
   "license": "ISC",
   "dependencies": {
+    "firebase-admin": "^12.2.0",
     "firebase-functions": "^5.0.1"
   }
 }

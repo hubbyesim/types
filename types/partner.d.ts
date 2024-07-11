@@ -1,4 +1,4 @@
-import { Timestamp } from 'firebase-functions/v1'
+import { Timestamp } from 'firebase-admin/firestore'
 
 export type Partner = {
     id: string;
