@@ -1,3 +1,5 @@
+import { Timestamp } from 'firebase-functions/v1'
+
 export type Partner = {
     id: string;
     administration_fee: number;
@@ -10,8 +12,8 @@ export type Partner = {
     pricingStrategy?: PricingStrategy;
     packageStrategy?: PackageStrategy;
     travelSpiritConfig?: TravelSpiritConfig;
-    next_invoice: Date;
-    last_invoice: Date; 
+    next_invoice: Timestamp;
+    last_invoice: Timestamp; 
 }
 
 export type PricingStrategy = {
