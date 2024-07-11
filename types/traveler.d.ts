@@ -7,6 +7,7 @@ export type Traveler = {
   bookingId?: string,
   returnDate?: string;
   package: string,
+  departureDate?: Date;
   arrivalDate: string;
   country: string;
   packageId: string;
