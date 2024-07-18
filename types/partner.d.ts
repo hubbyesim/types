@@ -23,6 +23,7 @@ export type PricingStrategy = {
 
 export type PackageStrategy = {
     name: string;
+    inclusionList?: string[];
     parameters: any;
 }
 
