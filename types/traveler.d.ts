@@ -1,3 +1,5 @@
+import { User } from "./user";
+
 export type Traveler = {
   id: string;
   firstName: string;
@@ -17,7 +19,7 @@ export type Traveler = {
   gender?: string;
   packageStrategy?: string;
   dateOfBirth?: string;
-  user: string | undefined; //Should be reference
+  user: string | undefined | User; //Should be reference
   esims: Array<string> | undefined; //should be array of reference
   data: {
     source: string;
