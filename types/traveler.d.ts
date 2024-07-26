@@ -17,8 +17,8 @@ export type Traveler = {
   gender?: string;
   packageStrategy?: string;
   dateOfBirth?: string;
-  user: string; //Should be reference
-  esims: Array<string>; //should be array of reference
+  user: string | undefined; //Should be reference
+  esims: Array<string> | undefined; //should be array of reference
   data: {
     source: string;
     manual: boolean;
