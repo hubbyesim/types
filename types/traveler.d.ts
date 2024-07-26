@@ -21,7 +21,6 @@ export type Traveler = {
   returnDate?: string;
   package: string,
   departureDate?: Date;
-  arrivalDate: string;
   country: string;
   packageId: string;
   partnerId: string,
@@ -29,7 +28,6 @@ export type Traveler = {
   flightNumber?: string;
   gender?: string;
   packageStrategy?: string;
-  sendMessages?: SentMessages;  //Whoops typo
   sentMessages?: SentMessages;
   dateOfBirth?: string;
   user: string | undefined | User; //Should be reference
@@ -38,4 +36,6 @@ export type Traveler = {
     source: string;
     manual: boolean;
   };
+  arrivalDate: string; //Whoops typo should deprecate
+  sendMessages?: SentMessages;  //Whoops typo should deprecate
 };
