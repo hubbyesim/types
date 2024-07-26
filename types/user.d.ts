@@ -18,4 +18,4 @@ export type User = {
     email: string;
     parameters: any;
     review_requested: Timestamp
-}
+}   
