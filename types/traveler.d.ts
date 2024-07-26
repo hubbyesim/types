@@ -1,5 +1,16 @@
 import { User } from "./user";
 
+export type Message = {
+  id: string;
+  key: string;
+  method: 'sms' | 'email' | 'push';
+  status: 'pending' | 'sent' | 'failed' | 'delivered';
+}
+
+export type SentMessages = {
+  [key: string]: Message;
+}
+
 export type Traveler = {
   id: string;
   firstName: string;
@@ -18,6 +29,8 @@ export type Traveler = {
   flightNumber?: string;
   gender?: string;
   packageStrategy?: string;
+  sendMessages?: SentMessages;  //Whoops typo
+  sentMessages?: SentMessages;
   dateOfBirth?: string;
   user: string | undefined | User; //Should be reference
   esims: Array<string> | undefined; //should be array of reference
