@@ -2,6 +2,7 @@ import { Timestamp } from "firebase-admin/firestore";
 import { Partner } from "./partner";
 
 export type User = {
+    id: string;
     name: string;
     fcm: string;
     gender: string; // M | F

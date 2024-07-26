@@ -1,6 +1,6 @@
 {
   "name": "@hubbyesim/types",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "The type definitions for the hubbyesim project",
   "main": "types/index.d.ts",
   "scripts": {
