@@ -32,6 +32,7 @@ export type IframeConfig = {
     secondaryColor: string;
     tertiaryColor: string;
     font: string;
+    iframe: string;
 }
 
 export type Schedule = {
