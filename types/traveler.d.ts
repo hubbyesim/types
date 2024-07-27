@@ -1,3 +1,4 @@
+import { DocumentReference } from "firebase-admin/firestore";
 import { User } from "./user";
 
 export type Message = {
@@ -30,8 +31,8 @@ export type Traveler = {
   packageStrategy?: string;
   sentMessages?: SentMessages;
   dateOfBirth?: string;
-  user: string | undefined | User; //Should be reference
-  esims: Array<string> | undefined; //should be array of reference
+  user: string | undefined | User | DocumentReference<User>; //Should be reference
+  esims: Array<DocumentReference> | undefined; //should be array of reference
   data: {
     source: string;
     manual: boolean;
