@@ -28,7 +28,8 @@ export type Traveler = {
   title?: string;
   flightNumber?: string;
   gender?: string;
-  packageStrategy?: string;
+  packageStrategy?: string; // Deprecated?
+  packageSize?: string; //only used for manual api calls to determine package size
   sentMessages?: SentMessages;
   dateOfBirth?: string;
   user: string | undefined | User | DocumentReference<User>; //Should be reference
