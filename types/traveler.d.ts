@@ -38,6 +38,7 @@ export type Traveler = {
     source: string;
     manual: boolean;
   };
+  language?: string;
   arrivalDate: string; //Whoops typo should deprecate
   sendMessages?: SentMessages;  //Whoops typo should deprecate
 };
