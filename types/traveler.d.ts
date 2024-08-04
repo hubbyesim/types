@@ -1,4 +1,5 @@
 import { DocumentReference } from "firebase-admin/firestore";
+import { Timestamp } from "firebase-admin/firestore";
 import { User } from "./user";
 
 export type Message = {
@@ -19,7 +20,7 @@ export type Traveler = {
   pax: number;
   email?: string;
   bookingId?: string,
-  returnDate?: string | Date;
+  returnDate?: string | Date | Timestamp;
   package?: string | DocumentReference;
   partner?: DocumentReference;
   departureDate?: Date;
@@ -40,6 +41,6 @@ export type Traveler = {
     manual: boolean;
   };
   language?: string;
-  arrivalDate: string | Date; //Whoops typo should deprecate
+  arrivalDate: string | Date | Timestamp; //Whoops typo should deprecate
   sendMessages?: SentMessages;  //Whoops typo should deprecate
 };
