@@ -19,7 +19,7 @@ export type Traveler = {
   pax: number;
   email?: string;
   bookingId?: string,
-  returnDate?: string;
+  returnDate?: string | Date;
   package?: string | DocumentReference;
   partner?: DocumentReference;
   departureDate?: Date;
@@ -40,6 +40,6 @@ export type Traveler = {
     manual: boolean;
   };
   language?: string;
-  arrivalDate: string; //Whoops typo should deprecate
+  arrivalDate: string | Date; //Whoops typo should deprecate
   sendMessages?: SentMessages;  //Whoops typo should deprecate
 };
