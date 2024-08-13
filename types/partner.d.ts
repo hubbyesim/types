@@ -9,11 +9,20 @@ export type Partner = {
     requires_card: boolean;
     type: string;
     schedules: Schedule[];
+    visualIdentity: VisualIdentity;
     pricingStrategy?: PricingStrategy;
     packageStrategy?: PackageStrategy;
     travelSpiritConfig?: TravelSpiritConfig;
     next_invoice: Timestamp;
     last_invoice: Timestamp; 
+}
+
+export type VisualIdentity = {
+    primaryColor: string;
+    secondaryColor: string;
+    tertiaryColor: string;
+    font: string;
+    logo: string; //Bucket storage path type?
 }
 
 export type PricingStrategy = {
