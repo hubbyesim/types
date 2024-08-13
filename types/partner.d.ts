@@ -22,7 +22,6 @@ export type VisualIdentity = {
     secondaryColor: string;
     tertiaryColor: string;
     font: string;
-    logo: string; //Bucket storage path type?
 }
 
 export type PricingStrategy = {
