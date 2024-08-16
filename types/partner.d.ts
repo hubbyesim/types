@@ -1,20 +1,20 @@
 import { Timestamp } from 'firebase-admin/firestore'
 
 export type Partner = {
-    id: string;
-    administration_fee: number;
-    email: string;
-    income_per_gb: number;
-    name: string;
-    requires_card: boolean;
-    type: string;
-    schedules: Schedule[];
-    visualIdentity: VisualIdentity;
-    pricingStrategy?: PricingStrategy;
-    packageStrategy?: PackageStrategy;
-    travelSpiritConfig?: TravelSpiritConfig;
-    next_invoice: Timestamp;
-    last_invoice: Timestamp; 
+    id: string | null;
+    administration_fee: number | null;
+    email: string | null;
+    income_per_gb: number | null;
+    name: string | null;
+    requires_card: boolean | null;
+    type: string | null;
+    schedules: Schedule[] | null;
+    visualIdentity: VisualIdentity | null;
+    pricingStrategy?: PricingStrategy | null;
+    packageStrategy?: PackageStrategy | null;
+    travelSpiritConfig?: TravelSpiritConfig | null;
+    next_invoice: Timestamp | null;
+    last_invoice: Timestamp | null; 
 }
 
 export type VisualIdentity = {
