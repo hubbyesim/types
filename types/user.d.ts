@@ -6,7 +6,7 @@ export type User = {
     stripe_id: string | null; // Provided by Stripe to perform purchases using Stripe SDK
     partner: string | Partner | undefined | null; // Reference to a Partner document
     referral: string | null; // Generated characters used as a referral code
-    fcm: string | null; // Push notification token from Firebase
+    fcm: string; // Push notification token from Firebase
     deeplink: string | null; // Link generated using the referral code
 
 
