@@ -4,7 +4,7 @@ export type Package = {
   id: string;
   label: string;
   bytes: number;
-  country: string | Country | undefined | null;
+  country: Country | undefined | null;
   hidden: boolean;
   price: number;
   partner_price: number;
