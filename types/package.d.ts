@@ -1,10 +1,10 @@
 export type Package = {
-  id: string | null;
-  label: string | null;
-  bytes: number | null;
-  country: string | null;
-  hidden: boolean | null;
-  price: number | null;
-  partner_price: number | null;
-  days: number | null;
+  id: string;
+  label: string;
+  bytes: number;
+  country: string;
+  hidden: boolean;
+  price: number;
+  partner_price: number;
+  days: number;
 };
