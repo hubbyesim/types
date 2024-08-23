@@ -30,6 +30,7 @@ export type Traveler = {
   title?: string;
   flightNumber?: string;
   gender?: string;
+  promo?: string;
   packageStrategy?: string; // Deprecated?
   packageSize?: string; //only used for manual api calls to determine package size
   sentMessages?: SentMessages;
