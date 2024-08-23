@@ -1,6 +1,8 @@
 import { DocumentReference } from "firebase-admin/firestore";
 import { Timestamp } from "firebase-admin/firestore";
 import { User } from "./user";
+import { Package } from "./package";
+import { Partner } from "./partner";
 
 export type Message = {
   id: string;
@@ -21,8 +23,8 @@ export type Traveler = {
   email?: string;
   bookingId?: string,
   returnDate?: string | Date | Timestamp;
-  package?: string | DocumentReference;
-  partner?: DocumentReference;
+  package?: string | DocumentReference<Package>;
+  partner?: DocumentReference<Partner>;
   departureDate?: string | Date | Timestamp;
   country: string | DocumentReference;
   packageId: string;
