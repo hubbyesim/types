@@ -23,7 +23,7 @@ export type Traveler = {
   email?: string;
   bookingId?: string,
   returnDate?: string | Date | Timestamp;
-  package?: string | Package;
+  package?: Package;
   partner?: DocumentReference<Partner>;
   departureDate?: string | Date | Timestamp;
   country: string | DocumentReference;
