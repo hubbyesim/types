@@ -30,10 +30,17 @@ type HubbyBooking = {
   user:  DocumentReference<User> | null; //Should be reference
   esims: Array<DocumentReference> | null; //should be array of reference
   locale: string;
+  communicationOptions: CommunicationOptions;
   data: {
     source: string;
     manual: boolean;
   };
+};
+
+type CommunicationOptions = {
+  shouldEmail: boolean;
+  shouldWhatsapp: boolean;
+  shouldPush: boolean;
 };
 
 export type Booking = HubbyBooking & HubbyModel;
