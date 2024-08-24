@@ -9,27 +9,28 @@ import { SentMessages } from "./message";
 
 export type Booking = {
   id: string;
-  title?: string;
+  title: string | null;
   first_name: string;
   last_name: string;
   pax: number;
-  email?: string;
-  booking_id?: string;
-  return_date?: Timestamp;
-  package?: Array<DocumentReference<Package>>;
-  partner?: DocumentReference<Partner>;
-  promo_code?: Array<DocumentReference<Promo_Code>>;
-  departure_date?: Timestamp;
+  email: string | null;
+  phone: string | null;
+  booking_id: string | null;
+  return_date: Timestamp | null;
+  packages: Array<DocumentReference<Package>>;
+  partner: DocumentReference<Partner>;
+  promo_codes: Array<DocumentReference<Promo_Code>>;
+  departure_date: Timestamp;
   country: DocumentReference<Country>;
   flight_number?: string;
   gender?: 'M' | 'F' | 'O';
   package_size?: string; //only used for manual api calls to determine package size
   sent_messages?: SentMessages;
-  user?:  DocumentReference<User>; //Should be reference
-  esims: Array<DocumentReference> | undefined; //should be array of reference
+  user:  DocumentReference<User> | null; //Should be reference
+  esims: Array<DocumentReference> | null; //should be array of reference
+  locale: string;
   data: {
     source: string;
     manual: boolean;
   };
-  locale: string;
 };
