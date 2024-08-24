@@ -22,7 +22,6 @@ type HubbyBooking = {
   partner: DocumentReference<Partner>;
   promo_codes: Array<DocumentReference<Promo_Code>>;
   departure_date: Timestamp;
-  country: DocumentReference<Country>;
   flight_number?: string;
   gender?: 'M' | 'F' | 'O';
   package_size?: string; //only used for manual api calls to determine package size
