@@ -6,8 +6,9 @@ import { Partner } from "./partner";
 import { Country } from "./country";
 import { Promo_Code } from "./promo_code";
 import { SentMessages } from "./message";
+import { HubbyModel } from "./hubby";
 
-export type Booking = {
+type HubbyBooking = {
   id: string;
   title: string | null;
   first_name: string;
@@ -34,3 +35,5 @@ export type Booking = {
     manual: boolean;
   };
 };
+
+export type Booking = HubbyBooking & HubbyModel;
