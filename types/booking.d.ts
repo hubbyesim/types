@@ -19,7 +19,6 @@ type HubbyBooking = {
   phone: string | null;
   booking_id: string | null;
   return_date: Timestamp | null;
-  packages: Array<DocumentReference<Package>>;
   partner: DocumentReference<Partner>;
   promo_codes: Array<DocumentReference<Promo_Code>>;
   departure_date: Timestamp;
