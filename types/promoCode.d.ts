@@ -17,6 +17,7 @@ export type HubbyPromoCode = {
   valid_from: string | Date | Timestamp;
   valid_to: string | Date | Timestamp;
   booking: DocumentReference<Booking> | null;
+  external_id: string;
 }
 
 export type PromoCode = HubbyPromoCode & HubbyModel;
