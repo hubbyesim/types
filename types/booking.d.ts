@@ -1,10 +1,8 @@
 import { DocumentReference } from "firebase-admin/firestore";
 import { Timestamp } from "firebase-admin/firestore";
 import { User } from "./user";
-import { Package } from "./package";
 import { Partner } from "./partner";
-import { Country } from "./country";
-import { Promo_Code } from "./promo_code";
+import { PromoCode } from "./promoCode";
 import { SentMessages } from "./message";
 import { HubbyModel } from "./hubby";
 
@@ -20,7 +18,7 @@ type HubbyBooking = {
   booking_id: string | null;
   return_date: Timestamp | null;
   partner: DocumentReference<Partner>;
-  promo_codes: Array<DocumentReference<Promo_Code>>;
+  promo_codes: Array<DocumentReference<PromoCode>>;
   departure_date: Timestamp;
   flight_number?: string;
   gender?: 'M' | 'F' | 'O';
@@ -33,17 +31,20 @@ type HubbyBooking = {
     source: string;
     manual: boolean;
   };
-  // communication_options: CommunicationOptions;
+  communication_options: CommunicationOptions;
 };
 
 
-//Left it out of booking as unsure if it is needed
+export enum CommunicationChannel {
+  EMAIL = 'email',
+  WHATSAPP = 'whatsapp',
+  PUSH_NOTIFICATION = 'push_notification',
+  SMS = 'sms',
+}
+
 type CommunicationOptions = {
-  should_message: boolean;
-  should_email: boolean;
-  should_whatsapp: boolean;
-  should_push: boolean;
-  should_sms: boolean;
+  shouldSendMessage: boolean; // Indicates whether to send any message at all
+  channels: CommunicationChannel[]; // List of channels to send the message across
 };
 
 export type Booking = HubbyBooking & HubbyModel;
