@@ -13,6 +13,7 @@ type HubbyBooking = {
   title: string | null;
   first_name: string;
   last_name: string;
+  full_name: string;
   pax: number;
   email: string | null;
   phone: string | null;
@@ -29,17 +30,21 @@ type HubbyBooking = {
   user:  DocumentReference<User> | null; //Should be reference
   esims: Array<DocumentReference> | null; //should be array of reference
   locale: string;
-  communicationOptions: CommunicationOptions;
   data: {
     source: string;
     manual: boolean;
   };
+  // communication_options: CommunicationOptions;
 };
 
+
+//Left it out of booking as unsure if it is needed
 type CommunicationOptions = {
-  shouldEmail: boolean;
-  shouldWhatsapp: boolean;
-  shouldPush: boolean;
+  should_message: boolean;
+  should_email: boolean;
+  should_whatsapp: boolean;
+  should_push: boolean;
+  should_sms: boolean;
 };
 
 export type Booking = HubbyBooking & HubbyModel;

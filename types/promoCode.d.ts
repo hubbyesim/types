@@ -1,3 +1,6 @@
+import { DocumentReference } from '@google-cloud/firestore';
+import { Booking } from './booking';
+
 export type PromoCode = {
   allowance_total: number | null; // Total users that can use the promo code
   allowance_user: number | null; // Total number of times a user can reuse the promo code
@@ -9,4 +12,5 @@ export type PromoCode = {
   valid_from: Date | null; // Date when the promo code becomes valid
   valid_to: Date | null; // Date when the promo code expires
   updated_at: Date | null; // Date when the promo code was last updated
+  booking: DocumentReference<Booking> | null; // Reference to a Booking document
 };
