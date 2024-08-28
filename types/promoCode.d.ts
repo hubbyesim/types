@@ -4,6 +4,7 @@ import { Partner } from "./partner";
 import { Country } from "./country";
 import { Booking } from "./booking";
 import { HubbyModel } from "./hubby";
+import { Package } from "./package";
 
 export type HubbyPromoCode = {
   id: string;
@@ -12,6 +13,7 @@ export type HubbyPromoCode = {
   allowance_total: number;
   allowance_user: number;
   package_size: string;
+  package: DocumentReference<Package>;
   partner: DocumentReference<Partner>;
   country: DocumentReference<Country>;
   valid_from: string | Date | Timestamp;
