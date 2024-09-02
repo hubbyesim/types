@@ -4,9 +4,9 @@ import { Country } from './country';
 import { Partner } from './partner';
 import { Timestamp } from 'firebase-admin/firestore';
 import { Payment } from './payment';
+import { HubbyModel } from "./hubby";
 
 export type Esim = {
-    id: string; // ICCID from telna
     country: DocumentReference<Country> | null; // Default: null
     imsi: number;
     qr: string;
@@ -30,11 +30,5 @@ export type Esim = {
     is_auto_install: boolean; // Flag on eSIM which should be prioritized on Android devices
     is_archived: boolean; // Flag that eSIM should not be shown in dashboard
     apn?: string; // Describes global data of an eSIM
-  
-    // Default Fields
-    created_at: Timestamp;
-    updated_at: Timestamp;
-    created_by: string;
-    updated_by: string;
-  };
+  } & HubbyModel;
   

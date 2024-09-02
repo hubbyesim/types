@@ -7,7 +7,6 @@ import { SentMessages } from "./message";
 import { HubbyModel } from "./hubby";
 
 type HubbyBooking = {
-  id: string;
   title: string | null;
   first_name: string;
   last_name: string;
@@ -24,7 +23,7 @@ type HubbyBooking = {
   gender?: 'M' | 'F' | 'O';
   package_size?: string; //only used for manual api calls to determine package size
   sent_messages?: SentMessages;
-  user:  DocumentReference<User> | null; //Should be reference
+  users:  Array<DocumentReference<User>> | null; //Should be reference
   esims: Array<DocumentReference> | null; //should be array of reference
   locale: string;
   data: {

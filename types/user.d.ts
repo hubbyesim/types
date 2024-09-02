@@ -1,8 +1,8 @@
 import { Timestamp } from "firebase-admin/firestore";
 import { Partner } from "./partner";
+import { HubbyModel } from "./hubby";
 
 export type User = {
-    id: string | null; // Optional User ID
     stripe_id: string | null; // Provided by Stripe to perform purchases using Stripe SDK
     partner: string | Partner | undefined | null; // Reference to a Partner document
     referral: string | null; // Generated characters used as a referral code
@@ -32,5 +32,5 @@ export type User = {
 
     review_requested: Timestamp | null; // Date the last app update review popup was presented
     last_seen: Date | null; // Updated when the user opens the app and is logged in
-  };
+} & HubbyModel;
   

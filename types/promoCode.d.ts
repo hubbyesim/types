@@ -7,7 +7,6 @@ import { HubbyModel } from "./hubby";
 import { Package } from "./package";
 
 export type HubbyPromoCode = {
-  id: string;
   code: string;
   discount: number;
   allowance_total: number;

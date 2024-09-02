@@ -1,7 +1,7 @@
 import { Timestamp } from 'firebase-admin/firestore'
+import { HubbyModel } from './hubby';
 
-export type Partner = {
-    id: string | null;
+export type Partner= {
     administration_fee: number | null;
     email: string | null;
     income_per_gb: number | null;
@@ -15,7 +15,7 @@ export type Partner = {
     travelSpiritConfig?: TravelSpiritConfig | null;
     next_invoice: Timestamp | null;
     last_invoice: Timestamp | null; 
-}
+}  & HubbyModel;
 
 export type VisualIdentity = {
     primaryColor: string;
