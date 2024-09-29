@@ -1,5 +1,5 @@
 import { HubbyBooking } from "./booking";
-
+import { CommunicationOptions } from "./booking";
 export type PackageSpecifications = Array<PackageSpecification>;
 
 export type PackageSpecification = {
@@ -22,7 +22,7 @@ type BookingApiResponse = Omit<
 > & {
   return_date: string | null; // ISO string
   partner: string; // DocumentReference id
-  promo_codes: PromoCodeResponse[]; // Array of DocumentReference ids
+  promo_codes: Array<string>; // Array of DocumentReference ids
   departure_date: string; // ISO string
   users: Array<string>; // DocumentReference id or null
   esims: string[] | null; // Array of DocumentReference ids or null
@@ -48,7 +48,7 @@ export type BookingApiRequest = Omit<
   | "created_at"
   | "updated_at"
 > & {
-  departure_date: Timestamp; // ISO 8601 date string
+  departure_date: Date; // ISO 8601 date string
   email?: string | null; // Optional email
   phone?: string | null; // Optional phone number in E.164 format
   first_name?: string | null; // Optional first name
@@ -56,16 +56,16 @@ export type BookingApiRequest = Omit<
   full_name?: string | null; // Optional full name
   title?: string | null; // Optional title, case-insensitive in validation
   pax?: number | null; // Optional number of passengers, must be an integer >= 1
-  return_date: Timestamp | null; // ISO 8601 date string, must be after departure_date
+  return_date: Date | null; // ISO 8601 date string, must be after departure_date
   flight_number?: string | null; // Optional alphanumeric string for flight number
   gender?: "M" | "F" | "O"; // Optional gender
-  date_of_birth?: Timestamp; // Optional ISO 8601 date string, must be before the current date
+  date_of_birth?: Date; // Optional ISO 8601 date string, must be before the current date
   locale?: string; // Optional locale string (2 to 5 characters)
   booking_id?: string | null; // Optional booking ID, minimum 3 characters
   communication_options: CommunicationOptions; // Required object for communication options
   package_specifications?: PackageSpecifications; // Array of package specifications, at least one entry is required
   created_by: string;
   updated_by: string;
-  created_at: Timestamp;
-  updated_at: Timestamp;
+  created_at: Date;
+  updated_at: Date;
 };

@@ -40,7 +40,7 @@ export enum CommunicationChannel {
   SMS = "sms",
 }
 
-type CommunicationOptions = {
+export type CommunicationOptions = {
   should_send_message: boolean; // Indicates whether to send any message at all
   channels: CommunicationChannel[]; // List of channels to send the message across
 };
