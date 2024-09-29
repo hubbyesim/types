@@ -20,10 +20,10 @@ type HubbyBooking = {
   promo_codes: Array<DocumentReference<PromoCode>>;
   departure_date: Timestamp;
   flight_number?: string;
-  gender?: 'M' | 'F' | 'O';
+  gender?: "M" | "F" | "O";
   package_size?: string; //only used for manual api calls to determine package size
   sent_messages?: SentMessages;
-  users:  Array<DocumentReference<User>> | null; //Should be reference
+  users: Array<DocumentReference<User>> | null; //Should be reference
   esims: Array<DocumentReference> | null; //should be array of reference
   locale: string;
   data: {
@@ -33,12 +33,11 @@ type HubbyBooking = {
   communication_options: CommunicationOptions;
 };
 
-
 export enum CommunicationChannel {
-  EMAIL = 'email',
-  WHATSAPP = 'whatsapp',
-  PUSH_NOTIFICATION = 'push_notification',
-  SMS = 'sms',
+  EMAIL = "email",
+  WHATSAPP = "whatsapp",
+  PUSH_NOTIFICATION = "push_notification",
+  SMS = "sms",
 }
 
 type CommunicationOptions = {
