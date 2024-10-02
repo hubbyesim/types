@@ -46,4 +46,5 @@ export type Traveler = {
   language?: string;
   arrivalDate: string | Date | Timestamp; //Whoops typo should deprecate
   sendMessages?: SentMessages;  //Whoops typo should deprecate
+  is_processed: boolean; // flags true if the traveler is processed for esim restoration
 };
