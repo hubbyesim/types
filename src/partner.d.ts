@@ -22,8 +22,18 @@ export type VisualIdentity = {
     primaryColor: string;
     secondaryColor: string;
     tertiaryColor: string;
-    font: string;
-    logo: string; //Bucket storage path type?
+    borderColor: string;
+    buttonColor: string;
+    iconColor: string;
+    textColor: string;
+    buttonTextColor: string;
+    backgroundColor: string;
+    fullDataMeterColor: string;
+    emptyDataMeterColor: string;
+    cardColor: string;
+    menuBarColor: string;
+    menuBarIconColor: string;
+    menuBarTextColor: string;
 }
 
 export type PricingStrategy = {
