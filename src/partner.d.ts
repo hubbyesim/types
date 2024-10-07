@@ -19,11 +19,33 @@ export type Partner = {
 } & HubbyModel;
 
 export type VisualIdentity = {
-    primaryColor: string;
-    secondaryColor: string;
-    tertiaryColor: string;
-    font: string;
-    logo: string; //Bucket storage path type?
+    primary_color: string;
+    secondary_color: string;
+    tertiary_color: string;
+    border_color: string;
+    icon_color: string;
+    text_color: string;
+    background_color: string;
+    card_color: string;
+    button: ButtonColor;
+    dateMeter: DataMeterColor;
+    menu_bar: MenuBarColor;
+}
+
+export type ButtonColor = {
+    color: string;
+    text_color: string;
+}
+
+export type DataMeterColor = {
+    full_color: string;
+    empty_color: string;
+}
+
+export type MenuBarColor = {
+    background_color: string;
+    icon_color: string;
+    text_color: string;
 }
 
 export type PricingStrategy = {
