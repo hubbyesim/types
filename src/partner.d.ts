@@ -1,4 +1,4 @@
-import { Timestamp } from 'firebase-admin/firestore'
+import { DocumentReference, Timestamp } from 'firebase-admin/firestore'
 import { HubbyModel } from './hubby';
 
 export type Partner = {
@@ -15,7 +15,7 @@ export type Partner = {
     travelSpiritConfig?: TravelSpiritConfig | null;
     next_invoice: Timestamp | null;
     last_invoice: Timestamp | null;
-    parent: string | null;
+    parent: DocumentReference | null;
     payment_method: "invoice" | "direct"
 } & HubbyModel;
 
