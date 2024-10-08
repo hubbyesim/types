@@ -15,6 +15,7 @@ export type Partner = {
     travelSpiritConfig?: TravelSpiritConfig | null;
     next_invoice: Timestamp | null;
     last_invoice: Timestamp | null;
+    parent: string | null;
     payment_method: "invoice" | "direct"
 } & HubbyModel;
 
