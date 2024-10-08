@@ -35,10 +35,10 @@ type HubbyBooking = {
 };
 
 export enum CommunicationChannel {
-  EMAIL = "email",
-  WHATSAPP = "whatsapp",
-  PUSH_NOTIFICATION = "push_notification",
-  SMS = "sms",
+  EMAIL = "EMAIL",
+  WHATSAPP = "WHATSAPP",
+  PUSH_NOTIFICATION = "PUSH_NOTIFICATION",
+  SMS = "SMS",
 }
 
 export type CommunicationOptions = {
