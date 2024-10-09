@@ -31,7 +31,7 @@ type HubbyBooking = {
     manual: boolean;
   };
   communication_options: CommunicationOptions;
-  is_processed: boolean; // flags true if the traveler is processed for esim restoration
+  is_rocessed_for_esim_restoration: boolean; // flags true if the traveler is processed for esim restoration
 };
 
 export enum CommunicationChannel {
