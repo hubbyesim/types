@@ -29,7 +29,7 @@ export type VisualIdentity = {
     background_color: string;
     card_color: string;
     button: ButtonColor;
-    dateMeter: DataMeterColor;
+    dataMeter: DataMeterColor;
     menu_bar: MenuBarColor;
 }
 
