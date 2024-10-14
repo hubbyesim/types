@@ -16,7 +16,8 @@ export type Partner = {
     next_invoice: Timestamp | null;
     last_invoice: Timestamp | null;
     parent: DocumentReference | null;
-    payment_method: "invoice" | "direct"
+    payment_method: "invoice" | "direct",
+    send_booking_confirmation: boolean;
 } & HubbyModel;
 
 export type VisualIdentity = {
