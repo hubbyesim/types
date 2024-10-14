@@ -1,5 +1,6 @@
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore'
 import { HubbyModel } from './hubby';
+import { Booking } from './booking';
 
 export type Partner = {
     administration_fee: number | null;
@@ -16,8 +17,14 @@ export type Partner = {
     next_invoice: Timestamp | null;
     last_invoice: Timestamp | null;
     parent: DocumentReference | null;
-    payment_method: "invoice" | "direct"
+    payment_method: "invoice" | "direct",
+    booking_confirmation: BookingConfirmation
 } & HubbyModel;
+
+export type BookingConfirmation = {
+    brevo_template_id: number;
+    send_booking_confirmation: boolean;
+}
 
 export type VisualIdentity = {
     primary_color: string;
