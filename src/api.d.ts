@@ -1,4 +1,5 @@
 import { HubbyBooking } from "./booking";
+import { Partner } from "./partner";
 import { CommunicationOptions } from "./booking";
 export type PackageSpecifications = Array<PackageSpecification>;
 
@@ -64,6 +65,21 @@ export type BookingApiRequest = Omit<
   booking_id?: string | null; // Optional booking ID, minimum 3 characters
   communication_options: CommunicationOptions; // Required object for communication options
   package_specifications?: PackageSpecifications; // Array of package specifications, at least one entry is required
+  created_by: string;
+  updated_by: string;
+  created_at: Date;
+  updated_at: Date;
+};
+
+export type PartnerApiRequest = Omit<
+  Partner,
+  | "parent"
+  | "created_at"
+  | "updated_at"
+> & {
+  next_invoice: Date; // Previously Timestamp
+  last_invoice: Date; // Previously Timestamp
+  parent: string | null; // Previously DocumentReference
   created_by: string;
   updated_by: string;
   created_at: Date;
