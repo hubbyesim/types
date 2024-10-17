@@ -34,7 +34,7 @@ type HubbyBooking = {
   is_processed_for_esim_restoration: boolean; // flags true if the traveler is processed for esim restoration
 };
 
-export enum CommunicationChannel {
+export const enum CommunicationChannel {
   EMAIL = "EMAIL",
   WHATSAPP = "WHATSAPP",
   PUSH_NOTIFICATION = "PUSH_NOTIFICATION",
