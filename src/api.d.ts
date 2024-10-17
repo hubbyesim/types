@@ -76,12 +76,12 @@ export type PartnerApiRequest = Omit<
   | "parent"
   | "created_at"
   | "updated_at"
+  | "last_invoice"
+  | "next_invoice"
 > & {
   next_invoice: Date; // Previously Timestamp
   last_invoice: Date; // Previously Timestamp
   parent: string | null; // Previously DocumentReference
-  created_by: string;
-  updated_by: string;
   created_at: Date;
   updated_at: Date;
 };
