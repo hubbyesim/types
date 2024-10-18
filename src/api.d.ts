@@ -85,3 +85,5 @@ export type PartnerApiRequest = Omit<
   created_at: Date;
   updated_at: Date;
 };
+
+export type PartnerApiResponse = PartnerApiRequest;
