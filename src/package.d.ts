@@ -1,7 +1,7 @@
 import { DocumentReference } from "firebase-admin/firestore";
 import { Country } from "./country";
 import { HubbyModel } from "./hubby";
-import { Partner } from "./partner";
+import { PriceModificationsPerPartner } from "./priceModifications";
 
 export type Package = {
   label: string;
@@ -9,17 +9,10 @@ export type Package = {
   size_in_gb: number;
   country: DocumentReference<Country>; //Hrvatska
   hidden: boolean;
-  price: number;
-  partner_price: number;
+  purchase_price: number;
+  // partner_price: number;
+  provider: string;
   days: number;
-  price_modifications: PriceModifications;
+  in_app_prices_per_partners: PriceModificationsPerPartner;
+  contract_prices_per_partners: PriceModificationsPerPartner;
 } & HubbyModel
-
-type PriceModifications = [PriceModification]
-
-type PriceModification = {
-  partner: DocumentReference<Partner>; //Hubby
-  fixed_price: number | null;
-  fixed_percentage: number | null;
-  price_type: 'fixed' | 'percentage';
-}

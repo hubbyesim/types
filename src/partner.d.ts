@@ -1,5 +1,6 @@
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore'
 import { HubbyModel } from './hubby';
+import { PriceModifications, PriceModificationsPerBundle } from './priceModifications';
 
 export type Partner = {
     administration_fee: number | null;
@@ -17,6 +18,8 @@ export type Partner = {
     last_invoice: Timestamp | null;
     parent: DocumentReference | null;
     payment_method: "invoice" | "direct"
+    in_app_prices_per_partners: PriceModificationsPerBundle;
+    contract_prices_per_partners: PriceModificationsPerBundle;
 } & HubbyModel;
 
 export type VisualIdentity = {
