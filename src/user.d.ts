@@ -1,10 +1,9 @@
-import { Timestamp } from "firebase-admin/firestore";
-import { Partner } from "./partner";
+import { DocumentReference, Timestamp } from "firebase-admin/firestore";
 import { HubbyModel } from "./hubby";
 
 export type User = {
     stripe_id: string | null; // Provided by Stripe to perform purchases using Stripe SDK
-    partner: string | Partner | undefined | null; // Reference to a Partner document
+    partner: DocumentReference | null; // Reference to a Partner document
     referral: string | null; // Generated characters used as a referral code
     fcm: string; // Push notification token from Firebase
     deeplink: string | null; // Link generated using the referral code

@@ -19,6 +19,7 @@ export type Partner = {
     parent: DocumentReference | null;
     payment_method: "invoice" | "direct",
     booking_confirmation: BookingConfirmation | null
+    users: DocumentReference[]
 } & HubbyModel;
 
 export type BookingConfirmation = {
