@@ -1,4 +1,4 @@
-import { HubbyBooking } from "./booking";
+import { Booking, HubbyBooking } from "./booking";
 import { Partner } from "./partner";
 import { CommunicationOptions } from "./booking";
 export type PackageSpecifications = Array<PackageSpecification>;
@@ -10,7 +10,7 @@ export type PackageSpecification = {
 };
 
 type BookingApiResponse = Omit<
-  HubbyBooking,
+  Booking,
   | "return_date"
   | "partner"
   | "promo_codes"
@@ -41,7 +41,7 @@ type PromoCodeApiResponse = {
 };
 
 export type BookingApiRequest = Omit<
-  HubbyBooking,
+  Booking,
   | "return_date"
   | "partner"
   | "promo_codes"
