@@ -67,8 +67,6 @@ export type BookingApiRequest = Omit<
   booking_id?: string | null; // Optional booking ID, minimum 3 characters
   communication_options: CommunicationOptions; // Required object for communication options
   package_specifications?: PackageSpecifications; // Array of package specifications, at least one entry is required
-  created_by: string;
-  updated_by: string;
   created_at: Date;
   updated_at: Date;
 };
