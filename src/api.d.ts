@@ -29,6 +29,8 @@ type BookingApiResponse = Omit<
   esims: string[] | null; // Array of DocumentReference ids or null
   created_at: string; // ISO string
   updated_at: string; // ISO string
+  created_by?: string;
+  updated_by?: string;
 };
 
 type PromoCodeApiResponse = {
