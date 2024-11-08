@@ -20,7 +20,12 @@ export type Partner = {
     payment_method: "invoice" | "direct",
     booking_confirmation: BookingConfirmation | null
     users: DocumentReference[] | null
+    booking_defaults: BookingDefaults | null
 } & HubbyModel;
+
+export type BookingDefaults = {
+    locale: "en-GB" | "fr" | "de" | "it" | "es" | "pt" | "nl" | "pl" | "ru" | "ja" | "zh" | "ar" | "cz";
+}
 
 export type BookingConfirmation = {
     brevo_template_id: number;
@@ -96,5 +101,6 @@ export type TravelSpiritConfig = {
     dbName: string;
     tableName: string;
     schedule: string;
+    externalPartnerName: string;
 }
 
