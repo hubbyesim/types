@@ -3,6 +3,7 @@ import { HubbyModel } from './hubby';
 import { Booking } from './booking';
 
 export type Partner = {
+    active?: boolean | null;
     administration_fee: number | null;
     email: string | null;
     income_per_gb: number | null;
