@@ -3,7 +3,6 @@ import { HubbyModel } from './hubby';
 import { Booking } from './booking';
 
 export type Partner = {
-    active?: boolean | null;
     administration_fee: number | null;
     email: string | null;
     income_per_gb: number | null;
@@ -21,7 +20,14 @@ export type Partner = {
     payment_method: "invoice" | "direct",
     booking_confirmation: BookingConfirmation | null
     users: DocumentReference[] | null
+    is_active?: boolean | null
     booking_defaults: BookingDefaults | null
+    address?: null;
+    banking_details?: {
+        account_holder: string;
+        bank_name: string;
+        iban: string;
+    } | null;
 } & HubbyModel;
 
 export type BookingDefaults = {
