@@ -22,12 +22,22 @@ export type Partner = {
     users: DocumentReference[] | null
     is_active?: boolean | null
     booking_defaults: BookingDefaults | null
-    address?: null;
+    address?: {
+        street?: string;
+        city?: string;
+        postal_code?: string;
+        country?: string;
+    } | null;
     banking_details?: {
         account_holder: string;
         bank_name: string;
         iban: string;
     } | null;
+    office_phone?: string | null;
+    chamber_of_commerce_number?: string | null;
+    vat_number?: string | null;
+    anvr_number?: number | null;
+    tax_number?: string | null;
 } & HubbyModel;
 
 export type BookingDefaults = {
