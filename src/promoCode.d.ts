@@ -19,7 +19,7 @@ export type HubbyPromoCode = {
   valid_to: string | Date | Timestamp;
   booking: DocumentReference<Booking> | null;
   external_id: string;
-  type?: 'full-discount' | 'partial-discount' | 'booking' | 'traveler' | null | string;
+  type?: 'full-discount' | 'partial-discount' | 'booking' | 'traveler' | 'referral' | null | string;
   countries?: string[];
   max_bytes?: number;
   usage?: string[],
