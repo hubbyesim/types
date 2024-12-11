@@ -3,7 +3,7 @@ import { Country } from "./country";
 import { HubbyModel } from "./hubby";
 import { Partner } from "./partner";
 export type Package = {
-  id: string;
+  external_id: string;
   provider: "telna" | "bondio" | string; // Example: "telna"
   label: string;
   bytes: number;

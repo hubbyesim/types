@@ -7,6 +7,7 @@ import { Payment } from "./payment";
 import { HubbyModel } from "./hubby";
 
 export type ESIM = {
+  external_id: string;
   country: DocumentReference<Country> | null; // Default: null
   imsi: number;
   qr: string;
