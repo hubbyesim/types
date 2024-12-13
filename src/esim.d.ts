@@ -11,24 +11,24 @@ export type ESIM = {
   imsi: number;
   qr: string;
   user: DocumentReference<User> | null; // Default: null, should be a DocumentReference to user
-  iccid: string,
+  iccid: string;
   provider: "telna" | "bondio" | string; // Example: "telna"
 
   // Loosely Defined Properties
-  total_data?: number; // Total data of the package purchased/given
-  data_left?: number; // Data left based on the package purchased/given
-  data_used?: boolean; // eSIM Data consumption
-  time_assigned?: Timestamp; // Added when a package is loaded and distributed to a user
-  last_updated?: Timestamp; // Updated every time user opens the app if the eSIM is primary/active in the app’s dashboard
+  total_data: number | null; // Total data of the package purchased/given
+  data_left: number | null; // Data left based on the package purchased/given
+  data_used: boolean | null; // eSIM Data consumption
+  time_assigned: Timestamp | null; // Added when a package is loaded and distributed to a user
+  last_updated: Timestamp | null; // Updated every time user opens the app if the eSIM is primary/active in the app’s dashboard
   status: string | null; // Updated every time user opens the app and the eSIM is active/primary in the app’s dashboard
   name: string; // Based on country name and count example: “TUR eSIM #1”
   android_auto: boolean; // Flag for Android auto install
-  partner?: DocumentReference<Partner>; // Partner Reference based on user
-  partner_price?: number; // Partner price of the partner used to distribute eSIM
-  promo?: string; // Promo code used
+  partner: DocumentReference<Partner> | null; // Partner Reference based on user
+  partner_price: number | null; // Partner price of the partner used to distribute eSIM
+  promo: string | null; // Promo code used
   type: "api" | "promo" | "balance" | "code" | "external" | "payment"; // Describes where the user got their eSIM
-  payment: DocumentReference<Payment>; // Payment ID from Stripe or ApplePay
+  payment: DocumentReference<Payment> | null; // Payment ID from Stripe or ApplePay
   is_auto_install: boolean; // Flag on eSIM which should be prioritized on Android devices
   is_archived: boolean; // Flag that eSIM should not be shown in dashboard
-  apn?: string; // Describes global data of an eSIM
+  apn: string | null; // Describes global data of an eSIM
 } & HubbyModel;
