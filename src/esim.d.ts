@@ -11,7 +11,8 @@ export type ESIM = {
   imsi: number;
   qr: string;
   user: DocumentReference<User> | null; // Default: null, should be a DocumentReference to user
-  provider: string; // Example: "telna"
+  iccid: number,
+  provider: "telna" | "bondio" | string; // Example: "telna"
 
   // Loosely Defined Properties
   total_data?: number; // Total data of the package purchased/given
