@@ -22,6 +22,7 @@ export type Partner = {
     users: DocumentReference[] | null
     is_active?: boolean | null
     booking_defaults: BookingDefaults | null
+    external_id?: string | null
     address?: {
         street?: string;
         city?: string;
