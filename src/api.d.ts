@@ -4,7 +4,7 @@ import { CommunicationOptions } from "./booking";
 export type PackageSpecifications = Array<PackageSpecification>;
 
 export type PackageSpecification = {
-  destination?: string;
+  destination: string;
   size?: string;
   package_id?: string;
 };
@@ -66,7 +66,7 @@ export type BookingApiRequest = Omit<
   locale?: string; // Optional locale string (2 to 5 characters)
   booking_id?: string | null; // Optional booking ID, minimum 3 characters
   communication_options: CommunicationOptions; // Required object for communication options
-  package_specifications?: PackageSpecifications; // Array of package specifications, at least one entry is required
+  package_specifications: PackageSpecifications; // Array of package specifications, at least one entry is required
   created_at: Date;
   updated_at: Date;
 };
