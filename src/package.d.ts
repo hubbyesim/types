@@ -13,5 +13,6 @@ export type Package = {
   partner_price: number;
   days: number;
   partner: DocumentReference<Partner> | null;
+  name: string;
   type: 'data-limited' | 'time-limited' | null;
 } & HubbyModel
