@@ -4,7 +4,7 @@ import { CommunicationOptions } from "./booking";
 export type PackageSpecifications = Array<PackageSpecification>;
 
 export type PackageSpecification = {
-  destination: string;
+  destination?: string;
   size?: string;
   package_id?: string;
 };
