@@ -39,6 +39,7 @@ export type Partner = {
     vat_number?: string | null;
     anvr_number?: number | null;
     tax_number?: string | null;
+    commission_fee?: number | null;
 } & HubbyModel;
 
 export type BookingDefaults = {
