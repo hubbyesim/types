@@ -9,3 +9,4 @@ export * from "./src/hubby";
 export * from "./src/esim";
 export * from "./src/api";
 export * from "./src/payment";
+export * from "./src/apiLogs";
