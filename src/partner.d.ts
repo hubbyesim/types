@@ -104,6 +104,7 @@ export type Schedule = {
     days: number;
     email: {
         brevoTemplateId: number;
+        travelerBrevoTemplateId?: number;
     };
     hour: number;
     key: string;
