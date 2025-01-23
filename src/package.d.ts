@@ -9,6 +9,8 @@ export type Package = {
   bytes: number;
   country: DocumentReference<Country>;
   hidden: boolean;
+  active: boolean;
+  priority: number;
   country_data: Country | null;
   price: number;
   partner_price: number;
