@@ -19,4 +19,7 @@ export type Package = {
   partner: DocumentReference<Partner> | null;
   name: string;
   type: 'data-limited' | 'time-limited' | null;
+  provider_parameters: null | {
+    imsi: number;
+  }
 } & HubbyModel
