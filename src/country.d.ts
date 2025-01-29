@@ -1,7 +1,7 @@
 export type Country = {
   id: string | null,
   bokun_id: number | null,
-  lte: boolean | null; // Indicates if LTE is enabled
+  LTE: boolean | null; // Indicates if LTE is enabled
   apn: string | null; // Access Point Name, e.g., "globaldata"
   click_count: number | null; // Number of times the network was clicked
   global_network: string | null; // Name of the global network, e.g., "SETAR GSM"
