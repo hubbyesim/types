@@ -28,8 +28,18 @@ export type User = {
     ios: boolean | null; // Flag to determine if the user uses an iPhone    
     has_card_saved: boolean | null; // Flag when a card has been saved to the Flutter Stripe SDK
     admin: boolean | null; // Flag to determine if the user is an admin
-
+    api_keys: ApiKeys | null;
     review_requested: Timestamp | null; // Date the last app update review popup was presented
     last_seen: Date | null; // Updated when the user opens the app and is logged in
 } & HubbyModel;
-  
+
+type ApiKeys = {
+    allowed_keys: string[];
+    keys: Record<string, ApiKey>;
+}
+
+type ApiKey = {
+    expires_at: Timestamp;
+    secret: string;
+    is_active: boolean;
+}
