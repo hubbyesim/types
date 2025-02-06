@@ -19,6 +19,7 @@ export type Package = {
   partner: DocumentReference<Partner> | null;
   name: string;
   type: 'data-limited' | 'time-limited' | null;
+  throttling?: number;
   provider_parameters: null | {
     imsi: number;
   }
