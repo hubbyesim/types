@@ -82,7 +82,6 @@ export type VisualIdentityBanner = {
     }
 }
 
-
 export type ButtonColor = {
     color: string;
     text_color: string;
