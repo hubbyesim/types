@@ -63,7 +63,25 @@ export type VisualIdentity = {
     button: ButtonColor;
     dataMeter: DataMeterColor;
     menu_bar: MenuBarColor;
+    logo: string;
+    top_banner: VisualIdentityBannerStrategy;
+    mid_banner: VisualIdentityBannerStrategy;
 }
+
+export type VisualIdentityBannerStrategy = {
+    strategy: "fixed" | "rotating" | "destination" | "timeOfDay"
+    banners: VisualIdentityBanner[];
+}
+
+export type VisualIdentityBanner = {
+    image_url: string;
+    alt: string;
+    click_url: string;
+    properties: {
+        [key: string]: string;
+    }
+}
+
 
 export type ButtonColor = {
     color: string;
