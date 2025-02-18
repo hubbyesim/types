@@ -1,4 +1,4 @@
-import { DocumentReference, Timestamp } from "firebase-admin/firestore";
+import { DocumentReference, Timestamp, FieldValue } from "firebase-admin/firestore";
 import { HubbyModel } from "./hubby";
 
 export type User = {
@@ -23,7 +23,7 @@ export type User = {
     phone_os: string | null; // Values: "ios" or "android"
     phone_os_version: string | null; // Used to investigate or validate issues with eSIM activation
     
-    balance: number | null; // Virtual money that can be used to purchase or top up an eSIM
+    balance: number | null | FieldValue; // Virtual money that can be used to purchase or top up an eSIM
 
     ios: boolean | null; // Flag to determine if the user uses an iPhone    
     has_card_saved: boolean | null; // Flag when a card has been saved to the Flutter Stripe SDK
