@@ -31,6 +31,8 @@ export type User = {
     api_keys: ApiKeys | null;
     review_requested: Timestamp | null; // Date the last app update review popup was presented
     last_seen: Date | null; // Updated when the user opens the app and is logged in
+    currency: string | null;
+    receipt_email: string | null;
 } & HubbyModel;
 
 type ApiKeys = {
