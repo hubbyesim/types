@@ -13,7 +13,7 @@ export type ESIM = {
   user: DocumentReference<User> | null; // Default: null, should be a DocumentReference to user
   iccid: string;
   provider: "telna" | "bondio" | string; // Example: "telna"
-
+  coverage_label?: null | string;
   // Loosely Defined Properties
   total_data: number | null; // Total data of the package purchased/given
   data_left: number | null; // Data left based on the package purchased/given
