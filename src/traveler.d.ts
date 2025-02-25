@@ -4,7 +4,7 @@ import { User } from "./user";
 import { Package } from "./package";
 import { Partner } from "./partner";
 
-export type Message = {
+type Message = {
   id: string;
   key: string;
   method: 'sms' | 'email' | 'push';
