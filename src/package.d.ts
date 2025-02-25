@@ -5,7 +5,7 @@ import { Partner } from "./partner";
 export type Package = {
   external_id: string;
   provider: "telna" | "bondio" | string; // Example: "telna"
-  provider_label: null | string;
+  coverage_label: null | string;
   label: string;
   bytes: number;
   country: DocumentReference<Country>;
