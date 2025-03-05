@@ -40,6 +40,10 @@ export type Partner = {
     anvr_number?: number | null;
     tax_number?: string | null;
     commission_fee?: number | null;
+    data?: {
+        source: string;
+        manual: boolean;
+    } | null;
 } & HubbyModel;
 
 export type BookingDefaults = {
