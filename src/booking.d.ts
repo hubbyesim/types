@@ -5,6 +5,7 @@ import { Partner } from "./partner";
 import { PromoCode } from "./promoCode";
 import { SentMessages } from "./message";
 import { HubbyModel } from "./hubby";
+import { PackageSpecifications } from "./api";
 
 type HubbyBooking = {
   title: string | null;
@@ -33,6 +34,9 @@ type HubbyBooking = {
   communication_options: CommunicationOptions;
   is_processed_for_esim_restoration: boolean; // flags true if the traveler is processed for esim restoration
   is_pseudonymized: boolean; // flags true if the traveler is pseudonymized
+  status: "PENDING" | "COMPLETED",
+  import_id?: string | null,
+  package_specifications?: PackageSpecifications,
 };
 
 export const enum CommunicationChannel {

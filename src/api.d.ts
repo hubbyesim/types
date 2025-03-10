@@ -7,6 +7,7 @@ export type PackageSpecification = {
   destination?: string;
   size?: string;
   package_id?: string;
+  iata_code?: string;
 };
 
 type BookingApiResponse = Omit<

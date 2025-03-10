@@ -5,6 +5,7 @@ import { Country } from "./country";
 import { Booking } from "./booking";
 import { HubbyModel } from "./hubby";
 import { Package } from "./package";
+import { PackageSpecification } from "./api";
 
 export type HubbyPromoCode = {
   external_id: string;
@@ -14,15 +15,16 @@ export type HubbyPromoCode = {
   type: 'full-discount' | 'partial-discount' | 'booking' | 'traveler' | null | string;
   usage: string[],
   uuid_usage: string[],
+  package_specification?: PackageSpecification,
+  partner?: DocumentReference<Partner>;
+  valid_from: string | Date | Timestamp;
+  valid_to: string | Date | Timestamp;
 
   //Optional fields based on the type
   discount?: number;
   package_size?: string;
   package?: DocumentReference<Package>;
-  partner?: DocumentReference<Partner>;
   country?: DocumentReference<Country>;
-  valid_from?: string | Date | Timestamp;
-  valid_to?: string | Date | Timestamp;
   booking?: DocumentReference<Booking> | null;
   countries?: string[];
   max_bytes?: number;
