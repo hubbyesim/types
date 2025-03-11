@@ -7,6 +7,19 @@ import { SentMessages } from "./message";
 import { HubbyModel } from "./hubby";
 import { PackageSpecifications } from "./api";
 
+export type SupportedLocales = 'en-US' | 'nl-NL' | 'de-DE' | 'fr-FR' | 'it-IT' | 'es-ES' | 'cs-CZ' | 'pl-PL';
+
+//Status explanation
+//PENDING: Booking is pending and waiting for payment
+//CONFIRMED: Booking is confirmed and payment is successful
+//COMPLETED: Booking is completed and payment is successful
+//CANCELLED: Booking is cancelled and payment is not successful
+//EXPIRED: Booking is expired and payment is not successful
+
+
+
+
+export type BookingStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled' | 'unpaid' | 'expired';
 type HubbyBooking = {
   title: string | null;
   first_name: string;
@@ -26,7 +39,8 @@ type HubbyBooking = {
   sent_messages?: SentMessages;
   users: Array<DocumentReference<User>> | null; //Should be reference
   esims: Array<DocumentReference> | null; //should be array of reference
-  locale: string;
+  locale: SupportedLocales;
+  status: BookingStatus;
   data: {
     source: string;
     manual: boolean;
@@ -34,7 +48,6 @@ type HubbyBooking = {
   communication_options: CommunicationOptions;
   is_processed_for_esim_restoration: boolean; // flags true if the traveler is processed for esim restoration
   is_pseudonymized: boolean; // flags true if the traveler is pseudonymized
-  status: "PENDING" | "COMPLETED",
   import_id?: string | null,
   package_specifications?: PackageSpecifications,
 };
