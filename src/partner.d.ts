@@ -1,5 +1,5 @@
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore'
-import { HubbyModel } from './hubby';
+import { HubbyModel, SupportedLocales } from './hubby';
 import { Booking } from './booking';
 
 export type Partner = {
@@ -47,7 +47,7 @@ export type Partner = {
 } & HubbyModel;
 
 export type BookingDefaults = {
-    locale: "en-GB" | "fr" | "de" | "it" | "es" | "pt" | "nl" | "pl" | "ru" | "ja" | "zh" | "ar" | "cz";
+    locale: SupportedLocales
 }
 
 export type BookingConfirmation = {
@@ -131,6 +131,7 @@ export type Schedule = {
     key: string;
     method: string;
     moment: string;
+    subject?: Record<SupportedLocales, string>; // ✅ Fix here
 }
 
 export type TravelSpiritConfig = {
