@@ -4,10 +4,8 @@ import { User } from "./user";
 import { Partner } from "./partner";
 import { PromoCode } from "./promoCode";
 import { SentMessages } from "./message";
-import { HubbyModel } from "./hubby";
+import { HubbyModel, SupportedLocales } from "./hubby";
 import { PackageSpecifications } from "./api";
-
-export type SupportedLocales = 'en-US' | 'nl-NL' | 'de-DE' | 'fr-FR' | 'it-IT' | 'es-ES' | 'cs-CZ' | 'pl-PL';
 
 //Status explanation
 //PENDING: Booking is pending and waiting for payment
@@ -15,11 +13,8 @@ export type SupportedLocales = 'en-US' | 'nl-NL' | 'de-DE' | 'fr-FR' | 'it-IT' |
 //COMPLETED: Booking is completed and payment is successful
 //CANCELLED: Booking is cancelled and payment is not successful
 //EXPIRED: Booking is expired and payment is not successful
-
-
-
-
 export type BookingStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled' | 'unpaid' | 'expired';
+
 type HubbyBooking = {
   title: string | null;
   first_name: string;
