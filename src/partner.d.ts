@@ -81,6 +81,7 @@ export type VisualIdentityBanner = {
     image_url: string;
     alt: string;
     click_url: string;
+    locale: SupportedLocales;
     properties: {
         [key: string]: string;
     }
@@ -131,7 +132,7 @@ export type Schedule = {
     key: string;
     method: string;
     moment: string;
-    subject?: Record<SupportedLocales, string>; // ✅ Fix here
+    subject?: Record<SupportedLocales, string>;
 }
 
 export type TravelSpiritConfig = {
