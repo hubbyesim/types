@@ -13,7 +13,7 @@ import { PackageSpecifications } from "./api";
 //COMPLETED: Booking is completed and payment is successful
 //CANCELLED: Booking is cancelled and payment is not successful
 //EXPIRED: Booking is expired and payment is not successful
-export type BookingStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled' | 'unpaid' | 'expired';
+export type BookingStatus = 'PENDING' | 'CONFIRMED' | 'COMPLETED' | 'CANCELLED' | 'UNPAID' | 'EXPIRED';
 
 type HubbyBooking = {
   title: string | null;
