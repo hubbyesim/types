@@ -59,6 +59,7 @@ export type VisualIdentity = {
     primary_color: string;
     secondary_color: string;
     logo: string;
+    font: string;
     top_banner: VisualIdentityBannerStrategy;
     mid_banner: VisualIdentityBannerStrategy;
 }
