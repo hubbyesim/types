@@ -109,6 +109,7 @@ export type Schedule = {
     method: string;
     moment: string;
     subject?: Record<SupportedLocales, string>;
+    previewText?: Record<SupportedLocales, string>;
 }
 
 export type TravelSpiritConfig = {
