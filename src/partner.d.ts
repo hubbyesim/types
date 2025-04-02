@@ -40,7 +40,12 @@ export type Partner = {
         payment_method: "invoice" | "direct";
         requires_card: boolean | null;
         next_invoice: Timestamp | null;
-        last_invoice: Timestamp | null;
+        last_invoice: Timestamp | null;   
+        pricing_strategy?: {
+            strategy: "split" | "bundle";
+            default_price_list: string;
+            custom_prices: PartnerPricing[];
+        } | null;
     } | null;
     
     banking_details?: {
@@ -58,12 +63,6 @@ export type Partner = {
         // Communication
         schedules: Schedule[] | null;
         booking_confirmation: BookingConfirmation | null;
-        
-        pricing_strategy?: {
-            strategy: "split" | "bundle";
-            default_price_list: string;
-            custom_prices: PartnerPricing[];
-        } | null;
     } | null;
     
     // Visual identity
