@@ -4,6 +4,7 @@ import { Booking } from './booking';
 
 export type Partner = {
     // Basic information
+    id: string;
     name: string | null;
     type: string | null;
     is_active?: boolean | null;
