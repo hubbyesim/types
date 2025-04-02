@@ -10,8 +10,6 @@ export type Partner = {
     external_id?: string | null;
     parent: DocumentReference | null;
 
-    packageStrategy?: PackageStrategy | null;
-
     // Contact information
     contact: {
         email: string | null;
@@ -52,31 +50,24 @@ export type Partner = {
     } | null;
     
     // Platform settings
-    platformSettings?: {
+    platform_settings?: {
+        package_strategy?: PackageStrategy | null;
         free_esim_allowance: number | null;
         booking_defaults: BookingDefaults | null;
-        data_source?: {
-            source: string;
-            manual: boolean;
+
+        // Communication
+        schedules: Schedule[] | null;
+        booking_confirmation: BookingConfirmation | null;
+        
+        pricing_strategy?: {
+            strategy: "split" | "bundle";
+            default_price_list: string;
+            custom_prices: PartnerPricing[];
         } | null;
     } | null;
     
     // Visual identity
-    visualIdentity: VisualIdentity | null;
-    
-    // Pricing
-    pricing?: {
-        strategy: "split" | "bundle";
-        default_price_list: string;
-        custom_prices: PartnerPricing[];
-    } | null;
-    
-    // Legacy pricing - marked for deprecation
-    pricingStrategy?: PricingStrategy | null;
-    
-    // Communication
-    schedules: Schedule[] | null;
-    booking_confirmation: BookingConfirmation | null;
+    visual_identity: VisualIdentity | null;
     
     // User management
     users: DocumentReference[] | null;
