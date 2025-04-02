@@ -3,48 +3,97 @@ import { HubbyModel, SupportedLocales } from './hubby';
 import { Booking } from './booking';
 
 export type Partner = {
-    administration_fee: number | null;
-    email: string | null;
-    income_per_gb: number | null;
+    // Basic information
     name: string | null;
-    requires_card: boolean | null;
     type: string | null;
-    schedules: Schedule[] | null;
-    visualIdentity: VisualIdentity | null;
-    pricingStrategy?: PricingStrategy | null;
-    packageStrategy?: PackageStrategy | null;
-    travelSpiritConfig?: TravelSpiritConfig | null;
-    next_invoice: Timestamp | null;
-    last_invoice: Timestamp | null;
+    is_active?: boolean | null;
+    external_id?: string | null;
     parent: DocumentReference | null;
-    payment_method: "invoice" | "direct",
-    booking_confirmation: BookingConfirmation | null
-    users: DocumentReference[] | null
-    is_active?: boolean | null
-    booking_defaults: BookingDefaults | null
-    external_id?: string | null
+
+    packageStrategy?: PackageStrategy | null;
+
+    // Contact information
+    contact: {
+        email: string | null;
+        office_phone?: string | null;
+    } | null;
+    
+    // Location information
     address?: {
         street?: string;
         city?: string;
         postal_code?: string;
         country?: string;
     } | null;
+    
+    // Registration information
+    registration?: {
+        chamber_of_commerce_number?: string | null;
+        vat_number?: string | null;
+        anvr_number?: number | null;
+        tax_number?: string | null;
+    } | null;
+    
+    // Financial information
+    finance: {
+        administration_fee: number | null;
+        income_per_gb: number | null;
+        commission_fee?: number | null;
+        payment_method: "invoice" | "direct";
+        requires_card: boolean | null;
+        next_invoice: Timestamp | null;
+        last_invoice: Timestamp | null;
+    } | null;
+    
     banking_details?: {
         account_holder: string;
         bank_name: string;
         iban: string;
     } | null;
-    office_phone?: string | null;
-    chamber_of_commerce_number?: string | null;
-    vat_number?: string | null;
-    anvr_number?: number | null;
-    tax_number?: string | null;
-    commission_fee?: number | null;
+    
+    // Platform settings
+    platformSettings?: {
+        free_esim_allowance: number | null;
+        booking_defaults: BookingDefaults | null;
+        data_source?: {
+            source: string;
+            manual: boolean;
+        } | null;
+    } | null;
+    
+    // Visual identity
+    visualIdentity: VisualIdentity | null;
+    
+    // Pricing
+    pricing?: {
+        strategy: "split" | "bundle";
+        default_price_list: string;
+        custom_prices: PartnerPricing[];
+    } | null;
+    
+    // Legacy pricing - marked for deprecation
+    pricingStrategy?: PricingStrategy | null;
+    
+    // Communication
+    schedules: Schedule[] | null;
+    booking_confirmation: BookingConfirmation | null;
+    
+    // User management
+    users: DocumentReference[] | null;
+    
+    // Metadata
     data?: {
         source: string;
         manual: boolean;
     } | null;
 } & HubbyModel;
+
+export type PartnerPricing = {
+    iso3: string;
+    label: "1GB" | "1DAY";
+    type: "data-limit" | "time-limit";
+    price: number;
+}
 
 export type BookingDefaults = {
     locale: SupportedLocales
@@ -79,23 +128,12 @@ export type VisualIdentityBanner = {
     }
 }
 
-export type PricingStrategy = {
-    name: string;
-    parameters: any;
-}
 
+// Marked for deprecation
 export type PackageStrategy = {
     name: string;
     iso3WhiteList?: string[];
     parameters: any;
-}
-
-export type IframeConfig = {
-    primaryColor: string;
-    secondaryColor: string;
-    tertiaryColor: string;
-    font: string;
-    iframe: string;
 }
 
 export type Schedule = {
@@ -110,17 +148,5 @@ export type Schedule = {
     moment: string;
     subject?: Record<SupportedLocales, string>;
     previewText?: Record<SupportedLocales, string>;
-}
-
-export type TravelSpiritConfig = {
-    id: string;
-    dbHost: string;
-    dbPort: number;
-    dbUser: string;
-    dbPassword: string;
-    dbName: string;
-    tableName: string;
-    schedule: string;
-    externalPartnerName: string;
 }
 
