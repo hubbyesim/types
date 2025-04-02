@@ -58,7 +58,12 @@ export type Partner = {
     // Platform settings
     platform_settings?: {
         package_strategy?: PackageStrategy | null;
-        free_esim_allowance: number | null;
+        free_esim: {
+            allowance: number | null;
+            destinations: string[] | null;
+            package_type: "data-limit" | "time-limit" | null;
+            size: string | null;
+        } | null;
         booking_defaults: BookingDefaults | null;
 
         // Communication
