@@ -7,6 +7,3 @@ export type HubbyModel = {
     created_by: string | null | DocumentReference
     updated_by: string | null | DocumentReference
 }
-
-export const supportedLocales: readonly ["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]
-export type SupportedLocales = (typeof supportedLocales)[number];
