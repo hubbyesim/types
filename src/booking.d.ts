@@ -4,8 +4,9 @@ import { User } from "./user";
 import { Partner } from "./partner";
 import { PromoCode } from "./promoCode";
 import { SentMessages } from "./message";
-import { HubbyModel, SupportedLocales } from "./hubby";
+import { HubbyModel } from "./hubby";
 import { PackageSpecifications } from "./api";
+import { SupportedLocales } from "./constants";
 
 //Status explanation
 //PENDING: Booking is pending and waiting for payment
