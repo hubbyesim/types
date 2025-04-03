@@ -1,6 +1,7 @@
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore'
 import { HubbyModel, SupportedLocales } from './hubby';
 import { Booking } from './booking';
+import { PackageSpecifications } from './api';
 
 export type Partner = {
     // Basic information
@@ -60,9 +61,7 @@ export type Partner = {
         package_strategy?: PackageStrategy | null;
         free_esim: {
             allowance: number | null;
-            destinations: string[] | null;
-            package_type: "data-limit" | "time-limit" | null;
-            size: string | null;
+            package_specifications: PackageSpecifications | null;
         } | null;
         booking_defaults: BookingDefaults | null;
 
