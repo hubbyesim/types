@@ -77,14 +77,19 @@ export type PartnerApiRequest = Omit<
   | "parent"
   | "created_at"
   | "updated_at"
-  | "last_invoice"
-  | "next_invoice"
+  | "users"
 > & {
-  next_invoice: Date; // Previously Timestamp
-  last_invoice: Date; // Previously Timestamp
   parent: string | null; // Previously DocumentReference
+  users: string[] | null; // Previously DocumentReference[]
   created_at: Date;
   updated_at: Date;
+  finance: Omit<
+    NonNullable<Partner['finance']>,
+    "next_invoice" | "last_invoice"
+  > & {
+    next_invoice: Date | null; // Previously Timestamp
+    last_invoice: Date | null; // Previously Timestamp
+  } | null;
 };
 
 export type PartnerApiResponse = PartnerApiRequest;
