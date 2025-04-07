@@ -1,6 +1,6 @@
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore'
-import { HubbyModel, SupportedLocales } from './hubby';
-import { Booking } from './booking';
+import { HubbyModel } from './hubby';
+import type { SupportedLocales } from './constants';
 
 export type Partner = {
     administration_fee: number | null;
