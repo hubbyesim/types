@@ -17,7 +17,7 @@ export type Partner = {
         email: string | null;
         office_phone?: string | null;
     } | null;
-    
+
     // Location information
     address?: {
         street?: string;
@@ -25,7 +25,7 @@ export type Partner = {
         postal_code?: string;
         country?: string;
     } | null;
-    
+
     // Registration information
     registration?: {
         chamber_of_commerce_number?: string | null;
@@ -33,29 +33,30 @@ export type Partner = {
         anvr_number?: number | null;
         tax_number?: string | null;
     } | null;
-    
-    // Financial information
-    finance: {
-        administration_fee: number | null;
-        income_per_gb: number | null;
-        commission_fee?: number | null;
-        payment_method: "invoice" | "direct";
-        requires_card: boolean | null;
-        next_invoice: Timestamp | null;
-        last_invoice: Timestamp | null;   
-        pricing_strategy?: {
-            strategy: "split" | "bundle";
-            default_price_list: string;
-            custom_prices: PartnerPricing[];
-        } | null;
-    } | null;
-    
+
+    // Banking information
     banking_details?: {
         account_holder: string;
         bank_name: string;
         iban: string;
     } | null;
-    
+
+    // Financial information
+    financial_properties: {
+        administration_fee: number | null;
+        income_per_gb: number | null;
+        commission_fee?: number | null;
+        payment_method: "invoice" | "direct";
+        requires_card: boolean | null;
+        next_invoice: Date | null;
+        last_invoice: Date | null;
+        pricing_strategy?: {
+            strategy: "split" | "bundle";
+            default_price_list: DocumentReference<PriceList> | null;
+            custom_prices: PartnerPricing[];
+        } | null;
+    } | null;
+
     // Platform settings
     platform_settings?: {
         package_strategy?: PackageStrategy | null;
@@ -69,18 +70,24 @@ export type Partner = {
         schedules: Schedule[] | null;
         booking_confirmation: BookingConfirmation | null;
     } | null;
-    
+
     // Visual identity
     visual_identity: VisualIdentity | null;
-    
+
     // User management
     users: DocumentReference[] | null;
-    
+
     // Metadata
     data?: {
         source: string;
         manual: boolean;
     } | null;
+} & HubbyModel;
+
+export type PriceList = {
+    id: string;
+    name: string;
+    price_list: PartnerPricing[];
 } & HubbyModel;
 
 export type PartnerPricing = {
@@ -109,7 +116,7 @@ export type VisualIdentity = {
 }
 
 export type VisualIdentityBannerStrategy = {
-    strategy: "fixed" | "rotating" | "destination" | "timeOfDay"
+    strategy: "fixed" | "rotating" | "destination" | "time_of_day"
     banners: VisualIdentityBanner[];
 }
 
@@ -127,21 +134,30 @@ export type VisualIdentityBanner = {
 // Marked for deprecation
 export type PackageStrategy = {
     name: string;
-    iso3WhiteList?: string[];
+    iso3_white_list?: string[];
     parameters: any;
 }
 
 export type Schedule = {
     days: number;
     email: {
-        brevoTemplateId: number;
-        travelerBrevoTemplateId?: number;
-    };
+        brevo_template_id: number;
+        subject?: Record<SupportedLocales, string>;
+        preview_text?: Record<SupportedLocales, string>;
+    } | null;
+    push: {
+        title?: Record<SupportedLocales, string>;
+        body?: Record<SupportedLocales, string>;
+        target: string;
+    } | null;
     hour: number;
     key: string;
-    method: string;
-    moment: string;
-    subject?: Record<SupportedLocales, string>;
-    previewText?: Record<SupportedLocales, string>;
+    method: 'email' | 'sms' | 'whatsapp' | 'push';
+    moment: 'departure' | 'return';
+    filter: {
+        type: 'iso3' | 'gender' | 'percentage' | 'age';
+        value: string | number;
+        comparison: 'equal' | 'not_equal' | 'greater_than' | 'less_than' | 'greater_than_or_equal' | 'less_than_or_equal';
+    } | null;
 }
 
