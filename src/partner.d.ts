@@ -153,7 +153,7 @@ export type Schedule = {
     hour: number;
     key: string;
     method: 'email' | 'sms' | 'whatsapp' | 'push';
-    moment: 'departure' | 'return';
+    moment: 'departure' | 'return' | 'immediate';
     filter: {
         type: 'iso3' | 'gender' | 'percentage' | 'age';
         value: string | number;
