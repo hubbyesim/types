@@ -51,9 +51,17 @@ export type Partner = {
         next_invoice: Date | null;
         last_invoice: Date | null;
         pricing_strategy?: {
-            strategy: "split" | "bundle";
-            default_price_list: DocumentReference<PriceList> | null;
-            custom_prices: PartnerPricing[];
+            partner: {
+                strategy: "split" | "bundle";
+                default_price_list: DocumentReference<PriceList> | null;
+                custom_prices: PartnerPricing[];
+                modification_percentage: number;
+            },
+            user: {
+                default_price_list: DocumentReference<PriceList> | null;
+                custom_prices: PartnerPricing[];
+                modification_percentage: number;
+            }
         } | null;
     } | null;
 
@@ -91,8 +99,8 @@ export type PriceList = {
 } & HubbyModel;
 
 export type PartnerPricing = {
-    iso3: string;
-    label: "1GB" | "1DAY";
+    destination: string;
+    label: string;
     type: "data-limit" | "time-limit";
     price: number;
 }
