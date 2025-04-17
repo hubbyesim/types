@@ -1,7 +1,7 @@
-import { DocumentReference, Timestamp } from 'firebase-admin/firestore'
-import { HubbyModel, SupportedLocales } from './hubby';
-import { Booking } from './booking';
+import { DocumentReference } from 'firebase-admin/firestore'
+import { HubbyModel} from './hubby';
 import { PackageSpecifications } from './api';
+import type { SupportedLocales } from './constants';
 
 export type Partner = {
     // Basic information
@@ -161,7 +161,7 @@ export type Schedule = {
     hour: number;
     key: string;
     method: 'email' | 'sms' | 'whatsapp' | 'push';
-    moment: 'departure' | 'return';
+    moment: 'departure' | 'return' | 'immediate';
     filter: {
         type: 'iso3' | 'gender' | 'percentage' | 'age';
         value: string | number;

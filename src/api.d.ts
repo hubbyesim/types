@@ -84,7 +84,7 @@ export type PartnerApiRequest = Omit<
   created_at: Date;
   updated_at: Date;
   finance: Omit<
-    NonNullable<Partner['finance']>,
+    NonNullable<Partner['financial_properties']>,
     "next_invoice" | "last_invoice"
   > & {
     next_invoice: Date | null; // Previously Timestamp
