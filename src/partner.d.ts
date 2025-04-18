@@ -1,5 +1,6 @@
 import { DocumentReference } from 'firebase-admin/firestore'
-import { HubbyModel} from './hubby';
+import { HubbyModel } from './hubby';
+import { Package } from './package';
 import { PackageSpecifications } from './api';
 import type { SupportedLocales } from './constants';
 
@@ -95,12 +96,13 @@ export type Partner = {
 export type PriceList = {
     id: string;
     name: string;
-    price_list: PartnerPricing[];
+    price_list: PackagePricing[];
 } & HubbyModel;
 
-export type PartnerPricing = {
+export type PackagePricing = {
     destination: string;
     label: string;
+    package: DocumentReference<Package>;
     type: "data-limit" | "time-limit";
     price: number;
 }
