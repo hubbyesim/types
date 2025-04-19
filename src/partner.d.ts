@@ -51,16 +51,16 @@ export type Partner = {
         requires_card: boolean | null;
         next_invoice: Date | null;
         last_invoice: Date | null;
-        pricing_strategy?: {
+        pricing_strategies?: {
             partner: {
                 strategy: "split" | "bundle";
                 default_price_list: DocumentReference<PriceList> | null;
-                custom_prices: PartnerPricing[];
+                custom_prices: PackagePricing[];
                 modification_percentage: number;
             },
             user: {
                 default_price_list: DocumentReference<PriceList> | null;
-                custom_prices: PartnerPricing[];
+                custom_prices: PackagePricing[];
                 modification_percentage: number;
             }
         } | null;
