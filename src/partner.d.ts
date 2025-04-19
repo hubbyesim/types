@@ -86,12 +86,12 @@ export type FinancialProperties = {
         partner: {
             strategy: "split" | "bundle";
             default_price_list: DocumentReference<PriceList> | null;
-            custom_prices: PackagePricing[];
+            custom_prices: PackagePrice[];
             modification_percentage: number;
         },
         user: {
             default_price_list: DocumentReference<PriceList> | null;
-            custom_prices: PackagePricing[];
+            custom_prices: PackagePrice[];
             modification_percentage: number;
         }
     } | null;
@@ -100,10 +100,10 @@ export type FinancialProperties = {
 export type PriceList = {
     id: string;
     name: string;
-    price_list: PackagePricing[];
+    price_list: PackagePrice[];
 } & HubbyModel;
 
-export type PackagePricing = {
+export type PackagePrice = {
     destination: string;
     label: string;
     package: DocumentReference<Package>;
