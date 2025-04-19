@@ -43,42 +43,10 @@ export type Partner = {
     } | null;
 
     // Financial information
-    financial_properties: {
-        administration_fee: number | null;
-        income_per_gb: number | null;
-        commission_fee?: number | null;
-        payment_method: "invoice" | "direct";
-        requires_card: boolean | null;
-        next_invoice: Date | null;
-        last_invoice: Date | null;
-        pricing_strategies?: {
-            partner: {
-                strategy: "split" | "bundle";
-                default_price_list: DocumentReference<PriceList> | null;
-                custom_prices: PackagePricing[];
-                modification_percentage: number;
-            },
-            user: {
-                default_price_list: DocumentReference<PriceList> | null;
-                custom_prices: PackagePricing[];
-                modification_percentage: number;
-            }
-        } | null;
-    } | null;
+    financial_properties: FinancialProperties | null;
 
     // Platform settings
-    platform_settings?: {
-        package_strategy?: PackageStrategy | null;
-        free_esim: {
-            allowance: number | null;
-            package_specifications: PackageSpecifications | null;
-        } | null;
-        booking_defaults: BookingDefaults | null;
-
-        // Communication
-        schedules: Schedule[] | null;
-        booking_confirmation: BookingConfirmation | null;
-    } | null;
+    platform_settings?: PlatformSettings | null;
 
     // Visual identity
     visual_identity: VisualIdentity | null;
@@ -92,6 +60,42 @@ export type Partner = {
         manual: boolean;
     } | null;
 } & HubbyModel;
+
+export type PlatformSettings = {
+    package_strategy?: PackageStrategy | null;
+    free_esim: {
+        allowance: number | null;
+        package_specifications: PackageSpecifications | null;
+    } | null;
+    booking_defaults: BookingDefaults | null;
+
+    // Communication
+    schedules: Schedule[] | null;
+    booking_confirmation: BookingConfirmation | null;
+} | null;
+
+export type FinancialProperties = {
+    administration_fee: number | null;
+    income_per_gb: number | null;
+    commission_fee?: number | null;
+    payment_method: "invoice" | "direct";
+    requires_card: boolean | null;
+    next_invoice: Date | null;
+    last_invoice: Date | null;
+    pricing_strategies?: {
+        partner: {
+            strategy: "split" | "bundle";
+            default_price_list: DocumentReference<PriceList> | null;
+            custom_prices: PackagePricing[];
+            modification_percentage: number;
+        },
+        user: {
+            default_price_list: DocumentReference<PriceList> | null;
+            custom_prices: PackagePricing[];
+            modification_percentage: number;
+        }
+    } | null;
+} | null;
 
 export type PriceList = {
     id: string;
