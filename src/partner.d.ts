@@ -48,13 +48,13 @@ export type Partner = {
     } | null;
 
     // Financial information
-    financial_properties: FinancialProperties | null;
+    financial_properties?: FinancialProperties;
 
     // Platform settings
-    platform_settings?: PlatformSettings | null;
+    platform_settings?: PlatformSettings;
 
     // Visual identity
-    visual_identity: VisualIdentity | null;
+    visual_identity?: VisualIdentity;
 } & HubbyModel;
 
 
