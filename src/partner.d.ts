@@ -1,5 +1,7 @@
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore'
 import { HubbyModel } from './hubby';
+import { Package } from './package';
+import { PackageSpecifications } from './api';
 import type { SupportedLocales } from './constants';
 
 export type Partner = {
@@ -44,7 +46,67 @@ export type Partner = {
         source: string;
         manual: boolean;
     } | null;
+
+    // Financial information
+    financial_properties: FinancialProperties | null;
+
+    // Platform settings
+    platform_settings?: PlatformSettings | null;
+
+    // Visual identity
+    visual_identity: VisualIdentity | null;
 } & HubbyModel;
+
+
+export type PlatformSettings = {
+    package_strategy?: PackageStrategy | null;
+    free_esim: {
+        allowance: number | null;
+        package_specifications: PackageSpecifications | null;
+    } | null;
+    booking_defaults: BookingDefaults | null;
+
+    // Communication
+    schedules: Schedule[] | null;
+    booking_confirmation: BookingConfirmation | null;
+} | null;
+
+export type FinancialProperties = {
+    administration_fee: number | null;
+    income_per_gb: number | null;
+    commission_fee?: number | null;
+    payment_method: "invoice" | "direct";
+    requires_card: boolean | null;
+    next_invoice: Date | null;
+    last_invoice: Date | null;
+    pricing_strategies?: {
+        partner: {
+            strategy: "split" | "bundle";
+            default_price_list: DocumentReference<PriceList> | null;
+            custom_prices: PackagePrice[];
+            modification_percentage: number;
+        },
+        user: {
+            default_price_list: DocumentReference<PriceList> | null;
+            custom_prices: PackagePrice[];
+            modification_percentage: number;
+        }
+    } | null;
+} | null;
+
+export type PriceList = {
+    id: string;
+    name: string;
+    price_list: PackagePrice[];
+} & HubbyModel;
+
+export type PackagePrice = {
+    destination: string;
+    label: string;
+    package: DocumentReference<Package>;
+    type: "data-limit" | "time-limit";
+    price: number;
+}
 
 export type BookingDefaults = {
     locale: SupportedLocales

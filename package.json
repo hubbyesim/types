@@ -1,6 +1,6 @@
 {
   "name": "@hubbyesim/types",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "The type definitions for the hubbyesim project",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
