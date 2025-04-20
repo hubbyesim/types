@@ -8,6 +8,12 @@ import { HubbyModel } from "./hubby";
 import { PackageSpecifications } from "./api";
 import { SupportedLocales } from "./constants";
 
+// Import converters from Zod schemas
+import {
+  bookingFromFirestore,
+  bookingToFirestore
+} from './schemas/booking';
+
 //Status explanation
 //PENDING: Booking is pending and waiting for payment
 //CONFIRMED: Booking is confirmed and payment is successful
@@ -16,7 +22,21 @@ import { SupportedLocales } from "./constants";
 //EXPIRED: Booking is expired and payment is not successful
 export type BookingStatus = 'PENDING' | 'CONFIRMED' | 'COMPLETED' | 'CANCELLED' | 'UNPAID' | 'EXPIRED';
 
-type HubbyBooking = {
+// Communication channels enum
+export enum CommunicationChannel {
+  EMAIL = "EMAIL",
+  WHATSAPP = "WHATSAPP",
+  PUSH_NOTIFICATION = "PUSH_NOTIFICATION",
+  SMS = "SMS",
+}
+
+export type CommunicationOptions = {
+  should_send_message: boolean; // Indicates whether to send any message at all
+  channels: CommunicationChannel[]; // List of channels to send the message across
+};
+
+// Legacy type definition
+export type Booking = {
   title: string | null;
   first_name: string;
   last_name: string;
@@ -46,18 +66,15 @@ type HubbyBooking = {
   is_pseudonymized: boolean; // flags true if the traveler is pseudonymized
   import_id?: string | null,
   package_specifications?: PackageSpecifications,
+  id: string,
+  created_at: Timestamp
+  updated_at: Timestamp
+  created_by: string | null | DocumentReference
+  updated_by: string | null | DocumentReference
 };
 
-export const enum CommunicationChannel {
-  EMAIL = "EMAIL",
-  WHATSAPP = "WHATSAPP",
-  PUSH_NOTIFICATION = "PUSH_NOTIFICATION",
-  SMS = "SMS",
+// Export converters
+export {
+  bookingFromFirestore,
+  bookingToFirestore
 }
-
-export type CommunicationOptions = {
-  should_send_message: boolean; // Indicates whether to send any message at all
-  channels: CommunicationChannel[]; // List of channels to send the message across
-};
-
-export type Booking = HubbyBooking & HubbyModel;

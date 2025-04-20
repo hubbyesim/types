@@ -1,15 +1,5 @@
-import { Timestamp } from "firebase-admin/firestore";
+import { Message, SentMessages } from './schemas/message';
 
-export type Message = {
-    id: string;
-    key: string;
-    method: "sms" | "email" | "push";
-    status: "pending" | "sent" | "failed" | "delivered";
-    created_at: Timestamp
-    updated_at: Timestamp
-  };
-  
-  export type SentMessages = {
-    [key: string]: Message;
-  };
-  
+// This file is kept for backwards compatibility
+// The main Message types are now defined in src/schemas/message.ts
+export { Message, SentMessages }; 

@@ -1,10 +1,5 @@
-import { HubbyModel } from "./hubby";
+import { Currency, CoversionRate } from './schemas/currency';
 
-export type Currency = {
-  base_code: string,
-  coversion_rates: CoversionRate
-} & HubbyModel;
-  
-type CoversionRate = {
-  currency: number
-}
+// This file is kept for backwards compatibility
+// The main Currency types are now defined in src/schemas/currency.ts
+export { Currency, CoversionRate }; 

@@ -1,3 +1,9 @@
+// Import converters from Zod schemas
+import {
+  countryToFirestore,
+  countryFromFirestore
+} from './schemas/country';
+
 export type Country = {
   id: string | null,
   bokun_id: number | null,
@@ -14,3 +20,9 @@ export type Country = {
   countries: null | string[];
   tier: number | null; // Indicates the tier level, e.g., 2
 };
+
+// Export converters
+export {
+  countryToFirestore,
+  countryFromFirestore
+}

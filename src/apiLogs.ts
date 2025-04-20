@@ -1,14 +1,5 @@
-import { Timestamp } from "firebase-admin/firestore"
+import { ApiLog } from './schemas/apiLogs';
 
-export interface ApiLog {
-  id?: string
-  method: string
-  user_id?: string
-  path: string
-  resource_type?: string
-  resource_id?: string
-  partner_id?: string
-  payload?: Record<string, unknown>
-  timestamp: Timestamp,
-  status_code: number
-}
+// This file is kept for backwards compatibility
+// The main ApiLog type is now defined in src/schemas/apiLogs.ts
+export { ApiLog }; 

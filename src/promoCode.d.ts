@@ -7,6 +7,12 @@ import { HubbyModel } from "./hubby";
 import { Package } from "./package";
 import { PackageSpecification } from "./api";
 
+// Import converters from Zod schemas
+import {
+  promoCodeToFirestore,
+  promoCodeFromFirestore
+} from './schemas/promoCode';
+
 export type HubbyPromoCode = {
   external_id: string;
   code: string;
@@ -32,3 +38,9 @@ export type HubbyPromoCode = {
 }
 
 export type PromoCode = HubbyPromoCode & HubbyModel;
+
+// Export converters
+export {
+  promoCodeToFirestore,
+  promoCodeFromFirestore
+}

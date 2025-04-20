@@ -2,6 +2,13 @@ import { DocumentReference } from "firebase-admin/firestore";
 import { Country } from "./country";
 import { HubbyModel } from "./hubby";
 import { Partner } from "./partner";
+
+// Import converters from Zod schemas
+import {
+  packageToFirestore,
+  packageFromFirestore
+} from './schemas/package';
+
 export type Package = {
   external_id: string;
   provider: "telna" | "bondio" | string; // Example: "telna"
@@ -25,3 +32,9 @@ export type Package = {
     imsi: number;
   }
 } & HubbyModel
+
+// Export converters
+export {
+  packageToFirestore,
+  packageFromFirestore
+}

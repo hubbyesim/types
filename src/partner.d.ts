@@ -4,6 +4,13 @@ import { Package } from './package';
 import { PackageSpecifications } from './api';
 import type { SupportedLocales } from './constants';
 
+// Import converters from Zod schemas
+import {
+    partnerToFirestore,
+    partnerFromFirestore,
+} from './schemas/partner';
+
+// Legacy type definitions to maintain backward compatibility
 export type Partner = {
     // Basic information
     id: string;
@@ -175,3 +182,8 @@ export type Schedule = {
     } | null;
 }
 
+// Export the converters
+export {
+    partnerToFirestore,
+    partnerFromFirestore
+}; 
