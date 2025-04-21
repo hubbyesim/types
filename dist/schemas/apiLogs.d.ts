@@ -1,0 +1,74 @@
+import { z } from 'zod';
+export declare const apiLogFirestoreSchema: z.ZodObject<{
+    id: z.ZodOptional<z.ZodString>;
+    method: z.ZodString;
+    user_id: z.ZodOptional<z.ZodString>;
+    path: z.ZodString;
+    resource_type: z.ZodOptional<z.ZodString>;
+    resource_id: z.ZodOptional<z.ZodString>;
+    partner_id: z.ZodOptional<z.ZodString>;
+    payload: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    timestamp: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
+    status_code: z.ZodNumber;
+}, "strip", z.ZodTypeAny, {
+    path: string;
+    method: string;
+    timestamp: FirebaseFirestore.Timestamp;
+    status_code: number;
+    id?: string | undefined;
+    user_id?: string | undefined;
+    resource_type?: string | undefined;
+    resource_id?: string | undefined;
+    partner_id?: string | undefined;
+    payload?: Record<string, unknown> | undefined;
+}, {
+    path: string;
+    method: string;
+    timestamp: FirebaseFirestore.Timestamp;
+    status_code: number;
+    id?: string | undefined;
+    user_id?: string | undefined;
+    resource_type?: string | undefined;
+    resource_id?: string | undefined;
+    partner_id?: string | undefined;
+    payload?: Record<string, unknown> | undefined;
+}>;
+export declare const apiLogAppSchema: z.ZodObject<{
+    id: z.ZodOptional<z.ZodString>;
+    method: z.ZodString;
+    user_id: z.ZodOptional<z.ZodString>;
+    path: z.ZodString;
+    resource_type: z.ZodOptional<z.ZodString>;
+    resource_id: z.ZodOptional<z.ZodString>;
+    partner_id: z.ZodOptional<z.ZodString>;
+    payload: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    timestamp: z.ZodDate;
+    status_code: z.ZodNumber;
+}, "strip", z.ZodTypeAny, {
+    path: string;
+    method: string;
+    timestamp: Date;
+    status_code: number;
+    id?: string | undefined;
+    user_id?: string | undefined;
+    resource_type?: string | undefined;
+    resource_id?: string | undefined;
+    partner_id?: string | undefined;
+    payload?: Record<string, unknown> | undefined;
+}, {
+    path: string;
+    method: string;
+    timestamp: Date;
+    status_code: number;
+    id?: string | undefined;
+    user_id?: string | undefined;
+    resource_type?: string | undefined;
+    resource_id?: string | undefined;
+    partner_id?: string | undefined;
+    payload?: Record<string, unknown> | undefined;
+}>;
+export type ApiLogFirestore = z.infer<typeof apiLogFirestoreSchema>;
+export type ApiLogApp = z.infer<typeof apiLogAppSchema>;
+export declare const apiLogToFirestore: (apiLog: ApiLogApp) => ApiLogFirestore;
+export declare const apiLogFromFirestore: (firestoreApiLog: ApiLogFirestore) => ApiLogApp;
+export type ApiLog = ApiLogApp;

@@ -1,0 +1,3142 @@
+import { z } from 'zod';
+export declare const PARTNER_COLLECTION = "partners";
+export declare const PRICE_LIST_COLLECTION = "priceLists";
+export declare const PACKAGE_COLLECTION = "packages";
+export declare const USER_COLLECTION = "users";
+export declare const partnerRefSchema: {
+    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+    collectionPath: string;
+};
+export declare const priceListRefSchema: {
+    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+    collectionPath: string;
+};
+export declare const packageRefSchema: {
+    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+    collectionPath: string;
+};
+export declare const userRefSchema: {
+    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+    collectionPath: string;
+};
+export declare const addressSchema: z.ZodNullable<z.ZodObject<{
+    street: z.ZodOptional<z.ZodString>;
+    city: z.ZodOptional<z.ZodString>;
+    postal_code: z.ZodOptional<z.ZodString>;
+    country: z.ZodOptional<z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    street?: string | undefined;
+    city?: string | undefined;
+    postal_code?: string | undefined;
+    country?: string | undefined;
+}, {
+    street?: string | undefined;
+    city?: string | undefined;
+    postal_code?: string | undefined;
+    country?: string | undefined;
+}>>;
+export declare const registrationSchema: z.ZodNullable<z.ZodObject<{
+    chamber_of_commerce_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    vat_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    anvr_number: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    tax_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+}, "strip", z.ZodTypeAny, {
+    chamber_of_commerce_number?: string | null | undefined;
+    vat_number?: string | null | undefined;
+    anvr_number?: number | null | undefined;
+    tax_number?: string | null | undefined;
+}, {
+    chamber_of_commerce_number?: string | null | undefined;
+    vat_number?: string | null | undefined;
+    anvr_number?: number | null | undefined;
+    tax_number?: string | null | undefined;
+}>>;
+export declare const bankingDetailsSchema: z.ZodNullable<z.ZodObject<{
+    account_holder: z.ZodString;
+    bank_name: z.ZodString;
+    iban: z.ZodString;
+}, "strip", z.ZodTypeAny, {
+    account_holder: string;
+    bank_name: string;
+    iban: string;
+}, {
+    account_holder: string;
+    bank_name: string;
+    iban: string;
+}>>;
+export declare const packagePriceFirestoreSchema: z.ZodObject<{
+    destination: z.ZodString;
+    label: z.ZodString;
+    package: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+    type: z.ZodEnum<["data-limit", "time-limit"]>;
+    price: z.ZodNumber;
+}, "strip", z.ZodTypeAny, {
+    type: "data-limit" | "time-limit";
+    destination: string;
+    label: string;
+    package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+    price: number;
+}, {
+    type: "data-limit" | "time-limit";
+    destination: string;
+    label: string;
+    package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+    price: number;
+}>;
+export declare const packagePriceAppSchema: z.ZodObject<{
+    destination: z.ZodString;
+    label: z.ZodString;
+    package: z.ZodString;
+    type: z.ZodEnum<["data-limit", "time-limit"]>;
+    price: z.ZodNumber;
+}, "strip", z.ZodTypeAny, {
+    type: "data-limit" | "time-limit";
+    destination: string;
+    label: string;
+    package: string;
+    price: number;
+}, {
+    type: "data-limit" | "time-limit";
+    destination: string;
+    label: string;
+    package: string;
+    price: number;
+}>;
+export declare const pricingStrategyFirestoreSchema: z.ZodObject<{
+    strategy: z.ZodEnum<["split", "bundle"]>;
+    default_price_list: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
+    custom_prices: z.ZodArray<z.ZodObject<{
+        destination: z.ZodString;
+        label: z.ZodString;
+        package: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+        type: z.ZodEnum<["data-limit", "time-limit"]>;
+        price: z.ZodNumber;
+    }, "strip", z.ZodTypeAny, {
+        type: "data-limit" | "time-limit";
+        destination: string;
+        label: string;
+        package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+        price: number;
+    }, {
+        type: "data-limit" | "time-limit";
+        destination: string;
+        label: string;
+        package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+        price: number;
+    }>, "many">;
+    modification_percentage: z.ZodNumber;
+}, "strip", z.ZodTypeAny, {
+    strategy: "split" | "bundle";
+    default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    custom_prices: {
+        type: "data-limit" | "time-limit";
+        destination: string;
+        label: string;
+        package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+        price: number;
+    }[];
+    modification_percentage: number;
+}, {
+    strategy: "split" | "bundle";
+    default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    custom_prices: {
+        type: "data-limit" | "time-limit";
+        destination: string;
+        label: string;
+        package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+        price: number;
+    }[];
+    modification_percentage: number;
+}>;
+export declare const pricingStrategyAppSchema: z.ZodObject<{
+    strategy: z.ZodEnum<["split", "bundle"]>;
+    default_price_list_id: z.ZodNullable<z.ZodString>;
+    custom_prices: z.ZodArray<z.ZodObject<{
+        destination: z.ZodString;
+        label: z.ZodString;
+        package: z.ZodString;
+        type: z.ZodEnum<["data-limit", "time-limit"]>;
+        price: z.ZodNumber;
+    }, "strip", z.ZodTypeAny, {
+        type: "data-limit" | "time-limit";
+        destination: string;
+        label: string;
+        package: string;
+        price: number;
+    }, {
+        type: "data-limit" | "time-limit";
+        destination: string;
+        label: string;
+        package: string;
+        price: number;
+    }>, "many">;
+    modification_percentage: z.ZodNumber;
+}, "strip", z.ZodTypeAny, {
+    strategy: "split" | "bundle";
+    custom_prices: {
+        type: "data-limit" | "time-limit";
+        destination: string;
+        label: string;
+        package: string;
+        price: number;
+    }[];
+    modification_percentage: number;
+    default_price_list_id: string | null;
+}, {
+    strategy: "split" | "bundle";
+    custom_prices: {
+        type: "data-limit" | "time-limit";
+        destination: string;
+        label: string;
+        package: string;
+        price: number;
+    }[];
+    modification_percentage: number;
+    default_price_list_id: string | null;
+}>;
+export declare const financialPropertiesFirestoreSchema: z.ZodNullable<z.ZodObject<{
+    administration_fee: z.ZodNullable<z.ZodNumber>;
+    income_per_gb: z.ZodNullable<z.ZodNumber>;
+    commission_fee: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    payment_method: z.ZodEnum<["invoice", "direct"]>;
+    requires_card: z.ZodNullable<z.ZodBoolean>;
+    next_invoice: z.ZodNullable<z.ZodDate>;
+    last_invoice: z.ZodNullable<z.ZodDate>;
+    pricing_strategies: z.ZodNullable<z.ZodObject<{
+        partner: z.ZodObject<{
+            strategy: z.ZodEnum<["split", "bundle"]>;
+            default_price_list: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
+            custom_prices: z.ZodArray<z.ZodObject<{
+                destination: z.ZodString;
+                label: z.ZodString;
+                package: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+                type: z.ZodEnum<["data-limit", "time-limit"]>;
+                price: z.ZodNumber;
+            }, "strip", z.ZodTypeAny, {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                price: number;
+            }, {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                price: number;
+            }>, "many">;
+            modification_percentage: z.ZodNumber;
+        }, "strip", z.ZodTypeAny, {
+            strategy: "split" | "bundle";
+            default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                price: number;
+            }[];
+            modification_percentage: number;
+        }, {
+            strategy: "split" | "bundle";
+            default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                price: number;
+            }[];
+            modification_percentage: number;
+        }>;
+        user: z.ZodObject<{
+            strategy: z.ZodEnum<["split", "bundle"]>;
+            default_price_list: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
+            custom_prices: z.ZodArray<z.ZodObject<{
+                destination: z.ZodString;
+                label: z.ZodString;
+                package: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+                type: z.ZodEnum<["data-limit", "time-limit"]>;
+                price: z.ZodNumber;
+            }, "strip", z.ZodTypeAny, {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                price: number;
+            }, {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                price: number;
+            }>, "many">;
+            modification_percentage: z.ZodNumber;
+        }, "strip", z.ZodTypeAny, {
+            strategy: "split" | "bundle";
+            default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                price: number;
+            }[];
+            modification_percentage: number;
+        }, {
+            strategy: "split" | "bundle";
+            default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                price: number;
+            }[];
+            modification_percentage: number;
+        }>;
+    }, "strip", z.ZodTypeAny, {
+        partner: {
+            strategy: "split" | "bundle";
+            default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                price: number;
+            }[];
+            modification_percentage: number;
+        };
+        user: {
+            strategy: "split" | "bundle";
+            default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                price: number;
+            }[];
+            modification_percentage: number;
+        };
+    }, {
+        partner: {
+            strategy: "split" | "bundle";
+            default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                price: number;
+            }[];
+            modification_percentage: number;
+        };
+        user: {
+            strategy: "split" | "bundle";
+            default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                price: number;
+            }[];
+            modification_percentage: number;
+        };
+    }>>;
+}, "strip", z.ZodTypeAny, {
+    administration_fee: number | null;
+    income_per_gb: number | null;
+    payment_method: "invoice" | "direct";
+    requires_card: boolean | null;
+    next_invoice: Date | null;
+    last_invoice: Date | null;
+    pricing_strategies: {
+        partner: {
+            strategy: "split" | "bundle";
+            default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                price: number;
+            }[];
+            modification_percentage: number;
+        };
+        user: {
+            strategy: "split" | "bundle";
+            default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                price: number;
+            }[];
+            modification_percentage: number;
+        };
+    } | null;
+    commission_fee?: number | null | undefined;
+}, {
+    administration_fee: number | null;
+    income_per_gb: number | null;
+    payment_method: "invoice" | "direct";
+    requires_card: boolean | null;
+    next_invoice: Date | null;
+    last_invoice: Date | null;
+    pricing_strategies: {
+        partner: {
+            strategy: "split" | "bundle";
+            default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                price: number;
+            }[];
+            modification_percentage: number;
+        };
+        user: {
+            strategy: "split" | "bundle";
+            default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                price: number;
+            }[];
+            modification_percentage: number;
+        };
+    } | null;
+    commission_fee?: number | null | undefined;
+}>>;
+export declare const financialPropertiesAppSchema: z.ZodNullable<z.ZodObject<{
+    administration_fee: z.ZodNullable<z.ZodNumber>;
+    income_per_gb: z.ZodNullable<z.ZodNumber>;
+    commission_fee: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    payment_method: z.ZodEnum<["invoice", "direct"]>;
+    requires_card: z.ZodNullable<z.ZodBoolean>;
+    next_invoice: z.ZodNullable<z.ZodDate>;
+    last_invoice: z.ZodNullable<z.ZodDate>;
+    pricing_strategies: z.ZodNullable<z.ZodObject<{
+        partner: z.ZodObject<{
+            strategy: z.ZodEnum<["split", "bundle"]>;
+            default_price_list_id: z.ZodNullable<z.ZodString>;
+            custom_prices: z.ZodArray<z.ZodObject<{
+                destination: z.ZodString;
+                label: z.ZodString;
+                package: z.ZodString;
+                type: z.ZodEnum<["data-limit", "time-limit"]>;
+                price: z.ZodNumber;
+            }, "strip", z.ZodTypeAny, {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: string;
+                price: number;
+            }, {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: string;
+                price: number;
+            }>, "many">;
+            modification_percentage: z.ZodNumber;
+        }, "strip", z.ZodTypeAny, {
+            strategy: "split" | "bundle";
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: string;
+                price: number;
+            }[];
+            modification_percentage: number;
+            default_price_list_id: string | null;
+        }, {
+            strategy: "split" | "bundle";
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: string;
+                price: number;
+            }[];
+            modification_percentage: number;
+            default_price_list_id: string | null;
+        }>;
+        user: z.ZodObject<{
+            strategy: z.ZodEnum<["split", "bundle"]>;
+            default_price_list_id: z.ZodNullable<z.ZodString>;
+            custom_prices: z.ZodArray<z.ZodObject<{
+                destination: z.ZodString;
+                label: z.ZodString;
+                package: z.ZodString;
+                type: z.ZodEnum<["data-limit", "time-limit"]>;
+                price: z.ZodNumber;
+            }, "strip", z.ZodTypeAny, {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: string;
+                price: number;
+            }, {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: string;
+                price: number;
+            }>, "many">;
+            modification_percentage: z.ZodNumber;
+        }, "strip", z.ZodTypeAny, {
+            strategy: "split" | "bundle";
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: string;
+                price: number;
+            }[];
+            modification_percentage: number;
+            default_price_list_id: string | null;
+        }, {
+            strategy: "split" | "bundle";
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: string;
+                price: number;
+            }[];
+            modification_percentage: number;
+            default_price_list_id: string | null;
+        }>;
+    }, "strip", z.ZodTypeAny, {
+        partner: {
+            strategy: "split" | "bundle";
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: string;
+                price: number;
+            }[];
+            modification_percentage: number;
+            default_price_list_id: string | null;
+        };
+        user: {
+            strategy: "split" | "bundle";
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: string;
+                price: number;
+            }[];
+            modification_percentage: number;
+            default_price_list_id: string | null;
+        };
+    }, {
+        partner: {
+            strategy: "split" | "bundle";
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: string;
+                price: number;
+            }[];
+            modification_percentage: number;
+            default_price_list_id: string | null;
+        };
+        user: {
+            strategy: "split" | "bundle";
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: string;
+                price: number;
+            }[];
+            modification_percentage: number;
+            default_price_list_id: string | null;
+        };
+    }>>;
+}, "strip", z.ZodTypeAny, {
+    administration_fee: number | null;
+    income_per_gb: number | null;
+    payment_method: "invoice" | "direct";
+    requires_card: boolean | null;
+    next_invoice: Date | null;
+    last_invoice: Date | null;
+    pricing_strategies: {
+        partner: {
+            strategy: "split" | "bundle";
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: string;
+                price: number;
+            }[];
+            modification_percentage: number;
+            default_price_list_id: string | null;
+        };
+        user: {
+            strategy: "split" | "bundle";
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: string;
+                price: number;
+            }[];
+            modification_percentage: number;
+            default_price_list_id: string | null;
+        };
+    } | null;
+    commission_fee?: number | null | undefined;
+}, {
+    administration_fee: number | null;
+    income_per_gb: number | null;
+    payment_method: "invoice" | "direct";
+    requires_card: boolean | null;
+    next_invoice: Date | null;
+    last_invoice: Date | null;
+    pricing_strategies: {
+        partner: {
+            strategy: "split" | "bundle";
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: string;
+                price: number;
+            }[];
+            modification_percentage: number;
+            default_price_list_id: string | null;
+        };
+        user: {
+            strategy: "split" | "bundle";
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                destination: string;
+                label: string;
+                package: string;
+                price: number;
+            }[];
+            modification_percentage: number;
+            default_price_list_id: string | null;
+        };
+    } | null;
+    commission_fee?: number | null | undefined;
+}>>;
+export declare const packageStrategySchema: z.ZodObject<{
+    name: z.ZodString;
+    iso3_white_list: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    parameters: z.ZodAny;
+}, "strip", z.ZodTypeAny, {
+    name: string;
+    iso3_white_list?: string[] | undefined;
+    parameters?: any;
+}, {
+    name: string;
+    iso3_white_list?: string[] | undefined;
+    parameters?: any;
+}>;
+export declare const bookingDefaultsSchema: z.ZodObject<{
+    locale: z.ZodEnum<["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]>;
+}, "strip", z.ZodTypeAny, {
+    locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+}, {
+    locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+}>;
+export declare const bookingConfirmationSchema: z.ZodObject<{
+    brevo_template_id: z.ZodNumber;
+    send_booking_confirmation: z.ZodBoolean;
+}, "strip", z.ZodTypeAny, {
+    brevo_template_id: number;
+    send_booking_confirmation: boolean;
+}, {
+    brevo_template_id: number;
+    send_booking_confirmation: boolean;
+}>;
+export declare const visualIdentityBannerSchema: z.ZodObject<{
+    image_url: z.ZodString;
+    alt: z.ZodString;
+    click_url: z.ZodString;
+    locale: z.ZodEnum<["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]>;
+    properties: z.ZodRecord<z.ZodString, z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+    image_url: string;
+    alt: string;
+    click_url: string;
+    properties: Record<string, string>;
+}, {
+    locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+    image_url: string;
+    alt: string;
+    click_url: string;
+    properties: Record<string, string>;
+}>;
+export declare const visualIdentityBannerStrategySchema: z.ZodObject<{
+    strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
+    banners: z.ZodArray<z.ZodObject<{
+        image_url: z.ZodString;
+        alt: z.ZodString;
+        click_url: z.ZodString;
+        locale: z.ZodEnum<["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]>;
+        properties: z.ZodRecord<z.ZodString, z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+        image_url: string;
+        alt: string;
+        click_url: string;
+        properties: Record<string, string>;
+    }, {
+        locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+        image_url: string;
+        alt: string;
+        click_url: string;
+        properties: Record<string, string>;
+    }>, "many">;
+}, "strip", z.ZodTypeAny, {
+    strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+    banners: {
+        locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+        image_url: string;
+        alt: string;
+        click_url: string;
+        properties: Record<string, string>;
+    }[];
+}, {
+    strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+    banners: {
+        locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+        image_url: string;
+        alt: string;
+        click_url: string;
+        properties: Record<string, string>;
+    }[];
+}>;
+export declare const visualIdentitySchema: z.ZodObject<{
+    primary_color: z.ZodString;
+    secondary_color: z.ZodString;
+    logo: z.ZodString;
+    font: z.ZodString;
+    top_banner: z.ZodObject<{
+        strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
+        banners: z.ZodArray<z.ZodObject<{
+            image_url: z.ZodString;
+            alt: z.ZodString;
+            click_url: z.ZodString;
+            locale: z.ZodEnum<["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]>;
+            properties: z.ZodRecord<z.ZodString, z.ZodString>;
+        }, "strip", z.ZodTypeAny, {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+        }, {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+        }>, "many">;
+    }, "strip", z.ZodTypeAny, {
+        strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+        banners: {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+        }[];
+    }, {
+        strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+        banners: {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+        }[];
+    }>;
+    mid_banner: z.ZodObject<{
+        strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
+        banners: z.ZodArray<z.ZodObject<{
+            image_url: z.ZodString;
+            alt: z.ZodString;
+            click_url: z.ZodString;
+            locale: z.ZodEnum<["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]>;
+            properties: z.ZodRecord<z.ZodString, z.ZodString>;
+        }, "strip", z.ZodTypeAny, {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+        }, {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+        }>, "many">;
+    }, "strip", z.ZodTypeAny, {
+        strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+        banners: {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+        }[];
+    }, {
+        strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+        banners: {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+        }[];
+    }>;
+}, "strip", z.ZodTypeAny, {
+    primary_color: string;
+    secondary_color: string;
+    logo: string;
+    font: string;
+    top_banner: {
+        strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+        banners: {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+        }[];
+    };
+    mid_banner: {
+        strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+        banners: {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+        }[];
+    };
+}, {
+    primary_color: string;
+    secondary_color: string;
+    logo: string;
+    font: string;
+    top_banner: {
+        strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+        banners: {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+        }[];
+    };
+    mid_banner: {
+        strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+        banners: {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+        }[];
+    };
+}>;
+export declare const scheduleFilterSchema: z.ZodNullable<z.ZodObject<{
+    type: z.ZodEnum<["iso3", "gender", "percentage", "age"]>;
+    value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
+    comparison: z.ZodEnum<["equal", "not_equal", "greater_than", "less_than", "greater_than_or_equal", "less_than_or_equal"]>;
+}, "strip", z.ZodTypeAny, {
+    value: string | number;
+    type: "gender" | "iso3" | "percentage" | "age";
+    comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+}, {
+    value: string | number;
+    type: "gender" | "iso3" | "percentage" | "age";
+    comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+}>>;
+export declare const scheduleSchema: z.ZodObject<{
+    days: z.ZodNumber;
+    email: z.ZodNullable<z.ZodObject<{
+        brevo_template_id: z.ZodNumber;
+        subject: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+        preview_text: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+    }, "strip", z.ZodTypeAny, {
+        brevo_template_id: number;
+        subject?: Record<string, string> | undefined;
+        preview_text?: Record<string, string> | undefined;
+    }, {
+        brevo_template_id: number;
+        subject?: Record<string, string> | undefined;
+        preview_text?: Record<string, string> | undefined;
+    }>>;
+    push: z.ZodNullable<z.ZodObject<{
+        title: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+        body: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+        target: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        target: string;
+        title?: Record<string, string> | undefined;
+        body?: Record<string, string> | undefined;
+    }, {
+        target: string;
+        title?: Record<string, string> | undefined;
+        body?: Record<string, string> | undefined;
+    }>>;
+    hour: z.ZodNumber;
+    key: z.ZodString;
+    method: z.ZodEnum<["email", "sms", "whatsapp", "push"]>;
+    moment: z.ZodEnum<["departure", "return", "immediate"]>;
+    filter: z.ZodNullable<z.ZodObject<{
+        type: z.ZodEnum<["iso3", "gender", "percentage", "age"]>;
+        value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
+        comparison: z.ZodEnum<["equal", "not_equal", "greater_than", "less_than", "greater_than_or_equal", "less_than_or_equal"]>;
+    }, "strip", z.ZodTypeAny, {
+        value: string | number;
+        type: "gender" | "iso3" | "percentage" | "age";
+        comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+    }, {
+        value: string | number;
+        type: "gender" | "iso3" | "percentage" | "age";
+        comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+    }>>;
+}, "strip", z.ZodTypeAny, {
+    push: {
+        target: string;
+        title?: Record<string, string> | undefined;
+        body?: Record<string, string> | undefined;
+    } | null;
+    filter: {
+        value: string | number;
+        type: "gender" | "iso3" | "percentage" | "age";
+        comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+    } | null;
+    email: {
+        brevo_template_id: number;
+        subject?: Record<string, string> | undefined;
+        preview_text?: Record<string, string> | undefined;
+    } | null;
+    days: number;
+    hour: number;
+    key: string;
+    method: "push" | "email" | "sms" | "whatsapp";
+    moment: "departure" | "return" | "immediate";
+}, {
+    push: {
+        target: string;
+        title?: Record<string, string> | undefined;
+        body?: Record<string, string> | undefined;
+    } | null;
+    filter: {
+        value: string | number;
+        type: "gender" | "iso3" | "percentage" | "age";
+        comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+    } | null;
+    email: {
+        brevo_template_id: number;
+        subject?: Record<string, string> | undefined;
+        preview_text?: Record<string, string> | undefined;
+    } | null;
+    days: number;
+    hour: number;
+    key: string;
+    method: "push" | "email" | "sms" | "whatsapp";
+    moment: "departure" | "return" | "immediate";
+}>;
+export declare const platformSettingsSchema: z.ZodNullable<z.ZodObject<{
+    package_strategy: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        name: z.ZodString;
+        iso3_white_list: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        parameters: z.ZodAny;
+    }, "strip", z.ZodTypeAny, {
+        name: string;
+        iso3_white_list?: string[] | undefined;
+        parameters?: any;
+    }, {
+        name: string;
+        iso3_white_list?: string[] | undefined;
+        parameters?: any;
+    }>>>;
+    free_esim: z.ZodNullable<z.ZodObject<{
+        allowance: z.ZodNullable<z.ZodNumber>;
+        package_specifications: z.ZodNullable<z.ZodRecord<z.ZodString, z.ZodAny>>;
+    }, "strip", z.ZodTypeAny, {
+        package_specifications: Record<string, any> | null;
+        allowance: number | null;
+    }, {
+        package_specifications: Record<string, any> | null;
+        allowance: number | null;
+    }>>;
+    booking_defaults: z.ZodNullable<z.ZodObject<{
+        locale: z.ZodEnum<["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]>;
+    }, "strip", z.ZodTypeAny, {
+        locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+    }, {
+        locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+    }>>;
+    schedules: z.ZodNullable<z.ZodArray<z.ZodObject<{
+        days: z.ZodNumber;
+        email: z.ZodNullable<z.ZodObject<{
+            brevo_template_id: z.ZodNumber;
+            subject: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+            preview_text: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+        }, "strip", z.ZodTypeAny, {
+            brevo_template_id: number;
+            subject?: Record<string, string> | undefined;
+            preview_text?: Record<string, string> | undefined;
+        }, {
+            brevo_template_id: number;
+            subject?: Record<string, string> | undefined;
+            preview_text?: Record<string, string> | undefined;
+        }>>;
+        push: z.ZodNullable<z.ZodObject<{
+            title: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+            body: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+            target: z.ZodString;
+        }, "strip", z.ZodTypeAny, {
+            target: string;
+            title?: Record<string, string> | undefined;
+            body?: Record<string, string> | undefined;
+        }, {
+            target: string;
+            title?: Record<string, string> | undefined;
+            body?: Record<string, string> | undefined;
+        }>>;
+        hour: z.ZodNumber;
+        key: z.ZodString;
+        method: z.ZodEnum<["email", "sms", "whatsapp", "push"]>;
+        moment: z.ZodEnum<["departure", "return", "immediate"]>;
+        filter: z.ZodNullable<z.ZodObject<{
+            type: z.ZodEnum<["iso3", "gender", "percentage", "age"]>;
+            value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
+            comparison: z.ZodEnum<["equal", "not_equal", "greater_than", "less_than", "greater_than_or_equal", "less_than_or_equal"]>;
+        }, "strip", z.ZodTypeAny, {
+            value: string | number;
+            type: "gender" | "iso3" | "percentage" | "age";
+            comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+        }, {
+            value: string | number;
+            type: "gender" | "iso3" | "percentage" | "age";
+            comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+        }>>;
+    }, "strip", z.ZodTypeAny, {
+        push: {
+            target: string;
+            title?: Record<string, string> | undefined;
+            body?: Record<string, string> | undefined;
+        } | null;
+        filter: {
+            value: string | number;
+            type: "gender" | "iso3" | "percentage" | "age";
+            comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+        } | null;
+        email: {
+            brevo_template_id: number;
+            subject?: Record<string, string> | undefined;
+            preview_text?: Record<string, string> | undefined;
+        } | null;
+        days: number;
+        hour: number;
+        key: string;
+        method: "push" | "email" | "sms" | "whatsapp";
+        moment: "departure" | "return" | "immediate";
+    }, {
+        push: {
+            target: string;
+            title?: Record<string, string> | undefined;
+            body?: Record<string, string> | undefined;
+        } | null;
+        filter: {
+            value: string | number;
+            type: "gender" | "iso3" | "percentage" | "age";
+            comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+        } | null;
+        email: {
+            brevo_template_id: number;
+            subject?: Record<string, string> | undefined;
+            preview_text?: Record<string, string> | undefined;
+        } | null;
+        days: number;
+        hour: number;
+        key: string;
+        method: "push" | "email" | "sms" | "whatsapp";
+        moment: "departure" | "return" | "immediate";
+    }>, "many">>;
+    booking_confirmation: z.ZodNullable<z.ZodObject<{
+        brevo_template_id: z.ZodNumber;
+        send_booking_confirmation: z.ZodBoolean;
+    }, "strip", z.ZodTypeAny, {
+        brevo_template_id: number;
+        send_booking_confirmation: boolean;
+    }, {
+        brevo_template_id: number;
+        send_booking_confirmation: boolean;
+    }>>;
+}, "strip", z.ZodTypeAny, {
+    free_esim: {
+        package_specifications: Record<string, any> | null;
+        allowance: number | null;
+    } | null;
+    booking_defaults: {
+        locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+    } | null;
+    schedules: {
+        push: {
+            target: string;
+            title?: Record<string, string> | undefined;
+            body?: Record<string, string> | undefined;
+        } | null;
+        filter: {
+            value: string | number;
+            type: "gender" | "iso3" | "percentage" | "age";
+            comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+        } | null;
+        email: {
+            brevo_template_id: number;
+            subject?: Record<string, string> | undefined;
+            preview_text?: Record<string, string> | undefined;
+        } | null;
+        days: number;
+        hour: number;
+        key: string;
+        method: "push" | "email" | "sms" | "whatsapp";
+        moment: "departure" | "return" | "immediate";
+    }[] | null;
+    booking_confirmation: {
+        brevo_template_id: number;
+        send_booking_confirmation: boolean;
+    } | null;
+    package_strategy?: {
+        name: string;
+        iso3_white_list?: string[] | undefined;
+        parameters?: any;
+    } | null | undefined;
+}, {
+    free_esim: {
+        package_specifications: Record<string, any> | null;
+        allowance: number | null;
+    } | null;
+    booking_defaults: {
+        locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+    } | null;
+    schedules: {
+        push: {
+            target: string;
+            title?: Record<string, string> | undefined;
+            body?: Record<string, string> | undefined;
+        } | null;
+        filter: {
+            value: string | number;
+            type: "gender" | "iso3" | "percentage" | "age";
+            comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+        } | null;
+        email: {
+            brevo_template_id: number;
+            subject?: Record<string, string> | undefined;
+            preview_text?: Record<string, string> | undefined;
+        } | null;
+        days: number;
+        hour: number;
+        key: string;
+        method: "push" | "email" | "sms" | "whatsapp";
+        moment: "departure" | "return" | "immediate";
+    }[] | null;
+    booking_confirmation: {
+        brevo_template_id: number;
+        send_booking_confirmation: boolean;
+    } | null;
+    package_strategy?: {
+        name: string;
+        iso3_white_list?: string[] | undefined;
+        parameters?: any;
+    } | null | undefined;
+}>>;
+export declare const partnerFirestoreSchema: z.ZodObject<{
+    id: z.ZodString;
+    created_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
+    updated_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
+    created_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>]>;
+    updated_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>]>;
+} & {
+    name: z.ZodNullable<z.ZodString>;
+    type: z.ZodNullable<z.ZodString>;
+    is_active: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
+    external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    parent: z.ZodNullable<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
+    contact: z.ZodNullable<z.ZodObject<{
+        email: z.ZodNullable<z.ZodString>;
+        office_phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, "strip", z.ZodTypeAny, {
+        email: string | null;
+        office_phone?: string | null | undefined;
+    }, {
+        email: string | null;
+        office_phone?: string | null | undefined;
+    }>>;
+    address: z.ZodNullable<z.ZodObject<{
+        street: z.ZodOptional<z.ZodString>;
+        city: z.ZodOptional<z.ZodString>;
+        postal_code: z.ZodOptional<z.ZodString>;
+        country: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        street?: string | undefined;
+        city?: string | undefined;
+        postal_code?: string | undefined;
+        country?: string | undefined;
+    }, {
+        street?: string | undefined;
+        city?: string | undefined;
+        postal_code?: string | undefined;
+        country?: string | undefined;
+    }>>;
+    registration: z.ZodNullable<z.ZodObject<{
+        chamber_of_commerce_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        vat_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        anvr_number: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        tax_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, "strip", z.ZodTypeAny, {
+        chamber_of_commerce_number?: string | null | undefined;
+        vat_number?: string | null | undefined;
+        anvr_number?: number | null | undefined;
+        tax_number?: string | null | undefined;
+    }, {
+        chamber_of_commerce_number?: string | null | undefined;
+        vat_number?: string | null | undefined;
+        anvr_number?: number | null | undefined;
+        tax_number?: string | null | undefined;
+    }>>;
+    banking_details: z.ZodNullable<z.ZodObject<{
+        account_holder: z.ZodString;
+        bank_name: z.ZodString;
+        iban: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        account_holder: string;
+        bank_name: string;
+        iban: string;
+    }, {
+        account_holder: string;
+        bank_name: string;
+        iban: string;
+    }>>;
+    financial_properties: z.ZodNullable<z.ZodObject<{
+        administration_fee: z.ZodNullable<z.ZodNumber>;
+        income_per_gb: z.ZodNullable<z.ZodNumber>;
+        commission_fee: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        payment_method: z.ZodEnum<["invoice", "direct"]>;
+        requires_card: z.ZodNullable<z.ZodBoolean>;
+        next_invoice: z.ZodNullable<z.ZodDate>;
+        last_invoice: z.ZodNullable<z.ZodDate>;
+        pricing_strategies: z.ZodNullable<z.ZodObject<{
+            partner: z.ZodObject<{
+                strategy: z.ZodEnum<["split", "bundle"]>;
+                default_price_list: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
+                custom_prices: z.ZodArray<z.ZodObject<{
+                    destination: z.ZodString;
+                    label: z.ZodString;
+                    package: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+                    type: z.ZodEnum<["data-limit", "time-limit"]>;
+                    price: z.ZodNumber;
+                }, "strip", z.ZodTypeAny, {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                    price: number;
+                }, {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                    price: number;
+                }>, "many">;
+                modification_percentage: z.ZodNumber;
+            }, "strip", z.ZodTypeAny, {
+                strategy: "split" | "bundle";
+                default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                    price: number;
+                }[];
+                modification_percentage: number;
+            }, {
+                strategy: "split" | "bundle";
+                default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                    price: number;
+                }[];
+                modification_percentage: number;
+            }>;
+            user: z.ZodObject<{
+                strategy: z.ZodEnum<["split", "bundle"]>;
+                default_price_list: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
+                custom_prices: z.ZodArray<z.ZodObject<{
+                    destination: z.ZodString;
+                    label: z.ZodString;
+                    package: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+                    type: z.ZodEnum<["data-limit", "time-limit"]>;
+                    price: z.ZodNumber;
+                }, "strip", z.ZodTypeAny, {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                    price: number;
+                }, {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                    price: number;
+                }>, "many">;
+                modification_percentage: z.ZodNumber;
+            }, "strip", z.ZodTypeAny, {
+                strategy: "split" | "bundle";
+                default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                    price: number;
+                }[];
+                modification_percentage: number;
+            }, {
+                strategy: "split" | "bundle";
+                default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                    price: number;
+                }[];
+                modification_percentage: number;
+            }>;
+        }, "strip", z.ZodTypeAny, {
+            partner: {
+                strategy: "split" | "bundle";
+                default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                    price: number;
+                }[];
+                modification_percentage: number;
+            };
+            user: {
+                strategy: "split" | "bundle";
+                default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                    price: number;
+                }[];
+                modification_percentage: number;
+            };
+        }, {
+            partner: {
+                strategy: "split" | "bundle";
+                default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                    price: number;
+                }[];
+                modification_percentage: number;
+            };
+            user: {
+                strategy: "split" | "bundle";
+                default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                    price: number;
+                }[];
+                modification_percentage: number;
+            };
+        }>>;
+    }, "strip", z.ZodTypeAny, {
+        administration_fee: number | null;
+        income_per_gb: number | null;
+        payment_method: "invoice" | "direct";
+        requires_card: boolean | null;
+        next_invoice: Date | null;
+        last_invoice: Date | null;
+        pricing_strategies: {
+            partner: {
+                strategy: "split" | "bundle";
+                default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                    price: number;
+                }[];
+                modification_percentage: number;
+            };
+            user: {
+                strategy: "split" | "bundle";
+                default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                    price: number;
+                }[];
+                modification_percentage: number;
+            };
+        } | null;
+        commission_fee?: number | null | undefined;
+    }, {
+        administration_fee: number | null;
+        income_per_gb: number | null;
+        payment_method: "invoice" | "direct";
+        requires_card: boolean | null;
+        next_invoice: Date | null;
+        last_invoice: Date | null;
+        pricing_strategies: {
+            partner: {
+                strategy: "split" | "bundle";
+                default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                    price: number;
+                }[];
+                modification_percentage: number;
+            };
+            user: {
+                strategy: "split" | "bundle";
+                default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                    price: number;
+                }[];
+                modification_percentage: number;
+            };
+        } | null;
+        commission_fee?: number | null | undefined;
+    }>>;
+    platform_settings: z.ZodNullable<z.ZodObject<{
+        package_strategy: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            name: z.ZodString;
+            iso3_white_list: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            parameters: z.ZodAny;
+        }, "strip", z.ZodTypeAny, {
+            name: string;
+            iso3_white_list?: string[] | undefined;
+            parameters?: any;
+        }, {
+            name: string;
+            iso3_white_list?: string[] | undefined;
+            parameters?: any;
+        }>>>;
+        free_esim: z.ZodNullable<z.ZodObject<{
+            allowance: z.ZodNullable<z.ZodNumber>;
+            package_specifications: z.ZodNullable<z.ZodRecord<z.ZodString, z.ZodAny>>;
+        }, "strip", z.ZodTypeAny, {
+            package_specifications: Record<string, any> | null;
+            allowance: number | null;
+        }, {
+            package_specifications: Record<string, any> | null;
+            allowance: number | null;
+        }>>;
+        booking_defaults: z.ZodNullable<z.ZodObject<{
+            locale: z.ZodEnum<["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]>;
+        }, "strip", z.ZodTypeAny, {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+        }, {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+        }>>;
+        schedules: z.ZodNullable<z.ZodArray<z.ZodObject<{
+            days: z.ZodNumber;
+            email: z.ZodNullable<z.ZodObject<{
+                brevo_template_id: z.ZodNumber;
+                subject: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+                preview_text: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+            }, "strip", z.ZodTypeAny, {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            }, {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            }>>;
+            push: z.ZodNullable<z.ZodObject<{
+                title: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+                body: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+                target: z.ZodString;
+            }, "strip", z.ZodTypeAny, {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            }, {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            }>>;
+            hour: z.ZodNumber;
+            key: z.ZodString;
+            method: z.ZodEnum<["email", "sms", "whatsapp", "push"]>;
+            moment: z.ZodEnum<["departure", "return", "immediate"]>;
+            filter: z.ZodNullable<z.ZodObject<{
+                type: z.ZodEnum<["iso3", "gender", "percentage", "age"]>;
+                value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
+                comparison: z.ZodEnum<["equal", "not_equal", "greater_than", "less_than", "greater_than_or_equal", "less_than_or_equal"]>;
+            }, "strip", z.ZodTypeAny, {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            }, {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            }>>;
+        }, "strip", z.ZodTypeAny, {
+            push: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null;
+            filter: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null;
+            email: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null;
+            days: number;
+            hour: number;
+            key: string;
+            method: "push" | "email" | "sms" | "whatsapp";
+            moment: "departure" | "return" | "immediate";
+        }, {
+            push: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null;
+            filter: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null;
+            email: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null;
+            days: number;
+            hour: number;
+            key: string;
+            method: "push" | "email" | "sms" | "whatsapp";
+            moment: "departure" | "return" | "immediate";
+        }>, "many">>;
+        booking_confirmation: z.ZodNullable<z.ZodObject<{
+            brevo_template_id: z.ZodNumber;
+            send_booking_confirmation: z.ZodBoolean;
+        }, "strip", z.ZodTypeAny, {
+            brevo_template_id: number;
+            send_booking_confirmation: boolean;
+        }, {
+            brevo_template_id: number;
+            send_booking_confirmation: boolean;
+        }>>;
+    }, "strip", z.ZodTypeAny, {
+        free_esim: {
+            package_specifications: Record<string, any> | null;
+            allowance: number | null;
+        } | null;
+        booking_defaults: {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+        } | null;
+        schedules: {
+            push: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null;
+            filter: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null;
+            email: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null;
+            days: number;
+            hour: number;
+            key: string;
+            method: "push" | "email" | "sms" | "whatsapp";
+            moment: "departure" | "return" | "immediate";
+        }[] | null;
+        booking_confirmation: {
+            brevo_template_id: number;
+            send_booking_confirmation: boolean;
+        } | null;
+        package_strategy?: {
+            name: string;
+            iso3_white_list?: string[] | undefined;
+            parameters?: any;
+        } | null | undefined;
+    }, {
+        free_esim: {
+            package_specifications: Record<string, any> | null;
+            allowance: number | null;
+        } | null;
+        booking_defaults: {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+        } | null;
+        schedules: {
+            push: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null;
+            filter: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null;
+            email: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null;
+            days: number;
+            hour: number;
+            key: string;
+            method: "push" | "email" | "sms" | "whatsapp";
+            moment: "departure" | "return" | "immediate";
+        }[] | null;
+        booking_confirmation: {
+            brevo_template_id: number;
+            send_booking_confirmation: boolean;
+        } | null;
+        package_strategy?: {
+            name: string;
+            iso3_white_list?: string[] | undefined;
+            parameters?: any;
+        } | null | undefined;
+    }>>;
+    visual_identity: z.ZodNullable<z.ZodObject<{
+        primary_color: z.ZodString;
+        secondary_color: z.ZodString;
+        logo: z.ZodString;
+        font: z.ZodString;
+        top_banner: z.ZodObject<{
+            strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
+            banners: z.ZodArray<z.ZodObject<{
+                image_url: z.ZodString;
+                alt: z.ZodString;
+                click_url: z.ZodString;
+                locale: z.ZodEnum<["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]>;
+                properties: z.ZodRecord<z.ZodString, z.ZodString>;
+            }, "strip", z.ZodTypeAny, {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }, {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }>, "many">;
+        }, "strip", z.ZodTypeAny, {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        }, {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        }>;
+        mid_banner: z.ZodObject<{
+            strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
+            banners: z.ZodArray<z.ZodObject<{
+                image_url: z.ZodString;
+                alt: z.ZodString;
+                click_url: z.ZodString;
+                locale: z.ZodEnum<["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]>;
+                properties: z.ZodRecord<z.ZodString, z.ZodString>;
+            }, "strip", z.ZodTypeAny, {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }, {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }>, "many">;
+        }, "strip", z.ZodTypeAny, {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        }, {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        }>;
+    }, "strip", z.ZodTypeAny, {
+        primary_color: string;
+        secondary_color: string;
+        logo: string;
+        font: string;
+        top_banner: {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        };
+        mid_banner: {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        };
+    }, {
+        primary_color: string;
+        secondary_color: string;
+        logo: string;
+        font: string;
+        top_banner: {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        };
+        mid_banner: {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        };
+    }>>;
+    users: z.ZodNullable<z.ZodArray<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
+    data: z.ZodNullable<z.ZodObject<{
+        source: z.ZodString;
+        manual: z.ZodBoolean;
+    }, "strip", z.ZodTypeAny, {
+        source: string;
+        manual: boolean;
+    }, {
+        source: string;
+        manual: boolean;
+    }>>;
+}, "strip", z.ZodTypeAny, {
+    id: string;
+    created_at: FirebaseFirestore.Timestamp;
+    updated_at: FirebaseFirestore.Timestamp;
+    created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    type: string | null;
+    updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    users: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[] | null;
+    data: {
+        source: string;
+        manual: boolean;
+    } | null;
+    name: string | null;
+    parent: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    contact: {
+        email: string | null;
+        office_phone?: string | null | undefined;
+    } | null;
+    address: {
+        street?: string | undefined;
+        city?: string | undefined;
+        postal_code?: string | undefined;
+        country?: string | undefined;
+    } | null;
+    registration: {
+        chamber_of_commerce_number?: string | null | undefined;
+        vat_number?: string | null | undefined;
+        anvr_number?: number | null | undefined;
+        tax_number?: string | null | undefined;
+    } | null;
+    banking_details: {
+        account_holder: string;
+        bank_name: string;
+        iban: string;
+    } | null;
+    financial_properties: {
+        administration_fee: number | null;
+        income_per_gb: number | null;
+        payment_method: "invoice" | "direct";
+        requires_card: boolean | null;
+        next_invoice: Date | null;
+        last_invoice: Date | null;
+        pricing_strategies: {
+            partner: {
+                strategy: "split" | "bundle";
+                default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                    price: number;
+                }[];
+                modification_percentage: number;
+            };
+            user: {
+                strategy: "split" | "bundle";
+                default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                    price: number;
+                }[];
+                modification_percentage: number;
+            };
+        } | null;
+        commission_fee?: number | null | undefined;
+    } | null;
+    platform_settings: {
+        free_esim: {
+            package_specifications: Record<string, any> | null;
+            allowance: number | null;
+        } | null;
+        booking_defaults: {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+        } | null;
+        schedules: {
+            push: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null;
+            filter: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null;
+            email: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null;
+            days: number;
+            hour: number;
+            key: string;
+            method: "push" | "email" | "sms" | "whatsapp";
+            moment: "departure" | "return" | "immediate";
+        }[] | null;
+        booking_confirmation: {
+            brevo_template_id: number;
+            send_booking_confirmation: boolean;
+        } | null;
+        package_strategy?: {
+            name: string;
+            iso3_white_list?: string[] | undefined;
+            parameters?: any;
+        } | null | undefined;
+    } | null;
+    visual_identity: {
+        primary_color: string;
+        secondary_color: string;
+        logo: string;
+        font: string;
+        top_banner: {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        };
+        mid_banner: {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        };
+    } | null;
+    is_active?: boolean | null | undefined;
+    external_id?: string | null | undefined;
+}, {
+    id: string;
+    created_at: FirebaseFirestore.Timestamp;
+    updated_at: FirebaseFirestore.Timestamp;
+    created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    type: string | null;
+    updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    users: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[] | null;
+    data: {
+        source: string;
+        manual: boolean;
+    } | null;
+    name: string | null;
+    parent: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    contact: {
+        email: string | null;
+        office_phone?: string | null | undefined;
+    } | null;
+    address: {
+        street?: string | undefined;
+        city?: string | undefined;
+        postal_code?: string | undefined;
+        country?: string | undefined;
+    } | null;
+    registration: {
+        chamber_of_commerce_number?: string | null | undefined;
+        vat_number?: string | null | undefined;
+        anvr_number?: number | null | undefined;
+        tax_number?: string | null | undefined;
+    } | null;
+    banking_details: {
+        account_holder: string;
+        bank_name: string;
+        iban: string;
+    } | null;
+    financial_properties: {
+        administration_fee: number | null;
+        income_per_gb: number | null;
+        payment_method: "invoice" | "direct";
+        requires_card: boolean | null;
+        next_invoice: Date | null;
+        last_invoice: Date | null;
+        pricing_strategies: {
+            partner: {
+                strategy: "split" | "bundle";
+                default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                    price: number;
+                }[];
+                modification_percentage: number;
+            };
+            user: {
+                strategy: "split" | "bundle";
+                default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                    price: number;
+                }[];
+                modification_percentage: number;
+            };
+        } | null;
+        commission_fee?: number | null | undefined;
+    } | null;
+    platform_settings: {
+        free_esim: {
+            package_specifications: Record<string, any> | null;
+            allowance: number | null;
+        } | null;
+        booking_defaults: {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+        } | null;
+        schedules: {
+            push: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null;
+            filter: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null;
+            email: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null;
+            days: number;
+            hour: number;
+            key: string;
+            method: "push" | "email" | "sms" | "whatsapp";
+            moment: "departure" | "return" | "immediate";
+        }[] | null;
+        booking_confirmation: {
+            brevo_template_id: number;
+            send_booking_confirmation: boolean;
+        } | null;
+        package_strategy?: {
+            name: string;
+            iso3_white_list?: string[] | undefined;
+            parameters?: any;
+        } | null | undefined;
+    } | null;
+    visual_identity: {
+        primary_color: string;
+        secondary_color: string;
+        logo: string;
+        font: string;
+        top_banner: {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        };
+        mid_banner: {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        };
+    } | null;
+    is_active?: boolean | null | undefined;
+    external_id?: string | null | undefined;
+}>;
+export declare const partnerAppSchema: z.ZodObject<{
+    id: z.ZodString;
+    created_at: z.ZodDate;
+    updated_at: z.ZodDate;
+    created_by: z.ZodUnion<[z.ZodString, z.ZodNull]>;
+    updated_by: z.ZodUnion<[z.ZodString, z.ZodNull]>;
+} & {
+    name: z.ZodNullable<z.ZodString>;
+    type: z.ZodNullable<z.ZodString>;
+    is_active: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
+    external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    parentId: z.ZodNullable<z.ZodString>;
+    contact: z.ZodNullable<z.ZodObject<{
+        email: z.ZodNullable<z.ZodString>;
+        office_phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, "strip", z.ZodTypeAny, {
+        email: string | null;
+        office_phone?: string | null | undefined;
+    }, {
+        email: string | null;
+        office_phone?: string | null | undefined;
+    }>>;
+    address: z.ZodNullable<z.ZodObject<{
+        street: z.ZodOptional<z.ZodString>;
+        city: z.ZodOptional<z.ZodString>;
+        postal_code: z.ZodOptional<z.ZodString>;
+        country: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        street?: string | undefined;
+        city?: string | undefined;
+        postal_code?: string | undefined;
+        country?: string | undefined;
+    }, {
+        street?: string | undefined;
+        city?: string | undefined;
+        postal_code?: string | undefined;
+        country?: string | undefined;
+    }>>;
+    registration: z.ZodNullable<z.ZodObject<{
+        chamber_of_commerce_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        vat_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        anvr_number: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        tax_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, "strip", z.ZodTypeAny, {
+        chamber_of_commerce_number?: string | null | undefined;
+        vat_number?: string | null | undefined;
+        anvr_number?: number | null | undefined;
+        tax_number?: string | null | undefined;
+    }, {
+        chamber_of_commerce_number?: string | null | undefined;
+        vat_number?: string | null | undefined;
+        anvr_number?: number | null | undefined;
+        tax_number?: string | null | undefined;
+    }>>;
+    banking_details: z.ZodNullable<z.ZodObject<{
+        account_holder: z.ZodString;
+        bank_name: z.ZodString;
+        iban: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        account_holder: string;
+        bank_name: string;
+        iban: string;
+    }, {
+        account_holder: string;
+        bank_name: string;
+        iban: string;
+    }>>;
+    financial_properties: z.ZodNullable<z.ZodObject<{
+        administration_fee: z.ZodNullable<z.ZodNumber>;
+        income_per_gb: z.ZodNullable<z.ZodNumber>;
+        commission_fee: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        payment_method: z.ZodEnum<["invoice", "direct"]>;
+        requires_card: z.ZodNullable<z.ZodBoolean>;
+        next_invoice: z.ZodNullable<z.ZodDate>;
+        last_invoice: z.ZodNullable<z.ZodDate>;
+        pricing_strategies: z.ZodNullable<z.ZodObject<{
+            partner: z.ZodObject<{
+                strategy: z.ZodEnum<["split", "bundle"]>;
+                default_price_list_id: z.ZodNullable<z.ZodString>;
+                custom_prices: z.ZodArray<z.ZodObject<{
+                    destination: z.ZodString;
+                    label: z.ZodString;
+                    package: z.ZodString;
+                    type: z.ZodEnum<["data-limit", "time-limit"]>;
+                    price: z.ZodNumber;
+                }, "strip", z.ZodTypeAny, {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: string;
+                    price: number;
+                }, {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: string;
+                    price: number;
+                }>, "many">;
+                modification_percentage: z.ZodNumber;
+            }, "strip", z.ZodTypeAny, {
+                strategy: "split" | "bundle";
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: string;
+                    price: number;
+                }[];
+                modification_percentage: number;
+                default_price_list_id: string | null;
+            }, {
+                strategy: "split" | "bundle";
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: string;
+                    price: number;
+                }[];
+                modification_percentage: number;
+                default_price_list_id: string | null;
+            }>;
+            user: z.ZodObject<{
+                strategy: z.ZodEnum<["split", "bundle"]>;
+                default_price_list_id: z.ZodNullable<z.ZodString>;
+                custom_prices: z.ZodArray<z.ZodObject<{
+                    destination: z.ZodString;
+                    label: z.ZodString;
+                    package: z.ZodString;
+                    type: z.ZodEnum<["data-limit", "time-limit"]>;
+                    price: z.ZodNumber;
+                }, "strip", z.ZodTypeAny, {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: string;
+                    price: number;
+                }, {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: string;
+                    price: number;
+                }>, "many">;
+                modification_percentage: z.ZodNumber;
+            }, "strip", z.ZodTypeAny, {
+                strategy: "split" | "bundle";
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: string;
+                    price: number;
+                }[];
+                modification_percentage: number;
+                default_price_list_id: string | null;
+            }, {
+                strategy: "split" | "bundle";
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: string;
+                    price: number;
+                }[];
+                modification_percentage: number;
+                default_price_list_id: string | null;
+            }>;
+        }, "strip", z.ZodTypeAny, {
+            partner: {
+                strategy: "split" | "bundle";
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: string;
+                    price: number;
+                }[];
+                modification_percentage: number;
+                default_price_list_id: string | null;
+            };
+            user: {
+                strategy: "split" | "bundle";
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: string;
+                    price: number;
+                }[];
+                modification_percentage: number;
+                default_price_list_id: string | null;
+            };
+        }, {
+            partner: {
+                strategy: "split" | "bundle";
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: string;
+                    price: number;
+                }[];
+                modification_percentage: number;
+                default_price_list_id: string | null;
+            };
+            user: {
+                strategy: "split" | "bundle";
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: string;
+                    price: number;
+                }[];
+                modification_percentage: number;
+                default_price_list_id: string | null;
+            };
+        }>>;
+    }, "strip", z.ZodTypeAny, {
+        administration_fee: number | null;
+        income_per_gb: number | null;
+        payment_method: "invoice" | "direct";
+        requires_card: boolean | null;
+        next_invoice: Date | null;
+        last_invoice: Date | null;
+        pricing_strategies: {
+            partner: {
+                strategy: "split" | "bundle";
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: string;
+                    price: number;
+                }[];
+                modification_percentage: number;
+                default_price_list_id: string | null;
+            };
+            user: {
+                strategy: "split" | "bundle";
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: string;
+                    price: number;
+                }[];
+                modification_percentage: number;
+                default_price_list_id: string | null;
+            };
+        } | null;
+        commission_fee?: number | null | undefined;
+    }, {
+        administration_fee: number | null;
+        income_per_gb: number | null;
+        payment_method: "invoice" | "direct";
+        requires_card: boolean | null;
+        next_invoice: Date | null;
+        last_invoice: Date | null;
+        pricing_strategies: {
+            partner: {
+                strategy: "split" | "bundle";
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: string;
+                    price: number;
+                }[];
+                modification_percentage: number;
+                default_price_list_id: string | null;
+            };
+            user: {
+                strategy: "split" | "bundle";
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: string;
+                    price: number;
+                }[];
+                modification_percentage: number;
+                default_price_list_id: string | null;
+            };
+        } | null;
+        commission_fee?: number | null | undefined;
+    }>>;
+    platform_settings: z.ZodNullable<z.ZodObject<{
+        package_strategy: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            name: z.ZodString;
+            iso3_white_list: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            parameters: z.ZodAny;
+        }, "strip", z.ZodTypeAny, {
+            name: string;
+            iso3_white_list?: string[] | undefined;
+            parameters?: any;
+        }, {
+            name: string;
+            iso3_white_list?: string[] | undefined;
+            parameters?: any;
+        }>>>;
+        free_esim: z.ZodNullable<z.ZodObject<{
+            allowance: z.ZodNullable<z.ZodNumber>;
+            package_specifications: z.ZodNullable<z.ZodRecord<z.ZodString, z.ZodAny>>;
+        }, "strip", z.ZodTypeAny, {
+            package_specifications: Record<string, any> | null;
+            allowance: number | null;
+        }, {
+            package_specifications: Record<string, any> | null;
+            allowance: number | null;
+        }>>;
+        booking_defaults: z.ZodNullable<z.ZodObject<{
+            locale: z.ZodEnum<["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]>;
+        }, "strip", z.ZodTypeAny, {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+        }, {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+        }>>;
+        schedules: z.ZodNullable<z.ZodArray<z.ZodObject<{
+            days: z.ZodNumber;
+            email: z.ZodNullable<z.ZodObject<{
+                brevo_template_id: z.ZodNumber;
+                subject: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+                preview_text: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+            }, "strip", z.ZodTypeAny, {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            }, {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            }>>;
+            push: z.ZodNullable<z.ZodObject<{
+                title: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+                body: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+                target: z.ZodString;
+            }, "strip", z.ZodTypeAny, {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            }, {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            }>>;
+            hour: z.ZodNumber;
+            key: z.ZodString;
+            method: z.ZodEnum<["email", "sms", "whatsapp", "push"]>;
+            moment: z.ZodEnum<["departure", "return", "immediate"]>;
+            filter: z.ZodNullable<z.ZodObject<{
+                type: z.ZodEnum<["iso3", "gender", "percentage", "age"]>;
+                value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
+                comparison: z.ZodEnum<["equal", "not_equal", "greater_than", "less_than", "greater_than_or_equal", "less_than_or_equal"]>;
+            }, "strip", z.ZodTypeAny, {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            }, {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            }>>;
+        }, "strip", z.ZodTypeAny, {
+            push: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null;
+            filter: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null;
+            email: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null;
+            days: number;
+            hour: number;
+            key: string;
+            method: "push" | "email" | "sms" | "whatsapp";
+            moment: "departure" | "return" | "immediate";
+        }, {
+            push: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null;
+            filter: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null;
+            email: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null;
+            days: number;
+            hour: number;
+            key: string;
+            method: "push" | "email" | "sms" | "whatsapp";
+            moment: "departure" | "return" | "immediate";
+        }>, "many">>;
+        booking_confirmation: z.ZodNullable<z.ZodObject<{
+            brevo_template_id: z.ZodNumber;
+            send_booking_confirmation: z.ZodBoolean;
+        }, "strip", z.ZodTypeAny, {
+            brevo_template_id: number;
+            send_booking_confirmation: boolean;
+        }, {
+            brevo_template_id: number;
+            send_booking_confirmation: boolean;
+        }>>;
+    }, "strip", z.ZodTypeAny, {
+        free_esim: {
+            package_specifications: Record<string, any> | null;
+            allowance: number | null;
+        } | null;
+        booking_defaults: {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+        } | null;
+        schedules: {
+            push: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null;
+            filter: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null;
+            email: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null;
+            days: number;
+            hour: number;
+            key: string;
+            method: "push" | "email" | "sms" | "whatsapp";
+            moment: "departure" | "return" | "immediate";
+        }[] | null;
+        booking_confirmation: {
+            brevo_template_id: number;
+            send_booking_confirmation: boolean;
+        } | null;
+        package_strategy?: {
+            name: string;
+            iso3_white_list?: string[] | undefined;
+            parameters?: any;
+        } | null | undefined;
+    }, {
+        free_esim: {
+            package_specifications: Record<string, any> | null;
+            allowance: number | null;
+        } | null;
+        booking_defaults: {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+        } | null;
+        schedules: {
+            push: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null;
+            filter: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null;
+            email: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null;
+            days: number;
+            hour: number;
+            key: string;
+            method: "push" | "email" | "sms" | "whatsapp";
+            moment: "departure" | "return" | "immediate";
+        }[] | null;
+        booking_confirmation: {
+            brevo_template_id: number;
+            send_booking_confirmation: boolean;
+        } | null;
+        package_strategy?: {
+            name: string;
+            iso3_white_list?: string[] | undefined;
+            parameters?: any;
+        } | null | undefined;
+    }>>;
+    visual_identity: z.ZodNullable<z.ZodObject<{
+        primary_color: z.ZodString;
+        secondary_color: z.ZodString;
+        logo: z.ZodString;
+        font: z.ZodString;
+        top_banner: z.ZodObject<{
+            strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
+            banners: z.ZodArray<z.ZodObject<{
+                image_url: z.ZodString;
+                alt: z.ZodString;
+                click_url: z.ZodString;
+                locale: z.ZodEnum<["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]>;
+                properties: z.ZodRecord<z.ZodString, z.ZodString>;
+            }, "strip", z.ZodTypeAny, {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }, {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }>, "many">;
+        }, "strip", z.ZodTypeAny, {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        }, {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        }>;
+        mid_banner: z.ZodObject<{
+            strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
+            banners: z.ZodArray<z.ZodObject<{
+                image_url: z.ZodString;
+                alt: z.ZodString;
+                click_url: z.ZodString;
+                locale: z.ZodEnum<["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]>;
+                properties: z.ZodRecord<z.ZodString, z.ZodString>;
+            }, "strip", z.ZodTypeAny, {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }, {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }>, "many">;
+        }, "strip", z.ZodTypeAny, {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        }, {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        }>;
+    }, "strip", z.ZodTypeAny, {
+        primary_color: string;
+        secondary_color: string;
+        logo: string;
+        font: string;
+        top_banner: {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        };
+        mid_banner: {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        };
+    }, {
+        primary_color: string;
+        secondary_color: string;
+        logo: string;
+        font: string;
+        top_banner: {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        };
+        mid_banner: {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        };
+    }>>;
+    user_ids: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
+    data: z.ZodNullable<z.ZodObject<{
+        source: z.ZodString;
+        manual: z.ZodBoolean;
+    }, "strip", z.ZodTypeAny, {
+        source: string;
+        manual: boolean;
+    }, {
+        source: string;
+        manual: boolean;
+    }>>;
+}, "strip", z.ZodTypeAny, {
+    id: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    type: string | null;
+    updated_by: string | null;
+    data: {
+        source: string;
+        manual: boolean;
+    } | null;
+    user_ids: string[] | null;
+    name: string | null;
+    contact: {
+        email: string | null;
+        office_phone?: string | null | undefined;
+    } | null;
+    address: {
+        street?: string | undefined;
+        city?: string | undefined;
+        postal_code?: string | undefined;
+        country?: string | undefined;
+    } | null;
+    registration: {
+        chamber_of_commerce_number?: string | null | undefined;
+        vat_number?: string | null | undefined;
+        anvr_number?: number | null | undefined;
+        tax_number?: string | null | undefined;
+    } | null;
+    banking_details: {
+        account_holder: string;
+        bank_name: string;
+        iban: string;
+    } | null;
+    financial_properties: {
+        administration_fee: number | null;
+        income_per_gb: number | null;
+        payment_method: "invoice" | "direct";
+        requires_card: boolean | null;
+        next_invoice: Date | null;
+        last_invoice: Date | null;
+        pricing_strategies: {
+            partner: {
+                strategy: "split" | "bundle";
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: string;
+                    price: number;
+                }[];
+                modification_percentage: number;
+                default_price_list_id: string | null;
+            };
+            user: {
+                strategy: "split" | "bundle";
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: string;
+                    price: number;
+                }[];
+                modification_percentage: number;
+                default_price_list_id: string | null;
+            };
+        } | null;
+        commission_fee?: number | null | undefined;
+    } | null;
+    platform_settings: {
+        free_esim: {
+            package_specifications: Record<string, any> | null;
+            allowance: number | null;
+        } | null;
+        booking_defaults: {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+        } | null;
+        schedules: {
+            push: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null;
+            filter: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null;
+            email: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null;
+            days: number;
+            hour: number;
+            key: string;
+            method: "push" | "email" | "sms" | "whatsapp";
+            moment: "departure" | "return" | "immediate";
+        }[] | null;
+        booking_confirmation: {
+            brevo_template_id: number;
+            send_booking_confirmation: boolean;
+        } | null;
+        package_strategy?: {
+            name: string;
+            iso3_white_list?: string[] | undefined;
+            parameters?: any;
+        } | null | undefined;
+    } | null;
+    visual_identity: {
+        primary_color: string;
+        secondary_color: string;
+        logo: string;
+        font: string;
+        top_banner: {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        };
+        mid_banner: {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        };
+    } | null;
+    parentId: string | null;
+    is_active?: boolean | null | undefined;
+    external_id?: string | null | undefined;
+}, {
+    id: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    type: string | null;
+    updated_by: string | null;
+    data: {
+        source: string;
+        manual: boolean;
+    } | null;
+    user_ids: string[] | null;
+    name: string | null;
+    contact: {
+        email: string | null;
+        office_phone?: string | null | undefined;
+    } | null;
+    address: {
+        street?: string | undefined;
+        city?: string | undefined;
+        postal_code?: string | undefined;
+        country?: string | undefined;
+    } | null;
+    registration: {
+        chamber_of_commerce_number?: string | null | undefined;
+        vat_number?: string | null | undefined;
+        anvr_number?: number | null | undefined;
+        tax_number?: string | null | undefined;
+    } | null;
+    banking_details: {
+        account_holder: string;
+        bank_name: string;
+        iban: string;
+    } | null;
+    financial_properties: {
+        administration_fee: number | null;
+        income_per_gb: number | null;
+        payment_method: "invoice" | "direct";
+        requires_card: boolean | null;
+        next_invoice: Date | null;
+        last_invoice: Date | null;
+        pricing_strategies: {
+            partner: {
+                strategy: "split" | "bundle";
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: string;
+                    price: number;
+                }[];
+                modification_percentage: number;
+                default_price_list_id: string | null;
+            };
+            user: {
+                strategy: "split" | "bundle";
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    destination: string;
+                    label: string;
+                    package: string;
+                    price: number;
+                }[];
+                modification_percentage: number;
+                default_price_list_id: string | null;
+            };
+        } | null;
+        commission_fee?: number | null | undefined;
+    } | null;
+    platform_settings: {
+        free_esim: {
+            package_specifications: Record<string, any> | null;
+            allowance: number | null;
+        } | null;
+        booking_defaults: {
+            locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+        } | null;
+        schedules: {
+            push: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null;
+            filter: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null;
+            email: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null;
+            days: number;
+            hour: number;
+            key: string;
+            method: "push" | "email" | "sms" | "whatsapp";
+            moment: "departure" | "return" | "immediate";
+        }[] | null;
+        booking_confirmation: {
+            brevo_template_id: number;
+            send_booking_confirmation: boolean;
+        } | null;
+        package_strategy?: {
+            name: string;
+            iso3_white_list?: string[] | undefined;
+            parameters?: any;
+        } | null | undefined;
+    } | null;
+    visual_identity: {
+        primary_color: string;
+        secondary_color: string;
+        logo: string;
+        font: string;
+        top_banner: {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        };
+        mid_banner: {
+            strategy: "fixed" | "destination" | "rotating" | "time_of_day";
+            banners: {
+                locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+            }[];
+        };
+    } | null;
+    parentId: string | null;
+    is_active?: boolean | null | undefined;
+    external_id?: string | null | undefined;
+}>;
+export type PartnerFirestore = z.infer<typeof partnerFirestoreSchema>;
+export type PartnerApp = z.infer<typeof partnerAppSchema>;
+export declare const priceListFirestoreSchema: z.ZodObject<{
+    created_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
+    updated_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
+    created_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>]>;
+    updated_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>]>;
+} & {
+    id: z.ZodString;
+    name: z.ZodString;
+    type: z.ZodDefault<z.ZodEnum<["partner", "user"]>>;
+    price_list: z.ZodArray<z.ZodObject<{
+        destination: z.ZodString;
+        label: z.ZodString;
+        package: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+        type: z.ZodEnum<["data-limit", "time-limit"]>;
+        price: z.ZodNumber;
+    }, "strip", z.ZodTypeAny, {
+        type: "data-limit" | "time-limit";
+        destination: string;
+        label: string;
+        package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+        price: number;
+    }, {
+        type: "data-limit" | "time-limit";
+        destination: string;
+        label: string;
+        package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+        price: number;
+    }>, "many">;
+}, "strip", z.ZodTypeAny, {
+    id: string;
+    created_at: FirebaseFirestore.Timestamp;
+    updated_at: FirebaseFirestore.Timestamp;
+    created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    type: "partner" | "user";
+    updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    name: string;
+    price_list: {
+        type: "data-limit" | "time-limit";
+        destination: string;
+        label: string;
+        package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+        price: number;
+    }[];
+}, {
+    id: string;
+    created_at: FirebaseFirestore.Timestamp;
+    updated_at: FirebaseFirestore.Timestamp;
+    created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    name: string;
+    price_list: {
+        type: "data-limit" | "time-limit";
+        destination: string;
+        label: string;
+        package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+        price: number;
+    }[];
+    type?: "partner" | "user" | undefined;
+}>;
+export declare const priceListAppSchema: z.ZodObject<{
+    created_at: z.ZodDate;
+    updated_at: z.ZodDate;
+    created_by: z.ZodUnion<[z.ZodString, z.ZodNull]>;
+    updated_by: z.ZodUnion<[z.ZodString, z.ZodNull]>;
+} & {
+    id: z.ZodString;
+    name: z.ZodString;
+    type: z.ZodDefault<z.ZodEnum<["partner", "user"]>>;
+    price_list: z.ZodArray<z.ZodObject<{
+        destination: z.ZodString;
+        label: z.ZodString;
+        package: z.ZodString;
+        type: z.ZodEnum<["data-limit", "time-limit"]>;
+        price: z.ZodNumber;
+    }, "strip", z.ZodTypeAny, {
+        type: "data-limit" | "time-limit";
+        destination: string;
+        label: string;
+        package: string;
+        price: number;
+    }, {
+        type: "data-limit" | "time-limit";
+        destination: string;
+        label: string;
+        package: string;
+        price: number;
+    }>, "many">;
+}, "strip", z.ZodTypeAny, {
+    id: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    type: "partner" | "user";
+    updated_by: string | null;
+    name: string;
+    price_list: {
+        type: "data-limit" | "time-limit";
+        destination: string;
+        label: string;
+        package: string;
+        price: number;
+    }[];
+}, {
+    id: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    updated_by: string | null;
+    name: string;
+    price_list: {
+        type: "data-limit" | "time-limit";
+        destination: string;
+        label: string;
+        package: string;
+        price: number;
+    }[];
+    type?: "partner" | "user" | undefined;
+}>;
+export type PriceListFirestore = z.infer<typeof priceListFirestoreSchema>;
+export type PriceListApp = z.infer<typeof priceListAppSchema>;
+export declare const partnerToFirestore: (partner: PartnerApp) => PartnerFirestore;
+export declare const partnerFromFirestore: (firestorePartner: PartnerFirestore) => PartnerApp;
+export declare const priceListFromFirestore: (firestorePriceList: PriceListFirestore) => PriceListApp;
+export declare const priceListToFirestore: (priceList: PriceListApp) => PriceListFirestore;
+export type Partner = PartnerApp;
+export type PartnerWithFirestore = PartnerFirestore;
+export type PriceList = PriceListApp;
+export type PackagePrice = z.infer<typeof packagePriceAppSchema>;
