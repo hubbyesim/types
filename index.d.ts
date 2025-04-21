@@ -1,3 +1,4 @@
+// Re-export all type definitions
 export * from "./src/package";
 export * from "./src/partner";
 export * from "./src/user";
@@ -10,3 +11,13 @@ export * from "./src/api";
 export * from "./src/payment";
 export * from "./src/apiLogs";
 export * from "./src/constants";
+
+// Export schema types and conversion functions
+export {
+  priceListFirestoreSchema,
+  priceListAppSchema,
+  priceListToFirestore,
+  priceListFromFirestore,
+  PriceListApp,
+  PriceListFirestore
+} from "./src/schemas/partner";
