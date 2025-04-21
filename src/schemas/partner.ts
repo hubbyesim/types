@@ -55,7 +55,7 @@ export const packagePriceFirestoreSchema = z.object({
 export const packagePriceAppSchema = z.object({
     destination: z.string(),
     label: z.string(),
-    packageId: z.string(),
+    package: z.string(),
     type: z.enum(['data-limit', 'time-limit']),
     price: z.number()
 });
@@ -348,7 +348,7 @@ export const partnerToFirestore = (partner: PartnerApp): PartnerFirestore => {
                 custom_prices: ps.partner.custom_prices.map(price => ({
                     destination: price.destination,
                     label: price.label,
-                    package: toFirestore.ref<any>(PACKAGE_COLLECTION, price.packageId),
+                    package: toFirestore.ref<any>(PACKAGE_COLLECTION, price.package),
                     type: price.type,
                     price: price.price
                 })),
@@ -364,7 +364,7 @@ export const partnerToFirestore = (partner: PartnerApp): PartnerFirestore => {
                 custom_prices: ps.user.custom_prices.map(price => ({
                     destination: price.destination,
                     label: price.label,
-                    package: toFirestore.ref<any>(PACKAGE_COLLECTION, price.packageId),
+                    package: toFirestore.ref<any>(PACKAGE_COLLECTION, price.package),
                     type: price.type,
                     price: price.price
                 })),
@@ -444,7 +444,7 @@ export const partnerFromFirestore = (firestorePartner: PartnerFirestore): Partne
                 custom_prices: ps.partner.custom_prices.map(price => ({
                     destination: price.destination,
                     label: price.label,
-                    packageId: fromFirestore.ref(price.package),
+                    package: fromFirestore.ref(price.package),
                     type: price.type,
                     price: price.price
                 })),
@@ -460,7 +460,7 @@ export const partnerFromFirestore = (firestorePartner: PartnerFirestore): Partne
                 custom_prices: ps.user.custom_prices.map(price => ({
                     destination: price.destination,
                     label: price.label,
-                    packageId: fromFirestore.ref(price.package),
+                    package: fromFirestore.ref(price.package),
                     type: price.type,
                     price: price.price
                 })),
@@ -503,7 +503,7 @@ export const priceListFromFirestore = (firestorePriceList: PriceListFirestore): 
         basePriceList.price_list = firestorePriceList.price_list.map(price => ({
             destination: price.destination,
             label: price.label,
-            packageId: fromFirestore.ref(price.package),
+            package: fromFirestore.ref(price.package),
             type: price.type,
             price: price.price
         }));
@@ -530,7 +530,7 @@ export const priceListToFirestore = (priceList: PriceListApp): PriceListFirestor
         basePriceList.price_list = priceList.price_list.map(price => ({
             destination: price.destination,
             label: price.label,
-            package: toFirestore.ref<any>(PACKAGE_COLLECTION, price.packageId),
+            package: toFirestore.ref<any>(PACKAGE_COLLECTION, price.package),
             type: price.type,
             price: price.price
         }));
