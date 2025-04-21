@@ -101,6 +101,7 @@ export const bookingAppSchema = baseModelAppSchema.extend({
 // Define types based on schemas
 export type BookingFirestore = z.infer<typeof bookingFirestoreSchema>;
 export type BookingApp = z.infer<typeof bookingAppSchema>;
+export type CommunicationOptions = z.infer<typeof communicationOptionsSchema>;
 
 // Field mapping types for conversions
 interface DateFieldMapping {

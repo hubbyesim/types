@@ -77,6 +77,7 @@ export const promoCodeAppSchema = baseModelAppSchema.extend({
 // Define types based on schemas
 export type PromoCodeFirestore = z.infer<typeof promoCodeFirestoreSchema>;
 export type PromoCodeApp = z.infer<typeof promoCodeAppSchema>;
+export type PackageSpecification = z.infer<typeof packageSpecificationSchema>;
 
 // Helper function to convert date/timestamp to Date
 const convertToDate = (value: string | Date | any): Date => {

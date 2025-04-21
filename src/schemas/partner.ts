@@ -262,6 +262,24 @@ export type PartnerFirestore = z.infer<typeof partnerFirestoreSchema>;
 export type PartnerApp = z.infer<typeof partnerAppSchema>;
 export type PriceListFirestore = z.infer<typeof priceListFirestoreSchema>;
 export type PriceListApp = z.infer<typeof priceListAppSchema>;
+export type Address = z.infer<typeof addressSchema>;
+export type Registration = z.infer<typeof registrationSchema>;
+export type BankingDetails = z.infer<typeof bankingDetailsSchema>;
+export type PackagePriceFirestore = z.infer<typeof packagePriceFirestoreSchema>;
+export type PackagePriceApp = z.infer<typeof packagePriceAppSchema>;
+export type PricingStrategyFirestore = z.infer<typeof pricingStrategyFirestoreSchema>;
+export type PricingStrategyApp = z.infer<typeof pricingStrategyAppSchema>;
+export type FinancialPropertiesFirestore = z.infer<typeof financialPropertiesFirestoreSchema>;
+export type FinancialPropertiesApp = z.infer<typeof financialPropertiesAppSchema>;
+export type PackageStrategy = z.infer<typeof packageStrategySchema>;
+export type BookingDefaults = z.infer<typeof bookingDefaultsSchema>;
+export type BookingConfirmation = z.infer<typeof bookingConfirmationSchema>;
+export type VisualIdentityBanner = z.infer<typeof visualIdentityBannerSchema>;
+export type VisualIdentityBannerStrategy = z.infer<typeof visualIdentityBannerStrategySchema>;
+export type VisualIdentity = z.infer<typeof visualIdentitySchema>;
+export type ScheduleFilter = z.infer<typeof scheduleFilterSchema>;
+export type Schedule = z.infer<typeof scheduleSchema>;
+export type PlatformSettings = z.infer<typeof platformSettingsSchema>;
 
 // Field mapping for conversions
 interface RefFieldMapping {
