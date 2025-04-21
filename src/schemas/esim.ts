@@ -8,6 +8,7 @@ import {
     fromFirestore,
     toFirestore
 } from './helpers';
+import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 
 // Define collection paths
 export const COUNTRY_COLLECTION = 'countries';
@@ -21,133 +22,155 @@ export const userRefSchema = createDocRefSchema<any>(USER_COLLECTION);
 export const partnerRefSchema = createDocRefSchema<any>(PARTNER_COLLECTION);
 export const paymentRefSchema = createDocRefSchema<any>(PAYMENT_COLLECTION);
 
-// Firestore schema for ESIM
-export const esimFirestoreSchema = baseModelSchema.extend({
-    country: countryRefSchema.schema.nullable(),
+// Common fields shared between Firestore and App schemas
+const commonESIMFields = {
     imsi: z.number(),
     qr: z.string(),
-    user: userRefSchema.schema.nullable(),
     iccid: z.string(),
     provider: z.string(),
     coverage_label: z.string().nullable().optional(),
     total_data: z.number().nullable(),
     data_left: z.number().nullable(),
     data_used: z.boolean().nullable(),
-    time_assigned: timestampSchema.nullable(),
-    last_updated: timestampSchema.nullable(),
     status: z.string().nullable(),
     name: z.string(),
     android_auto: z.boolean(),
-    partner: partnerRefSchema.schema.nullable(),
     partner_price: z.number().nullable(),
     promo: z.string().nullable(),
     type: z.enum(['api', 'promo', 'balance', 'code', 'external', 'payment']),
-    payment: paymentRefSchema.schema.nullable(),
     is_auto_install: z.boolean(),
     is_archived: z.boolean(),
     apn: z.string().nullable()
+};
+
+// Firestore schema for ESIM
+export const esimFirestoreSchema = baseModelSchema.extend({
+    ...commonESIMFields,
+    country: countryRefSchema.schema.nullable(),
+    user: userRefSchema.schema.nullable(),
+    time_assigned: timestampSchema.nullable(),
+    last_updated: timestampSchema.nullable(),
+    partner: partnerRefSchema.schema.nullable(),
+    payment: paymentRefSchema.schema.nullable(),
 });
 
 // App schema for ESIM
 export const esimAppSchema = baseModelAppSchema.extend({
+    ...commonESIMFields,
     countryId: z.string().nullable(),
-    imsi: z.number(),
-    qr: z.string(),
     userId: z.string().nullable(),
-    iccid: z.string(),
-    provider: z.string(),
-    coverage_label: z.string().nullable().optional(),
-    total_data: z.number().nullable(),
-    data_left: z.number().nullable(),
-    data_used: z.boolean().nullable(),
     time_assigned: z.date().nullable(),
     last_updated: z.date().nullable(),
-    status: z.string().nullable(),
-    name: z.string(),
-    android_auto: z.boolean(),
     partnerId: z.string().nullable(),
-    partner_price: z.number().nullable(),
-    promo: z.string().nullable(),
-    type: z.enum(['api', 'promo', 'balance', 'code', 'external', 'payment']),
     paymentId: z.string().nullable(),
-    is_auto_install: z.boolean(),
-    is_archived: z.boolean(),
-    apn: z.string().nullable()
 });
 
 // Define types based on schemas
 export type ESIMFirestore = z.infer<typeof esimFirestoreSchema>;
 export type ESIMApp = z.infer<typeof esimAppSchema>;
 
+// Field mapping types for conversions
+interface RefFieldMapping {
+    app: keyof ESIMApp;
+    firestore: keyof ESIMFirestore;
+    collection: string;
+    nullable: boolean;
+}
+
+interface DateFieldMapping {
+    field: 'time_assigned' | 'last_updated';
+    nullable: boolean;
+}
+
+const refFieldMappings: RefFieldMapping[] = [
+    { app: 'countryId', firestore: 'country', collection: COUNTRY_COLLECTION, nullable: true },
+    { app: 'userId', firestore: 'user', collection: USER_COLLECTION, nullable: true },
+    { app: 'partnerId', firestore: 'partner', collection: PARTNER_COLLECTION, nullable: true },
+    { app: 'paymentId', firestore: 'payment', collection: PAYMENT_COLLECTION, nullable: true }
+];
+
+const dateFieldMappings: DateFieldMapping[] = [
+    { field: 'time_assigned', nullable: true },
+    { field: 'last_updated', nullable: true }
+];
+
 // Conversion functions
 export const esimToFirestore = (esim: ESIMApp): ESIMFirestore => {
-    return {
-        id: esim.id,
-        created_at: toFirestore.date(esim.created_at),
-        updated_at: toFirestore.date(esim.updated_at),
-        created_by: typeof esim.created_by === 'string' ? esim.created_by : null,
-        updated_by: typeof esim.updated_by === 'string' ? esim.updated_by : null,
-        country: esim.countryId ? toFirestore.ref<any>(COUNTRY_COLLECTION, esim.countryId) : null,
-        imsi: esim.imsi,
-        qr: esim.qr,
-        user: esim.userId ? toFirestore.ref<any>(USER_COLLECTION, esim.userId) : null,
-        iccid: esim.iccid,
-        provider: esim.provider,
-        coverage_label: esim.coverage_label,
-        total_data: esim.total_data,
-        data_left: esim.data_left,
-        data_used: esim.data_used,
-        time_assigned: esim.time_assigned ? toFirestore.date(esim.time_assigned) : null,
-        last_updated: esim.last_updated ? toFirestore.date(esim.last_updated) : null,
-        status: esim.status,
-        name: esim.name,
-        android_auto: esim.android_auto,
-        partner: esim.partnerId ? toFirestore.ref<any>(PARTNER_COLLECTION, esim.partnerId) : null,
-        partner_price: esim.partner_price,
-        promo: esim.promo,
-        type: esim.type,
-        payment: esim.paymentId ? toFirestore.ref<any>(PAYMENT_COLLECTION, esim.paymentId) : null,
-        is_auto_install: esim.is_auto_install,
-        is_archived: esim.is_archived,
-        apn: esim.apn
-    };
+    // Create base object with common fields
+    const result = { ...esim } as unknown as Record<string, any>;
+    
+    // Handle base model fields
+    result.created_at = toFirestore.date(esim.created_at);
+    result.updated_at = toFirestore.date(esim.updated_at);
+    result.created_by = typeof esim.created_by === 'string' ? esim.created_by : null;
+    result.updated_by = typeof esim.updated_by === 'string' ? esim.updated_by : null;
+    
+    // Convert date fields
+    dateFieldMappings.forEach(({ field, nullable }) => {
+        const value = esim[field];
+        if (nullable && value === null) {
+            result[field] = null;
+        } else if (value instanceof Date) {
+            result[field] = toFirestore.date(value);
+        }
+    });
+    
+    // Convert reference fields
+    refFieldMappings.forEach(({ app, firestore, collection, nullable }) => {
+        const value = esim[app];
+        
+        if (nullable && value === null) {
+            result[firestore] = null;
+        } else if (typeof value === 'string') {
+            result[firestore] = toFirestore.ref<any>(collection, value);
+        }
+        
+        // Delete app field to avoid duplication
+        delete result[app];
+    });
+    
+    return result as unknown as ESIMFirestore;
 };
 
 export const esimFromFirestore = (firestoreEsim: ESIMFirestore): ESIMApp => {
-    return {
-        id: firestoreEsim.id,
-        created_at: fromFirestore.date(firestoreEsim.created_at),
-        updated_at: fromFirestore.date(firestoreEsim.updated_at),
-        created_by: typeof firestoreEsim.created_by === 'string'
-            ? firestoreEsim.created_by
-            : firestoreEsim.created_by ? fromFirestore.ref(firestoreEsim.created_by) : null,
-        updated_by: typeof firestoreEsim.updated_by === 'string'
-            ? firestoreEsim.updated_by
-            : firestoreEsim.updated_by ? fromFirestore.ref(firestoreEsim.updated_by) : null,
-        countryId: firestoreEsim.country ? fromFirestore.ref(firestoreEsim.country) : null,
-        imsi: firestoreEsim.imsi,
-        qr: firestoreEsim.qr,
-        userId: firestoreEsim.user ? fromFirestore.ref(firestoreEsim.user) : null,
-        iccid: firestoreEsim.iccid,
-        provider: firestoreEsim.provider,
-        coverage_label: firestoreEsim.coverage_label,
-        total_data: firestoreEsim.total_data,
-        data_left: firestoreEsim.data_left,
-        data_used: firestoreEsim.data_used,
-        time_assigned: firestoreEsim.time_assigned ? fromFirestore.date(firestoreEsim.time_assigned) : null,
-        last_updated: firestoreEsim.last_updated ? fromFirestore.date(firestoreEsim.last_updated) : null,
-        status: firestoreEsim.status,
-        name: firestoreEsim.name,
-        android_auto: firestoreEsim.android_auto,
-        partnerId: firestoreEsim.partner ? fromFirestore.ref(firestoreEsim.partner) : null,
-        partner_price: firestoreEsim.partner_price,
-        promo: firestoreEsim.promo,
-        type: firestoreEsim.type,
-        paymentId: firestoreEsim.payment ? fromFirestore.ref(firestoreEsim.payment) : null,
-        is_auto_install: firestoreEsim.is_auto_install,
-        is_archived: firestoreEsim.is_archived,
-        apn: firestoreEsim.apn
-    };
+    // Create base object with common fields
+    const result = { ...firestoreEsim } as unknown as Record<string, any>;
+    
+    // Handle base model fields
+    result.created_at = fromFirestore.date(firestoreEsim.created_at);
+    result.updated_at = fromFirestore.date(firestoreEsim.updated_at);
+    result.created_by = typeof firestoreEsim.created_by === 'string'
+        ? firestoreEsim.created_by
+        : firestoreEsim.created_by ? fromFirestore.ref(firestoreEsim.created_by) : null;
+    result.updated_by = typeof firestoreEsim.updated_by === 'string'
+        ? firestoreEsim.updated_by
+        : firestoreEsim.updated_by ? fromFirestore.ref(firestoreEsim.updated_by) : null;
+    
+    // Convert date fields
+    dateFieldMappings.forEach(({ field, nullable }) => {
+        const value = firestoreEsim[field];
+        if (nullable && value === null) {
+            result[field] = null;
+        } else if (value instanceof Timestamp) {
+            result[field] = fromFirestore.date(value);
+        }
+    });
+    
+    // Convert reference fields
+    refFieldMappings.forEach(({ app, firestore, nullable }) => {
+        const value = firestoreEsim[firestore];
+        
+        if (nullable && value === null) {
+            result[app] = null;
+        } else if (value) {
+            result[app] = fromFirestore.ref(value as any);
+        }
+        
+        // Delete firestore field to avoid duplication
+        delete result[firestore];
+    });
+    
+    return result as unknown as ESIMApp;
 };
 
 // For backwards compatibility

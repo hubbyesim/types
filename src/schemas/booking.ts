@@ -9,6 +9,7 @@ import {
     toFirestore
 } from './helpers';
 import { SupportedLocales, SUPPORTED_LOCALES } from '../constants';
+import { DocumentReference, DocumentData, Timestamp } from 'firebase/firestore';
 
 // Define collection paths
 export const PARTNER_COLLECTION = 'partners';
@@ -48,8 +49,8 @@ export const bookingStatusSchema = z.enum([
 ]);
 export type BookingStatus = z.infer<typeof bookingStatusSchema>;
 
-// Firestore schema for Booking
-export const bookingFirestoreSchema = baseModelSchema.extend({
+// Common booking fields shared between Firestore and App schemas
+const commonBookingFields = {
     title: z.string().nullable(),
     first_name: z.string(),
     last_name: z.string(),
@@ -58,16 +59,10 @@ export const bookingFirestoreSchema = baseModelSchema.extend({
     email: z.string().email().nullable(),
     phone: z.string().nullable(),
     booking_id: z.string().nullable(),
-    return_date: timestampSchema.nullable(),
-    partner: partnerRefSchema.schema,
-    promo_codes: z.array(promoCodeRefSchema.schema),
-    departure_date: timestampSchema,
     flight_number: z.string().optional(),
     gender: z.enum(['M', 'F', 'O']).optional(),
     package_size: z.string().optional(),
     sent_messages: z.record(z.any()).optional(),
-    users: z.array(userRefSchema.schema).nullable(),
-    esims: z.array(esimRefSchema.schema).nullable(),
     locale: z.enum(SUPPORTED_LOCALES),
     status: bookingStatusSchema,
     data: z.object({
@@ -79,130 +74,145 @@ export const bookingFirestoreSchema = baseModelSchema.extend({
     is_pseudonymized: z.boolean(),
     import_id: z.string().nullable().optional(),
     package_specifications: z.record(z.any()).optional()
+};
+
+// Firestore schema for Booking
+export const bookingFirestoreSchema = baseModelSchema.extend({
+    ...commonBookingFields,
+    return_date: timestampSchema.nullable(),
+    departure_date: timestampSchema,
+    partner: partnerRefSchema.schema,
+    promo_codes: z.array(promoCodeRefSchema.schema),
+    users: z.array(userRefSchema.schema).nullable(),
+    esims: z.array(esimRefSchema.schema).nullable(),
 });
 
 // App schema for Booking
 export const bookingAppSchema = baseModelAppSchema.extend({
-    title: z.string().nullable(),
-    first_name: z.string(),
-    last_name: z.string(),
-    full_name: z.string(),
-    pax: z.number(),
-    email: z.string().email().nullable(),
-    phone: z.string().nullable(),
-    booking_id: z.string().nullable(),
+    ...commonBookingFields,
     return_date: z.date().nullable(),
+    departure_date: z.date(),
     partnerId: docRefToStringSchema(partnerRefSchema),
     promo_code_ids: z.array(docRefToStringSchema(promoCodeRefSchema)),
-    departure_date: z.date(),
-    flight_number: z.string().optional(),
-    gender: z.enum(['M', 'F', 'O']).optional(),
-    package_size: z.string().optional(),
-    sent_messages: z.record(z.any()).optional(),
     user_ids: z.array(z.string()).nullable(),
     esim_ids: z.array(z.string()).nullable(),
-    locale: z.enum(SUPPORTED_LOCALES),
-    status: bookingStatusSchema,
-    data: z.object({
-        source: z.string(),
-        manual: z.boolean()
-    }),
-    communication_options: communicationOptionsSchema,
-    is_processed_for_esim_restoration: z.boolean(),
-    is_pseudonymized: z.boolean(),
-    import_id: z.string().nullable().optional(),
-    package_specifications: z.record(z.any()).optional()
 });
 
 // Define types based on schemas
 export type BookingFirestore = z.infer<typeof bookingFirestoreSchema>;
 export type BookingApp = z.infer<typeof bookingAppSchema>;
 
+// Field mapping types for conversions
+interface DateFieldMapping {
+    field: 'return_date' | 'departure_date';
+    nullable?: boolean;
+}
+
+interface RefFieldMapping {
+    app: keyof BookingApp;
+    firestore: keyof BookingFirestore;
+    collection: string;
+    isArray?: boolean;
+    nullable?: boolean;
+}
+
+const refFieldMappings: RefFieldMapping[] = [
+    { app: 'partnerId', firestore: 'partner', collection: PARTNER_COLLECTION },
+    { app: 'promo_code_ids', firestore: 'promo_codes', collection: PROMO_CODE_COLLECTION, isArray: true },
+    { app: 'user_ids', firestore: 'users', collection: USER_COLLECTION, isArray: true, nullable: true },
+    { app: 'esim_ids', firestore: 'esims', collection: ESIM_COLLECTION, isArray: true, nullable: true }
+];
+
+const dateFieldMappings: DateFieldMapping[] = [
+    { field: 'return_date', nullable: true },
+    { field: 'departure_date' }
+];
+
 // Conversion functions
 export const bookingToFirestore = (booking: BookingApp): BookingFirestore => {
-    return {
-        id: booking.id,
-        created_at: toFirestore.date(booking.created_at),
-        updated_at: toFirestore.date(booking.updated_at),
-        created_by: typeof booking.created_by === 'string' ? booking.created_by : null,
-        updated_by: typeof booking.updated_by === 'string' ? booking.updated_by : null,
-        title: booking.title,
-        first_name: booking.first_name,
-        last_name: booking.last_name,
-        full_name: booking.full_name,
-        pax: booking.pax,
-        email: booking.email,
-        phone: booking.phone,
-        booking_id: booking.booking_id,
-        return_date: booking.return_date ? toFirestore.date(booking.return_date) : null,
-        partner: toFirestore.ref<any>(PARTNER_COLLECTION, booking.partnerId),
-        promo_codes: booking.promo_code_ids.map(id =>
-            toFirestore.ref<any>(PROMO_CODE_COLLECTION, id)
-        ),
-        departure_date: toFirestore.date(booking.departure_date),
-        flight_number: booking.flight_number,
-        gender: booking.gender,
-        package_size: booking.package_size,
-        sent_messages: booking.sent_messages,
-        users: booking.user_ids ? booking.user_ids.map(id =>
-            toFirestore.ref<any>(USER_COLLECTION, id)
-        ) : null,
-        esims: booking.esim_ids ? booking.esim_ids.map(id =>
-            toFirestore.ref<any>(ESIM_COLLECTION, id)
-        ) : null,
-        locale: booking.locale,
-        status: booking.status,
-        data: booking.data,
-        communication_options: booking.communication_options,
-        is_processed_for_esim_restoration: booking.is_processed_for_esim_restoration,
-        is_pseudonymized: booking.is_pseudonymized,
-        import_id: booking.import_id,
-        package_specifications: booking.package_specifications
-    };
+    // Create base object with common fields
+    const result = { ...booking } as unknown as Record<string, any>;
+    
+    // Handle base model fields
+    result.created_at = toFirestore.date(booking.created_at);
+    result.updated_at = toFirestore.date(booking.updated_at);
+    result.created_by = typeof booking.created_by === 'string' ? booking.created_by : null;
+    result.updated_by = typeof booking.updated_by === 'string' ? booking.updated_by : null;
+    
+    // Convert date fields
+    dateFieldMappings.forEach(({ field, nullable }) => {
+        const value = booking[field];
+        if (nullable && value === null) {
+            result[field] = null;
+        } else if (value instanceof Date) {
+            result[field] = toFirestore.date(value);
+        }
+    });
+    
+    // Convert reference fields
+    refFieldMappings.forEach(({ app, firestore, collection, isArray, nullable }) => {
+        const value = booking[app];
+        
+        if (isArray) {
+            if (nullable && value === null) {
+                result[firestore] = null;
+            } else if (Array.isArray(value)) {
+                result[firestore] = value.map(id => toFirestore.ref<any>(collection, id));
+            }
+        } else if (typeof value === 'string') {
+            result[firestore] = toFirestore.ref<any>(collection, value);
+        }
+        
+        // Delete app field to avoid duplication
+        delete result[app];
+    });
+    
+    return result as unknown as BookingFirestore;
 };
 
 export const bookingFromFirestore = (firestoreBooking: BookingFirestore): BookingApp => {
-    return {
-        id: firestoreBooking.id,
-        created_at: fromFirestore.date(firestoreBooking.created_at),
-        updated_at: fromFirestore.date(firestoreBooking.updated_at),
-        created_by: typeof firestoreBooking.created_by === 'string'
-            ? firestoreBooking.created_by
-            : firestoreBooking.created_by ? fromFirestore.ref(firestoreBooking.created_by) : null,
-        updated_by: typeof firestoreBooking.updated_by === 'string'
-            ? firestoreBooking.updated_by
-            : firestoreBooking.updated_by ? fromFirestore.ref(firestoreBooking.updated_by) : null,
-        title: firestoreBooking.title,
-        first_name: firestoreBooking.first_name,
-        last_name: firestoreBooking.last_name,
-        full_name: firestoreBooking.full_name,
-        pax: firestoreBooking.pax,
-        email: firestoreBooking.email,
-        phone: firestoreBooking.phone,
-        booking_id: firestoreBooking.booking_id,
-        return_date: firestoreBooking.return_date ? fromFirestore.date(firestoreBooking.return_date) : null,
-        partnerId: fromFirestore.ref(firestoreBooking.partner),
-        promo_code_ids: firestoreBooking.promo_codes.map(ref => fromFirestore.ref(ref)),
-        departure_date: fromFirestore.date(firestoreBooking.departure_date),
-        flight_number: firestoreBooking.flight_number,
-        gender: firestoreBooking.gender,
-        package_size: firestoreBooking.package_size,
-        sent_messages: firestoreBooking.sent_messages,
-        user_ids: firestoreBooking.users
-            ? firestoreBooking.users.map(ref => fromFirestore.ref(ref))
-            : null,
-        esim_ids: firestoreBooking.esims
-            ? firestoreBooking.esims.map(ref => fromFirestore.ref(ref))
-            : null,
-        locale: firestoreBooking.locale,
-        status: firestoreBooking.status,
-        data: firestoreBooking.data,
-        communication_options: firestoreBooking.communication_options,
-        is_processed_for_esim_restoration: firestoreBooking.is_processed_for_esim_restoration,
-        is_pseudonymized: firestoreBooking.is_pseudonymized,
-        import_id: firestoreBooking.import_id,
-        package_specifications: firestoreBooking.package_specifications
-    };
+    // Create base object with common fields
+    const result = { ...firestoreBooking } as unknown as Record<string, any>;
+    
+    // Handle base model fields
+    result.created_at = fromFirestore.date(firestoreBooking.created_at);
+    result.updated_at = fromFirestore.date(firestoreBooking.updated_at);
+    result.created_by = typeof firestoreBooking.created_by === 'string'
+        ? firestoreBooking.created_by
+        : firestoreBooking.created_by ? fromFirestore.ref(firestoreBooking.created_by) : null;
+    result.updated_by = typeof firestoreBooking.updated_by === 'string'
+        ? firestoreBooking.updated_by
+        : firestoreBooking.updated_by ? fromFirestore.ref(firestoreBooking.updated_by) : null;
+    
+    // Convert date fields
+    dateFieldMappings.forEach(({ field, nullable }) => {
+        const value = firestoreBooking[field];
+        if (nullable && value === null) {
+            result[field] = null;
+        } else if (value instanceof Timestamp) {
+            result[field] = fromFirestore.date(value);
+        }
+    });
+    
+    // Convert reference fields
+    refFieldMappings.forEach(({ app, firestore, isArray, nullable }) => {
+        const value = firestoreBooking[firestore];
+        
+        if (isArray) {
+            if (nullable && value === null) {
+                result[app] = null;
+            } else if (Array.isArray(value)) {
+                result[app] = value.map(ref => fromFirestore.ref(ref as any));
+            }
+        } else if (value) {
+            result[app] = fromFirestore.ref(value as any);
+        }
+        
+        // Delete firestore field to avoid duplication
+        delete result[firestore];
+    });
+    
+    return result as unknown as BookingApp;
 };
 
 // For backwards compatibility

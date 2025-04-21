@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { DocumentReference } from 'firebase-admin/firestore';
+import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 export declare const PROFILE_COLLECTION = "profiles";
 export declare const profileRefSchema: {
     schema: z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
@@ -7,34 +7,34 @@ export declare const profileRefSchema: {
 };
 export declare const userFirestoreSchema: z.ZodObject<{
     id: z.ZodString;
-    created_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
-    updated_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
+    created_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
+    updated_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
     created_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>]>;
     updated_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>]>;
 } & {
+    createdAt: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
+    profileRef: z.ZodNullable<z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
     name: z.ZodNullable<z.ZodString>;
     email: z.ZodNullable<z.ZodString>;
-    createdAt: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
-    profileRef: z.ZodNullable<z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
 }, "strip", z.ZodTypeAny, {
     name: string | null;
     id: string;
     email: string | null;
-    created_at: FirebaseFirestore.Timestamp;
-    updated_at: FirebaseFirestore.Timestamp;
+    created_at: Timestamp;
+    updated_at: Timestamp;
     created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    createdAt: FirebaseFirestore.Timestamp;
+    createdAt: Timestamp;
     profileRef: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
 }, {
     name: string | null;
     id: string;
     email: string | null;
-    created_at: FirebaseFirestore.Timestamp;
-    updated_at: FirebaseFirestore.Timestamp;
+    created_at: Timestamp;
+    updated_at: Timestamp;
     created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    createdAt: FirebaseFirestore.Timestamp;
+    createdAt: Timestamp;
     profileRef: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
 }>;
 export declare const userAppSchema: z.ZodObject<{
@@ -44,10 +44,10 @@ export declare const userAppSchema: z.ZodObject<{
     created_by: z.ZodUnion<[z.ZodString, z.ZodNull]>;
     updated_by: z.ZodUnion<[z.ZodString, z.ZodNull]>;
 } & {
-    name: z.ZodNullable<z.ZodString>;
-    email: z.ZodNullable<z.ZodString>;
     createdAt: z.ZodDate;
     profileId: z.ZodNullable<z.ZodString>;
+    name: z.ZodNullable<z.ZodString>;
+    email: z.ZodNullable<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     name: string | null;
     id: string;

@@ -10,6 +10,7 @@ import {
     toFirestore
 } from './helpers';
 import { SUPPORTED_LOCALES } from '../constants';
+import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 
 // Define collection paths
 export const PARTNER_COLLECTION = 'partners';
@@ -44,37 +45,44 @@ export const bankingDetailsSchema = z.object({
     iban: z.string()
 }).nullable();
 
-export const packagePriceFirestoreSchema = z.object({
+// Common package price fields shared between Firestore and App schemas
+const commonPackagePriceFields = {
     destination: z.string(),
     label: z.string(),
-    package: packageRefSchema.schema,
     type: z.enum(['data-limit', 'time-limit']),
     price: z.number()
+};
+
+export const packagePriceFirestoreSchema = z.object({
+    ...commonPackagePriceFields,
+    package: packageRefSchema.schema,
 });
 
 export const packagePriceAppSchema = z.object({
-    destination: z.string(),
-    label: z.string(),
+    ...commonPackagePriceFields,
     package: z.string(),
-    type: z.enum(['data-limit', 'time-limit']),
-    price: z.number()
 });
 
-export const pricingStrategyFirestoreSchema = z.object({
+// Common pricing strategy fields
+const commonPricingStrategyFields = {
     strategy: z.enum(['split', 'bundle']),
+    modification_percentage: z.number()
+};
+
+export const pricingStrategyFirestoreSchema = z.object({
+    ...commonPricingStrategyFields,
     default_price_list: priceListRefSchema.schema.nullable(),
     custom_prices: z.array(packagePriceFirestoreSchema),
-    modification_percentage: z.number()
 });
 
 export const pricingStrategyAppSchema = z.object({
-    strategy: z.enum(['split', 'bundle']),
+    ...commonPricingStrategyFields,
     default_price_list_id: z.string().nullable(),
     custom_prices: z.array(packagePriceAppSchema),
-    modification_percentage: z.number()
 });
 
-export const financialPropertiesFirestoreSchema = z.object({
+// Common financial properties fields
+const commonFinancialPropertiesFields = {
     administration_fee: z.number().nullable(),
     income_per_gb: z.number().nullable(),
     commission_fee: z.number().nullable().optional(),
@@ -82,6 +90,10 @@ export const financialPropertiesFirestoreSchema = z.object({
     requires_card: z.boolean().nullable(),
     next_invoice: z.date().nullable(),
     last_invoice: z.date().nullable(),
+};
+
+export const financialPropertiesFirestoreSchema = z.object({
+    ...commonFinancialPropertiesFields,
     pricing_strategies: z.object({
         partner: pricingStrategyFirestoreSchema,
         user: pricingStrategyFirestoreSchema
@@ -89,13 +101,7 @@ export const financialPropertiesFirestoreSchema = z.object({
 }).nullable();
 
 export const financialPropertiesAppSchema = z.object({
-    administration_fee: z.number().nullable(),
-    income_per_gb: z.number().nullable(),
-    commission_fee: z.number().nullable().optional(),
-    payment_method: z.enum(['invoice', 'direct']),
-    requires_card: z.boolean().nullable(),
-    next_invoice: z.date().nullable(),
-    last_invoice: z.date().nullable(),
+    ...commonFinancialPropertiesFields,
     pricing_strategies: z.object({
         partner: pricingStrategyAppSchema,
         user: pricingStrategyAppSchema
@@ -182,15 +188,14 @@ export const platformSettingsSchema = z.object({
     booking_confirmation: bookingConfirmationSchema.nullable()
 }).nullable();
 
-// Firestore schema for Partner
-export const partnerFirestoreSchema = baseModelSchema.extend({
+// Common partner fields shared between Firestore and App schemas
+const commonPartnerFields = {
     // Basic information
     name: z.string().nullable(),
     type: z.string().nullable(),
     is_active: z.boolean().nullable().optional(),
     external_id: z.string().nullable().optional(),
-    parent: documentRefSchema.nullable(),
-
+    
     // Contact information
     contact: z.object({
         email: z.string().nullable(),
@@ -206,337 +211,323 @@ export const partnerFirestoreSchema = baseModelSchema.extend({
     // Banking information
     banking_details: bankingDetailsSchema,
 
-    // Financial information
-    financial_properties: financialPropertiesFirestoreSchema,
-
     // Platform settings
     platform_settings: platformSettingsSchema,
 
     // Visual identity
     visual_identity: visualIdentitySchema.nullable(),
 
-    // User management
-    users: z.array(documentRefSchema).nullable(),
-
     // Metadata
     data: z.object({
         source: z.string(),
         manual: z.boolean()
     }).nullable()
+};
+
+// Firestore schema for Partner
+export const partnerFirestoreSchema = baseModelSchema.extend({
+    ...commonPartnerFields,
+    parent: documentRefSchema.nullable(),
+    users: z.array(documentRefSchema).nullable(),
+    financial_properties: financialPropertiesFirestoreSchema,
 });
 
 // App schema for Partner
 export const partnerAppSchema = baseModelAppSchema.extend({
-    // Basic information
-    name: z.string().nullable(),
-    type: z.string().nullable(),
-    is_active: z.boolean().nullable().optional(),
-    external_id: z.string().nullable().optional(),
+    ...commonPartnerFields,
     parentId: z.string().nullable(),
-
-    // Contact information
-    contact: z.object({
-        email: z.string().nullable(),
-        office_phone: z.string().nullable().optional()
-    }).nullable(),
-
-    // Location information
-    address: addressSchema,
-
-    // Registration information
-    registration: registrationSchema,
-
-    // Banking information
-    banking_details: bankingDetailsSchema,
-
-    // Financial information
-    financial_properties: financialPropertiesAppSchema,
-
-    // Platform settings
-    platform_settings: platformSettingsSchema,
-
-    // Visual identity
-    visual_identity: visualIdentitySchema.nullable(),
-
-    // User management
     user_ids: z.array(z.string()).nullable(),
+    financial_properties: financialPropertiesAppSchema,
+});
 
-    // Metadata
-    data: z.object({
-        source: z.string(),
-        manual: z.boolean()
-    }).nullable()
+// Common price list fields
+const commonPriceListFields = {
+    name: z.string(),
+    type: z.enum(['partner', 'user']).default('partner'),
+};
+
+// Type for price list
+export const priceListFirestoreSchema = baseModelSchema.extend({
+    ...commonPriceListFields,
+    price_list: z.array(packagePriceFirestoreSchema)
+});
+
+export const priceListAppSchema = baseModelAppSchema.extend({
+    ...commonPriceListFields,
+    price_list: z.array(packagePriceAppSchema)
 });
 
 // Define types based on schemas
 export type PartnerFirestore = z.infer<typeof partnerFirestoreSchema>;
 export type PartnerApp = z.infer<typeof partnerAppSchema>;
-
-// Type for price list
-export const priceListFirestoreSchema = baseModelSchema.extend({
-    id: z.string(),
-    name: z.string(),
-    type: z.enum(['partner', 'user']).default('partner'),
-    price_list: z.array(packagePriceFirestoreSchema)
-});
-
-export const priceListAppSchema = baseModelAppSchema.extend({
-    id: z.string(),
-    name: z.string(),
-    type: z.enum(['partner', 'user']).default('partner'),
-    price_list: z.array(packagePriceAppSchema)
-});
-
 export type PriceListFirestore = z.infer<typeof priceListFirestoreSchema>;
 export type PriceListApp = z.infer<typeof priceListAppSchema>;
 
+// Field mapping for conversions
+interface RefFieldMapping {
+    app: keyof PartnerApp;
+    firestore: keyof PartnerFirestore;
+    collection: string;
+    nullable?: boolean;
+    isArray?: boolean;
+}
+
+const refFieldMappings: RefFieldMapping[] = [
+    { app: 'parentId', firestore: 'parent', collection: PARTNER_COLLECTION, nullable: true },
+    { app: 'user_ids', firestore: 'users', collection: USER_COLLECTION, nullable: true, isArray: true }
+];
+
 // Conversion functions
 export const partnerToFirestore = (partner: PartnerApp): PartnerFirestore => {
-    // Create a base partner object
-    const basePartner: Partial<PartnerFirestore> = {
-        id: partner.id,
-        created_at: toFirestore.date(partner.created_at),
-        updated_at: toFirestore.date(partner.updated_at),
-        created_by: typeof partner.created_by === 'string' ? partner.created_by : null,
-        updated_by: typeof partner.updated_by === 'string' ? partner.updated_by : null,
-        name: partner.name,
-        type: partner.type,
-        is_active: partner.is_active,
-        external_id: partner.external_id,
-        parent: partner.parentId
-            ? toFirestore.ref<PartnerFirestore>(PARTNER_COLLECTION, partner.parentId)
-            : null,
-        contact: partner.contact,
-        address: partner.address,
-        registration: partner.registration,
-        banking_details: partner.banking_details,
-        platform_settings: partner.platform_settings,
-        visual_identity: partner.visual_identity,
-        users: partner.user_ids
-            ? partner.user_ids.map(id => toFirestore.ref<any>(USER_COLLECTION, id))
-            : null,
-        data: partner.data,
-        financial_properties: null // Default to null
-    };
-
-    // Handle financial properties separately
+    // Create base object with common fields
+    const result = { ...partner } as unknown as Record<string, any>;
+    
+    // Handle base model fields
+    result.created_at = toFirestore.date(partner.created_at);
+    result.updated_at = toFirestore.date(partner.updated_at);
+    result.created_by = typeof partner.created_by === 'string' ? partner.created_by : null;
+    result.updated_by = typeof partner.updated_by === 'string' ? partner.updated_by : null;
+    
+    // Convert reference fields
+    refFieldMappings.forEach(({ app, firestore, collection, nullable, isArray }) => {
+        const value = partner[app];
+        
+        if (isArray) {
+            if (nullable && value === null) {
+                result[firestore] = null;
+            } else if (Array.isArray(value)) {
+                result[firestore] = value.map(id => toFirestore.ref<any>(collection, id));
+            }
+        } else if (nullable && value === null) {
+            result[firestore] = null;
+        } else if (typeof value === 'string') {
+            result[firestore] = toFirestore.ref<any>(collection, value);
+        }
+        
+        // Delete app field to avoid duplication
+        delete result[app];
+    });
+    
+    // Handle financial properties specially due to complex nested structure
     if (partner.financial_properties) {
         const fp = { ...partner.financial_properties };
-
-        // Copy the financial properties without pricing strategies
+        
         const financialProps: any = {
-            administration_fee: fp.administration_fee,
-            income_per_gb: fp.income_per_gb,
-            commission_fee: fp.commission_fee,
-            payment_method: fp.payment_method,
-            requires_card: fp.requires_card,
-            next_invoice: fp.next_invoice,
-            last_invoice: fp.last_invoice,
-            pricing_strategies: null // Default to null
+            ...fp,
+            pricing_strategies: null
         };
-
+        
         // Handle pricing strategies if they exist
         if (fp.pricing_strategies) {
             const ps = fp.pricing_strategies;
-
+            
             // Convert partner pricing strategy
             const partnerStrategy = {
-                strategy: ps.partner.strategy,
+                ...ps.partner,
                 default_price_list: ps.partner.default_price_list_id
                     ? toFirestore.ref<PriceListFirestore>(PRICE_LIST_COLLECTION, ps.partner.default_price_list_id)
                     : null,
                 custom_prices: ps.partner.custom_prices.map(price => ({
-                    destination: price.destination,
-                    label: price.label,
-                    package: toFirestore.ref<any>(PACKAGE_COLLECTION, price.package),
-                    type: price.type,
-                    price: price.price
-                })),
-                modification_percentage: ps.partner.modification_percentage
+                    ...price,
+                    package: toFirestore.ref<any>(PACKAGE_COLLECTION, price.package)
+                }))
             };
-
+            
             // Convert user pricing strategy
             const userStrategy = {
-                strategy: ps.user.strategy,
+                ...ps.user,
                 default_price_list: ps.user.default_price_list_id
                     ? toFirestore.ref<PriceListFirestore>(PRICE_LIST_COLLECTION, ps.user.default_price_list_id)
                     : null,
                 custom_prices: ps.user.custom_prices.map(price => ({
-                    destination: price.destination,
-                    label: price.label,
-                    package: toFirestore.ref<any>(PACKAGE_COLLECTION, price.package),
-                    type: price.type,
-                    price: price.price
-                })),
-                modification_percentage: ps.user.modification_percentage
+                    ...price,
+                    package: toFirestore.ref<any>(PACKAGE_COLLECTION, price.package)
+                }))
             };
-
+            
+            const partnerStrategyObj: any = partnerStrategy;
+            const userStrategyObj: any = userStrategy;
+            
+            if ('default_price_list_id' in partnerStrategyObj) {
+                delete partnerStrategyObj.default_price_list_id;
+            }
+            
+            if ('default_price_list_id' in userStrategyObj) {
+                delete userStrategyObj.default_price_list_id;
+            }
+            
             // Set pricing strategies
             financialProps.pricing_strategies = {
-                partner: partnerStrategy,
-                user: userStrategy
+                partner: partnerStrategyObj,
+                user: userStrategyObj
             };
         }
-
-        // Set financial properties
-        basePartner.financial_properties = financialProps;
+        
+        result.financial_properties = financialProps;
     }
-
-    return basePartner as PartnerFirestore;
+    
+    return result as unknown as PartnerFirestore;
 };
 
 export const partnerFromFirestore = (firestorePartner: PartnerFirestore): PartnerApp => {
-    // Create a base partner object
-    const basePartner: Partial<PartnerApp> = {
-        id: firestorePartner.id,
-        created_at: fromFirestore.date(firestorePartner.created_at),
-        updated_at: fromFirestore.date(firestorePartner.updated_at),
-        created_by: typeof firestorePartner.created_by === 'string'
-            ? firestorePartner.created_by
-            : firestorePartner.created_by ? fromFirestore.ref(firestorePartner.created_by) : null,
-        updated_by: typeof firestorePartner.updated_by === 'string'
-            ? firestorePartner.updated_by
-            : firestorePartner.updated_by ? fromFirestore.ref(firestorePartner.updated_by) : null,
-        name: firestorePartner.name,
-        type: firestorePartner.type,
-        is_active: firestorePartner.is_active,
-        external_id: firestorePartner.external_id,
-        parentId: firestorePartner.parent ? fromFirestore.ref(firestorePartner.parent) : null,
-        contact: firestorePartner.contact,
-        address: firestorePartner.address,
-        registration: firestorePartner.registration,
-        banking_details: firestorePartner.banking_details,
-        platform_settings: firestorePartner.platform_settings,
-        visual_identity: firestorePartner.visual_identity,
-        user_ids: firestorePartner.users
-            ? firestorePartner.users.map(ref => fromFirestore.ref(ref))
-            : null,
-        data: firestorePartner.data,
-        financial_properties: null // Default to null
-    };
-
-    // Handle financial properties separately
+    // Create base object with common fields
+    const result = { ...firestorePartner } as unknown as Record<string, any>;
+    
+    // Handle base model fields
+    result.created_at = fromFirestore.date(firestorePartner.created_at);
+    result.updated_at = fromFirestore.date(firestorePartner.updated_at);
+    result.created_by = typeof firestorePartner.created_by === 'string'
+        ? firestorePartner.created_by
+        : firestorePartner.created_by ? fromFirestore.ref(firestorePartner.created_by) : null;
+    result.updated_by = typeof firestorePartner.updated_by === 'string'
+        ? firestorePartner.updated_by
+        : firestorePartner.updated_by ? fromFirestore.ref(firestorePartner.updated_by) : null;
+    
+    // Convert reference fields
+    refFieldMappings.forEach(({ app, firestore, nullable, isArray }) => {
+        const value = firestorePartner[firestore];
+        
+        if (isArray) {
+            if (nullable && value === null) {
+                result[app] = null;
+            } else if (Array.isArray(value)) {
+                result[app] = value.map(ref => fromFirestore.ref(ref as any));
+            }
+        } else if (nullable && value === null) {
+            result[app] = null;
+        } else if (value) {
+            result[app] = fromFirestore.ref(value as any);
+        }
+        
+        // Delete firestore field to avoid duplication
+        delete result[firestore];
+    });
+    
+    // Handle financial properties specially
     if (firestorePartner.financial_properties) {
         const fp = { ...firestorePartner.financial_properties };
-
-        // Copy the financial properties without pricing strategies
+        
         const financialProps: any = {
-            administration_fee: fp.administration_fee,
-            income_per_gb: fp.income_per_gb,
-            commission_fee: fp.commission_fee,
-            payment_method: fp.payment_method,
-            requires_card: fp.requires_card,
-            next_invoice: fp.next_invoice,
-            last_invoice: fp.last_invoice,
-            pricing_strategies: null // Default to null
+            ...fp,
+            pricing_strategies: null
         };
-
+        
         // Handle pricing strategies if they exist
         if (fp.pricing_strategies) {
             const ps = fp.pricing_strategies;
-
+            
             // Convert partner pricing strategy
             const partnerStrategy = {
-                strategy: ps.partner.strategy,
+                ...ps.partner,
                 default_price_list_id: ps.partner.default_price_list
                     ? fromFirestore.ref(ps.partner.default_price_list)
                     : null,
                 custom_prices: ps.partner.custom_prices.map(price => ({
-                    destination: price.destination,
-                    label: price.label,
-                    package: fromFirestore.ref(price.package),
-                    type: price.type,
-                    price: price.price
-                })),
-                modification_percentage: ps.partner.modification_percentage
+                    ...price,
+                    package: fromFirestore.ref(price.package)
+                }))
             };
-
+            
             // Convert user pricing strategy
             const userStrategy = {
-                strategy: ps.user.strategy,
+                ...ps.user,
                 default_price_list_id: ps.user.default_price_list
                     ? fromFirestore.ref(ps.user.default_price_list)
                     : null,
                 custom_prices: ps.user.custom_prices.map(price => ({
-                    destination: price.destination,
-                    label: price.label,
-                    package: fromFirestore.ref(price.package),
-                    type: price.type,
-                    price: price.price
-                })),
-                modification_percentage: ps.user.modification_percentage
+                    ...price,
+                    package: fromFirestore.ref(price.package)
+                }))
             };
-
+            
+            const partnerStrategyObj: any = partnerStrategy;
+            const userStrategyObj: any = userStrategy;
+            
+            if ('default_price_list' in partnerStrategyObj) {
+                delete partnerStrategyObj.default_price_list;
+            }
+            
+            if ('default_price_list' in userStrategyObj) {
+                delete userStrategyObj.default_price_list;
+            }
+            
             // Set pricing strategies
             financialProps.pricing_strategies = {
-                partner: partnerStrategy,
-                user: userStrategy
+                partner: partnerStrategyObj,
+                user: userStrategyObj
             };
         }
-
-        // Set financial properties
-        basePartner.financial_properties = financialProps;
+        
+        result.financial_properties = financialProps;
     }
-
-    return basePartner as PartnerApp;
+    
+    return result as unknown as PartnerApp;
 };
+
+// Field mapping for price list conversions
+interface PriceListRefMapping {
+    isArray: boolean;
+    field: keyof PriceListFirestore & keyof PriceListApp;
+    itemField: string;
+    collection: string;
+}
+
+const priceListRefMappings: PriceListRefMapping[] = [
+    { isArray: true, field: 'price_list', itemField: 'package', collection: PACKAGE_COLLECTION }
+];
 
 // Conversion function for PriceList from Firestore to App format
 export const priceListFromFirestore = (firestorePriceList: PriceListFirestore): PriceListApp => {
-    // Create a base priceList object with app-friendly types
-    const basePriceList: Partial<PriceListApp> = {
-        id: firestorePriceList.id,
-        name: firestorePriceList.name,
-        type: firestorePriceList.type,
-        created_at: fromFirestore.date(firestorePriceList.created_at),
-        updated_at: fromFirestore.date(firestorePriceList.updated_at),
-        created_by: typeof firestorePriceList.created_by === 'string'
-            ? firestorePriceList.created_by
-            : firestorePriceList.created_by ? fromFirestore.ref(firestorePriceList.created_by) : null,
-        updated_by: typeof firestorePriceList.updated_by === 'string'
-            ? firestorePriceList.updated_by
-            : firestorePriceList.updated_by ? fromFirestore.ref(firestorePriceList.updated_by) : null,
-    };
-
-    // Convert package references in price_list
-    if (firestorePriceList.price_list) {
-        basePriceList.price_list = firestorePriceList.price_list.map(price => ({
-            destination: price.destination,
-            label: price.label,
-            package: fromFirestore.ref(price.package),
-            type: price.type,
-            price: price.price
-        }));
-    }
-
-    return basePriceList as PriceListApp;
+    // Create base object with common fields
+    const result = { ...firestorePriceList } as unknown as Record<string, any>;
+    
+    // Handle base model fields
+    result.created_at = fromFirestore.date(firestorePriceList.created_at);
+    result.updated_at = fromFirestore.date(firestorePriceList.updated_at);
+    result.created_by = typeof firestorePriceList.created_by === 'string'
+        ? firestorePriceList.created_by
+        : firestorePriceList.created_by ? fromFirestore.ref(firestorePriceList.created_by) : null;
+    result.updated_by = typeof firestorePriceList.updated_by === 'string'
+        ? firestorePriceList.updated_by
+        : firestorePriceList.updated_by ? fromFirestore.ref(firestorePriceList.updated_by) : null;
+    
+    // Convert array of objects with document references
+    priceListRefMappings.forEach(({ isArray, field, itemField }) => {
+        const priceList = firestorePriceList[field];
+        if (isArray && Array.isArray(priceList)) {
+            result[field] = priceList.map((item: any) => ({
+                ...item,
+                [itemField]: fromFirestore.ref(item[itemField])
+            }));
+        }
+    });
+    
+    return result as unknown as PriceListApp;
 };
 
 // Conversion function for PriceList from App to Firestore format
 export const priceListToFirestore = (priceList: PriceListApp): PriceListFirestore => {
-    // Create a base priceList object with Firestore types
-    const basePriceList: Partial<PriceListFirestore> = {
-        id: priceList.id,
-        name: priceList.name,
-        type: priceList.type,
-        created_at: toFirestore.date(priceList.created_at),
-        updated_at: toFirestore.date(priceList.updated_at),
-        created_by: typeof priceList.created_by === 'string' ? priceList.created_by : null,
-        updated_by: typeof priceList.updated_by === 'string' ? priceList.updated_by : null,
-    };
-
-    // Convert packageIds to document references in price_list
-    if (priceList.price_list) {
-        basePriceList.price_list = priceList.price_list.map(price => ({
-            destination: price.destination,
-            label: price.label,
-            package: toFirestore.ref<any>(PACKAGE_COLLECTION, price.package),
-            type: price.type,
-            price: price.price
-        }));
-    }
-
-    return basePriceList as PriceListFirestore;
+    // Create base object with common fields
+    const result = { ...priceList } as unknown as Record<string, any>;
+    
+    // Handle base model fields
+    result.created_at = toFirestore.date(priceList.created_at);
+    result.updated_at = toFirestore.date(priceList.updated_at);
+    result.created_by = typeof priceList.created_by === 'string' ? priceList.created_by : null;
+    result.updated_by = typeof priceList.updated_by === 'string' ? priceList.updated_by : null;
+    
+    // Convert array of objects with document references
+    priceListRefMappings.forEach(({ isArray, field, itemField, collection }) => {
+        const priceListValue = priceList[field];
+        if (isArray && Array.isArray(priceListValue)) {
+            result[field] = priceListValue.map((item: any) => ({
+                ...item,
+                [itemField]: toFirestore.ref<any>(collection, item[itemField])
+            }));
+        }
+    });
+    
+    return result as unknown as PriceListFirestore;
 };
 
 // For backwards compatibility

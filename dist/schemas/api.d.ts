@@ -101,18 +101,18 @@ export declare const bookingApiResponseSchema: z.ZodObject<{
     status: "CANCELLED" | "PENDING" | "CONFIRMED" | "COMPLETED" | "UNPAID" | "EXPIRED";
     created_at: string;
     updated_at: string;
+    phone: string | null;
     users: string[];
     esims: string[] | null;
+    return_date: string | null;
+    departure_date: string;
+    partner: string;
+    promo_codes: string[];
     first_name: string;
     last_name: string;
     full_name: string;
     pax: number;
-    phone: string | null;
     booking_id: string | null;
-    return_date: string | null;
-    partner: string;
-    promo_codes: string[];
-    departure_date: string;
     locale: string;
     communication_options: {
         should_send_message: boolean;
@@ -138,18 +138,18 @@ export declare const bookingApiResponseSchema: z.ZodObject<{
     status: "CANCELLED" | "PENDING" | "CONFIRMED" | "COMPLETED" | "UNPAID" | "EXPIRED";
     created_at: string;
     updated_at: string;
+    phone: string | null;
     users: string[];
     esims: string[] | null;
+    return_date: string | null;
+    departure_date: string;
+    partner: string;
+    promo_codes: string[];
     first_name: string;
     last_name: string;
     full_name: string;
     pax: number;
-    phone: string | null;
     booking_id: string | null;
-    return_date: string | null;
-    partner: string;
-    promo_codes: string[];
-    departure_date: string;
     locale: string;
     communication_options: {
         should_send_message: boolean;
@@ -265,11 +265,11 @@ export declare const bookingApiRequestSchema: z.ZodObject<{
         iata_code?: string | undefined;
     }[];
     email?: string | null | undefined;
+    phone?: string | null | undefined;
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
     pax?: number | null | undefined;
-    phone?: string | null | undefined;
     booking_id?: string | null | undefined;
     flight_number?: string | null | undefined;
     gender?: "M" | "F" | "O" | undefined;
@@ -302,11 +302,11 @@ export declare const bookingApiRequestSchema: z.ZodObject<{
         iata_code?: string | undefined;
     }[];
     email?: string | null | undefined;
+    phone?: string | null | undefined;
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
     pax?: number | null | undefined;
-    phone?: string | null | undefined;
     booking_id?: string | null | undefined;
     flight_number?: string | null | undefined;
     gender?: "M" | "F" | "O" | undefined;
@@ -392,14 +392,14 @@ export declare const partnerApiRequestSchema: z.ZodObject<{
                 custom_prices: z.ZodArray<z.ZodAny, "many">;
                 modification_percentage: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
-                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: any[];
+                strategy: "split" | "bundle";
                 modification_percentage: number;
             }, {
-                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: any[];
+                strategy: "split" | "bundle";
                 modification_percentage: number;
             }>;
             user: z.ZodObject<{
@@ -422,9 +422,9 @@ export declare const partnerApiRequestSchema: z.ZodObject<{
                 modification_percentage: number;
             };
             partner: {
-                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: any[];
+                strategy: "split" | "bundle";
                 modification_percentage: number;
             };
         }, {
@@ -434,9 +434,9 @@ export declare const partnerApiRequestSchema: z.ZodObject<{
                 modification_percentage: number;
             };
             partner: {
-                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: any[];
+                strategy: "split" | "bundle";
                 modification_percentage: number;
             };
         }>>;
@@ -447,7 +447,6 @@ export declare const partnerApiRequestSchema: z.ZodObject<{
         requires_card: boolean | null;
         next_invoice: Date | null;
         last_invoice: Date | null;
-        commission_fee?: number | undefined;
         pricing_strategies?: {
             user: {
                 default_price_list: string | null;
@@ -455,12 +454,13 @@ export declare const partnerApiRequestSchema: z.ZodObject<{
                 modification_percentage: number;
             };
             partner: {
-                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: any[];
+                strategy: "split" | "bundle";
                 modification_percentage: number;
             };
         } | undefined;
+        commission_fee?: number | undefined;
     }, {
         administration_fee: number | null;
         income_per_gb: number | null;
@@ -468,7 +468,6 @@ export declare const partnerApiRequestSchema: z.ZodObject<{
         requires_card: boolean | null;
         next_invoice: Date | null;
         last_invoice: Date | null;
-        commission_fee?: number | undefined;
         pricing_strategies?: {
             user: {
                 default_price_list: string | null;
@@ -476,12 +475,13 @@ export declare const partnerApiRequestSchema: z.ZodObject<{
                 modification_percentage: number;
             };
             partner: {
-                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: any[];
+                strategy: "split" | "bundle";
                 modification_percentage: number;
             };
         } | undefined;
+        commission_fee?: number | undefined;
     }>>;
     platform_settings: z.ZodOptional<z.ZodAny>;
     visual_identity: z.ZodNullable<z.ZodAny>;
@@ -521,7 +521,6 @@ export declare const partnerApiRequestSchema: z.ZodObject<{
         requires_card: boolean | null;
         next_invoice: Date | null;
         last_invoice: Date | null;
-        commission_fee?: number | undefined;
         pricing_strategies?: {
             user: {
                 default_price_list: string | null;
@@ -529,12 +528,13 @@ export declare const partnerApiRequestSchema: z.ZodObject<{
                 modification_percentage: number;
             };
             partner: {
-                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: any[];
+                strategy: "split" | "bundle";
                 modification_percentage: number;
             };
         } | undefined;
+        commission_fee?: number | undefined;
     } | null;
     data?: {
         source: string;
@@ -582,7 +582,6 @@ export declare const partnerApiRequestSchema: z.ZodObject<{
         requires_card: boolean | null;
         next_invoice: Date | null;
         last_invoice: Date | null;
-        commission_fee?: number | undefined;
         pricing_strategies?: {
             user: {
                 default_price_list: string | null;
@@ -590,12 +589,13 @@ export declare const partnerApiRequestSchema: z.ZodObject<{
                 modification_percentage: number;
             };
             partner: {
-                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: any[];
+                strategy: "split" | "bundle";
                 modification_percentage: number;
             };
         } | undefined;
+        commission_fee?: number | undefined;
     } | null;
     data?: {
         source: string;
@@ -700,14 +700,14 @@ export declare const partnerApiResponseSchema: z.ZodObject<{
                 custom_prices: z.ZodArray<z.ZodAny, "many">;
                 modification_percentage: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
-                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: any[];
+                strategy: "split" | "bundle";
                 modification_percentage: number;
             }, {
-                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: any[];
+                strategy: "split" | "bundle";
                 modification_percentage: number;
             }>;
             user: z.ZodObject<{
@@ -730,9 +730,9 @@ export declare const partnerApiResponseSchema: z.ZodObject<{
                 modification_percentage: number;
             };
             partner: {
-                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: any[];
+                strategy: "split" | "bundle";
                 modification_percentage: number;
             };
         }, {
@@ -742,9 +742,9 @@ export declare const partnerApiResponseSchema: z.ZodObject<{
                 modification_percentage: number;
             };
             partner: {
-                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: any[];
+                strategy: "split" | "bundle";
                 modification_percentage: number;
             };
         }>>;
@@ -755,7 +755,6 @@ export declare const partnerApiResponseSchema: z.ZodObject<{
         requires_card: boolean | null;
         next_invoice: Date | null;
         last_invoice: Date | null;
-        commission_fee?: number | undefined;
         pricing_strategies?: {
             user: {
                 default_price_list: string | null;
@@ -763,12 +762,13 @@ export declare const partnerApiResponseSchema: z.ZodObject<{
                 modification_percentage: number;
             };
             partner: {
-                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: any[];
+                strategy: "split" | "bundle";
                 modification_percentage: number;
             };
         } | undefined;
+        commission_fee?: number | undefined;
     }, {
         administration_fee: number | null;
         income_per_gb: number | null;
@@ -776,7 +776,6 @@ export declare const partnerApiResponseSchema: z.ZodObject<{
         requires_card: boolean | null;
         next_invoice: Date | null;
         last_invoice: Date | null;
-        commission_fee?: number | undefined;
         pricing_strategies?: {
             user: {
                 default_price_list: string | null;
@@ -784,12 +783,13 @@ export declare const partnerApiResponseSchema: z.ZodObject<{
                 modification_percentage: number;
             };
             partner: {
-                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: any[];
+                strategy: "split" | "bundle";
                 modification_percentage: number;
             };
         } | undefined;
+        commission_fee?: number | undefined;
     }>>;
     platform_settings: z.ZodOptional<z.ZodAny>;
     visual_identity: z.ZodNullable<z.ZodAny>;
@@ -829,7 +829,6 @@ export declare const partnerApiResponseSchema: z.ZodObject<{
         requires_card: boolean | null;
         next_invoice: Date | null;
         last_invoice: Date | null;
-        commission_fee?: number | undefined;
         pricing_strategies?: {
             user: {
                 default_price_list: string | null;
@@ -837,12 +836,13 @@ export declare const partnerApiResponseSchema: z.ZodObject<{
                 modification_percentage: number;
             };
             partner: {
-                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: any[];
+                strategy: "split" | "bundle";
                 modification_percentage: number;
             };
         } | undefined;
+        commission_fee?: number | undefined;
     } | null;
     data?: {
         source: string;
@@ -890,7 +890,6 @@ export declare const partnerApiResponseSchema: z.ZodObject<{
         requires_card: boolean | null;
         next_invoice: Date | null;
         last_invoice: Date | null;
-        commission_fee?: number | undefined;
         pricing_strategies?: {
             user: {
                 default_price_list: string | null;
@@ -898,12 +897,13 @@ export declare const partnerApiResponseSchema: z.ZodObject<{
                 modification_percentage: number;
             };
             partner: {
-                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: any[];
+                strategy: "split" | "bundle";
                 modification_percentage: number;
             };
         } | undefined;
+        commission_fee?: number | undefined;
     } | null;
     data?: {
         source: string;

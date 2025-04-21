@@ -21,8 +21,8 @@ export declare const paymentFirestoreSchema: z.ZodObject<{
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     package: string;
-    iccid: string;
     promo: string;
+    iccid: string;
     amount: number;
     customer: string;
     topup: boolean;
@@ -34,8 +34,8 @@ export declare const paymentFirestoreSchema: z.ZodObject<{
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     package: string;
-    iccid: string;
     promo: string;
+    iccid: string;
     amount: number;
     customer: string;
     topup: boolean;
@@ -62,8 +62,8 @@ export declare const paymentAppSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     package: string;
-    iccid: string;
     promo: string;
+    iccid: string;
     amount: number;
     customer: string;
     topup: boolean;
@@ -75,8 +75,8 @@ export declare const paymentAppSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     package: string;
-    iccid: string;
     promo: string;
+    iccid: string;
     amount: number;
     customer: string;
     topup: boolean;

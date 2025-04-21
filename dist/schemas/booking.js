@@ -4,6 +4,7 @@ exports.bookingFromFirestore = exports.bookingToFirestore = exports.bookingAppSc
 const zod_1 = require("zod");
 const helpers_1 = require("./helpers");
 const constants_1 = require("../constants");
+const firestore_1 = require("firebase/firestore");
 // Define collection paths
 exports.PARTNER_COLLECTION = 'partners';
 exports.PROMO_CODE_COLLECTION = 'promoCodes';
@@ -35,148 +36,124 @@ exports.bookingStatusSchema = zod_1.z.enum([
     'UNPAID',
     'EXPIRED'
 ]);
+// Common booking fields shared between Firestore and App schemas
+const commonBookingFields = {
+    title: zod_1.z.string().nullable(),
+    first_name: zod_1.z.string(),
+    last_name: zod_1.z.string(),
+    full_name: zod_1.z.string(),
+    pax: zod_1.z.number(),
+    email: zod_1.z.string().email().nullable(),
+    phone: zod_1.z.string().nullable(),
+    booking_id: zod_1.z.string().nullable(),
+    flight_number: zod_1.z.string().optional(),
+    gender: zod_1.z.enum(['M', 'F', 'O']).optional(),
+    package_size: zod_1.z.string().optional(),
+    sent_messages: zod_1.z.record(zod_1.z.any()).optional(),
+    locale: zod_1.z.enum(constants_1.SUPPORTED_LOCALES),
+    status: exports.bookingStatusSchema,
+    data: zod_1.z.object({
+        source: zod_1.z.string(),
+        manual: zod_1.z.boolean()
+    }),
+    communication_options: exports.communicationOptionsSchema,
+    is_processed_for_esim_restoration: zod_1.z.boolean(),
+    is_pseudonymized: zod_1.z.boolean(),
+    import_id: zod_1.z.string().nullable().optional(),
+    package_specifications: zod_1.z.record(zod_1.z.any()).optional()
+};
 // Firestore schema for Booking
-exports.bookingFirestoreSchema = helpers_1.baseModelSchema.extend({
-    title: zod_1.z.string().nullable(),
-    first_name: zod_1.z.string(),
-    last_name: zod_1.z.string(),
-    full_name: zod_1.z.string(),
-    pax: zod_1.z.number(),
-    email: zod_1.z.string().email().nullable(),
-    phone: zod_1.z.string().nullable(),
-    booking_id: zod_1.z.string().nullable(),
-    return_date: helpers_1.timestampSchema.nullable(),
-    partner: exports.partnerRefSchema.schema,
-    promo_codes: zod_1.z.array(exports.promoCodeRefSchema.schema),
-    departure_date: helpers_1.timestampSchema,
-    flight_number: zod_1.z.string().optional(),
-    gender: zod_1.z.enum(['M', 'F', 'O']).optional(),
-    package_size: zod_1.z.string().optional(),
-    sent_messages: zod_1.z.record(zod_1.z.any()).optional(),
-    users: zod_1.z.array(exports.userRefSchema.schema).nullable(),
-    esims: zod_1.z.array(exports.esimRefSchema.schema).nullable(),
-    locale: zod_1.z.enum(constants_1.SUPPORTED_LOCALES),
-    status: exports.bookingStatusSchema,
-    data: zod_1.z.object({
-        source: zod_1.z.string(),
-        manual: zod_1.z.boolean()
-    }),
-    communication_options: exports.communicationOptionsSchema,
-    is_processed_for_esim_restoration: zod_1.z.boolean(),
-    is_pseudonymized: zod_1.z.boolean(),
-    import_id: zod_1.z.string().nullable().optional(),
-    package_specifications: zod_1.z.record(zod_1.z.any()).optional()
-});
+exports.bookingFirestoreSchema = helpers_1.baseModelSchema.extend(Object.assign(Object.assign({}, commonBookingFields), { return_date: helpers_1.timestampSchema.nullable(), departure_date: helpers_1.timestampSchema, partner: exports.partnerRefSchema.schema, promo_codes: zod_1.z.array(exports.promoCodeRefSchema.schema), users: zod_1.z.array(exports.userRefSchema.schema).nullable(), esims: zod_1.z.array(exports.esimRefSchema.schema).nullable() }));
 // App schema for Booking
-exports.bookingAppSchema = helpers_1.baseModelAppSchema.extend({
-    title: zod_1.z.string().nullable(),
-    first_name: zod_1.z.string(),
-    last_name: zod_1.z.string(),
-    full_name: zod_1.z.string(),
-    pax: zod_1.z.number(),
-    email: zod_1.z.string().email().nullable(),
-    phone: zod_1.z.string().nullable(),
-    booking_id: zod_1.z.string().nullable(),
-    return_date: zod_1.z.date().nullable(),
-    partnerId: (0, helpers_1.docRefToStringSchema)(exports.partnerRefSchema),
-    promo_code_ids: zod_1.z.array((0, helpers_1.docRefToStringSchema)(exports.promoCodeRefSchema)),
-    departure_date: zod_1.z.date(),
-    flight_number: zod_1.z.string().optional(),
-    gender: zod_1.z.enum(['M', 'F', 'O']).optional(),
-    package_size: zod_1.z.string().optional(),
-    sent_messages: zod_1.z.record(zod_1.z.any()).optional(),
-    user_ids: zod_1.z.array(zod_1.z.string()).nullable(),
-    esim_ids: zod_1.z.array(zod_1.z.string()).nullable(),
-    locale: zod_1.z.enum(constants_1.SUPPORTED_LOCALES),
-    status: exports.bookingStatusSchema,
-    data: zod_1.z.object({
-        source: zod_1.z.string(),
-        manual: zod_1.z.boolean()
-    }),
-    communication_options: exports.communicationOptionsSchema,
-    is_processed_for_esim_restoration: zod_1.z.boolean(),
-    is_pseudonymized: zod_1.z.boolean(),
-    import_id: zod_1.z.string().nullable().optional(),
-    package_specifications: zod_1.z.record(zod_1.z.any()).optional()
-});
+exports.bookingAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonBookingFields), { return_date: zod_1.z.date().nullable(), departure_date: zod_1.z.date(), partnerId: (0, helpers_1.docRefToStringSchema)(exports.partnerRefSchema), promo_code_ids: zod_1.z.array((0, helpers_1.docRefToStringSchema)(exports.promoCodeRefSchema)), user_ids: zod_1.z.array(zod_1.z.string()).nullable(), esim_ids: zod_1.z.array(zod_1.z.string()).nullable() }));
+const refFieldMappings = [
+    { app: 'partnerId', firestore: 'partner', collection: exports.PARTNER_COLLECTION },
+    { app: 'promo_code_ids', firestore: 'promo_codes', collection: exports.PROMO_CODE_COLLECTION, isArray: true },
+    { app: 'user_ids', firestore: 'users', collection: exports.USER_COLLECTION, isArray: true, nullable: true },
+    { app: 'esim_ids', firestore: 'esims', collection: exports.ESIM_COLLECTION, isArray: true, nullable: true }
+];
+const dateFieldMappings = [
+    { field: 'return_date', nullable: true },
+    { field: 'departure_date' }
+];
 // Conversion functions
 const bookingToFirestore = (booking) => {
-    return {
-        id: booking.id,
-        created_at: helpers_1.toFirestore.date(booking.created_at),
-        updated_at: helpers_1.toFirestore.date(booking.updated_at),
-        created_by: typeof booking.created_by === 'string' ? booking.created_by : null,
-        updated_by: typeof booking.updated_by === 'string' ? booking.updated_by : null,
-        title: booking.title,
-        first_name: booking.first_name,
-        last_name: booking.last_name,
-        full_name: booking.full_name,
-        pax: booking.pax,
-        email: booking.email,
-        phone: booking.phone,
-        booking_id: booking.booking_id,
-        return_date: booking.return_date ? helpers_1.toFirestore.date(booking.return_date) : null,
-        partner: helpers_1.toFirestore.ref(exports.PARTNER_COLLECTION, booking.partnerId),
-        promo_codes: booking.promo_code_ids.map(id => helpers_1.toFirestore.ref(exports.PROMO_CODE_COLLECTION, id)),
-        departure_date: helpers_1.toFirestore.date(booking.departure_date),
-        flight_number: booking.flight_number,
-        gender: booking.gender,
-        package_size: booking.package_size,
-        sent_messages: booking.sent_messages,
-        users: booking.user_ids ? booking.user_ids.map(id => helpers_1.toFirestore.ref(exports.USER_COLLECTION, id)) : null,
-        esims: booking.esim_ids ? booking.esim_ids.map(id => helpers_1.toFirestore.ref(exports.ESIM_COLLECTION, id)) : null,
-        locale: booking.locale,
-        status: booking.status,
-        data: booking.data,
-        communication_options: booking.communication_options,
-        is_processed_for_esim_restoration: booking.is_processed_for_esim_restoration,
-        is_pseudonymized: booking.is_pseudonymized,
-        import_id: booking.import_id,
-        package_specifications: booking.package_specifications
-    };
+    // Create base object with common fields
+    const result = Object.assign({}, booking);
+    // Handle base model fields
+    result.created_at = helpers_1.toFirestore.date(booking.created_at);
+    result.updated_at = helpers_1.toFirestore.date(booking.updated_at);
+    result.created_by = typeof booking.created_by === 'string' ? booking.created_by : null;
+    result.updated_by = typeof booking.updated_by === 'string' ? booking.updated_by : null;
+    // Convert date fields
+    dateFieldMappings.forEach(({ field, nullable }) => {
+        const value = booking[field];
+        if (nullable && value === null) {
+            result[field] = null;
+        }
+        else if (value instanceof Date) {
+            result[field] = helpers_1.toFirestore.date(value);
+        }
+    });
+    // Convert reference fields
+    refFieldMappings.forEach(({ app, firestore, collection, isArray, nullable }) => {
+        const value = booking[app];
+        if (isArray) {
+            if (nullable && value === null) {
+                result[firestore] = null;
+            }
+            else if (Array.isArray(value)) {
+                result[firestore] = value.map(id => helpers_1.toFirestore.ref(collection, id));
+            }
+        }
+        else if (typeof value === 'string') {
+            result[firestore] = helpers_1.toFirestore.ref(collection, value);
+        }
+        // Delete app field to avoid duplication
+        delete result[app];
+    });
+    return result;
 };
 exports.bookingToFirestore = bookingToFirestore;
 const bookingFromFirestore = (firestoreBooking) => {
-    return {
-        id: firestoreBooking.id,
-        created_at: helpers_1.fromFirestore.date(firestoreBooking.created_at),
-        updated_at: helpers_1.fromFirestore.date(firestoreBooking.updated_at),
-        created_by: typeof firestoreBooking.created_by === 'string'
-            ? firestoreBooking.created_by
-            : firestoreBooking.created_by ? helpers_1.fromFirestore.ref(firestoreBooking.created_by) : null,
-        updated_by: typeof firestoreBooking.updated_by === 'string'
-            ? firestoreBooking.updated_by
-            : firestoreBooking.updated_by ? helpers_1.fromFirestore.ref(firestoreBooking.updated_by) : null,
-        title: firestoreBooking.title,
-        first_name: firestoreBooking.first_name,
-        last_name: firestoreBooking.last_name,
-        full_name: firestoreBooking.full_name,
-        pax: firestoreBooking.pax,
-        email: firestoreBooking.email,
-        phone: firestoreBooking.phone,
-        booking_id: firestoreBooking.booking_id,
-        return_date: firestoreBooking.return_date ? helpers_1.fromFirestore.date(firestoreBooking.return_date) : null,
-        partnerId: helpers_1.fromFirestore.ref(firestoreBooking.partner),
-        promo_code_ids: firestoreBooking.promo_codes.map(ref => helpers_1.fromFirestore.ref(ref)),
-        departure_date: helpers_1.fromFirestore.date(firestoreBooking.departure_date),
-        flight_number: firestoreBooking.flight_number,
-        gender: firestoreBooking.gender,
-        package_size: firestoreBooking.package_size,
-        sent_messages: firestoreBooking.sent_messages,
-        user_ids: firestoreBooking.users
-            ? firestoreBooking.users.map(ref => helpers_1.fromFirestore.ref(ref))
-            : null,
-        esim_ids: firestoreBooking.esims
-            ? firestoreBooking.esims.map(ref => helpers_1.fromFirestore.ref(ref))
-            : null,
-        locale: firestoreBooking.locale,
-        status: firestoreBooking.status,
-        data: firestoreBooking.data,
-        communication_options: firestoreBooking.communication_options,
-        is_processed_for_esim_restoration: firestoreBooking.is_processed_for_esim_restoration,
-        is_pseudonymized: firestoreBooking.is_pseudonymized,
-        import_id: firestoreBooking.import_id,
-        package_specifications: firestoreBooking.package_specifications
-    };
+    // Create base object with common fields
+    const result = Object.assign({}, firestoreBooking);
+    // Handle base model fields
+    result.created_at = helpers_1.fromFirestore.date(firestoreBooking.created_at);
+    result.updated_at = helpers_1.fromFirestore.date(firestoreBooking.updated_at);
+    result.created_by = typeof firestoreBooking.created_by === 'string'
+        ? firestoreBooking.created_by
+        : firestoreBooking.created_by ? helpers_1.fromFirestore.ref(firestoreBooking.created_by) : null;
+    result.updated_by = typeof firestoreBooking.updated_by === 'string'
+        ? firestoreBooking.updated_by
+        : firestoreBooking.updated_by ? helpers_1.fromFirestore.ref(firestoreBooking.updated_by) : null;
+    // Convert date fields
+    dateFieldMappings.forEach(({ field, nullable }) => {
+        const value = firestoreBooking[field];
+        if (nullable && value === null) {
+            result[field] = null;
+        }
+        else if (value instanceof firestore_1.Timestamp) {
+            result[field] = helpers_1.fromFirestore.date(value);
+        }
+    });
+    // Convert reference fields
+    refFieldMappings.forEach(({ app, firestore, isArray, nullable }) => {
+        const value = firestoreBooking[firestore];
+        if (isArray) {
+            if (nullable && value === null) {
+                result[app] = null;
+            }
+            else if (Array.isArray(value)) {
+                result[app] = value.map(ref => helpers_1.fromFirestore.ref(ref));
+            }
+        }
+        else if (value) {
+            result[app] = helpers_1.fromFirestore.ref(value);
+        }
+        // Delete firestore field to avoid duplication
+        delete result[firestore];
+    });
+    return result;
 };
 exports.bookingFromFirestore = bookingFromFirestore;
