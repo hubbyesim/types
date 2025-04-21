@@ -1,44 +1,89 @@
 import { z } from 'zod';
-import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
+import { DocumentReference, Timestamp, FieldValue } from 'firebase-admin/firestore';
 import {
     baseModelSchema,
     baseModelAppSchema,
     timestampSchema,
+    documentRefSchema,
     createDocRefSchema,
     docRefToStringSchema,
     fromFirestore,
-    toFirestore
+    toFirestore,
+    fieldValueSchema
 } from './helpers';
 
-// Define Profile collection path
+// Define collection paths
 export const PROFILE_COLLECTION = 'profiles';
+export const PARTNER_COLLECTION = 'partners';
 
-// Define Firestore schema
+// Define document reference schemas
 export const profileRefSchema = createDocRefSchema<any>(PROFILE_COLLECTION);
+export const partnerRefSchema = createDocRefSchema<any>(PARTNER_COLLECTION);
+
+// Schema for API Key
+export const apiKeySchema = z.object({
+    expires_at: timestampSchema,
+    secret: z.string(),
+    is_active: z.boolean()
+});
+
+// Schema for API Keys
+export const apiKeysSchema = z.object({
+    allowed_keys: z.array(z.string()),
+    keys: z.record(z.string(), apiKeySchema)
+});
 
 // Common user fields shared between Firestore and App schemas
 const commonUserFields = {
     name: z.string().nullable(),
     email: z.string().email().nullable(),
+    stripe_id: z.string().nullable(),
+    referral: z.string().nullable(),
+    fcm: z.string().optional(),
+    deeplink: z.string().nullable(),
+    gender: z.string().nullable(),
+    company: z.string().nullable(),
+    coordinates: z.string().nullable(),
+    parameters: z.any().nullable(),
+    locale: z.string().nullable(),
+    phone_model: z.string().nullable(),
+    phone_os: z.string().nullable(),
+    phone_os_version: z.string().nullable(),
+    ios: z.boolean().nullable(),
+    has_card_saved: z.boolean().nullable(),
+    admin: z.boolean().nullable(),
+    api_keys: apiKeysSchema.nullable(),
+    currency: z.string().nullable(),
+    receipt_email: z.string().nullable()
 };
 
 // Define Firestore schema
 export const userFirestoreSchema = baseModelSchema.extend({
     ...commonUserFields,
     createdAt: timestampSchema,
-    profileRef: profileRefSchema.schema.nullable()
+    partner: partnerRefSchema.schema.nullable(),
+    profileRef: profileRefSchema.schema.nullable(),
+    balance: z.union([z.number(), z.null(), fieldValueSchema]),
+    review_requested: timestampSchema.nullable(),
+    last_seen: timestampSchema.nullable()
 });
 
 // Define App schema (with JavaScript-friendly types)
 export const userAppSchema = baseModelAppSchema.extend({
     ...commonUserFields,
     createdAt: z.date(),
-    profileRef: docRefToStringSchema(profileRefSchema).nullable()
+    partner: docRefToStringSchema(partnerRefSchema).nullable(),
+    profileRef: docRefToStringSchema(profileRefSchema).nullable(),
+    balance: z.number().nullable(),
+    review_requested: z.date().nullable(),
+    last_seen: z.date().nullable()
 });
 
 // Define types based on schemas
 export type UserFirestore = z.infer<typeof userFirestoreSchema>;
 export type UserApp = z.infer<typeof userAppSchema>;
+export type ApiKeys = z.infer<typeof apiKeysSchema>;
+export type ApiKey = z.infer<typeof apiKeySchema>;
 
 // Field mapping for conversions
 interface RefFieldMapping {
@@ -49,15 +94,19 @@ interface RefFieldMapping {
 }
 
 const refFieldMappings: RefFieldMapping[] = [
-    { app: 'profileRef', firestore: 'profileRef', collection: PROFILE_COLLECTION, nullable: true }
+    { app: 'profileRef', firestore: 'profileRef', collection: PROFILE_COLLECTION, nullable: true },
+    { app: 'partner', firestore: 'partner', collection: PARTNER_COLLECTION, nullable: true }
 ];
 
 interface DateFieldMapping {
-    field: keyof UserFirestore & keyof UserApp;
+    field: 'createdAt' | 'review_requested' | 'last_seen';
+    nullable?: boolean;
 }
 
 const dateFieldMappings: DateFieldMapping[] = [
-    { field: 'createdAt' }
+    { field: 'createdAt' },
+    { field: 'review_requested', nullable: true },
+    { field: 'last_seen', nullable: true }
 ];
 
 // Conversion functions
@@ -72,9 +121,11 @@ export const userToFirestore = (user: UserApp): UserFirestore => {
     result.updated_by = typeof user.updated_by === 'string' ? user.updated_by : null;
 
     // Convert date fields
-    dateFieldMappings.forEach(({ field }) => {
+    dateFieldMappings.forEach(({ field, nullable }) => {
         const value = user[field];
-        if (value instanceof Date) {
+        if (nullable && value === null) {
+            result[field] = null;
+        } else if (value instanceof Date) {
             result[field] = toFirestore.date(value);
         }
     });
@@ -111,9 +162,11 @@ export const userFromFirestore = (firestoreUser: UserFirestore): UserApp => {
         : firestoreUser.updated_by ? fromFirestore.ref(firestoreUser.updated_by) : null;
 
     // Convert date fields
-    dateFieldMappings.forEach(({ field }) => {
+    dateFieldMappings.forEach(({ field, nullable }) => {
         const value = firestoreUser[field];
-        if (value instanceof Timestamp) {
+        if (nullable && value === null) {
+            result[field] = null;
+        } else if (value instanceof Timestamp) {
             result[field] = fromFirestore.date(value);
         }
     });
@@ -131,6 +184,11 @@ export const userFromFirestore = (firestoreUser: UserFirestore): UserApp => {
         // Delete firestore field to avoid duplication
         delete result[firestore];
     });
+
+    // Handle special case for balance field
+    if (firestoreUser.balance instanceof FieldValue) {
+        result.balance = null; // Handle FieldValue by converting to null for the app
+    }
 
     return result as unknown as UserApp;
 };

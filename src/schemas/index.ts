@@ -10,7 +10,11 @@ export {
   User,
   UserFirestore,
   UserApp,
-  PROFILE_COLLECTION
+  PROFILE_COLLECTION,
+  ApiKeys,
+  ApiKey,
+  apiKeysSchema,
+  apiKeySchema
 } from './user';
 
 // Export from booking schema
@@ -28,6 +32,9 @@ export {
   communicationChannelSchema,
   communicationOptionsSchema
 } from './booking';
+
+// Import types for re-export with aliases
+import { FinancialPropertiesApp } from './partner';
 
 // Export from partner schema
 export {
@@ -47,8 +54,19 @@ export {
   PriceListFirestore,
   PackagePrice,
   PARTNER_COLLECTION,
-  PRICE_LIST_COLLECTION
+  PRICE_LIST_COLLECTION,
+  financialPropertiesFirestoreSchema,
+  financialPropertiesAppSchema,
+  platformSettingsSchema,
+  FinancialPropertiesFirestore,
+  FinancialPropertiesApp,
+  PlatformSettings,
+  Schedule,
+  scheduleSchema
 } from './partner';
+
+// Add type alias for backwards compatibility
+export { FinancialPropertiesApp as FinancialProperties };
 
 // Export from country schema
 export {
