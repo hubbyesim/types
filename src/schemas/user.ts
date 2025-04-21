@@ -64,13 +64,13 @@ const dateFieldMappings: DateFieldMapping[] = [
 export const userToFirestore = (user: UserApp): UserFirestore => {
     // Create base object with common fields
     const result = { ...user } as unknown as Record<string, any>;
-    
+
     // Handle base model fields
     result.created_at = toFirestore.date(user.created_at);
     result.updated_at = toFirestore.date(user.updated_at);
     result.created_by = typeof user.created_by === 'string' ? user.created_by : null;
     result.updated_by = typeof user.updated_by === 'string' ? user.updated_by : null;
-    
+
     // Convert date fields
     dateFieldMappings.forEach(({ field }) => {
         const value = user[field];
@@ -78,28 +78,28 @@ export const userToFirestore = (user: UserApp): UserFirestore => {
             result[field] = toFirestore.date(value);
         }
     });
-    
+
     // Convert reference fields
     refFieldMappings.forEach(({ app, firestore, collection, nullable }) => {
         const value = user[app];
-        
+
         if (nullable && value === null) {
             result[firestore] = null;
         } else if (typeof value === 'string') {
             result[firestore] = toFirestore.ref<any>(collection, value);
         }
-        
+
         // Delete app field to avoid duplication
         delete result[app];
     });
-    
+
     return result as unknown as UserFirestore;
 };
 
 export const userFromFirestore = (firestoreUser: UserFirestore): UserApp => {
     // Create base object with common fields
     const result = { ...firestoreUser } as unknown as Record<string, any>;
-    
+
     // Handle base model fields
     result.created_at = fromFirestore.date(firestoreUser.created_at);
     result.updated_at = fromFirestore.date(firestoreUser.updated_at);
@@ -109,7 +109,7 @@ export const userFromFirestore = (firestoreUser: UserFirestore): UserApp => {
     result.updated_by = typeof firestoreUser.updated_by === 'string'
         ? firestoreUser.updated_by
         : firestoreUser.updated_by ? fromFirestore.ref(firestoreUser.updated_by) : null;
-    
+
     // Convert date fields
     dateFieldMappings.forEach(({ field }) => {
         const value = firestoreUser[field];
@@ -117,24 +117,24 @@ export const userFromFirestore = (firestoreUser: UserFirestore): UserApp => {
             result[field] = fromFirestore.date(value);
         }
     });
-    
+
     // Convert reference fields
     refFieldMappings.forEach(({ app, firestore, nullable }) => {
         const value = firestoreUser[firestore];
-        
+
         if (nullable && value === null) {
             result[app] = null;
         } else if (value) {
             result[app] = fromFirestore.ref(value as any);
         }
-        
+
         // Delete firestore field to avoid duplication
         delete result[firestore];
     });
-    
+
     return result as unknown as UserApp;
 };
 
 // For backwards compatibility
-export type User = UserApp;
-export type UserWithFirestore = UserFirestore; 
+export type User = UserFirestore;
+export type HUser = UserApp; 

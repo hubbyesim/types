@@ -98,13 +98,13 @@ const dateFieldMappings: DateFieldMapping[] = [
 export const esimToFirestore = (esim: ESIMApp): ESIMFirestore => {
     // Create base object with common fields
     const result = { ...esim } as unknown as Record<string, any>;
-    
+
     // Handle base model fields
     result.created_at = toFirestore.date(esim.created_at);
     result.updated_at = toFirestore.date(esim.updated_at);
     result.created_by = typeof esim.created_by === 'string' ? esim.created_by : null;
     result.updated_by = typeof esim.updated_by === 'string' ? esim.updated_by : null;
-    
+
     // Convert date fields
     dateFieldMappings.forEach(({ field, nullable }) => {
         const value = esim[field];
@@ -114,28 +114,28 @@ export const esimToFirestore = (esim: ESIMApp): ESIMFirestore => {
             result[field] = toFirestore.date(value);
         }
     });
-    
+
     // Convert reference fields
     refFieldMappings.forEach(({ app, firestore, collection, nullable }) => {
         const value = esim[app];
-        
+
         if (nullable && value === null) {
             result[firestore] = null;
         } else if (typeof value === 'string') {
             result[firestore] = toFirestore.ref<any>(collection, value);
         }
-        
+
         // Delete app field to avoid duplication
         delete result[app];
     });
-    
+
     return result as unknown as ESIMFirestore;
 };
 
 export const esimFromFirestore = (firestoreEsim: ESIMFirestore): ESIMApp => {
     // Create base object with common fields
     const result = { ...firestoreEsim } as unknown as Record<string, any>;
-    
+
     // Handle base model fields
     result.created_at = fromFirestore.date(firestoreEsim.created_at);
     result.updated_at = fromFirestore.date(firestoreEsim.updated_at);
@@ -145,7 +145,7 @@ export const esimFromFirestore = (firestoreEsim: ESIMFirestore): ESIMApp => {
     result.updated_by = typeof firestoreEsim.updated_by === 'string'
         ? firestoreEsim.updated_by
         : firestoreEsim.updated_by ? fromFirestore.ref(firestoreEsim.updated_by) : null;
-    
+
     // Convert date fields
     dateFieldMappings.forEach(({ field, nullable }) => {
         const value = firestoreEsim[field];
@@ -155,23 +155,24 @@ export const esimFromFirestore = (firestoreEsim: ESIMFirestore): ESIMApp => {
             result[field] = fromFirestore.date(value);
         }
     });
-    
+
     // Convert reference fields
     refFieldMappings.forEach(({ app, firestore, nullable }) => {
         const value = firestoreEsim[firestore];
-        
+
         if (nullable && value === null) {
             result[app] = null;
         } else if (value) {
             result[app] = fromFirestore.ref(value as any);
         }
-        
+
         // Delete firestore field to avoid duplication
         delete result[firestore];
     });
-    
+
     return result as unknown as ESIMApp;
 };
 
 // For backwards compatibility
-export type ESIM = ESIMApp; 
+export type ESIM = ESIMFirestore;
+export type HESIM = ESIMApp; 

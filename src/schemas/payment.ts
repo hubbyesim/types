@@ -72,4 +72,5 @@ export const paymentFromFirestore = (firestorePayment: PaymentFirestore): Paymen
 };
 
 // For backwards compatibility
-export type Payment = PaymentApp; 
+export type Payment = PaymentFirestore;
+export type HPayment = PaymentApp; 

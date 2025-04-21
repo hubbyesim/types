@@ -132,13 +132,13 @@ const dateFieldMappings: DateFieldMapping[] = [
 export const bookingToFirestore = (booking: BookingApp): BookingFirestore => {
     // Create base object with common fields
     const result = { ...booking } as unknown as Record<string, any>;
-    
+
     // Handle base model fields
     result.created_at = toFirestore.date(booking.created_at);
     result.updated_at = toFirestore.date(booking.updated_at);
     result.created_by = typeof booking.created_by === 'string' ? booking.created_by : null;
     result.updated_by = typeof booking.updated_by === 'string' ? booking.updated_by : null;
-    
+
     // Convert date fields
     dateFieldMappings.forEach(({ field, nullable }) => {
         const value = booking[field];
@@ -148,11 +148,11 @@ export const bookingToFirestore = (booking: BookingApp): BookingFirestore => {
             result[field] = toFirestore.date(value);
         }
     });
-    
+
     // Convert reference fields
     refFieldMappings.forEach(({ app, firestore, collection, isArray, nullable }) => {
         const value = booking[app];
-        
+
         if (isArray) {
             if (nullable && value === null) {
                 result[firestore] = null;
@@ -162,18 +162,18 @@ export const bookingToFirestore = (booking: BookingApp): BookingFirestore => {
         } else if (typeof value === 'string') {
             result[firestore] = toFirestore.ref<any>(collection, value);
         }
-        
+
         // Delete app field to avoid duplication
         delete result[app];
     });
-    
+
     return result as unknown as BookingFirestore;
 };
 
 export const bookingFromFirestore = (firestoreBooking: BookingFirestore): BookingApp => {
     // Create base object with common fields
     const result = { ...firestoreBooking } as unknown as Record<string, any>;
-    
+
     // Handle base model fields
     result.created_at = fromFirestore.date(firestoreBooking.created_at);
     result.updated_at = fromFirestore.date(firestoreBooking.updated_at);
@@ -183,7 +183,7 @@ export const bookingFromFirestore = (firestoreBooking: BookingFirestore): Bookin
     result.updated_by = typeof firestoreBooking.updated_by === 'string'
         ? firestoreBooking.updated_by
         : firestoreBooking.updated_by ? fromFirestore.ref(firestoreBooking.updated_by) : null;
-    
+
     // Convert date fields
     dateFieldMappings.forEach(({ field, nullable }) => {
         const value = firestoreBooking[field];
@@ -193,11 +193,11 @@ export const bookingFromFirestore = (firestoreBooking: BookingFirestore): Bookin
             result[field] = fromFirestore.date(value);
         }
     });
-    
+
     // Convert reference fields
     refFieldMappings.forEach(({ app, firestore, isArray, nullable }) => {
         const value = firestoreBooking[firestore];
-        
+
         if (isArray) {
             if (nullable && value === null) {
                 result[app] = null;
@@ -207,14 +207,14 @@ export const bookingFromFirestore = (firestoreBooking: BookingFirestore): Bookin
         } else if (value) {
             result[app] = fromFirestore.ref(value as any);
         }
-        
+
         // Delete firestore field to avoid duplication
         delete result[firestore];
     });
-    
+
     return result as unknown as BookingApp;
 };
 
 // For backwards compatibility
-export type Booking = BookingApp;
-export type BookingWithFirestore = BookingFirestore; 
+export type Booking = BookingFirestore;
+export type HBooking = BookingApp; 

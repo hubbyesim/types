@@ -224,4 +224,5 @@ export const promoCodeFromFirestore = (firestorePromoCode: PromoCodeFirestore): 
 };
 
 // For backwards compatibility
-export type PromoCode = PromoCodeApp; 
+export type PromoCode = PromoCodeFirestore;
+export type HPromoCode = PromoCodeApp; 

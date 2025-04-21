@@ -69,4 +69,5 @@ export const apiLogFromFirestore = (firestoreApiLog: ApiLogFirestore): ApiLogApp
 };
 
 // For backwards compatibility
-export type ApiLog = ApiLogApp; 
+export type ApiLog = ApiLogFirestore;
+export type HApiLog = ApiLogApp; 

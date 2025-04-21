@@ -82,5 +82,7 @@ export const sentMessagesFromFirestore = (firestoreSentMessages: SentMessagesFir
 };
 
 // For backwards compatibility
-export type Message = MessageApp;
-export type SentMessages = SentMessagesApp; 
+export type Message = MessageFirestore;
+export type HMessage = MessageApp;
+export type SentMessages = SentMessagesFirestore;
+export type HSentMessages = SentMessagesApp; 

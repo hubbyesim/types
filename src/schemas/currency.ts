@@ -58,4 +58,5 @@ export const currencyFromFirestore = (firestoreCurrency: CurrencyFirestore): Cur
 };
 
 // For backwards compatibility
-export type Currency = CurrencyApp; 
+export type Currency = CurrencyFirestore;
+export type HCurrency = CurrencyApp; 

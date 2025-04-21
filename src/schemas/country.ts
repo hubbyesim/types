@@ -38,4 +38,5 @@ export const countryToFirestore = (country: CountryApp): CountryFirestore => cou
 export const countryFromFirestore = (firestoreCountry: CountryFirestore): CountryApp => firestoreCountry;
 
 // For backwards compatibility
-export type Country = CountryApp; 
+export type Country = CountryFirestore;
+export type HCountry = CountryApp; 

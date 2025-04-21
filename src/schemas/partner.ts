@@ -195,7 +195,7 @@ const commonPartnerFields = {
     type: z.string().nullable(),
     is_active: z.boolean().nullable().optional(),
     external_id: z.string().nullable().optional(),
-    
+
     // Contact information
     contact: z.object({
         email: z.string().nullable(),
@@ -281,17 +281,17 @@ const refFieldMappings: RefFieldMapping[] = [
 export const partnerToFirestore = (partner: PartnerApp): PartnerFirestore => {
     // Create base object with common fields
     const result = { ...partner } as unknown as Record<string, any>;
-    
+
     // Handle base model fields
     result.created_at = toFirestore.date(partner.created_at);
     result.updated_at = toFirestore.date(partner.updated_at);
     result.created_by = typeof partner.created_by === 'string' ? partner.created_by : null;
     result.updated_by = typeof partner.updated_by === 'string' ? partner.updated_by : null;
-    
+
     // Convert reference fields
     refFieldMappings.forEach(({ app, firestore, collection, nullable, isArray }) => {
         const value = partner[app];
-        
+
         if (isArray) {
             if (nullable && value === null) {
                 result[firestore] = null;
@@ -303,24 +303,24 @@ export const partnerToFirestore = (partner: PartnerApp): PartnerFirestore => {
         } else if (typeof value === 'string') {
             result[firestore] = toFirestore.ref<any>(collection, value);
         }
-        
+
         // Delete app field to avoid duplication
         delete result[app];
     });
-    
+
     // Handle financial properties specially due to complex nested structure
     if (partner.financial_properties) {
         const fp = { ...partner.financial_properties };
-        
+
         const financialProps: any = {
             ...fp,
             pricing_strategies: null
         };
-        
+
         // Handle pricing strategies if they exist
         if (fp.pricing_strategies) {
             const ps = fp.pricing_strategies;
-            
+
             // Convert partner pricing strategy
             const partnerStrategy = {
                 ...ps.partner,
@@ -332,7 +332,7 @@ export const partnerToFirestore = (partner: PartnerApp): PartnerFirestore => {
                     package: toFirestore.ref<any>(PACKAGE_COLLECTION, price.package)
                 }))
             };
-            
+
             // Convert user pricing strategy
             const userStrategy = {
                 ...ps.user,
@@ -344,35 +344,35 @@ export const partnerToFirestore = (partner: PartnerApp): PartnerFirestore => {
                     package: toFirestore.ref<any>(PACKAGE_COLLECTION, price.package)
                 }))
             };
-            
+
             const partnerStrategyObj: any = partnerStrategy;
             const userStrategyObj: any = userStrategy;
-            
+
             if ('default_price_list_id' in partnerStrategyObj) {
                 delete partnerStrategyObj.default_price_list_id;
             }
-            
+
             if ('default_price_list_id' in userStrategyObj) {
                 delete userStrategyObj.default_price_list_id;
             }
-            
+
             // Set pricing strategies
             financialProps.pricing_strategies = {
                 partner: partnerStrategyObj,
                 user: userStrategyObj
             };
         }
-        
+
         result.financial_properties = financialProps;
     }
-    
+
     return result as unknown as PartnerFirestore;
 };
 
 export const partnerFromFirestore = (firestorePartner: PartnerFirestore): PartnerApp => {
     // Create base object with common fields
     const result = { ...firestorePartner } as unknown as Record<string, any>;
-    
+
     // Handle base model fields
     result.created_at = fromFirestore.date(firestorePartner.created_at);
     result.updated_at = fromFirestore.date(firestorePartner.updated_at);
@@ -382,11 +382,11 @@ export const partnerFromFirestore = (firestorePartner: PartnerFirestore): Partne
     result.updated_by = typeof firestorePartner.updated_by === 'string'
         ? firestorePartner.updated_by
         : firestorePartner.updated_by ? fromFirestore.ref(firestorePartner.updated_by) : null;
-    
+
     // Convert reference fields
     refFieldMappings.forEach(({ app, firestore, nullable, isArray }) => {
         const value = firestorePartner[firestore];
-        
+
         if (isArray) {
             if (nullable && value === null) {
                 result[app] = null;
@@ -398,24 +398,24 @@ export const partnerFromFirestore = (firestorePartner: PartnerFirestore): Partne
         } else if (value) {
             result[app] = fromFirestore.ref(value as any);
         }
-        
+
         // Delete firestore field to avoid duplication
         delete result[firestore];
     });
-    
+
     // Handle financial properties specially
     if (firestorePartner.financial_properties) {
         const fp = { ...firestorePartner.financial_properties };
-        
+
         const financialProps: any = {
             ...fp,
             pricing_strategies: null
         };
-        
+
         // Handle pricing strategies if they exist
         if (fp.pricing_strategies) {
             const ps = fp.pricing_strategies;
-            
+
             // Convert partner pricing strategy
             const partnerStrategy = {
                 ...ps.partner,
@@ -427,7 +427,7 @@ export const partnerFromFirestore = (firestorePartner: PartnerFirestore): Partne
                     package: fromFirestore.ref(price.package)
                 }))
             };
-            
+
             // Convert user pricing strategy
             const userStrategy = {
                 ...ps.user,
@@ -439,28 +439,28 @@ export const partnerFromFirestore = (firestorePartner: PartnerFirestore): Partne
                     package: fromFirestore.ref(price.package)
                 }))
             };
-            
+
             const partnerStrategyObj: any = partnerStrategy;
             const userStrategyObj: any = userStrategy;
-            
+
             if ('default_price_list' in partnerStrategyObj) {
                 delete partnerStrategyObj.default_price_list;
             }
-            
+
             if ('default_price_list' in userStrategyObj) {
                 delete userStrategyObj.default_price_list;
             }
-            
+
             // Set pricing strategies
             financialProps.pricing_strategies = {
                 partner: partnerStrategyObj,
                 user: userStrategyObj
             };
         }
-        
+
         result.financial_properties = financialProps;
     }
-    
+
     return result as unknown as PartnerApp;
 };
 
@@ -480,7 +480,7 @@ const priceListRefMappings: PriceListRefMapping[] = [
 export const priceListFromFirestore = (firestorePriceList: PriceListFirestore): PriceListApp => {
     // Create base object with common fields
     const result = { ...firestorePriceList } as unknown as Record<string, any>;
-    
+
     // Handle base model fields
     result.created_at = fromFirestore.date(firestorePriceList.created_at);
     result.updated_at = fromFirestore.date(firestorePriceList.updated_at);
@@ -490,7 +490,7 @@ export const priceListFromFirestore = (firestorePriceList: PriceListFirestore): 
     result.updated_by = typeof firestorePriceList.updated_by === 'string'
         ? firestorePriceList.updated_by
         : firestorePriceList.updated_by ? fromFirestore.ref(firestorePriceList.updated_by) : null;
-    
+
     // Convert array of objects with document references
     priceListRefMappings.forEach(({ isArray, field, itemField }) => {
         const priceList = firestorePriceList[field];
@@ -501,7 +501,7 @@ export const priceListFromFirestore = (firestorePriceList: PriceListFirestore): 
             }));
         }
     });
-    
+
     return result as unknown as PriceListApp;
 };
 
@@ -509,13 +509,13 @@ export const priceListFromFirestore = (firestorePriceList: PriceListFirestore): 
 export const priceListToFirestore = (priceList: PriceListApp): PriceListFirestore => {
     // Create base object with common fields
     const result = { ...priceList } as unknown as Record<string, any>;
-    
+
     // Handle base model fields
     result.created_at = toFirestore.date(priceList.created_at);
     result.updated_at = toFirestore.date(priceList.updated_at);
     result.created_by = typeof priceList.created_by === 'string' ? priceList.created_by : null;
     result.updated_by = typeof priceList.updated_by === 'string' ? priceList.updated_by : null;
-    
+
     // Convert array of objects with document references
     priceListRefMappings.forEach(({ isArray, field, itemField, collection }) => {
         const priceListValue = priceList[field];
@@ -526,12 +526,13 @@ export const priceListToFirestore = (priceList: PriceListApp): PriceListFirestor
             }));
         }
     });
-    
+
     return result as unknown as PriceListFirestore;
 };
 
 // For backwards compatibility
-export type Partner = PartnerApp;
-export type PartnerWithFirestore = PartnerFirestore;
-export type PriceList = PriceListApp;
+export type Partner = PartnerFirestore;
+export type HPartner = PartnerApp;
+export type PriceList = PriceListFirestore;
+export type HPriceList = PriceListApp;
 export type PackagePrice = z.infer<typeof packagePriceAppSchema>; 
