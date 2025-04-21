@@ -39,14 +39,14 @@ function getUserFromFirestore(firestoreUser) {
     return user;
 }
 // Example: Creating a new user
-function createNewUser(name, email, profileId) {
+function createNewUser(name, email, profileRef) {
     const now = new Date();
-    // Create a new user object
+    // Create a new user object that follows the App schema (using Date objects)
     const newUser = {
         id: 'user_' + Date.now(),
         name,
         email,
-        profileId,
+        profileRef,
         createdAt: now,
         created_at: now,
         updated_at: now,
@@ -67,7 +67,7 @@ function exampleUsage() {
         const retrievedUser = getUserFromFirestore(firestoreUser);
         console.log('Round trip successful:', user.id === retrievedUser.id &&
             user.name === retrievedUser.name &&
-            user.profileId === retrievedUser.profileId);
+            user.profileRef === retrievedUser.profileRef);
     }
     catch (error) {
         if (error instanceof zod_1.z.ZodError) {

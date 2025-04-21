@@ -16,9 +16,9 @@ const commonUserFields = {
 // Define Firestore schema
 exports.userFirestoreSchema = helpers_1.baseModelSchema.extend(Object.assign(Object.assign({}, commonUserFields), { createdAt: helpers_1.timestampSchema, profileRef: exports.profileRefSchema.schema.nullable() }));
 // Define App schema (with JavaScript-friendly types)
-exports.userAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonUserFields), { createdAt: zod_1.z.date(), profileId: (0, helpers_1.docRefToStringSchema)(exports.profileRefSchema).nullable() }));
+exports.userAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonUserFields), { createdAt: zod_1.z.date(), profileRef: (0, helpers_1.docRefToStringSchema)(exports.profileRefSchema).nullable() }));
 const refFieldMappings = [
-    { app: 'profileId', firestore: 'profileRef', collection: exports.PROFILE_COLLECTION, nullable: true }
+    { app: 'profileRef', firestore: 'profileRef', collection: exports.PROFILE_COLLECTION, nullable: true }
 ];
 const dateFieldMappings = [
     { field: 'createdAt' }

@@ -179,8 +179,8 @@ export declare const packageAppSchema: z.ZodObject<{
     created_by: z.ZodUnion<[z.ZodString, z.ZodNull]>;
     updated_by: z.ZodUnion<[z.ZodString, z.ZodNull]>;
 } & {
-    countryId: z.ZodString;
-    partnerId: z.ZodNullable<z.ZodString>;
+    country: z.ZodString;
+    partner: z.ZodNullable<z.ZodString>;
     external_id: z.ZodString;
     provider: z.ZodString;
     coverage_label: z.ZodNullable<z.ZodString>;
@@ -257,12 +257,13 @@ export declare const packageAppSchema: z.ZodObject<{
     bytes: number;
     hidden: boolean;
     label: string;
+    country: string;
     days: number;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    partnerId: string | null;
+    partner: string | null;
     price: number;
     is_active: boolean;
     external_id: string;
@@ -289,7 +290,6 @@ export declare const packageAppSchema: z.ZodObject<{
     provider_parameters: {
         imsi: number;
     } | null;
-    countryId: string;
     throttling?: number | undefined;
 }, {
     name: string;
@@ -299,12 +299,13 @@ export declare const packageAppSchema: z.ZodObject<{
     bytes: number;
     hidden: boolean;
     label: string;
+    country: string;
     days: number;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    partnerId: string | null;
+    partner: string | null;
     price: number;
     is_active: boolean;
     external_id: string;
@@ -331,11 +332,11 @@ export declare const packageAppSchema: z.ZodObject<{
     provider_parameters: {
         imsi: number;
     } | null;
-    countryId: string;
     throttling?: number | undefined;
 }>;
 export type PackageFirestore = z.infer<typeof packageFirestoreSchema>;
 export type PackageApp = z.infer<typeof packageAppSchema>;
 export declare const packageToFirestore: (packageData: PackageApp) => PackageFirestore;
 export declare const packageFromFirestore: (firestorePackage: PackageFirestore) => PackageApp;
-export type Package = PackageApp;
+export type Package = PackageFirestore;
+export type HPackage = PackageApp;

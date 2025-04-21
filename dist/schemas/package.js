@@ -35,10 +35,10 @@ const commonPackageFields = {
 // Firestore schema for Package
 exports.packageFirestoreSchema = helpers_1.baseModelSchema.extend(Object.assign(Object.assign({}, commonPackageFields), { country: exports.countryRefSchema.schema, partner: exports.partnerRefSchema.schema.nullable() }));
 // App schema for Package
-exports.packageAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonPackageFields), { countryId: (0, helpers_1.docRefToStringSchema)(exports.countryRefSchema), partnerId: zod_1.z.string().nullable() }));
+exports.packageAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonPackageFields), { country: (0, helpers_1.docRefToStringSchema)(exports.countryRefSchema), partner: zod_1.z.string().nullable() }));
 const refFieldMappings = [
-    { app: 'countryId', firestore: 'country', collection: exports.COUNTRY_COLLECTION },
-    { app: 'partnerId', firestore: 'partner', collection: exports.PARTNER_COLLECTION, nullable: true }
+    { app: 'country', firestore: 'country', collection: exports.COUNTRY_COLLECTION },
+    { app: 'partner', firestore: 'partner', collection: exports.PARTNER_COLLECTION, nullable: true }
 ];
 // Conversion functions
 const packageToFirestore = (packageData) => {

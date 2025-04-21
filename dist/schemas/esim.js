@@ -37,12 +37,12 @@ const commonESIMFields = {
 // Firestore schema for ESIM
 exports.esimFirestoreSchema = helpers_1.baseModelSchema.extend(Object.assign(Object.assign({}, commonESIMFields), { country: exports.countryRefSchema.schema.nullable(), user: exports.userRefSchema.schema.nullable(), time_assigned: helpers_1.timestampSchema.nullable(), last_updated: helpers_1.timestampSchema.nullable(), partner: exports.partnerRefSchema.schema.nullable(), payment: exports.paymentRefSchema.schema.nullable() }));
 // App schema for ESIM
-exports.esimAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonESIMFields), { countryId: zod_1.z.string().nullable(), userId: zod_1.z.string().nullable(), time_assigned: zod_1.z.date().nullable(), last_updated: zod_1.z.date().nullable(), partnerId: zod_1.z.string().nullable(), paymentId: zod_1.z.string().nullable() }));
+exports.esimAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonESIMFields), { country: zod_1.z.string().nullable(), user: zod_1.z.string().nullable(), time_assigned: zod_1.z.date().nullable(), last_updated: zod_1.z.date().nullable(), partner: zod_1.z.string().nullable(), payment: zod_1.z.string().nullable() }));
 const refFieldMappings = [
-    { app: 'countryId', firestore: 'country', collection: exports.COUNTRY_COLLECTION, nullable: true },
-    { app: 'userId', firestore: 'user', collection: exports.USER_COLLECTION, nullable: true },
-    { app: 'partnerId', firestore: 'partner', collection: exports.PARTNER_COLLECTION, nullable: true },
-    { app: 'paymentId', firestore: 'payment', collection: exports.PAYMENT_COLLECTION, nullable: true }
+    { app: 'country', firestore: 'country', collection: exports.COUNTRY_COLLECTION, nullable: true },
+    { app: 'user', firestore: 'user', collection: exports.USER_COLLECTION, nullable: true },
+    { app: 'partner', firestore: 'partner', collection: exports.PARTNER_COLLECTION, nullable: true },
+    { app: 'payment', firestore: 'payment', collection: exports.PAYMENT_COLLECTION, nullable: true }
 ];
 const dateFieldMappings = [
     { field: 'time_assigned', nullable: true },

@@ -83,4 +83,5 @@ export type CurrencyFirestore = z.infer<typeof currencyFirestoreSchema>;
 export type CurrencyApp = z.infer<typeof currencyAppSchema>;
 export declare const currencyToFirestore: (currency: CurrencyApp) => CurrencyFirestore;
 export declare const currencyFromFirestore: (firestoreCurrency: CurrencyFirestore) => CurrencyApp;
-export type Currency = CurrencyApp;
+export type Currency = CurrencyFirestore;
+export type HCurrency = CurrencyApp;

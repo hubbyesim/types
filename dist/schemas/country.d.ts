@@ -95,4 +95,5 @@ export type CountryFirestore = z.infer<typeof countryFirestoreSchema>;
 export type CountryApp = z.infer<typeof countryAppSchema>;
 export declare const countryToFirestore: (country: CountryApp) => CountryFirestore;
 export declare const countryFromFirestore: (firestoreCountry: CountryFirestore) => CountryApp;
-export type Country = CountryApp;
+export type Country = CountryFirestore;
+export type HCountry = CountryApp;

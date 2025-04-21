@@ -48,15 +48,15 @@ exports.promoCodeAppSchema = helpers_1.baseModelAppSchema.extend({
     usage: zod_1.z.array(zod_1.z.string()),
     uuid_usage: zod_1.z.array(zod_1.z.string()),
     package_specification: exports.packageSpecificationSchema.optional(),
-    partnerId: zod_1.z.string().optional(),
+    partner: zod_1.z.string().optional(),
     valid_from: zod_1.z.date(),
     valid_to: zod_1.z.date(),
     // Optional fields based on the type
     discount: zod_1.z.number().optional(),
     package_size: zod_1.z.string().optional(),
-    packageId: zod_1.z.string().optional(),
-    countryId: zod_1.z.string().optional(),
-    bookingId: zod_1.z.string().nullable().optional(),
+    package: zod_1.z.string().optional(),
+    country: zod_1.z.string().optional(),
+    booking: zod_1.z.string().nullable().optional(),
     countries: zod_1.z.array(zod_1.z.string()).optional(),
     max_bytes: zod_1.z.number().optional(),
     starter_data: zod_1.z.number().optional()
@@ -96,8 +96,8 @@ const promoCodeToFirestore = (promoCode) => {
     if (promoCode.package_specification) {
         result.package_specification = promoCode.package_specification;
     }
-    if (promoCode.partnerId) {
-        result.partner = helpers_1.toFirestore.ref(exports.PARTNER_COLLECTION, promoCode.partnerId);
+    if (promoCode.partner) {
+        result.partner = helpers_1.toFirestore.ref(exports.PARTNER_COLLECTION, promoCode.partner);
     }
     if ('discount' in promoCode) {
         result.discount = promoCode.discount;
@@ -105,15 +105,15 @@ const promoCodeToFirestore = (promoCode) => {
     if (promoCode.package_size) {
         result.package_size = promoCode.package_size;
     }
-    if (promoCode.packageId) {
-        result.package = helpers_1.toFirestore.ref(exports.PACKAGE_COLLECTION, promoCode.packageId);
+    if (promoCode.package) {
+        result.package = helpers_1.toFirestore.ref(exports.PACKAGE_COLLECTION, promoCode.package);
     }
-    if (promoCode.countryId) {
-        result.country = helpers_1.toFirestore.ref(exports.COUNTRY_COLLECTION, promoCode.countryId);
+    if (promoCode.country) {
+        result.country = helpers_1.toFirestore.ref(exports.COUNTRY_COLLECTION, promoCode.country);
     }
-    if (promoCode.bookingId !== undefined) {
-        result.booking = promoCode.bookingId
-            ? helpers_1.toFirestore.ref(exports.BOOKING_COLLECTION, promoCode.bookingId)
+    if (promoCode.booking !== undefined) {
+        result.booking = promoCode.booking
+            ? helpers_1.toFirestore.ref(exports.BOOKING_COLLECTION, promoCode.booking)
             : null;
     }
     if (promoCode.countries) {
@@ -154,7 +154,7 @@ const promoCodeFromFirestore = (firestorePromoCode) => {
         result.package_specification = firestorePromoCode.package_specification;
     }
     if (firestorePromoCode.partner) {
-        result.partnerId = helpers_1.fromFirestore.ref(firestorePromoCode.partner);
+        result.partner = helpers_1.fromFirestore.ref(firestorePromoCode.partner);
     }
     if ('discount' in firestorePromoCode) {
         result.discount = firestorePromoCode.discount;
@@ -163,13 +163,13 @@ const promoCodeFromFirestore = (firestorePromoCode) => {
         result.package_size = firestorePromoCode.package_size;
     }
     if (firestorePromoCode.package) {
-        result.packageId = helpers_1.fromFirestore.ref(firestorePromoCode.package);
+        result.package = helpers_1.fromFirestore.ref(firestorePromoCode.package);
     }
     if (firestorePromoCode.country) {
-        result.countryId = helpers_1.fromFirestore.ref(firestorePromoCode.country);
+        result.country = helpers_1.fromFirestore.ref(firestorePromoCode.country);
     }
     if (firestorePromoCode.booking !== undefined) {
-        result.bookingId = firestorePromoCode.booking
+        result.booking = firestorePromoCode.booking
             ? helpers_1.fromFirestore.ref(firestorePromoCode.booking)
             : null;
     }

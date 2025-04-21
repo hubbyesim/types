@@ -85,4 +85,5 @@ export type PaymentFirestore = z.infer<typeof paymentFirestoreSchema>;
 export type PaymentApp = z.infer<typeof paymentAppSchema>;
 export declare const paymentToFirestore: (payment: PaymentApp) => PaymentFirestore;
 export declare const paymentFromFirestore: (firestorePayment: PaymentFirestore) => PaymentApp;
-export type Payment = PaymentApp;
+export type Payment = PaymentFirestore;
+export type HPayment = PaymentApp;

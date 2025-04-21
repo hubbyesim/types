@@ -45,7 +45,7 @@ export declare const userAppSchema: z.ZodObject<{
     updated_by: z.ZodUnion<[z.ZodString, z.ZodNull]>;
 } & {
     createdAt: z.ZodDate;
-    profileId: z.ZodNullable<z.ZodString>;
+    profileRef: z.ZodNullable<z.ZodString>;
     name: z.ZodNullable<z.ZodString>;
     email: z.ZodNullable<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
@@ -57,7 +57,7 @@ export declare const userAppSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     createdAt: Date;
-    profileId: string | null;
+    profileRef: string | null;
 }, {
     name: string | null;
     id: string;
@@ -67,11 +67,11 @@ export declare const userAppSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     createdAt: Date;
-    profileId: string | null;
+    profileRef: string | null;
 }>;
 export type UserFirestore = z.infer<typeof userFirestoreSchema>;
 export type UserApp = z.infer<typeof userAppSchema>;
 export declare const userToFirestore: (user: UserApp) => UserFirestore;
 export declare const userFromFirestore: (firestoreUser: UserFirestore) => UserApp;
-export type User = UserApp;
-export type UserWithFirestore = UserFirestore;
+export type User = UserFirestore;
+export type HUser = UserApp;

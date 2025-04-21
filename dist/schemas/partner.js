@@ -168,7 +168,7 @@ const commonPartnerFields = {
 // Firestore schema for Partner
 exports.partnerFirestoreSchema = helpers_1.baseModelSchema.extend(Object.assign(Object.assign({}, commonPartnerFields), { parent: helpers_1.documentRefSchema.nullable(), users: zod_1.z.array(helpers_1.documentRefSchema).nullable(), financial_properties: exports.financialPropertiesFirestoreSchema }));
 // App schema for Partner
-exports.partnerAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonPartnerFields), { parentId: zod_1.z.string().nullable(), user_ids: zod_1.z.array(zod_1.z.string()).nullable(), financial_properties: exports.financialPropertiesAppSchema }));
+exports.partnerAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonPartnerFields), { parent: zod_1.z.string().nullable(), users: zod_1.z.array(zod_1.z.string()).nullable(), financial_properties: exports.financialPropertiesAppSchema }));
 // Common price list fields
 const commonPriceListFields = {
     name: zod_1.z.string(),
@@ -178,8 +178,8 @@ const commonPriceListFields = {
 exports.priceListFirestoreSchema = helpers_1.baseModelSchema.extend(Object.assign(Object.assign({}, commonPriceListFields), { price_list: zod_1.z.array(exports.packagePriceFirestoreSchema) }));
 exports.priceListAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonPriceListFields), { price_list: zod_1.z.array(exports.packagePriceAppSchema) }));
 const refFieldMappings = [
-    { app: 'parentId', firestore: 'parent', collection: exports.PARTNER_COLLECTION, nullable: true },
-    { app: 'user_ids', firestore: 'users', collection: exports.USER_COLLECTION, nullable: true, isArray: true }
+    { app: 'parent', firestore: 'parent', collection: exports.PARTNER_COLLECTION, nullable: true },
+    { app: 'users', firestore: 'users', collection: exports.USER_COLLECTION, nullable: true, isArray: true }
 ];
 // Conversion functions
 const partnerToFirestore = (partner) => {

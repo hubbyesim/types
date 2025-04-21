@@ -71,4 +71,5 @@ export type ApiLogFirestore = z.infer<typeof apiLogFirestoreSchema>;
 export type ApiLogApp = z.infer<typeof apiLogAppSchema>;
 export declare const apiLogToFirestore: (apiLog: ApiLogApp) => ApiLogFirestore;
 export declare const apiLogFromFirestore: (firestoreApiLog: ApiLogFirestore) => ApiLogApp;
-export type ApiLog = ApiLogApp;
+export type ApiLog = ApiLogFirestore;
+export type HApiLog = ApiLogApp;

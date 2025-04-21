@@ -170,10 +170,10 @@ export declare const bookingAppSchema: z.ZodObject<{
 } & {
     return_date: z.ZodNullable<z.ZodDate>;
     departure_date: z.ZodDate;
-    partnerId: z.ZodString;
-    promo_code_ids: z.ZodArray<z.ZodString, "many">;
-    user_ids: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
-    esim_ids: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
+    partner: z.ZodString;
+    promo_codes: z.ZodArray<z.ZodString, "many">;
+    users: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
+    esims: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
     title: z.ZodNullable<z.ZodString>;
     first_name: z.ZodString;
     last_name: z.ZodString;
@@ -226,8 +226,12 @@ export declare const bookingAppSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     phone: string | null;
+    users: string[] | null;
+    esims: string[] | null;
     return_date: Date | null;
     departure_date: Date;
+    partner: string;
+    promo_codes: string[];
     first_name: string;
     last_name: string;
     full_name: string;
@@ -240,10 +244,6 @@ export declare const bookingAppSchema: z.ZodObject<{
     };
     is_processed_for_esim_restoration: boolean;
     is_pseudonymized: boolean;
-    partnerId: string;
-    promo_code_ids: string[];
-    user_ids: string[] | null;
-    esim_ids: string[] | null;
     flight_number?: string | undefined;
     gender?: "M" | "F" | "O" | undefined;
     package_size?: string | undefined;
@@ -264,8 +264,12 @@ export declare const bookingAppSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     phone: string | null;
+    users: string[] | null;
+    esims: string[] | null;
     return_date: Date | null;
     departure_date: Date;
+    partner: string;
+    promo_codes: string[];
     first_name: string;
     last_name: string;
     full_name: string;
@@ -278,10 +282,6 @@ export declare const bookingAppSchema: z.ZodObject<{
     };
     is_processed_for_esim_restoration: boolean;
     is_pseudonymized: boolean;
-    partnerId: string;
-    promo_code_ids: string[];
-    user_ids: string[] | null;
-    esim_ids: string[] | null;
     flight_number?: string | undefined;
     gender?: "M" | "F" | "O" | undefined;
     package_size?: string | undefined;
@@ -291,7 +291,8 @@ export declare const bookingAppSchema: z.ZodObject<{
 }>;
 export type BookingFirestore = z.infer<typeof bookingFirestoreSchema>;
 export type BookingApp = z.infer<typeof bookingAppSchema>;
+export type CommunicationOptions = z.infer<typeof communicationOptionsSchema>;
 export declare const bookingToFirestore: (booking: BookingApp) => BookingFirestore;
 export declare const bookingFromFirestore: (firestoreBooking: BookingFirestore) => BookingApp;
-export type Booking = BookingApp;
-export type BookingWithFirestore = BookingFirestore;
+export type Booking = BookingFirestore;
+export type HBooking = BookingApp;

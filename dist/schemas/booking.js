@@ -65,12 +65,12 @@ const commonBookingFields = {
 // Firestore schema for Booking
 exports.bookingFirestoreSchema = helpers_1.baseModelSchema.extend(Object.assign(Object.assign({}, commonBookingFields), { return_date: helpers_1.timestampSchema.nullable(), departure_date: helpers_1.timestampSchema, partner: exports.partnerRefSchema.schema, promo_codes: zod_1.z.array(exports.promoCodeRefSchema.schema), users: zod_1.z.array(exports.userRefSchema.schema).nullable(), esims: zod_1.z.array(exports.esimRefSchema.schema).nullable() }));
 // App schema for Booking
-exports.bookingAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonBookingFields), { return_date: zod_1.z.date().nullable(), departure_date: zod_1.z.date(), partnerId: (0, helpers_1.docRefToStringSchema)(exports.partnerRefSchema), promo_code_ids: zod_1.z.array((0, helpers_1.docRefToStringSchema)(exports.promoCodeRefSchema)), user_ids: zod_1.z.array(zod_1.z.string()).nullable(), esim_ids: zod_1.z.array(zod_1.z.string()).nullable() }));
+exports.bookingAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonBookingFields), { return_date: zod_1.z.date().nullable(), departure_date: zod_1.z.date(), partner: (0, helpers_1.docRefToStringSchema)(exports.partnerRefSchema), promo_codes: zod_1.z.array((0, helpers_1.docRefToStringSchema)(exports.promoCodeRefSchema)), users: zod_1.z.array(zod_1.z.string()).nullable(), esims: zod_1.z.array(zod_1.z.string()).nullable() }));
 const refFieldMappings = [
-    { app: 'partnerId', firestore: 'partner', collection: exports.PARTNER_COLLECTION },
-    { app: 'promo_code_ids', firestore: 'promo_codes', collection: exports.PROMO_CODE_COLLECTION, isArray: true },
-    { app: 'user_ids', firestore: 'users', collection: exports.USER_COLLECTION, isArray: true, nullable: true },
-    { app: 'esim_ids', firestore: 'esims', collection: exports.ESIM_COLLECTION, isArray: true, nullable: true }
+    { app: 'partner', firestore: 'partner', collection: exports.PARTNER_COLLECTION },
+    { app: 'promo_codes', firestore: 'promo_codes', collection: exports.PROMO_CODE_COLLECTION, isArray: true },
+    { app: 'users', firestore: 'users', collection: exports.USER_COLLECTION, isArray: true, nullable: true },
+    { app: 'esims', firestore: 'esims', collection: exports.ESIM_COLLECTION, isArray: true, nullable: true }
 ];
 const dateFieldMappings = [
     { field: 'return_date', nullable: true },

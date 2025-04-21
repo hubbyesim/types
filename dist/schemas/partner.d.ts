@@ -2098,8 +2098,8 @@ export declare const partnerAppSchema: z.ZodObject<{
     created_by: z.ZodUnion<[z.ZodString, z.ZodNull]>;
     updated_by: z.ZodUnion<[z.ZodString, z.ZodNull]>;
 } & {
-    parentId: z.ZodNullable<z.ZodString>;
-    user_ids: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
+    parent: z.ZodNullable<z.ZodString>;
+    users: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
     financial_properties: z.ZodNullable<z.ZodObject<{
         pricing_strategies: z.ZodNullable<z.ZodObject<{
             partner: z.ZodObject<{
@@ -2748,11 +2748,12 @@ export declare const partnerAppSchema: z.ZodObject<{
         city?: string | undefined;
         postal_code?: string | undefined;
     } | null;
+    parent: string | null;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    user_ids: string[] | null;
+    users: string[] | null;
     financial_properties: {
         pricing_strategies: {
             user: {
@@ -2869,7 +2870,6 @@ export declare const partnerAppSchema: z.ZodObject<{
             }[];
         };
     } | null;
-    parentId: string | null;
     is_active?: boolean | null | undefined;
     external_id?: string | null | undefined;
 }, {
@@ -2886,11 +2886,12 @@ export declare const partnerAppSchema: z.ZodObject<{
         city?: string | undefined;
         postal_code?: string | undefined;
     } | null;
+    parent: string | null;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    user_ids: string[] | null;
+    users: string[] | null;
     financial_properties: {
         pricing_strategies: {
             user: {
@@ -3007,7 +3008,6 @@ export declare const partnerAppSchema: z.ZodObject<{
             }[];
         };
     } | null;
-    parentId: string | null;
     is_active?: boolean | null | undefined;
     external_id?: string | null | undefined;
 }>;
@@ -3133,11 +3133,30 @@ export type PartnerFirestore = z.infer<typeof partnerFirestoreSchema>;
 export type PartnerApp = z.infer<typeof partnerAppSchema>;
 export type PriceListFirestore = z.infer<typeof priceListFirestoreSchema>;
 export type PriceListApp = z.infer<typeof priceListAppSchema>;
+export type Address = z.infer<typeof addressSchema>;
+export type Registration = z.infer<typeof registrationSchema>;
+export type BankingDetails = z.infer<typeof bankingDetailsSchema>;
+export type PackagePriceFirestore = z.infer<typeof packagePriceFirestoreSchema>;
+export type PackagePriceApp = z.infer<typeof packagePriceAppSchema>;
+export type PricingStrategyFirestore = z.infer<typeof pricingStrategyFirestoreSchema>;
+export type PricingStrategyApp = z.infer<typeof pricingStrategyAppSchema>;
+export type FinancialPropertiesFirestore = z.infer<typeof financialPropertiesFirestoreSchema>;
+export type FinancialPropertiesApp = z.infer<typeof financialPropertiesAppSchema>;
+export type PackageStrategy = z.infer<typeof packageStrategySchema>;
+export type BookingDefaults = z.infer<typeof bookingDefaultsSchema>;
+export type BookingConfirmation = z.infer<typeof bookingConfirmationSchema>;
+export type VisualIdentityBanner = z.infer<typeof visualIdentityBannerSchema>;
+export type VisualIdentityBannerStrategy = z.infer<typeof visualIdentityBannerStrategySchema>;
+export type VisualIdentity = z.infer<typeof visualIdentitySchema>;
+export type ScheduleFilter = z.infer<typeof scheduleFilterSchema>;
+export type Schedule = z.infer<typeof scheduleSchema>;
+export type PlatformSettings = z.infer<typeof platformSettingsSchema>;
 export declare const partnerToFirestore: (partner: PartnerApp) => PartnerFirestore;
 export declare const partnerFromFirestore: (firestorePartner: PartnerFirestore) => PartnerApp;
 export declare const priceListFromFirestore: (firestorePriceList: PriceListFirestore) => PriceListApp;
 export declare const priceListToFirestore: (priceList: PriceListApp) => PriceListFirestore;
-export type Partner = PartnerApp;
-export type PartnerWithFirestore = PartnerFirestore;
-export type PriceList = PriceListApp;
+export type Partner = PartnerFirestore;
+export type HPartner = PartnerApp;
+export type PriceList = PriceListFirestore;
+export type HPriceList = PriceListApp;
 export type PackagePrice = z.infer<typeof packagePriceAppSchema>;

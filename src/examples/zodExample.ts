@@ -5,8 +5,9 @@ import {
     userAppSchema,
     userToFirestore,
     userFromFirestore,
-    User,
-    UserFirestore
+    UserApp,
+    UserFirestore,
+    User
 } from '../schemas/user';
 
 /**
@@ -19,7 +20,7 @@ import {
  */
 
 // Example: Validating an App model
-function validateUserApp(userData: unknown): User {
+function validateUserApp(userData: unknown): UserApp {
     // Parse and validate the data against the schema
     // This will throw an error if validation fails
     const validatedUser = userAppSchema.parse(userData);
@@ -29,7 +30,7 @@ function validateUserApp(userData: unknown): User {
 }
 
 // Example: Converting from App to Firestore model
-function saveUserToFirestore(user: User): UserFirestore {
+function saveUserToFirestore(user: UserApp): UserFirestore {
     // Convert to Firestore model
     const firestoreUser = userToFirestore(user);
 
@@ -43,7 +44,7 @@ function saveUserToFirestore(user: User): UserFirestore {
 }
 
 // Example: Converting from Firestore to App model
-function getUserFromFirestore(firestoreUser: UserFirestore): User {
+function getUserFromFirestore(firestoreUser: UserFirestore): UserApp {
     // Convert to App model
     const user = userFromFirestore(firestoreUser);
 
@@ -54,15 +55,15 @@ function getUserFromFirestore(firestoreUser: UserFirestore): User {
 }
 
 // Example: Creating a new user
-function createNewUser(name: string, email: string, profileId: string | null): User {
+function createNewUser(name: string, email: string, profileRef: string | null): UserApp {
     const now = new Date();
 
-    // Create a new user object
-    const newUser: User = {
+    // Create a new user object that follows the App schema (using Date objects)
+    const newUser = {
         id: 'user_' + Date.now(),
         name,
         email,
-        profileId,
+        profileRef,
         createdAt: now,
         created_at: now,
         updated_at: now,
@@ -89,7 +90,7 @@ function exampleUsage() {
         console.log('Round trip successful:',
             user.id === retrievedUser.id &&
             user.name === retrievedUser.name &&
-            user.profileId === retrievedUser.profileId
+            user.profileRef === retrievedUser.profileRef
         );
     } catch (error) {
         if (error instanceof z.ZodError) {
