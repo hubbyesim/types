@@ -11,3 +11,4 @@ export * from "./src/api";
 export * from "./src/payment";
 export * from "./src/apiLogs";
 export * from "./src/constants";
+export * from "./src/schemas";

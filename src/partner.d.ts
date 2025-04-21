@@ -107,6 +107,7 @@ export type FinancialProperties = {
 export type PriceList = {
     id: string;
     name: string;
+    type: 'partner' | 'user';
     price_list: PackagePrice[];
 } & HubbyModel;
 

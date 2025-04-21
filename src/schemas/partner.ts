@@ -276,12 +276,14 @@ export type PartnerApp = z.infer<typeof partnerAppSchema>;
 export const priceListFirestoreSchema = baseModelSchema.extend({
     id: z.string(),
     name: z.string(),
+    type: z.enum(['partner', 'user']).default('partner'),
     price_list: z.array(packagePriceFirestoreSchema)
 });
 
 export const priceListAppSchema = baseModelAppSchema.extend({
     id: z.string(),
     name: z.string(),
+    type: z.enum(['partner', 'user']).default('partner'),
     price_list: z.array(packagePriceAppSchema)
 });
 
@@ -477,6 +479,64 @@ export const partnerFromFirestore = (firestorePartner: PartnerFirestore): Partne
     }
 
     return basePartner as PartnerApp;
+};
+
+// Conversion function for PriceList from Firestore to App format
+export const priceListFromFirestore = (firestorePriceList: PriceListFirestore): PriceListApp => {
+    // Create a base priceList object with app-friendly types
+    const basePriceList: Partial<PriceListApp> = {
+        id: firestorePriceList.id,
+        name: firestorePriceList.name,
+        type: firestorePriceList.type,
+        created_at: fromFirestore.date(firestorePriceList.created_at),
+        updated_at: fromFirestore.date(firestorePriceList.updated_at),
+        created_by: typeof firestorePriceList.created_by === 'string'
+            ? firestorePriceList.created_by
+            : firestorePriceList.created_by ? fromFirestore.ref(firestorePriceList.created_by) : null,
+        updated_by: typeof firestorePriceList.updated_by === 'string'
+            ? firestorePriceList.updated_by
+            : firestorePriceList.updated_by ? fromFirestore.ref(firestorePriceList.updated_by) : null,
+    };
+
+    // Convert package references in price_list
+    if (firestorePriceList.price_list) {
+        basePriceList.price_list = firestorePriceList.price_list.map(price => ({
+            destination: price.destination,
+            label: price.label,
+            packageId: fromFirestore.ref(price.package),
+            type: price.type,
+            price: price.price
+        }));
+    }
+
+    return basePriceList as PriceListApp;
+};
+
+// Conversion function for PriceList from App to Firestore format
+export const priceListToFirestore = (priceList: PriceListApp): PriceListFirestore => {
+    // Create a base priceList object with Firestore types
+    const basePriceList: Partial<PriceListFirestore> = {
+        id: priceList.id,
+        name: priceList.name,
+        type: priceList.type,
+        created_at: toFirestore.date(priceList.created_at),
+        updated_at: toFirestore.date(priceList.updated_at),
+        created_by: typeof priceList.created_by === 'string' ? priceList.created_by : null,
+        updated_by: typeof priceList.updated_by === 'string' ? priceList.updated_by : null,
+    };
+
+    // Convert packageIds to document references in price_list
+    if (priceList.price_list) {
+        basePriceList.price_list = priceList.price_list.map(price => ({
+            destination: price.destination,
+            label: price.label,
+            package: toFirestore.ref<any>(PACKAGE_COLLECTION, price.packageId),
+            type: price.type,
+            price: price.price
+        }));
+    }
+
+    return basePriceList as PriceListFirestore;
 };
 
 // For backwards compatibility
