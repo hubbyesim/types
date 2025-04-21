@@ -235,8 +235,8 @@ export const partnerFirestoreSchema = baseModelSchema.extend({
 // App schema for Partner
 export const partnerAppSchema = baseModelAppSchema.extend({
     ...commonPartnerFields,
-    parentId: z.string().nullable(),
-    user_ids: z.array(z.string()).nullable(),
+    parent: z.string().nullable(),
+    users: z.array(z.string()).nullable(),
     financial_properties: financialPropertiesAppSchema,
 });
 
@@ -273,8 +273,8 @@ interface RefFieldMapping {
 }
 
 const refFieldMappings: RefFieldMapping[] = [
-    { app: 'parentId', firestore: 'parent', collection: PARTNER_COLLECTION, nullable: true },
-    { app: 'user_ids', firestore: 'users', collection: USER_COLLECTION, nullable: true, isArray: true }
+    { app: 'parent', firestore: 'parent', collection: PARTNER_COLLECTION, nullable: true },
+    { app: 'users', firestore: 'users', collection: USER_COLLECTION, nullable: true, isArray: true }
 ];
 
 // Conversion functions

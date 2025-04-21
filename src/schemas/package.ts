@@ -52,8 +52,8 @@ export const packageFirestoreSchema = baseModelSchema.extend({
 // App schema for Package
 export const packageAppSchema = baseModelAppSchema.extend({
     ...commonPackageFields,
-    countryId: docRefToStringSchema(countryRefSchema),
-    partnerId: z.string().nullable(),
+    country: docRefToStringSchema(countryRefSchema),
+    partner: z.string().nullable(),
 });
 
 // Define types based on schemas
@@ -69,8 +69,8 @@ interface RefFieldMapping {
 }
 
 const refFieldMappings: RefFieldMapping[] = [
-    { app: 'countryId', firestore: 'country', collection: COUNTRY_COLLECTION },
-    { app: 'partnerId', firestore: 'partner', collection: PARTNER_COLLECTION, nullable: true }
+    { app: 'country', firestore: 'country', collection: COUNTRY_COLLECTION },
+    { app: 'partner', firestore: 'partner', collection: PARTNER_COLLECTION, nullable: true }
 ];
 
 // Conversion functions

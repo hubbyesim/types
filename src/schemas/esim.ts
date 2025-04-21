@@ -57,12 +57,12 @@ export const esimFirestoreSchema = baseModelSchema.extend({
 // App schema for ESIM
 export const esimAppSchema = baseModelAppSchema.extend({
     ...commonESIMFields,
-    countryId: z.string().nullable(),
-    userId: z.string().nullable(),
+    country: z.string().nullable(),
+    user: z.string().nullable(),
     time_assigned: z.date().nullable(),
     last_updated: z.date().nullable(),
-    partnerId: z.string().nullable(),
-    paymentId: z.string().nullable(),
+    partner: z.string().nullable(),
+    payment: z.string().nullable(),
 });
 
 // Define types based on schemas
@@ -83,10 +83,10 @@ interface DateFieldMapping {
 }
 
 const refFieldMappings: RefFieldMapping[] = [
-    { app: 'countryId', firestore: 'country', collection: COUNTRY_COLLECTION, nullable: true },
-    { app: 'userId', firestore: 'user', collection: USER_COLLECTION, nullable: true },
-    { app: 'partnerId', firestore: 'partner', collection: PARTNER_COLLECTION, nullable: true },
-    { app: 'paymentId', firestore: 'payment', collection: PAYMENT_COLLECTION, nullable: true }
+    { app: 'country', firestore: 'country', collection: COUNTRY_COLLECTION, nullable: true },
+    { app: 'user', firestore: 'user', collection: USER_COLLECTION, nullable: true },
+    { app: 'partner', firestore: 'partner', collection: PARTNER_COLLECTION, nullable: true },
+    { app: 'payment', firestore: 'payment', collection: PAYMENT_COLLECTION, nullable: true }
 ];
 
 const dateFieldMappings: DateFieldMapping[] = [

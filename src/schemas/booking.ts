@@ -92,10 +92,10 @@ export const bookingAppSchema = baseModelAppSchema.extend({
     ...commonBookingFields,
     return_date: z.date().nullable(),
     departure_date: z.date(),
-    partnerId: docRefToStringSchema(partnerRefSchema),
-    promo_code_ids: z.array(docRefToStringSchema(promoCodeRefSchema)),
-    user_ids: z.array(z.string()).nullable(),
-    esim_ids: z.array(z.string()).nullable(),
+    partner: docRefToStringSchema(partnerRefSchema),
+    promo_codes: z.array(docRefToStringSchema(promoCodeRefSchema)),
+    users: z.array(z.string()).nullable(),
+    esims: z.array(z.string()).nullable(),
 });
 
 // Define types based on schemas
@@ -117,10 +117,10 @@ interface RefFieldMapping {
 }
 
 const refFieldMappings: RefFieldMapping[] = [
-    { app: 'partnerId', firestore: 'partner', collection: PARTNER_COLLECTION },
-    { app: 'promo_code_ids', firestore: 'promo_codes', collection: PROMO_CODE_COLLECTION, isArray: true },
-    { app: 'user_ids', firestore: 'users', collection: USER_COLLECTION, isArray: true, nullable: true },
-    { app: 'esim_ids', firestore: 'esims', collection: ESIM_COLLECTION, isArray: true, nullable: true }
+    { app: 'partner', firestore: 'partner', collection: PARTNER_COLLECTION },
+    { app: 'promo_codes', firestore: 'promo_codes', collection: PROMO_CODE_COLLECTION, isArray: true },
+    { app: 'users', firestore: 'users', collection: USER_COLLECTION, isArray: true, nullable: true },
+    { app: 'esims', firestore: 'esims', collection: ESIM_COLLECTION, isArray: true, nullable: true }
 ];
 
 const dateFieldMappings: DateFieldMapping[] = [

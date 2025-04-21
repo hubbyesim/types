@@ -33,7 +33,7 @@ export const userFirestoreSchema = baseModelSchema.extend({
 export const userAppSchema = baseModelAppSchema.extend({
     ...commonUserFields,
     createdAt: z.date(),
-    profileId: docRefToStringSchema(profileRefSchema).nullable()
+    profileRef: docRefToStringSchema(profileRefSchema).nullable()
 });
 
 // Define types based on schemas
@@ -49,7 +49,7 @@ interface RefFieldMapping {
 }
 
 const refFieldMappings: RefFieldMapping[] = [
-    { app: 'profileId', firestore: 'profileRef', collection: PROFILE_COLLECTION, nullable: true }
+    { app: 'profileRef', firestore: 'profileRef', collection: PROFILE_COLLECTION, nullable: true }
 ];
 
 interface DateFieldMapping {

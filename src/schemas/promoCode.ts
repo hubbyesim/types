@@ -59,16 +59,16 @@ export const promoCodeAppSchema = baseModelAppSchema.extend({
     usage: z.array(z.string()),
     uuid_usage: z.array(z.string()),
     package_specification: packageSpecificationSchema.optional(),
-    partnerId: z.string().optional(),
+    partner: z.string().optional(),
     valid_from: z.date(),
     valid_to: z.date(),
 
     // Optional fields based on the type
     discount: z.number().optional(),
     package_size: z.string().optional(),
-    packageId: z.string().optional(),
-    countryId: z.string().optional(),
-    bookingId: z.string().nullable().optional(),
+    package: z.string().optional(),
+    country: z.string().optional(),
+    booking: z.string().nullable().optional(),
     countries: z.array(z.string()).optional(),
     max_bytes: z.number().optional(),
     starter_data: z.number().optional()
@@ -114,8 +114,8 @@ export const promoCodeToFirestore = (promoCode: PromoCodeApp): PromoCodeFirestor
         result.package_specification = promoCode.package_specification;
     }
 
-    if (promoCode.partnerId) {
-        result.partner = toFirestore.ref<any>(PARTNER_COLLECTION, promoCode.partnerId);
+    if (promoCode.partner) {
+        result.partner = toFirestore.ref<any>(PARTNER_COLLECTION, promoCode.partner);
     }
 
     if ('discount' in promoCode) {
@@ -126,17 +126,17 @@ export const promoCodeToFirestore = (promoCode: PromoCodeApp): PromoCodeFirestor
         result.package_size = promoCode.package_size;
     }
 
-    if (promoCode.packageId) {
-        result.package = toFirestore.ref<any>(PACKAGE_COLLECTION, promoCode.packageId);
+    if (promoCode.package) {
+        result.package = toFirestore.ref<any>(PACKAGE_COLLECTION, promoCode.package);
     }
 
-    if (promoCode.countryId) {
-        result.country = toFirestore.ref<any>(COUNTRY_COLLECTION, promoCode.countryId);
+    if (promoCode.country) {
+        result.country = toFirestore.ref<any>(COUNTRY_COLLECTION, promoCode.country);
     }
 
-    if (promoCode.bookingId !== undefined) {
-        result.booking = promoCode.bookingId
-            ? toFirestore.ref<any>(BOOKING_COLLECTION, promoCode.bookingId)
+    if (promoCode.booking !== undefined) {
+        result.booking = promoCode.booking
+            ? toFirestore.ref<any>(BOOKING_COLLECTION, promoCode.booking)
             : null;
     }
 
@@ -183,7 +183,7 @@ export const promoCodeFromFirestore = (firestorePromoCode: PromoCodeFirestore): 
     }
 
     if (firestorePromoCode.partner) {
-        result.partnerId = fromFirestore.ref(firestorePromoCode.partner);
+        result.partner = fromFirestore.ref(firestorePromoCode.partner);
     }
 
     if ('discount' in firestorePromoCode) {
@@ -195,15 +195,15 @@ export const promoCodeFromFirestore = (firestorePromoCode: PromoCodeFirestore): 
     }
 
     if (firestorePromoCode.package) {
-        result.packageId = fromFirestore.ref(firestorePromoCode.package);
+        result.package = fromFirestore.ref(firestorePromoCode.package);
     }
 
     if (firestorePromoCode.country) {
-        result.countryId = fromFirestore.ref(firestorePromoCode.country);
+        result.country = fromFirestore.ref(firestorePromoCode.country);
     }
 
     if (firestorePromoCode.booking !== undefined) {
-        result.bookingId = firestorePromoCode.booking
+        result.booking = firestorePromoCode.booking
             ? fromFirestore.ref(firestorePromoCode.booking)
             : null;
     }
