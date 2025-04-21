@@ -17,23 +17,23 @@ export declare const userFirestoreSchema: z.ZodObject<{
     createdAt: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
     profileRef: z.ZodNullable<z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
 }, "strip", z.ZodTypeAny, {
+    name: string | null;
     id: string;
+    email: string | null;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    email: string | null;
-    name: string | null;
     createdAt: FirebaseFirestore.Timestamp;
     profileRef: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
 }, {
+    name: string | null;
     id: string;
+    email: string | null;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    email: string | null;
-    name: string | null;
     createdAt: FirebaseFirestore.Timestamp;
     profileRef: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
 }>;
@@ -49,23 +49,23 @@ export declare const userAppSchema: z.ZodObject<{
     createdAt: z.ZodDate;
     profileId: z.ZodNullable<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
+    name: string | null;
     id: string;
+    email: string | null;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    email: string | null;
-    name: string | null;
     createdAt: Date;
     profileId: string | null;
 }, {
+    name: string | null;
     id: string;
+    email: string | null;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    email: string | null;
-    name: string | null;
     createdAt: Date;
     profileId: string | null;
 }>;

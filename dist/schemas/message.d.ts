@@ -7,19 +7,19 @@ export declare const messageFirestoreSchema: z.ZodObject<{
     created_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
     updated_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
 }, "strip", z.ZodTypeAny, {
+    key: string;
     id: string;
+    method: "push" | "email" | "sms";
+    status: "failed" | "pending" | "sent" | "delivered";
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
-    status: "pending" | "sent" | "failed" | "delivered";
-    key: string;
-    method: "push" | "email" | "sms";
 }, {
+    key: string;
     id: string;
+    method: "push" | "email" | "sms";
+    status: "failed" | "pending" | "sent" | "delivered";
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
-    status: "pending" | "sent" | "failed" | "delivered";
-    key: string;
-    method: "push" | "email" | "sms";
 }>;
 export declare const messageAppSchema: z.ZodObject<{
     id: z.ZodString;
@@ -29,19 +29,19 @@ export declare const messageAppSchema: z.ZodObject<{
     created_at: z.ZodDate;
     updated_at: z.ZodDate;
 }, "strip", z.ZodTypeAny, {
+    key: string;
     id: string;
+    method: "push" | "email" | "sms";
+    status: "failed" | "pending" | "sent" | "delivered";
     created_at: Date;
     updated_at: Date;
-    status: "pending" | "sent" | "failed" | "delivered";
-    key: string;
-    method: "push" | "email" | "sms";
 }, {
+    key: string;
     id: string;
+    method: "push" | "email" | "sms";
+    status: "failed" | "pending" | "sent" | "delivered";
     created_at: Date;
     updated_at: Date;
-    status: "pending" | "sent" | "failed" | "delivered";
-    key: string;
-    method: "push" | "email" | "sms";
 }>;
 export declare const sentMessagesFirestoreSchema: z.ZodRecord<z.ZodString, z.ZodObject<{
     id: z.ZodString;
@@ -51,19 +51,19 @@ export declare const sentMessagesFirestoreSchema: z.ZodRecord<z.ZodString, z.Zod
     created_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
     updated_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
 }, "strip", z.ZodTypeAny, {
+    key: string;
     id: string;
+    method: "push" | "email" | "sms";
+    status: "failed" | "pending" | "sent" | "delivered";
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
-    status: "pending" | "sent" | "failed" | "delivered";
-    key: string;
-    method: "push" | "email" | "sms";
 }, {
+    key: string;
     id: string;
+    method: "push" | "email" | "sms";
+    status: "failed" | "pending" | "sent" | "delivered";
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
-    status: "pending" | "sent" | "failed" | "delivered";
-    key: string;
-    method: "push" | "email" | "sms";
 }>>;
 export declare const sentMessagesAppSchema: z.ZodRecord<z.ZodString, z.ZodObject<{
     id: z.ZodString;
@@ -73,19 +73,19 @@ export declare const sentMessagesAppSchema: z.ZodRecord<z.ZodString, z.ZodObject
     created_at: z.ZodDate;
     updated_at: z.ZodDate;
 }, "strip", z.ZodTypeAny, {
+    key: string;
     id: string;
+    method: "push" | "email" | "sms";
+    status: "failed" | "pending" | "sent" | "delivered";
     created_at: Date;
     updated_at: Date;
-    status: "pending" | "sent" | "failed" | "delivered";
-    key: string;
-    method: "push" | "email" | "sms";
 }, {
+    key: string;
     id: string;
+    method: "push" | "email" | "sms";
+    status: "failed" | "pending" | "sent" | "delivered";
     created_at: Date;
     updated_at: Date;
-    status: "pending" | "sent" | "failed" | "delivered";
-    key: string;
-    method: "push" | "email" | "sms";
 }>>;
 export type MessageFirestore = z.infer<typeof messageFirestoreSchema>;
 export type MessageApp = z.infer<typeof messageAppSchema>;

@@ -47,23 +47,23 @@ export declare const promoCodeFirestoreSchema: z.ZodObject<{
     max_bytes: z.ZodOptional<z.ZodNumber>;
     starter_data: z.ZodOptional<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
+    code: string;
+    type: string | null;
     id: string;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    code: string;
-    type: string | null;
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     external_id: string;
     allowance_user: number;
     allowance_total: number;
     usage: string[];
     uuid_usage: string[];
-    valid_from: string | FirebaseFirestore.Timestamp | Date;
-    valid_to: string | FirebaseFirestore.Timestamp | Date;
+    valid_from: string | Date | FirebaseFirestore.Timestamp;
+    valid_to: string | Date | FirebaseFirestore.Timestamp;
+    country?: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | undefined;
     partner?: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | undefined;
     package_size?: string | undefined;
-    country?: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | undefined;
     package?: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | undefined;
     countries?: string[] | undefined;
     booking?: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null | undefined;
@@ -72,23 +72,23 @@ export declare const promoCodeFirestoreSchema: z.ZodObject<{
     max_bytes?: number | undefined;
     starter_data?: number | undefined;
 }, {
+    code: string;
+    type: string | null;
     id: string;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    code: string;
-    type: string | null;
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     external_id: string;
     allowance_user: number;
     allowance_total: number;
     usage: string[];
     uuid_usage: string[];
-    valid_from: string | FirebaseFirestore.Timestamp | Date;
-    valid_to: string | FirebaseFirestore.Timestamp | Date;
+    valid_from: string | Date | FirebaseFirestore.Timestamp;
+    valid_to: string | Date | FirebaseFirestore.Timestamp;
+    country?: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | undefined;
     partner?: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | undefined;
     package_size?: string | undefined;
-    country?: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | undefined;
     package?: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | undefined;
     countries?: string[] | undefined;
     booking?: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null | undefined;
@@ -124,12 +124,12 @@ export declare const promoCodeAppSchema: z.ZodObject<{
     max_bytes: z.ZodOptional<z.ZodNumber>;
     starter_data: z.ZodOptional<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
+    code: string;
+    type: string | null;
     id: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
-    code: string;
-    type: string | null;
     updated_by: string | null;
     external_id: string;
     allowance_user: number;
@@ -149,12 +149,12 @@ export declare const promoCodeAppSchema: z.ZodObject<{
     packageId?: string | undefined;
     bookingId?: string | null | undefined;
 }, {
+    code: string;
+    type: string | null;
     id: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
-    code: string;
-    type: string | null;
     updated_by: string | null;
     external_id: string;
     allowance_user: number;

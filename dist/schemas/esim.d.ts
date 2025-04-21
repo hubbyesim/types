@@ -50,17 +50,17 @@ export declare const esimFirestoreSchema: z.ZodObject<{
     is_archived: z.ZodBoolean;
     apn: z.ZodNullable<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
+    name: string;
+    type: "code" | "external" | "promo" | "api" | "balance" | "payment";
     id: string;
+    country: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    status: string | null;
+    user: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    status: string | null;
-    type: "code" | "promo" | "api" | "balance" | "external" | "payment";
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     partner: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    country: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    user: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    name: string;
     apn: string | null;
     imsi: number;
     provider: string;
@@ -79,17 +79,17 @@ export declare const esimFirestoreSchema: z.ZodObject<{
     is_archived: boolean;
     coverage_label?: string | null | undefined;
 }, {
+    name: string;
+    type: "code" | "external" | "promo" | "api" | "balance" | "payment";
     id: string;
+    country: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    status: string | null;
+    user: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    status: string | null;
-    type: "code" | "promo" | "api" | "balance" | "external" | "payment";
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     partner: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    country: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    user: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    name: string;
     apn: string | null;
     imsi: number;
     provider: string;
@@ -139,15 +139,15 @@ export declare const esimAppSchema: z.ZodObject<{
     is_archived: z.ZodBoolean;
     apn: z.ZodNullable<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
+    name: string;
+    type: "code" | "external" | "promo" | "api" | "balance" | "payment";
     id: string;
+    status: string | null;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
-    status: string | null;
-    type: "code" | "promo" | "api" | "balance" | "external" | "payment";
     updated_by: string | null;
     partnerId: string | null;
-    name: string;
     apn: string | null;
     imsi: number;
     provider: string;
@@ -168,15 +168,15 @@ export declare const esimAppSchema: z.ZodObject<{
     paymentId: string | null;
     coverage_label?: string | null | undefined;
 }, {
+    name: string;
+    type: "code" | "external" | "promo" | "api" | "balance" | "payment";
     id: string;
+    status: string | null;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
-    status: string | null;
-    type: "code" | "promo" | "api" | "balance" | "external" | "payment";
     updated_by: string | null;
     partnerId: string | null;
-    name: string;
     apn: string | null;
     imsi: number;
     provider: string;

@@ -264,7 +264,7 @@ const partnerToFirestore = (partner) => {
     };
     // Handle financial properties separately
     if (partner.financial_properties) {
-        const fp = { ...partner.financial_properties };
+        const fp = Object.assign({}, partner.financial_properties);
         // Copy the financial properties without pricing strategies
         const financialProps = {
             administration_fee: fp.administration_fee,
@@ -352,7 +352,7 @@ const partnerFromFirestore = (firestorePartner) => {
     };
     // Handle financial properties separately
     if (firestorePartner.financial_properties) {
-        const fp = { ...firestorePartner.financial_properties };
+        const fp = Object.assign({}, firestorePartner.financial_properties);
         // Copy the financial properties without pricing strategies
         const financialProps = {
             administration_fee: fp.administration_fee,

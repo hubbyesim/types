@@ -20,4 +20,4 @@ export {
   priceListFromFirestore,
   PriceListApp,
   PriceListFirestore
-} from "./schemas/partner";
+} from "./schemas/partner"; 

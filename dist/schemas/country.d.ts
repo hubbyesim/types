@@ -15,8 +15,9 @@ export declare const countryFirestoreSchema: z.ZodObject<{
     countries: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
     tier: z.ZodNullable<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
-    id: string | null;
     name: string | null;
+    id: string | null;
+    region: boolean | null;
     bokun_id: number | null;
     LTE: boolean | null;
     apn: string | null;
@@ -25,13 +26,13 @@ export declare const countryFirestoreSchema: z.ZodObject<{
     global_price: number | null;
     hubby: number | null;
     imsi: number | null;
-    region: boolean | null;
     is_region: boolean | null;
     countries: string[] | null;
     tier: number | null;
 }, {
-    id: string | null;
     name: string | null;
+    id: string | null;
+    region: boolean | null;
     bokun_id: number | null;
     LTE: boolean | null;
     apn: string | null;
@@ -40,7 +41,6 @@ export declare const countryFirestoreSchema: z.ZodObject<{
     global_price: number | null;
     hubby: number | null;
     imsi: number | null;
-    region: boolean | null;
     is_region: boolean | null;
     countries: string[] | null;
     tier: number | null;
@@ -61,8 +61,9 @@ export declare const countryAppSchema: z.ZodObject<{
     countries: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
     tier: z.ZodNullable<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
-    id: string | null;
     name: string | null;
+    id: string | null;
+    region: boolean | null;
     bokun_id: number | null;
     LTE: boolean | null;
     apn: string | null;
@@ -71,13 +72,13 @@ export declare const countryAppSchema: z.ZodObject<{
     global_price: number | null;
     hubby: number | null;
     imsi: number | null;
-    region: boolean | null;
     is_region: boolean | null;
     countries: string[] | null;
     tier: number | null;
 }, {
-    id: string | null;
     name: string | null;
+    id: string | null;
+    region: boolean | null;
     bokun_id: number | null;
     LTE: boolean | null;
     apn: string | null;
@@ -86,7 +87,6 @@ export declare const countryAppSchema: z.ZodObject<{
     global_price: number | null;
     hubby: number | null;
     imsi: number | null;
-    region: boolean | null;
     is_region: boolean | null;
     countries: string[] | null;
     tier: number | null;

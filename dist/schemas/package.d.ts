@@ -42,8 +42,9 @@ export declare const packageFirestoreSchema: z.ZodObject<{
         countries: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
         tier: z.ZodNullable<z.ZodNumber>;
     }, "strip", z.ZodTypeAny, {
-        id: string | null;
         name: string | null;
+        id: string | null;
+        region: boolean | null;
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
@@ -52,13 +53,13 @@ export declare const packageFirestoreSchema: z.ZodObject<{
         global_price: number | null;
         hubby: number | null;
         imsi: number | null;
-        region: boolean | null;
         is_region: boolean | null;
         countries: string[] | null;
         tier: number | null;
     }, {
-        id: string | null;
         name: string | null;
+        id: string | null;
+        region: boolean | null;
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
@@ -67,7 +68,6 @@ export declare const packageFirestoreSchema: z.ZodObject<{
         global_price: number | null;
         hubby: number | null;
         imsi: number | null;
-        region: boolean | null;
         is_region: boolean | null;
         countries: string[] | null;
         tier: number | null;
@@ -87,29 +87,30 @@ export declare const packageFirestoreSchema: z.ZodObject<{
         imsi: number;
     }>>;
 }, "strip", z.ZodTypeAny, {
+    name: string;
+    type: "data-limited" | "time-limited" | null;
     id: string;
+    priority: number;
+    bytes: number;
+    hidden: boolean;
+    label: string;
+    country: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+    days: number;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    type: "data-limited" | "time-limited" | null;
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     partner: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    country: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-    label: string;
     price: number;
-    name: string;
-    days: number;
     is_active: boolean;
     external_id: string;
     provider: string;
     coverage_label: string | null;
-    bytes: number;
-    hidden: boolean;
     is_hidden: boolean;
-    priority: number;
     country_data: {
-        id: string | null;
         name: string | null;
+        id: string | null;
+        region: boolean | null;
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
@@ -118,7 +119,6 @@ export declare const packageFirestoreSchema: z.ZodObject<{
         global_price: number | null;
         hubby: number | null;
         imsi: number | null;
-        region: boolean | null;
         is_region: boolean | null;
         countries: string[] | null;
         tier: number | null;
@@ -129,29 +129,30 @@ export declare const packageFirestoreSchema: z.ZodObject<{
     } | null;
     throttling?: number | undefined;
 }, {
+    name: string;
+    type: "data-limited" | "time-limited" | null;
     id: string;
+    priority: number;
+    bytes: number;
+    hidden: boolean;
+    label: string;
+    country: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+    days: number;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    type: "data-limited" | "time-limited" | null;
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     partner: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    country: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-    label: string;
     price: number;
-    name: string;
-    days: number;
     is_active: boolean;
     external_id: string;
     provider: string;
     coverage_label: string | null;
-    bytes: number;
-    hidden: boolean;
     is_hidden: boolean;
-    priority: number;
     country_data: {
-        id: string | null;
         name: string | null;
+        id: string | null;
+        region: boolean | null;
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
@@ -160,7 +161,6 @@ export declare const packageFirestoreSchema: z.ZodObject<{
         global_price: number | null;
         hubby: number | null;
         imsi: number | null;
-        region: boolean | null;
         is_region: boolean | null;
         countries: string[] | null;
         tier: number | null;
@@ -204,8 +204,9 @@ export declare const packageAppSchema: z.ZodObject<{
         countries: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
         tier: z.ZodNullable<z.ZodNumber>;
     }, "strip", z.ZodTypeAny, {
-        id: string | null;
         name: string | null;
+        id: string | null;
+        region: boolean | null;
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
@@ -214,13 +215,13 @@ export declare const packageAppSchema: z.ZodObject<{
         global_price: number | null;
         hubby: number | null;
         imsi: number | null;
-        region: boolean | null;
         is_region: boolean | null;
         countries: string[] | null;
         tier: number | null;
     }, {
-        id: string | null;
         name: string | null;
+        id: string | null;
+        region: boolean | null;
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
@@ -229,7 +230,6 @@ export declare const packageAppSchema: z.ZodObject<{
         global_price: number | null;
         hubby: number | null;
         imsi: number | null;
-        region: boolean | null;
         is_region: boolean | null;
         countries: string[] | null;
         tier: number | null;
@@ -249,28 +249,29 @@ export declare const packageAppSchema: z.ZodObject<{
         imsi: number;
     }>>;
 }, "strip", z.ZodTypeAny, {
+    name: string;
+    type: "data-limited" | "time-limited" | null;
     id: string;
+    priority: number;
+    bytes: number;
+    hidden: boolean;
+    label: string;
+    days: number;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
-    type: "data-limited" | "time-limited" | null;
     updated_by: string | null;
     partnerId: string | null;
-    label: string;
     price: number;
-    name: string;
-    days: number;
     is_active: boolean;
     external_id: string;
     provider: string;
     coverage_label: string | null;
-    bytes: number;
-    hidden: boolean;
     is_hidden: boolean;
-    priority: number;
     country_data: {
-        id: string | null;
         name: string | null;
+        id: string | null;
+        region: boolean | null;
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
@@ -279,7 +280,6 @@ export declare const packageAppSchema: z.ZodObject<{
         global_price: number | null;
         hubby: number | null;
         imsi: number | null;
-        region: boolean | null;
         is_region: boolean | null;
         countries: string[] | null;
         tier: number | null;
@@ -291,28 +291,29 @@ export declare const packageAppSchema: z.ZodObject<{
     countryId: string;
     throttling?: number | undefined;
 }, {
+    name: string;
+    type: "data-limited" | "time-limited" | null;
     id: string;
+    priority: number;
+    bytes: number;
+    hidden: boolean;
+    label: string;
+    days: number;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
-    type: "data-limited" | "time-limited" | null;
     updated_by: string | null;
     partnerId: string | null;
-    label: string;
     price: number;
-    name: string;
-    days: number;
     is_active: boolean;
     external_id: string;
     provider: string;
     coverage_label: string | null;
-    bytes: number;
-    hidden: boolean;
     is_hidden: boolean;
-    priority: number;
     country_data: {
-        id: string | null;
         name: string | null;
+        id: string | null;
+        region: boolean | null;
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
@@ -321,7 +322,6 @@ export declare const packageAppSchema: z.ZodObject<{
         global_price: number | null;
         hubby: number | null;
         imsi: number | null;
-        region: boolean | null;
         is_region: boolean | null;
         countries: string[] | null;
         tier: number | null;

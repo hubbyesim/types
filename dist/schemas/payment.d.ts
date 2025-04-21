@@ -15,10 +15,10 @@ export declare const paymentFirestoreSchema: z.ZodObject<{
     topup: z.ZodBoolean;
 }, "strip", z.ZodTypeAny, {
     id: string;
+    date: Date;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    date: Date;
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     package: string;
     iccid: string;
@@ -28,10 +28,10 @@ export declare const paymentFirestoreSchema: z.ZodObject<{
     topup: boolean;
 }, {
     id: string;
+    date: Date;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    date: Date;
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     package: string;
     iccid: string;
@@ -56,10 +56,10 @@ export declare const paymentAppSchema: z.ZodObject<{
     topup: z.ZodBoolean;
 }, "strip", z.ZodTypeAny, {
     id: string;
+    date: Date;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
-    date: Date;
     updated_by: string | null;
     package: string;
     iccid: string;
@@ -69,10 +69,10 @@ export declare const paymentAppSchema: z.ZodObject<{
     topup: boolean;
 }, {
     id: string;
+    date: Date;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
-    date: Date;
     updated_by: string | null;
     package: string;
     iccid: string;

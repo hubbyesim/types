@@ -3,10 +3,11 @@
   "version": "1.6.0",
   "description": "The type definitions for the hubbyesim project",
   "scripts": {
+    "build": "tsc && cp -r src/*.d.ts dist/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "types": "index.d.ts",
-  "main": "index.js",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
   "keywords": [],
   "author": "Daniel Fortuyn",
   "license": "ISC",

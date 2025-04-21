@@ -85,20 +85,24 @@ export declare const bookingFirestoreSchema: z.ZodObject<{
     import_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     package_specifications: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
 }, "strip", z.ZodTypeAny, {
+    data: {
+        source: string;
+        manual: boolean;
+    };
     id: string;
+    title: string | null;
+    email: string | null;
+    status: "CANCELLED" | "PENDING" | "CONFIRMED" | "COMPLETED" | "UNPAID" | "EXPIRED";
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     users: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[] | null;
     esims: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[] | null;
-    title: string | null;
     first_name: string;
     last_name: string;
     full_name: string;
     pax: number;
-    email: string | null;
     phone: string | null;
     booking_id: string | null;
     return_date: FirebaseFirestore.Timestamp | null;
@@ -106,10 +110,6 @@ export declare const bookingFirestoreSchema: z.ZodObject<{
     promo_codes: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[];
     departure_date: FirebaseFirestore.Timestamp;
     locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
-    data: {
-        source: string;
-        manual: boolean;
-    };
     communication_options: {
         should_send_message: boolean;
         channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
@@ -123,20 +123,24 @@ export declare const bookingFirestoreSchema: z.ZodObject<{
     import_id?: string | null | undefined;
     package_specifications?: Record<string, any> | undefined;
 }, {
+    data: {
+        source: string;
+        manual: boolean;
+    };
     id: string;
+    title: string | null;
+    email: string | null;
+    status: "CANCELLED" | "PENDING" | "CONFIRMED" | "COMPLETED" | "UNPAID" | "EXPIRED";
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     users: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[] | null;
     esims: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[] | null;
-    title: string | null;
     first_name: string;
     last_name: string;
     full_name: string;
     pax: number;
-    email: string | null;
     phone: string | null;
     booking_id: string | null;
     return_date: FirebaseFirestore.Timestamp | null;
@@ -144,10 +148,6 @@ export declare const bookingFirestoreSchema: z.ZodObject<{
     promo_codes: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[];
     departure_date: FirebaseFirestore.Timestamp;
     locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
-    data: {
-        source: string;
-        manual: boolean;
-    };
     communication_options: {
         should_send_message: boolean;
         channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
@@ -213,27 +213,27 @@ export declare const bookingAppSchema: z.ZodObject<{
     import_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     package_specifications: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
 }, "strip", z.ZodTypeAny, {
+    data: {
+        source: string;
+        manual: boolean;
+    };
     id: string;
+    title: string | null;
+    email: string | null;
+    status: "CANCELLED" | "PENDING" | "CONFIRMED" | "COMPLETED" | "UNPAID" | "EXPIRED";
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
-    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
     updated_by: string | null;
-    title: string | null;
     first_name: string;
     last_name: string;
     full_name: string;
     pax: number;
-    email: string | null;
     phone: string | null;
     booking_id: string | null;
     return_date: Date | null;
     departure_date: Date;
     locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
-    data: {
-        source: string;
-        manual: boolean;
-    };
     communication_options: {
         should_send_message: boolean;
         channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
@@ -251,27 +251,27 @@ export declare const bookingAppSchema: z.ZodObject<{
     import_id?: string | null | undefined;
     package_specifications?: Record<string, any> | undefined;
 }, {
+    data: {
+        source: string;
+        manual: boolean;
+    };
     id: string;
+    title: string | null;
+    email: string | null;
+    status: "CANCELLED" | "PENDING" | "CONFIRMED" | "COMPLETED" | "UNPAID" | "EXPIRED";
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
-    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
     updated_by: string | null;
-    title: string | null;
     first_name: string;
     last_name: string;
     full_name: string;
     pax: number;
-    email: string | null;
     phone: string | null;
     booking_id: string | null;
     return_date: Date | null;
     departure_date: Date;
     locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
-    data: {
-        source: string;
-        manual: boolean;
-    };
     communication_options: {
         should_send_message: boolean;
         channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
