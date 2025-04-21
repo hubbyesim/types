@@ -78,4 +78,4 @@ jobs:
             🛠 Auto-generated release for schema build.
             Changes based on updates in `src/`.
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN 
