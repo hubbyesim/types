@@ -9,7 +9,7 @@ import {
     fromFirestore,
     toFirestore
 } from './helpers';
-import { SUPPORTED_LOCALES } from '../constants';
+import { SUPPORTED_LOCALES, supportedLocalesSchema } from '../constants';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 
 // Define collection paths
@@ -115,7 +115,7 @@ export const packageStrategySchema = z.object({
 });
 
 export const bookingDefaultsSchema = z.object({
-    locale: z.enum(SUPPORTED_LOCALES)
+    locale: supportedLocalesSchema
 });
 
 export const bookingConfirmationSchema = z.object({
@@ -127,7 +127,7 @@ export const visualIdentityBannerSchema = z.object({
     image_url: z.string(),
     alt: z.string(),
     click_url: z.string(),
-    locale: z.enum(SUPPORTED_LOCALES),
+    locale: supportedLocalesSchema,
     properties: z.record(z.string())
 });
 

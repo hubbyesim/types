@@ -72,7 +72,7 @@ exports.packageStrategySchema = zod_1.z.object({
     parameters: zod_1.z.any()
 });
 exports.bookingDefaultsSchema = zod_1.z.object({
-    locale: zod_1.z.enum(constants_1.SUPPORTED_LOCALES)
+    locale: constants_1.supportedLocalesSchema
 });
 exports.bookingConfirmationSchema = zod_1.z.object({
     brevo_template_id: zod_1.z.number(),
@@ -82,7 +82,7 @@ exports.visualIdentityBannerSchema = zod_1.z.object({
     image_url: zod_1.z.string(),
     alt: zod_1.z.string(),
     click_url: zod_1.z.string(),
-    locale: zod_1.z.enum(constants_1.SUPPORTED_LOCALES),
+    locale: constants_1.supportedLocalesSchema,
     properties: zod_1.z.record(zod_1.z.string())
 });
 exports.visualIdentityBannerStrategySchema = zod_1.z.object({

@@ -8,7 +8,7 @@ import {
     fromFirestore,
     toFirestore
 } from './helpers';
-import { SupportedLocales, SUPPORTED_LOCALES } from '../constants';
+import { SupportedLocales, SUPPORTED_LOCALES, supportedLocalesSchema } from '../constants';
 import { DocumentReference, DocumentData, Timestamp } from 'firebase/firestore';
 
 // Define collection paths
@@ -63,7 +63,7 @@ const commonBookingFields = {
     gender: z.enum(['M', 'F', 'O']).optional(),
     package_size: z.string().optional(),
     sent_messages: z.record(z.any()).optional(),
-    locale: z.enum(SUPPORTED_LOCALES),
+    locale: supportedLocalesSchema,
     status: bookingStatusSchema,
     data: z.object({
         source: z.string(),

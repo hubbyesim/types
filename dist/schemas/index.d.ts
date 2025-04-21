@@ -1,6 +1,6 @@
 export * from './helpers';
 export { userFirestoreSchema, userAppSchema, userToFirestore, userFromFirestore, User, UserFirestore, UserApp, PROFILE_COLLECTION } from './user';
-export { bookingFirestoreSchema, bookingAppSchema, bookingToFirestore, bookingFromFirestore, Booking, BookingFirestore, BookingApp, BookingStatus, CommunicationChannel } from './booking';
+export { bookingFirestoreSchema, bookingAppSchema, bookingToFirestore, bookingFromFirestore, Booking, BookingFirestore, BookingApp, BookingStatus, CommunicationChannel, CommunicationOptions, communicationChannelSchema, communicationOptionsSchema } from './booking';
 export { partnerFirestoreSchema, partnerAppSchema, partnerToFirestore, partnerFromFirestore, Partner, PartnerFirestore, PartnerApp, priceListFirestoreSchema, priceListAppSchema, priceListToFirestore, priceListFromFirestore, PriceList, PriceListApp, PriceListFirestore, PackagePrice, PARTNER_COLLECTION, PRICE_LIST_COLLECTION } from './partner';
 export { countryFirestoreSchema, countryAppSchema, countryToFirestore, countryFromFirestore, Country, CountryFirestore, CountryApp } from './country';
 export { packageFirestoreSchema, packageAppSchema, packageToFirestore, packageFromFirestore, Package, PackageFirestore, PackageApp } from './package';
@@ -11,3 +11,4 @@ export { messageFirestoreSchema, messageAppSchema, messageToFirestore, messageFr
 export { currencyFirestoreSchema, currencyAppSchema, currencyToFirestore, currencyFromFirestore, Currency, CurrencyFirestore, CurrencyApp, CoversionRate, conversionRateSchema } from './currency';
 export { apiLogFirestoreSchema, apiLogAppSchema, apiLogToFirestore, apiLogFromFirestore, ApiLog, ApiLogFirestore, ApiLogApp } from './apiLogs';
 export { packageSpecificationSchema, packageSpecificationsSchema, bookingApiResponseSchema, promoCodeApiResponseSchema, bookingApiRequestSchema, partnerApiRequestSchema, partnerApiResponseSchema, PackageSpecification, PackageSpecifications, BookingApiRequest, BookingApiResponse, PromoCodeApiResponse, PartnerApiRequest, PartnerApiResponse } from './api';
+export { SUPPORTED_LOCALES, SupportedLocales, supportedLocalesSchema, SupportedLocalesFromSchema } from '../constants';

@@ -50,7 +50,7 @@ const commonBookingFields = {
     gender: zod_1.z.enum(['M', 'F', 'O']).optional(),
     package_size: zod_1.z.string().optional(),
     sent_messages: zod_1.z.record(zod_1.z.any()).optional(),
-    locale: zod_1.z.enum(constants_1.SUPPORTED_LOCALES),
+    locale: constants_1.supportedLocalesSchema,
     status: exports.bookingStatusSchema,
     data: zod_1.z.object({
         source: zod_1.z.string(),

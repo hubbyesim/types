@@ -56,9 +56,17 @@ export const baseModelAppSchema = z.object({
     updated_by: z.union([z.string(), z.null()])
 });
 
+// Define HubbyModel schemas explicitly
+export const hubbyModelFirestoreSchema = baseModelSchema;
+export const hubbyModelAppSchema = baseModelAppSchema;
+
 // Type for the base model
-export type HubbyModelFirestore = z.infer<typeof baseModelSchema>;
-export type HubbyModelApp = z.infer<typeof baseModelAppSchema>;
+export type HubbyModelFirestore = z.infer<typeof hubbyModelFirestoreSchema>;
+export type HubbyModelApp = z.infer<typeof hubbyModelAppSchema>;
+
+// For backwards compatibility
+export type HubbyModel = HubbyModelFirestore;
+export type HHubbyModel = HubbyModelApp;
 
 // Helper function to create document reference schemas
 export const createDocRefSchema = <T>(collectionPath: string) => {

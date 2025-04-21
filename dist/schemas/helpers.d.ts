@@ -49,8 +49,48 @@ export declare const baseModelAppSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
 }>;
-export type HubbyModelFirestore = z.infer<typeof baseModelSchema>;
-export type HubbyModelApp = z.infer<typeof baseModelAppSchema>;
+export declare const hubbyModelFirestoreSchema: z.ZodObject<{
+    id: z.ZodString;
+    created_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
+    updated_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
+    created_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>]>;
+    updated_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>]>;
+}, "strip", z.ZodTypeAny, {
+    id: string;
+    created_at: Timestamp;
+    updated_at: Timestamp;
+    created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+}, {
+    id: string;
+    created_at: Timestamp;
+    updated_at: Timestamp;
+    created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+}>;
+export declare const hubbyModelAppSchema: z.ZodObject<{
+    id: z.ZodString;
+    created_at: z.ZodDate;
+    updated_at: z.ZodDate;
+    created_by: z.ZodUnion<[z.ZodString, z.ZodNull]>;
+    updated_by: z.ZodUnion<[z.ZodString, z.ZodNull]>;
+}, "strip", z.ZodTypeAny, {
+    id: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    updated_by: string | null;
+}, {
+    id: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    updated_by: string | null;
+}>;
+export type HubbyModelFirestore = z.infer<typeof hubbyModelFirestoreSchema>;
+export type HubbyModelApp = z.infer<typeof hubbyModelAppSchema>;
+export type HubbyModel = HubbyModelFirestore;
+export type HHubbyModel = HubbyModelApp;
 export declare const createDocRefSchema: <T>(collectionPath: string) => {
     schema: z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
     collectionPath: string;

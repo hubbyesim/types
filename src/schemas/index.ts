@@ -23,7 +23,10 @@ export {
   BookingFirestore,
   BookingApp,
   BookingStatus,
-  CommunicationChannel
+  CommunicationChannel,
+  CommunicationOptions,
+  communicationChannelSchema,
+  communicationOptionsSchema
 } from './booking';
 
 // Export from partner schema
@@ -160,4 +163,12 @@ export {
   PromoCodeApiResponse,
   PartnerApiRequest,
   PartnerApiResponse
-} from './api'; 
+} from './api';
+
+// Export from constants
+export {
+  SUPPORTED_LOCALES,
+  SupportedLocales,
+  supportedLocalesSchema,
+  SupportedLocalesFromSchema
+} from '../constants';
