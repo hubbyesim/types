@@ -3,7 +3,7 @@
   "version": "1.6.0",
   "description": "The type definitions for the hubbyesim project",
   "scripts": {
-    "build": "tsc && cp -r src/*.d.ts dist/",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "types": "./dist/index.d.ts",
