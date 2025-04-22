@@ -77,7 +77,7 @@ export const pricingStrategyFirestoreSchema = z.object({
 
 export const pricingStrategyAppSchema = z.object({
     ...commonPricingStrategyFields,
-    default_price_list_id: z.string().nullable(),
+    default_price_list: z.string().nullable(),
     custom_prices: z.array(packagePriceAppSchema),
 });
 
@@ -316,8 +316,8 @@ export const partnerToFirestore = (partner: PartnerApp): PartnerFirestore => {
                     // Convert partner pricing strategy
                     const partnerStrategy = {
                         ...ps.partner,
-                        default_price_list: ps.partner.default_price_list_id
-                            ? toFirestore.ref<PriceListFirestore>(PRICE_LIST_COLLECTION, ps.partner.default_price_list_id)
+                        default_price_list: ps.partner.default_price_list
+                            ? toFirestore.ref<PriceListFirestore>(PRICE_LIST_COLLECTION, ps.partner.default_price_list)
                             : null,
                         custom_prices: ps.partner.custom_prices.map((price: PackagePriceApp) => ({
                             ...price,
@@ -328,8 +328,8 @@ export const partnerToFirestore = (partner: PartnerApp): PartnerFirestore => {
                     // Convert user pricing strategy
                     const userStrategy = {
                         ...ps.user,
-                        default_price_list: ps.user.default_price_list_id
-                            ? toFirestore.ref<PriceListFirestore>(PRICE_LIST_COLLECTION, ps.user.default_price_list_id)
+                        default_price_list: ps.user.default_price_list
+                            ? toFirestore.ref<PriceListFirestore>(PRICE_LIST_COLLECTION, ps.user.default_price_list)
                             : null,
                         custom_prices: ps.user.custom_prices.map((price: PackagePriceApp) => ({
                             ...price,
@@ -340,12 +340,12 @@ export const partnerToFirestore = (partner: PartnerApp): PartnerFirestore => {
                     const partnerStrategyObj: any = partnerStrategy;
                     const userStrategyObj: any = userStrategy;
 
-                    if ('default_price_list_id' in partnerStrategyObj) {
-                        delete partnerStrategyObj.default_price_list_id;
+                    if ('default_price_list' in partnerStrategyObj) {
+                        delete partnerStrategyObj.default_price_list;
                     }
 
-                    if ('default_price_list_id' in userStrategyObj) {
-                        delete userStrategyObj.default_price_list_id;
+                    if ('default_price_list' in userStrategyObj) {
+                        delete userStrategyObj.default_price_list;
                     }
 
                     // Set pricing strategies
@@ -382,7 +382,7 @@ export const partnerFromFirestore = (firestorePartner: PartnerFirestore): Partne
                     // Convert partner pricing strategy
                     const partnerStrategy = {
                         ...ps.partner,
-                        default_price_list_id: ps.partner.default_price_list
+                        default_price_list: ps.partner.default_price_list
                             ? fromFirestore.ref(ps.partner.default_price_list)
                             : null,
                         custom_prices: ps.partner.custom_prices.map(price => ({
@@ -394,7 +394,7 @@ export const partnerFromFirestore = (firestorePartner: PartnerFirestore): Partne
                     // Convert user pricing strategy
                     const userStrategy = {
                         ...ps.user,
-                        default_price_list_id: ps.user.default_price_list
+                        default_price_list: ps.user.default_price_list
                             ? fromFirestore.ref(ps.user.default_price_list)
                             : null,
                         custom_prices: ps.user.custom_prices.map(price => ({

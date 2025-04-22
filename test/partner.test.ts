@@ -139,7 +139,7 @@ const createSamplePartner = (): PartnerApp => ({
             partner: {
                 strategy: 'split',
                 modification_percentage: 10,
-                default_price_list_id: 'price_list_123',
+                default_price_list: 'price_list_123',
                 custom_prices: [{
                     destination: 'Global',
                     label: 'Premium Global',
@@ -151,7 +151,7 @@ const createSamplePartner = (): PartnerApp => ({
             user: {
                 strategy: 'bundle',
                 modification_percentage: 5,
-                default_price_list_id: 'price_list_456',
+                default_price_list: 'price_list_456',
                 custom_prices: []
             }
         }
@@ -206,7 +206,7 @@ export const testPartnerToFirestore = (partnerData: PartnerApp) => {
         
         // Verify pricing strategies references
         if (
-            partnerData.financial_properties?.pricing_strategies?.partner?.default_price_list_id && 
+            partnerData.financial_properties?.pricing_strategies?.partner?.default_price_list && 
             firestorePartner.financial_properties?.pricing_strategies?.partner?.default_price_list
         ) {
             const priceListRef = firestorePartner.financial_properties.pricing_strategies.partner.default_price_list;

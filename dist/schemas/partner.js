@@ -47,7 +47,7 @@ const commonPricingStrategyFields = {
     modification_percentage: zod_1.z.number()
 };
 exports.pricingStrategyFirestoreSchema = zod_1.z.object(Object.assign(Object.assign({}, commonPricingStrategyFields), { default_price_list: exports.priceListRefSchema.schema.nullable(), custom_prices: zod_1.z.array(exports.packagePriceFirestoreSchema) }));
-exports.pricingStrategyAppSchema = zod_1.z.object(Object.assign(Object.assign({}, commonPricingStrategyFields), { default_price_list_id: zod_1.z.string().nullable(), custom_prices: zod_1.z.array(exports.packagePriceAppSchema) }));
+exports.pricingStrategyAppSchema = zod_1.z.object(Object.assign(Object.assign({}, commonPricingStrategyFields), { default_price_list: zod_1.z.string().nullable(), custom_prices: zod_1.z.array(exports.packagePriceAppSchema) }));
 // Common financial properties fields
 const commonFinancialPropertiesFields = {
     administration_fee: zod_1.z.number().nullable(),
@@ -198,20 +198,20 @@ const partnerToFirestore = (partner) => {
                 if (fp.pricing_strategies) {
                     const ps = fp.pricing_strategies;
                     // Convert partner pricing strategy
-                    const partnerStrategy = Object.assign(Object.assign({}, ps.partner), { default_price_list: ps.partner.default_price_list_id
-                            ? helpers_1.toFirestore.ref(exports.PRICE_LIST_COLLECTION, ps.partner.default_price_list_id)
+                    const partnerStrategy = Object.assign(Object.assign({}, ps.partner), { default_price_list: ps.partner.default_price_list
+                            ? helpers_1.toFirestore.ref(exports.PRICE_LIST_COLLECTION, ps.partner.default_price_list)
                             : null, custom_prices: ps.partner.custom_prices.map((price) => (Object.assign(Object.assign({}, price), { package: helpers_1.toFirestore.ref(exports.PACKAGE_COLLECTION, price.package) }))) });
                     // Convert user pricing strategy
-                    const userStrategy = Object.assign(Object.assign({}, ps.user), { default_price_list: ps.user.default_price_list_id
-                            ? helpers_1.toFirestore.ref(exports.PRICE_LIST_COLLECTION, ps.user.default_price_list_id)
+                    const userStrategy = Object.assign(Object.assign({}, ps.user), { default_price_list: ps.user.default_price_list
+                            ? helpers_1.toFirestore.ref(exports.PRICE_LIST_COLLECTION, ps.user.default_price_list)
                             : null, custom_prices: ps.user.custom_prices.map((price) => (Object.assign(Object.assign({}, price), { package: helpers_1.toFirestore.ref(exports.PACKAGE_COLLECTION, price.package) }))) });
                     const partnerStrategyObj = partnerStrategy;
                     const userStrategyObj = userStrategy;
-                    if ('default_price_list_id' in partnerStrategyObj) {
-                        delete partnerStrategyObj.default_price_list_id;
+                    if ('default_price_list' in partnerStrategyObj) {
+                        delete partnerStrategyObj.default_price_list;
                     }
-                    if ('default_price_list_id' in userStrategyObj) {
-                        delete userStrategyObj.default_price_list_id;
+                    if ('default_price_list' in userStrategyObj) {
+                        delete userStrategyObj.default_price_list;
                     }
                     // Set pricing strategies
                     financialProps.pricing_strategies = {
@@ -239,11 +239,11 @@ const partnerFromFirestore = (firestorePartner) => {
                 if (fp.pricing_strategies) {
                     const ps = fp.pricing_strategies;
                     // Convert partner pricing strategy
-                    const partnerStrategy = Object.assign(Object.assign({}, ps.partner), { default_price_list_id: ps.partner.default_price_list
+                    const partnerStrategy = Object.assign(Object.assign({}, ps.partner), { default_price_list: ps.partner.default_price_list
                             ? helpers_1.fromFirestore.ref(ps.partner.default_price_list)
                             : null, custom_prices: ps.partner.custom_prices.map(price => (Object.assign(Object.assign({}, price), { package: helpers_1.fromFirestore.ref(price.package) }))) });
                     // Convert user pricing strategy
-                    const userStrategy = Object.assign(Object.assign({}, ps.user), { default_price_list_id: ps.user.default_price_list
+                    const userStrategy = Object.assign(Object.assign({}, ps.user), { default_price_list: ps.user.default_price_list
                             ? helpers_1.fromFirestore.ref(ps.user.default_price_list)
                             : null, custom_prices: ps.user.custom_prices.map(price => (Object.assign(Object.assign({}, price), { package: helpers_1.fromFirestore.ref(price.package) }))) });
                     const partnerStrategyObj = partnerStrategy;

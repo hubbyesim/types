@@ -150,7 +150,7 @@ export declare const pricingStrategyFirestoreSchema: z.ZodObject<{
     modification_percentage: number;
 }>;
 export declare const pricingStrategyAppSchema: z.ZodObject<{
-    default_price_list_id: z.ZodNullable<z.ZodString>;
+    default_price_list: z.ZodNullable<z.ZodString>;
     custom_prices: z.ZodArray<z.ZodObject<{
         package: z.ZodString;
         destination: z.ZodString;
@@ -173,6 +173,7 @@ export declare const pricingStrategyAppSchema: z.ZodObject<{
     strategy: z.ZodEnum<["split", "bundle"]>;
     modification_percentage: z.ZodNumber;
 }, "strip", z.ZodTypeAny, {
+    default_price_list: string | null;
     custom_prices: {
         type: "data-limit" | "time-limit";
         label: string;
@@ -182,8 +183,8 @@ export declare const pricingStrategyAppSchema: z.ZodObject<{
     }[];
     strategy: "split" | "bundle";
     modification_percentage: number;
-    default_price_list_id: string | null;
 }, {
+    default_price_list: string | null;
     custom_prices: {
         type: "data-limit" | "time-limit";
         label: string;
@@ -193,7 +194,6 @@ export declare const pricingStrategyAppSchema: z.ZodObject<{
     }[];
     strategy: "split" | "bundle";
     modification_percentage: number;
-    default_price_list_id: string | null;
 }>;
 export declare const financialPropertiesFirestoreSchema: z.ZodNullable<z.ZodObject<{
     pricing_strategies: z.ZodNullable<z.ZodObject<{
@@ -419,7 +419,7 @@ export declare const financialPropertiesFirestoreSchema: z.ZodNullable<z.ZodObje
 export declare const financialPropertiesAppSchema: z.ZodNullable<z.ZodObject<{
     pricing_strategies: z.ZodNullable<z.ZodObject<{
         partner: z.ZodObject<{
-            default_price_list_id: z.ZodNullable<z.ZodString>;
+            default_price_list: z.ZodNullable<z.ZodString>;
             custom_prices: z.ZodArray<z.ZodObject<{
                 package: z.ZodString;
                 destination: z.ZodString;
@@ -442,6 +442,7 @@ export declare const financialPropertiesAppSchema: z.ZodNullable<z.ZodObject<{
             strategy: z.ZodEnum<["split", "bundle"]>;
             modification_percentage: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
+            default_price_list: string | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
@@ -451,8 +452,8 @@ export declare const financialPropertiesAppSchema: z.ZodNullable<z.ZodObject<{
             }[];
             strategy: "split" | "bundle";
             modification_percentage: number;
-            default_price_list_id: string | null;
         }, {
+            default_price_list: string | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
@@ -462,10 +463,9 @@ export declare const financialPropertiesAppSchema: z.ZodNullable<z.ZodObject<{
             }[];
             strategy: "split" | "bundle";
             modification_percentage: number;
-            default_price_list_id: string | null;
         }>;
         user: z.ZodObject<{
-            default_price_list_id: z.ZodNullable<z.ZodString>;
+            default_price_list: z.ZodNullable<z.ZodString>;
             custom_prices: z.ZodArray<z.ZodObject<{
                 package: z.ZodString;
                 destination: z.ZodString;
@@ -488,6 +488,7 @@ export declare const financialPropertiesAppSchema: z.ZodNullable<z.ZodObject<{
             strategy: z.ZodEnum<["split", "bundle"]>;
             modification_percentage: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
+            default_price_list: string | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
@@ -497,8 +498,8 @@ export declare const financialPropertiesAppSchema: z.ZodNullable<z.ZodObject<{
             }[];
             strategy: "split" | "bundle";
             modification_percentage: number;
-            default_price_list_id: string | null;
         }, {
+            default_price_list: string | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
@@ -508,10 +509,10 @@ export declare const financialPropertiesAppSchema: z.ZodNullable<z.ZodObject<{
             }[];
             strategy: "split" | "bundle";
             modification_percentage: number;
-            default_price_list_id: string | null;
         }>;
     }, "strip", z.ZodTypeAny, {
         user: {
+            default_price_list: string | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
@@ -521,9 +522,9 @@ export declare const financialPropertiesAppSchema: z.ZodNullable<z.ZodObject<{
             }[];
             strategy: "split" | "bundle";
             modification_percentage: number;
-            default_price_list_id: string | null;
         };
         partner: {
+            default_price_list: string | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
@@ -533,10 +534,10 @@ export declare const financialPropertiesAppSchema: z.ZodNullable<z.ZodObject<{
             }[];
             strategy: "split" | "bundle";
             modification_percentage: number;
-            default_price_list_id: string | null;
         };
     }, {
         user: {
+            default_price_list: string | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
@@ -546,9 +547,9 @@ export declare const financialPropertiesAppSchema: z.ZodNullable<z.ZodObject<{
             }[];
             strategy: "split" | "bundle";
             modification_percentage: number;
-            default_price_list_id: string | null;
         };
         partner: {
+            default_price_list: string | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
@@ -558,7 +559,6 @@ export declare const financialPropertiesAppSchema: z.ZodNullable<z.ZodObject<{
             }[];
             strategy: "split" | "bundle";
             modification_percentage: number;
-            default_price_list_id: string | null;
         };
     }>>;
     administration_fee: z.ZodNullable<z.ZodNumber>;
@@ -571,6 +571,7 @@ export declare const financialPropertiesAppSchema: z.ZodNullable<z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     pricing_strategies: {
         user: {
+            default_price_list: string | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
@@ -580,9 +581,9 @@ export declare const financialPropertiesAppSchema: z.ZodNullable<z.ZodObject<{
             }[];
             strategy: "split" | "bundle";
             modification_percentage: number;
-            default_price_list_id: string | null;
         };
         partner: {
+            default_price_list: string | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
@@ -592,7 +593,6 @@ export declare const financialPropertiesAppSchema: z.ZodNullable<z.ZodObject<{
             }[];
             strategy: "split" | "bundle";
             modification_percentage: number;
-            default_price_list_id: string | null;
         };
     } | null;
     administration_fee: number | null;
@@ -605,6 +605,7 @@ export declare const financialPropertiesAppSchema: z.ZodNullable<z.ZodObject<{
 }, {
     pricing_strategies: {
         user: {
+            default_price_list: string | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
@@ -614,9 +615,9 @@ export declare const financialPropertiesAppSchema: z.ZodNullable<z.ZodObject<{
             }[];
             strategy: "split" | "bundle";
             modification_percentage: number;
-            default_price_list_id: string | null;
         };
         partner: {
+            default_price_list: string | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
@@ -626,7 +627,6 @@ export declare const financialPropertiesAppSchema: z.ZodNullable<z.ZodObject<{
             }[];
             strategy: "split" | "bundle";
             modification_percentage: number;
-            default_price_list_id: string | null;
         };
     } | null;
     administration_fee: number | null;
@@ -2103,7 +2103,7 @@ export declare const partnerAppSchema: z.ZodObject<{
     financial_properties: z.ZodNullable<z.ZodObject<{
         pricing_strategies: z.ZodNullable<z.ZodObject<{
             partner: z.ZodObject<{
-                default_price_list_id: z.ZodNullable<z.ZodString>;
+                default_price_list: z.ZodNullable<z.ZodString>;
                 custom_prices: z.ZodArray<z.ZodObject<{
                     package: z.ZodString;
                     destination: z.ZodString;
@@ -2126,6 +2126,7 @@ export declare const partnerAppSchema: z.ZodObject<{
                 strategy: z.ZodEnum<["split", "bundle"]>;
                 modification_percentage: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
+                default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
@@ -2135,8 +2136,8 @@ export declare const partnerAppSchema: z.ZodObject<{
                 }[];
                 strategy: "split" | "bundle";
                 modification_percentage: number;
-                default_price_list_id: string | null;
             }, {
+                default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
@@ -2146,10 +2147,9 @@ export declare const partnerAppSchema: z.ZodObject<{
                 }[];
                 strategy: "split" | "bundle";
                 modification_percentage: number;
-                default_price_list_id: string | null;
             }>;
             user: z.ZodObject<{
-                default_price_list_id: z.ZodNullable<z.ZodString>;
+                default_price_list: z.ZodNullable<z.ZodString>;
                 custom_prices: z.ZodArray<z.ZodObject<{
                     package: z.ZodString;
                     destination: z.ZodString;
@@ -2172,6 +2172,7 @@ export declare const partnerAppSchema: z.ZodObject<{
                 strategy: z.ZodEnum<["split", "bundle"]>;
                 modification_percentage: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
+                default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
@@ -2181,8 +2182,8 @@ export declare const partnerAppSchema: z.ZodObject<{
                 }[];
                 strategy: "split" | "bundle";
                 modification_percentage: number;
-                default_price_list_id: string | null;
             }, {
+                default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
@@ -2192,10 +2193,10 @@ export declare const partnerAppSchema: z.ZodObject<{
                 }[];
                 strategy: "split" | "bundle";
                 modification_percentage: number;
-                default_price_list_id: string | null;
             }>;
         }, "strip", z.ZodTypeAny, {
             user: {
+                default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
@@ -2205,9 +2206,9 @@ export declare const partnerAppSchema: z.ZodObject<{
                 }[];
                 strategy: "split" | "bundle";
                 modification_percentage: number;
-                default_price_list_id: string | null;
             };
             partner: {
+                default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
@@ -2217,10 +2218,10 @@ export declare const partnerAppSchema: z.ZodObject<{
                 }[];
                 strategy: "split" | "bundle";
                 modification_percentage: number;
-                default_price_list_id: string | null;
             };
         }, {
             user: {
+                default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
@@ -2230,9 +2231,9 @@ export declare const partnerAppSchema: z.ZodObject<{
                 }[];
                 strategy: "split" | "bundle";
                 modification_percentage: number;
-                default_price_list_id: string | null;
             };
             partner: {
+                default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
@@ -2242,7 +2243,6 @@ export declare const partnerAppSchema: z.ZodObject<{
                 }[];
                 strategy: "split" | "bundle";
                 modification_percentage: number;
-                default_price_list_id: string | null;
             };
         }>>;
         administration_fee: z.ZodNullable<z.ZodNumber>;
@@ -2255,6 +2255,7 @@ export declare const partnerAppSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         pricing_strategies: {
             user: {
+                default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
@@ -2264,9 +2265,9 @@ export declare const partnerAppSchema: z.ZodObject<{
                 }[];
                 strategy: "split" | "bundle";
                 modification_percentage: number;
-                default_price_list_id: string | null;
             };
             partner: {
+                default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
@@ -2276,7 +2277,6 @@ export declare const partnerAppSchema: z.ZodObject<{
                 }[];
                 strategy: "split" | "bundle";
                 modification_percentage: number;
-                default_price_list_id: string | null;
             };
         } | null;
         administration_fee: number | null;
@@ -2289,6 +2289,7 @@ export declare const partnerAppSchema: z.ZodObject<{
     }, {
         pricing_strategies: {
             user: {
+                default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
@@ -2298,9 +2299,9 @@ export declare const partnerAppSchema: z.ZodObject<{
                 }[];
                 strategy: "split" | "bundle";
                 modification_percentage: number;
-                default_price_list_id: string | null;
             };
             partner: {
+                default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
@@ -2310,7 +2311,6 @@ export declare const partnerAppSchema: z.ZodObject<{
                 }[];
                 strategy: "split" | "bundle";
                 modification_percentage: number;
-                default_price_list_id: string | null;
             };
         } | null;
         administration_fee: number | null;
@@ -2757,6 +2757,7 @@ export declare const partnerAppSchema: z.ZodObject<{
     financial_properties: {
         pricing_strategies: {
             user: {
+                default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
@@ -2766,9 +2767,9 @@ export declare const partnerAppSchema: z.ZodObject<{
                 }[];
                 strategy: "split" | "bundle";
                 modification_percentage: number;
-                default_price_list_id: string | null;
             };
             partner: {
+                default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
@@ -2778,7 +2779,6 @@ export declare const partnerAppSchema: z.ZodObject<{
                 }[];
                 strategy: "split" | "bundle";
                 modification_percentage: number;
-                default_price_list_id: string | null;
             };
         } | null;
         administration_fee: number | null;
@@ -2895,6 +2895,7 @@ export declare const partnerAppSchema: z.ZodObject<{
     financial_properties: {
         pricing_strategies: {
             user: {
+                default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
@@ -2904,9 +2905,9 @@ export declare const partnerAppSchema: z.ZodObject<{
                 }[];
                 strategy: "split" | "bundle";
                 modification_percentage: number;
-                default_price_list_id: string | null;
             };
             partner: {
+                default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
@@ -2916,7 +2917,6 @@ export declare const partnerAppSchema: z.ZodObject<{
                 }[];
                 strategy: "split" | "bundle";
                 modification_percentage: number;
-                default_price_list_id: string | null;
             };
         } | null;
         administration_fee: number | null;
