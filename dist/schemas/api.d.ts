@@ -1,33 +1,33 @@
 import { z } from 'zod';
 export declare const packageSpecificationSchema: z.ZodObject<{
-    destination: z.ZodOptional<z.ZodString>;
-    size: z.ZodOptional<z.ZodString>;
+    destination: z.ZodString;
+    size: z.ZodString;
     package_id: z.ZodOptional<z.ZodString>;
     iata_code: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    size?: string | undefined;
-    destination?: string | undefined;
+    size: string;
+    destination: string;
     package_id?: string | undefined;
     iata_code?: string | undefined;
 }, {
-    size?: string | undefined;
-    destination?: string | undefined;
+    size: string;
+    destination: string;
     package_id?: string | undefined;
     iata_code?: string | undefined;
 }>;
 export declare const packageSpecificationsSchema: z.ZodArray<z.ZodObject<{
-    destination: z.ZodOptional<z.ZodString>;
-    size: z.ZodOptional<z.ZodString>;
+    destination: z.ZodString;
+    size: z.ZodString;
     package_id: z.ZodOptional<z.ZodString>;
     iata_code: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    size?: string | undefined;
-    destination?: string | undefined;
+    size: string;
+    destination: string;
     package_id?: string | undefined;
     iata_code?: string | undefined;
 }, {
-    size?: string | undefined;
-    destination?: string | undefined;
+    size: string;
+    destination: string;
     package_id?: string | undefined;
     iata_code?: string | undefined;
 }>, "many">;
@@ -223,18 +223,18 @@ export declare const bookingApiRequestSchema: z.ZodObject<{
     is_pseudonymized: z.ZodBoolean;
     date_of_birth: z.ZodOptional<z.ZodDate>;
     package_specifications: z.ZodArray<z.ZodObject<{
-        destination: z.ZodOptional<z.ZodString>;
-        size: z.ZodOptional<z.ZodString>;
+        destination: z.ZodString;
+        size: z.ZodString;
         package_id: z.ZodOptional<z.ZodString>;
         iata_code: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        size?: string | undefined;
-        destination?: string | undefined;
+        size: string;
+        destination: string;
         package_id?: string | undefined;
         iata_code?: string | undefined;
     }, {
-        size?: string | undefined;
-        destination?: string | undefined;
+        size: string;
+        destination: string;
         package_id?: string | undefined;
         iata_code?: string | undefined;
     }>, "many">;
@@ -259,8 +259,8 @@ export declare const bookingApiRequestSchema: z.ZodObject<{
     is_processed_for_esim_restoration: boolean;
     is_pseudonymized: boolean;
     package_specifications: {
-        size?: string | undefined;
-        destination?: string | undefined;
+        size: string;
+        destination: string;
         package_id?: string | undefined;
         iata_code?: string | undefined;
     }[];
@@ -296,8 +296,8 @@ export declare const bookingApiRequestSchema: z.ZodObject<{
     is_processed_for_esim_restoration: boolean;
     is_pseudonymized: boolean;
     package_specifications: {
-        size?: string | undefined;
-        destination?: string | undefined;
+        size: string;
+        destination: string;
         package_id?: string | undefined;
         iata_code?: string | undefined;
     }[];

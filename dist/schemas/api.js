@@ -4,8 +4,8 @@ exports.partnerApiResponseSchema = exports.partnerApiRequestSchema = exports.boo
 const zod_1 = require("zod");
 // Schema for package specification
 exports.packageSpecificationSchema = zod_1.z.object({
-    destination: zod_1.z.string().optional(),
-    size: zod_1.z.string().optional(),
+    destination: zod_1.z.string(),
+    size: zod_1.z.string(),
     package_id: zod_1.z.string().optional(),
     iata_code: zod_1.z.string().optional()
 });

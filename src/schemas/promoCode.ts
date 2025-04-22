@@ -20,18 +20,13 @@ import {
     BOOKING_COLLECTION
 } from './utils/collections';
 import { createReferenceSchemas } from './utils/schemas';
+import { packageSpecificationSchema } from './api';
 
 // Define document reference schemas using the utility function
 const partnerRef = createReferenceSchemas(PARTNER_COLLECTION, true);
 const countryRef = createReferenceSchemas(COUNTRY_COLLECTION, true);
 const packageRef = createReferenceSchemas(PACKAGE_COLLECTION, true);
 const bookingRef = createReferenceSchemas(BOOKING_COLLECTION, true);
-
-// Package specification schema
-export const packageSpecificationSchema = z.object({
-    destination: z.string(),
-    size: z.string()
-});
 
 // Firestore schema for PromoCode
 export const promoCodeFirestoreSchema = baseModelSchema.extend({

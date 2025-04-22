@@ -1,21 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.promoCodeFromFirestore = exports.promoCodeToFirestore = exports.promoCodeAppSchema = exports.promoCodeFirestoreSchema = exports.packageSpecificationSchema = void 0;
+exports.promoCodeFromFirestore = exports.promoCodeToFirestore = exports.promoCodeAppSchema = exports.promoCodeFirestoreSchema = void 0;
 const zod_1 = require("zod");
 const helpers_1 = require("./helpers");
 const utils_1 = require("./utils");
 const collections_1 = require("./utils/collections");
 const schemas_1 = require("./utils/schemas");
+const api_1 = require("./api");
 // Define document reference schemas using the utility function
 const partnerRef = (0, schemas_1.createReferenceSchemas)(collections_1.PARTNER_COLLECTION, true);
 const countryRef = (0, schemas_1.createReferenceSchemas)(collections_1.COUNTRY_COLLECTION, true);
 const packageRef = (0, schemas_1.createReferenceSchemas)(collections_1.PACKAGE_COLLECTION, true);
 const bookingRef = (0, schemas_1.createReferenceSchemas)(collections_1.BOOKING_COLLECTION, true);
-// Package specification schema
-exports.packageSpecificationSchema = zod_1.z.object({
-    destination: zod_1.z.string(),
-    size: zod_1.z.string()
-});
 // Firestore schema for PromoCode
 exports.promoCodeFirestoreSchema = helpers_1.baseModelSchema.extend({
     external_id: zod_1.z.string(),
@@ -25,7 +21,7 @@ exports.promoCodeFirestoreSchema = helpers_1.baseModelSchema.extend({
     type: zod_1.z.enum(['full-discount', 'partial-discount', 'booking', 'traveler']).nullable().or(zod_1.z.string()),
     usage: zod_1.z.array(zod_1.z.string()),
     uuid_usage: zod_1.z.array(zod_1.z.string()),
-    package_specification: exports.packageSpecificationSchema.optional(),
+    package_specification: api_1.packageSpecificationSchema.optional(),
     partner: partnerRef.firestore,
     valid_from: zod_1.z.union([zod_1.z.string(), zod_1.z.date(), helpers_1.timestampSchema]),
     valid_to: zod_1.z.union([zod_1.z.string(), zod_1.z.date(), helpers_1.timestampSchema]),
@@ -48,7 +44,7 @@ exports.promoCodeAppSchema = helpers_1.baseModelAppSchema.extend({
     type: zod_1.z.enum(['full-discount', 'partial-discount', 'booking', 'traveler']).nullable().or(zod_1.z.string()),
     usage: zod_1.z.array(zod_1.z.string()),
     uuid_usage: zod_1.z.array(zod_1.z.string()),
-    package_specification: exports.packageSpecificationSchema.optional(),
+    package_specification: api_1.packageSpecificationSchema.optional(),
     partner: partnerRef.app,
     valid_from: zod_1.z.date(),
     valid_to: zod_1.z.date(),

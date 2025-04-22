@@ -1,14 +1,4 @@
 import { z } from 'zod';
-export declare const packageSpecificationSchema: z.ZodObject<{
-    destination: z.ZodString;
-    size: z.ZodString;
-}, "strip", z.ZodTypeAny, {
-    size: string;
-    destination: string;
-}, {
-    size: string;
-    destination: string;
-}>;
 export declare const promoCodeFirestoreSchema: z.ZodObject<{
     id: z.ZodString;
     created_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
@@ -26,12 +16,18 @@ export declare const promoCodeFirestoreSchema: z.ZodObject<{
     package_specification: z.ZodOptional<z.ZodObject<{
         destination: z.ZodString;
         size: z.ZodString;
+        package_id: z.ZodOptional<z.ZodString>;
+        iata_code: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         size: string;
         destination: string;
+        package_id?: string | undefined;
+        iata_code?: string | undefined;
     }, {
         size: string;
         destination: string;
+        package_id?: string | undefined;
+        iata_code?: string | undefined;
     }>>;
     partner: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>> | z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
     valid_from: z.ZodUnion<[z.ZodString, z.ZodDate, z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>]>;
@@ -68,6 +64,8 @@ export declare const promoCodeFirestoreSchema: z.ZodObject<{
     package_specification?: {
         size: string;
         destination: string;
+        package_id?: string | undefined;
+        iata_code?: string | undefined;
     } | undefined;
     discount?: number | undefined;
     max_bytes?: number | undefined;
@@ -96,6 +94,8 @@ export declare const promoCodeFirestoreSchema: z.ZodObject<{
     package_specification?: {
         size: string;
         destination: string;
+        package_id?: string | undefined;
+        iata_code?: string | undefined;
     } | undefined;
     discount?: number | undefined;
     max_bytes?: number | undefined;
@@ -118,12 +118,18 @@ export declare const promoCodeAppSchema: z.ZodObject<{
     package_specification: z.ZodOptional<z.ZodObject<{
         destination: z.ZodString;
         size: z.ZodString;
+        package_id: z.ZodOptional<z.ZodString>;
+        iata_code: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         size: string;
         destination: string;
+        package_id?: string | undefined;
+        iata_code?: string | undefined;
     }, {
         size: string;
         destination: string;
+        package_id?: string | undefined;
+        iata_code?: string | undefined;
     }>>;
     partner: z.ZodString | z.ZodNullable<z.ZodString>;
     valid_from: z.ZodDate;
@@ -160,6 +166,8 @@ export declare const promoCodeAppSchema: z.ZodObject<{
     package_specification?: {
         size: string;
         destination: string;
+        package_id?: string | undefined;
+        iata_code?: string | undefined;
     } | undefined;
     discount?: number | undefined;
     max_bytes?: number | undefined;
@@ -188,6 +196,8 @@ export declare const promoCodeAppSchema: z.ZodObject<{
     package_specification?: {
         size: string;
         destination: string;
+        package_id?: string | undefined;
+        iata_code?: string | undefined;
     } | undefined;
     discount?: number | undefined;
     max_bytes?: number | undefined;
