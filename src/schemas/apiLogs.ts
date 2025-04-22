@@ -4,6 +4,11 @@ import {
     fromFirestore,
     toFirestore
 } from './helpers';
+import {
+    GenericDateFieldMapping,
+    genericToFirestore,
+    genericFromFirestore
+} from './utils';
 
 // Firestore schema for ApiLog
 export const apiLogFirestoreSchema = z.object({
@@ -37,35 +42,26 @@ export const apiLogAppSchema = z.object({
 export type ApiLogFirestore = z.infer<typeof apiLogFirestoreSchema>;
 export type ApiLogApp = z.infer<typeof apiLogAppSchema>;
 
+// Define date field mappings
+const dateFieldMappings: GenericDateFieldMapping<ApiLogApp, ApiLogFirestore>[] = [
+    { field: 'timestamp' }
+];
+
 // Conversion functions
 export const apiLogToFirestore = (apiLog: ApiLogApp): ApiLogFirestore => {
-    return {
-        id: apiLog.id,
-        method: apiLog.method,
-        user_id: apiLog.user_id,
-        path: apiLog.path,
-        resource_type: apiLog.resource_type,
-        resource_id: apiLog.resource_id,
-        partner_id: apiLog.partner_id,
-        payload: apiLog.payload,
-        timestamp: toFirestore.date(apiLog.timestamp),
-        status_code: apiLog.status_code
-    };
+    return genericToFirestore({
+        appObject: apiLog,
+        refFieldMappings: [],
+        dateFieldMappings
+    });
 };
 
 export const apiLogFromFirestore = (firestoreApiLog: ApiLogFirestore): ApiLogApp => {
-    return {
-        id: firestoreApiLog.id,
-        method: firestoreApiLog.method,
-        user_id: firestoreApiLog.user_id,
-        path: firestoreApiLog.path,
-        resource_type: firestoreApiLog.resource_type,
-        resource_id: firestoreApiLog.resource_id,
-        partner_id: firestoreApiLog.partner_id,
-        payload: firestoreApiLog.payload,
-        timestamp: fromFirestore.date(firestoreApiLog.timestamp),
-        status_code: firestoreApiLog.status_code
-    };
+    return genericFromFirestore({
+        firestoreObject: firestoreApiLog,
+        refFieldMappings: [],
+        dateFieldMappings
+    });
 };
 
 // For backwards compatibility

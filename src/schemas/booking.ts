@@ -8,14 +8,20 @@ import {
     fromFirestore,
     toFirestore
 } from './helpers';
+import {
+    GenericRefFieldMapping,
+    GenericDateFieldMapping,
+    genericToFirestore,
+    genericFromFirestore
+} from './utils';
+import {
+    PARTNER_COLLECTION,
+    PROMO_CODE_COLLECTION,
+    USER_COLLECTION,
+    ESIM_COLLECTION
+} from './utils/collections';
 import { SupportedLocales, SUPPORTED_LOCALES, supportedLocalesSchema } from '../constants';
 import { DocumentReference, DocumentData, Timestamp } from 'firebase/firestore';
-
-// Define collection paths
-export const PARTNER_COLLECTION = 'partners';
-export const PROMO_CODE_COLLECTION = 'promoCodes';
-export const USER_COLLECTION = 'users';
-export const ESIM_COLLECTION = 'esims';
 
 // Define document reference schemas for related collections
 export const partnerRefSchema = createDocRefSchema<any>(PARTNER_COLLECTION);
@@ -104,116 +110,33 @@ export type BookingApp = z.infer<typeof bookingAppSchema>;
 export type CommunicationOptions = z.infer<typeof communicationOptionsSchema>;
 
 // Field mapping types for conversions
-interface DateFieldMapping {
-    field: 'return_date' | 'departure_date';
-    nullable?: boolean;
-}
-
-interface RefFieldMapping {
-    app: keyof BookingApp;
-    firestore: keyof BookingFirestore;
-    collection: string;
-    isArray?: boolean;
-    nullable?: boolean;
-}
-
-const refFieldMappings: RefFieldMapping[] = [
+const refFieldMappings: GenericRefFieldMapping<BookingApp, BookingFirestore>[] = [
     { app: 'partner', firestore: 'partner', collection: PARTNER_COLLECTION },
     { app: 'promo_codes', firestore: 'promo_codes', collection: PROMO_CODE_COLLECTION, isArray: true },
     { app: 'users', firestore: 'users', collection: USER_COLLECTION, isArray: true, nullable: true },
     { app: 'esims', firestore: 'esims', collection: ESIM_COLLECTION, isArray: true, nullable: true }
 ];
 
-const dateFieldMappings: DateFieldMapping[] = [
+const dateFieldMappings: GenericDateFieldMapping<BookingApp, BookingFirestore>[] = [
     { field: 'return_date', nullable: true },
     { field: 'departure_date' }
 ];
 
 // Conversion functions
 export const bookingToFirestore = (booking: BookingApp): BookingFirestore => {
-    // Create base object with common fields
-    const result = { ...booking } as unknown as Record<string, any>;
-
-    // Handle base model fields
-    result.created_at = toFirestore.date(booking.created_at);
-    result.updated_at = toFirestore.date(booking.updated_at);
-    result.created_by = typeof booking.created_by === 'string' ? booking.created_by : null;
-    result.updated_by = typeof booking.updated_by === 'string' ? booking.updated_by : null;
-
-    // Convert date fields
-    dateFieldMappings.forEach(({ field, nullable }) => {
-        const value = booking[field];
-        if (nullable && value === null) {
-            result[field] = null;
-        } else if (value instanceof Date) {
-            result[field] = toFirestore.date(value);
-        }
+    return genericToFirestore({
+        appObject: booking,
+        refFieldMappings,
+        dateFieldMappings
     });
-
-    // Convert reference fields
-    refFieldMappings.forEach(({ app, firestore, collection, isArray, nullable }) => {
-        const value = booking[app];
-
-        if (isArray) {
-            if (nullable && value === null) {
-                result[firestore] = null;
-            } else if (Array.isArray(value)) {
-                result[firestore] = value.map(id => toFirestore.ref<any>(collection, id));
-            }
-        } else if (typeof value === 'string') {
-            result[firestore] = toFirestore.ref<any>(collection, value);
-        }
-
-        // Delete app field to avoid duplication
-        delete result[app];
-    });
-
-    return result as unknown as BookingFirestore;
 };
 
 export const bookingFromFirestore = (firestoreBooking: BookingFirestore): BookingApp => {
-    // Create base object with common fields
-    const result = { ...firestoreBooking } as unknown as Record<string, any>;
-
-    // Handle base model fields
-    result.created_at = fromFirestore.date(firestoreBooking.created_at);
-    result.updated_at = fromFirestore.date(firestoreBooking.updated_at);
-    result.created_by = typeof firestoreBooking.created_by === 'string'
-        ? firestoreBooking.created_by
-        : firestoreBooking.created_by ? fromFirestore.ref(firestoreBooking.created_by) : null;
-    result.updated_by = typeof firestoreBooking.updated_by === 'string'
-        ? firestoreBooking.updated_by
-        : firestoreBooking.updated_by ? fromFirestore.ref(firestoreBooking.updated_by) : null;
-
-    // Convert date fields
-    dateFieldMappings.forEach(({ field, nullable }) => {
-        const value = firestoreBooking[field];
-        if (nullable && value === null) {
-            result[field] = null;
-        } else if (value instanceof Timestamp) {
-            result[field] = fromFirestore.date(value);
-        }
+    return genericFromFirestore({
+        firestoreObject: firestoreBooking,
+        refFieldMappings,
+        dateFieldMappings
     });
-
-    // Convert reference fields
-    refFieldMappings.forEach(({ app, firestore, isArray, nullable }) => {
-        const value = firestoreBooking[firestore];
-
-        if (isArray) {
-            if (nullable && value === null) {
-                result[app] = null;
-            } else if (Array.isArray(value)) {
-                result[app] = value.map(ref => fromFirestore.ref(ref as any));
-            }
-        } else if (value) {
-            result[app] = fromFirestore.ref(value as any);
-        }
-
-        // Delete firestore field to avoid duplication
-        delete result[firestore];
-    });
-
-    return result as unknown as BookingApp;
 };
 
 // For backwards compatibility

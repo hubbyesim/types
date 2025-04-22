@@ -5,8 +5,13 @@ import {
     fromFirestore,
     toFirestore
 } from './helpers';
+import {
+    GenericDateFieldMapping,
+    genericToFirestore,
+    genericFromFirestore
+} from './utils';
 
-// Firestore schema for Payment - this is simple as it doesn't contain Firestore specific types
+// Firestore schema for Payment
 export const paymentFirestoreSchema = baseModelSchema.extend({
     amount: z.number(),
     customer: z.string(),
@@ -32,43 +37,26 @@ export const paymentAppSchema = baseModelAppSchema.extend({
 export type PaymentFirestore = z.infer<typeof paymentFirestoreSchema>;
 export type PaymentApp = z.infer<typeof paymentAppSchema>;
 
-// Conversion functions (simplified since no special conversions needed)
+// Define date field mappings
+const dateFieldMappings: GenericDateFieldMapping<PaymentApp, PaymentFirestore>[] = [
+    { field: 'date' }
+];
+
+// Conversion functions using generic utilities
 export const paymentToFirestore = (payment: PaymentApp): PaymentFirestore => {
-    return {
-        id: payment.id,
-        created_at: toFirestore.date(payment.created_at),
-        updated_at: toFirestore.date(payment.updated_at),
-        created_by: typeof payment.created_by === 'string' ? payment.created_by : null,
-        updated_by: typeof payment.updated_by === 'string' ? payment.updated_by : null,
-        amount: payment.amount,
-        customer: payment.customer,
-        date: payment.date,
-        iccid: payment.iccid,
-        package: payment.package,
-        promo: payment.promo,
-        topup: payment.topup
-    };
+    return genericToFirestore({
+        appObject: payment,
+        refFieldMappings: [],
+        dateFieldMappings
+    });
 };
 
 export const paymentFromFirestore = (firestorePayment: PaymentFirestore): PaymentApp => {
-    return {
-        id: firestorePayment.id,
-        created_at: fromFirestore.date(firestorePayment.created_at),
-        updated_at: fromFirestore.date(firestorePayment.updated_at),
-        created_by: typeof firestorePayment.created_by === 'string'
-            ? firestorePayment.created_by
-            : firestorePayment.created_by ? fromFirestore.ref(firestorePayment.created_by) : null,
-        updated_by: typeof firestorePayment.updated_by === 'string'
-            ? firestorePayment.updated_by
-            : firestorePayment.updated_by ? fromFirestore.ref(firestorePayment.updated_by) : null,
-        amount: firestorePayment.amount,
-        customer: firestorePayment.customer,
-        date: firestorePayment.date,
-        iccid: firestorePayment.iccid,
-        package: firestorePayment.package,
-        promo: firestorePayment.promo,
-        topup: firestorePayment.topup
-    };
+    return genericFromFirestore({
+        firestoreObject: firestorePayment,
+        refFieldMappings: [],
+        dateFieldMappings
+    });
 };
 
 // For backwards compatibility

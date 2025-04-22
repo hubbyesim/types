@@ -5,6 +5,10 @@ import {
     fromFirestore,
     toFirestore
 } from './helpers';
+import {
+    genericToFirestore,
+    genericFromFirestore
+} from './utils';
 
 // Country Firestore schema - no transformations needed as it doesn't 
 // contain Firestore-specific types
@@ -33,9 +37,22 @@ export const countryAppSchema = countryFirestoreSchema;
 export type CountryFirestore = z.infer<typeof countryFirestoreSchema>;
 export type CountryApp = z.infer<typeof countryAppSchema>;
 
-// Conversion functions (these are identity functions since no transformation is needed)
-export const countryToFirestore = (country: CountryApp): CountryFirestore => country;
-export const countryFromFirestore = (firestoreCountry: CountryFirestore): CountryApp => firestoreCountry;
+// Conversion functions using generic utilities for consistency
+export const countryToFirestore = (country: CountryApp): CountryFirestore => {
+    return genericToFirestore({
+        appObject: country,
+        refFieldMappings: [],
+        dateFieldMappings: []
+    });
+};
+
+export const countryFromFirestore = (firestoreCountry: CountryFirestore): CountryApp => {
+    return genericFromFirestore({
+        firestoreObject: firestoreCountry,
+        refFieldMappings: [],
+        dateFieldMappings: []
+    });
+};
 
 // For backwards compatibility
 export type Country = CountryFirestore;

@@ -6,6 +6,11 @@ import {
     fromFirestore,
     toFirestore
 } from './helpers';
+import {
+    GenericDateFieldMapping,
+    genericToFirestore,
+    genericFromFirestore
+} from './utils';
 
 // Firestore schema for Message
 export const messageFirestoreSchema = z.object({
@@ -37,27 +42,27 @@ export type MessageApp = z.infer<typeof messageAppSchema>;
 export type SentMessagesFirestore = z.infer<typeof sentMessagesFirestoreSchema>;
 export type SentMessagesApp = z.infer<typeof sentMessagesAppSchema>;
 
+// Define date field mappings
+const dateFieldMappings: GenericDateFieldMapping<MessageApp, MessageFirestore>[] = [
+    { field: 'created_at' },
+    { field: 'updated_at' }
+];
+
 // Conversion functions
 export const messageToFirestore = (message: MessageApp): MessageFirestore => {
-    return {
-        id: message.id,
-        key: message.key,
-        method: message.method,
-        status: message.status,
-        created_at: toFirestore.date(message.created_at),
-        updated_at: toFirestore.date(message.updated_at)
-    };
+    return genericToFirestore({
+        appObject: message,
+        refFieldMappings: [],
+        dateFieldMappings
+    });
 };
 
 export const messageFromFirestore = (firestoreMessage: MessageFirestore): MessageApp => {
-    return {
-        id: firestoreMessage.id,
-        key: firestoreMessage.key,
-        method: firestoreMessage.method,
-        status: firestoreMessage.status,
-        created_at: fromFirestore.date(firestoreMessage.created_at),
-        updated_at: fromFirestore.date(firestoreMessage.updated_at)
-    };
+    return genericFromFirestore({
+        firestoreObject: firestoreMessage,
+        refFieldMappings: [],
+        dateFieldMappings
+    });
 };
 
 // Convert a record of messages

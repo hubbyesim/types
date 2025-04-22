@@ -8,12 +8,17 @@ import {
     fromFirestore,
     toFirestore
 } from './helpers';
+import {
+    GenericRefFieldMapping,
+    genericToFirestore,
+    genericFromFirestore
+} from './utils';
+import {
+    COUNTRY_COLLECTION,
+    PARTNER_COLLECTION
+} from './utils/collections';
 import { countryFirestoreSchema, CountryFirestore, CountryApp } from './country';
 import { DocumentReference } from 'firebase-admin/firestore';
-
-// Define collection paths
-export const COUNTRY_COLLECTION = 'countries';
-export const PARTNER_COLLECTION = 'partners';
 
 // Define document reference schemas
 export const countryRefSchema = createDocRefSchema<CountryFirestore>(COUNTRY_COLLECTION);
@@ -61,75 +66,26 @@ export type PackageFirestore = z.infer<typeof packageFirestoreSchema>;
 export type PackageApp = z.infer<typeof packageAppSchema>;
 
 // Field mapping for conversions
-interface RefFieldMapping {
-    app: keyof PackageApp;
-    firestore: keyof PackageFirestore;
-    collection: string;
-    nullable?: boolean;
-}
-
-const refFieldMappings: RefFieldMapping[] = [
+const refFieldMappings: GenericRefFieldMapping<PackageApp, PackageFirestore>[] = [
     { app: 'country', firestore: 'country', collection: COUNTRY_COLLECTION },
     { app: 'partner', firestore: 'partner', collection: PARTNER_COLLECTION, nullable: true }
 ];
 
 // Conversion functions
 export const packageToFirestore = (packageData: PackageApp): PackageFirestore => {
-    // Create base object with common fields
-    const result = { ...packageData } as unknown as Record<string, any>;
-
-    // Handle base model fields
-    result.created_at = toFirestore.date(packageData.created_at);
-    result.updated_at = toFirestore.date(packageData.updated_at);
-    result.created_by = typeof packageData.created_by === 'string' ? packageData.created_by : null;
-    result.updated_by = typeof packageData.updated_by === 'string' ? packageData.updated_by : null;
-
-    // Convert reference fields
-    refFieldMappings.forEach(({ app, firestore, collection, nullable }) => {
-        const value = packageData[app];
-
-        if (nullable && value === null) {
-            result[firestore] = null;
-        } else if (typeof value === 'string') {
-            result[firestore] = toFirestore.ref<any>(collection, value);
-        }
-
-        // Delete app field to avoid duplication
-        delete result[app];
+    return genericToFirestore({
+        appObject: packageData,
+        refFieldMappings,
+        dateFieldMappings: []
     });
-
-    return result as unknown as PackageFirestore;
 };
 
 export const packageFromFirestore = (firestorePackage: PackageFirestore): PackageApp => {
-    // Create base object with common fields
-    const result = { ...firestorePackage } as unknown as Record<string, any>;
-
-    // Handle base model fields
-    result.created_at = fromFirestore.date(firestorePackage.created_at);
-    result.updated_at = fromFirestore.date(firestorePackage.updated_at);
-    result.created_by = typeof firestorePackage.created_by === 'string'
-        ? firestorePackage.created_by
-        : firestorePackage.created_by ? fromFirestore.ref(firestorePackage.created_by) : null;
-    result.updated_by = typeof firestorePackage.updated_by === 'string'
-        ? firestorePackage.updated_by
-        : firestorePackage.updated_by ? fromFirestore.ref(firestorePackage.updated_by) : null;
-
-    // Convert reference fields
-    refFieldMappings.forEach(({ app, firestore, nullable }) => {
-        const value = firestorePackage[firestore];
-
-        if (nullable && value === null) {
-            result[app] = null;
-        } else if (value) {
-            result[app] = fromFirestore.ref(value as any);
-        }
-
-        // Delete firestore field to avoid duplication
-        delete result[firestore];
+    return genericFromFirestore({
+        firestoreObject: firestorePackage,
+        refFieldMappings,
+        dateFieldMappings: []
     });
-
-    return result as unknown as PackageApp;
 };
 
 // For backwards compatibility
