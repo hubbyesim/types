@@ -14,18 +14,18 @@ export declare const promoCodeFirestoreSchema: z.ZodObject<{
     usage: z.ZodArray<z.ZodString, "many">;
     uuid_usage: z.ZodArray<z.ZodString, "many">;
     package_specification: z.ZodOptional<z.ZodObject<{
-        destination: z.ZodString;
-        size: z.ZodString;
+        destination: z.ZodOptional<z.ZodString>;
+        size: z.ZodOptional<z.ZodString>;
         package_id: z.ZodOptional<z.ZodString>;
         iata_code: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        size: string;
-        destination: string;
+        size?: string | undefined;
+        destination?: string | undefined;
         package_id?: string | undefined;
         iata_code?: string | undefined;
     }, {
-        size: string;
-        destination: string;
+        size?: string | undefined;
+        destination?: string | undefined;
         package_id?: string | undefined;
         iata_code?: string | undefined;
     }>>;
@@ -62,8 +62,8 @@ export declare const promoCodeFirestoreSchema: z.ZodObject<{
     countries?: string[] | undefined;
     package_size?: string | undefined;
     package_specification?: {
-        size: string;
-        destination: string;
+        size?: string | undefined;
+        destination?: string | undefined;
         package_id?: string | undefined;
         iata_code?: string | undefined;
     } | undefined;
@@ -92,8 +92,8 @@ export declare const promoCodeFirestoreSchema: z.ZodObject<{
     countries?: string[] | undefined;
     package_size?: string | undefined;
     package_specification?: {
-        size: string;
-        destination: string;
+        size?: string | undefined;
+        destination?: string | undefined;
         package_id?: string | undefined;
         iata_code?: string | undefined;
     } | undefined;
@@ -116,18 +116,18 @@ export declare const promoCodeAppSchema: z.ZodObject<{
     usage: z.ZodArray<z.ZodString, "many">;
     uuid_usage: z.ZodArray<z.ZodString, "many">;
     package_specification: z.ZodOptional<z.ZodObject<{
-        destination: z.ZodString;
-        size: z.ZodString;
+        destination: z.ZodOptional<z.ZodString>;
+        size: z.ZodOptional<z.ZodString>;
         package_id: z.ZodOptional<z.ZodString>;
         iata_code: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        size: string;
-        destination: string;
+        size?: string | undefined;
+        destination?: string | undefined;
         package_id?: string | undefined;
         iata_code?: string | undefined;
     }, {
-        size: string;
-        destination: string;
+        size?: string | undefined;
+        destination?: string | undefined;
         package_id?: string | undefined;
         iata_code?: string | undefined;
     }>>;
@@ -164,8 +164,8 @@ export declare const promoCodeAppSchema: z.ZodObject<{
     countries?: string[] | undefined;
     package_size?: string | undefined;
     package_specification?: {
-        size: string;
-        destination: string;
+        size?: string | undefined;
+        destination?: string | undefined;
         package_id?: string | undefined;
         iata_code?: string | undefined;
     } | undefined;
@@ -194,8 +194,8 @@ export declare const promoCodeAppSchema: z.ZodObject<{
     countries?: string[] | undefined;
     package_size?: string | undefined;
     package_specification?: {
-        size: string;
-        destination: string;
+        size?: string | undefined;
+        destination?: string | undefined;
         package_id?: string | undefined;
         iata_code?: string | undefined;
     } | undefined;
