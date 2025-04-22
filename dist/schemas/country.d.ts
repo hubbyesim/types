@@ -18,6 +18,7 @@ export declare const countryFirestoreSchema: z.ZodObject<{
     name: string | null;
     id: string | null;
     region: boolean | null;
+    countries: string[] | null;
     bokun_id: number | null;
     LTE: boolean | null;
     apn: string | null;
@@ -27,12 +28,12 @@ export declare const countryFirestoreSchema: z.ZodObject<{
     hubby: number | null;
     imsi: number | null;
     is_region: boolean | null;
-    countries: string[] | null;
     tier: number | null;
 }, {
     name: string | null;
     id: string | null;
     region: boolean | null;
+    countries: string[] | null;
     bokun_id: number | null;
     LTE: boolean | null;
     apn: string | null;
@@ -42,7 +43,6 @@ export declare const countryFirestoreSchema: z.ZodObject<{
     hubby: number | null;
     imsi: number | null;
     is_region: boolean | null;
-    countries: string[] | null;
     tier: number | null;
 }>;
 export declare const countryAppSchema: z.ZodObject<{
@@ -64,6 +64,7 @@ export declare const countryAppSchema: z.ZodObject<{
     name: string | null;
     id: string | null;
     region: boolean | null;
+    countries: string[] | null;
     bokun_id: number | null;
     LTE: boolean | null;
     apn: string | null;
@@ -73,12 +74,12 @@ export declare const countryAppSchema: z.ZodObject<{
     hubby: number | null;
     imsi: number | null;
     is_region: boolean | null;
-    countries: string[] | null;
     tier: number | null;
 }, {
     name: string | null;
     id: string | null;
     region: boolean | null;
+    countries: string[] | null;
     bokun_id: number | null;
     LTE: boolean | null;
     apn: string | null;
@@ -88,7 +89,6 @@ export declare const countryAppSchema: z.ZodObject<{
     hubby: number | null;
     imsi: number | null;
     is_region: boolean | null;
-    countries: string[] | null;
     tier: number | null;
 }>;
 export type CountryFirestore = z.infer<typeof countryFirestoreSchema>;

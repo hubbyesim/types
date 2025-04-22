@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.apiLogFromFirestore = exports.apiLogToFirestore = exports.apiLogAppSchema = exports.apiLogFirestoreSchema = void 0;
 const zod_1 = require("zod");
 const helpers_1 = require("./helpers");
+const utils_1 = require("./utils");
 // Firestore schema for ApiLog
 exports.apiLogFirestoreSchema = zod_1.z.object({
     id: zod_1.z.string().optional(),
@@ -29,34 +30,24 @@ exports.apiLogAppSchema = zod_1.z.object({
     timestamp: zod_1.z.date(),
     status_code: zod_1.z.number()
 });
+// Define date field mappings
+const dateFieldMappings = [
+    { field: 'timestamp' }
+];
 // Conversion functions
 const apiLogToFirestore = (apiLog) => {
-    return {
-        id: apiLog.id,
-        method: apiLog.method,
-        user_id: apiLog.user_id,
-        path: apiLog.path,
-        resource_type: apiLog.resource_type,
-        resource_id: apiLog.resource_id,
-        partner_id: apiLog.partner_id,
-        payload: apiLog.payload,
-        timestamp: helpers_1.toFirestore.date(apiLog.timestamp),
-        status_code: apiLog.status_code
-    };
+    return (0, utils_1.genericToFirestore)({
+        appObject: apiLog,
+        refFieldMappings: [],
+        dateFieldMappings
+    });
 };
 exports.apiLogToFirestore = apiLogToFirestore;
 const apiLogFromFirestore = (firestoreApiLog) => {
-    return {
-        id: firestoreApiLog.id,
-        method: firestoreApiLog.method,
-        user_id: firestoreApiLog.user_id,
-        path: firestoreApiLog.path,
-        resource_type: firestoreApiLog.resource_type,
-        resource_id: firestoreApiLog.resource_id,
-        partner_id: firestoreApiLog.partner_id,
-        payload: firestoreApiLog.payload,
-        timestamp: helpers_1.fromFirestore.date(firestoreApiLog.timestamp),
-        status_code: firestoreApiLog.status_code
-    };
+    return (0, utils_1.genericFromFirestore)({
+        firestoreObject: firestoreApiLog,
+        refFieldMappings: [],
+        dateFieldMappings
+    });
 };
 exports.apiLogFromFirestore = apiLogFromFirestore;

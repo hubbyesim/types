@@ -1,20 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bookingFromFirestore = exports.bookingToFirestore = exports.bookingAppSchema = exports.bookingFirestoreSchema = exports.bookingStatusSchema = exports.communicationOptionsSchema = exports.communicationChannelSchema = exports.esimRefSchema = exports.userRefSchema = exports.promoCodeRefSchema = exports.partnerRefSchema = exports.ESIM_COLLECTION = exports.USER_COLLECTION = exports.PROMO_CODE_COLLECTION = exports.PARTNER_COLLECTION = void 0;
+exports.bookingFromFirestore = exports.bookingToFirestore = exports.bookingAppSchema = exports.bookingFirestoreSchema = exports.bookingStatusSchema = exports.communicationOptionsSchema = exports.communicationChannelSchema = exports.esimRefSchema = exports.userRefSchema = exports.promoCodeRefSchema = exports.partnerRefSchema = void 0;
 const zod_1 = require("zod");
 const helpers_1 = require("./helpers");
+const utils_1 = require("./utils");
+const collections_1 = require("./utils/collections");
 const constants_1 = require("../constants");
-const firestore_1 = require("firebase/firestore");
-// Define collection paths
-exports.PARTNER_COLLECTION = 'partners';
-exports.PROMO_CODE_COLLECTION = 'promoCodes';
-exports.USER_COLLECTION = 'users';
-exports.ESIM_COLLECTION = 'esims';
 // Define document reference schemas for related collections
-exports.partnerRefSchema = (0, helpers_1.createDocRefSchema)(exports.PARTNER_COLLECTION);
-exports.promoCodeRefSchema = (0, helpers_1.createDocRefSchema)(exports.PROMO_CODE_COLLECTION);
-exports.userRefSchema = (0, helpers_1.createDocRefSchema)(exports.USER_COLLECTION);
-exports.esimRefSchema = (0, helpers_1.createDocRefSchema)(exports.ESIM_COLLECTION);
+exports.partnerRefSchema = (0, helpers_1.createDocRefSchema)(collections_1.PARTNER_COLLECTION);
+exports.promoCodeRefSchema = (0, helpers_1.createDocRefSchema)(collections_1.PROMO_CODE_COLLECTION);
+exports.userRefSchema = (0, helpers_1.createDocRefSchema)(collections_1.USER_COLLECTION);
+exports.esimRefSchema = (0, helpers_1.createDocRefSchema)(collections_1.ESIM_COLLECTION);
 // Enum for communication channels
 exports.communicationChannelSchema = zod_1.z.enum([
     'EMAIL',
@@ -66,11 +62,12 @@ const commonBookingFields = {
 exports.bookingFirestoreSchema = helpers_1.baseModelSchema.extend(Object.assign(Object.assign({}, commonBookingFields), { return_date: helpers_1.timestampSchema.nullable(), departure_date: helpers_1.timestampSchema, partner: exports.partnerRefSchema.schema, promo_codes: zod_1.z.array(exports.promoCodeRefSchema.schema), users: zod_1.z.array(exports.userRefSchema.schema).nullable(), esims: zod_1.z.array(exports.esimRefSchema.schema).nullable() }));
 // App schema for Booking
 exports.bookingAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonBookingFields), { return_date: zod_1.z.date().nullable(), departure_date: zod_1.z.date(), partner: (0, helpers_1.docRefToStringSchema)(exports.partnerRefSchema), promo_codes: zod_1.z.array((0, helpers_1.docRefToStringSchema)(exports.promoCodeRefSchema)), users: zod_1.z.array(zod_1.z.string()).nullable(), esims: zod_1.z.array(zod_1.z.string()).nullable() }));
+// Field mapping types for conversions
 const refFieldMappings = [
-    { app: 'partner', firestore: 'partner', collection: exports.PARTNER_COLLECTION },
-    { app: 'promo_codes', firestore: 'promo_codes', collection: exports.PROMO_CODE_COLLECTION, isArray: true },
-    { app: 'users', firestore: 'users', collection: exports.USER_COLLECTION, isArray: true, nullable: true },
-    { app: 'esims', firestore: 'esims', collection: exports.ESIM_COLLECTION, isArray: true, nullable: true }
+    { app: 'partner', firestore: 'partner', collection: collections_1.PARTNER_COLLECTION },
+    { app: 'promo_codes', firestore: 'promo_codes', collection: collections_1.PROMO_CODE_COLLECTION, isArray: true },
+    { app: 'users', firestore: 'users', collection: collections_1.USER_COLLECTION, isArray: true, nullable: true },
+    { app: 'esims', firestore: 'esims', collection: collections_1.ESIM_COLLECTION, isArray: true, nullable: true }
 ];
 const dateFieldMappings = [
     { field: 'return_date', nullable: true },
@@ -78,82 +75,18 @@ const dateFieldMappings = [
 ];
 // Conversion functions
 const bookingToFirestore = (booking) => {
-    // Create base object with common fields
-    const result = Object.assign({}, booking);
-    // Handle base model fields
-    result.created_at = helpers_1.toFirestore.date(booking.created_at);
-    result.updated_at = helpers_1.toFirestore.date(booking.updated_at);
-    result.created_by = typeof booking.created_by === 'string' ? booking.created_by : null;
-    result.updated_by = typeof booking.updated_by === 'string' ? booking.updated_by : null;
-    // Convert date fields
-    dateFieldMappings.forEach(({ field, nullable }) => {
-        const value = booking[field];
-        if (nullable && value === null) {
-            result[field] = null;
-        }
-        else if (value instanceof Date) {
-            result[field] = helpers_1.toFirestore.date(value);
-        }
+    return (0, utils_1.genericToFirestore)({
+        appObject: booking,
+        refFieldMappings,
+        dateFieldMappings
     });
-    // Convert reference fields
-    refFieldMappings.forEach(({ app, firestore, collection, isArray, nullable }) => {
-        const value = booking[app];
-        if (isArray) {
-            if (nullable && value === null) {
-                result[firestore] = null;
-            }
-            else if (Array.isArray(value)) {
-                result[firestore] = value.map(id => helpers_1.toFirestore.ref(collection, id));
-            }
-        }
-        else if (typeof value === 'string') {
-            result[firestore] = helpers_1.toFirestore.ref(collection, value);
-        }
-        // Delete app field to avoid duplication
-        delete result[app];
-    });
-    return result;
 };
 exports.bookingToFirestore = bookingToFirestore;
 const bookingFromFirestore = (firestoreBooking) => {
-    // Create base object with common fields
-    const result = Object.assign({}, firestoreBooking);
-    // Handle base model fields
-    result.created_at = helpers_1.fromFirestore.date(firestoreBooking.created_at);
-    result.updated_at = helpers_1.fromFirestore.date(firestoreBooking.updated_at);
-    result.created_by = typeof firestoreBooking.created_by === 'string'
-        ? firestoreBooking.created_by
-        : firestoreBooking.created_by ? helpers_1.fromFirestore.ref(firestoreBooking.created_by) : null;
-    result.updated_by = typeof firestoreBooking.updated_by === 'string'
-        ? firestoreBooking.updated_by
-        : firestoreBooking.updated_by ? helpers_1.fromFirestore.ref(firestoreBooking.updated_by) : null;
-    // Convert date fields
-    dateFieldMappings.forEach(({ field, nullable }) => {
-        const value = firestoreBooking[field];
-        if (nullable && value === null) {
-            result[field] = null;
-        }
-        else if (value instanceof firestore_1.Timestamp) {
-            result[field] = helpers_1.fromFirestore.date(value);
-        }
+    return (0, utils_1.genericFromFirestore)({
+        firestoreObject: firestoreBooking,
+        refFieldMappings,
+        dateFieldMappings
     });
-    // Convert reference fields
-    refFieldMappings.forEach(({ app, firestore, isArray, nullable }) => {
-        const value = firestoreBooking[firestore];
-        if (isArray) {
-            if (nullable && value === null) {
-                result[app] = null;
-            }
-            else if (Array.isArray(value)) {
-                result[app] = value.map(ref => helpers_1.fromFirestore.ref(ref));
-            }
-        }
-        else if (value) {
-            result[app] = helpers_1.fromFirestore.ref(value);
-        }
-        // Delete firestore field to avoid duplication
-        delete result[firestore];
-    });
-    return result;
 };
 exports.bookingFromFirestore = bookingFromFirestore;

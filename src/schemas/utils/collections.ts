@@ -13,4 +13,4 @@ export const BOOKING_COLLECTION = 'bookings';
 export const PROMO_CODE_COLLECTION = 'promocodes';
 export const PRICE_LIST_COLLECTION = 'priceLists';
 export const ESIM_COLLECTION = 'esims';
-export const PAYMENT_COLLECTION = 'payments'; 
+export const PAYMENT_COLLECTION = 'payments';

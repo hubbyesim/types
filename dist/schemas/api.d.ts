@@ -101,9 +101,9 @@ export declare const bookingApiResponseSchema: z.ZodObject<{
     status: "CANCELLED" | "PENDING" | "CONFIRMED" | "COMPLETED" | "UNPAID" | "EXPIRED";
     created_at: string;
     updated_at: string;
-    phone: string | null;
     users: string[];
     esims: string[] | null;
+    phone: string | null;
     return_date: string | null;
     departure_date: string;
     partner: string;
@@ -138,9 +138,9 @@ export declare const bookingApiResponseSchema: z.ZodObject<{
     status: "CANCELLED" | "PENDING" | "CONFIRMED" | "COMPLETED" | "UNPAID" | "EXPIRED";
     created_at: string;
     updated_at: string;
-    phone: string | null;
     users: string[];
     esims: string[] | null;
+    phone: string | null;
     return_date: string | null;
     departure_date: string;
     partner: string;

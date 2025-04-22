@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sentMessagesFromFirestore = exports.sentMessagesToFirestore = exports.messageFromFirestore = exports.messageToFirestore = exports.sentMessagesAppSchema = exports.sentMessagesFirestoreSchema = exports.messageAppSchema = exports.messageFirestoreSchema = void 0;
 const zod_1 = require("zod");
 const helpers_1 = require("./helpers");
+const utils_1 = require("./utils");
 // Firestore schema for Message
 exports.messageFirestoreSchema = zod_1.z.object({
     id: zod_1.z.string(),
@@ -24,27 +25,26 @@ exports.messageAppSchema = zod_1.z.object({
 // Define SentMessages schema (a record of messages)
 exports.sentMessagesFirestoreSchema = zod_1.z.record(exports.messageFirestoreSchema);
 exports.sentMessagesAppSchema = zod_1.z.record(exports.messageAppSchema);
+// Define date field mappings
+const dateFieldMappings = [
+    { field: 'created_at' },
+    { field: 'updated_at' }
+];
 // Conversion functions
 const messageToFirestore = (message) => {
-    return {
-        id: message.id,
-        key: message.key,
-        method: message.method,
-        status: message.status,
-        created_at: helpers_1.toFirestore.date(message.created_at),
-        updated_at: helpers_1.toFirestore.date(message.updated_at)
-    };
+    return (0, utils_1.genericToFirestore)({
+        appObject: message,
+        refFieldMappings: [],
+        dateFieldMappings
+    });
 };
 exports.messageToFirestore = messageToFirestore;
 const messageFromFirestore = (firestoreMessage) => {
-    return {
-        id: firestoreMessage.id,
-        key: firestoreMessage.key,
-        method: firestoreMessage.method,
-        status: firestoreMessage.status,
-        created_at: helpers_1.fromFirestore.date(firestoreMessage.created_at),
-        updated_at: helpers_1.fromFirestore.date(firestoreMessage.updated_at)
-    };
+    return (0, utils_1.genericFromFirestore)({
+        firestoreObject: firestoreMessage,
+        refFieldMappings: [],
+        dateFieldMappings
+    });
 };
 exports.messageFromFirestore = messageFromFirestore;
 // Convert a record of messages

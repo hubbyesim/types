@@ -1,15 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userFromFirestore = exports.userToFirestore = exports.userAppSchema = exports.userFirestoreSchema = exports.apiKeysSchema = exports.apiKeySchema = exports.partnerRefSchema = exports.profileRefSchema = exports.PARTNER_COLLECTION = exports.PROFILE_COLLECTION = void 0;
+exports.userToFirestoreWithBalance = exports.userFromFirestore = exports.userToFirestore = exports.userAppSchema = exports.userFirestoreSchema = exports.apiKeysSchema = exports.apiKeySchema = exports.partnerRefSchema = exports.profileRefSchema = void 0;
 const zod_1 = require("zod");
 const firestore_1 = require("firebase-admin/firestore");
 const helpers_1 = require("./helpers");
-// Define collection paths
-exports.PROFILE_COLLECTION = 'profiles';
-exports.PARTNER_COLLECTION = 'partners';
+const utils_1 = require("./utils");
+const collections_1 = require("./utils/collections");
 // Define document reference schemas
-exports.profileRefSchema = (0, helpers_1.createDocRefSchema)(exports.PROFILE_COLLECTION);
-exports.partnerRefSchema = (0, helpers_1.createDocRefSchema)(exports.PARTNER_COLLECTION);
+exports.profileRefSchema = (0, helpers_1.createDocRefSchema)(collections_1.PROFILE_COLLECTION);
+exports.partnerRefSchema = (0, helpers_1.createDocRefSchema)(collections_1.PARTNER_COLLECTION);
 // Schema for API Key
 exports.apiKeySchema = zod_1.z.object({
     expires_at: helpers_1.timestampSchema,
@@ -48,9 +47,10 @@ const commonUserFields = {
 exports.userFirestoreSchema = helpers_1.baseModelSchema.extend(Object.assign(Object.assign({}, commonUserFields), { createdAt: helpers_1.timestampSchema, partner: exports.partnerRefSchema.schema.nullable(), profileRef: exports.profileRefSchema.schema.nullable(), balance: zod_1.z.union([zod_1.z.number(), zod_1.z.null(), helpers_1.fieldValueSchema]), review_requested: helpers_1.timestampSchema.nullable(), last_seen: helpers_1.timestampSchema.nullable() }));
 // Define App schema (with JavaScript-friendly types)
 exports.userAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonUserFields), { createdAt: zod_1.z.date(), partner: (0, helpers_1.docRefToStringSchema)(exports.partnerRefSchema).nullable(), profileRef: (0, helpers_1.docRefToStringSchema)(exports.profileRefSchema).nullable(), balance: zod_1.z.number().nullable(), review_requested: zod_1.z.date().nullable(), last_seen: zod_1.z.date().nullable() }));
+// Field mapping for conversions
 const refFieldMappings = [
-    { app: 'profileRef', firestore: 'profileRef', collection: exports.PROFILE_COLLECTION, nullable: true },
-    { app: 'partner', firestore: 'partner', collection: exports.PARTNER_COLLECTION, nullable: true }
+    { app: 'profileRef', firestore: 'profileRef', collection: collections_1.PROFILE_COLLECTION, nullable: true },
+    { app: 'partner', firestore: 'partner', collection: collections_1.PARTNER_COLLECTION, nullable: true }
 ];
 const dateFieldMappings = [
     { field: 'createdAt' },
@@ -59,76 +59,34 @@ const dateFieldMappings = [
 ];
 // Conversion functions
 const userToFirestore = (user) => {
-    // Create base object with common fields
-    const result = Object.assign({}, user);
-    // Handle base model fields
-    result.created_at = helpers_1.toFirestore.date(user.created_at);
-    result.updated_at = helpers_1.toFirestore.date(user.updated_at);
-    result.created_by = typeof user.created_by === 'string' ? user.created_by : null;
-    result.updated_by = typeof user.updated_by === 'string' ? user.updated_by : null;
-    // Convert date fields
-    dateFieldMappings.forEach(({ field, nullable }) => {
-        const value = user[field];
-        if (nullable && value === null) {
-            result[field] = null;
-        }
-        else if (value instanceof Date) {
-            result[field] = helpers_1.toFirestore.date(value);
-        }
+    return (0, utils_1.genericToFirestore)({
+        appObject: user,
+        refFieldMappings,
+        dateFieldMappings
     });
-    // Convert reference fields
-    refFieldMappings.forEach(({ app, firestore, collection, nullable }) => {
-        const value = user[app];
-        if (nullable && value === null) {
-            result[firestore] = null;
-        }
-        else if (typeof value === 'string') {
-            result[firestore] = helpers_1.toFirestore.ref(collection, value);
-        }
-        // Delete app field to avoid duplication
-        delete result[app];
-    });
-    return result;
 };
 exports.userToFirestore = userToFirestore;
 const userFromFirestore = (firestoreUser) => {
-    // Create base object with common fields
-    const result = Object.assign({}, firestoreUser);
-    // Handle base model fields
-    result.created_at = helpers_1.fromFirestore.date(firestoreUser.created_at);
-    result.updated_at = helpers_1.fromFirestore.date(firestoreUser.updated_at);
-    result.created_by = typeof firestoreUser.created_by === 'string'
-        ? firestoreUser.created_by
-        : firestoreUser.created_by ? helpers_1.fromFirestore.ref(firestoreUser.created_by) : null;
-    result.updated_by = typeof firestoreUser.updated_by === 'string'
-        ? firestoreUser.updated_by
-        : firestoreUser.updated_by ? helpers_1.fromFirestore.ref(firestoreUser.updated_by) : null;
-    // Convert date fields
-    dateFieldMappings.forEach(({ field, nullable }) => {
-        const value = firestoreUser[field];
-        if (nullable && value === null) {
-            result[field] = null;
-        }
-        else if (value instanceof firestore_1.Timestamp) {
-            result[field] = helpers_1.fromFirestore.date(value);
+    return (0, utils_1.genericFromFirestore)({
+        firestoreObject: firestoreUser,
+        refFieldMappings,
+        dateFieldMappings,
+        specialCaseHandler: (result, firestoreData) => {
+            // Handle special case for balance field
+            if (firestoreData.balance instanceof firestore_1.FieldValue) {
+                result.balance = null; // Handle FieldValue by converting to null for the app
+            }
         }
     });
-    // Convert reference fields
-    refFieldMappings.forEach(({ app, firestore, nullable }) => {
-        const value = firestoreUser[firestore];
-        if (nullable && value === null) {
-            result[app] = null;
-        }
-        else if (value) {
-            result[app] = helpers_1.fromFirestore.ref(value);
-        }
-        // Delete firestore field to avoid duplication
-        delete result[firestore];
-    });
-    // Handle special case for balance field
-    if (firestoreUser.balance instanceof firestore_1.FieldValue) {
-        result.balance = null; // Handle FieldValue by converting to null for the app
+};
+exports.userFromFirestore = userFromFirestore;
+// Handle the special case of balance field which can be FieldValue
+const userToFirestoreWithBalance = (user) => {
+    const result = (0, exports.userToFirestore)(user);
+    // Special handling for balance field if it's a FieldValue
+    if (user.balance === null || typeof user.balance === 'number') {
+        result.balance = user.balance;
     }
     return result;
 };
-exports.userFromFirestore = userFromFirestore;
+exports.userToFirestoreWithBalance = userToFirestoreWithBalance;

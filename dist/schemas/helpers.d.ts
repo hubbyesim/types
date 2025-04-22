@@ -1,5 +1,11 @@
 import { z } from 'zod';
 import { Timestamp, DocumentReference, FieldValue } from 'firebase-admin/firestore';
+export declare let isTestEnvironment: boolean;
+export declare class MockDocumentReference {
+    path: string;
+    id: string;
+    constructor(collectionPath: string, id: string);
+}
 export declare const timestampSchema: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
 export declare const documentRefSchema: z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
 export declare const fieldValueSchema: z.ZodType<FieldValue, z.ZodTypeDef, FieldValue>;
@@ -9,7 +15,7 @@ export declare const toFirestore: {
 };
 export declare const fromFirestore: {
     date: (timestamp: Timestamp) => Date;
-    ref: <T>(docRef: DocumentReference<T>) => string;
+    ref: <T>(docRef: DocumentReference<T> | MockDocumentReference) => string;
 };
 export declare const baseModelSchema: z.ZodObject<{
     id: z.ZodString;
@@ -96,3 +102,4 @@ export declare const createDocRefSchema: <T>(collectionPath: string) => {
     collectionPath: string;
 };
 export declare const docRefToStringSchema: <T>(docRefSchema: ReturnType<typeof createDocRefSchema<T>>) => z.ZodString;
+export declare const PROFILE_COLLECTION = "profiles";

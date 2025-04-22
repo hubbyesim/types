@@ -1,7 +1,5 @@
 import { z } from 'zod';
 import { DocumentReference } from 'firebase-admin/firestore';
-export declare const COUNTRY_COLLECTION = "countries";
-export declare const PARTNER_COLLECTION = "partners";
 export declare const countryRefSchema: {
     schema: z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
     collectionPath: string;
@@ -47,6 +45,7 @@ export declare const packageFirestoreSchema: z.ZodObject<{
         name: string | null;
         id: string | null;
         region: boolean | null;
+        countries: string[] | null;
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
@@ -56,12 +55,12 @@ export declare const packageFirestoreSchema: z.ZodObject<{
         hubby: number | null;
         imsi: number | null;
         is_region: boolean | null;
-        countries: string[] | null;
         tier: number | null;
     }, {
         name: string | null;
         id: string | null;
         region: boolean | null;
+        countries: string[] | null;
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
@@ -71,7 +70,6 @@ export declare const packageFirestoreSchema: z.ZodObject<{
         hubby: number | null;
         imsi: number | null;
         is_region: boolean | null;
-        countries: string[] | null;
         tier: number | null;
     }>>;
     price: z.ZodNumber;
@@ -112,6 +110,7 @@ export declare const packageFirestoreSchema: z.ZodObject<{
         name: string | null;
         id: string | null;
         region: boolean | null;
+        countries: string[] | null;
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
@@ -121,7 +120,6 @@ export declare const packageFirestoreSchema: z.ZodObject<{
         hubby: number | null;
         imsi: number | null;
         is_region: boolean | null;
-        countries: string[] | null;
         tier: number | null;
     } | null;
     partner_price: number;
@@ -154,6 +152,7 @@ export declare const packageFirestoreSchema: z.ZodObject<{
         name: string | null;
         id: string | null;
         region: boolean | null;
+        countries: string[] | null;
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
@@ -163,7 +162,6 @@ export declare const packageFirestoreSchema: z.ZodObject<{
         hubby: number | null;
         imsi: number | null;
         is_region: boolean | null;
-        countries: string[] | null;
         tier: number | null;
     } | null;
     partner_price: number;
@@ -209,6 +207,7 @@ export declare const packageAppSchema: z.ZodObject<{
         name: string | null;
         id: string | null;
         region: boolean | null;
+        countries: string[] | null;
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
@@ -218,12 +217,12 @@ export declare const packageAppSchema: z.ZodObject<{
         hubby: number | null;
         imsi: number | null;
         is_region: boolean | null;
-        countries: string[] | null;
         tier: number | null;
     }, {
         name: string | null;
         id: string | null;
         region: boolean | null;
+        countries: string[] | null;
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
@@ -233,7 +232,6 @@ export declare const packageAppSchema: z.ZodObject<{
         hubby: number | null;
         imsi: number | null;
         is_region: boolean | null;
-        countries: string[] | null;
         tier: number | null;
     }>>;
     price: z.ZodNumber;
@@ -274,6 +272,7 @@ export declare const packageAppSchema: z.ZodObject<{
         name: string | null;
         id: string | null;
         region: boolean | null;
+        countries: string[] | null;
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
@@ -283,7 +282,6 @@ export declare const packageAppSchema: z.ZodObject<{
         hubby: number | null;
         imsi: number | null;
         is_region: boolean | null;
-        countries: string[] | null;
         tier: number | null;
     } | null;
     partner_price: number;
@@ -316,6 +314,7 @@ export declare const packageAppSchema: z.ZodObject<{
         name: string | null;
         id: string | null;
         region: boolean | null;
+        countries: string[] | null;
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
@@ -325,7 +324,6 @@ export declare const packageAppSchema: z.ZodObject<{
         hubby: number | null;
         imsi: number | null;
         is_region: boolean | null;
-        countries: string[] | null;
         tier: number | null;
     } | null;
     partner_price: number;

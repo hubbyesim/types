@@ -1,9 +1,5 @@
 import { z } from 'zod';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
-export declare const COUNTRY_COLLECTION = "countries";
-export declare const USER_COLLECTION = "users";
-export declare const PARTNER_COLLECTION = "partners";
-export declare const PAYMENT_COLLECTION = "payments";
 export declare const countryRefSchema: {
     schema: z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
     collectionPath: string;

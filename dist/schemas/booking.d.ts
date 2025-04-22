@@ -1,8 +1,4 @@
 import { z } from 'zod';
-export declare const PARTNER_COLLECTION = "partners";
-export declare const PROMO_CODE_COLLECTION = "promoCodes";
-export declare const USER_COLLECTION = "users";
-export declare const ESIM_COLLECTION = "esims";
 export declare const partnerRefSchema: {
     schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
     collectionPath: string;
@@ -97,9 +93,9 @@ export declare const bookingFirestoreSchema: z.ZodObject<{
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    phone: string | null;
     users: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[] | null;
     esims: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[] | null;
+    phone: string | null;
     return_date: FirebaseFirestore.Timestamp | null;
     departure_date: FirebaseFirestore.Timestamp;
     partner: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
@@ -135,9 +131,9 @@ export declare const bookingFirestoreSchema: z.ZodObject<{
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    phone: string | null;
     users: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[] | null;
     esims: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[] | null;
+    phone: string | null;
     return_date: FirebaseFirestore.Timestamp | null;
     departure_date: FirebaseFirestore.Timestamp;
     partner: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
@@ -225,9 +221,9 @@ export declare const bookingAppSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    phone: string | null;
     users: string[] | null;
     esims: string[] | null;
+    phone: string | null;
     return_date: Date | null;
     departure_date: Date;
     partner: string;
@@ -263,9 +259,9 @@ export declare const bookingAppSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    phone: string | null;
     users: string[] | null;
     esims: string[] | null;
+    phone: string | null;
     return_date: Date | null;
     departure_date: Date;
     partner: string;

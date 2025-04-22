@@ -1,7 +1,5 @@
 import { z } from 'zod';
 import { DocumentReference, Timestamp, FieldValue } from 'firebase-admin/firestore';
-export declare const PROFILE_COLLECTION = "profiles";
-export declare const PARTNER_COLLECTION = "partners";
 export declare const profileRefSchema: {
     schema: z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
     collectionPath: string;
@@ -341,5 +339,6 @@ export type ApiKeys = z.infer<typeof apiKeysSchema>;
 export type ApiKey = z.infer<typeof apiKeySchema>;
 export declare const userToFirestore: (user: UserApp) => UserFirestore;
 export declare const userFromFirestore: (firestoreUser: UserFirestore) => UserApp;
+export declare const userToFirestoreWithBalance: (user: UserApp) => UserFirestore;
 export type User = UserFirestore;
 export type HUser = UserApp;

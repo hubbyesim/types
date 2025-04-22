@@ -107,4 +107,6 @@ export const createDocRefSchema = <T>(collectionPath: string) => {
 // Helper function to convert a document reference schema to a string schema
 export const docRefToStringSchema = <T>(docRefSchema: ReturnType<typeof createDocRefSchema<T>>) => {
     return z.string().describe(`ID from ${docRefSchema.collectionPath}`);
-}; 
+};
+
+export const PROFILE_COLLECTION = 'profiles'; 

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.countryFromFirestore = exports.countryToFirestore = exports.countryAppSchema = exports.countryFirestoreSchema = void 0;
 const zod_1 = require("zod");
+const utils_1 = require("./utils");
 // Country Firestore schema - no transformations needed as it doesn't 
 // contain Firestore-specific types
 exports.countryFirestoreSchema = zod_1.z.object({
@@ -23,8 +24,20 @@ exports.countryFirestoreSchema = zod_1.z.object({
 // For Country, the app schema is identical to the Firestore schema
 // since there are no Firestore-specific types to convert
 exports.countryAppSchema = exports.countryFirestoreSchema;
-// Conversion functions (these are identity functions since no transformation is needed)
-const countryToFirestore = (country) => country;
+// Conversion functions using generic utilities for consistency
+const countryToFirestore = (country) => {
+    return (0, utils_1.genericToFirestore)({
+        appObject: country,
+        refFieldMappings: [],
+        dateFieldMappings: []
+    });
+};
 exports.countryToFirestore = countryToFirestore;
-const countryFromFirestore = (firestoreCountry) => firestoreCountry;
+const countryFromFirestore = (firestoreCountry) => {
+    return (0, utils_1.genericFromFirestore)({
+        firestoreObject: firestoreCountry,
+        refFieldMappings: [],
+        dateFieldMappings: []
+    });
+};
 exports.countryFromFirestore = countryFromFirestore;

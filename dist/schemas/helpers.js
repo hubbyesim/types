@@ -1,8 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.docRefToStringSchema = exports.createDocRefSchema = exports.hubbyModelAppSchema = exports.hubbyModelFirestoreSchema = exports.baseModelAppSchema = exports.baseModelSchema = exports.fromFirestore = exports.toFirestore = exports.fieldValueSchema = exports.documentRefSchema = exports.timestampSchema = void 0;
+exports.PROFILE_COLLECTION = exports.docRefToStringSchema = exports.createDocRefSchema = exports.hubbyModelAppSchema = exports.hubbyModelFirestoreSchema = exports.baseModelAppSchema = exports.baseModelSchema = exports.fromFirestore = exports.toFirestore = exports.fieldValueSchema = exports.documentRefSchema = exports.timestampSchema = exports.MockDocumentReference = exports.isTestEnvironment = void 0;
 const zod_1 = require("zod");
 const firestore_1 = require("firebase-admin/firestore");
+// Flag to indicate if we're running in a test environment
+exports.isTestEnvironment = false;
+// Test environment document references for mocking
+class MockDocumentReference {
+    constructor(collectionPath, id) {
+        this.path = `${collectionPath}/${id}`;
+        this.id = id;
+    }
+}
+exports.MockDocumentReference = MockDocumentReference;
 // Firebase type schemas with custom type guards instead of z.instanceof
 exports.timestampSchema = zod_1.z.custom((val) => val instanceof firestore_1.Timestamp);
 exports.documentRefSchema = zod_1.z.custom((val) => typeof val === 'object' &&
@@ -16,16 +26,22 @@ exports.fieldValueSchema = zod_1.z.custom((val) => typeof val === 'object' &&
 exports.toFirestore = {
     date: (date) => firestore_1.Timestamp.fromDate(date),
     ref: (collectionPath, id) => {
-        // Note: This is a simplified version. In a real implementation, 
-        // you'd need to use the Firestore instance to create a proper reference.
-        // This would typically use something like:
-        // return firestore.collection(collectionPath).doc(id) as DocumentReference<T>;
+        // For tests, return a mock document reference
+        if (exports.isTestEnvironment) {
+            return new MockDocumentReference(collectionPath, id);
+        }
+        // In a real environment, this requires a Firestore instance
         throw new Error('Implementation requires Firestore instance');
     }
 };
 exports.fromFirestore = {
     date: (timestamp) => timestamp.toDate(),
-    ref: (docRef) => docRef.id
+    ref: (docRef) => {
+        if (docRef instanceof MockDocumentReference) {
+            return docRef.id;
+        }
+        return docRef.id;
+    }
 };
 // Base model schema for common fields
 exports.baseModelSchema = zod_1.z.object({
@@ -62,3 +78,4 @@ const docRefToStringSchema = (docRefSchema) => {
     return zod_1.z.string().describe(`ID from ${docRefSchema.collectionPath}`);
 };
 exports.docRefToStringSchema = docRefToStringSchema;
+exports.PROFILE_COLLECTION = 'profiles';

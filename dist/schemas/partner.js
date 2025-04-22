@@ -177,181 +177,126 @@ const commonPriceListFields = {
 // Type for price list
 exports.priceListFirestoreSchema = helpers_1.baseModelSchema.extend(Object.assign(Object.assign({}, commonPriceListFields), { price_list: zod_1.z.array(exports.packagePriceFirestoreSchema) }));
 exports.priceListAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonPriceListFields), { price_list: zod_1.z.array(exports.packagePriceAppSchema) }));
+// Field mapping for conversions using the shared GenericRefFieldMapping interface
+const utils_1 = require("./utils");
 const refFieldMappings = [
     { app: 'parent', firestore: 'parent', collection: exports.PARTNER_COLLECTION, nullable: true },
     { app: 'users', firestore: 'users', collection: exports.USER_COLLECTION, nullable: true, isArray: true }
 ];
 // Conversion functions
 const partnerToFirestore = (partner) => {
-    // Create base object with common fields
-    const result = Object.assign({}, partner);
-    // Handle base model fields
-    result.created_at = helpers_1.toFirestore.date(partner.created_at);
-    result.updated_at = helpers_1.toFirestore.date(partner.updated_at);
-    result.created_by = typeof partner.created_by === 'string' ? partner.created_by : null;
-    result.updated_by = typeof partner.updated_by === 'string' ? partner.updated_by : null;
-    // Convert reference fields
-    refFieldMappings.forEach(({ app, firestore, collection, nullable, isArray }) => {
-        const value = partner[app];
-        if (isArray) {
-            if (nullable && value === null) {
-                result[firestore] = null;
+    return (0, utils_1.genericToFirestore)({
+        appObject: partner,
+        refFieldMappings,
+        dateFieldMappings: [],
+        specialCaseHandler: (result, appData) => {
+            // Handle financial properties specially due to complex nested structure
+            if (appData.financial_properties) {
+                const fp = Object.assign({}, appData.financial_properties);
+                const financialProps = Object.assign(Object.assign({}, fp), { pricing_strategies: null });
+                // Handle pricing strategies if they exist
+                if (fp.pricing_strategies) {
+                    const ps = fp.pricing_strategies;
+                    // Convert partner pricing strategy
+                    const partnerStrategy = Object.assign(Object.assign({}, ps.partner), { default_price_list: ps.partner.default_price_list_id
+                            ? helpers_1.toFirestore.ref(exports.PRICE_LIST_COLLECTION, ps.partner.default_price_list_id)
+                            : null, custom_prices: ps.partner.custom_prices.map((price) => (Object.assign(Object.assign({}, price), { package: helpers_1.toFirestore.ref(exports.PACKAGE_COLLECTION, price.package) }))) });
+                    // Convert user pricing strategy
+                    const userStrategy = Object.assign(Object.assign({}, ps.user), { default_price_list: ps.user.default_price_list_id
+                            ? helpers_1.toFirestore.ref(exports.PRICE_LIST_COLLECTION, ps.user.default_price_list_id)
+                            : null, custom_prices: ps.user.custom_prices.map((price) => (Object.assign(Object.assign({}, price), { package: helpers_1.toFirestore.ref(exports.PACKAGE_COLLECTION, price.package) }))) });
+                    const partnerStrategyObj = partnerStrategy;
+                    const userStrategyObj = userStrategy;
+                    if ('default_price_list_id' in partnerStrategyObj) {
+                        delete partnerStrategyObj.default_price_list_id;
+                    }
+                    if ('default_price_list_id' in userStrategyObj) {
+                        delete userStrategyObj.default_price_list_id;
+                    }
+                    // Set pricing strategies
+                    financialProps.pricing_strategies = {
+                        partner: partnerStrategyObj,
+                        user: userStrategyObj
+                    };
+                }
+                result.financial_properties = financialProps;
             }
-            else if (Array.isArray(value)) {
-                result[firestore] = value.map(id => helpers_1.toFirestore.ref(collection, id));
-            }
         }
-        else if (nullable && value === null) {
-            result[firestore] = null;
-        }
-        else if (typeof value === 'string') {
-            result[firestore] = helpers_1.toFirestore.ref(collection, value);
-        }
-        // Delete app field to avoid duplication
-        delete result[app];
     });
-    // Handle financial properties specially due to complex nested structure
-    if (partner.financial_properties) {
-        const fp = Object.assign({}, partner.financial_properties);
-        const financialProps = Object.assign(Object.assign({}, fp), { pricing_strategies: null });
-        // Handle pricing strategies if they exist
-        if (fp.pricing_strategies) {
-            const ps = fp.pricing_strategies;
-            // Convert partner pricing strategy
-            const partnerStrategy = Object.assign(Object.assign({}, ps.partner), { default_price_list: ps.partner.default_price_list_id
-                    ? helpers_1.toFirestore.ref(exports.PRICE_LIST_COLLECTION, ps.partner.default_price_list_id)
-                    : null, custom_prices: ps.partner.custom_prices.map(price => (Object.assign(Object.assign({}, price), { package: helpers_1.toFirestore.ref(exports.PACKAGE_COLLECTION, price.package) }))) });
-            // Convert user pricing strategy
-            const userStrategy = Object.assign(Object.assign({}, ps.user), { default_price_list: ps.user.default_price_list_id
-                    ? helpers_1.toFirestore.ref(exports.PRICE_LIST_COLLECTION, ps.user.default_price_list_id)
-                    : null, custom_prices: ps.user.custom_prices.map(price => (Object.assign(Object.assign({}, price), { package: helpers_1.toFirestore.ref(exports.PACKAGE_COLLECTION, price.package) }))) });
-            const partnerStrategyObj = partnerStrategy;
-            const userStrategyObj = userStrategy;
-            if ('default_price_list_id' in partnerStrategyObj) {
-                delete partnerStrategyObj.default_price_list_id;
-            }
-            if ('default_price_list_id' in userStrategyObj) {
-                delete userStrategyObj.default_price_list_id;
-            }
-            // Set pricing strategies
-            financialProps.pricing_strategies = {
-                partner: partnerStrategyObj,
-                user: userStrategyObj
-            };
-        }
-        result.financial_properties = financialProps;
-    }
-    return result;
 };
 exports.partnerToFirestore = partnerToFirestore;
 const partnerFromFirestore = (firestorePartner) => {
-    // Create base object with common fields
-    const result = Object.assign({}, firestorePartner);
-    // Handle base model fields
-    result.created_at = helpers_1.fromFirestore.date(firestorePartner.created_at);
-    result.updated_at = helpers_1.fromFirestore.date(firestorePartner.updated_at);
-    result.created_by = typeof firestorePartner.created_by === 'string'
-        ? firestorePartner.created_by
-        : firestorePartner.created_by ? helpers_1.fromFirestore.ref(firestorePartner.created_by) : null;
-    result.updated_by = typeof firestorePartner.updated_by === 'string'
-        ? firestorePartner.updated_by
-        : firestorePartner.updated_by ? helpers_1.fromFirestore.ref(firestorePartner.updated_by) : null;
-    // Convert reference fields
-    refFieldMappings.forEach(({ app, firestore, nullable, isArray }) => {
-        const value = firestorePartner[firestore];
-        if (isArray) {
-            if (nullable && value === null) {
-                result[app] = null;
+    return (0, utils_1.genericFromFirestore)({
+        firestoreObject: firestorePartner,
+        refFieldMappings,
+        dateFieldMappings: [],
+        specialCaseHandler: (result, firestoreData) => {
+            // Handle financial properties specially
+            if (firestoreData.financial_properties) {
+                const fp = Object.assign({}, firestoreData.financial_properties);
+                const financialProps = Object.assign(Object.assign({}, fp), { pricing_strategies: null });
+                // Handle pricing strategies if they exist
+                if (fp.pricing_strategies) {
+                    const ps = fp.pricing_strategies;
+                    // Convert partner pricing strategy
+                    const partnerStrategy = Object.assign(Object.assign({}, ps.partner), { default_price_list_id: ps.partner.default_price_list
+                            ? helpers_1.fromFirestore.ref(ps.partner.default_price_list)
+                            : null, custom_prices: ps.partner.custom_prices.map(price => (Object.assign(Object.assign({}, price), { package: helpers_1.fromFirestore.ref(price.package) }))) });
+                    // Convert user pricing strategy
+                    const userStrategy = Object.assign(Object.assign({}, ps.user), { default_price_list_id: ps.user.default_price_list
+                            ? helpers_1.fromFirestore.ref(ps.user.default_price_list)
+                            : null, custom_prices: ps.user.custom_prices.map(price => (Object.assign(Object.assign({}, price), { package: helpers_1.fromFirestore.ref(price.package) }))) });
+                    const partnerStrategyObj = partnerStrategy;
+                    const userStrategyObj = userStrategy;
+                    if ('default_price_list' in partnerStrategyObj) {
+                        delete partnerStrategyObj.default_price_list;
+                    }
+                    if ('default_price_list' in userStrategyObj) {
+                        delete userStrategyObj.default_price_list;
+                    }
+                    // Set pricing strategies
+                    financialProps.pricing_strategies = {
+                        partner: partnerStrategyObj,
+                        user: userStrategyObj
+                    };
+                }
+                result.financial_properties = financialProps;
             }
-            else if (Array.isArray(value)) {
-                result[app] = value.map(ref => helpers_1.fromFirestore.ref(ref));
-            }
         }
-        else if (nullable && value === null) {
-            result[app] = null;
-        }
-        else if (value) {
-            result[app] = helpers_1.fromFirestore.ref(value);
-        }
-        // Delete firestore field to avoid duplication
-        delete result[firestore];
     });
-    // Handle financial properties specially
-    if (firestorePartner.financial_properties) {
-        const fp = Object.assign({}, firestorePartner.financial_properties);
-        const financialProps = Object.assign(Object.assign({}, fp), { pricing_strategies: null });
-        // Handle pricing strategies if they exist
-        if (fp.pricing_strategies) {
-            const ps = fp.pricing_strategies;
-            // Convert partner pricing strategy
-            const partnerStrategy = Object.assign(Object.assign({}, ps.partner), { default_price_list_id: ps.partner.default_price_list
-                    ? helpers_1.fromFirestore.ref(ps.partner.default_price_list)
-                    : null, custom_prices: ps.partner.custom_prices.map(price => (Object.assign(Object.assign({}, price), { package: helpers_1.fromFirestore.ref(price.package) }))) });
-            // Convert user pricing strategy
-            const userStrategy = Object.assign(Object.assign({}, ps.user), { default_price_list_id: ps.user.default_price_list
-                    ? helpers_1.fromFirestore.ref(ps.user.default_price_list)
-                    : null, custom_prices: ps.user.custom_prices.map(price => (Object.assign(Object.assign({}, price), { package: helpers_1.fromFirestore.ref(price.package) }))) });
-            const partnerStrategyObj = partnerStrategy;
-            const userStrategyObj = userStrategy;
-            if ('default_price_list' in partnerStrategyObj) {
-                delete partnerStrategyObj.default_price_list;
-            }
-            if ('default_price_list' in userStrategyObj) {
-                delete userStrategyObj.default_price_list;
-            }
-            // Set pricing strategies
-            financialProps.pricing_strategies = {
-                partner: partnerStrategyObj,
-                user: userStrategyObj
-            };
-        }
-        result.financial_properties = financialProps;
-    }
-    return result;
 };
 exports.partnerFromFirestore = partnerFromFirestore;
-const priceListRefMappings = [
-    { isArray: true, field: 'price_list', itemField: 'package', collection: exports.PACKAGE_COLLECTION }
-];
+// Field mapping for price list conversions
+const priceListRefFieldMappings = [];
 // Conversion function for PriceList from Firestore to App format
 const priceListFromFirestore = (firestorePriceList) => {
-    // Create base object with common fields
-    const result = Object.assign({}, firestorePriceList);
-    // Handle base model fields
-    result.created_at = helpers_1.fromFirestore.date(firestorePriceList.created_at);
-    result.updated_at = helpers_1.fromFirestore.date(firestorePriceList.updated_at);
-    result.created_by = typeof firestorePriceList.created_by === 'string'
-        ? firestorePriceList.created_by
-        : firestorePriceList.created_by ? helpers_1.fromFirestore.ref(firestorePriceList.created_by) : null;
-    result.updated_by = typeof firestorePriceList.updated_by === 'string'
-        ? firestorePriceList.updated_by
-        : firestorePriceList.updated_by ? helpers_1.fromFirestore.ref(firestorePriceList.updated_by) : null;
-    // Convert array of objects with document references
-    priceListRefMappings.forEach(({ isArray, field, itemField }) => {
-        const priceList = firestorePriceList[field];
-        if (isArray && Array.isArray(priceList)) {
-            result[field] = priceList.map((item) => (Object.assign(Object.assign({}, item), { [itemField]: helpers_1.fromFirestore.ref(item[itemField]) })));
+    return (0, utils_1.genericFromFirestore)({
+        firestoreObject: firestorePriceList,
+        refFieldMappings: priceListRefFieldMappings,
+        dateFieldMappings: [],
+        specialCaseHandler: (result, firestoreData) => {
+            // Convert array of objects with document references
+            const priceList = firestoreData.price_list;
+            if (Array.isArray(priceList)) {
+                result.price_list = priceList.map((item) => (Object.assign(Object.assign({}, item), { package: helpers_1.fromFirestore.ref(item.package) })));
+            }
         }
     });
-    return result;
 };
 exports.priceListFromFirestore = priceListFromFirestore;
 // Conversion function for PriceList from App to Firestore format
 const priceListToFirestore = (priceList) => {
-    // Create base object with common fields
-    const result = Object.assign({}, priceList);
-    // Handle base model fields
-    result.created_at = helpers_1.toFirestore.date(priceList.created_at);
-    result.updated_at = helpers_1.toFirestore.date(priceList.updated_at);
-    result.created_by = typeof priceList.created_by === 'string' ? priceList.created_by : null;
-    result.updated_by = typeof priceList.updated_by === 'string' ? priceList.updated_by : null;
-    // Convert array of objects with document references
-    priceListRefMappings.forEach(({ isArray, field, itemField, collection }) => {
-        const priceListValue = priceList[field];
-        if (isArray && Array.isArray(priceListValue)) {
-            result[field] = priceListValue.map((item) => (Object.assign(Object.assign({}, item), { [itemField]: helpers_1.toFirestore.ref(collection, item[itemField]) })));
+    return (0, utils_1.genericToFirestore)({
+        appObject: priceList,
+        refFieldMappings: priceListRefFieldMappings,
+        dateFieldMappings: [],
+        specialCaseHandler: (result, appData) => {
+            // Convert array of objects with document references
+            const priceListValue = appData.price_list;
+            if (Array.isArray(priceListValue)) {
+                result.price_list = priceListValue.map((item) => (Object.assign(Object.assign({}, item), { package: helpers_1.toFirestore.ref(exports.PACKAGE_COLLECTION, item.package) })));
+            }
         }
     });
-    return result;
 };
 exports.priceListToFirestore = priceListToFirestore;

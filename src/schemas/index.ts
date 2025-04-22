@@ -10,7 +10,6 @@ export {
   User,
   UserFirestore,
   UserApp,
-  PROFILE_COLLECTION,
   ApiKeys,
   ApiKey,
   apiKeysSchema,

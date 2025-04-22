@@ -4,7 +4,10 @@
  */
 
 // First, import and setup mocks (MUST happen before importing any schemas)
-import { MockDocumentReference, MockTimestamp, cleanupMocks } from './mocks';
+import { MockDocumentReference, MockTimestamp, cleanupMocks, setupMocks } from './mocks';
+
+// Make sure mocks are properly initialized
+setupMocks();
 
 // Now we can import the Partner schemas and functions
 import {
@@ -16,7 +19,12 @@ import {
     PARTNER_COLLECTION,
     PRICE_LIST_COLLECTION,
     PACKAGE_COLLECTION,
-    USER_COLLECTION
+    USER_COLLECTION,
+    priceListAppSchema,
+    priceListToFirestore,
+    priceListFromFirestore,
+    PriceListApp,
+    PriceListFirestore
 } from '../src/schemas/partner';
 
 import { z } from 'zod';
@@ -332,24 +340,413 @@ export const testPartnerFromFirestore = (firestorePartner: PartnerFirestore, ori
 };
 
 /**
+ * Log test result and track failures
+ */
+const logTestResult = (testName: string, passed: boolean, failedTests: string[]) => {
+    if (passed) {
+        console.log(`  ✓ ${testName}`);
+    } else {
+        console.log(`  ✗ ${testName}`);
+        failedTests.push(testName);
+    }
+};
+
+/**
+ * Test round-trip conversion from Firestore schema to App schema back to Firestore
+ */
+export const testPartnerFirestoreToAppToFirestore = (firestorePartner: PartnerFirestore) => {
+    try {
+        const appPartner = partnerFromFirestore(firestorePartner);
+        const roundTripFirestore = partnerToFirestore(appPartner);
+        
+        // Test data integrity for important fields
+        console.log('Partner Firestore→App→Firestore round trip data integrity check:');
+        
+        // Track test failures
+        const failedTests: string[] = [];
+        
+        // Basic fields
+        const basicFieldsTest = 
+            firestorePartner.id === roundTripFirestore.id &&
+            firestorePartner.name === roundTripFirestore.name &&
+            firestorePartner.type === roundTripFirestore.type &&
+            firestorePartner.is_active === roundTripFirestore.is_active;
+        
+        logTestResult('Basic fields match', basicFieldsTest, failedTests);
+        
+        // Contact information
+        const contactTest = JSON.stringify(firestorePartner.contact) === JSON.stringify(roundTripFirestore.contact);
+        logTestResult('Contact info match', contactTest, failedTests);
+        
+        // Address
+        const addressTest = JSON.stringify(firestorePartner.address) === JSON.stringify(roundTripFirestore.address);
+        logTestResult('Address match', addressTest, failedTests);
+        
+        // Registration
+        const registrationTest = JSON.stringify(firestorePartner.registration) === JSON.stringify(roundTripFirestore.registration);
+        logTestResult('Registration match', registrationTest, failedTests);
+        
+        // Banking details
+        const bankingTest = JSON.stringify(firestorePartner.banking_details) === JSON.stringify(roundTripFirestore.banking_details);
+        logTestResult('Banking details match', bankingTest, failedTests);
+        
+        // Parent reference
+        const parentTest = 
+            (!firestorePartner.parent && !roundTripFirestore.parent) || 
+            (firestorePartner.parent?.path === roundTripFirestore.parent?.path);
+        logTestResult('Parent reference match', parentTest, failedTests);
+        
+        // User references
+        let usersTest = true;
+        if (firestorePartner.users && roundTripFirestore.users) {
+            if (firestorePartner.users.length === roundTripFirestore.users.length) {
+                for (let i = 0; i < firestorePartner.users.length; i++) {
+                    if (firestorePartner.users[i].path !== roundTripFirestore.users[i].path) {
+                        usersTest = false;
+                        break;
+                    }
+                }
+            } else {
+                usersTest = false;
+            }
+        } else {
+            usersTest = !firestorePartner.users && !roundTripFirestore.users;
+        }
+        logTestResult('User references match', usersTest, failedTests);
+        
+        // Financial properties - basic fields
+        const fpTest = 
+            (!firestorePartner.financial_properties && !roundTripFirestore.financial_properties) ||
+            (firestorePartner.financial_properties?.administration_fee === roundTripFirestore.financial_properties?.administration_fee &&
+            firestorePartner.financial_properties?.income_per_gb === roundTripFirestore.financial_properties?.income_per_gb &&
+            firestorePartner.financial_properties?.payment_method === roundTripFirestore.financial_properties?.payment_method);
+        logTestResult('Financial properties match', fpTest, failedTests);
+        
+        // Check pricing strategies if they exist
+        let pricingStrategiesTest = true;
+        if (
+            firestorePartner.financial_properties?.pricing_strategies && 
+            roundTripFirestore.financial_properties?.pricing_strategies
+        ) {
+            const originalPS = firestorePartner.financial_properties.pricing_strategies;
+            const roundTripPS = roundTripFirestore.financial_properties.pricing_strategies;
+            
+            // Check partner strategy
+            if (
+                originalPS.partner.strategy !== roundTripPS.partner.strategy ||
+                originalPS.partner.modification_percentage !== roundTripPS.partner.modification_percentage ||
+                (originalPS.partner.default_price_list?.path !== roundTripPS.partner.default_price_list?.path)
+            ) {
+                pricingStrategiesTest = false;
+            }
+            
+            // Check user strategy
+            if (
+                originalPS.user.strategy !== roundTripPS.user.strategy ||
+                originalPS.user.modification_percentage !== roundTripPS.user.modification_percentage ||
+                (originalPS.user.default_price_list?.path !== roundTripPS.user.default_price_list?.path)
+            ) {
+                pricingStrategiesTest = false;
+            }
+            
+            // Check custom prices
+            if (
+                originalPS.partner.custom_prices.length !== roundTripPS.partner.custom_prices.length ||
+                originalPS.user.custom_prices.length !== roundTripPS.user.custom_prices.length
+            ) {
+                pricingStrategiesTest = false;
+            } else {
+                // Compare each custom price
+                for (let i = 0; i < originalPS.partner.custom_prices.length; i++) {
+                    const originalPrice = originalPS.partner.custom_prices[i];
+                    const roundTripPrice = roundTripPS.partner.custom_prices[i];
+                    
+                    if (
+                        originalPrice.destination !== roundTripPrice.destination ||
+                        originalPrice.label !== roundTripPrice.label ||
+                        originalPrice.type !== roundTripPrice.type ||
+                        originalPrice.price !== roundTripPrice.price ||
+                        originalPrice.package.path !== roundTripPrice.package.path
+                    ) {
+                        pricingStrategiesTest = false;
+                        break;
+                    }
+                }
+            }
+        } else if (
+            (firestorePartner.financial_properties?.pricing_strategies && !roundTripFirestore.financial_properties?.pricing_strategies) ||
+            (!firestorePartner.financial_properties?.pricing_strategies && roundTripFirestore.financial_properties?.pricing_strategies)
+        ) {
+            pricingStrategiesTest = false;
+        }
+        
+        logTestResult('Pricing strategies match', pricingStrategiesTest, failedTests);
+        
+        // Platform settings
+        const platformSettingsTest = JSON.stringify(firestorePartner.platform_settings) === 
+            JSON.stringify(roundTripFirestore.platform_settings);
+        logTestResult('Platform settings match', platformSettingsTest, failedTests);
+        
+        // Visual identity
+        const visualIdentityTest = JSON.stringify(firestorePartner.visual_identity) === 
+            JSON.stringify(roundTripFirestore.visual_identity);
+        logTestResult('Visual identity match', visualIdentityTest, failedTests);
+        
+        // Metadata
+        const metadataTest = JSON.stringify(firestorePartner.data) === JSON.stringify(roundTripFirestore.data);
+        logTestResult('Metadata match', metadataTest, failedTests);
+        
+        // Check if all tests passed
+        if (failedTests.length === 0) {
+            console.log('✅ Partner Firestore→App→Firestore round trip test passed');
+            return roundTripFirestore;
+        } else {
+            throw new Error(`Failed tests: ${failedTests.join(', ')}`);
+        }
+    } catch (error) {
+        console.error('❌ Partner Firestore→App→Firestore round trip test failed:', error);
+        throw error;
+    }
+};
+
+// Helper function to create a sample price list for testing
+const createSamplePriceList = (): PriceListApp => ({
+    id: 'price_list_123',
+    name: 'Standard Price List',
+    type: 'partner',
+    price_list: [
+        {
+            destination: 'Global',
+            label: 'Basic Global',
+            type: 'data-limit',
+            price: 19.99,
+            package: 'package_123'
+        },
+        {
+            destination: 'Europe',
+            label: 'Europe Travel',
+            type: 'time-limit',
+            price: 14.99,
+            package: 'package_456'
+        }
+    ],
+    created_at: new Date(),
+    updated_at: new Date(),
+    created_by: 'system',
+    updated_by: null
+});
+
+/**
+ * Test price list app schema validation
+ */
+export const testPriceListAppSchemaValidation = () => {
+    try {
+        const priceListData = createSamplePriceList();
+        const validPriceList = priceListAppSchema.parse(priceListData);
+        console.log('✅ PriceList app schema validation passed');
+        return validPriceList;
+    } catch (error) {
+        if (error instanceof z.ZodError) {
+            console.error('❌ PriceList validation error:', error.errors);
+        } else {
+            console.error('❌ PriceList error:', error);
+        }
+        throw error;
+    }
+};
+
+/**
+ * Test conversion from price list app schema to Firestore schema
+ */
+export const testPriceListToFirestore = (priceListData: PriceListApp) => {
+    try {
+        const firestorePriceList = priceListToFirestore(priceListData);
+        
+        // Verify package references in price list items
+        const allPackageRefsValid = firestorePriceList.price_list.every(
+            price => price.package.path.startsWith(PACKAGE_COLLECTION)
+        );
+        
+        if (!allPackageRefsValid) {
+            throw new Error('Package document references are invalid');
+        }
+        
+        console.log('✅ PriceList to Firestore conversion passed');
+        return firestorePriceList;
+    } catch (error) {
+        console.error('❌ PriceList to Firestore conversion failed:', error);
+        throw error;
+    }
+};
+
+/**
+ * Test conversion from Firestore schema back to app schema
+ */
+export const testPriceListFromFirestore = (firestorePriceList: PriceListFirestore, originalPriceList: PriceListApp) => {
+    try {
+        const retrievedPriceList = priceListFromFirestore(firestorePriceList);
+        
+        // Test data integrity for important fields
+        console.log('PriceList App→Firestore→App round trip data integrity check:');
+        
+        // Track test failures
+        const failedTests: string[] = [];
+        
+        // Basic fields
+        const basicFieldsTest = 
+            originalPriceList.id === retrievedPriceList.id &&
+            originalPriceList.name === retrievedPriceList.name &&
+            originalPriceList.type === retrievedPriceList.type;
+        
+        logTestResult('Basic fields match', basicFieldsTest, failedTests);
+        
+        // Price list items
+        let priceListItemsTest = true;
+        if (originalPriceList.price_list.length === retrievedPriceList.price_list.length) {
+            for (let i = 0; i < originalPriceList.price_list.length; i++) {
+                const originalItem = originalPriceList.price_list[i];
+                const retrievedItem = retrievedPriceList.price_list[i];
+                
+                if (
+                    originalItem.destination !== retrievedItem.destination ||
+                    originalItem.label !== retrievedItem.label ||
+                    originalItem.type !== retrievedItem.type ||
+                    originalItem.price !== retrievedItem.price ||
+                    originalItem.package !== retrievedItem.package
+                ) {
+                    priceListItemsTest = false;
+                    break;
+                }
+            }
+        } else {
+            priceListItemsTest = false;
+        }
+        
+        logTestResult('Price list items match', priceListItemsTest, failedTests);
+        
+        // Check if all tests passed
+        if (failedTests.length === 0) {
+            console.log('✅ PriceList App→Firestore→App round trip test passed');
+            return retrievedPriceList;
+        } else {
+            throw new Error(`Failed tests: ${failedTests.join(', ')}`);
+        }
+    } catch (error) {
+        console.error('❌ PriceList App→Firestore→App round trip test failed:', error);
+        throw error;
+    }
+};
+
+/**
+ * Test round-trip conversion from Firestore schema to App schema back to Firestore
+ */
+export const testPriceListFirestoreToAppToFirestore = (firestorePriceList: PriceListFirestore) => {
+    try {
+        const appPriceList = priceListFromFirestore(firestorePriceList);
+        const roundTripFirestore = priceListToFirestore(appPriceList);
+        
+        // Test data integrity for important fields
+        console.log('PriceList Firestore→App→Firestore round trip data integrity check:');
+        
+        // Track test failures
+        const failedTests: string[] = [];
+        
+        // Basic fields
+        const basicFieldsTest = 
+            firestorePriceList.id === roundTripFirestore.id &&
+            firestorePriceList.name === roundTripFirestore.name &&
+            firestorePriceList.type === roundTripFirestore.type;
+        
+        logTestResult('Basic fields match', basicFieldsTest, failedTests);
+        
+        // Price list items
+        let priceListItemsTest = true;
+        if (firestorePriceList.price_list.length === roundTripFirestore.price_list.length) {
+            for (let i = 0; i < firestorePriceList.price_list.length; i++) {
+                const originalItem = firestorePriceList.price_list[i];
+                const roundTripItem = roundTripFirestore.price_list[i];
+                
+                if (
+                    originalItem.destination !== roundTripItem.destination ||
+                    originalItem.label !== roundTripItem.label ||
+                    originalItem.type !== roundTripItem.type ||
+                    originalItem.price !== roundTripItem.price ||
+                    originalItem.package.path !== roundTripItem.package.path
+                ) {
+                    priceListItemsTest = false;
+                    break;
+                }
+            }
+        } else {
+            priceListItemsTest = false;
+        }
+        
+        logTestResult('Price list items match', priceListItemsTest, failedTests);
+        
+        // Check if all tests passed
+        if (failedTests.length === 0) {
+            console.log('✅ PriceList Firestore→App→Firestore round trip test passed');
+            return roundTripFirestore;
+        } else {
+            throw new Error(`Failed tests: ${failedTests.join(', ')}`);
+        }
+    } catch (error) {
+        console.error('❌ PriceList Firestore→App→Firestore round trip test failed:', error);
+        throw error;
+    }
+};
+
+/**
+ * Run all price list tests
+ */
+export const runAllPriceListTests = () => {
+    try {
+        console.log('\nRunning PriceList Schema Tests:');
+        
+        // Validate app schema
+        const validPriceList = testPriceListAppSchemaValidation();
+        
+        // Test app to Firestore conversion
+        const firestorePriceList = testPriceListToFirestore(validPriceList);
+        
+        // Test Firestore to app conversion (round trip App → Firestore → App)
+        testPriceListFromFirestore(firestorePriceList, validPriceList);
+        
+        // Test round trip Firestore → App → Firestore
+        testPriceListFirestoreToAppToFirestore(firestorePriceList);
+        
+        console.log('\n✅ All PriceList schema tests passed successfully!');
+        return true;
+    } catch (error) {
+        console.error('\n❌ PriceList schema tests failed:', error);
+        return false;
+    }
+};
+
+/**
  * Run all partner tests
  */
 export const runAllPartnerTests = () => {
-    console.log('\n----------------------------------------');
-    console.log('Running Partner Schema Tests:');
-    console.log('----------------------------------------');
-    
     try {
-        // Test app schema validation
+        console.log('Running Partner Schema Tests:');
+        
+        // Validate app schema
         const validPartner = testPartnerAppSchemaValidation();
         
-        // Test conversion to Firestore
+        // Test app to Firestore conversion
         const firestorePartner = testPartnerToFirestore(validPartner);
         
-        // Test conversion back to app
+        // Test Firestore to app conversion (round trip App → Firestore → App)
         testPartnerFromFirestore(firestorePartner, validPartner);
         
+        // Test round trip Firestore → App → Firestore
+        testPartnerFirestoreToAppToFirestore(firestorePartner);
+        
         console.log('\n✅ All Partner schema tests passed successfully!');
+        
+        // Run price list tests
+        runAllPriceListTests();
+        
         return true;
     } catch (error) {
         console.error('\n❌ Partner schema tests failed:', error);
@@ -360,7 +757,7 @@ export const runAllPartnerTests = () => {
     }
 };
 
-// Run tests directly when this file is executed
+// If this file is run directly (not imported), run all tests
 if (require.main === module) {
     runAllPartnerTests();
 } 
