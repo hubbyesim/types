@@ -2,7 +2,7 @@ import { z } from 'zod';
 export declare const messageFirestoreSchema: z.ZodObject<{
     id: z.ZodString;
     key: z.ZodString;
-    method: z.ZodEnum<["sms", "email", "push"]>;
+    method: z.ZodEnum<["push", "sms", "email"]>;
     status: z.ZodEnum<["pending", "sent", "failed", "delivered"]>;
     created_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
     updated_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
@@ -24,7 +24,7 @@ export declare const messageFirestoreSchema: z.ZodObject<{
 export declare const messageAppSchema: z.ZodObject<{
     id: z.ZodString;
     key: z.ZodString;
-    method: z.ZodEnum<["sms", "email", "push"]>;
+    method: z.ZodEnum<["push", "sms", "email"]>;
     status: z.ZodEnum<["pending", "sent", "failed", "delivered"]>;
     created_at: z.ZodDate;
     updated_at: z.ZodDate;
@@ -46,7 +46,7 @@ export declare const messageAppSchema: z.ZodObject<{
 export declare const sentMessagesFirestoreSchema: z.ZodRecord<z.ZodString, z.ZodObject<{
     id: z.ZodString;
     key: z.ZodString;
-    method: z.ZodEnum<["sms", "email", "push"]>;
+    method: z.ZodEnum<["push", "sms", "email"]>;
     status: z.ZodEnum<["pending", "sent", "failed", "delivered"]>;
     created_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
     updated_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
@@ -68,7 +68,7 @@ export declare const sentMessagesFirestoreSchema: z.ZodRecord<z.ZodString, z.Zod
 export declare const sentMessagesAppSchema: z.ZodRecord<z.ZodString, z.ZodObject<{
     id: z.ZodString;
     key: z.ZodString;
-    method: z.ZodEnum<["sms", "email", "push"]>;
+    method: z.ZodEnum<["push", "sms", "email"]>;
     status: z.ZodEnum<["pending", "sent", "failed", "delivered"]>;
     created_at: z.ZodDate;
     updated_at: z.ZodDate;
@@ -95,7 +95,9 @@ export declare const messageToFirestore: (message: MessageApp) => MessageFiresto
 export declare const messageFromFirestore: (firestoreMessage: MessageFirestore) => MessageApp;
 export declare const sentMessagesToFirestore: (sentMessages: SentMessagesApp) => SentMessagesFirestore;
 export declare const sentMessagesFromFirestore: (firestoreSentMessages: SentMessagesFirestore) => SentMessagesApp;
-export type Message = MessageFirestore;
+export type Message = MessageApp;
 export type HMessage = MessageApp;
-export type SentMessages = SentMessagesFirestore;
+export type SentMessages = SentMessagesApp;
 export type HSentMessages = SentMessagesApp;
+export declare const convertSentMessagesToFirestore: (sentMessages: Record<string, Message>) => Record<string, MessageFirestore>;
+export declare const convertSentMessagesFromFirestore: (firestoreSentMessages: Record<string, MessageFirestore>) => Record<string, Message>;

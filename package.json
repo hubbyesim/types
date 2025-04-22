@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc",
     "test": "ts-node test/index.ts",
-    "test:partner": "ts-node test/partner.test.ts"
+    "test:partner": "ts-node test/partner.test.ts",
+    "test:schema": "ts-node test/schema-validation.test.ts"
   },
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",

@@ -1,6 +1,7 @@
 "use strict";
 /**
- * Centralized exports for all schema utilities
+ * Utils barrel file
+ * Exports all utility functions from a single point for easier imports
  */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -18,8 +19,14 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.genericFromFirestore = exports.genericToFirestore = exports.isDate = exports.convertToDate = void 0;
-// Export collection paths
+// Export collections
 __exportStar(require("./collections"), exports);
+// Export the documentation helpers
+__exportStar(require("./documentation"), exports);
+// Export the validation helpers
+__exportStar(require("./validator"), exports);
+// Export the version compatibility helpers
+__exportStar(require("./version"), exports);
 // Export schema utilities
 __exportStar(require("./schemas"), exports);
 // Export conversion utilities

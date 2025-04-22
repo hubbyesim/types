@@ -401,7 +401,9 @@ export const testPartnerFirestoreToAppToFirestore = (firestorePartner: PartnerFi
         if (firestorePartner.users && roundTripFirestore.users) {
             if (firestorePartner.users.length === roundTripFirestore.users.length) {
                 for (let i = 0; i < firestorePartner.users.length; i++) {
-                    if (firestorePartner.users[i].path !== roundTripFirestore.users[i].path) {
+                    const userA = firestorePartner.users[i];
+                    const userB = roundTripFirestore.users[i];
+                    if (userA && userB && userA.path !== userB.path) {
                         usersTest = false;
                         break;
                     }
@@ -461,13 +463,14 @@ export const testPartnerFirestoreToAppToFirestore = (firestorePartner: PartnerFi
                     const originalPrice = originalPS.partner.custom_prices[i];
                     const roundTripPrice = roundTripPS.partner.custom_prices[i];
                     
-                    if (
+                    if (originalPrice && roundTripPrice && (
                         originalPrice.destination !== roundTripPrice.destination ||
                         originalPrice.label !== roundTripPrice.label ||
                         originalPrice.type !== roundTripPrice.type ||
                         originalPrice.price !== roundTripPrice.price ||
-                        originalPrice.package.path !== roundTripPrice.package.path
-                    ) {
+                        (originalPrice.package && roundTripPrice.package && 
+                         originalPrice.package.path !== roundTripPrice.package.path)
+                    )) {
                         pricingStrategiesTest = false;
                         break;
                     }
@@ -607,13 +610,13 @@ export const testPriceListFromFirestore = (firestorePriceList: PriceListFirestor
                 const originalItem = originalPriceList.price_list[i];
                 const retrievedItem = retrievedPriceList.price_list[i];
                 
-                if (
+                if (originalItem && retrievedItem && (
                     originalItem.destination !== retrievedItem.destination ||
                     originalItem.label !== retrievedItem.label ||
                     originalItem.type !== retrievedItem.type ||
                     originalItem.price !== retrievedItem.price ||
                     originalItem.package !== retrievedItem.package
-                ) {
+                )) {
                     priceListItemsTest = false;
                     break;
                 }
@@ -666,13 +669,14 @@ export const testPriceListFirestoreToAppToFirestore = (firestorePriceList: Price
                 const originalItem = firestorePriceList.price_list[i];
                 const roundTripItem = roundTripFirestore.price_list[i];
                 
-                if (
+                if (originalItem && roundTripItem && (
                     originalItem.destination !== roundTripItem.destination ||
                     originalItem.label !== roundTripItem.label ||
                     originalItem.type !== roundTripItem.type ||
                     originalItem.price !== roundTripItem.price ||
-                    originalItem.package.path !== roundTripItem.package.path
-                ) {
+                    (originalItem.package && roundTripItem.package &&
+                     originalItem.package.path !== roundTripItem.package.path)
+                )) {
                     priceListItemsTest = false;
                     break;
                 }

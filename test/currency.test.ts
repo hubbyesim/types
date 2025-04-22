@@ -4,7 +4,10 @@
  */
 
 // First, import and setup mocks (MUST happen before importing any schemas)
-import { MockDocumentReference, MockTimestamp, cleanupMocks } from './mocks';
+import { MockDocumentReference, MockTimestamp, cleanupMocks, setupMocks } from './mocks';
+
+// Make sure mocks are properly initialized
+setupMocks();
 
 // Now we can import the Currency schemas and functions
 import {
@@ -22,10 +25,11 @@ import { z } from 'zod';
  */
 const createSampleCurrency = (): CurrencyApp => ({
     id: 'currency_eur',
-    base_code: 'EUR',
-    coversion_rates: {
-        currency: 1.0
-    },
+    code: 'EUR',
+    symbol: '€',
+    name: 'Euro',
+    rate: 1.0,
+    is_default: true,
     created_at: new Date('2023-05-15'),
     updated_at: new Date('2023-06-01'),
     created_by: 'admin_user',
@@ -97,17 +101,20 @@ export const testCurrencyFromFirestore = (firestoreCurrency: CurrencyFirestore, 
         // Basic fields test
         const basicFieldsTest = 
             originalCurrency.id === retrievedCurrency.id &&
-            originalCurrency.base_code === retrievedCurrency.base_code;
+            originalCurrency.code === retrievedCurrency.code &&
+            originalCurrency.symbol === retrievedCurrency.symbol &&
+            originalCurrency.name === retrievedCurrency.name;
         
         console.log('- Basic fields:', basicFieldsTest ? '✅' : '❌');
         if (!basicFieldsTest) failedTests.push('Basic fields');
         
-        // Conversion rates test
-        const conversionRatesTest = 
-            originalCurrency.coversion_rates.currency === retrievedCurrency.coversion_rates.currency;
+        // Rate and default flag test
+        const rateDefaultTest = 
+            originalCurrency.rate === retrievedCurrency.rate &&
+            originalCurrency.is_default === retrievedCurrency.is_default;
         
-        console.log('- Conversion rates:', conversionRatesTest ? '✅' : '❌');
-        if (!conversionRatesTest) failedTests.push('Conversion rates');
+        console.log('- Rate and default flag:', rateDefaultTest ? '✅' : '❌');
+        if (!rateDefaultTest) failedTests.push('Rate and default flag');
         
         // Date fields test
         const createdAtMatch = originalCurrency.created_at.getTime() === retrievedCurrency.created_at.getTime();
@@ -156,14 +163,13 @@ export const runAllCurrencyTests = () => {
     } catch (error) {
         console.error('\n❌ Currency schema tests failed:', error);
         return false;
+    } finally {
+        // Clean up mocks
+        cleanupMocks();
     }
 };
 
 // Run tests directly when this file is executed
 if (require.main === module) {
-    try {
-        runAllCurrencyTests();
-    } finally {
-        cleanupMocks();
-    }
+    runAllCurrencyTests();
 } 
