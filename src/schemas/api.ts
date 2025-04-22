@@ -4,8 +4,8 @@ import { partnerAppSchema } from './partner';
 
 // Schema for package specification
 export const packageSpecificationSchema = z.object({
-    destination: z.string(),
-    size: z.string(),
+    destination: z.string().optional(),
+    size: z.string().optional(),
     package_id: z.string().optional(),
     iata_code: z.string().optional()
 });
