@@ -61,7 +61,14 @@ export {
   FinancialPropertiesApp,
   PlatformSettings,
   Schedule,
-  scheduleSchema
+  scheduleSchema,
+  // Visual identity exports
+  VisualIdentity,
+  VisualIdentityBanner,
+  VisualIdentityBannerStrategy,
+  visualIdentitySchema,
+  visualIdentityBannerSchema,
+  visualIdentityBannerStrategySchema
 } from './partner';
 
 // Add type alias for backwards compatibility

@@ -1,6 +1,6 @@
 {
   "name": "@hubbyesim/types",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "The type definitions for the hubbyesim project",
   "scripts": {
     "build": "tsc",
