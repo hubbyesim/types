@@ -3,7 +3,6 @@ import {
     baseModelSchema,
     baseModelAppSchema,
     timestampSchema,
-    createDocRefSchema,
     docRefToStringSchema,
     fromFirestore,
     toFirestore
@@ -21,12 +20,12 @@ import {
     PAYMENT_COLLECTION
 } from './utils/collections';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
-
-// Define document reference schemas
-export const countryRefSchema = createDocRefSchema<any>(COUNTRY_COLLECTION);
-export const userRefSchema = createDocRefSchema<any>(USER_COLLECTION);
-export const partnerRefSchema = createDocRefSchema<any>(PARTNER_COLLECTION);
-export const paymentRefSchema = createDocRefSchema<any>(PAYMENT_COLLECTION);
+import { 
+    countryRefNullable, 
+    userRefNullable, 
+    partnerRefNullable, 
+    paymentRefNullable 
+} from './refs';
 
 // Common fields shared between Firestore and App schemas
 const commonESIMFields = {
@@ -52,12 +51,12 @@ const commonESIMFields = {
 // Firestore schema for ESIM
 export const esimFirestoreSchema = baseModelSchema.extend({
     ...commonESIMFields,
-    country: countryRefSchema.schema.nullable(),
-    user: userRefSchema.schema.nullable(),
+    country: countryRefNullable,
+    user: userRefNullable,
     time_assigned: timestampSchema.nullable(),
     last_updated: timestampSchema.nullable(),
-    partner: partnerRefSchema.schema.nullable(),
-    payment: paymentRefSchema.schema.nullable(),
+    partner: partnerRefNullable,
+    payment: paymentRefNullable,
 });
 
 // App schema for ESIM

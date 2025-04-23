@@ -1,13 +1,5 @@
 import { z } from 'zod';
 import { DocumentReference, Timestamp, FieldValue } from 'firebase-admin/firestore';
-export declare const profileRefSchema: {
-    schema: z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-    collectionPath: string;
-};
-export declare const partnerRefSchema: {
-    schema: z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-    collectionPath: string;
-};
 export declare const apiKeySchema: z.ZodObject<{
     expires_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
     secret: z.ZodString;

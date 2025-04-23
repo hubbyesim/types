@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.partnerApiResponseSchema = exports.partnerApiRequestSchema = exports.bookingApiRequestSchema = exports.promoCodeApiResponseSchema = exports.bookingApiResponseSchema = exports.communicationOptionsSchema = exports.packageSpecificationsSchema = exports.packageSpecificationSchema = void 0;
+exports.partnerApiResponseSchema = exports.partnerApiRequestSchema = exports.bookingApiRequestSchema = exports.promoCodeApiResponseSchema = exports.bookingApiResponseSchema = exports.packageSpecificationsSchema = exports.packageSpecificationSchema = void 0;
 const zod_1 = require("zod");
+const booking_1 = require("./booking");
 // Schema for package specification
 exports.packageSpecificationSchema = zod_1.z.object({
     destination: zod_1.z.string().optional(),
@@ -10,11 +11,6 @@ exports.packageSpecificationSchema = zod_1.z.object({
     iata_code: zod_1.z.string().optional()
 });
 exports.packageSpecificationsSchema = zod_1.z.array(exports.packageSpecificationSchema);
-// Communication options schema
-exports.communicationOptionsSchema = zod_1.z.object({
-    should_send_message: zod_1.z.boolean(),
-    channels: zod_1.z.array(zod_1.z.enum(["EMAIL", "WHATSAPP", "PUSH_NOTIFICATION", "SMS"]))
-});
 // ===== API TYPES FOR BOOKING =====
 // Booking API response schema
 exports.bookingApiResponseSchema = zod_1.z.object({
@@ -43,7 +39,7 @@ exports.bookingApiResponseSchema = zod_1.z.object({
         source: zod_1.z.string(),
         manual: zod_1.z.boolean()
     }),
-    communication_options: exports.communicationOptionsSchema,
+    communication_options: booking_1.communicationOptionsSchema,
     is_processed_for_esim_restoration: zod_1.z.boolean(),
     is_pseudonymized: zod_1.z.boolean(),
     import_id: zod_1.z.string().nullable().optional(),
@@ -82,7 +78,7 @@ exports.bookingApiRequestSchema = zod_1.z.object({
         source: zod_1.z.string(),
         manual: zod_1.z.boolean()
     }),
-    communication_options: exports.communicationOptionsSchema,
+    communication_options: booking_1.communicationOptionsSchema,
     is_processed_for_esim_restoration: zod_1.z.boolean(),
     is_pseudonymized: zod_1.z.boolean(),
     date_of_birth: zod_1.z.date().optional(),

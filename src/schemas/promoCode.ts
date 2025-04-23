@@ -2,9 +2,7 @@ import { z } from 'zod';
 import {
     baseModelSchema,
     baseModelAppSchema,
-    timestampSchema,
-    createDocRefSchema,
-    docRefToStringSchema
+    timestampSchema
 } from './helpers';
 import {
     GenericRefFieldMapping,
@@ -19,14 +17,17 @@ import {
     PACKAGE_COLLECTION,
     BOOKING_COLLECTION
 } from './utils/collections';
-import { createReferenceSchemas } from './utils/schemas';
 import { packageSpecificationSchema } from './api';
-
-// Define document reference schemas using the utility function
-const partnerRef = createReferenceSchemas(PARTNER_COLLECTION, true);
-const countryRef = createReferenceSchemas(COUNTRY_COLLECTION, true);
-const packageRef = createReferenceSchemas(PACKAGE_COLLECTION, true);
-const bookingRef = createReferenceSchemas(BOOKING_COLLECTION, true);
+import { 
+    partnerRefNullable,
+    countryRefNullable,
+    packageRefNullable,
+    bookingRefNullable,
+    partnerRefStringNullable,
+    countryRefStringNullable,
+    packageRefStringNullable,
+    bookingRefStringNullable
+} from './refs';
 
 // Firestore schema for PromoCode
 export const promoCodeFirestoreSchema = baseModelSchema.extend({
@@ -38,16 +39,16 @@ export const promoCodeFirestoreSchema = baseModelSchema.extend({
     usage: z.array(z.string()),
     uuid_usage: z.array(z.string()),
     package_specification: packageSpecificationSchema.optional(),
-    partner: partnerRef.firestore,
+    partner: partnerRefNullable,
     valid_from: z.union([z.string(), z.date(), timestampSchema]),
     valid_to: z.union([z.string(), z.date(), timestampSchema]),
 
     // Optional fields based on the type
     discount: z.number().optional(),
     package_size: z.string().optional(),
-    package: packageRef.firestore,
-    country: countryRef.firestore,
-    booking: bookingRef.firestore,
+    package: packageRefNullable,
+    country: countryRefNullable,
+    booking: bookingRefNullable,
     countries: z.array(z.string()).optional(),
     max_bytes: z.number().optional(),
     starter_data: z.number().optional()
@@ -63,16 +64,16 @@ export const promoCodeAppSchema = baseModelAppSchema.extend({
     usage: z.array(z.string()),
     uuid_usage: z.array(z.string()),
     package_specification: packageSpecificationSchema.optional(),
-    partner: partnerRef.app,
+    partner: partnerRefStringNullable,
     valid_from: z.date(),
     valid_to: z.date(),
 
     // Optional fields based on the type
     discount: z.number().optional(),
     package_size: z.string().optional(),
-    package: packageRef.app,
-    country: countryRef.app,
-    booking: bookingRef.app,
+    package: packageRefStringNullable,
+    country: countryRefStringNullable,
+    booking: bookingRefStringNullable,
     countries: z.array(z.string()).optional(),
     max_bytes: z.number().optional(),
     starter_data: z.number().optional()

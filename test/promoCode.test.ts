@@ -15,14 +15,18 @@ import {
     PromoCodeFirestore
 } from '../src/schemas/promoCode';
 
+// Import collection constants from the centralized refs
 import {
     PARTNER_COLLECTION,
     COUNTRY_COLLECTION,
     BOOKING_COLLECTION,
     PACKAGE_COLLECTION
-} from '../src/schemas/utils/collections';
+} from '../src/schemas/refs';
 
 import { z } from 'zod';
+
+// Import helpers for use in tests
+import * as helpers from '../src/schemas/helpers';
 
 /**
  * Create a sample promo code with comprehensive data for testing
@@ -84,7 +88,6 @@ export const testPromoCodeAppSchemaValidation = () => {
 export const testPromoCodeToFirestore = (promoCodeData: PromoCodeApp) => {
     try {
         // Create a mock implementation for document references
-        const helpers = require('../src/schemas/helpers');
         const originalRefMethod = helpers.toFirestore.ref;
         const originalDateMethod = helpers.toFirestore.date;
         
@@ -162,25 +165,25 @@ export const testPromoCodeFromFirestore = (
 ) => {
     try {
         // Mock the Firestore references
-        const helpers = require('../src/schemas/helpers');
         const originalRefMethod = helpers.fromFirestore.ref;
         const originalDateMethod = helpers.fromFirestore.date;
         
         // Mock document references
-        helpers.fromFirestore.ref = <T>(
-            docRef: any, 
-            collectionPath: string
-        ): string | null => {
-            if (!docRef) return null;
-            // Extract the ID from the mock reference
-            return docRef.id;
-        };
+        helpers.fromFirestore.ref = (<T>(docRef: any): string => {
+            // Custom implementation for testing
+            if (docRef && typeof docRef === 'object' && 'id' in docRef) {
+                return docRef.id;
+            }
+            return '';
+        }) as any;
         
-        // Mock timestamps
-        helpers.fromFirestore.date = (timestamp: MockTimestamp): Date | null => {
-            if (!timestamp) return null;
-            return timestamp.toDate();
-        };
+        helpers.fromFirestore.date = ((timestamp: MockTimestamp): Date => {
+            // Custom implementation for testing
+            if (timestamp && typeof timestamp === 'object' && 'toDate' in timestamp) {
+                return timestamp.toDate();
+            }
+            return new Date();
+        }) as any;
         
         // Run the conversion
         const convertedPromoCode = promoCodeFromFirestore(firestorePromoCode);
@@ -323,7 +326,6 @@ export const testPromoCodeReferenceHandling = () => {
         promoCodeData.booking = 'booking_test_101112';
         
         // Mock helper functions
-        const helpers = require('../src/schemas/helpers');
         const originalToRefMethod = helpers.toFirestore.ref;
         const originalToDateMethod = helpers.toFirestore.date;
         const originalFromRefMethod = helpers.fromFirestore.ref;
@@ -338,18 +340,21 @@ export const testPromoCodeReferenceHandling = () => {
             return new MockTimestamp(date);
         };
         
-        helpers.fromFirestore.ref = <T>(
-            docRef: any, 
-            collectionPath: string
-        ): string | null => {
-            if (!docRef) return null;
-            return docRef.id;
-        };
+        helpers.fromFirestore.ref = (<T>(docRef: any): string => {
+            // Custom implementation for testing
+            if (docRef && typeof docRef === 'object' && 'id' in docRef) {
+                return docRef.id;
+            }
+            return '';
+        }) as any;
         
-        helpers.fromFirestore.date = (timestamp: MockTimestamp): Date | null => {
-            if (!timestamp) return null;
-            return timestamp.toDate();
-        };
+        helpers.fromFirestore.date = ((timestamp: MockTimestamp): Date => {
+            // Custom implementation for testing
+            if (timestamp && typeof timestamp === 'object' && 'toDate' in timestamp) {
+                return timestamp.toDate();
+            }
+            return new Date();
+        }) as any;
         
         // Convert to Firestore
         const firestorePromoCode = promoCodeToFirestore(promoCodeData);

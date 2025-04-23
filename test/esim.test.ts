@@ -4,7 +4,20 @@
  */
 
 // First, import and setup mocks (MUST happen before importing any schemas)
-import { MockDocumentReference, MockTimestamp, cleanupMocks } from './mocks';
+import { MockDocumentReference, MockTimestamp, cleanupMocks, setupMocks } from './mocks';
+
+// Make sure mocks are properly initialized
+setupMocks();
+
+// Import collection paths from the centralized refs file
+import {
+    COUNTRY_COLLECTION,
+    USER_COLLECTION,
+    PARTNER_COLLECTION,
+    PAYMENT_COLLECTION
+} from '../src/schemas/refs';
+
+import { z } from 'zod';
 
 // Now we can import the ESIM schemas and functions
 import {
@@ -14,16 +27,6 @@ import {
     ESIMApp,
     ESIMFirestore
 } from '../src/schemas/esim';
-
-// Import collection paths from the correct source
-import {
-    COUNTRY_COLLECTION,
-    USER_COLLECTION,
-    PARTNER_COLLECTION,
-    PAYMENT_COLLECTION
-} from '../src/schemas/utils/collections';
-
-import { z } from 'zod';
 
 /**
  * Create a sample ESIM with comprehensive data for testing

@@ -1,25 +1,5 @@
 import { z } from 'zod';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
-export declare const PARTNER_COLLECTION = "partners";
-export declare const PRICE_LIST_COLLECTION = "priceLists";
-export declare const PACKAGE_COLLECTION = "packages";
-export declare const USER_COLLECTION = "users";
-export declare const partnerRefSchema: {
-    schema: z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-    collectionPath: string;
-};
-export declare const priceListRefSchema: {
-    schema: z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-    collectionPath: string;
-};
-export declare const packageRefSchema: {
-    schema: z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-    collectionPath: string;
-};
-export declare const userRefSchema: {
-    schema: z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-    collectionPath: string;
-};
 export declare const addressSchema: z.ZodNullable<z.ZodObject<{
     street: z.ZodOptional<z.ZodString>;
     city: z.ZodOptional<z.ZodString>;
@@ -74,15 +54,15 @@ export declare const packagePriceFirestoreSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     type: "data-limit" | "time-limit";
     label: string;
-    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
     destination: string;
     price: number;
+    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
 }, {
     type: "data-limit" | "time-limit";
     label: string;
-    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
     destination: string;
     price: number;
+    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
 }>;
 export declare const packagePriceAppSchema: z.ZodObject<{
     package: z.ZodString;
@@ -93,17 +73,18 @@ export declare const packagePriceAppSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     type: "data-limit" | "time-limit";
     label: string;
-    package: string;
     destination: string;
     price: number;
+    package: string;
 }, {
     type: "data-limit" | "time-limit";
     label: string;
-    package: string;
     destination: string;
     price: number;
+    package: string;
 }>;
-export declare const pricingStrategyFirestoreSchema: z.ZodObject<{
+export declare const partnerPricingStrategyFirestoreSchema: z.ZodObject<{
+    strategy: z.ZodEnum<["split", "bundle"]>;
     default_price_list: z.ZodNullable<z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
     custom_prices: z.ZodArray<z.ZodObject<{
         package: z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
@@ -114,42 +95,42 @@ export declare const pricingStrategyFirestoreSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         type: "data-limit" | "time-limit";
         label: string;
-        package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
         destination: string;
         price: number;
+        package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
     }, {
         type: "data-limit" | "time-limit";
         label: string;
-        package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
         destination: string;
         price: number;
+        package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
     }>, "many">;
-    strategy: z.ZodEnum<["split", "bundle"]>;
     modification_percentage: z.ZodNumber;
 }, "strip", z.ZodTypeAny, {
+    strategy: "split" | "bundle";
     default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     custom_prices: {
         type: "data-limit" | "time-limit";
         label: string;
-        package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
         destination: string;
         price: number;
+        package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
     }[];
-    strategy: "split" | "bundle";
     modification_percentage: number;
 }, {
+    strategy: "split" | "bundle";
     default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     custom_prices: {
         type: "data-limit" | "time-limit";
         label: string;
-        package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
         destination: string;
         price: number;
+        package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
     }[];
-    strategy: "split" | "bundle";
     modification_percentage: number;
 }>;
-export declare const pricingStrategyAppSchema: z.ZodObject<{
+export declare const partnerPricingStrategyAppSchema: z.ZodObject<{
+    strategy: z.ZodEnum<["split", "bundle"]>;
     default_price_list: z.ZodNullable<z.ZodString>;
     custom_prices: z.ZodArray<z.ZodObject<{
         package: z.ZodString;
@@ -160,44 +141,136 @@ export declare const pricingStrategyAppSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         type: "data-limit" | "time-limit";
         label: string;
-        package: string;
         destination: string;
         price: number;
+        package: string;
     }, {
         type: "data-limit" | "time-limit";
         label: string;
-        package: string;
         destination: string;
         price: number;
+        package: string;
+    }>, "many">;
+    modification_percentage: z.ZodNumber;
+}, "strip", z.ZodTypeAny, {
+    strategy: "split" | "bundle";
+    default_price_list: string | null;
+    custom_prices: {
+        type: "data-limit" | "time-limit";
+        label: string;
+        destination: string;
+        price: number;
+        package: string;
+    }[];
+    modification_percentage: number;
+}, {
+    strategy: "split" | "bundle";
+    default_price_list: string | null;
+    custom_prices: {
+        type: "data-limit" | "time-limit";
+        label: string;
+        destination: string;
+        price: number;
+        package: string;
+    }[];
+    modification_percentage: number;
+}>;
+export declare const userPricingStrategyFirestoreSchema: z.ZodObject<{
+    default_price_list: z.ZodNullable<z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
+    custom_prices: z.ZodArray<z.ZodObject<{
+        package: z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+        destination: z.ZodString;
+        label: z.ZodString;
+        type: z.ZodEnum<["data-limit", "time-limit"]>;
+        price: z.ZodNumber;
+    }, "strip", z.ZodTypeAny, {
+        type: "data-limit" | "time-limit";
+        label: string;
+        destination: string;
+        price: number;
+        package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+    }, {
+        type: "data-limit" | "time-limit";
+        label: string;
+        destination: string;
+        price: number;
+        package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
     }>, "many">;
     strategy: z.ZodEnum<["split", "bundle"]>;
     modification_percentage: z.ZodNumber;
 }, "strip", z.ZodTypeAny, {
-    default_price_list: string | null;
+    strategy: "split" | "bundle";
+    default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     custom_prices: {
         type: "data-limit" | "time-limit";
         label: string;
-        package: string;
         destination: string;
         price: number;
+        package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
     }[];
-    strategy: "split" | "bundle";
     modification_percentage: number;
 }, {
+    strategy: "split" | "bundle";
+    default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    custom_prices: {
+        type: "data-limit" | "time-limit";
+        label: string;
+        destination: string;
+        price: number;
+        package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+    }[];
+    modification_percentage: number;
+}>;
+export declare const userPricingStrategyAppSchema: z.ZodObject<{
+    default_price_list: z.ZodNullable<z.ZodString>;
+    custom_prices: z.ZodArray<z.ZodObject<{
+        package: z.ZodString;
+        destination: z.ZodString;
+        label: z.ZodString;
+        type: z.ZodEnum<["data-limit", "time-limit"]>;
+        price: z.ZodNumber;
+    }, "strip", z.ZodTypeAny, {
+        type: "data-limit" | "time-limit";
+        label: string;
+        destination: string;
+        price: number;
+        package: string;
+    }, {
+        type: "data-limit" | "time-limit";
+        label: string;
+        destination: string;
+        price: number;
+        package: string;
+    }>, "many">;
+    strategy: z.ZodEnum<["split", "bundle"]>;
+    modification_percentage: z.ZodNumber;
+}, "strip", z.ZodTypeAny, {
+    strategy: "split" | "bundle";
     default_price_list: string | null;
     custom_prices: {
         type: "data-limit" | "time-limit";
         label: string;
-        package: string;
         destination: string;
         price: number;
+        package: string;
     }[];
+    modification_percentage: number;
+}, {
     strategy: "split" | "bundle";
+    default_price_list: string | null;
+    custom_prices: {
+        type: "data-limit" | "time-limit";
+        label: string;
+        destination: string;
+        price: number;
+        package: string;
+    }[];
     modification_percentage: number;
 }>;
 export declare const financialPropertiesFirestoreSchema: z.ZodNullable<z.ZodObject<{
     pricing_strategies: z.ZodNullable<z.ZodObject<{
         partner: z.ZodObject<{
+            strategy: z.ZodEnum<["split", "bundle"]>;
             default_price_list: z.ZodNullable<z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
             custom_prices: z.ZodArray<z.ZodObject<{
                 package: z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
@@ -208,39 +281,38 @@ export declare const financialPropertiesFirestoreSchema: z.ZodNullable<z.ZodObje
             }, "strip", z.ZodTypeAny, {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 price: number;
+                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
             }, {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 price: number;
+                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
             }>, "many">;
-            strategy: z.ZodEnum<["split", "bundle"]>;
             modification_percentage: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
+            strategy: "split" | "bundle";
             default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 price: number;
+                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
             }[];
-            strategy: "split" | "bundle";
             modification_percentage: number;
         }, {
+            strategy: "split" | "bundle";
             default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 price: number;
+                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
             }[];
-            strategy: "split" | "bundle";
             modification_percentage: number;
         }>;
         user: z.ZodObject<{
@@ -254,89 +326,89 @@ export declare const financialPropertiesFirestoreSchema: z.ZodNullable<z.ZodObje
             }, "strip", z.ZodTypeAny, {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 price: number;
+                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
             }, {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 price: number;
+                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
             }>, "many">;
             strategy: z.ZodEnum<["split", "bundle"]>;
             modification_percentage: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
+            strategy: "split" | "bundle";
             default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 price: number;
+                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
             }[];
-            strategy: "split" | "bundle";
             modification_percentage: number;
         }, {
+            strategy: "split" | "bundle";
             default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 price: number;
+                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
             }[];
-            strategy: "split" | "bundle";
             modification_percentage: number;
         }>;
     }, "strip", z.ZodTypeAny, {
         user: {
+            strategy: "split" | "bundle";
             default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 price: number;
+                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
             }[];
-            strategy: "split" | "bundle";
             modification_percentage: number;
         };
         partner: {
+            strategy: "split" | "bundle";
             default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 price: number;
+                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
             }[];
-            strategy: "split" | "bundle";
             modification_percentage: number;
         };
     }, {
         user: {
+            strategy: "split" | "bundle";
             default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 price: number;
+                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
             }[];
-            strategy: "split" | "bundle";
             modification_percentage: number;
         };
         partner: {
+            strategy: "split" | "bundle";
             default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 price: number;
+                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
             }[];
-            strategy: "split" | "bundle";
             modification_percentage: number;
         };
     }>>;
@@ -348,77 +420,78 @@ export declare const financialPropertiesFirestoreSchema: z.ZodNullable<z.ZodObje
     next_invoice: z.ZodNullable<z.ZodDate>;
     last_invoice: z.ZodNullable<z.ZodDate>;
 }, "strip", z.ZodTypeAny, {
-    pricing_strategies: {
-        user: {
-            default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-            custom_prices: {
-                type: "data-limit" | "time-limit";
-                label: string;
-                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-                destination: string;
-                price: number;
-            }[];
-            strategy: "split" | "bundle";
-            modification_percentage: number;
-        };
-        partner: {
-            default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-            custom_prices: {
-                type: "data-limit" | "time-limit";
-                label: string;
-                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-                destination: string;
-                price: number;
-            }[];
-            strategy: "split" | "bundle";
-            modification_percentage: number;
-        };
-    } | null;
     administration_fee: number | null;
     income_per_gb: number | null;
     payment_method: "direct" | "invoice";
     requires_card: boolean | null;
     next_invoice: Date | null;
     last_invoice: Date | null;
+    pricing_strategies: {
+        user: {
+            strategy: "split" | "bundle";
+            default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                label: string;
+                destination: string;
+                price: number;
+                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+            }[];
+            modification_percentage: number;
+        };
+        partner: {
+            strategy: "split" | "bundle";
+            default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                label: string;
+                destination: string;
+                price: number;
+                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+            }[];
+            modification_percentage: number;
+        };
+    } | null;
     commission_fee?: number | null | undefined;
 }, {
-    pricing_strategies: {
-        user: {
-            default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-            custom_prices: {
-                type: "data-limit" | "time-limit";
-                label: string;
-                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-                destination: string;
-                price: number;
-            }[];
-            strategy: "split" | "bundle";
-            modification_percentage: number;
-        };
-        partner: {
-            default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-            custom_prices: {
-                type: "data-limit" | "time-limit";
-                label: string;
-                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-                destination: string;
-                price: number;
-            }[];
-            strategy: "split" | "bundle";
-            modification_percentage: number;
-        };
-    } | null;
     administration_fee: number | null;
     income_per_gb: number | null;
     payment_method: "direct" | "invoice";
     requires_card: boolean | null;
     next_invoice: Date | null;
     last_invoice: Date | null;
+    pricing_strategies: {
+        user: {
+            strategy: "split" | "bundle";
+            default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                label: string;
+                destination: string;
+                price: number;
+                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+            }[];
+            modification_percentage: number;
+        };
+        partner: {
+            strategy: "split" | "bundle";
+            default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                label: string;
+                destination: string;
+                price: number;
+                package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+            }[];
+            modification_percentage: number;
+        };
+    } | null;
     commission_fee?: number | null | undefined;
 }>>;
 export declare const financialPropertiesAppSchema: z.ZodNullable<z.ZodObject<{
     pricing_strategies: z.ZodNullable<z.ZodObject<{
         partner: z.ZodObject<{
+            strategy: z.ZodEnum<["split", "bundle"]>;
             default_price_list: z.ZodNullable<z.ZodString>;
             custom_prices: z.ZodArray<z.ZodObject<{
                 package: z.ZodString;
@@ -429,39 +502,38 @@ export declare const financialPropertiesAppSchema: z.ZodNullable<z.ZodObject<{
             }, "strip", z.ZodTypeAny, {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: string;
                 destination: string;
                 price: number;
+                package: string;
             }, {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: string;
                 destination: string;
                 price: number;
+                package: string;
             }>, "many">;
-            strategy: z.ZodEnum<["split", "bundle"]>;
             modification_percentage: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
+            strategy: "split" | "bundle";
             default_price_list: string | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: string;
                 destination: string;
                 price: number;
+                package: string;
             }[];
-            strategy: "split" | "bundle";
             modification_percentage: number;
         }, {
+            strategy: "split" | "bundle";
             default_price_list: string | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: string;
                 destination: string;
                 price: number;
+                package: string;
             }[];
-            strategy: "split" | "bundle";
             modification_percentage: number;
         }>;
         user: z.ZodObject<{
@@ -475,89 +547,89 @@ export declare const financialPropertiesAppSchema: z.ZodNullable<z.ZodObject<{
             }, "strip", z.ZodTypeAny, {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: string;
                 destination: string;
                 price: number;
+                package: string;
             }, {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: string;
                 destination: string;
                 price: number;
+                package: string;
             }>, "many">;
             strategy: z.ZodEnum<["split", "bundle"]>;
             modification_percentage: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
+            strategy: "split" | "bundle";
             default_price_list: string | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: string;
                 destination: string;
                 price: number;
+                package: string;
             }[];
-            strategy: "split" | "bundle";
             modification_percentage: number;
         }, {
+            strategy: "split" | "bundle";
             default_price_list: string | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: string;
                 destination: string;
                 price: number;
+                package: string;
             }[];
-            strategy: "split" | "bundle";
             modification_percentage: number;
         }>;
     }, "strip", z.ZodTypeAny, {
         user: {
+            strategy: "split" | "bundle";
             default_price_list: string | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: string;
                 destination: string;
                 price: number;
+                package: string;
             }[];
-            strategy: "split" | "bundle";
             modification_percentage: number;
         };
         partner: {
+            strategy: "split" | "bundle";
             default_price_list: string | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: string;
                 destination: string;
                 price: number;
+                package: string;
             }[];
-            strategy: "split" | "bundle";
             modification_percentage: number;
         };
     }, {
         user: {
+            strategy: "split" | "bundle";
             default_price_list: string | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: string;
                 destination: string;
                 price: number;
+                package: string;
             }[];
-            strategy: "split" | "bundle";
             modification_percentage: number;
         };
         partner: {
+            strategy: "split" | "bundle";
             default_price_list: string | null;
             custom_prices: {
                 type: "data-limit" | "time-limit";
                 label: string;
-                package: string;
                 destination: string;
                 price: number;
+                package: string;
             }[];
-            strategy: "split" | "bundle";
             modification_percentage: number;
         };
     }>>;
@@ -569,72 +641,72 @@ export declare const financialPropertiesAppSchema: z.ZodNullable<z.ZodObject<{
     next_invoice: z.ZodNullable<z.ZodDate>;
     last_invoice: z.ZodNullable<z.ZodDate>;
 }, "strip", z.ZodTypeAny, {
-    pricing_strategies: {
-        user: {
-            default_price_list: string | null;
-            custom_prices: {
-                type: "data-limit" | "time-limit";
-                label: string;
-                package: string;
-                destination: string;
-                price: number;
-            }[];
-            strategy: "split" | "bundle";
-            modification_percentage: number;
-        };
-        partner: {
-            default_price_list: string | null;
-            custom_prices: {
-                type: "data-limit" | "time-limit";
-                label: string;
-                package: string;
-                destination: string;
-                price: number;
-            }[];
-            strategy: "split" | "bundle";
-            modification_percentage: number;
-        };
-    } | null;
     administration_fee: number | null;
     income_per_gb: number | null;
     payment_method: "direct" | "invoice";
     requires_card: boolean | null;
     next_invoice: Date | null;
     last_invoice: Date | null;
+    pricing_strategies: {
+        user: {
+            strategy: "split" | "bundle";
+            default_price_list: string | null;
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                label: string;
+                destination: string;
+                price: number;
+                package: string;
+            }[];
+            modification_percentage: number;
+        };
+        partner: {
+            strategy: "split" | "bundle";
+            default_price_list: string | null;
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                label: string;
+                destination: string;
+                price: number;
+                package: string;
+            }[];
+            modification_percentage: number;
+        };
+    } | null;
     commission_fee?: number | null | undefined;
 }, {
-    pricing_strategies: {
-        user: {
-            default_price_list: string | null;
-            custom_prices: {
-                type: "data-limit" | "time-limit";
-                label: string;
-                package: string;
-                destination: string;
-                price: number;
-            }[];
-            strategy: "split" | "bundle";
-            modification_percentage: number;
-        };
-        partner: {
-            default_price_list: string | null;
-            custom_prices: {
-                type: "data-limit" | "time-limit";
-                label: string;
-                package: string;
-                destination: string;
-                price: number;
-            }[];
-            strategy: "split" | "bundle";
-            modification_percentage: number;
-        };
-    } | null;
     administration_fee: number | null;
     income_per_gb: number | null;
     payment_method: "direct" | "invoice";
     requires_card: boolean | null;
     next_invoice: Date | null;
     last_invoice: Date | null;
+    pricing_strategies: {
+        user: {
+            strategy: "split" | "bundle";
+            default_price_list: string | null;
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                label: string;
+                destination: string;
+                price: number;
+                package: string;
+            }[];
+            modification_percentage: number;
+        };
+        partner: {
+            strategy: "split" | "bundle";
+            default_price_list: string | null;
+            custom_prices: {
+                type: "data-limit" | "time-limit";
+                label: string;
+                destination: string;
+                price: number;
+                package: string;
+            }[];
+            modification_percentage: number;
+        };
+    } | null;
     commission_fee?: number | null | undefined;
 }>>;
 export declare const packageStrategySchema: z.ZodObject<{
@@ -1178,11 +1250,12 @@ export declare const partnerFirestoreSchema: z.ZodObject<{
     created_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>]>;
     updated_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>]>;
 } & {
-    parent: z.ZodNullable<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
-    users: z.ZodNullable<z.ZodArray<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
+    parent: z.ZodNullable<z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
+    users: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
     financial_properties: z.ZodNullable<z.ZodObject<{
         pricing_strategies: z.ZodNullable<z.ZodObject<{
             partner: z.ZodObject<{
+                strategy: z.ZodEnum<["split", "bundle"]>;
                 default_price_list: z.ZodNullable<z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
                 custom_prices: z.ZodArray<z.ZodObject<{
                     package: z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
@@ -1193,39 +1266,38 @@ export declare const partnerFirestoreSchema: z.ZodObject<{
                 }, "strip", z.ZodTypeAny, {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     price: number;
+                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 }, {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     price: number;
+                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 }>, "many">;
-                strategy: z.ZodEnum<["split", "bundle"]>;
                 modification_percentage: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
+                strategy: "split" | "bundle";
                 default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     price: number;
+                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 }[];
-                strategy: "split" | "bundle";
                 modification_percentage: number;
             }, {
+                strategy: "split" | "bundle";
                 default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     price: number;
+                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 }[];
-                strategy: "split" | "bundle";
                 modification_percentage: number;
             }>;
             user: z.ZodObject<{
@@ -1239,89 +1311,89 @@ export declare const partnerFirestoreSchema: z.ZodObject<{
                 }, "strip", z.ZodTypeAny, {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     price: number;
+                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 }, {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     price: number;
+                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 }>, "many">;
                 strategy: z.ZodEnum<["split", "bundle"]>;
                 modification_percentage: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
+                strategy: "split" | "bundle";
                 default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     price: number;
+                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 }[];
-                strategy: "split" | "bundle";
                 modification_percentage: number;
             }, {
+                strategy: "split" | "bundle";
                 default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     price: number;
+                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 }[];
-                strategy: "split" | "bundle";
                 modification_percentage: number;
             }>;
         }, "strip", z.ZodTypeAny, {
             user: {
+                strategy: "split" | "bundle";
                 default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     price: number;
+                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 }[];
-                strategy: "split" | "bundle";
                 modification_percentage: number;
             };
             partner: {
+                strategy: "split" | "bundle";
                 default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     price: number;
+                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 }[];
-                strategy: "split" | "bundle";
                 modification_percentage: number;
             };
         }, {
             user: {
+                strategy: "split" | "bundle";
                 default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     price: number;
+                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 }[];
-                strategy: "split" | "bundle";
                 modification_percentage: number;
             };
             partner: {
+                strategy: "split" | "bundle";
                 default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     price: number;
+                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 }[];
-                strategy: "split" | "bundle";
                 modification_percentage: number;
             };
         }>>;
@@ -1333,72 +1405,72 @@ export declare const partnerFirestoreSchema: z.ZodObject<{
         next_invoice: z.ZodNullable<z.ZodDate>;
         last_invoice: z.ZodNullable<z.ZodDate>;
     }, "strip", z.ZodTypeAny, {
-        pricing_strategies: {
-            user: {
-                default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-                custom_prices: {
-                    type: "data-limit" | "time-limit";
-                    label: string;
-                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-                    destination: string;
-                    price: number;
-                }[];
-                strategy: "split" | "bundle";
-                modification_percentage: number;
-            };
-            partner: {
-                default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-                custom_prices: {
-                    type: "data-limit" | "time-limit";
-                    label: string;
-                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-                    destination: string;
-                    price: number;
-                }[];
-                strategy: "split" | "bundle";
-                modification_percentage: number;
-            };
-        } | null;
         administration_fee: number | null;
         income_per_gb: number | null;
         payment_method: "direct" | "invoice";
         requires_card: boolean | null;
         next_invoice: Date | null;
         last_invoice: Date | null;
+        pricing_strategies: {
+            user: {
+                strategy: "split" | "bundle";
+                default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    label: string;
+                    destination: string;
+                    price: number;
+                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                }[];
+                modification_percentage: number;
+            };
+            partner: {
+                strategy: "split" | "bundle";
+                default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    label: string;
+                    destination: string;
+                    price: number;
+                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                }[];
+                modification_percentage: number;
+            };
+        } | null;
         commission_fee?: number | null | undefined;
     }, {
-        pricing_strategies: {
-            user: {
-                default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-                custom_prices: {
-                    type: "data-limit" | "time-limit";
-                    label: string;
-                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-                    destination: string;
-                    price: number;
-                }[];
-                strategy: "split" | "bundle";
-                modification_percentage: number;
-            };
-            partner: {
-                default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-                custom_prices: {
-                    type: "data-limit" | "time-limit";
-                    label: string;
-                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-                    destination: string;
-                    price: number;
-                }[];
-                strategy: "split" | "bundle";
-                modification_percentage: number;
-            };
-        } | null;
         administration_fee: number | null;
         income_per_gb: number | null;
         payment_method: "direct" | "invoice";
         requires_card: boolean | null;
         next_invoice: Date | null;
         last_invoice: Date | null;
+        pricing_strategies: {
+            user: {
+                strategy: "split" | "bundle";
+                default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    label: string;
+                    destination: string;
+                    price: number;
+                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                }[];
+                modification_percentage: number;
+            };
+            partner: {
+                strategy: "split" | "bundle";
+                default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    label: string;
+                    destination: string;
+                    price: number;
+                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                }[];
+                modification_percentage: number;
+            };
+        } | null;
         commission_fee?: number | null | undefined;
     }>>;
     name: z.ZodNullable<z.ZodString>;
@@ -1834,41 +1906,6 @@ export declare const partnerFirestoreSchema: z.ZodObject<{
     created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     users: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[] | null;
-    financial_properties: {
-        pricing_strategies: {
-            user: {
-                default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-                custom_prices: {
-                    type: "data-limit" | "time-limit";
-                    label: string;
-                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-                    destination: string;
-                    price: number;
-                }[];
-                strategy: "split" | "bundle";
-                modification_percentage: number;
-            };
-            partner: {
-                default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-                custom_prices: {
-                    type: "data-limit" | "time-limit";
-                    label: string;
-                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-                    destination: string;
-                    price: number;
-                }[];
-                strategy: "split" | "bundle";
-                modification_percentage: number;
-            };
-        } | null;
-        administration_fee: number | null;
-        income_per_gb: number | null;
-        payment_method: "direct" | "invoice";
-        requires_card: boolean | null;
-        next_invoice: Date | null;
-        last_invoice: Date | null;
-        commission_fee?: number | null | undefined;
-    } | null;
     contact: {
         email: string | null;
         office_phone?: string | null | undefined;
@@ -1949,6 +1986,41 @@ export declare const partnerFirestoreSchema: z.ZodObject<{
                 properties: Record<string, string>;
             }[];
         };
+    } | null;
+    financial_properties: {
+        administration_fee: number | null;
+        income_per_gb: number | null;
+        payment_method: "direct" | "invoice";
+        requires_card: boolean | null;
+        next_invoice: Date | null;
+        last_invoice: Date | null;
+        pricing_strategies: {
+            user: {
+                strategy: "split" | "bundle";
+                default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    label: string;
+                    destination: string;
+                    price: number;
+                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                }[];
+                modification_percentage: number;
+            };
+            partner: {
+                strategy: "split" | "bundle";
+                default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    label: string;
+                    destination: string;
+                    price: number;
+                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                }[];
+                modification_percentage: number;
+            };
+        } | null;
+        commission_fee?: number | null | undefined;
     } | null;
     is_active?: boolean | null | undefined;
     external_id?: string | null | undefined;
@@ -1972,41 +2044,6 @@ export declare const partnerFirestoreSchema: z.ZodObject<{
     created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     users: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[] | null;
-    financial_properties: {
-        pricing_strategies: {
-            user: {
-                default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-                custom_prices: {
-                    type: "data-limit" | "time-limit";
-                    label: string;
-                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-                    destination: string;
-                    price: number;
-                }[];
-                strategy: "split" | "bundle";
-                modification_percentage: number;
-            };
-            partner: {
-                default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-                custom_prices: {
-                    type: "data-limit" | "time-limit";
-                    label: string;
-                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-                    destination: string;
-                    price: number;
-                }[];
-                strategy: "split" | "bundle";
-                modification_percentage: number;
-            };
-        } | null;
-        administration_fee: number | null;
-        income_per_gb: number | null;
-        payment_method: "direct" | "invoice";
-        requires_card: boolean | null;
-        next_invoice: Date | null;
-        last_invoice: Date | null;
-        commission_fee?: number | null | undefined;
-    } | null;
     contact: {
         email: string | null;
         office_phone?: string | null | undefined;
@@ -2087,6 +2124,41 @@ export declare const partnerFirestoreSchema: z.ZodObject<{
                 properties: Record<string, string>;
             }[];
         };
+    } | null;
+    financial_properties: {
+        administration_fee: number | null;
+        income_per_gb: number | null;
+        payment_method: "direct" | "invoice";
+        requires_card: boolean | null;
+        next_invoice: Date | null;
+        last_invoice: Date | null;
+        pricing_strategies: {
+            user: {
+                strategy: "split" | "bundle";
+                default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    label: string;
+                    destination: string;
+                    price: number;
+                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                }[];
+                modification_percentage: number;
+            };
+            partner: {
+                strategy: "split" | "bundle";
+                default_price_list: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    label: string;
+                    destination: string;
+                    price: number;
+                    package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
+                }[];
+                modification_percentage: number;
+            };
+        } | null;
+        commission_fee?: number | null | undefined;
     } | null;
     is_active?: boolean | null | undefined;
     external_id?: string | null | undefined;
@@ -2103,6 +2175,7 @@ export declare const partnerAppSchema: z.ZodObject<{
     financial_properties: z.ZodNullable<z.ZodObject<{
         pricing_strategies: z.ZodNullable<z.ZodObject<{
             partner: z.ZodObject<{
+                strategy: z.ZodEnum<["split", "bundle"]>;
                 default_price_list: z.ZodNullable<z.ZodString>;
                 custom_prices: z.ZodArray<z.ZodObject<{
                     package: z.ZodString;
@@ -2113,39 +2186,38 @@ export declare const partnerAppSchema: z.ZodObject<{
                 }, "strip", z.ZodTypeAny, {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: string;
                     destination: string;
                     price: number;
+                    package: string;
                 }, {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: string;
                     destination: string;
                     price: number;
+                    package: string;
                 }>, "many">;
-                strategy: z.ZodEnum<["split", "bundle"]>;
                 modification_percentage: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
+                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: string;
                     destination: string;
                     price: number;
+                    package: string;
                 }[];
-                strategy: "split" | "bundle";
                 modification_percentage: number;
             }, {
+                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: string;
                     destination: string;
                     price: number;
+                    package: string;
                 }[];
-                strategy: "split" | "bundle";
                 modification_percentage: number;
             }>;
             user: z.ZodObject<{
@@ -2159,89 +2231,89 @@ export declare const partnerAppSchema: z.ZodObject<{
                 }, "strip", z.ZodTypeAny, {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: string;
                     destination: string;
                     price: number;
+                    package: string;
                 }, {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: string;
                     destination: string;
                     price: number;
+                    package: string;
                 }>, "many">;
                 strategy: z.ZodEnum<["split", "bundle"]>;
                 modification_percentage: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
+                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: string;
                     destination: string;
                     price: number;
+                    package: string;
                 }[];
-                strategy: "split" | "bundle";
                 modification_percentage: number;
             }, {
+                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: string;
                     destination: string;
                     price: number;
+                    package: string;
                 }[];
-                strategy: "split" | "bundle";
                 modification_percentage: number;
             }>;
         }, "strip", z.ZodTypeAny, {
             user: {
+                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: string;
                     destination: string;
                     price: number;
+                    package: string;
                 }[];
-                strategy: "split" | "bundle";
                 modification_percentage: number;
             };
             partner: {
+                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: string;
                     destination: string;
                     price: number;
+                    package: string;
                 }[];
-                strategy: "split" | "bundle";
                 modification_percentage: number;
             };
         }, {
             user: {
+                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: string;
                     destination: string;
                     price: number;
+                    package: string;
                 }[];
-                strategy: "split" | "bundle";
                 modification_percentage: number;
             };
             partner: {
+                strategy: "split" | "bundle";
                 default_price_list: string | null;
                 custom_prices: {
                     type: "data-limit" | "time-limit";
                     label: string;
-                    package: string;
                     destination: string;
                     price: number;
+                    package: string;
                 }[];
-                strategy: "split" | "bundle";
                 modification_percentage: number;
             };
         }>>;
@@ -2253,72 +2325,72 @@ export declare const partnerAppSchema: z.ZodObject<{
         next_invoice: z.ZodNullable<z.ZodDate>;
         last_invoice: z.ZodNullable<z.ZodDate>;
     }, "strip", z.ZodTypeAny, {
-        pricing_strategies: {
-            user: {
-                default_price_list: string | null;
-                custom_prices: {
-                    type: "data-limit" | "time-limit";
-                    label: string;
-                    package: string;
-                    destination: string;
-                    price: number;
-                }[];
-                strategy: "split" | "bundle";
-                modification_percentage: number;
-            };
-            partner: {
-                default_price_list: string | null;
-                custom_prices: {
-                    type: "data-limit" | "time-limit";
-                    label: string;
-                    package: string;
-                    destination: string;
-                    price: number;
-                }[];
-                strategy: "split" | "bundle";
-                modification_percentage: number;
-            };
-        } | null;
         administration_fee: number | null;
         income_per_gb: number | null;
         payment_method: "direct" | "invoice";
         requires_card: boolean | null;
         next_invoice: Date | null;
         last_invoice: Date | null;
+        pricing_strategies: {
+            user: {
+                strategy: "split" | "bundle";
+                default_price_list: string | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    label: string;
+                    destination: string;
+                    price: number;
+                    package: string;
+                }[];
+                modification_percentage: number;
+            };
+            partner: {
+                strategy: "split" | "bundle";
+                default_price_list: string | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    label: string;
+                    destination: string;
+                    price: number;
+                    package: string;
+                }[];
+                modification_percentage: number;
+            };
+        } | null;
         commission_fee?: number | null | undefined;
     }, {
-        pricing_strategies: {
-            user: {
-                default_price_list: string | null;
-                custom_prices: {
-                    type: "data-limit" | "time-limit";
-                    label: string;
-                    package: string;
-                    destination: string;
-                    price: number;
-                }[];
-                strategy: "split" | "bundle";
-                modification_percentage: number;
-            };
-            partner: {
-                default_price_list: string | null;
-                custom_prices: {
-                    type: "data-limit" | "time-limit";
-                    label: string;
-                    package: string;
-                    destination: string;
-                    price: number;
-                }[];
-                strategy: "split" | "bundle";
-                modification_percentage: number;
-            };
-        } | null;
         administration_fee: number | null;
         income_per_gb: number | null;
         payment_method: "direct" | "invoice";
         requires_card: boolean | null;
         next_invoice: Date | null;
         last_invoice: Date | null;
+        pricing_strategies: {
+            user: {
+                strategy: "split" | "bundle";
+                default_price_list: string | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    label: string;
+                    destination: string;
+                    price: number;
+                    package: string;
+                }[];
+                modification_percentage: number;
+            };
+            partner: {
+                strategy: "split" | "bundle";
+                default_price_list: string | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    label: string;
+                    destination: string;
+                    price: number;
+                    package: string;
+                }[];
+                modification_percentage: number;
+            };
+        } | null;
         commission_fee?: number | null | undefined;
     }>>;
     name: z.ZodNullable<z.ZodString>;
@@ -2754,41 +2826,6 @@ export declare const partnerAppSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     users: string[] | null;
-    financial_properties: {
-        pricing_strategies: {
-            user: {
-                default_price_list: string | null;
-                custom_prices: {
-                    type: "data-limit" | "time-limit";
-                    label: string;
-                    package: string;
-                    destination: string;
-                    price: number;
-                }[];
-                strategy: "split" | "bundle";
-                modification_percentage: number;
-            };
-            partner: {
-                default_price_list: string | null;
-                custom_prices: {
-                    type: "data-limit" | "time-limit";
-                    label: string;
-                    package: string;
-                    destination: string;
-                    price: number;
-                }[];
-                strategy: "split" | "bundle";
-                modification_percentage: number;
-            };
-        } | null;
-        administration_fee: number | null;
-        income_per_gb: number | null;
-        payment_method: "direct" | "invoice";
-        requires_card: boolean | null;
-        next_invoice: Date | null;
-        last_invoice: Date | null;
-        commission_fee?: number | null | undefined;
-    } | null;
     contact: {
         email: string | null;
         office_phone?: string | null | undefined;
@@ -2869,6 +2906,41 @@ export declare const partnerAppSchema: z.ZodObject<{
                 properties: Record<string, string>;
             }[];
         };
+    } | null;
+    financial_properties: {
+        administration_fee: number | null;
+        income_per_gb: number | null;
+        payment_method: "direct" | "invoice";
+        requires_card: boolean | null;
+        next_invoice: Date | null;
+        last_invoice: Date | null;
+        pricing_strategies: {
+            user: {
+                strategy: "split" | "bundle";
+                default_price_list: string | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    label: string;
+                    destination: string;
+                    price: number;
+                    package: string;
+                }[];
+                modification_percentage: number;
+            };
+            partner: {
+                strategy: "split" | "bundle";
+                default_price_list: string | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    label: string;
+                    destination: string;
+                    price: number;
+                    package: string;
+                }[];
+                modification_percentage: number;
+            };
+        } | null;
+        commission_fee?: number | null | undefined;
     } | null;
     is_active?: boolean | null | undefined;
     external_id?: string | null | undefined;
@@ -2892,41 +2964,6 @@ export declare const partnerAppSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     users: string[] | null;
-    financial_properties: {
-        pricing_strategies: {
-            user: {
-                default_price_list: string | null;
-                custom_prices: {
-                    type: "data-limit" | "time-limit";
-                    label: string;
-                    package: string;
-                    destination: string;
-                    price: number;
-                }[];
-                strategy: "split" | "bundle";
-                modification_percentage: number;
-            };
-            partner: {
-                default_price_list: string | null;
-                custom_prices: {
-                    type: "data-limit" | "time-limit";
-                    label: string;
-                    package: string;
-                    destination: string;
-                    price: number;
-                }[];
-                strategy: "split" | "bundle";
-                modification_percentage: number;
-            };
-        } | null;
-        administration_fee: number | null;
-        income_per_gb: number | null;
-        payment_method: "direct" | "invoice";
-        requires_card: boolean | null;
-        next_invoice: Date | null;
-        last_invoice: Date | null;
-        commission_fee?: number | null | undefined;
-    } | null;
     contact: {
         email: string | null;
         office_phone?: string | null | undefined;
@@ -3007,6 +3044,41 @@ export declare const partnerAppSchema: z.ZodObject<{
                 properties: Record<string, string>;
             }[];
         };
+    } | null;
+    financial_properties: {
+        administration_fee: number | null;
+        income_per_gb: number | null;
+        payment_method: "direct" | "invoice";
+        requires_card: boolean | null;
+        next_invoice: Date | null;
+        last_invoice: Date | null;
+        pricing_strategies: {
+            user: {
+                strategy: "split" | "bundle";
+                default_price_list: string | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    label: string;
+                    destination: string;
+                    price: number;
+                    package: string;
+                }[];
+                modification_percentage: number;
+            };
+            partner: {
+                strategy: "split" | "bundle";
+                default_price_list: string | null;
+                custom_prices: {
+                    type: "data-limit" | "time-limit";
+                    label: string;
+                    destination: string;
+                    price: number;
+                    package: string;
+                }[];
+                modification_percentage: number;
+            };
+        } | null;
+        commission_fee?: number | null | undefined;
     } | null;
     is_active?: boolean | null | undefined;
     external_id?: string | null | undefined;
@@ -3027,15 +3099,15 @@ export declare const priceListFirestoreSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         type: "data-limit" | "time-limit";
         label: string;
-        package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
         destination: string;
         price: number;
+        package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
     }, {
         type: "data-limit" | "time-limit";
         label: string;
-        package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
         destination: string;
         price: number;
+        package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
     }>, "many">;
     name: z.ZodString;
     type: z.ZodDefault<z.ZodEnum<["partner", "user"]>>;
@@ -3050,9 +3122,9 @@ export declare const priceListFirestoreSchema: z.ZodObject<{
     price_list: {
         type: "data-limit" | "time-limit";
         label: string;
-        package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
         destination: string;
         price: number;
+        package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
     }[];
 }, {
     name: string;
@@ -3064,9 +3136,9 @@ export declare const priceListFirestoreSchema: z.ZodObject<{
     price_list: {
         type: "data-limit" | "time-limit";
         label: string;
-        package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
         destination: string;
         price: number;
+        package: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
     }[];
     type?: "user" | "partner" | undefined;
 }>;
@@ -3086,15 +3158,15 @@ export declare const priceListAppSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         type: "data-limit" | "time-limit";
         label: string;
-        package: string;
         destination: string;
         price: number;
+        package: string;
     }, {
         type: "data-limit" | "time-limit";
         label: string;
-        package: string;
         destination: string;
         price: number;
+        package: string;
     }>, "many">;
     name: z.ZodString;
     type: z.ZodDefault<z.ZodEnum<["partner", "user"]>>;
@@ -3109,9 +3181,9 @@ export declare const priceListAppSchema: z.ZodObject<{
     price_list: {
         type: "data-limit" | "time-limit";
         label: string;
-        package: string;
         destination: string;
         price: number;
+        package: string;
     }[];
 }, {
     name: string;
@@ -3123,12 +3195,33 @@ export declare const priceListAppSchema: z.ZodObject<{
     price_list: {
         type: "data-limit" | "time-limit";
         label: string;
-        package: string;
         destination: string;
         price: number;
+        package: string;
     }[];
     type?: "user" | "partner" | undefined;
 }>;
+export declare const partnerToFirestore: (partner: PartnerApp) => PartnerFirestore;
+export declare const partnerFromFirestore: (firestorePartner: PartnerFirestore) => PartnerApp;
+export declare const priceListFromFirestore: (firestorePriceList: PriceListFirestore) => PriceListApp;
+export declare const priceListToFirestore: (priceList: PriceListApp) => PriceListFirestore;
+export type Partner = PartnerFirestore;
+export type HPartner = PartnerApp;
+export type PriceList = PriceListFirestore;
+export type HPriceList = PriceListApp;
+export type HPackagePrice = z.infer<typeof packagePriceAppSchema>;
+export type PackagePrice = z.infer<typeof packagePriceFirestoreSchema>;
+export type HFinancialProperties = z.infer<typeof financialPropertiesAppSchema>;
+export type FinancialProperties = z.infer<typeof financialPropertiesFirestoreSchema>;
+export type HPlatformSettings = z.infer<typeof platformSettingsSchema>;
+export type HVisualIdentity = z.infer<typeof visualIdentitySchema>;
+export type HSchedule = z.infer<typeof scheduleSchema>;
+export type HPackageStrategy = z.infer<typeof packageStrategySchema>;
+export type HBookingDefaults = z.infer<typeof bookingDefaultsSchema>;
+export type HBookingConfirmation = z.infer<typeof bookingConfirmationSchema>;
+export type HVisualIdentityBanner = z.infer<typeof visualIdentityBannerSchema>;
+export type HVisualIdentityBannerStrategy = z.infer<typeof visualIdentityBannerStrategySchema>;
+export type HScheduleFilter = z.infer<typeof scheduleFilterSchema>;
 export type PartnerFirestore = z.infer<typeof partnerFirestoreSchema>;
 export type PartnerApp = z.infer<typeof partnerAppSchema>;
 export type PriceListFirestore = z.infer<typeof priceListFirestoreSchema>;
@@ -3138,8 +3231,10 @@ export type Registration = z.infer<typeof registrationSchema>;
 export type BankingDetails = z.infer<typeof bankingDetailsSchema>;
 export type PackagePriceFirestore = z.infer<typeof packagePriceFirestoreSchema>;
 export type PackagePriceApp = z.infer<typeof packagePriceAppSchema>;
-export type PricingStrategyFirestore = z.infer<typeof pricingStrategyFirestoreSchema>;
-export type PricingStrategyApp = z.infer<typeof pricingStrategyAppSchema>;
+export type PartnerPricingStrategyFirestore = z.infer<typeof partnerPricingStrategyFirestoreSchema>;
+export type PartnerPricingStrategyApp = z.infer<typeof partnerPricingStrategyAppSchema>;
+export type UserPricingStrategyFirestore = z.infer<typeof userPricingStrategyFirestoreSchema>;
+export type UserPricingStrategyApp = z.infer<typeof userPricingStrategyAppSchema>;
 export type FinancialPropertiesFirestore = z.infer<typeof financialPropertiesFirestoreSchema>;
 export type FinancialPropertiesApp = z.infer<typeof financialPropertiesAppSchema>;
 export type PackageStrategy = z.infer<typeof packageStrategySchema>;
@@ -3151,12 +3246,3 @@ export type VisualIdentity = z.infer<typeof visualIdentitySchema>;
 export type ScheduleFilter = z.infer<typeof scheduleFilterSchema>;
 export type Schedule = z.infer<typeof scheduleSchema>;
 export type PlatformSettings = z.infer<typeof platformSettingsSchema>;
-export declare const partnerToFirestore: (partner: PartnerApp) => PartnerFirestore;
-export declare const partnerFromFirestore: (firestorePartner: PartnerFirestore) => PartnerApp;
-export declare const priceListFromFirestore: (firestorePriceList: PriceListFirestore) => PriceListApp;
-export declare const priceListToFirestore: (priceList: PriceListApp) => PriceListFirestore;
-export type Partner = PartnerFirestore;
-export type HPartner = PartnerApp;
-export type PriceList = PriceListFirestore;
-export type HPriceList = PriceListApp;
-export type PackagePrice = z.infer<typeof packagePriceAppSchema>;

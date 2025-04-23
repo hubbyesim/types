@@ -2,9 +2,6 @@ import { z } from 'zod';
 import {
     baseModelSchema,
     baseModelAppSchema,
-    documentRefSchema,
-    createDocRefSchema,
-    docRefToStringSchema,
     fromFirestore,
     toFirestore
 } from './helpers';
@@ -19,10 +16,12 @@ import {
 } from './utils/collections';
 import { countryFirestoreSchema, CountryFirestore, CountryApp } from './country';
 import { DocumentReference } from 'firebase-admin/firestore';
-
-// Define document reference schemas
-export const countryRefSchema = createDocRefSchema<CountryFirestore>(COUNTRY_COLLECTION);
-export const partnerRefSchema = createDocRefSchema<any>(PARTNER_COLLECTION);
+import { 
+    countryRefSchema, 
+    partnerRefNullable,
+    countryRefString,
+    partnerRefStringNullable
+} from './refs';
 
 // Common package fields shared between Firestore and App schemas
 const commonPackageFields = {
@@ -51,14 +50,14 @@ const commonPackageFields = {
 export const packageFirestoreSchema = baseModelSchema.extend({
     ...commonPackageFields,
     country: countryRefSchema.schema,
-    partner: partnerRefSchema.schema.nullable(),
+    partner: partnerRefNullable,
 });
 
 // App schema for Package
 export const packageAppSchema = baseModelAppSchema.extend({
     ...commonPackageFields,
-    country: docRefToStringSchema(countryRefSchema),
-    partner: z.string().nullable(),
+    country: countryRefString,
+    partner: partnerRefStringNullable,
 });
 
 // Define types based on schemas

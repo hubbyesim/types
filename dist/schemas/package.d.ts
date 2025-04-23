@@ -1,13 +1,5 @@
 import { z } from 'zod';
 import { DocumentReference } from 'firebase-admin/firestore';
-export declare const countryRefSchema: {
-    schema: z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-    collectionPath: string;
-};
-export declare const partnerRefSchema: {
-    schema: z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-    collectionPath: string;
-};
 export declare const packageFirestoreSchema: z.ZodObject<{
     id: z.ZodString;
     created_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
@@ -100,7 +92,6 @@ export declare const packageFirestoreSchema: z.ZodObject<{
     created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    price: number;
     is_active: boolean;
     external_id: string;
     provider: string;
@@ -122,6 +113,7 @@ export declare const packageFirestoreSchema: z.ZodObject<{
         is_region: boolean | null;
         tier: number | null;
     } | null;
+    price: number;
     partner_price: number;
     provider_parameters: {
         imsi: number;
@@ -142,7 +134,6 @@ export declare const packageFirestoreSchema: z.ZodObject<{
     created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    price: number;
     is_active: boolean;
     external_id: string;
     provider: string;
@@ -164,6 +155,7 @@ export declare const packageFirestoreSchema: z.ZodObject<{
         is_region: boolean | null;
         tier: number | null;
     } | null;
+    price: number;
     partner_price: number;
     provider_parameters: {
         imsi: number;
@@ -262,7 +254,6 @@ export declare const packageAppSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     partner: string | null;
-    price: number;
     is_active: boolean;
     external_id: string;
     provider: string;
@@ -284,6 +275,7 @@ export declare const packageAppSchema: z.ZodObject<{
         is_region: boolean | null;
         tier: number | null;
     } | null;
+    price: number;
     partner_price: number;
     provider_parameters: {
         imsi: number;
@@ -304,7 +296,6 @@ export declare const packageAppSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     partner: string | null;
-    price: number;
     is_active: boolean;
     external_id: string;
     provider: string;
@@ -326,6 +317,7 @@ export declare const packageAppSchema: z.ZodObject<{
         is_region: boolean | null;
         tier: number | null;
     } | null;
+    price: number;
     partner_price: number;
     provider_parameters: {
         imsi: number;

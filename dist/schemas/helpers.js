@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PROFILE_COLLECTION = exports.docRefToStringSchema = exports.createDocRefSchema = exports.hubbyModelAppSchema = exports.hubbyModelFirestoreSchema = exports.baseModelAppSchema = exports.baseModelSchema = exports.fromFirestore = exports.toFirestore = exports.fieldValueSchema = exports.documentRefSchema = exports.timestampSchema = exports.MockDocumentReference = exports.isTestEnvironment = void 0;
+exports.docRefToStringSchema = exports.createDocRefSchema = exports.hubbyModelAppSchema = exports.hubbyModelFirestoreSchema = exports.baseModelAppSchema = exports.baseModelSchema = exports.fromFirestore = exports.toFirestore = exports.fieldValueSchema = exports.documentRefSchema = exports.timestampSchema = exports.MockDocumentReference = exports.isTestEnvironment = void 0;
 const zod_1 = require("zod");
 const firestore_1 = require("firebase-admin/firestore");
 // Flag to indicate if we're running in a test environment
@@ -78,4 +78,3 @@ const docRefToStringSchema = (docRefSchema) => {
     return zod_1.z.string().describe(`ID from ${docRefSchema.collectionPath}`);
 };
 exports.docRefToStringSchema = docRefToStringSchema;
-exports.PROFILE_COLLECTION = 'profiles';

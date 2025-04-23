@@ -1,14 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userToFirestoreWithBalance = exports.userFromFirestore = exports.userToFirestore = exports.userAppSchema = exports.userFirestoreSchema = exports.apiKeysSchema = exports.apiKeySchema = exports.partnerRefSchema = exports.profileRefSchema = void 0;
+exports.userToFirestoreWithBalance = exports.userFromFirestore = exports.userToFirestore = exports.userAppSchema = exports.userFirestoreSchema = exports.apiKeysSchema = exports.apiKeySchema = void 0;
 const zod_1 = require("zod");
 const firestore_1 = require("firebase-admin/firestore");
 const helpers_1 = require("./helpers");
 const utils_1 = require("./utils");
 const collections_1 = require("./utils/collections");
-// Define document reference schemas
-exports.profileRefSchema = (0, helpers_1.createDocRefSchema)(collections_1.PROFILE_COLLECTION);
-exports.partnerRefSchema = (0, helpers_1.createDocRefSchema)(collections_1.PARTNER_COLLECTION);
+const refs_1 = require("./refs");
 // Schema for API Key
 exports.apiKeySchema = zod_1.z.object({
     expires_at: helpers_1.timestampSchema,
@@ -44,9 +42,9 @@ const commonUserFields = {
     receipt_email: zod_1.z.string().nullable()
 };
 // Define Firestore schema
-exports.userFirestoreSchema = helpers_1.baseModelSchema.extend(Object.assign(Object.assign({}, commonUserFields), { createdAt: helpers_1.timestampSchema, partner: exports.partnerRefSchema.schema.nullable(), profileRef: exports.profileRefSchema.schema.nullable(), balance: zod_1.z.union([zod_1.z.number(), zod_1.z.null(), helpers_1.fieldValueSchema]), review_requested: helpers_1.timestampSchema.nullable(), last_seen: helpers_1.timestampSchema.nullable() }));
+exports.userFirestoreSchema = helpers_1.baseModelSchema.extend(Object.assign(Object.assign({}, commonUserFields), { createdAt: helpers_1.timestampSchema, partner: refs_1.partnerRefNullable, profileRef: refs_1.profileRefNullable, balance: zod_1.z.union([zod_1.z.number(), zod_1.z.null(), helpers_1.fieldValueSchema]), review_requested: helpers_1.timestampSchema.nullable(), last_seen: helpers_1.timestampSchema.nullable() }));
 // Define App schema (with JavaScript-friendly types)
-exports.userAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonUserFields), { createdAt: zod_1.z.date(), partner: (0, helpers_1.docRefToStringSchema)(exports.partnerRefSchema).nullable(), profileRef: (0, helpers_1.docRefToStringSchema)(exports.profileRefSchema).nullable(), balance: zod_1.z.number().nullable(), review_requested: zod_1.z.date().nullable(), last_seen: zod_1.z.date().nullable() }));
+exports.userAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonUserFields), { createdAt: zod_1.z.date(), partner: refs_1.partnerRefStringNullable, profileRef: refs_1.profileRefStringNullable, balance: zod_1.z.number().nullable(), review_requested: zod_1.z.date().nullable(), last_seen: zod_1.z.date().nullable() }));
 // Field mapping for conversions
 const refFieldMappings = [
     { app: 'profileRef', firestore: 'profileRef', collection: collections_1.PROFILE_COLLECTION, nullable: true },

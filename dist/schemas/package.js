@@ -1,14 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.packageFromFirestore = exports.packageToFirestore = exports.packageAppSchema = exports.packageFirestoreSchema = exports.partnerRefSchema = exports.countryRefSchema = void 0;
+exports.packageFromFirestore = exports.packageToFirestore = exports.packageAppSchema = exports.packageFirestoreSchema = void 0;
 const zod_1 = require("zod");
 const helpers_1 = require("./helpers");
 const utils_1 = require("./utils");
 const collections_1 = require("./utils/collections");
 const country_1 = require("./country");
-// Define document reference schemas
-exports.countryRefSchema = (0, helpers_1.createDocRefSchema)(collections_1.COUNTRY_COLLECTION);
-exports.partnerRefSchema = (0, helpers_1.createDocRefSchema)(collections_1.PARTNER_COLLECTION);
+const refs_1 = require("./refs");
 // Common package fields shared between Firestore and App schemas
 const commonPackageFields = {
     external_id: zod_1.z.string(),
@@ -32,9 +30,9 @@ const commonPackageFields = {
     }).nullable()
 };
 // Firestore schema for Package
-exports.packageFirestoreSchema = helpers_1.baseModelSchema.extend(Object.assign(Object.assign({}, commonPackageFields), { country: exports.countryRefSchema.schema, partner: exports.partnerRefSchema.schema.nullable() }));
+exports.packageFirestoreSchema = helpers_1.baseModelSchema.extend(Object.assign(Object.assign({}, commonPackageFields), { country: refs_1.countryRefSchema.schema, partner: refs_1.partnerRefNullable }));
 // App schema for Package
-exports.packageAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonPackageFields), { country: (0, helpers_1.docRefToStringSchema)(exports.countryRefSchema), partner: zod_1.z.string().nullable() }));
+exports.packageAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonPackageFields), { country: refs_1.countryRefString, partner: refs_1.partnerRefStringNullable }));
 // Field mapping for conversions
 const refFieldMappings = [
     { app: 'country', firestore: 'country', collection: collections_1.COUNTRY_COLLECTION },

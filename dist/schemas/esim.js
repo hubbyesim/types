@@ -1,15 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.esimFromFirestore = exports.esimToFirestore = exports.esimAppSchema = exports.esimFirestoreSchema = exports.paymentRefSchema = exports.partnerRefSchema = exports.userRefSchema = exports.countryRefSchema = void 0;
+exports.esimFromFirestore = exports.esimToFirestore = exports.esimAppSchema = exports.esimFirestoreSchema = void 0;
 const zod_1 = require("zod");
 const helpers_1 = require("./helpers");
 const utils_1 = require("./utils");
 const collections_1 = require("./utils/collections");
-// Define document reference schemas
-exports.countryRefSchema = (0, helpers_1.createDocRefSchema)(collections_1.COUNTRY_COLLECTION);
-exports.userRefSchema = (0, helpers_1.createDocRefSchema)(collections_1.USER_COLLECTION);
-exports.partnerRefSchema = (0, helpers_1.createDocRefSchema)(collections_1.PARTNER_COLLECTION);
-exports.paymentRefSchema = (0, helpers_1.createDocRefSchema)(collections_1.PAYMENT_COLLECTION);
+const refs_1 = require("./refs");
 // Common fields shared between Firestore and App schemas
 const commonESIMFields = {
     imsi: zod_1.z.number(),
@@ -31,7 +27,7 @@ const commonESIMFields = {
     apn: zod_1.z.string().nullable()
 };
 // Firestore schema for ESIM
-exports.esimFirestoreSchema = helpers_1.baseModelSchema.extend(Object.assign(Object.assign({}, commonESIMFields), { country: exports.countryRefSchema.schema.nullable(), user: exports.userRefSchema.schema.nullable(), time_assigned: helpers_1.timestampSchema.nullable(), last_updated: helpers_1.timestampSchema.nullable(), partner: exports.partnerRefSchema.schema.nullable(), payment: exports.paymentRefSchema.schema.nullable() }));
+exports.esimFirestoreSchema = helpers_1.baseModelSchema.extend(Object.assign(Object.assign({}, commonESIMFields), { country: refs_1.countryRefNullable, user: refs_1.userRefNullable, time_assigned: helpers_1.timestampSchema.nullable(), last_updated: helpers_1.timestampSchema.nullable(), partner: refs_1.partnerRefNullable, payment: refs_1.paymentRefNullable }));
 // App schema for ESIM
 exports.esimAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonESIMFields), { country: zod_1.z.string().nullable(), user: zod_1.z.string().nullable(), time_assigned: zod_1.z.date().nullable(), last_updated: zod_1.z.date().nullable(), partner: zod_1.z.string().nullable(), payment: zod_1.z.string().nullable() }));
 // Field mapping for conversions

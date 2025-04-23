@@ -4,9 +4,6 @@ import {
     baseModelSchema,
     baseModelAppSchema,
     timestampSchema,
-    documentRefSchema,
-    createDocRefSchema,
-    docRefToStringSchema,
     fromFirestore,
     toFirestore,
     fieldValueSchema
@@ -21,10 +18,12 @@ import {
     PROFILE_COLLECTION,
     PARTNER_COLLECTION
 } from './utils/collections';
-
-// Define document reference schemas
-export const profileRefSchema = createDocRefSchema<any>(PROFILE_COLLECTION);
-export const partnerRefSchema = createDocRefSchema<any>(PARTNER_COLLECTION);
+import { 
+    partnerRefNullable, 
+    profileRefNullable, 
+    partnerRefStringNullable, 
+    profileRefStringNullable 
+} from './refs';
 
 // Schema for API Key
 export const apiKeySchema = z.object({
@@ -67,8 +66,8 @@ const commonUserFields = {
 export const userFirestoreSchema = baseModelSchema.extend({
     ...commonUserFields,
     createdAt: timestampSchema,
-    partner: partnerRefSchema.schema.nullable(),
-    profileRef: profileRefSchema.schema.nullable(),
+    partner: partnerRefNullable,
+    profileRef: profileRefNullable,
     balance: z.union([z.number(), z.null(), fieldValueSchema]),
     review_requested: timestampSchema.nullable(),
     last_seen: timestampSchema.nullable()
@@ -78,8 +77,8 @@ export const userFirestoreSchema = baseModelSchema.extend({
 export const userAppSchema = baseModelAppSchema.extend({
     ...commonUserFields,
     createdAt: z.date(),
-    partner: docRefToStringSchema(partnerRefSchema).nullable(),
-    profileRef: docRefToStringSchema(profileRefSchema).nullable(),
+    partner: partnerRefStringNullable,
+    profileRef: profileRefStringNullable,
     balance: z.number().nullable(),
     review_requested: z.date().nullable(),
     last_seen: z.date().nullable()

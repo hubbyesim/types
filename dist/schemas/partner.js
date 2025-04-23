@@ -1,19 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.priceListToFirestore = exports.priceListFromFirestore = exports.partnerFromFirestore = exports.partnerToFirestore = exports.priceListAppSchema = exports.priceListFirestoreSchema = exports.partnerAppSchema = exports.partnerFirestoreSchema = exports.platformSettingsSchema = exports.scheduleSchema = exports.scheduleFilterSchema = exports.visualIdentitySchema = exports.visualIdentityBannerStrategySchema = exports.visualIdentityBannerSchema = exports.bookingConfirmationSchema = exports.bookingDefaultsSchema = exports.packageStrategySchema = exports.financialPropertiesAppSchema = exports.financialPropertiesFirestoreSchema = exports.pricingStrategyAppSchema = exports.pricingStrategyFirestoreSchema = exports.packagePriceAppSchema = exports.packagePriceFirestoreSchema = exports.bankingDetailsSchema = exports.registrationSchema = exports.addressSchema = exports.userRefSchema = exports.packageRefSchema = exports.priceListRefSchema = exports.partnerRefSchema = exports.USER_COLLECTION = exports.PACKAGE_COLLECTION = exports.PRICE_LIST_COLLECTION = exports.PARTNER_COLLECTION = void 0;
+exports.priceListToFirestore = exports.priceListFromFirestore = exports.partnerFromFirestore = exports.partnerToFirestore = exports.priceListAppSchema = exports.priceListFirestoreSchema = exports.partnerAppSchema = exports.partnerFirestoreSchema = exports.platformSettingsSchema = exports.scheduleSchema = exports.scheduleFilterSchema = exports.visualIdentitySchema = exports.visualIdentityBannerStrategySchema = exports.visualIdentityBannerSchema = exports.bookingConfirmationSchema = exports.bookingDefaultsSchema = exports.packageStrategySchema = exports.financialPropertiesAppSchema = exports.financialPropertiesFirestoreSchema = exports.userPricingStrategyAppSchema = exports.userPricingStrategyFirestoreSchema = exports.partnerPricingStrategyAppSchema = exports.partnerPricingStrategyFirestoreSchema = exports.packagePriceAppSchema = exports.packagePriceFirestoreSchema = exports.bankingDetailsSchema = exports.registrationSchema = exports.addressSchema = void 0;
 const zod_1 = require("zod");
 const helpers_1 = require("./helpers");
 const constants_1 = require("../constants");
-// Define collection paths
-exports.PARTNER_COLLECTION = 'partners';
-exports.PRICE_LIST_COLLECTION = 'priceLists';
-exports.PACKAGE_COLLECTION = 'packages';
-exports.USER_COLLECTION = 'users';
-// Define document reference schemas
-exports.partnerRefSchema = (0, helpers_1.createDocRefSchema)(exports.PARTNER_COLLECTION);
-exports.priceListRefSchema = (0, helpers_1.createDocRefSchema)(exports.PRICE_LIST_COLLECTION);
-exports.packageRefSchema = (0, helpers_1.createDocRefSchema)(exports.PACKAGE_COLLECTION);
-exports.userRefSchema = (0, helpers_1.createDocRefSchema)(exports.USER_COLLECTION);
+const refs_1 = require("./refs");
 // Helper schemas for nested structures
 exports.addressSchema = zod_1.z.object({
     street: zod_1.z.string().optional(),
@@ -39,15 +30,17 @@ const commonPackagePriceFields = {
     type: zod_1.z.enum(['data-limit', 'time-limit']),
     price: zod_1.z.number()
 };
-exports.packagePriceFirestoreSchema = zod_1.z.object(Object.assign(Object.assign({}, commonPackagePriceFields), { package: exports.packageRefSchema.schema }));
-exports.packagePriceAppSchema = zod_1.z.object(Object.assign(Object.assign({}, commonPackagePriceFields), { package: zod_1.z.string() }));
+exports.packagePriceFirestoreSchema = zod_1.z.object(Object.assign(Object.assign({}, commonPackagePriceFields), { package: refs_1.packageRefSchema.schema }));
+exports.packagePriceAppSchema = zod_1.z.object(Object.assign(Object.assign({}, commonPackagePriceFields), { package: refs_1.packageRefString }));
 // Common pricing strategy fields
 const commonPricingStrategyFields = {
     strategy: zod_1.z.enum(['split', 'bundle']),
     modification_percentage: zod_1.z.number()
 };
-exports.pricingStrategyFirestoreSchema = zod_1.z.object(Object.assign(Object.assign({}, commonPricingStrategyFields), { default_price_list: exports.priceListRefSchema.schema.nullable(), custom_prices: zod_1.z.array(exports.packagePriceFirestoreSchema) }));
-exports.pricingStrategyAppSchema = zod_1.z.object(Object.assign(Object.assign({}, commonPricingStrategyFields), { default_price_list: zod_1.z.string().nullable(), custom_prices: zod_1.z.array(exports.packagePriceAppSchema) }));
+exports.partnerPricingStrategyFirestoreSchema = zod_1.z.object(Object.assign(Object.assign({}, commonPricingStrategyFields), { strategy: zod_1.z.enum(['split', 'bundle']), default_price_list: refs_1.priceListRefNullable, custom_prices: zod_1.z.array(exports.packagePriceFirestoreSchema) }));
+exports.partnerPricingStrategyAppSchema = zod_1.z.object(Object.assign(Object.assign({}, commonPricingStrategyFields), { strategy: zod_1.z.enum(['split', 'bundle']), default_price_list: refs_1.priceListRefStringNullable, custom_prices: zod_1.z.array(exports.packagePriceAppSchema) }));
+exports.userPricingStrategyFirestoreSchema = zod_1.z.object(Object.assign(Object.assign({}, commonPricingStrategyFields), { default_price_list: refs_1.priceListRefNullable, custom_prices: zod_1.z.array(exports.packagePriceFirestoreSchema) }));
+exports.userPricingStrategyAppSchema = zod_1.z.object(Object.assign(Object.assign({}, commonPricingStrategyFields), { default_price_list: refs_1.priceListRefStringNullable, custom_prices: zod_1.z.array(exports.packagePriceAppSchema) }));
 // Common financial properties fields
 const commonFinancialPropertiesFields = {
     administration_fee: zod_1.z.number().nullable(),
@@ -59,12 +52,12 @@ const commonFinancialPropertiesFields = {
     last_invoice: zod_1.z.date().nullable(),
 };
 exports.financialPropertiesFirestoreSchema = zod_1.z.object(Object.assign(Object.assign({}, commonFinancialPropertiesFields), { pricing_strategies: zod_1.z.object({
-        partner: exports.pricingStrategyFirestoreSchema,
-        user: exports.pricingStrategyFirestoreSchema
+        partner: exports.partnerPricingStrategyFirestoreSchema,
+        user: exports.userPricingStrategyFirestoreSchema
     }).nullable() })).nullable();
 exports.financialPropertiesAppSchema = zod_1.z.object(Object.assign(Object.assign({}, commonFinancialPropertiesFields), { pricing_strategies: zod_1.z.object({
-        partner: exports.pricingStrategyAppSchema,
-        user: exports.pricingStrategyAppSchema
+        partner: exports.partnerPricingStrategyAppSchema,
+        user: exports.userPricingStrategyAppSchema
     }).nullable() })).nullable();
 exports.packageStrategySchema = zod_1.z.object({
     name: zod_1.z.string(),
@@ -166,9 +159,9 @@ const commonPartnerFields = {
     }).nullable()
 };
 // Firestore schema for Partner
-exports.partnerFirestoreSchema = helpers_1.baseModelSchema.extend(Object.assign(Object.assign({}, commonPartnerFields), { parent: helpers_1.documentRefSchema.nullable(), users: zod_1.z.array(helpers_1.documentRefSchema).nullable(), financial_properties: exports.financialPropertiesFirestoreSchema }));
+exports.partnerFirestoreSchema = helpers_1.baseModelSchema.extend(Object.assign(Object.assign({}, commonPartnerFields), { parent: refs_1.partnerRefNullable, users: refs_1.userRefArrayNullable, financial_properties: exports.financialPropertiesFirestoreSchema }));
 // App schema for Partner
-exports.partnerAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonPartnerFields), { parent: zod_1.z.string().nullable(), users: zod_1.z.array(zod_1.z.string()).nullable(), financial_properties: exports.financialPropertiesAppSchema }));
+exports.partnerAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonPartnerFields), { parent: refs_1.partnerRefStringNullable, users: refs_1.userRefStringArrayNullable, financial_properties: exports.financialPropertiesAppSchema }));
 // Common price list fields
 const commonPriceListFields = {
     name: zod_1.z.string(),
@@ -177,11 +170,12 @@ const commonPriceListFields = {
 // Type for price list
 exports.priceListFirestoreSchema = helpers_1.baseModelSchema.extend(Object.assign(Object.assign({}, commonPriceListFields), { price_list: zod_1.z.array(exports.packagePriceFirestoreSchema) }));
 exports.priceListAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonPriceListFields), { price_list: zod_1.z.array(exports.packagePriceAppSchema) }));
+// Define types based on schemas
 // Field mapping for conversions using the shared GenericRefFieldMapping interface
 const utils_1 = require("./utils");
 const refFieldMappings = [
-    { app: 'parent', firestore: 'parent', collection: exports.PARTNER_COLLECTION, nullable: true },
-    { app: 'users', firestore: 'users', collection: exports.USER_COLLECTION, nullable: true, isArray: true }
+    { app: 'parent', firestore: 'parent', collection: refs_1.PARTNER_COLLECTION, nullable: true },
+    { app: 'users', firestore: 'users', collection: refs_1.USER_COLLECTION, nullable: true, isArray: true }
 ];
 // Conversion functions
 const partnerToFirestore = (partner) => {
@@ -199,12 +193,12 @@ const partnerToFirestore = (partner) => {
                     const ps = fp.pricing_strategies;
                     // Convert partner pricing strategy
                     const partnerStrategy = Object.assign(Object.assign({}, ps.partner), { default_price_list: ps.partner.default_price_list
-                            ? helpers_1.toFirestore.ref(exports.PRICE_LIST_COLLECTION, ps.partner.default_price_list)
-                            : null, custom_prices: ps.partner.custom_prices.map((price) => (Object.assign(Object.assign({}, price), { package: helpers_1.toFirestore.ref(exports.PACKAGE_COLLECTION, price.package) }))) });
+                            ? helpers_1.toFirestore.ref(refs_1.PRICE_LIST_COLLECTION, ps.partner.default_price_list)
+                            : null, custom_prices: ps.partner.custom_prices.map((price) => (Object.assign(Object.assign({}, price), { package: helpers_1.toFirestore.ref(refs_1.PACKAGE_COLLECTION, price.package) }))) });
                     // Convert user pricing strategy
                     const userStrategy = Object.assign(Object.assign({}, ps.user), { default_price_list: ps.user.default_price_list
-                            ? helpers_1.toFirestore.ref(exports.PRICE_LIST_COLLECTION, ps.user.default_price_list)
-                            : null, custom_prices: ps.user.custom_prices.map((price) => (Object.assign(Object.assign({}, price), { package: helpers_1.toFirestore.ref(exports.PACKAGE_COLLECTION, price.package) }))) });
+                            ? helpers_1.toFirestore.ref(refs_1.PRICE_LIST_COLLECTION, ps.user.default_price_list)
+                            : null, custom_prices: ps.user.custom_prices.map((price) => (Object.assign(Object.assign({}, price), { package: helpers_1.toFirestore.ref(refs_1.PACKAGE_COLLECTION, price.package) }))) });
                     const partnerStrategyObj = partnerStrategy;
                     const userStrategyObj = userStrategy;
                     if ('default_price_list' in partnerStrategyObj) {
@@ -294,7 +288,7 @@ const priceListToFirestore = (priceList) => {
             // Convert array of objects with document references
             const priceListValue = appData.price_list;
             if (Array.isArray(priceListValue)) {
-                result.price_list = priceListValue.map((item) => (Object.assign(Object.assign({}, item), { package: helpers_1.toFirestore.ref(exports.PACKAGE_COLLECTION, item.package) })));
+                result.price_list = priceListValue.map((item) => (Object.assign(Object.assign({}, item), { package: helpers_1.toFirestore.ref(refs_1.PACKAGE_COLLECTION, item.package) })));
             }
         }
     });

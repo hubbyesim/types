@@ -49,15 +49,16 @@ import {
     userAppSchema,
     userToFirestore,
     userFromFirestore,
+    userToFirestoreWithBalance,
     UserApp,
     UserFirestore
 } from '../src/schemas/user';
 
-// Import collection paths from the correct source
+// Import collection constants from the centralized refs
 import {
     PROFILE_COLLECTION,
     PARTNER_COLLECTION
-} from '../src/schemas/utils/collections';
+} from '../src/schemas/refs';
 
 /**
  * Create a sample user with comprehensive data for testing

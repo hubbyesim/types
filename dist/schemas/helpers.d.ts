@@ -102,4 +102,3 @@ export declare const createDocRefSchema: <T>(collectionPath: string) => {
     collectionPath: string;
 };
 export declare const docRefToStringSchema: <T>(docRefSchema: ReturnType<typeof createDocRefSchema<T>>) => z.ZodString;
-export declare const PROFILE_COLLECTION = "profiles";

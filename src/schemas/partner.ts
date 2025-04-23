@@ -11,18 +11,23 @@ import {
 } from './helpers';
 import { SUPPORTED_LOCALES, supportedLocalesSchema } from '../constants';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
-
-// Define collection paths
-export const PARTNER_COLLECTION = 'partners';
-export const PRICE_LIST_COLLECTION = 'priceLists';
-export const PACKAGE_COLLECTION = 'packages';
-export const USER_COLLECTION = 'users';
-
-// Define document reference schemas
-export const partnerRefSchema = createDocRefSchema<any>(PARTNER_COLLECTION);
-export const priceListRefSchema = createDocRefSchema<any>(PRICE_LIST_COLLECTION);
-export const packageRefSchema = createDocRefSchema<any>(PACKAGE_COLLECTION);
-export const userRefSchema = createDocRefSchema<any>(USER_COLLECTION);
+import { 
+    partnerRefSchema, 
+    priceListRefSchema, 
+    packageRefSchema, 
+    userRefSchema,
+    partnerRefNullable,
+    userRefArrayNullable,
+    priceListRefNullable,
+    packageRefString,
+    partnerRefStringNullable,
+    userRefStringArrayNullable,
+    priceListRefStringNullable,
+    PARTNER_COLLECTION,
+    PRICE_LIST_COLLECTION,
+    PACKAGE_COLLECTION,
+    USER_COLLECTION
+} from './refs';
 
 // Helper schemas for nested structures
 export const addressSchema = z.object({
@@ -60,7 +65,7 @@ export const packagePriceFirestoreSchema = z.object({
 
 export const packagePriceAppSchema = z.object({
     ...commonPackagePriceFields,
-    package: z.string(),
+    package: packageRefString,
 });
 
 // Common pricing strategy fields
@@ -69,15 +74,29 @@ const commonPricingStrategyFields = {
     modification_percentage: z.number()
 };
 
-export const pricingStrategyFirestoreSchema = z.object({
+export const partnerPricingStrategyFirestoreSchema = z.object({
     ...commonPricingStrategyFields,
-    default_price_list: priceListRefSchema.schema.nullable(),
+    strategy: z.enum(['split', 'bundle']),
+    default_price_list: priceListRefNullable,
     custom_prices: z.array(packagePriceFirestoreSchema),
 });
 
-export const pricingStrategyAppSchema = z.object({
+export const partnerPricingStrategyAppSchema = z.object({
     ...commonPricingStrategyFields,
-    default_price_list: z.string().nullable(),
+    strategy: z.enum(['split', 'bundle']),
+    default_price_list: priceListRefStringNullable,
+    custom_prices: z.array(packagePriceAppSchema),
+});
+
+export const userPricingStrategyFirestoreSchema = z.object({
+    ...commonPricingStrategyFields,
+    default_price_list: priceListRefNullable,
+    custom_prices: z.array(packagePriceFirestoreSchema),
+});
+
+export const userPricingStrategyAppSchema = z.object({
+    ...commonPricingStrategyFields,
+    default_price_list: priceListRefStringNullable,
     custom_prices: z.array(packagePriceAppSchema),
 });
 
@@ -95,16 +114,16 @@ const commonFinancialPropertiesFields = {
 export const financialPropertiesFirestoreSchema = z.object({
     ...commonFinancialPropertiesFields,
     pricing_strategies: z.object({
-        partner: pricingStrategyFirestoreSchema,
-        user: pricingStrategyFirestoreSchema
+        partner: partnerPricingStrategyFirestoreSchema,
+        user: userPricingStrategyFirestoreSchema
     }).nullable()
 }).nullable();
 
 export const financialPropertiesAppSchema = z.object({
     ...commonFinancialPropertiesFields,
     pricing_strategies: z.object({
-        partner: pricingStrategyAppSchema,
-        user: pricingStrategyAppSchema
+        partner: partnerPricingStrategyAppSchema,
+        user: userPricingStrategyAppSchema
     }).nullable()
 }).nullable();
 
@@ -227,16 +246,16 @@ const commonPartnerFields = {
 // Firestore schema for Partner
 export const partnerFirestoreSchema = baseModelSchema.extend({
     ...commonPartnerFields,
-    parent: documentRefSchema.nullable(),
-    users: z.array(documentRefSchema).nullable(),
+    parent: partnerRefNullable,
+    users: userRefArrayNullable,
     financial_properties: financialPropertiesFirestoreSchema,
 });
 
 // App schema for Partner
 export const partnerAppSchema = baseModelAppSchema.extend({
     ...commonPartnerFields,
-    parent: z.string().nullable(),
-    users: z.array(z.string()).nullable(),
+    parent: partnerRefStringNullable,
+    users: userRefStringArrayNullable,
     financial_properties: financialPropertiesAppSchema,
 });
 
@@ -258,28 +277,7 @@ export const priceListAppSchema = baseModelAppSchema.extend({
 });
 
 // Define types based on schemas
-export type PartnerFirestore = z.infer<typeof partnerFirestoreSchema>;
-export type PartnerApp = z.infer<typeof partnerAppSchema>;
-export type PriceListFirestore = z.infer<typeof priceListFirestoreSchema>;
-export type PriceListApp = z.infer<typeof priceListAppSchema>;
-export type Address = z.infer<typeof addressSchema>;
-export type Registration = z.infer<typeof registrationSchema>;
-export type BankingDetails = z.infer<typeof bankingDetailsSchema>;
-export type PackagePriceFirestore = z.infer<typeof packagePriceFirestoreSchema>;
-export type PackagePriceApp = z.infer<typeof packagePriceAppSchema>;
-export type PricingStrategyFirestore = z.infer<typeof pricingStrategyFirestoreSchema>;
-export type PricingStrategyApp = z.infer<typeof pricingStrategyAppSchema>;
-export type FinancialPropertiesFirestore = z.infer<typeof financialPropertiesFirestoreSchema>;
-export type FinancialPropertiesApp = z.infer<typeof financialPropertiesAppSchema>;
-export type PackageStrategy = z.infer<typeof packageStrategySchema>;
-export type BookingDefaults = z.infer<typeof bookingDefaultsSchema>;
-export type BookingConfirmation = z.infer<typeof bookingConfirmationSchema>;
-export type VisualIdentityBanner = z.infer<typeof visualIdentityBannerSchema>;
-export type VisualIdentityBannerStrategy = z.infer<typeof visualIdentityBannerStrategySchema>;
-export type VisualIdentity = z.infer<typeof visualIdentitySchema>;
-export type ScheduleFilter = z.infer<typeof scheduleFilterSchema>;
-export type Schedule = z.infer<typeof scheduleSchema>;
-export type PlatformSettings = z.infer<typeof platformSettingsSchema>;
+
 
 // Field mapping for conversions using the shared GenericRefFieldMapping interface
 import { 
@@ -473,4 +471,42 @@ export type Partner = PartnerFirestore;
 export type HPartner = PartnerApp;
 export type PriceList = PriceListFirestore;
 export type HPriceList = PriceListApp;
-export type PackagePrice = z.infer<typeof packagePriceAppSchema>; 
+
+export type HPackagePrice = z.infer<typeof packagePriceAppSchema>;
+export type PackagePrice = z.infer<typeof packagePriceFirestoreSchema>;
+
+export type HFinancialProperties = z.infer<typeof financialPropertiesAppSchema>;
+export type FinancialProperties = z.infer<typeof financialPropertiesFirestoreSchema>;
+export type HPlatformSettings = z.infer<typeof platformSettingsSchema>;
+export type HVisualIdentity = z.infer<typeof visualIdentitySchema>;
+export type HSchedule = z.infer<typeof scheduleSchema>;
+export type HPackageStrategy = z.infer<typeof packageStrategySchema>;
+export type HBookingDefaults = z.infer<typeof bookingDefaultsSchema>;
+export type HBookingConfirmation = z.infer<typeof bookingConfirmationSchema>;
+export type HVisualIdentityBanner = z.infer<typeof visualIdentityBannerSchema>;
+export type HVisualIdentityBannerStrategy = z.infer<typeof visualIdentityBannerStrategySchema>;
+export type HScheduleFilter = z.infer<typeof scheduleFilterSchema>;
+export type PartnerFirestore = z.infer<typeof partnerFirestoreSchema>;
+export type PartnerApp = z.infer<typeof partnerAppSchema>;
+export type PriceListFirestore = z.infer<typeof priceListFirestoreSchema>;
+export type PriceListApp = z.infer<typeof priceListAppSchema>;
+export type Address = z.infer<typeof addressSchema>;
+export type Registration = z.infer<typeof registrationSchema>;
+export type BankingDetails = z.infer<typeof bankingDetailsSchema>;
+export type PackagePriceFirestore = z.infer<typeof packagePriceFirestoreSchema>;
+export type PackagePriceApp = z.infer<typeof packagePriceAppSchema>;
+export type PartnerPricingStrategyFirestore = z.infer<typeof partnerPricingStrategyFirestoreSchema>;
+export type PartnerPricingStrategyApp = z.infer<typeof partnerPricingStrategyAppSchema>;
+export type UserPricingStrategyFirestore = z.infer<typeof userPricingStrategyFirestoreSchema>;
+export type UserPricingStrategyApp = z.infer<typeof userPricingStrategyAppSchema>;
+export type FinancialPropertiesFirestore = z.infer<typeof financialPropertiesFirestoreSchema>;
+export type FinancialPropertiesApp = z.infer<typeof financialPropertiesAppSchema>;
+export type PackageStrategy = z.infer<typeof packageStrategySchema>;
+export type BookingDefaults = z.infer<typeof bookingDefaultsSchema>;
+export type BookingConfirmation = z.infer<typeof bookingConfirmationSchema>;
+export type VisualIdentityBanner = z.infer<typeof visualIdentityBannerSchema>;
+export type VisualIdentityBannerStrategy = z.infer<typeof visualIdentityBannerStrategySchema>;
+export type VisualIdentity = z.infer<typeof visualIdentitySchema>;
+export type ScheduleFilter = z.infer<typeof scheduleFilterSchema>;
+export type Schedule = z.infer<typeof scheduleSchema>;
+export type PlatformSettings = z.infer<typeof platformSettingsSchema>;

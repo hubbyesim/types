@@ -1,16 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bookingFromFirestore = exports.bookingToFirestore = exports.bookingAppSchema = exports.bookingFirestoreSchema = exports.bookingStatusSchema = exports.communicationOptionsSchema = exports.communicationChannelSchema = exports.esimRefSchema = exports.userRefSchema = exports.promoCodeRefSchema = exports.partnerRefSchema = void 0;
+exports.bookingFromFirestore = exports.bookingToFirestore = exports.bookingAppSchema = exports.bookingFirestoreSchema = exports.bookingStatusSchema = exports.communicationOptionsSchema = exports.CommunicationChannel = exports.communicationChannelSchema = void 0;
 const zod_1 = require("zod");
 const helpers_1 = require("./helpers");
 const utils_1 = require("./utils");
 const collections_1 = require("./utils/collections");
 const constants_1 = require("../constants");
-// Define document reference schemas for related collections
-exports.partnerRefSchema = (0, helpers_1.createDocRefSchema)(collections_1.PARTNER_COLLECTION);
-exports.promoCodeRefSchema = (0, helpers_1.createDocRefSchema)(collections_1.PROMO_CODE_COLLECTION);
-exports.userRefSchema = (0, helpers_1.createDocRefSchema)(collections_1.USER_COLLECTION);
-exports.esimRefSchema = (0, helpers_1.createDocRefSchema)(collections_1.ESIM_COLLECTION);
+const refs_1 = require("./refs");
 // Enum for communication channels
 exports.communicationChannelSchema = zod_1.z.enum([
     'EMAIL',
@@ -18,6 +14,13 @@ exports.communicationChannelSchema = zod_1.z.enum([
     'PUSH_NOTIFICATION',
     'SMS'
 ]);
+// Add enum-like object for use in code
+exports.CommunicationChannel = {
+    EMAIL: 'EMAIL',
+    WHATSAPP: 'WHATSAPP',
+    PUSH_NOTIFICATION: 'PUSH_NOTIFICATION',
+    SMS: 'SMS'
+};
 // Schema for communication options
 exports.communicationOptionsSchema = zod_1.z.object({
     should_send_message: zod_1.z.boolean(),
@@ -59,9 +62,9 @@ const commonBookingFields = {
     package_specifications: zod_1.z.record(zod_1.z.any()).optional()
 };
 // Firestore schema for Booking
-exports.bookingFirestoreSchema = helpers_1.baseModelSchema.extend(Object.assign(Object.assign({}, commonBookingFields), { return_date: helpers_1.timestampSchema.nullable(), departure_date: helpers_1.timestampSchema, partner: exports.partnerRefSchema.schema, promo_codes: zod_1.z.array(exports.promoCodeRefSchema.schema), users: zod_1.z.array(exports.userRefSchema.schema).nullable(), esims: zod_1.z.array(exports.esimRefSchema.schema).nullable() }));
+exports.bookingFirestoreSchema = helpers_1.baseModelSchema.extend(Object.assign(Object.assign({}, commonBookingFields), { return_date: helpers_1.timestampSchema.nullable(), departure_date: helpers_1.timestampSchema, partner: refs_1.partnerRefSchema.schema, promo_codes: refs_1.promoCodeRefArray, users: refs_1.userRefArrayNullable, esims: refs_1.esimRefArrayNullable }));
 // App schema for Booking
-exports.bookingAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonBookingFields), { return_date: zod_1.z.date().nullable(), departure_date: zod_1.z.date(), partner: (0, helpers_1.docRefToStringSchema)(exports.partnerRefSchema), promo_codes: zod_1.z.array((0, helpers_1.docRefToStringSchema)(exports.promoCodeRefSchema)), users: zod_1.z.array(zod_1.z.string()).nullable(), esims: zod_1.z.array(zod_1.z.string()).nullable() }));
+exports.bookingAppSchema = helpers_1.baseModelAppSchema.extend(Object.assign(Object.assign({}, commonBookingFields), { return_date: zod_1.z.date().nullable(), departure_date: zod_1.z.date(), partner: refs_1.partnerRefString, promo_codes: refs_1.promoCodeRefStringArray, users: refs_1.userRefStringArrayNullable, esims: refs_1.esimRefStringArrayNullable }));
 // Field mapping types for conversions
 const refFieldMappings = [
     { app: 'partner', firestore: 'partner', collection: collections_1.PARTNER_COLLECTION },

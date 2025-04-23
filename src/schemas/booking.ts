@@ -3,7 +3,6 @@ import {
     baseModelSchema,
     baseModelAppSchema,
     timestampSchema,
-    createDocRefSchema,
     docRefToStringSchema,
     fromFirestore,
     toFirestore
@@ -22,12 +21,16 @@ import {
 } from './utils/collections';
 import { SupportedLocales, SUPPORTED_LOCALES, supportedLocalesSchema } from '../constants';
 import { DocumentReference, DocumentData, Timestamp } from 'firebase/firestore';
-
-// Define document reference schemas for related collections
-export const partnerRefSchema = createDocRefSchema<any>(PARTNER_COLLECTION);
-export const promoCodeRefSchema = createDocRefSchema<any>(PROMO_CODE_COLLECTION);
-export const userRefSchema = createDocRefSchema<any>(USER_COLLECTION);
-export const esimRefSchema = createDocRefSchema<any>(ESIM_COLLECTION);
+import { 
+    partnerRefSchema, 
+    promoCodeRefArray, 
+    userRefArrayNullable, 
+    esimRefArrayNullable,
+    partnerRefString,
+    promoCodeRefStringArray,
+    userRefStringArrayNullable,
+    esimRefStringArrayNullable
+} from './refs';
 
 // Enum for communication channels
 export const communicationChannelSchema = z.enum([
@@ -36,7 +39,18 @@ export const communicationChannelSchema = z.enum([
     'PUSH_NOTIFICATION',
     'SMS'
 ]);
-export type CommunicationChannel = z.infer<typeof communicationChannelSchema>;
+export type CommunicationChannelType = z.infer<typeof communicationChannelSchema>;
+
+// For backward compatibility
+export type CommunicationChannel = CommunicationChannelType;
+
+// Add enum-like object for use in code
+export const CommunicationChannel = {
+    EMAIL: 'EMAIL' as const,
+    WHATSAPP: 'WHATSAPP' as const,
+    PUSH_NOTIFICATION: 'PUSH_NOTIFICATION' as const,
+    SMS: 'SMS' as const
+} as const;
 
 // Schema for communication options
 export const communicationOptionsSchema = z.object({
@@ -88,9 +102,9 @@ export const bookingFirestoreSchema = baseModelSchema.extend({
     return_date: timestampSchema.nullable(),
     departure_date: timestampSchema,
     partner: partnerRefSchema.schema,
-    promo_codes: z.array(promoCodeRefSchema.schema),
-    users: z.array(userRefSchema.schema).nullable(),
-    esims: z.array(esimRefSchema.schema).nullable(),
+    promo_codes: promoCodeRefArray,
+    users: userRefArrayNullable,
+    esims: esimRefArrayNullable,
 });
 
 // App schema for Booking
@@ -98,10 +112,10 @@ export const bookingAppSchema = baseModelAppSchema.extend({
     ...commonBookingFields,
     return_date: z.date().nullable(),
     departure_date: z.date(),
-    partner: docRefToStringSchema(partnerRefSchema),
-    promo_codes: z.array(docRefToStringSchema(promoCodeRefSchema)),
-    users: z.array(z.string()).nullable(),
-    esims: z.array(z.string()).nullable(),
+    partner: partnerRefString,
+    promo_codes: promoCodeRefStringArray,
+    users: userRefStringArrayNullable,
+    esims: esimRefStringArrayNullable,
 });
 
 // Define types based on schemas

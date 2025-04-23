@@ -1,6 +1,5 @@
 import { z } from 'zod';
-import { bookingAppSchema } from './booking';
-import { partnerAppSchema } from './partner';
+import { communicationOptionsSchema } from './booking';
 
 // Schema for package specification
 export const packageSpecificationSchema = z.object({
@@ -12,11 +11,6 @@ export const packageSpecificationSchema = z.object({
 
 export const packageSpecificationsSchema = z.array(packageSpecificationSchema);
 
-// Communication options schema
-export const communicationOptionsSchema = z.object({
-    should_send_message: z.boolean(),
-    channels: z.array(z.enum(["EMAIL", "WHATSAPP", "PUSH_NOTIFICATION", "SMS"]))
-});
 
 // ===== API TYPES FOR BOOKING =====
 // Booking API response schema

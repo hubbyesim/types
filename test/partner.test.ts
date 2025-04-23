@@ -9,6 +9,14 @@ import { MockDocumentReference, MockTimestamp, cleanupMocks, setupMocks } from '
 // Make sure mocks are properly initialized
 setupMocks();
 
+// Import collection constants from the centralized refs
+import {
+    PARTNER_COLLECTION,
+    PRICE_LIST_COLLECTION,
+    PACKAGE_COLLECTION,
+    USER_COLLECTION
+} from '../src/schemas/refs';
+
 // Now we can import the Partner schemas and functions
 import {
     partnerAppSchema,
@@ -16,10 +24,6 @@ import {
     partnerFromFirestore,
     PartnerApp,
     PartnerFirestore,
-    PARTNER_COLLECTION,
-    PRICE_LIST_COLLECTION,
-    PACKAGE_COLLECTION,
-    USER_COLLECTION,
     priceListAppSchema,
     priceListToFirestore,
     priceListFromFirestore,

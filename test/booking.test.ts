@@ -4,7 +4,18 @@
  */
 
 // First, import and setup mocks (MUST happen before importing any schemas)
-import { MockDocumentReference, MockTimestamp, cleanupMocks } from './mocks';
+import { MockDocumentReference, MockTimestamp, cleanupMocks, setupMocks } from './mocks';
+
+// Make sure mocks are properly initialized
+setupMocks();
+
+// Import collection constants from the centralized refs
+import {
+    PARTNER_COLLECTION,
+    PROMO_CODE_COLLECTION,
+    USER_COLLECTION,
+    ESIM_COLLECTION
+} from '../src/schemas/refs';
 
 // Now we can import the Booking schemas and functions
 import {
@@ -12,16 +23,10 @@ import {
     bookingToFirestore,
     bookingFromFirestore,
     BookingApp,
-    BookingFirestore
+    BookingFirestore,
+    BookingStatus,
+    CommunicationChannel
 } from '../src/schemas/booking';
-
-// Import collection paths from the correct source
-import {
-    PARTNER_COLLECTION,
-    PROMO_CODE_COLLECTION,
-    USER_COLLECTION,
-    ESIM_COLLECTION
-} from '../src/schemas/utils/collections';
 
 import { SupportedLocales } from '../src/constants';
 import { z } from 'zod';

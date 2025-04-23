@@ -4,7 +4,16 @@
  */
 
 // First, import and setup mocks (MUST happen before importing any schemas)
-import { MockDocumentReference, MockTimestamp, cleanupMocks } from './mocks';
+import { MockDocumentReference, MockTimestamp, cleanupMocks, setupMocks } from './mocks';
+
+// Make sure mocks are properly initialized
+setupMocks();
+
+// Import collection paths from the centralized refs file
+import {
+    COUNTRY_COLLECTION,
+    PARTNER_COLLECTION
+} from '../src/schemas/refs';
 
 // Now we can import the Package schemas and functions
 import {
@@ -14,12 +23,6 @@ import {
     PackageApp,
     PackageFirestore
 } from '../src/schemas/package';
-
-// Import collection paths from the correct source
-import {
-    COUNTRY_COLLECTION,
-    PARTNER_COLLECTION
-} from '../src/schemas/utils/collections';
 
 import { z } from 'zod';
 

@@ -5,13 +5,8 @@ const zod_1 = require("zod");
 const helpers_1 = require("./helpers");
 const utils_1 = require("./utils");
 const collections_1 = require("./utils/collections");
-const schemas_1 = require("./utils/schemas");
 const api_1 = require("./api");
-// Define document reference schemas using the utility function
-const partnerRef = (0, schemas_1.createReferenceSchemas)(collections_1.PARTNER_COLLECTION, true);
-const countryRef = (0, schemas_1.createReferenceSchemas)(collections_1.COUNTRY_COLLECTION, true);
-const packageRef = (0, schemas_1.createReferenceSchemas)(collections_1.PACKAGE_COLLECTION, true);
-const bookingRef = (0, schemas_1.createReferenceSchemas)(collections_1.BOOKING_COLLECTION, true);
+const refs_1 = require("./refs");
 // Firestore schema for PromoCode
 exports.promoCodeFirestoreSchema = helpers_1.baseModelSchema.extend({
     external_id: zod_1.z.string(),
@@ -22,15 +17,15 @@ exports.promoCodeFirestoreSchema = helpers_1.baseModelSchema.extend({
     usage: zod_1.z.array(zod_1.z.string()),
     uuid_usage: zod_1.z.array(zod_1.z.string()),
     package_specification: api_1.packageSpecificationSchema.optional(),
-    partner: partnerRef.firestore,
+    partner: refs_1.partnerRefNullable,
     valid_from: zod_1.z.union([zod_1.z.string(), zod_1.z.date(), helpers_1.timestampSchema]),
     valid_to: zod_1.z.union([zod_1.z.string(), zod_1.z.date(), helpers_1.timestampSchema]),
     // Optional fields based on the type
     discount: zod_1.z.number().optional(),
     package_size: zod_1.z.string().optional(),
-    package: packageRef.firestore,
-    country: countryRef.firestore,
-    booking: bookingRef.firestore,
+    package: refs_1.packageRefNullable,
+    country: refs_1.countryRefNullable,
+    booking: refs_1.bookingRefNullable,
     countries: zod_1.z.array(zod_1.z.string()).optional(),
     max_bytes: zod_1.z.number().optional(),
     starter_data: zod_1.z.number().optional()
@@ -45,15 +40,15 @@ exports.promoCodeAppSchema = helpers_1.baseModelAppSchema.extend({
     usage: zod_1.z.array(zod_1.z.string()),
     uuid_usage: zod_1.z.array(zod_1.z.string()),
     package_specification: api_1.packageSpecificationSchema.optional(),
-    partner: partnerRef.app,
+    partner: refs_1.partnerRefStringNullable,
     valid_from: zod_1.z.date(),
     valid_to: zod_1.z.date(),
     // Optional fields based on the type
     discount: zod_1.z.number().optional(),
     package_size: zod_1.z.string().optional(),
-    package: packageRef.app,
-    country: countryRef.app,
-    booking: bookingRef.app,
+    package: refs_1.packageRefStringNullable,
+    country: refs_1.countryRefStringNullable,
+    booking: refs_1.bookingRefStringNullable,
     countries: zod_1.z.array(zod_1.z.string()).optional(),
     max_bytes: zod_1.z.number().optional(),
     starter_data: zod_1.z.number().optional()
