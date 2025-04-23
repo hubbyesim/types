@@ -70,7 +70,6 @@ export const packagePriceAppSchema = z.object({
 
 // Common pricing strategy fields
 const commonPricingStrategyFields = {
-    strategy: z.enum(['split', 'bundle']),
     modification_percentage: z.number()
 };
 
@@ -114,16 +113,16 @@ const commonFinancialPropertiesFields = {
 export const financialPropertiesFirestoreSchema = z.object({
     ...commonFinancialPropertiesFields,
     pricing_strategies: z.object({
-        partner: partnerPricingStrategyFirestoreSchema,
-        user: userPricingStrategyFirestoreSchema
+        partner: partnerPricingStrategyFirestoreSchema.optional(),
+        user: userPricingStrategyFirestoreSchema.optional()
     }).nullable()
 }).nullable();
 
 export const financialPropertiesAppSchema = z.object({
     ...commonFinancialPropertiesFields,
     pricing_strategies: z.object({
-        partner: partnerPricingStrategyAppSchema,
-        user: userPricingStrategyAppSchema
+        partner: partnerPricingStrategyAppSchema.optional(),
+        user: userPricingStrategyAppSchema.optional()
     }).nullable()
 }).nullable();
 
@@ -310,47 +309,54 @@ export const partnerToFirestore = (partner: PartnerApp): PartnerFirestore => {
                 // Handle pricing strategies if they exist
                 if (fp.pricing_strategies) {
                     const ps = fp.pricing_strategies;
+                    const pricingStrategies: any = {};
 
-                    // Convert partner pricing strategy
-                    const partnerStrategy = {
-                        ...ps.partner,
-                        default_price_list: ps.partner.default_price_list
-                            ? toFirestore.ref<PriceListFirestore>(PRICE_LIST_COLLECTION, ps.partner.default_price_list)
-                            : null,
-                        custom_prices: ps.partner.custom_prices.map((price: PackagePriceApp) => ({
-                            ...price,
-                            package: toFirestore.ref<any>(PACKAGE_COLLECTION, price.package)
-                        }))
-                    };
+                    // Convert partner pricing strategy if it exists
+                    if (ps.partner) {
+                        const partnerStrategy = {
+                            ...ps.partner,
+                            default_price_list: ps.partner.default_price_list
+                                ? toFirestore.ref<PriceListFirestore>(PRICE_LIST_COLLECTION, ps.partner.default_price_list)
+                                : null,
+                            custom_prices: ps.partner.custom_prices.map((price: PackagePriceApp) => ({
+                                ...price,
+                                package: toFirestore.ref<any>(PACKAGE_COLLECTION, price.package)
+                            }))
+                        };
 
-                    // Convert user pricing strategy
-                    const userStrategy = {
-                        ...ps.user,
-                        default_price_list: ps.user.default_price_list
-                            ? toFirestore.ref<PriceListFirestore>(PRICE_LIST_COLLECTION, ps.user.default_price_list)
-                            : null,
-                        custom_prices: ps.user.custom_prices.map((price: PackagePriceApp) => ({
-                            ...price,
-                            package: toFirestore.ref<any>(PACKAGE_COLLECTION, price.package)
-                        }))
-                    };
-
-                    const partnerStrategyObj: any = partnerStrategy;
-                    const userStrategyObj: any = userStrategy;
-
-                    if ('default_price_list' in partnerStrategyObj) {
-                        delete partnerStrategyObj.default_price_list;
+                        const partnerStrategyObj: any = partnerStrategy;
+                        
+                        if ('default_price_list' in partnerStrategyObj) {
+                            delete partnerStrategyObj.default_price_list;
+                        }
+                        
+                        pricingStrategies.partner = partnerStrategyObj;
                     }
 
-                    if ('default_price_list' in userStrategyObj) {
-                        delete userStrategyObj.default_price_list;
+                    // Convert user pricing strategy if it exists
+                    if (ps.user) {
+                        const userStrategy = {
+                            ...ps.user,
+                            default_price_list: ps.user.default_price_list
+                                ? toFirestore.ref<PriceListFirestore>(PRICE_LIST_COLLECTION, ps.user.default_price_list)
+                                : null,
+                            custom_prices: ps.user.custom_prices.map((price: PackagePriceApp) => ({
+                                ...price,
+                                package: toFirestore.ref<any>(PACKAGE_COLLECTION, price.package)
+                            }))
+                        };
+
+                        const userStrategyObj: any = userStrategy;
+                        
+                        if ('default_price_list' in userStrategyObj) {
+                            delete userStrategyObj.default_price_list;
+                        }
+                        
+                        pricingStrategies.user = userStrategyObj;
                     }
 
                     // Set pricing strategies
-                    financialProps.pricing_strategies = {
-                        partner: partnerStrategyObj,
-                        user: userStrategyObj
-                    };
+                    financialProps.pricing_strategies = pricingStrategies;
                 }
 
                 result.financial_properties = financialProps;
@@ -376,47 +382,54 @@ export const partnerFromFirestore = (firestorePartner: PartnerFirestore): Partne
                 // Handle pricing strategies if they exist
                 if (fp.pricing_strategies) {
                     const ps = fp.pricing_strategies;
+                    const pricingStrategies: any = {};
 
-                    // Convert partner pricing strategy
-                    const partnerStrategy = {
-                        ...ps.partner,
-                        default_price_list: ps.partner.default_price_list
-                            ? fromFirestore.ref(ps.partner.default_price_list)
-                            : null,
-                        custom_prices: ps.partner.custom_prices.map(price => ({
-                            ...price,
-                            package: fromFirestore.ref(price.package)
-                        }))
-                    };
+                    // Convert partner pricing strategy if it exists
+                    if (ps.partner) {
+                        const partnerStrategy = {
+                            ...ps.partner,
+                            default_price_list: ps.partner.default_price_list
+                                ? fromFirestore.ref(ps.partner.default_price_list)
+                                : null,
+                            custom_prices: ps.partner.custom_prices.map(price => ({
+                                ...price,
+                                package: fromFirestore.ref(price.package)
+                            }))
+                        };
 
-                    // Convert user pricing strategy
-                    const userStrategy = {
-                        ...ps.user,
-                        default_price_list: ps.user.default_price_list
-                            ? fromFirestore.ref(ps.user.default_price_list)
-                            : null,
-                        custom_prices: ps.user.custom_prices.map(price => ({
-                            ...price,
-                            package: fromFirestore.ref(price.package)
-                        }))
-                    };
-
-                    const partnerStrategyObj: any = partnerStrategy;
-                    const userStrategyObj: any = userStrategy;
-
-                    if ('default_price_list' in partnerStrategyObj) {
-                        delete partnerStrategyObj.default_price_list;
+                        const partnerStrategyObj: any = partnerStrategy;
+                        
+                        if ('default_price_list' in partnerStrategyObj) {
+                            delete partnerStrategyObj.default_price_list;
+                        }
+                        
+                        pricingStrategies.partner = partnerStrategyObj;
                     }
 
-                    if ('default_price_list' in userStrategyObj) {
-                        delete userStrategyObj.default_price_list;
+                    // Convert user pricing strategy if it exists
+                    if (ps.user) {
+                        const userStrategy = {
+                            ...ps.user,
+                            default_price_list: ps.user.default_price_list
+                                ? fromFirestore.ref(ps.user.default_price_list)
+                                : null,
+                            custom_prices: ps.user.custom_prices.map(price => ({
+                                ...price,
+                                package: fromFirestore.ref(price.package)
+                            }))
+                        };
+
+                        const userStrategyObj: any = userStrategy;
+                        
+                        if ('default_price_list' in userStrategyObj) {
+                            delete userStrategyObj.default_price_list;
+                        }
+                        
+                        pricingStrategies.user = userStrategyObj;
                     }
 
                     // Set pricing strategies
-                    financialProps.pricing_strategies = {
-                        partner: partnerStrategyObj,
-                        user: userStrategyObj
-                    };
+                    financialProps.pricing_strategies = pricingStrategies;
                 }
 
                 result.financial_properties = financialProps;

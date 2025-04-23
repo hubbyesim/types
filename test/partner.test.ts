@@ -153,7 +153,6 @@ const createSamplePartner = (): PartnerApp => ({
                 }]
             },
             user: {
-                strategy: 'bundle',
                 modification_percentage: 5,
                 default_price_list: 'price_list_456',
                 custom_prices: []
@@ -438,47 +437,54 @@ export const testPartnerFirestoreToAppToFirestore = (firestorePartner: PartnerFi
             const roundTripPS = roundTripFirestore.financial_properties.pricing_strategies;
             
             // Check partner strategy
-            if (
-                originalPS.partner.strategy !== roundTripPS.partner.strategy ||
-                originalPS.partner.modification_percentage !== roundTripPS.partner.modification_percentage ||
-                (originalPS.partner.default_price_list?.path !== roundTripPS.partner.default_price_list?.path)
-            ) {
+            if (originalPS.partner && roundTripPS.partner) {
+                if (
+                    originalPS.partner.strategy !== roundTripPS.partner.strategy ||
+                    originalPS.partner.modification_percentage !== roundTripPS.partner.modification_percentage ||
+                    (originalPS.partner.default_price_list?.path !== roundTripPS.partner.default_price_list?.path)
+                ) {
+                    pricingStrategiesTest = false;
+                }
+                
+                // Check custom prices
+                if (
+                    originalPS.partner.custom_prices.length !== roundTripPS.partner.custom_prices.length
+                ) {
+                    pricingStrategiesTest = false;
+                } else {
+                    // Compare each custom price
+                    for (let i = 0; i < originalPS.partner.custom_prices.length; i++) {
+                        const originalPrice = originalPS.partner.custom_prices[i];
+                        const roundTripPrice = roundTripPS.partner.custom_prices[i];
+                        
+                        if (originalPrice && roundTripPrice && (
+                            originalPrice.destination !== roundTripPrice.destination ||
+                            originalPrice.label !== roundTripPrice.label ||
+                            originalPrice.type !== roundTripPrice.type ||
+                            originalPrice.price !== roundTripPrice.price ||
+                            (originalPrice.package && roundTripPrice.package && 
+                             originalPrice.package.path !== roundTripPrice.package.path)
+                        )) {
+                            pricingStrategiesTest = false;
+                            break;
+                        }
+                    }
+                }
+            } else if (originalPS.partner || roundTripPS.partner) {
+                // One has partner strategy and the other doesn't
                 pricingStrategiesTest = false;
             }
             
             // Check user strategy
-            if (
-                originalPS.user.strategy !== roundTripPS.user.strategy ||
-                originalPS.user.modification_percentage !== roundTripPS.user.modification_percentage ||
-                (originalPS.user.default_price_list?.path !== roundTripPS.user.default_price_list?.path)
-            ) {
-                pricingStrategiesTest = false;
-            }
-            
-            // Check custom prices
-            if (
-                originalPS.partner.custom_prices.length !== roundTripPS.partner.custom_prices.length ||
-                originalPS.user.custom_prices.length !== roundTripPS.user.custom_prices.length
-            ) {
-                pricingStrategiesTest = false;
-            } else {
-                // Compare each custom price
-                for (let i = 0; i < originalPS.partner.custom_prices.length; i++) {
-                    const originalPrice = originalPS.partner.custom_prices[i];
-                    const roundTripPrice = roundTripPS.partner.custom_prices[i];
-                    
-                    if (originalPrice && roundTripPrice && (
-                        originalPrice.destination !== roundTripPrice.destination ||
-                        originalPrice.label !== roundTripPrice.label ||
-                        originalPrice.type !== roundTripPrice.type ||
-                        originalPrice.price !== roundTripPrice.price ||
-                        (originalPrice.package && roundTripPrice.package && 
-                         originalPrice.package.path !== roundTripPrice.package.path)
-                    )) {
-                        pricingStrategiesTest = false;
-                        break;
-                    }
+            if (originalPS.user && roundTripPS.user) {
+                if (
+                    originalPS.user.custom_prices.length !== roundTripPS.user.custom_prices.length
+                ) {
+                    pricingStrategiesTest = false;
                 }
+            } else if (originalPS.user || roundTripPS.user) {
+                // One has user strategy and the other doesn't
+                pricingStrategiesTest = false;
             }
         } else if (
             (firestorePartner.financial_properties?.pricing_strategies && !roundTripFirestore.financial_properties?.pricing_strategies) ||

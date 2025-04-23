@@ -90,14 +90,14 @@ export type FinancialProperties = {
     next_invoice: Date | null;
     last_invoice: Date | null;
     pricing_strategies?: {
-        partner: {
+        partner?: {
             strategy: "split" | "bundle";
-            default_price_list: DocumentReference<PriceList> | null;
+            default_price_list: DocumentReference<PriceList>;
             custom_prices: PackagePrice[];
             modification_percentage: number;
         },
-        user: {
-            default_price_list: DocumentReference<PriceList> | null;
+        user?: {
+            default_price_list: DocumentReference<PriceList>;
             custom_prices: PackagePrice[];
             modification_percentage: number;
         }
