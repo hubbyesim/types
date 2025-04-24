@@ -1,24 +1,16 @@
 {
     "compilerOptions": {
-        "declaration": true,
-        "outDir": "./dist",
-        "rootDir": "./src",
-        "strict": true,
-        "target": "ES2015",
-        "moduleResolution": "node",
-        "module": "commonjs",
-        "esModuleInterop": true,
-        "resolveJsonModule": true,
-        "noUncheckedIndexedAccess": true,
-        "strictNullChecks": true,
-        "noImplicitAny": true,
-        "forceConsistentCasingInFileNames": true
+      "target": "ES2022",
+      "module": "ESNext",
+      "moduleResolution": "Bundler",
+      "outDir": "dist",
+      "rootDir": "src",
+      "declaration": true,
+      "strict": true,
+      "esModuleInterop": true,
+      "resolveJsonModule": true,
+      "noImplicitAny": true,
+      "skipLibCheck": true
     },
-    "include": [
-        "src/**/*.ts"
-    ],
-    "exclude": [
-        "node_modules",
-        "dist"
-    ]
-}
+    "include": ["src"]
+  }  

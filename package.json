@@ -1,16 +1,22 @@
 {
   "name": "@hubbyesim/types",
   "version": "1.7.0",
-  "description": "The type definitions for the hubbyesim project",
-  "scripts": {
-    "build": "tsc",
-    "test": "ts-node test/index.ts",
-    "test:partner": "ts-node test/partner.test.ts",
-    "test:schema": "ts-node test/schema-validation.test.ts"
-  },
-  "types": "./dist/index.d.ts",
+  "description": "Type definitions for the hubbyesim project",
+  "type": "module",
   "main": "./dist/index.js",
-  "keywords": [],
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "node --loader ts-node/esm --experimental-specifier-resolution=node test/index.ts",
+    "generate-exports": "node scripts/generate-exports.js"
+  },
   "author": "Daniel Fortuyn",
   "license": "ISC",
   "dependencies": {
@@ -20,6 +26,7 @@
   },
   "devDependencies": {
     "ts-node": "^10.9.2",
+    "tsup": "^7.2.0",
     "typescript": "^5.3.2"
   }
 }

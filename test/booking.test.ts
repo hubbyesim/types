@@ -4,7 +4,7 @@
  */
 
 // First, import and setup mocks (MUST happen before importing any schemas)
-import { MockDocumentReference, MockTimestamp, cleanupMocks, setupMocks } from './mocks';
+import { MockDocumentReference, MockTimestamp, cleanupMocks, setupMocks } from './mocks.js';
 
 // Make sure mocks are properly initialized
 setupMocks();
@@ -15,7 +15,7 @@ import {
     PROMO_CODE_COLLECTION,
     USER_COLLECTION,
     ESIM_COLLECTION
-} from '../src/schemas/refs';
+} from '../src/schemas/refs.js';
 
 // Now we can import the Booking schemas and functions
 import {
@@ -26,9 +26,9 @@ import {
     BookingFirestore,
     BookingStatus,
     CommunicationChannel
-} from '../src/schemas/booking';
+} from '../src/schemas/booking.js';
 
-import { SupportedLocales } from '../src/constants';
+import { SupportedLocales } from '../src/constants.js';
 import { z } from 'zod';
 
 /**
@@ -304,7 +304,10 @@ export const runAllBookingTests = () => {
 };
 
 // Run tests directly when this file is executed
-if (require.main === module) {
+// In ESM, there's no direct replacement for require.main === module
+// We can check if the current file's URL ends with this file's name
+const isDirectlyExecuted = import.meta.url.endsWith('/booking.test.js');
+if (isDirectlyExecuted) {
     try {
         runAllBookingTests();
     } finally {

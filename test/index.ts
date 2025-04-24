@@ -5,27 +5,41 @@
  */
 
 // Enable test environment
-require('../src/schemas/helpers').isTestEnvironment = true;
+import { testEnv } from '../src/schemas/helpers.js';
+testEnv.isTestEnvironment = true;
 
-import { runAllPartnerTests } from './partner.test';
-import { runAllPromoCodeTests } from './promoCode.test';
-import { runAllPackageTests } from './package.test';
-import { runAllESIMTests } from './esim.test';
-import { runAllUserTests } from './user.test';
-import { runAllBookingTests } from './booking.test';
-import { runAllCountryTests } from './country.test';
-import { runAllCurrencyTests } from './currency.test';
+import { runAllPartnerTests } from './partner.test.js';
+import { runAllPromoCodeTests } from './promoCode.test.js';
+import { runAllPackageTests } from './package.test.js';
+import { runAllESIMTests } from './esim.test.js';
+import { runAllUserTests } from './user.test.js';
+import { runAllBookingTests } from './booking.test.js';
+import { runAllCountryTests } from './country.test.js';
+import { runAllCurrencyTests } from './currency.test.js';
+// Import the schema validation tests
+import { runTests as runSchemaValidationTests } from './schema-validation.test.js';
 // Import additional test runners as they're created
-// import { runAllApiLogsTests } from './apiLogs.test';
-// import { runAllPaymentTests } from './payment.test';
-// import { runAllMessageTests } from './message.test';
-// import { runAllApiTests } from './api.test';
+// import { runAllApiLogsTests } from './apiLogs.test.js';
+// import { runAllPaymentTests } from './payment.test.js';
+// import { runAllMessageTests } from './message.test.js';
+// import { runAllApiTests } from './api.test.js';
 
 console.log('===================================================');
 console.log('Running all tests for @hubbyesim/types');
 console.log('===================================================');
 
 let failed = false;
+
+// Run schema validation tests
+try {
+    console.log('\n----------------------------------------');
+    console.log('Running Schema Validation Tests:');
+    console.log('----------------------------------------');
+    runSchemaValidationTests();
+} catch (error) {
+    console.error('Schema validation tests failed with uncaught error:', error);
+    failed = true;
+}
 
 // Run partner tests
 try {

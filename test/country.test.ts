@@ -4,7 +4,7 @@
  */
 
 // First, import and setup mocks (MUST happen before importing any schemas)
-import { MockDocumentReference, MockTimestamp, cleanupMocks } from './mocks';
+import { MockDocumentReference, MockTimestamp, cleanupMocks } from './mocks.js';
 
 // Now we can import the Country schemas and functions
 import {
@@ -13,7 +13,7 @@ import {
     countryFromFirestore,
     CountryApp,
     CountryFirestore
-} from '../src/schemas/country';
+} from '../src/schemas/country.js';
 
 import { z } from 'zod';
 
@@ -139,7 +139,10 @@ export const runAllCountryTests = () => {
 };
 
 // Run tests directly when this file is executed
-if (require.main === module) {
+// In ESM, there's no direct replacement for require.main === module
+// We can check if the current file's URL ends with this file's name
+const isDirectlyExecuted = import.meta.url.endsWith('/country.test.js');
+if (isDirectlyExecuted) {
     try {
         runAllCountryTests();
     } finally {

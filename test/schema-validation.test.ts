@@ -1,12 +1,12 @@
 import { z } from 'zod';
-import { createValidator, createConversionValidator } from '../src/schemas/utils/validator';
+import { createValidator, createConversionValidator } from '../src/schemas/utils/validator.js';
 import { 
     currencyAppSchema, 
     currencyFirestoreSchema,
     currencyToFirestore,
     currencyFromFirestore,
     CurrencyApp
-} from '../src/schemas/currency';
+} from '../src/schemas/currency.js';
 
 // Create validators
 const validateCurrencyApp = createValidator(currencyAppSchema, 'CurrencyApp');
@@ -77,8 +77,11 @@ function runTests() {
     }
 }
 
-// Run the tests if this file is executed directly
-if (require.main === module) {
+// For ESM compatibility, check if this is the main module
+// In ESM, there's no direct replacement for require.main === module
+// We can check if the current file's URL ends with this file's name
+const isDirectlyExecuted = import.meta.url.endsWith('/schema-validation.test.js');
+if (isDirectlyExecuted) {
     runTests();
 }
 

@@ -4,7 +4,7 @@
  */
 
 // First, import and setup mocks (MUST happen before importing any schemas)
-import { MockDocumentReference, MockTimestamp, cleanupMocks } from './mocks';
+import { MockDocumentReference, MockTimestamp, cleanupMocks } from './mocks.js';
 
 // Now we can import the PromoCode schemas and functions
 import {
@@ -13,7 +13,7 @@ import {
     promoCodeFromFirestore,
     PromoCodeApp,
     PromoCodeFirestore
-} from '../src/schemas/promoCode';
+} from '../src/schemas/promoCode.js';
 
 // Import collection constants from the centralized refs
 import {
@@ -21,12 +21,12 @@ import {
     COUNTRY_COLLECTION,
     BOOKING_COLLECTION,
     PACKAGE_COLLECTION
-} from '../src/schemas/refs';
+} from '../src/schemas/refs.js';
 
 import { z } from 'zod';
 
 // Import helpers for use in tests
-import * as helpers from '../src/schemas/helpers';
+import * as helpers from '../src/schemas/helpers.js';
 
 /**
  * Create a sample promo code with comprehensive data for testing
@@ -455,7 +455,10 @@ export const runAllPromoCodeTests = () => {
 };
 
 // Run tests directly when this file is executed
-if (require.main === module) {
+// In ESM, there's no direct replacement for require.main === module
+// We can check if the current file's URL ends with this file's name
+const isDirectlyExecuted = import.meta.url.endsWith('/promoCode.test.js');
+if (isDirectlyExecuted) {
     try {
         runAllPromoCodeTests();
     } finally {

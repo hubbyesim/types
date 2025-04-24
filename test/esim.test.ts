@@ -4,7 +4,7 @@
  */
 
 // First, import and setup mocks (MUST happen before importing any schemas)
-import { MockDocumentReference, MockTimestamp, cleanupMocks, setupMocks } from './mocks';
+import { MockDocumentReference, MockTimestamp, cleanupMocks, setupMocks } from './mocks.js';
 
 // Make sure mocks are properly initialized
 setupMocks();
@@ -15,7 +15,7 @@ import {
     USER_COLLECTION,
     PARTNER_COLLECTION,
     PAYMENT_COLLECTION
-} from '../src/schemas/refs';
+} from '../src/schemas/refs.js';
 
 import { z } from 'zod';
 
@@ -26,7 +26,7 @@ import {
     esimFromFirestore,
     ESIMApp,
     ESIMFirestore
-} from '../src/schemas/esim';
+} from '../src/schemas/esim.js';
 
 /**
  * Create a sample ESIM with comprehensive data for testing
@@ -270,7 +270,10 @@ export const runAllESIMTests = () => {
 };
 
 // Run tests directly when this file is executed
-if (require.main === module) {
+// In ESM, there's no direct replacement for require.main === module
+// We can check if the current file's URL ends with this file's name
+const isDirectlyExecuted = import.meta.url.endsWith('/esim.test.js');
+if (isDirectlyExecuted) {
     try {
         runAllESIMTests();
     } finally {

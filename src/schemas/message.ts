@@ -94,13 +94,13 @@ export const sentMessagesFromFirestore = (firestoreSentMessages: SentMessagesFir
 };
 
 // For backwards compatibility
-export type Message = MessageApp;  // Change to MessageApp for proper typing
+export type Message = MessageFirestore;
 export type HMessage = MessageApp;
-export type SentMessages = SentMessagesApp;  // Change to MessageApp for proper typing
+export type SentMessages = SentMessagesFirestore;
 export type HSentMessages = SentMessagesApp;
 
 // Helper function for backward compatibility with runtime type conversion
-export const convertSentMessagesToFirestore = (sentMessages: Record<string, Message>): Record<string, MessageFirestore> => {
+export const convertSentMessagesToFirestore = (sentMessages: Record<string, MessageApp>): Record<string, MessageFirestore> => {
     const result: Record<string, MessageFirestore> = {};
     
     for (const key in sentMessages) {
@@ -124,8 +124,8 @@ export const convertSentMessagesToFirestore = (sentMessages: Record<string, Mess
     return result;
 };
 
-export const convertSentMessagesFromFirestore = (firestoreSentMessages: Record<string, MessageFirestore>): Record<string, Message> => {
-    const result: Record<string, Message> = {};
+export const convertSentMessagesFromFirestore = (firestoreSentMessages: Record<string, MessageFirestore>): Record<string, MessageApp> => {
+    const result: Record<string, MessageApp> = {};
     
     for (const key in firestoreSentMessages) {
         const firestoreMessage = firestoreSentMessages[key];

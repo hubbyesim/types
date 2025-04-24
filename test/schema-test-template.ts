@@ -4,7 +4,7 @@
  * This file provides a template for testing Zod schema validation and Firebase-App conversion
  */
 import { z } from 'zod';
-import { MockDocumentReference, MockTimestamp, cleanupMocks } from './mocks';
+import { MockDocumentReference, MockTimestamp, cleanupMocks } from './mocks.js';
 
 /**
  * Generic test for schema validation

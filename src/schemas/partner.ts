@@ -11,10 +11,10 @@ import {
 } from './helpers';
 import { SUPPORTED_LOCALES, supportedLocalesSchema } from '../constants';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
-import { 
-    partnerRefSchema, 
-    priceListRefSchema, 
-    packageRefSchema, 
+import {
+    partnerRefSchema,
+    priceListRefSchema,
+    packageRefSchema,
     userRefSchema,
     partnerRefNullable,
     userRefArrayNullable,
@@ -279,11 +279,11 @@ export const priceListAppSchema = baseModelAppSchema.extend({
 
 
 // Field mapping for conversions using the shared GenericRefFieldMapping interface
-import { 
-    GenericRefFieldMapping, 
-    GenericDateFieldMapping, 
-    genericToFirestore, 
-    genericFromFirestore 
+import {
+    GenericRefFieldMapping,
+    GenericDateFieldMapping,
+    genericToFirestore,
+    genericFromFirestore
 } from './utils';
 
 const refFieldMappings: GenericRefFieldMapping<PartnerApp, PartnerFirestore>[] = [
@@ -325,11 +325,11 @@ export const partnerToFirestore = (partner: PartnerApp): PartnerFirestore => {
                         };
 
                         const partnerStrategyObj: any = partnerStrategy;
-                        
+
                         if ('default_price_list' in partnerStrategyObj) {
                             delete partnerStrategyObj.default_price_list;
                         }
-                        
+
                         pricingStrategies.partner = partnerStrategyObj;
                     }
 
@@ -347,11 +347,11 @@ export const partnerToFirestore = (partner: PartnerApp): PartnerFirestore => {
                         };
 
                         const userStrategyObj: any = userStrategy;
-                        
+
                         if ('default_price_list' in userStrategyObj) {
                             delete userStrategyObj.default_price_list;
                         }
-                        
+
                         pricingStrategies.user = userStrategyObj;
                     }
 
@@ -398,11 +398,11 @@ export const partnerFromFirestore = (firestorePartner: PartnerFirestore): Partne
                         };
 
                         const partnerStrategyObj: any = partnerStrategy;
-                        
+
                         if ('default_price_list' in partnerStrategyObj) {
                             delete partnerStrategyObj.default_price_list;
                         }
-                        
+
                         pricingStrategies.partner = partnerStrategyObj;
                     }
 
@@ -420,11 +420,11 @@ export const partnerFromFirestore = (firestorePartner: PartnerFirestore): Partne
                         };
 
                         const userStrategyObj: any = userStrategy;
-                        
+
                         if ('default_price_list' in userStrategyObj) {
                             delete userStrategyObj.default_price_list;
                         }
-                        
+
                         pricingStrategies.user = userStrategyObj;
                     }
 

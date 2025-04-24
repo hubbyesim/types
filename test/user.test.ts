@@ -4,13 +4,14 @@
  */
 
 // First, import and setup mocks (MUST happen before importing any schemas)
-import { MockDocumentReference, MockTimestamp, cleanupMocks } from './mocks';
+import { MockDocumentReference, MockTimestamp, cleanupMocks } from './mocks.js';
 
-// Check if test environment flag is set
-console.log('isTestEnvironment flag in user.test.ts:', require('../src/schemas/helpers').isTestEnvironment);
+// Import helpers and log testEnv state
+import { testEnv } from '../src/schemas/helpers.js';
+console.log('isTestEnvironment flag in user.test.ts:', testEnv.isTestEnvironment);
 
 // Patch the ref method directly
-const helpers = require('../src/schemas/helpers');
+import * as helpers from '../src/schemas/helpers.js';
 const originalToRefMethod = helpers.toFirestore.ref;
 helpers.toFirestore.ref = (collectionPath: string, id: string): any => {
     return new MockDocumentReference(collectionPath, id);
@@ -42,7 +43,7 @@ helpers.fromFirestore.date = (timestamp: any): Date => {
     return new Date(timestamp);
 };
 
-import { runSchemaTests } from './schema-test-template';
+import { runSchemaTests } from './schema-test-template.js';
 
 // Now we can import the User schemas and functions
 import {
@@ -52,13 +53,13 @@ import {
     userToFirestoreWithBalance,
     UserApp,
     UserFirestore
-} from '../src/schemas/user';
+} from '../src/schemas/user.js';
 
 // Import collection constants from the centralized refs
 import {
     PROFILE_COLLECTION,
     PARTNER_COLLECTION
-} from '../src/schemas/refs';
+} from '../src/schemas/refs.js';
 
 /**
  * Create a sample user with comprehensive data for testing
@@ -82,11 +83,11 @@ const createSampleUser = (): UserApp => ({
     ios: true,
     has_card_saved: true,
     admin: false,
-    
+
     // Note: For testing, we need to handle the complex API keys structure separately
     // in the conversion functions rather than in the sample data
     api_keys: null,
-    
+
     currency: 'EUR',
     receipt_email: 'receipts@example.com',
     createdAt: new Date('2023-01-01'),
@@ -126,7 +127,7 @@ export const runAllUserTests = () => {
         integrityChecks: [
             {
                 name: 'Basic fields',
-                check: (original, retrieved) => 
+                check: (original, retrieved) =>
                     original.id === retrieved.id &&
                     original.name === retrieved.name &&
                     original.email === retrieved.email &&
@@ -137,12 +138,12 @@ export const runAllUserTests = () => {
                 check: (original, retrieved) => {
                     const partnerMatch = original.partner === retrieved.partner;
                     const profileRefMatch = original.profileRef === retrieved.profileRef;
-                    
+
                     if (!partnerMatch || !profileRefMatch) {
                         console.log('  - partner:', partnerMatch ? '✅' : '❌', 'Original:', original.partner, 'Retrieved:', retrieved.partner);
                         console.log('  - profileRef:', profileRefMatch ? '✅' : '❌', 'Original:', original.profileRef, 'Retrieved:', retrieved.profileRef);
                     }
-                    
+
                     return partnerMatch && profileRefMatch;
                 }
             },
@@ -150,11 +151,11 @@ export const runAllUserTests = () => {
                 name: 'Date fields',
                 check: (original, retrieved) => {
                     // CreatedAt check
-                    const createdAtMatch = 
-                        original.createdAt instanceof Date && 
+                    const createdAtMatch =
+                        original.createdAt instanceof Date &&
                         retrieved.createdAt instanceof Date &&
                         original.createdAt.getTime() === retrieved.createdAt.getTime();
-                    
+
                     // Review requested check (can be null/undefined)
                     let reviewRequestedMatch = true;
                     if (original.review_requested === null && retrieved.review_requested === null) {
@@ -164,7 +165,7 @@ export const runAllUserTests = () => {
                     } else {
                         reviewRequestedMatch = false;
                     }
-                    
+
                     // Last seen check (can be null/undefined)
                     let lastSeenMatch = true;
                     if (original.last_seen === null && retrieved.last_seen === null) {
@@ -174,18 +175,18 @@ export const runAllUserTests = () => {
                     } else {
                         lastSeenMatch = false;
                     }
-                    
+
                     // HubbyModel date fields
-                    const createdAt2Match = 
-                        original.created_at instanceof Date && 
+                    const createdAt2Match =
+                        original.created_at instanceof Date &&
                         retrieved.created_at instanceof Date &&
                         original.created_at.getTime() === retrieved.created_at.getTime();
-                        
-                    const updatedAtMatch = 
-                        original.updated_at instanceof Date && 
+
+                    const updatedAtMatch =
+                        original.updated_at instanceof Date &&
                         retrieved.updated_at instanceof Date &&
                         original.updated_at.getTime() === retrieved.updated_at.getTime();
-                        
+
                     // Log details if there's a failure
                     if (!createdAtMatch || !reviewRequestedMatch || !lastSeenMatch || !createdAt2Match || !updatedAtMatch) {
                         console.log('  - createdAt:', createdAtMatch ? '✅' : '❌', typeof retrieved.createdAt);
@@ -194,13 +195,13 @@ export const runAllUserTests = () => {
                         console.log('  - created_at:', createdAt2Match ? '✅' : '❌', typeof retrieved.created_at);
                         console.log('  - updated_at:', updatedAtMatch ? '✅' : '❌', typeof retrieved.updated_at);
                     }
-                        
+
                     return createdAtMatch && reviewRequestedMatch && lastSeenMatch && createdAt2Match && updatedAtMatch;
                 }
             },
             {
                 name: 'Numeric fields',
-                check: (original, retrieved) => 
+                check: (original, retrieved) =>
                     original.balance === retrieved.balance
             }
         ]
@@ -208,7 +209,10 @@ export const runAllUserTests = () => {
 };
 
 // Run tests directly when this file is executed
-if (require.main === module) {
+// In ESM, there's no direct replacement for require.main === module
+// We can check if the current file's URL ends with this file's name
+const isDirectlyExecuted = import.meta.url.endsWith('/user.test.js');
+if (isDirectlyExecuted) {
     try {
         runAllUserTests();
     } finally {

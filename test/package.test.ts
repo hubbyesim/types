@@ -4,7 +4,7 @@
  */
 
 // First, import and setup mocks (MUST happen before importing any schemas)
-import { MockDocumentReference, MockTimestamp, cleanupMocks, setupMocks } from './mocks';
+import { MockDocumentReference, MockTimestamp, cleanupMocks, setupMocks } from './mocks.js';
 
 // Make sure mocks are properly initialized
 setupMocks();
@@ -13,7 +13,7 @@ setupMocks();
 import {
     COUNTRY_COLLECTION,
     PARTNER_COLLECTION
-} from '../src/schemas/refs';
+} from '../src/schemas/refs.js';
 
 // Now we can import the Package schemas and functions
 import {
@@ -22,7 +22,7 @@ import {
     packageFromFirestore,
     PackageApp,
     PackageFirestore
-} from '../src/schemas/package';
+} from '../src/schemas/package.js';
 
 import { z } from 'zod';
 
@@ -235,7 +235,10 @@ export const runAllPackageTests = () => {
 };
 
 // Run tests directly when this file is executed
-if (require.main === module) {
+// In ESM, there's no direct replacement for require.main === module
+// We can check if the current file's URL ends with this file's name
+const isDirectlyExecuted = import.meta.url.endsWith('/package.test.js');
+if (isDirectlyExecuted) {
     try {
         runAllPackageTests();
     } finally {

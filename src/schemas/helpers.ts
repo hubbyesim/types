@@ -2,7 +2,8 @@ import { z } from 'zod';
 import { Timestamp, DocumentReference, FieldValue } from 'firebase-admin/firestore';
 
 // Flag to indicate if we're running in a test environment
-export let isTestEnvironment = false;
+// Export as object to make it mutable in ESM context
+export const testEnv = { isTestEnvironment: false };
 
 // Test environment document references for mocking
 export class MockDocumentReference {
@@ -40,10 +41,10 @@ export const toFirestore = {
     date: (date: Date): Timestamp => Timestamp.fromDate(date),
     ref: <T>(collectionPath: string, id: string): DocumentReference<T> => {
         // For tests, return a mock document reference
-        if (isTestEnvironment) {
+        if (testEnv.isTestEnvironment) {
             return new MockDocumentReference(collectionPath, id) as any;
         }
-        
+
         // In a real environment, this requires a Firestore instance
         throw new Error('Implementation requires Firestore instance');
     }

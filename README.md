@@ -139,4 +139,27 @@ Each model has:
 2. **Developer Experience**: Strong type inference and autocomplete
 3. **Error Handling**: Detailed and structured error messages
 4. **Simplified Integration**: Seamless conversion between Firestore and application data
-5. **Maintainability**: Single source of truth for types, with schemas that generate TypeScript types 
+5. **Maintainability**: Single source of truth for types, with schemas that generate TypeScript types
+
+## Type System
+
+This package uses a dual-type system for each schema:
+
+1. `*Firestore` types - Represent data as stored in Firestore
+2. `*App` types - Represent data as used in application code
+
+For convenience and backward compatibility:
+- Firestore types are exported with both their full name and the base name (e.g., `BookingFirestore` and `Booking`)
+- App types are exported with an H-prefix (e.g., `BookingApp` as `HBooking`)
+
+### Type Generation
+
+All types are now automatically exported from a single `index.ts` file that is generated from the schema files.
+
+To regenerate the exports after making changes to schema files, run:
+
+```bash
+npm run generate-exports
+```
+
+> **Note:** The individual .d.ts files in the src/ directory (like booking.d.ts, etc.) are deprecated and will be removed in a future version. All types are now exported directly from the schema files through the generated index.ts. 

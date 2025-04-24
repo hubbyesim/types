@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 // Get a list of all .d.ts files in the src directory
 const srcDir = path.join(__dirname, '../src');
@@ -17,14 +17,14 @@ const dtsFiles = fs.readdirSync(srcDir)
 dtsFiles.forEach(file => {
   const srcPath = path.join(srcDir, file);
   const distPath = path.join(distDir, file);
-  
+
   // Copy the d.ts file to dist
   fs.copyFileSync(srcPath, distPath);
-  
+
   // Create a corresponding JS file that re-exports from index
   const jsFileName = file.replace('.d.ts', '.js');
   const jsFilePath = path.join(distDir, jsFileName);
-  
+
   if (!fs.existsSync(jsFilePath)) {
     const moduleName = file.replace('.d.ts', '');
     // Create a JS file with a proper Object.defineProperty and empty exports

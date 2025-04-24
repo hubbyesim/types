@@ -4,7 +4,7 @@
  */
 
 // First, import and setup mocks (MUST happen before importing any schemas)
-import { MockDocumentReference, MockTimestamp, cleanupMocks, setupMocks } from './mocks';
+import { MockDocumentReference, MockTimestamp, cleanupMocks, setupMocks } from './mocks.js';
 
 // Make sure mocks are properly initialized
 setupMocks();
@@ -16,8 +16,9 @@ import {
     currencyFromFirestore,
     CurrencyApp,
     CurrencyFirestore
-} from '../src/schemas/currency';
+} from '../src/schemas/currency.js';
 
+import * as helpers from '../src/schemas/helpers.js';
 import { z } from 'zod';
 
 /**
@@ -61,7 +62,6 @@ export const testCurrencyAppSchemaValidation = () => {
 export const testCurrencyToFirestore = (currencyData: CurrencyApp) => {
     try {
         // Override toFirestore.ref for this test if needed
-        const helpers = require('../src/schemas/helpers');
         const originalRef = helpers.toFirestore.ref;
         
         // Create a mock implementation if needed
@@ -170,6 +170,9 @@ export const runAllCurrencyTests = () => {
 };
 
 // Run tests directly when this file is executed
-if (require.main === module) {
+// In ESM, there's no direct replacement for require.main === module
+// We can check if the current file's URL ends with this file's name
+const isDirectlyExecuted = import.meta.url.endsWith('/currency.test.js');
+if (isDirectlyExecuted) {
     runAllCurrencyTests();
 } 

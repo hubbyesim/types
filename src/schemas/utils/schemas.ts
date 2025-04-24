@@ -1,6 +1,7 @@
 import { z } from 'zod';
-import { docRefToStringSchema } from '../helpers';
-import * as refs from '../refs';
+import { docRefToStringSchema } from '../helpers.js';
+import * as refs from '../refs.js';
+import { createDocRefSchema } from '../helpers.js';
 
 /**
  * Creates both Firestore and App schema versions of a reference field
@@ -16,23 +17,22 @@ export function createReferenceSchemas<T>(collection: string, nullable = false) 
     // Get the appropriate schema based on collection name and nullable flag
     const firestoreSchema = getFirestoreRefSchema(collection, nullable);
     const appSchema = getAppRefSchema(collection, nullable);
-    
+
     if (!firestoreSchema || !appSchema) {
         // Fallback to dynamic creation if the schema isn't in the centralized refs
-        const { createDocRefSchema } = require('../helpers');
         const refSchema = createDocRefSchema(collection);
-        
+
         return {
-            firestore: nullable 
-                ? refSchema.schema.nullable() 
+            firestore: nullable
+                ? refSchema.schema.nullable()
                 : refSchema.schema,
-            app: nullable 
-                ? docRefToStringSchema(refSchema).nullable() 
+            app: nullable
+                ? docRefToStringSchema(refSchema).nullable()
                 : docRefToStringSchema(refSchema),
             refSchema
         };
     }
-    
+
     return {
         firestore: firestoreSchema,
         app: appSchema,
@@ -63,7 +63,7 @@ function getFirestoreRefSchema(collection: string, nullable: boolean) {
         'currencies': nullable ? refs.currencyRefNullable : refs.currencyRefSchema.schema,
         'api_logs': nullable ? refs.apiLogRefNullable : refs.apiLogRefSchema.schema,
     };
-    
+
     return collectionMap[collection];
 }
 
@@ -86,7 +86,7 @@ function getAppRefSchema(collection: string, nullable: boolean) {
         'currencies': nullable ? refs.currencyRefStringNullable : refs.currencyRefString,
         'api_logs': nullable ? refs.apiLogRefStringNullable : refs.apiLogRefString,
     };
-    
+
     return collectionMap[collection];
 }
 
@@ -100,33 +100,32 @@ export function createArrayReferenceSchemas<T>(collection: string, nullable = fa
     // Get the appropriate array schema based on collection name and nullable flag
     const firestoreSchema = getFirestoreArrayRefSchema(collection, nullable);
     const appSchema = getAppArrayRefSchema(collection, nullable);
-    
+
     if (!firestoreSchema || !appSchema) {
         // Fallback to dynamic creation
-        const { createDocRefSchema } = require('../helpers');
         const refSchema = createDocRefSchema(collection);
-        
+
         return {
-            firestore: nullable 
-                ? z.array(refSchema.schema).nullable() 
+            firestore: nullable
+                ? z.array(refSchema.schema).nullable()
                 : z.array(refSchema.schema),
-            app: nullable 
-                ? z.array(z.string()).nullable() 
+            app: nullable
+                ? z.array(z.string()).nullable()
                 : z.array(z.string()),
             refSchema
         };
     }
-    
+
     // Get base reference schema for compatibility
     const baseRefSchema = getBaseRefSchema(collection);
-    
+
     return {
         firestore: firestoreSchema,
         app: appSchema,
         // For backward compatibility
         refSchema: {
-            schema: baseRefSchema ? (nullable ? baseRefSchema.schema.nullable() : baseRefSchema.schema) 
-                   : z.any(), // Fallback if we can't determine the right schema
+            schema: baseRefSchema ? (nullable ? baseRefSchema.schema.nullable() : baseRefSchema.schema)
+                : z.any(), // Fallback if we can't determine the right schema
             collectionPath: collection
         }
     };
@@ -151,7 +150,7 @@ function getBaseRefSchema(collection: string) {
         'currencies': refs.currencyRefSchema,
         'api_logs': refs.apiLogRefSchema,
     };
-    
+
     return map[collection];
 }
 
@@ -174,7 +173,7 @@ function getFirestoreArrayRefSchema(collection: string, nullable: boolean) {
         'currencies': nullable ? refs.currencyRefArrayNullable : refs.currencyRefArray,
         'api_logs': nullable ? refs.apiLogRefArrayNullable : refs.apiLogRefArray,
     };
-    
+
     return collectionMap[collection];
 }
 
@@ -197,7 +196,7 @@ function getAppArrayRefSchema(collection: string, nullable: boolean) {
         'currencies': nullable ? refs.currencyRefStringArrayNullable : refs.currencyRefStringArray,
         'api_logs': nullable ? refs.apiLogRefStringArrayNullable : refs.apiLogRefStringArray,
     };
-    
+
     return collectionMap[collection];
 }
 
@@ -206,7 +205,7 @@ function getAppArrayRefSchema(collection: string, nullable: boolean) {
  */
 function camelCase(str: string) {
     return str
-        .replace(/(?:^\w|[A-Z]|\b\w)/g, (letter, index) => 
+        .replace(/(?:^\w|[A-Z]|\b\w)/g, (letter, index) =>
             index === 0 ? letter.toLowerCase() : letter.toUpperCase()
         )
         .replace(/\s+|-|_/g, '');
