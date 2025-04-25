@@ -1,4 +1,4 @@
-import { toFirestore, fromFirestore } from './helpers';
+import { toFirestore, fromFirestore } from './firebase/helpers';
 
 // Generic interfaces for field mappings
 export interface GenericRefFieldMapping<AppType, FirestoreType> {
@@ -46,7 +46,7 @@ export function genericToFirestore<AppType extends Record<string, any>, Firestor
 }): FirestoreType {
     // Create base object with common fields but exclude reference fields
     const result: Record<string, any> = {};
-    
+
     // Copy all fields except references that will be handled separately
     const refFieldNames = refFieldMappings.map(mapping => mapping.app);
     Object.keys(appObject as Record<string, any>).forEach(key => {
@@ -59,15 +59,15 @@ export function genericToFirestore<AppType extends Record<string, any>, Firestor
     if ('created_at' in appObject && isDate(appObject.created_at)) {
         result.created_at = toFirestore.date(appObject.created_at);
     }
-    
+
     if ('updated_at' in appObject && isDate(appObject.updated_at)) {
         result.updated_at = toFirestore.date(appObject.updated_at);
     }
-    
+
     if ('created_by' in appObject) {
         result.created_by = typeof appObject.created_by === 'string' ? appObject.created_by : null;
     }
-    
+
     if ('updated_by' in appObject) {
         result.updated_by = typeof appObject.updated_by === 'string' ? appObject.updated_by : null;
     }
@@ -100,7 +100,7 @@ export function genericToFirestore<AppType extends Record<string, any>, Firestor
             }
         }
     });
-    
+
     // Apply any special case handling
     if (specialCaseHandler) {
         specialCaseHandler(result, appObject);
@@ -123,7 +123,7 @@ export function genericFromFirestore<FirestoreType extends Record<string, any>, 
 }): AppType {
     // Create base object excluding reference fields that will be handled separately
     const result: Record<string, any> = {};
-    
+
     // Copy all fields except references that will be handled separately
     const refFieldNames = refFieldMappings.map(mapping => mapping.firestore);
     Object.keys(firestoreObject as Record<string, any>).forEach(key => {
@@ -136,18 +136,18 @@ export function genericFromFirestore<FirestoreType extends Record<string, any>, 
     if ('created_at' in firestoreObject) {
         result.created_at = fromFirestore.date(firestoreObject.created_at as any);
     }
-    
+
     if ('updated_at' in firestoreObject) {
         result.updated_at = fromFirestore.date(firestoreObject.updated_at as any);
     }
-    
+
     if ('created_by' in firestoreObject) {
         const createdBy = firestoreObject.created_by;
         result.created_by = typeof createdBy === 'string'
             ? createdBy
             : createdBy ? fromFirestore.ref(createdBy as any) : null;
     }
-    
+
     if ('updated_by' in firestoreObject) {
         const updatedBy = firestoreObject.updated_by;
         result.updated_by = typeof updatedBy === 'string'
@@ -183,7 +183,7 @@ export function genericFromFirestore<FirestoreType extends Record<string, any>, 
             }
         }
     });
-    
+
     // Apply any special case handling
     if (specialCaseHandler) {
         specialCaseHandler(result, firestoreObject);

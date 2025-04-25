@@ -16,7 +16,7 @@ import {
   MESSAGE_COLLECTION,
   CURRENCY_COLLECTION,
   API_LOG_COLLECTION
-} from '../refs';
+} from '../base/refs';
 
 export {
   PARTNER_COLLECTION,
