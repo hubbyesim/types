@@ -1,6 +1,6 @@
 {
   "name": "@hubbyesim/types",
-  "version": "1.7.1",
+  "version": "2.0.1",
   "description": "Type definitions for the hubbyesim project",
   "type": "module",
   "main": "./dist/index.js",
@@ -22,8 +22,7 @@
   "author": "Daniel Fortuyn",
   "license": "ISC",
   "dependencies": {
-    "firebase-admin": "^12.2.0",
-    "firebase-functions": "^5.0.1",
+    "@firebase/firestore-types": "*",
     "zod": "^3.24.3"
   },
   "devDependencies": {
