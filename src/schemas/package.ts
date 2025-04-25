@@ -15,7 +15,6 @@ import {
     PARTNER_COLLECTION
 } from './utils/collections';
 import { countryFirestoreSchema, CountryFirestore, CountryApp } from './country';
-import { DocumentReference } from 'firebase-admin/firestore';
 import {
     countryRefSchema,
     partnerRefNullable,
