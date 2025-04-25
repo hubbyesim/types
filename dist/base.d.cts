@@ -2766,6 +2766,7 @@ declare const priceListAppSchema: z.ZodObject<{
 } & {
     name: z.ZodString;
     description: z.ZodNullable<z.ZodString>;
+    type: z.ZodEnum<["partner", "consumer"]>;
     partner: z.ZodNullable<z.ZodString>;
     package_prices: z.ZodArray<z.ZodObject<{
         package: z.ZodString;
@@ -2791,6 +2792,7 @@ declare const priceListAppSchema: z.ZodObject<{
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
+    type: "partner" | "consumer";
     updated_by: string | null;
     description: string | null;
     partner: string | null;
@@ -2807,6 +2809,7 @@ declare const priceListAppSchema: z.ZodObject<{
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
+    type: "partner" | "consumer";
     updated_by: string | null;
     description: string | null;
     partner: string | null;

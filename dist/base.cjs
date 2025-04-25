@@ -533,6 +533,7 @@ var partnerAppSchema = baseModelAppSchema.extend({
 var priceListAppSchema = baseModelAppSchema.extend({
   name: import_zod6.z.string(),
   description: import_zod6.z.string().nullable(),
+  type: import_zod6.z.enum(["partner", "consumer"]),
   partner: partnerRefStringNullable,
   package_prices: import_zod6.z.array(packagePriceAppSchema)
 });

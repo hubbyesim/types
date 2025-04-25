@@ -745,6 +745,7 @@ var partnerAppSchema = baseModelAppSchema.extend({
 var priceListAppSchema = baseModelAppSchema.extend({
   name: z9.string(),
   description: z9.string().nullable(),
+  type: z9.enum(["partner", "consumer"]),
   partner: partnerRefStringNullable,
   package_prices: z9.array(packagePriceAppSchema)
 });
