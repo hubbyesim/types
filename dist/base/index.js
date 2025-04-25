@@ -872,4 +872,4 @@ export {
   visualIdentityBannerStrategySchema,
   visualIdentitySchema
 };
-//# sourceMappingURL=base.js.map
+//# sourceMappingURL=index.js.map

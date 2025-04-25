@@ -1021,4 +1021,4 @@ var isDate = (value) => {
   visualIdentityBannerStrategySchema,
   visualIdentitySchema
 });
-//# sourceMappingURL=base.cjs.map
+//# sourceMappingURL=index.cjs.map
