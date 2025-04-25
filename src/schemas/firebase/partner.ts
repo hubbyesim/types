@@ -134,6 +134,7 @@ export type PackagePriceFirestore = z.infer<typeof packagePriceFirestoreSchema>;
 export type PartnerPricingStrategyFirestore = z.infer<typeof partnerPricingStrategyFirestoreSchema>;
 export type UserPricingStrategyFirestore = z.infer<typeof userPricingStrategyFirestoreSchema>;
 export type FinancialPropertiesFirestore = z.infer<typeof financialPropertiesFirestoreSchema>;
+export type FinancialProperties = z.infer<typeof financialPropertiesAppSchema>;
 
 // For backwards compatibility
 export type Partner = PartnerFirestore;

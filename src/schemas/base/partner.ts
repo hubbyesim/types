@@ -213,6 +213,7 @@ export const partnerAppSchema = baseModelAppSchema.extend({
 export const priceListAppSchema = baseModelAppSchema.extend({
     name: z.string(),
     description: z.string().nullable(),
+    type: z.enum(['partner', 'consumer']),
     partner: partnerRefStringNullable,
     package_prices: z.array(packagePriceAppSchema)
 });
