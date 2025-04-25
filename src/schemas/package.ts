@@ -16,8 +16,8 @@ import {
 } from './utils/collections';
 import { countryFirestoreSchema, CountryFirestore, CountryApp } from './country';
 import { DocumentReference } from 'firebase-admin/firestore';
-import { 
-    countryRefSchema, 
+import {
+    countryRefSchema,
     partnerRefNullable,
     countryRefString,
     partnerRefStringNullable
@@ -45,6 +45,7 @@ const commonPackageFields = {
         imsi: z.number()
     }).nullable()
 };
+
 
 // Firestore schema for Package
 export const packageFirestoreSchema = baseModelSchema.extend({

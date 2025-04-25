@@ -756,25 +756,23 @@ var commonESIMFields = {
   type: z9.enum(["api", "promo", "balance", "code", "external", "payment"]),
   is_auto_install: z9.boolean(),
   is_archived: z9.boolean(),
+  user: z9.string().nullable(),
+  payment: z9.string().nullable(),
   apn: z9.string().nullable()
 };
 var esimFirestoreSchema = baseModelSchema.extend({
   ...commonESIMFields,
   country: countryRefNullable,
-  user: userRefNullable,
   time_assigned: timestampSchema.nullable(),
   last_updated: timestampSchema.nullable(),
-  partner: partnerRefNullable,
-  payment: paymentRefNullable
+  partner: partnerRefNullable
 });
 var esimAppSchema = baseModelAppSchema.extend({
   ...commonESIMFields,
   country: z9.string().nullable(),
-  user: z9.string().nullable(),
   time_assigned: z9.date().nullable(),
   last_updated: z9.date().nullable(),
-  partner: z9.string().nullable(),
-  payment: z9.string().nullable()
+  partner: z9.string().nullable()
 });
 var refFieldMappings2 = [
   { app: "country", firestore: "country", collection: COUNTRY_COLLECTION, nullable: true },

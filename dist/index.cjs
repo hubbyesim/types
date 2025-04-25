@@ -1006,25 +1006,23 @@ var commonESIMFields = {
   type: import_zod9.z.enum(["api", "promo", "balance", "code", "external", "payment"]),
   is_auto_install: import_zod9.z.boolean(),
   is_archived: import_zod9.z.boolean(),
+  user: import_zod9.z.string().nullable(),
+  payment: import_zod9.z.string().nullable(),
   apn: import_zod9.z.string().nullable()
 };
 var esimFirestoreSchema = baseModelSchema.extend({
   ...commonESIMFields,
   country: countryRefNullable,
-  user: userRefNullable,
   time_assigned: timestampSchema.nullable(),
   last_updated: timestampSchema.nullable(),
-  partner: partnerRefNullable,
-  payment: paymentRefNullable
+  partner: partnerRefNullable
 });
 var esimAppSchema = baseModelAppSchema.extend({
   ...commonESIMFields,
   country: import_zod9.z.string().nullable(),
-  user: import_zod9.z.string().nullable(),
   time_assigned: import_zod9.z.date().nullable(),
   last_updated: import_zod9.z.date().nullable(),
-  partner: import_zod9.z.string().nullable(),
-  payment: import_zod9.z.string().nullable()
+  partner: import_zod9.z.string().nullable()
 });
 var refFieldMappings2 = [
   { app: "country", firestore: "country", collection: COUNTRY_COLLECTION, nullable: true },

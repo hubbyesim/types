@@ -20,11 +20,11 @@ import {
     PAYMENT_COLLECTION
 } from './utils/collections';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
-import { 
-    countryRefNullable, 
-    userRefNullable, 
-    partnerRefNullable, 
-    paymentRefNullable 
+import {
+    countryRefNullable,
+    userRefNullable,
+    partnerRefNullable,
+    paymentRefNullable
 } from './refs';
 
 // Common fields shared between Firestore and App schemas
@@ -45,6 +45,8 @@ const commonESIMFields = {
     type: z.enum(['api', 'promo', 'balance', 'code', 'external', 'payment']),
     is_auto_install: z.boolean(),
     is_archived: z.boolean(),
+    user: z.string().nullable(),
+    payment: z.string().nullable(),
     apn: z.string().nullable()
 };
 
@@ -52,22 +54,18 @@ const commonESIMFields = {
 export const esimFirestoreSchema = baseModelSchema.extend({
     ...commonESIMFields,
     country: countryRefNullable,
-    user: userRefNullable,
     time_assigned: timestampSchema.nullable(),
     last_updated: timestampSchema.nullable(),
     partner: partnerRefNullable,
-    payment: paymentRefNullable,
 });
 
 // App schema for ESIM
 export const esimAppSchema = baseModelAppSchema.extend({
     ...commonESIMFields,
     country: z.string().nullable(),
-    user: z.string().nullable(),
     time_assigned: z.date().nullable(),
     last_updated: z.date().nullable(),
     partner: z.string().nullable(),
-    payment: z.string().nullable(),
 });
 
 // Define types based on schemas

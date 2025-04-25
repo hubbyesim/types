@@ -1483,11 +1483,9 @@ declare const esimFirestoreSchema: z.ZodObject<{
     updated_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>]>;
 } & {
     country: z.ZodNullable<z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
-    user: z.ZodNullable<z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
     time_assigned: z.ZodNullable<z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>>;
     last_updated: z.ZodNullable<z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>>;
     partner: z.ZodNullable<z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
-    payment: z.ZodNullable<z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
     imsi: z.ZodNumber;
     qr: z.ZodString;
     iccid: z.ZodString;
@@ -1504,6 +1502,8 @@ declare const esimFirestoreSchema: z.ZodObject<{
     type: z.ZodEnum<["api", "promo", "balance", "code", "external", "payment"]>;
     is_auto_install: z.ZodBoolean;
     is_archived: z.ZodBoolean;
+    user: z.ZodNullable<z.ZodString>;
+    payment: z.ZodNullable<z.ZodString>;
     apn: z.ZodNullable<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     id: string;
@@ -1516,11 +1516,11 @@ declare const esimFirestoreSchema: z.ZodObject<{
     partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     name: string;
     country: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    user: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    user: string | null;
     apn: string | null;
     imsi: number;
     promo: string | null;
-    payment: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    payment: string | null;
     time_assigned: Timestamp | null;
     last_updated: Timestamp | null;
     qr: string;
@@ -1545,11 +1545,11 @@ declare const esimFirestoreSchema: z.ZodObject<{
     partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     name: string;
     country: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    user: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    user: string | null;
     apn: string | null;
     imsi: number;
     promo: string | null;
-    payment: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    payment: string | null;
     time_assigned: Timestamp | null;
     last_updated: Timestamp | null;
     qr: string;
@@ -1572,11 +1572,9 @@ declare const esimAppSchema: z.ZodObject<{
     updated_by: z.ZodUnion<[z.ZodString, z.ZodNull]>;
 } & {
     country: z.ZodNullable<z.ZodString>;
-    user: z.ZodNullable<z.ZodString>;
     time_assigned: z.ZodNullable<z.ZodDate>;
     last_updated: z.ZodNullable<z.ZodDate>;
     partner: z.ZodNullable<z.ZodString>;
-    payment: z.ZodNullable<z.ZodString>;
     imsi: z.ZodNumber;
     qr: z.ZodString;
     iccid: z.ZodString;
@@ -1593,6 +1591,8 @@ declare const esimAppSchema: z.ZodObject<{
     type: z.ZodEnum<["api", "promo", "balance", "code", "external", "payment"]>;
     is_auto_install: z.ZodBoolean;
     is_archived: z.ZodBoolean;
+    user: z.ZodNullable<z.ZodString>;
+    payment: z.ZodNullable<z.ZodString>;
     apn: z.ZodNullable<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     id: string;
