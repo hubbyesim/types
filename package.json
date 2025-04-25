@@ -12,11 +12,11 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
-    "./firebase": {
-      "import": "./dist/firebase/index.js",
-      "require": "./dist/firebase/index.cjs",
-      "types": "./dist/firebase/index.d.ts",
-      "default": "./dist/firebase/index.js"
+    "./base": {
+      "import": "./dist/base/index.js",
+      "require": "./dist/base/index.cjs",
+      "types": "./dist/base/index.d.ts",
+      "default": "./dist/base/index.js"
     }
   },
   "scripts": {
@@ -28,6 +28,7 @@
   "author": "Daniel Fortuyn",
   "license": "ISC",
   "dependencies": {
+    "@hubbyesim/types": "^1.8.1",
     "firebase-admin": "^12.2.0",
     "firebase-functions": "^5.0.1",
     "zod": "^3.24.3"
