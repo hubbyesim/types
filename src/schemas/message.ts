@@ -1,16 +1,18 @@
 import { z } from 'zod';
-import { Timestamp } from 'firebase/firestore';
 import {
     baseModelSchema,
     baseModelAppSchema,
     timestampSchema,
     fromFirestore,
-    toFirestore
+    toFirestore,
+    createFirestoreHelpers
 } from './helpers';
 import {
     GenericDateFieldMapping,
     genericToFirestore,
-    genericFromFirestore
+    genericFromFirestore,
+    FirestoreProvider,
+    isTimestamp
 } from './utils';
 
 // Firestore schema for Message
@@ -50,43 +52,45 @@ const dateFieldMappings: GenericDateFieldMapping<MessageApp, MessageFirestore>[]
 ];
 
 // Conversion functions
-export const messageToFirestore = (message: MessageApp): MessageFirestore => {
+export const messageToFirestore = (message: MessageApp, firestore?: FirestoreProvider): MessageFirestore => {
     return genericToFirestore({
         appObject: message,
         refFieldMappings: [],
-        dateFieldMappings
+        dateFieldMappings,
+        firestore
     });
 };
 
-export const messageFromFirestore = (firestoreMessage: MessageFirestore): MessageApp => {
+export const messageFromFirestore = (firestoreMessage: MessageFirestore, firestore?: FirestoreProvider): MessageApp => {
     return genericFromFirestore({
         firestoreObject: firestoreMessage,
         refFieldMappings: [],
-        dateFieldMappings
+        dateFieldMappings,
+        firestore
     });
 };
 
 // Convert a record of messages - with null safety
-export const sentMessagesToFirestore = (sentMessages: SentMessagesApp): SentMessagesFirestore => {
+export const sentMessagesToFirestore = (sentMessages: SentMessagesApp, firestore?: FirestoreProvider): SentMessagesFirestore => {
     const result: Record<string, MessageFirestore> = {};
 
     for (const key in sentMessages) {
         const message = sentMessages[key];
         if (message) {
-            result[key] = messageToFirestore(message);
+            result[key] = messageToFirestore(message, firestore);
         }
     }
 
     return result;
 };
 
-export const sentMessagesFromFirestore = (firestoreSentMessages: SentMessagesFirestore): SentMessagesApp => {
+export const sentMessagesFromFirestore = (firestoreSentMessages: SentMessagesFirestore, firestore?: FirestoreProvider): SentMessagesApp => {
     const result: Record<string, MessageApp> = {};
 
     for (const key in firestoreSentMessages) {
         const firestoreMessage = firestoreSentMessages[key];
         if (firestoreMessage) {
-            result[key] = messageFromFirestore(firestoreMessage);
+            result[key] = messageFromFirestore(firestoreMessage, firestore);
         }
     }
 
@@ -100,50 +104,56 @@ export type SentMessages = SentMessagesFirestore;
 export type HSentMessages = SentMessagesApp;
 
 // Helper function for backward compatibility with runtime type conversion
-export const convertSentMessagesToFirestore = (sentMessages: Record<string, MessageApp>): Record<string, MessageFirestore> => {
+export const convertSentMessagesToFirestore = (
+    sentMessages: Record<string, MessageApp>,
+    firestore?: FirestoreProvider
+): Record<string, MessageFirestore> => {
     const result: Record<string, MessageFirestore> = {};
-    
+    const firestoreHelpers = firestore ? createFirestoreHelpers(firestore) : null;
+
     for (const key in sentMessages) {
         const message = sentMessages[key];
         if (message) {
             // Convert Date to Timestamp for Firestore if needed
             const firestoreMessage: MessageFirestore = {
                 ...message,
-                created_at: message.created_at instanceof Date 
-                    ? Timestamp.fromDate(message.created_at) 
+                created_at: message.created_at instanceof Date && firestoreHelpers
+                    ? firestoreHelpers.toFirestore.date(message.created_at)
                     : message.created_at,
-                updated_at: message.updated_at instanceof Date 
-                    ? Timestamp.fromDate(message.updated_at) 
+                updated_at: message.updated_at instanceof Date && firestoreHelpers
+                    ? firestoreHelpers.toFirestore.date(message.updated_at)
                     : message.updated_at
             } as MessageFirestore;
-            
+
             result[key] = firestoreMessage;
         }
     }
-    
+
     return result;
 };
 
-export const convertSentMessagesFromFirestore = (firestoreSentMessages: Record<string, MessageFirestore>): Record<string, MessageApp> => {
+export const convertSentMessagesFromFirestore = (
+    firestoreSentMessages: Record<string, MessageFirestore>
+): Record<string, MessageApp> => {
     const result: Record<string, MessageApp> = {};
-    
+
     for (const key in firestoreSentMessages) {
         const firestoreMessage = firestoreSentMessages[key];
         if (firestoreMessage) {
             // Convert Timestamp to Date for app if needed
             const appMessage: MessageApp = {
                 ...firestoreMessage,
-                created_at: firestoreMessage.created_at instanceof Timestamp 
-                    ? firestoreMessage.created_at.toDate() 
+                created_at: isTimestamp(firestoreMessage.created_at)
+                    ? firestoreMessage.created_at.toDate()
                     : firestoreMessage.created_at as unknown as Date,
-                updated_at: firestoreMessage.updated_at instanceof Timestamp 
-                    ? firestoreMessage.updated_at.toDate() 
+                updated_at: isTimestamp(firestoreMessage.updated_at)
+                    ? firestoreMessage.updated_at.toDate()
                     : firestoreMessage.updated_at as unknown as Date
             };
-            
+
             result[key] = appMessage;
         }
     }
-    
+
     return result;
 }; 

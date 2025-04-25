@@ -162,4 +162,58 @@ To regenerate the exports after making changes to schema files, run:
 npm run generate-exports
 ```
 
-> **Note:** The individual .d.ts files in the src/ directory (like booking.d.ts, etc.) are deprecated and will be removed in a future version. All types are now exported directly from the schema files through the generated index.ts. 
+> **Note:** The individual .d.ts files in the src/ directory (like booking.d.ts, etc.) are deprecated and will be removed in a future version. All types are now exported directly from the schema files through the generated index.ts.
+
+## FirestoreProvider
+
+The shared types package uses a `FirestoreProvider` interface to abstract away direct dependencies on Firebase SDKs. This allows the package to work with both firebase and firebase-admin SDKs without directly importing either one.
+
+### Usage
+
+When using conversion functions, you can now pass a FirestoreProvider implementation:
+
+```typescript
+// Import the types you need
+import { userToFirestore, userFromFirestore, FirestoreProvider } from '@hubbyesim/types';
+
+// Create an implementation of FirestoreProvider using firebase/firestore
+const clientFirestoreProvider: FirestoreProvider = {
+  Timestamp: {
+    fromDate: firebase.firestore.Timestamp.fromDate,
+    now: firebase.firestore.Timestamp.now
+  },
+  FieldValue: {
+    serverTimestamp: firebase.firestore.FieldValue.serverTimestamp,
+    increment: firebase.firestore.FieldValue.increment
+  },
+  doc: (path) => firebase.firestore().doc(path),
+  collection: (path) => firebase.firestore().collection(path)
+};
+
+// Create an implementation of FirestoreProvider using firebase-admin
+const adminFirestoreProvider: FirestoreProvider = {
+  Timestamp: {
+    fromDate: admin.firestore.Timestamp.fromDate,
+    now: admin.firestore.Timestamp.now
+  },
+  FieldValue: {
+    serverTimestamp: admin.firestore.FieldValue.serverTimestamp,
+    increment: admin.firestore.FieldValue.increment
+  },
+  doc: (path) => admin.firestore().doc(path),
+  collection: (path) => admin.firestore().collection(path)
+};
+
+// Use with conversion functions
+const userFirestore = userToFirestore(userApp, clientFirestoreProvider);
+const userApp = userFromFirestore(userFirestore, adminFirestoreProvider);
+```
+
+The FirestoreProvider interface allows the shared types package to:
+
+1. Work with both client and admin SDKs
+2. Not have direct dependencies on Firebase packages
+3. Allow for easier testing with mock implementations
+4. Provide more flexibility in how Firestore is accessed
+
+All conversion functions now accept an optional FirestoreProvider parameter, and will work in a pass-through mode if no provider is given. 

@@ -11,7 +11,8 @@ import {
     GenericRefFieldMapping,
     GenericDateFieldMapping,
     genericToFirestore,
-    genericFromFirestore
+    genericFromFirestore,
+    FirestoreProvider
 } from './utils';
 import {
     PARTNER_COLLECTION,
@@ -20,11 +21,10 @@ import {
     ESIM_COLLECTION
 } from './utils/collections';
 import { SupportedLocales, SUPPORTED_LOCALES, supportedLocalesSchema } from '../constants';
-import { DocumentReference, DocumentData, Timestamp } from 'firebase/firestore';
-import { 
-    partnerRefSchema, 
-    promoCodeRefArray, 
-    userRefArrayNullable, 
+import {
+    partnerRefSchema,
+    promoCodeRefArray,
+    userRefArrayNullable,
     esimRefArrayNullable,
     partnerRefString,
     promoCodeRefStringArray,
@@ -137,19 +137,21 @@ const dateFieldMappings: GenericDateFieldMapping<BookingApp, BookingFirestore>[]
 ];
 
 // Conversion functions
-export const bookingToFirestore = (booking: BookingApp): BookingFirestore => {
+export const bookingToFirestore = (booking: BookingApp, firestore?: FirestoreProvider): BookingFirestore => {
     return genericToFirestore({
         appObject: booking,
         refFieldMappings,
-        dateFieldMappings
+        dateFieldMappings,
+        firestore
     });
 };
 
-export const bookingFromFirestore = (firestoreBooking: BookingFirestore): BookingApp => {
+export const bookingFromFirestore = (firestoreBooking: BookingFirestore, firestore?: FirestoreProvider): BookingApp => {
     return genericFromFirestore({
         firestoreObject: firestoreBooking,
         refFieldMappings,
-        dateFieldMappings
+        dateFieldMappings,
+        firestore
     });
 };
 

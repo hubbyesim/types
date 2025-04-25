@@ -1,5 +1,5 @@
-import { Timestamp } from 'firebase/firestore';
-import { toFirestore, fromFirestore } from '../helpers';
+import { FirestoreProvider, isTimestamp } from './firestoreProvider';
+import { createFirestoreHelpers } from '../helpers';
 
 // Common interfaces for field mappings
 export interface RefFieldMapping<TApp, TFirestore> {
@@ -23,8 +23,8 @@ export const convertToDate = (value: unknown): Date => {
     if (typeof value === 'string') {
         return new Date(value);
     }
-    if (value && typeof (value as any).toDate === 'function') {
-        return (value as Timestamp).toDate();
+    if (isTimestamp(value)) {
+        return value.toDate();
     }
     throw new Error(`Unable to convert value to Date: ${value}`);
 };
@@ -38,10 +38,12 @@ export const isDate = (value: unknown): value is Date => {
 export function convertToFirestore<TApp extends Record<string, any>, TFirestore extends Record<string, any>>(
     appData: TApp,
     refFieldMappings: RefFieldMapping<TApp, TFirestore>[],
-    dateFieldMappings?: DateFieldMapping<TApp>[]
+    dateFieldMappings?: DateFieldMapping<TApp>[],
+    firestore?: FirestoreProvider
 ): TFirestore {
     // Create base object with common fields but exclude reference fields
     const result: Record<string, any> = {};
+    const firestoreHelpers = firestore ? createFirestoreHelpers(firestore) : null;
 
     // Copy all fields except references that will be handled separately
     const refFieldNames = refFieldMappings.map(mapping => String(mapping.app));
@@ -52,8 +54,18 @@ export function convertToFirestore<TApp extends Record<string, any>, TFirestore 
     });
 
     // Handle base model fields
-    result.created_at = toFirestore.date(appData.created_at);
-    result.updated_at = toFirestore.date(appData.updated_at);
+    if (appData.created_at instanceof Date) {
+        result.created_at = firestoreHelpers
+            ? firestoreHelpers.toFirestore.date(appData.created_at)
+            : appData.created_at;
+    }
+
+    if (appData.updated_at instanceof Date) {
+        result.updated_at = firestoreHelpers
+            ? firestoreHelpers.toFirestore.date(appData.updated_at)
+            : appData.updated_at;
+    }
+
     result.created_by = typeof appData.created_by === 'string' ? appData.created_by : null;
     result.updated_by = typeof appData.updated_by === 'string' ? appData.updated_by : null;
 
@@ -64,7 +76,9 @@ export function convertToFirestore<TApp extends Record<string, any>, TFirestore 
             if (nullable && value === null) {
                 result[String(field)] = null;
             } else if (isDate(value)) {
-                result[String(field)] = toFirestore.date(value);
+                result[String(field)] = firestoreHelpers
+                    ? firestoreHelpers.toFirestore.date(value)
+                    : value;
             }
         });
     }
@@ -78,13 +92,22 @@ export function convertToFirestore<TApp extends Record<string, any>, TFirestore 
             if (nullable && value === null) {
                 result[firestoreKey] = null;
             } else if (Array.isArray(value)) {
-                result[firestoreKey] = value.map((id: string) => toFirestore.ref<any>(collection, id));
+                if (firestoreHelpers) {
+                    result[firestoreKey] = value.map((id: string) =>
+                        firestoreHelpers.toFirestore.ref(collection, id));
+                } else {
+                    result[firestoreKey] = value; // Pass through if no Firestore provider
+                }
             }
         } else {
             if (nullable && value === null) {
                 result[firestoreKey] = null;
             } else if (typeof value === 'string') {
-                result[firestoreKey] = toFirestore.ref<any>(collection, value);
+                if (firestoreHelpers) {
+                    result[firestoreKey] = firestoreHelpers.toFirestore.ref(collection, value);
+                } else {
+                    result[firestoreKey] = value; // Pass through if no Firestore provider
+                }
             }
         }
     });
@@ -111,14 +134,29 @@ export function convertFromFirestore<TFirestore extends Record<string, any>, TAp
     });
 
     // Handle base model fields
-    result.created_at = fromFirestore.date(firestoreData.created_at);
-    result.updated_at = fromFirestore.date(firestoreData.updated_at);
+    if (isTimestamp(firestoreData.created_at)) {
+        result.created_at = firestoreData.created_at.toDate();
+    } else if (firestoreData.created_at instanceof Date) {
+        result.created_at = firestoreData.created_at;
+    }
+
+    if (isTimestamp(firestoreData.updated_at)) {
+        result.updated_at = firestoreData.updated_at.toDate();
+    } else if (firestoreData.updated_at instanceof Date) {
+        result.updated_at = firestoreData.updated_at;
+    }
+
     result.created_by = typeof firestoreData.created_by === 'string'
         ? firestoreData.created_by
-        : firestoreData.created_by ? fromFirestore.ref(firestoreData.created_by) : null;
+        : firestoreData.created_by && typeof firestoreData.created_by === 'object' && 'id' in firestoreData.created_by
+            ? firestoreData.created_by.id
+            : null;
+
     result.updated_by = typeof firestoreData.updated_by === 'string'
         ? firestoreData.updated_by
-        : firestoreData.updated_by ? fromFirestore.ref(firestoreData.updated_by) : null;
+        : firestoreData.updated_by && typeof firestoreData.updated_by === 'object' && 'id' in firestoreData.updated_by
+            ? firestoreData.updated_by.id
+            : null;
 
     // Convert date fields
     if (dateFieldMappings) {
@@ -129,7 +167,12 @@ export function convertFromFirestore<TFirestore extends Record<string, any>, TAp
             if (nullable && value === null) {
                 result[fieldName] = null;
             } else {
-                result[fieldName] = convertToDate(value);
+                try {
+                    result[fieldName] = convertToDate(value);
+                } catch (error) {
+                    console.warn(`Failed to convert field ${fieldName} to Date: ${error}`);
+                    result[fieldName] = value; // Keep original value on error
+                }
             }
         });
     }
@@ -143,13 +186,22 @@ export function convertFromFirestore<TFirestore extends Record<string, any>, TAp
             if (nullable && value === null) {
                 result[appKey] = null;
             } else if (Array.isArray(value)) {
-                result[appKey] = value.map((ref: unknown) => fromFirestore.ref(ref as any));
+                result[appKey] = value.map((ref: unknown) => {
+                    if (typeof ref === 'string') return ref;
+                    return ref && typeof ref === 'object' && 'id' in ref ? ref.id : null;
+                }).filter(Boolean);
             }
         } else {
             if (nullable && value === null) {
                 result[appKey] = null;
             } else if (value) {
-                result[appKey] = fromFirestore.ref(value as any);
+                if (typeof value === 'string') {
+                    result[appKey] = value;
+                } else if (typeof value === 'object' && value !== null && 'id' in value) {
+                    result[appKey] = value.id;
+                } else {
+                    result[appKey] = null;
+                }
             }
         }
     });

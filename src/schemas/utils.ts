@@ -1,4 +1,24 @@
-import { toFirestore, fromFirestore } from './helpers';
+import { createFirestoreHelpers } from './helpers';
+import {
+    FirestoreProvider,
+    isTimestamp,
+    isDocumentReference,
+    isFieldValue,
+    TimestampLike,
+    DocumentReferenceLike,
+    FieldValueLike
+} from './utils/firestoreProvider';
+
+// Re-export the FirestoreProvider interface and helper functions
+export {
+    FirestoreProvider,
+    isTimestamp,
+    isDocumentReference,
+    isFieldValue,
+    TimestampLike,
+    DocumentReferenceLike,
+    FieldValueLike
+};
 
 // Generic interfaces for field mappings
 export interface GenericRefFieldMapping<AppType, FirestoreType> {
@@ -15,21 +35,21 @@ export interface GenericDateFieldMapping<AppType, FirestoreType> {
 }
 
 // Helper function to convert date-like values to Date
-export const convertToDate = (value: any): Date => {
-    if (value && typeof value === 'object' && 'getTime' in value) {
-        return value as Date;
+export const convertToDate = (value: unknown): Date => {
+    if (value instanceof Date) {
+        return value;
     }
     if (typeof value === 'string') {
         return new Date(value);
     }
-    if (value && typeof value === 'object' && typeof value.toDate === 'function') {
+    if (isTimestamp(value)) {
         return value.toDate();
     }
     throw new Error(`Unable to convert value to Date: ${value}`);
 };
 
-export const isDate = (value: any): value is Date => {
-    return value && typeof value === 'object' && 'getTime' in value;
+export const isDate = (value: unknown): value is Date => {
+    return value instanceof Date;
 };
 
 // Generic toFirestore conversion function
@@ -37,16 +57,19 @@ export function genericToFirestore<AppType extends Record<string, any>, Firestor
     appObject,
     refFieldMappings,
     dateFieldMappings,
-    specialCaseHandler
+    specialCaseHandler,
+    firestore
 }: {
     appObject: AppType;
     refFieldMappings: GenericRefFieldMapping<AppType, FirestoreType>[];
     dateFieldMappings: GenericDateFieldMapping<AppType, FirestoreType>[];
     specialCaseHandler?: (result: Record<string, any>, appData: AppType) => void;
+    firestore?: FirestoreProvider;
 }): FirestoreType {
     // Create base object with common fields but exclude reference fields
     const result: Record<string, any> = {};
-    
+    const { toFirestore } = firestore ? createFirestoreHelpers(firestore) : { toFirestore: null };
+
     // Copy all fields except references that will be handled separately
     const refFieldNames = refFieldMappings.map(mapping => mapping.app);
     Object.keys(appObject as Record<string, any>).forEach(key => {
@@ -57,17 +80,21 @@ export function genericToFirestore<AppType extends Record<string, any>, Firestor
 
     // Handle base model fields
     if ('created_at' in appObject && isDate(appObject.created_at)) {
-        result.created_at = toFirestore.date(appObject.created_at);
+        result.created_at = toFirestore
+            ? toFirestore.date(appObject.created_at)
+            : appObject.created_at; // Pass through if no Firestore provider
     }
-    
+
     if ('updated_at' in appObject && isDate(appObject.updated_at)) {
-        result.updated_at = toFirestore.date(appObject.updated_at);
+        result.updated_at = toFirestore
+            ? toFirestore.date(appObject.updated_at)
+            : appObject.updated_at; // Pass through if no Firestore provider
     }
-    
+
     if ('created_by' in appObject) {
         result.created_by = typeof appObject.created_by === 'string' ? appObject.created_by : null;
     }
-    
+
     if ('updated_by' in appObject) {
         result.updated_by = typeof appObject.updated_by === 'string' ? appObject.updated_by : null;
     }
@@ -78,29 +105,40 @@ export function genericToFirestore<AppType extends Record<string, any>, Firestor
         if (nullable && value === null) {
             result[field as string] = null;
         } else if (isDate(value)) {
-            result[field as string] = toFirestore.date(value);
+            result[field as string] = toFirestore
+                ? toFirestore.date(value)
+                : value; // Pass through if no Firestore provider
         }
     });
 
     // Convert reference fields
-    refFieldMappings.forEach(({ app, firestore, collection, isArray, nullable }) => {
+    refFieldMappings.forEach(({ app, firestore: firestoreField, collection, isArray, nullable }) => {
         const value = appObject[app];
 
         if (isArray) {
             if (nullable && value === null) {
-                result[firestore as string] = null;
+                result[firestoreField as string] = null;
             } else if (Array.isArray(value)) {
-                result[firestore as string] = value.map((id: string) => toFirestore.ref<any>(collection, id));
+                if (toFirestore) {
+                    result[firestoreField as string] = value.map((id: string) =>
+                        toFirestore.ref(collection, id));
+                } else {
+                    result[firestoreField as string] = value; // Pass through if no Firestore provider
+                }
             }
         } else {
             if (nullable && value === null) {
-                result[firestore as string] = null;
+                result[firestoreField as string] = null;
             } else if (typeof value === 'string') {
-                result[firestore as string] = toFirestore.ref<any>(collection, value);
+                if (toFirestore) {
+                    result[firestoreField as string] = toFirestore.ref(collection, value);
+                } else {
+                    result[firestoreField as string] = value; // Pass through if no Firestore provider
+                }
             }
         }
     });
-    
+
     // Apply any special case handling
     if (specialCaseHandler) {
         specialCaseHandler(result, appObject);
@@ -114,16 +152,19 @@ export function genericFromFirestore<FirestoreType extends Record<string, any>, 
     firestoreObject,
     refFieldMappings,
     dateFieldMappings,
-    specialCaseHandler
+    specialCaseHandler,
+    firestore
 }: {
     firestoreObject: FirestoreType;
     refFieldMappings: GenericRefFieldMapping<AppType, FirestoreType>[];
     dateFieldMappings: GenericDateFieldMapping<AppType, FirestoreType>[];
     specialCaseHandler?: (result: Record<string, any>, firestoreData: FirestoreType) => void;
+    firestore?: FirestoreProvider;
 }): AppType {
     // Create base object excluding reference fields that will be handled separately
     const result: Record<string, any> = {};
-    
+    const { fromFirestore } = firestore ? createFirestoreHelpers(firestore) : { fromFirestore: null };
+
     // Copy all fields except references that will be handled separately
     const refFieldNames = refFieldMappings.map(mapping => mapping.firestore);
     Object.keys(firestoreObject as Record<string, any>).forEach(key => {
@@ -134,25 +175,39 @@ export function genericFromFirestore<FirestoreType extends Record<string, any>, 
 
     // Handle base model fields
     if ('created_at' in firestoreObject) {
-        result.created_at = fromFirestore.date(firestoreObject.created_at as any);
+        const createdAt = firestoreObject.created_at as unknown;
+        result.created_at = isTimestamp(createdAt)
+            ? createdAt.toDate()
+            : createdAt instanceof Date ? createdAt : new Date();
     }
-    
+
     if ('updated_at' in firestoreObject) {
-        result.updated_at = fromFirestore.date(firestoreObject.updated_at as any);
+        const updatedAt = firestoreObject.updated_at as unknown;
+        result.updated_at = isTimestamp(updatedAt)
+            ? updatedAt.toDate()
+            : updatedAt instanceof Date ? updatedAt : new Date();
     }
-    
+
     if ('created_by' in firestoreObject) {
         const createdBy = firestoreObject.created_by;
-        result.created_by = typeof createdBy === 'string'
-            ? createdBy
-            : createdBy ? fromFirestore.ref(createdBy as any) : null;
+        if (typeof createdBy === 'string') {
+            result.created_by = createdBy;
+        } else if (createdBy && 'id' in createdBy && typeof createdBy.id === 'string') {
+            result.created_by = createdBy.id;
+        } else {
+            result.created_by = null;
+        }
     }
-    
+
     if ('updated_by' in firestoreObject) {
         const updatedBy = firestoreObject.updated_by;
-        result.updated_by = typeof updatedBy === 'string'
-            ? updatedBy
-            : updatedBy ? fromFirestore.ref(updatedBy as any) : null;
+        if (typeof updatedBy === 'string') {
+            result.updated_by = updatedBy;
+        } else if (updatedBy && 'id' in updatedBy && typeof updatedBy.id === 'string') {
+            result.updated_by = updatedBy.id;
+        } else {
+            result.updated_by = null;
+        }
     }
 
     // Convert date fields
@@ -161,29 +216,43 @@ export function genericFromFirestore<FirestoreType extends Record<string, any>, 
         if (nullable && value === null) {
             result[field as string] = null;
         } else {
-            result[field as string] = convertToDate(value);
+            try {
+                result[field as string] = convertToDate(value);
+            } catch (error) {
+                console.warn(`Failed to convert field ${String(field)} to Date: ${error}`);
+                result[field as string] = value; // Keep original value on error
+            }
         }
     });
 
     // Convert reference fields
-    refFieldMappings.forEach(({ app, firestore, nullable, isArray }) => {
-        const value = firestoreObject[firestore];
+    refFieldMappings.forEach(({ app, firestore: firestoreField, nullable, isArray }) => {
+        const value = firestoreObject[firestoreField];
 
         if (isArray) {
             if (nullable && value === null) {
                 result[app as string] = null;
             } else if (Array.isArray(value)) {
-                result[app as string] = value.map((ref: any) => fromFirestore.ref(ref));
+                result[app as string] = value.map((ref: any) => {
+                    if (typeof ref === 'string') return ref;
+                    return ref && 'id' in ref ? ref.id : null;
+                }).filter(Boolean);
             }
         } else {
             if (nullable && value === null) {
                 result[app as string] = null;
             } else if (value) {
-                result[app as string] = fromFirestore.ref(value as any);
+                if (typeof value === 'string') {
+                    result[app as string] = value;
+                } else if ('id' in value && typeof value.id === 'string') {
+                    result[app as string] = value.id;
+                } else {
+                    result[app as string] = null;
+                }
             }
         }
     });
-    
+
     // Apply any special case handling
     if (specialCaseHandler) {
         specialCaseHandler(result, firestoreObject);

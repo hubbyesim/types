@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { DocumentReference, Timestamp, FieldValue } from 'firebase/firestore';
 import {
     baseModelSchema,
     baseModelAppSchema,
@@ -12,7 +11,9 @@ import {
     GenericRefFieldMapping,
     GenericDateFieldMapping,
     genericToFirestore,
-    genericFromFirestore
+    genericFromFirestore,
+    FirestoreProvider,
+    isFieldValue
 } from './utils';
 import {
     PROFILE_COLLECTION,
@@ -20,6 +21,7 @@ import {
 } from './utils/collections';
 import {
     partnerRefNullable,
+    promoCodeRefNullable,
     profileRefNullable,
     partnerRefStringNullable,
     profileRefStringNullable
@@ -103,31 +105,36 @@ const dateFieldMappings: GenericDateFieldMapping<UserApp, UserFirestore>[] = [
 ];
 
 // Conversion functions
-export const userToFirestore = (user: UserApp): UserFirestore => {
+export const userToFirestore = (user: UserApp, firestore?: FirestoreProvider): UserFirestore => {
     return genericToFirestore({
         appObject: user,
         refFieldMappings,
-        dateFieldMappings
+        dateFieldMappings,
+        firestore
     });
 };
 
-export const userFromFirestore = (firestoreUser: UserFirestore): UserApp => {
+export const userFromFirestore = (firestoreUser: UserFirestore, firestore?: FirestoreProvider): UserApp => {
     return genericFromFirestore({
         firestoreObject: firestoreUser,
         refFieldMappings,
         dateFieldMappings,
         specialCaseHandler: (result, firestoreData) => {
             // Handle special case for balance field
-            if (firestoreData.balance instanceof FieldValue) {
+            if (isFieldValue(firestoreData.balance)) {
                 result.balance = null; // Handle FieldValue by converting to null for the app
             }
-        }
+        },
+        firestore
     });
 };
 
 // Handle the special case of balance field which can be FieldValue
-export const userToFirestoreWithBalance = (user: UserApp): UserFirestore => {
-    const result = userToFirestore(user);
+export const userToFirestoreWithBalance = (
+    user: UserApp,
+    firestore?: FirestoreProvider
+): UserFirestore => {
+    const result = userToFirestore(user, firestore);
 
     // Special handling for balance field if it's a FieldValue
     if (user.balance === null || typeof user.balance === 'number') {
