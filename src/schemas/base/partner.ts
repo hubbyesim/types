@@ -153,7 +153,7 @@ export const scheduleSchema = z.object({
 export const platformSettingsSchema = z.object({
     package_strategy: packageStrategySchema.nullable().optional(),
     free_esim: z.object({
-        packackage_specification: z.object({
+        package_specification: z.object({
             size: z.string(),
             type: z.string(),
             destination: z.string()
