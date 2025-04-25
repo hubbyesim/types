@@ -1,4 +1,4 @@
-import { DocumentReference, Timestamp } from '@firebase/firestore-types';
+import { DocumentReference, Timestamp } from '@firebase/firestore-types'
 import { toFirestore, fromFirestore } from '../helpers';
 
 // Common interfaces for field mappings
