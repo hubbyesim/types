@@ -3,7 +3,7 @@ import { defineConfig } from 'tsup';
 export default defineConfig({
   entry: {
     index: 'src/index.ts',
-    firebase: 'src/schemas/firebase/index.ts'
+    base: 'src/schemas/base/index.ts'
   },
   format: ['esm', 'cjs'],
   dts: true,

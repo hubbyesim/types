@@ -1,5 +1,5 @@
 // Export only from base folder
-export * from './base';
+export * from './firebase';
 
 // Export from constants
 export {
