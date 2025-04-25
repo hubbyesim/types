@@ -1314,19 +1314,19 @@ var scheduleFilterSchema = import_zod12.z.object({
     "greater_than_or_equal",
     "less_than_or_equal"
   ])
-}).nullable();
+}).nullable().optional();
 var scheduleSchema = import_zod12.z.object({
   days: import_zod12.z.number(),
   email: import_zod12.z.object({
     brevo_template_id: import_zod12.z.number(),
     subject: import_zod12.z.record(import_zod12.z.string()).optional(),
     preview_text: import_zod12.z.record(import_zod12.z.string()).optional()
-  }).nullable(),
+  }).nullable().optional(),
   push: import_zod12.z.object({
     title: import_zod12.z.record(import_zod12.z.string()).optional(),
     body: import_zod12.z.record(import_zod12.z.string()).optional(),
     target: import_zod12.z.string()
-  }).nullable(),
+  }).nullable().optional(),
   hour: import_zod12.z.number(),
   key: import_zod12.z.string(),
   method: import_zod12.z.enum(["email", "sms", "whatsapp", "push"]),

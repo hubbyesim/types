@@ -1064,19 +1064,19 @@ var scheduleFilterSchema = z12.object({
     "greater_than_or_equal",
     "less_than_or_equal"
   ])
-}).nullable();
+}).nullable().optional();
 var scheduleSchema = z12.object({
   days: z12.number(),
   email: z12.object({
     brevo_template_id: z12.number(),
     subject: z12.record(z12.string()).optional(),
     preview_text: z12.record(z12.string()).optional()
-  }).nullable(),
+  }).nullable().optional(),
   push: z12.object({
     title: z12.record(z12.string()).optional(),
     body: z12.record(z12.string()).optional(),
     target: z12.string()
-  }).nullable(),
+  }).nullable().optional(),
   hour: z12.number(),
   key: z12.string(),
   method: z12.enum(["email", "sms", "whatsapp", "push"]),

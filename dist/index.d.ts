@@ -3114,7 +3114,7 @@ declare const visualIdentitySchema: z.ZodObject<{
         }[];
     };
 }>;
-declare const scheduleFilterSchema: z.ZodNullable<z.ZodObject<{
+declare const scheduleFilterSchema: z.ZodOptional<z.ZodNullable<z.ZodObject<{
     type: z.ZodEnum<["iso3", "gender", "percentage", "age"]>;
     value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
     comparison: z.ZodEnum<["equal", "not_equal", "greater_than", "less_than", "greater_than_or_equal", "less_than_or_equal"]>;
@@ -3126,10 +3126,10 @@ declare const scheduleFilterSchema: z.ZodNullable<z.ZodObject<{
     value: string | number;
     type: "gender" | "iso3" | "percentage" | "age";
     comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-}>>;
+}>>>;
 declare const scheduleSchema: z.ZodObject<{
     days: z.ZodNumber;
-    email: z.ZodNullable<z.ZodObject<{
+    email: z.ZodOptional<z.ZodNullable<z.ZodObject<{
         brevo_template_id: z.ZodNumber;
         subject: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
         preview_text: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
@@ -3141,8 +3141,8 @@ declare const scheduleSchema: z.ZodObject<{
         brevo_template_id: number;
         subject?: Record<string, string> | undefined;
         preview_text?: Record<string, string> | undefined;
-    }>>;
-    push: z.ZodNullable<z.ZodObject<{
+    }>>>;
+    push: z.ZodOptional<z.ZodNullable<z.ZodObject<{
         title: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
         body: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
         target: z.ZodString;
@@ -3154,12 +3154,12 @@ declare const scheduleSchema: z.ZodObject<{
         target: string;
         title?: Record<string, string> | undefined;
         body?: Record<string, string> | undefined;
-    }>>;
+    }>>>;
     hour: z.ZodNumber;
     key: z.ZodString;
     method: z.ZodEnum<["email", "sms", "whatsapp", "push"]>;
     moment: z.ZodEnum<["departure", "return", "immediate"]>;
-    filter: z.ZodNullable<z.ZodObject<{
+    filter: z.ZodOptional<z.ZodNullable<z.ZodObject<{
         type: z.ZodEnum<["iso3", "gender", "percentage", "age"]>;
         value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
         comparison: z.ZodEnum<["equal", "not_equal", "greater_than", "less_than", "greater_than_or_equal", "less_than_or_equal"]>;
@@ -3171,49 +3171,49 @@ declare const scheduleSchema: z.ZodObject<{
         value: string | number;
         type: "gender" | "iso3" | "percentage" | "age";
         comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-    }>>;
+    }>>>;
 }, "strip", z.ZodTypeAny, {
-    push: {
-        target: string;
-        title?: Record<string, string> | undefined;
-        body?: Record<string, string> | undefined;
-    } | null;
-    filter: {
-        value: string | number;
-        type: "gender" | "iso3" | "percentage" | "age";
-        comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-    } | null;
-    email: {
-        brevo_template_id: number;
-        subject?: Record<string, string> | undefined;
-        preview_text?: Record<string, string> | undefined;
-    } | null;
     method: "push" | "email" | "sms" | "whatsapp";
     key: string;
     days: number;
     hour: number;
     moment: "departure" | "return" | "immediate";
+    push?: {
+        target: string;
+        title?: Record<string, string> | undefined;
+        body?: Record<string, string> | undefined;
+    } | null | undefined;
+    filter?: {
+        value: string | number;
+        type: "gender" | "iso3" | "percentage" | "age";
+        comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+    } | null | undefined;
+    email?: {
+        brevo_template_id: number;
+        subject?: Record<string, string> | undefined;
+        preview_text?: Record<string, string> | undefined;
+    } | null | undefined;
 }, {
-    push: {
-        target: string;
-        title?: Record<string, string> | undefined;
-        body?: Record<string, string> | undefined;
-    } | null;
-    filter: {
-        value: string | number;
-        type: "gender" | "iso3" | "percentage" | "age";
-        comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-    } | null;
-    email: {
-        brevo_template_id: number;
-        subject?: Record<string, string> | undefined;
-        preview_text?: Record<string, string> | undefined;
-    } | null;
     method: "push" | "email" | "sms" | "whatsapp";
     key: string;
     days: number;
     hour: number;
     moment: "departure" | "return" | "immediate";
+    push?: {
+        target: string;
+        title?: Record<string, string> | undefined;
+        body?: Record<string, string> | undefined;
+    } | null | undefined;
+    filter?: {
+        value: string | number;
+        type: "gender" | "iso3" | "percentage" | "age";
+        comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+    } | null | undefined;
+    email?: {
+        brevo_template_id: number;
+        subject?: Record<string, string> | undefined;
+        preview_text?: Record<string, string> | undefined;
+    } | null | undefined;
 }>;
 declare const platformSettingsSchema: z.ZodNullable<z.ZodObject<{
     package_strategy: z.ZodOptional<z.ZodNullable<z.ZodObject<{
@@ -3248,7 +3248,7 @@ declare const platformSettingsSchema: z.ZodNullable<z.ZodObject<{
     }>>;
     schedules: z.ZodNullable<z.ZodArray<z.ZodObject<{
         days: z.ZodNumber;
-        email: z.ZodNullable<z.ZodObject<{
+        email: z.ZodOptional<z.ZodNullable<z.ZodObject<{
             brevo_template_id: z.ZodNumber;
             subject: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
             preview_text: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
@@ -3260,8 +3260,8 @@ declare const platformSettingsSchema: z.ZodNullable<z.ZodObject<{
             brevo_template_id: number;
             subject?: Record<string, string> | undefined;
             preview_text?: Record<string, string> | undefined;
-        }>>;
-        push: z.ZodNullable<z.ZodObject<{
+        }>>>;
+        push: z.ZodOptional<z.ZodNullable<z.ZodObject<{
             title: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
             body: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
             target: z.ZodString;
@@ -3273,12 +3273,12 @@ declare const platformSettingsSchema: z.ZodNullable<z.ZodObject<{
             target: string;
             title?: Record<string, string> | undefined;
             body?: Record<string, string> | undefined;
-        }>>;
+        }>>>;
         hour: z.ZodNumber;
         key: z.ZodString;
         method: z.ZodEnum<["email", "sms", "whatsapp", "push"]>;
         moment: z.ZodEnum<["departure", "return", "immediate"]>;
-        filter: z.ZodNullable<z.ZodObject<{
+        filter: z.ZodOptional<z.ZodNullable<z.ZodObject<{
             type: z.ZodEnum<["iso3", "gender", "percentage", "age"]>;
             value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
             comparison: z.ZodEnum<["equal", "not_equal", "greater_than", "less_than", "greater_than_or_equal", "less_than_or_equal"]>;
@@ -3290,49 +3290,49 @@ declare const platformSettingsSchema: z.ZodNullable<z.ZodObject<{
             value: string | number;
             type: "gender" | "iso3" | "percentage" | "age";
             comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-        }>>;
+        }>>>;
     }, "strip", z.ZodTypeAny, {
-        push: {
-            target: string;
-            title?: Record<string, string> | undefined;
-            body?: Record<string, string> | undefined;
-        } | null;
-        filter: {
-            value: string | number;
-            type: "gender" | "iso3" | "percentage" | "age";
-            comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-        } | null;
-        email: {
-            brevo_template_id: number;
-            subject?: Record<string, string> | undefined;
-            preview_text?: Record<string, string> | undefined;
-        } | null;
         method: "push" | "email" | "sms" | "whatsapp";
         key: string;
         days: number;
         hour: number;
         moment: "departure" | "return" | "immediate";
+        push?: {
+            target: string;
+            title?: Record<string, string> | undefined;
+            body?: Record<string, string> | undefined;
+        } | null | undefined;
+        filter?: {
+            value: string | number;
+            type: "gender" | "iso3" | "percentage" | "age";
+            comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+        } | null | undefined;
+        email?: {
+            brevo_template_id: number;
+            subject?: Record<string, string> | undefined;
+            preview_text?: Record<string, string> | undefined;
+        } | null | undefined;
     }, {
-        push: {
-            target: string;
-            title?: Record<string, string> | undefined;
-            body?: Record<string, string> | undefined;
-        } | null;
-        filter: {
-            value: string | number;
-            type: "gender" | "iso3" | "percentage" | "age";
-            comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-        } | null;
-        email: {
-            brevo_template_id: number;
-            subject?: Record<string, string> | undefined;
-            preview_text?: Record<string, string> | undefined;
-        } | null;
         method: "push" | "email" | "sms" | "whatsapp";
         key: string;
         days: number;
         hour: number;
         moment: "departure" | "return" | "immediate";
+        push?: {
+            target: string;
+            title?: Record<string, string> | undefined;
+            body?: Record<string, string> | undefined;
+        } | null | undefined;
+        filter?: {
+            value: string | number;
+            type: "gender" | "iso3" | "percentage" | "age";
+            comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+        } | null | undefined;
+        email?: {
+            brevo_template_id: number;
+            subject?: Record<string, string> | undefined;
+            preview_text?: Record<string, string> | undefined;
+        } | null | undefined;
     }>, "many">>;
     booking_confirmation: z.ZodNullable<z.ZodObject<{
         brevo_template_id: z.ZodNumber;
@@ -3353,26 +3353,26 @@ declare const platformSettingsSchema: z.ZodNullable<z.ZodObject<{
         locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
     } | null;
     schedules: {
-        push: {
-            target: string;
-            title?: Record<string, string> | undefined;
-            body?: Record<string, string> | undefined;
-        } | null;
-        filter: {
-            value: string | number;
-            type: "gender" | "iso3" | "percentage" | "age";
-            comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-        } | null;
-        email: {
-            brevo_template_id: number;
-            subject?: Record<string, string> | undefined;
-            preview_text?: Record<string, string> | undefined;
-        } | null;
         method: "push" | "email" | "sms" | "whatsapp";
         key: string;
         days: number;
         hour: number;
         moment: "departure" | "return" | "immediate";
+        push?: {
+            target: string;
+            title?: Record<string, string> | undefined;
+            body?: Record<string, string> | undefined;
+        } | null | undefined;
+        filter?: {
+            value: string | number;
+            type: "gender" | "iso3" | "percentage" | "age";
+            comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+        } | null | undefined;
+        email?: {
+            brevo_template_id: number;
+            subject?: Record<string, string> | undefined;
+            preview_text?: Record<string, string> | undefined;
+        } | null | undefined;
     }[] | null;
     booking_confirmation: {
         brevo_template_id: number;
@@ -3392,26 +3392,26 @@ declare const platformSettingsSchema: z.ZodNullable<z.ZodObject<{
         locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
     } | null;
     schedules: {
-        push: {
-            target: string;
-            title?: Record<string, string> | undefined;
-            body?: Record<string, string> | undefined;
-        } | null;
-        filter: {
-            value: string | number;
-            type: "gender" | "iso3" | "percentage" | "age";
-            comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-        } | null;
-        email: {
-            brevo_template_id: number;
-            subject?: Record<string, string> | undefined;
-            preview_text?: Record<string, string> | undefined;
-        } | null;
         method: "push" | "email" | "sms" | "whatsapp";
         key: string;
         days: number;
         hour: number;
         moment: "departure" | "return" | "immediate";
+        push?: {
+            target: string;
+            title?: Record<string, string> | undefined;
+            body?: Record<string, string> | undefined;
+        } | null | undefined;
+        filter?: {
+            value: string | number;
+            type: "gender" | "iso3" | "percentage" | "age";
+            comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+        } | null | undefined;
+        email?: {
+            brevo_template_id: number;
+            subject?: Record<string, string> | undefined;
+            preview_text?: Record<string, string> | undefined;
+        } | null | undefined;
     }[] | null;
     booking_confirmation: {
         brevo_template_id: number;
@@ -3738,7 +3738,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
         }>>;
         schedules: z.ZodNullable<z.ZodArray<z.ZodObject<{
             days: z.ZodNumber;
-            email: z.ZodNullable<z.ZodObject<{
+            email: z.ZodOptional<z.ZodNullable<z.ZodObject<{
                 brevo_template_id: z.ZodNumber;
                 subject: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
                 preview_text: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
@@ -3750,8 +3750,8 @@ declare const partnerFirestoreSchema: z.ZodObject<{
                 brevo_template_id: number;
                 subject?: Record<string, string> | undefined;
                 preview_text?: Record<string, string> | undefined;
-            }>>;
-            push: z.ZodNullable<z.ZodObject<{
+            }>>>;
+            push: z.ZodOptional<z.ZodNullable<z.ZodObject<{
                 title: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
                 body: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
                 target: z.ZodString;
@@ -3763,12 +3763,12 @@ declare const partnerFirestoreSchema: z.ZodObject<{
                 target: string;
                 title?: Record<string, string> | undefined;
                 body?: Record<string, string> | undefined;
-            }>>;
+            }>>>;
             hour: z.ZodNumber;
             key: z.ZodString;
             method: z.ZodEnum<["email", "sms", "whatsapp", "push"]>;
             moment: z.ZodEnum<["departure", "return", "immediate"]>;
-            filter: z.ZodNullable<z.ZodObject<{
+            filter: z.ZodOptional<z.ZodNullable<z.ZodObject<{
                 type: z.ZodEnum<["iso3", "gender", "percentage", "age"]>;
                 value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
                 comparison: z.ZodEnum<["equal", "not_equal", "greater_than", "less_than", "greater_than_or_equal", "less_than_or_equal"]>;
@@ -3780,49 +3780,49 @@ declare const partnerFirestoreSchema: z.ZodObject<{
                 value: string | number;
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-            }>>;
+            }>>>;
         }, "strip", z.ZodTypeAny, {
-            push: {
-                target: string;
-                title?: Record<string, string> | undefined;
-                body?: Record<string, string> | undefined;
-            } | null;
-            filter: {
-                value: string | number;
-                type: "gender" | "iso3" | "percentage" | "age";
-                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-            } | null;
-            email: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null;
             method: "push" | "email" | "sms" | "whatsapp";
             key: string;
             days: number;
             hour: number;
             moment: "departure" | "return" | "immediate";
+            push?: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null | undefined;
+            filter?: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null | undefined;
         }, {
-            push: {
-                target: string;
-                title?: Record<string, string> | undefined;
-                body?: Record<string, string> | undefined;
-            } | null;
-            filter: {
-                value: string | number;
-                type: "gender" | "iso3" | "percentage" | "age";
-                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-            } | null;
-            email: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null;
             method: "push" | "email" | "sms" | "whatsapp";
             key: string;
             days: number;
             hour: number;
             moment: "departure" | "return" | "immediate";
+            push?: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null | undefined;
+            filter?: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null | undefined;
         }>, "many">>;
         booking_confirmation: z.ZodNullable<z.ZodObject<{
             brevo_template_id: z.ZodNumber;
@@ -3843,26 +3843,26 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
         } | null;
         schedules: {
-            push: {
-                target: string;
-                title?: Record<string, string> | undefined;
-                body?: Record<string, string> | undefined;
-            } | null;
-            filter: {
-                value: string | number;
-                type: "gender" | "iso3" | "percentage" | "age";
-                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-            } | null;
-            email: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null;
             method: "push" | "email" | "sms" | "whatsapp";
             key: string;
             days: number;
             hour: number;
             moment: "departure" | "return" | "immediate";
+            push?: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null | undefined;
+            filter?: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null | undefined;
         }[] | null;
         booking_confirmation: {
             brevo_template_id: number;
@@ -3882,26 +3882,26 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
         } | null;
         schedules: {
-            push: {
-                target: string;
-                title?: Record<string, string> | undefined;
-                body?: Record<string, string> | undefined;
-            } | null;
-            filter: {
-                value: string | number;
-                type: "gender" | "iso3" | "percentage" | "age";
-                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-            } | null;
-            email: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null;
             method: "push" | "email" | "sms" | "whatsapp";
             key: string;
             days: number;
             hour: number;
             moment: "departure" | "return" | "immediate";
+            push?: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null | undefined;
+            filter?: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null | undefined;
         }[] | null;
         booking_confirmation: {
             brevo_template_id: number;
@@ -4103,26 +4103,26 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
         } | null;
         schedules: {
-            push: {
-                target: string;
-                title?: Record<string, string> | undefined;
-                body?: Record<string, string> | undefined;
-            } | null;
-            filter: {
-                value: string | number;
-                type: "gender" | "iso3" | "percentage" | "age";
-                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-            } | null;
-            email: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null;
             method: "push" | "email" | "sms" | "whatsapp";
             key: string;
             days: number;
             hour: number;
             moment: "departure" | "return" | "immediate";
+            push?: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null | undefined;
+            filter?: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null | undefined;
         }[] | null;
         booking_confirmation: {
             brevo_template_id: number;
@@ -4240,26 +4240,26 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
         } | null;
         schedules: {
-            push: {
-                target: string;
-                title?: Record<string, string> | undefined;
-                body?: Record<string, string> | undefined;
-            } | null;
-            filter: {
-                value: string | number;
-                type: "gender" | "iso3" | "percentage" | "age";
-                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-            } | null;
-            email: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null;
             method: "push" | "email" | "sms" | "whatsapp";
             key: string;
             days: number;
             hour: number;
             moment: "departure" | "return" | "immediate";
+            push?: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null | undefined;
+            filter?: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null | undefined;
         }[] | null;
         booking_confirmation: {
             brevo_template_id: number;
@@ -4649,7 +4649,7 @@ declare const partnerAppSchema: z.ZodObject<{
         }>>;
         schedules: z.ZodNullable<z.ZodArray<z.ZodObject<{
             days: z.ZodNumber;
-            email: z.ZodNullable<z.ZodObject<{
+            email: z.ZodOptional<z.ZodNullable<z.ZodObject<{
                 brevo_template_id: z.ZodNumber;
                 subject: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
                 preview_text: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
@@ -4661,8 +4661,8 @@ declare const partnerAppSchema: z.ZodObject<{
                 brevo_template_id: number;
                 subject?: Record<string, string> | undefined;
                 preview_text?: Record<string, string> | undefined;
-            }>>;
-            push: z.ZodNullable<z.ZodObject<{
+            }>>>;
+            push: z.ZodOptional<z.ZodNullable<z.ZodObject<{
                 title: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
                 body: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
                 target: z.ZodString;
@@ -4674,12 +4674,12 @@ declare const partnerAppSchema: z.ZodObject<{
                 target: string;
                 title?: Record<string, string> | undefined;
                 body?: Record<string, string> | undefined;
-            }>>;
+            }>>>;
             hour: z.ZodNumber;
             key: z.ZodString;
             method: z.ZodEnum<["email", "sms", "whatsapp", "push"]>;
             moment: z.ZodEnum<["departure", "return", "immediate"]>;
-            filter: z.ZodNullable<z.ZodObject<{
+            filter: z.ZodOptional<z.ZodNullable<z.ZodObject<{
                 type: z.ZodEnum<["iso3", "gender", "percentage", "age"]>;
                 value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
                 comparison: z.ZodEnum<["equal", "not_equal", "greater_than", "less_than", "greater_than_or_equal", "less_than_or_equal"]>;
@@ -4691,49 +4691,49 @@ declare const partnerAppSchema: z.ZodObject<{
                 value: string | number;
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-            }>>;
+            }>>>;
         }, "strip", z.ZodTypeAny, {
-            push: {
-                target: string;
-                title?: Record<string, string> | undefined;
-                body?: Record<string, string> | undefined;
-            } | null;
-            filter: {
-                value: string | number;
-                type: "gender" | "iso3" | "percentage" | "age";
-                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-            } | null;
-            email: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null;
             method: "push" | "email" | "sms" | "whatsapp";
             key: string;
             days: number;
             hour: number;
             moment: "departure" | "return" | "immediate";
+            push?: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null | undefined;
+            filter?: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null | undefined;
         }, {
-            push: {
-                target: string;
-                title?: Record<string, string> | undefined;
-                body?: Record<string, string> | undefined;
-            } | null;
-            filter: {
-                value: string | number;
-                type: "gender" | "iso3" | "percentage" | "age";
-                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-            } | null;
-            email: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null;
             method: "push" | "email" | "sms" | "whatsapp";
             key: string;
             days: number;
             hour: number;
             moment: "departure" | "return" | "immediate";
+            push?: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null | undefined;
+            filter?: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null | undefined;
         }>, "many">>;
         booking_confirmation: z.ZodNullable<z.ZodObject<{
             brevo_template_id: z.ZodNumber;
@@ -4754,26 +4754,26 @@ declare const partnerAppSchema: z.ZodObject<{
             locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
         } | null;
         schedules: {
-            push: {
-                target: string;
-                title?: Record<string, string> | undefined;
-                body?: Record<string, string> | undefined;
-            } | null;
-            filter: {
-                value: string | number;
-                type: "gender" | "iso3" | "percentage" | "age";
-                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-            } | null;
-            email: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null;
             method: "push" | "email" | "sms" | "whatsapp";
             key: string;
             days: number;
             hour: number;
             moment: "departure" | "return" | "immediate";
+            push?: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null | undefined;
+            filter?: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null | undefined;
         }[] | null;
         booking_confirmation: {
             brevo_template_id: number;
@@ -4793,26 +4793,26 @@ declare const partnerAppSchema: z.ZodObject<{
             locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
         } | null;
         schedules: {
-            push: {
-                target: string;
-                title?: Record<string, string> | undefined;
-                body?: Record<string, string> | undefined;
-            } | null;
-            filter: {
-                value: string | number;
-                type: "gender" | "iso3" | "percentage" | "age";
-                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-            } | null;
-            email: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null;
             method: "push" | "email" | "sms" | "whatsapp";
             key: string;
             days: number;
             hour: number;
             moment: "departure" | "return" | "immediate";
+            push?: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null | undefined;
+            filter?: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null | undefined;
         }[] | null;
         booking_confirmation: {
             brevo_template_id: number;
@@ -5014,26 +5014,26 @@ declare const partnerAppSchema: z.ZodObject<{
             locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
         } | null;
         schedules: {
-            push: {
-                target: string;
-                title?: Record<string, string> | undefined;
-                body?: Record<string, string> | undefined;
-            } | null;
-            filter: {
-                value: string | number;
-                type: "gender" | "iso3" | "percentage" | "age";
-                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-            } | null;
-            email: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null;
             method: "push" | "email" | "sms" | "whatsapp";
             key: string;
             days: number;
             hour: number;
             moment: "departure" | "return" | "immediate";
+            push?: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null | undefined;
+            filter?: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null | undefined;
         }[] | null;
         booking_confirmation: {
             brevo_template_id: number;
@@ -5151,26 +5151,26 @@ declare const partnerAppSchema: z.ZodObject<{
             locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
         } | null;
         schedules: {
-            push: {
-                target: string;
-                title?: Record<string, string> | undefined;
-                body?: Record<string, string> | undefined;
-            } | null;
-            filter: {
-                value: string | number;
-                type: "gender" | "iso3" | "percentage" | "age";
-                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-            } | null;
-            email: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null;
             method: "push" | "email" | "sms" | "whatsapp";
             key: string;
             days: number;
             hour: number;
             moment: "departure" | "return" | "immediate";
+            push?: {
+                target: string;
+                title?: Record<string, string> | undefined;
+                body?: Record<string, string> | undefined;
+            } | null | undefined;
+            filter?: {
+                value: string | number;
+                type: "gender" | "iso3" | "percentage" | "age";
+                comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
+            } | null | undefined;
         }[] | null;
         booking_confirmation: {
             brevo_template_id: number;

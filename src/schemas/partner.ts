@@ -173,7 +173,7 @@ export const scheduleFilterSchema = z.object({
         'greater_than_or_equal',
         'less_than_or_equal'
     ])
-}).nullable();
+}).nullable().optional();
 
 export const scheduleSchema = z.object({
     days: z.number(),
@@ -181,12 +181,12 @@ export const scheduleSchema = z.object({
         brevo_template_id: z.number(),
         subject: z.record(z.string()).optional(),
         preview_text: z.record(z.string()).optional()
-    }).nullable(),
+    }).nullable().optional(),
     push: z.object({
         title: z.record(z.string()).optional(),
         body: z.record(z.string()).optional(),
         target: z.string()
-    }).nullable(),
+    }).nullable().optional(),
     hour: z.number(),
     key: z.string(),
     method: z.enum(['email', 'sms', 'whatsapp', 'push']),
