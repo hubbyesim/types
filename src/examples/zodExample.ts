@@ -1,4 +1,3 @@
-import { Timestamp, DocumentReference } from 'firebase/firestore';
 import { z } from 'zod';
 import {
     userFirestoreSchema,
@@ -9,6 +8,7 @@ import {
     UserFirestore,
     User
 } from '../schemas/user';
+import { FirestoreProvider } from '../schemas/utils';
 
 /**
  * Example: Using Zod for validation
@@ -18,6 +18,41 @@ import {
  * 2. Converting between Firestore and App models
  * 3. Type inference and safety
  */
+
+// Example: Creating a FirestoreProvider implementation
+function createMockFirestoreProvider(): FirestoreProvider {
+    return {
+        Timestamp: {
+            fromDate: (date: Date) => ({
+                toDate: () => date,
+                seconds: Math.floor(date.getTime() / 1000),
+                nanoseconds: (date.getTime() % 1000) * 1000000
+            }),
+            now: () => {
+                const date = new Date();
+                return {
+                    toDate: () => date,
+                    seconds: Math.floor(date.getTime() / 1000),
+                    nanoseconds: (date.getTime() % 1000) * 1000000
+                };
+            }
+        },
+        FieldValue: {
+            serverTimestamp: () => ({ isEqual: () => false }),
+            increment: (n: number) => ({ value: n, isEqual: () => false })
+        },
+        doc: (path: string) => ({
+            id: path.split('/').pop() || '',
+            path
+        }),
+        collection: (path: string) => ({
+            path
+        })
+    };
+}
+
+// Get a mock Firestore provider for examples
+const mockFirestore = createMockFirestoreProvider();
 
 // Example: Validating an App model
 function validateUserApp(userData: unknown): UserApp {
@@ -31,8 +66,8 @@ function validateUserApp(userData: unknown): UserApp {
 
 // Example: Converting from App to Firestore model
 function saveUserToFirestore(user: UserApp): UserFirestore {
-    // Convert to Firestore model
-    const firestoreUser = userToFirestore(user);
+    // Convert to Firestore model using the mock provider
+    const firestoreUser = userToFirestore(user, mockFirestore);
 
     // Validate against Firestore schema
     const validatedFirestoreUser = userFirestoreSchema.parse(firestoreUser);
@@ -45,8 +80,8 @@ function saveUserToFirestore(user: UserApp): UserFirestore {
 
 // Example: Converting from Firestore to App model
 function getUserFromFirestore(firestoreUser: UserFirestore): UserApp {
-    // Convert to App model
-    const user = userFromFirestore(firestoreUser);
+    // Convert to App model using the mock provider
+    const user = userFromFirestore(firestoreUser, mockFirestore);
 
     // In a real implementation, you would return the user to the app
     console.log('User for app:', user);
@@ -92,11 +127,15 @@ function exampleUsage() {
             user.name === retrievedUser.name &&
             user.profileRef === retrievedUser.profileRef
         );
-    } catch (error) {
-        if (error instanceof z.ZodError) {
-            console.error('Validation error:', error.errors);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            if (typeof z !== 'undefined' && 'ZodError' in z && error instanceof z.ZodError) {
+                console.error('Validation error:', (error as z.ZodError).errors);
+            } else {
+                console.error('Error:', error);
+            }
         } else {
-            console.error('Error:', error);
+            console.error('Unknown error:', error);
         }
     }
 }
@@ -107,11 +146,15 @@ function exampleInvalidUser() {
         // Invalid email will cause validation to fail
         const invalidUser = createNewUser('Invalid User', 'not-an-email', 'profile_123');
         console.log('This should not be reached');
-    } catch (error) {
-        if (error instanceof z.ZodError) {
-            console.log('Validation failed as expected:', error.errors);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            if (typeof z !== 'undefined' && 'ZodError' in z && error instanceof z.ZodError) {
+                console.log('Validation failed as expected:', (error as z.ZodError).errors);
+            } else {
+                console.error('Unexpected error:', error);
+            }
         } else {
-            console.error('Unexpected error:', error);
+            console.error('Unknown error:', error);
         }
     }
 }

@@ -18,6 +18,9 @@ export * from './version';
 // Export schema utilities
 export * from './schemas';
 
+// Export FirestoreProvider and related types
+export * from './firestoreProvider';
+
 // Export conversion utilities
 export {
     GenericRefFieldMapping,

@@ -90,6 +90,7 @@ __export(src_exports, {
   countryRefStringNullable: () => countryRefStringNullable,
   countryToFirestore: () => countryToFirestore,
   createDocRefSchema: () => createDocRefSchema,
+  createFirestoreHelpers: () => createFirestoreHelpers,
   currencyAppSchema: () => currencyAppSchema,
   currencyFirestoreSchema: () => currencyFirestoreSchema,
   currencyFromFirestore: () => currencyFromFirestore,
@@ -125,6 +126,9 @@ __export(src_exports, {
   hubbyModelAppSchema: () => hubbyModelAppSchema,
   hubbyModelFirestoreSchema: () => hubbyModelFirestoreSchema,
   isDate: () => isDate,
+  isDocumentReference: () => isDocumentReference,
+  isFieldValue: () => isFieldValue,
+  isTimestamp: () => isTimestamp,
   messageAppSchema: () => messageAppSchema,
   messageFirestoreSchema: () => messageFirestoreSchema,
   messageFromFirestore: () => messageFromFirestore,
@@ -256,7 +260,19 @@ var import_zod4 = require("zod");
 
 // src/schemas/helpers.ts
 var import_zod = require("zod");
-var import_firestore = require("firebase/firestore");
+
+// src/schemas/utils/firestoreProvider.ts
+function isTimestamp(value) {
+  return value && typeof value === "object" && "toDate" in value && typeof value.toDate === "function" && "seconds" in value && "nanoseconds" in value;
+}
+function isDocumentReference(value) {
+  return value && typeof value === "object" && "id" in value && "path" in value;
+}
+function isFieldValue(value) {
+  return value && typeof value === "object" && "isEqual" in value && typeof value.isEqual === "function";
+}
+
+// src/schemas/helpers.ts
 var testEnv = { isTestEnvironment: false };
 var MockDocumentReference = class {
   path;
@@ -267,30 +283,61 @@ var MockDocumentReference = class {
   }
 };
 var timestampSchema = import_zod.z.custom(
-  (val) => val instanceof import_firestore.Timestamp
+  (val) => isTimestamp(val)
 );
 var documentRefSchema = import_zod.z.custom(
-  (val) => typeof val === "object" && val !== null && "path" in val && "id" in val
+  (val) => isDocumentReference(val)
 );
 var fieldValueSchema = import_zod.z.custom(
-  (val) => typeof val === "object" && val !== null && "isEqual" in val
+  (val) => isFieldValue(val)
 );
+var createFirestoreHelpers = (firestore) => ({
+  toFirestore: {
+    date: (date) => firestore.Timestamp.fromDate(date),
+    ref: (collectionPath, id) => {
+      if (testEnv.isTestEnvironment) {
+        return new MockDocumentReference(collectionPath, id);
+      }
+      return firestore.doc(`${collectionPath}/${id}`);
+    },
+    serverTimestamp: () => firestore.FieldValue.serverTimestamp()
+  },
+  fromFirestore: {
+    date: (timestamp) => timestamp.toDate(),
+    ref: (docRef) => {
+      if (docRef instanceof MockDocumentReference) {
+        return docRef.id;
+      }
+      return docRef.id;
+    }
+  }
+});
 var toFirestore = {
-  date: (date) => import_firestore.Timestamp.fromDate(date),
+  date: (date) => {
+    throw new Error("Please use createFirestoreHelpers(firestore).toFirestore.date() instead");
+  },
   ref: (collectionPath, id) => {
     if (testEnv.isTestEnvironment) {
       return new MockDocumentReference(collectionPath, id);
     }
-    throw new Error("Implementation requires Firestore instance");
+    throw new Error("Please use createFirestoreHelpers(firestore).toFirestore.ref() instead");
   }
 };
 var fromFirestore = {
-  date: (timestamp) => timestamp.toDate(),
+  date: (timestamp) => {
+    if (isTimestamp(timestamp)) {
+      return timestamp.toDate();
+    }
+    throw new Error("Invalid timestamp object");
+  },
   ref: (docRef) => {
     if (docRef instanceof MockDocumentReference) {
       return docRef.id;
     }
-    return docRef.id;
+    if (isDocumentReference(docRef)) {
+      return docRef.id;
+    }
+    throw new Error("Invalid document reference");
   }
 };
 var baseModelSchema = import_zod.z.object({
@@ -327,27 +374,29 @@ var docRefToStringSchema = (docRefSchema) => {
 
 // src/schemas/utils.ts
 var convertToDate = (value) => {
-  if (value && typeof value === "object" && "getTime" in value) {
+  if (value instanceof Date) {
     return value;
   }
   if (typeof value === "string") {
     return new Date(value);
   }
-  if (value && typeof value === "object" && typeof value.toDate === "function") {
+  if (isTimestamp(value)) {
     return value.toDate();
   }
   throw new Error(`Unable to convert value to Date: ${value}`);
 };
 var isDate = (value) => {
-  return value && typeof value === "object" && "getTime" in value;
+  return value instanceof Date;
 };
 function genericToFirestore({
   appObject,
   refFieldMappings: refFieldMappings7,
   dateFieldMappings: dateFieldMappings9,
-  specialCaseHandler
+  specialCaseHandler,
+  firestore
 }) {
   const result = {};
+  const { toFirestore: toFirestore10 } = firestore ? createFirestoreHelpers(firestore) : { toFirestore: null };
   const refFieldNames = refFieldMappings7.map((mapping) => mapping.app);
   Object.keys(appObject).forEach((key) => {
     if (!refFieldNames.includes(key)) {
@@ -355,10 +404,10 @@ function genericToFirestore({
     }
   });
   if ("created_at" in appObject && isDate(appObject.created_at)) {
-    result.created_at = toFirestore.date(appObject.created_at);
+    result.created_at = toFirestore10 ? toFirestore10.date(appObject.created_at) : appObject.created_at;
   }
   if ("updated_at" in appObject && isDate(appObject.updated_at)) {
-    result.updated_at = toFirestore.date(appObject.updated_at);
+    result.updated_at = toFirestore10 ? toFirestore10.date(appObject.updated_at) : appObject.updated_at;
   }
   if ("created_by" in appObject) {
     result.created_by = typeof appObject.created_by === "string" ? appObject.created_by : null;
@@ -371,22 +420,30 @@ function genericToFirestore({
     if (nullable && value === null) {
       result[field] = null;
     } else if (isDate(value)) {
-      result[field] = toFirestore.date(value);
+      result[field] = toFirestore10 ? toFirestore10.date(value) : value;
     }
   });
-  refFieldMappings7.forEach(({ app, firestore, collection, isArray, nullable }) => {
+  refFieldMappings7.forEach(({ app, firestore: firestoreField, collection, isArray, nullable }) => {
     const value = appObject[app];
     if (isArray) {
       if (nullable && value === null) {
-        result[firestore] = null;
+        result[firestoreField] = null;
       } else if (Array.isArray(value)) {
-        result[firestore] = value.map((id) => toFirestore.ref(collection, id));
+        if (toFirestore10) {
+          result[firestoreField] = value.map((id) => toFirestore10.ref(collection, id));
+        } else {
+          result[firestoreField] = value;
+        }
       }
     } else {
       if (nullable && value === null) {
-        result[firestore] = null;
+        result[firestoreField] = null;
       } else if (typeof value === "string") {
-        result[firestore] = toFirestore.ref(collection, value);
+        if (toFirestore10) {
+          result[firestoreField] = toFirestore10.ref(collection, value);
+        } else {
+          result[firestoreField] = value;
+        }
       }
     }
   });
@@ -399,9 +456,11 @@ function genericFromFirestore({
   firestoreObject,
   refFieldMappings: refFieldMappings7,
   dateFieldMappings: dateFieldMappings9,
-  specialCaseHandler
+  specialCaseHandler,
+  firestore
 }) {
   const result = {};
+  const { fromFirestore: fromFirestore10 } = firestore ? createFirestoreHelpers(firestore) : { fromFirestore: null };
   const refFieldNames = refFieldMappings7.map((mapping) => mapping.firestore);
   Object.keys(firestoreObject).forEach((key) => {
     if (!refFieldNames.includes(key)) {
@@ -409,40 +468,69 @@ function genericFromFirestore({
     }
   });
   if ("created_at" in firestoreObject) {
-    result.created_at = fromFirestore.date(firestoreObject.created_at);
+    const createdAt = firestoreObject.created_at;
+    result.created_at = isTimestamp(createdAt) ? createdAt.toDate() : createdAt instanceof Date ? createdAt : /* @__PURE__ */ new Date();
   }
   if ("updated_at" in firestoreObject) {
-    result.updated_at = fromFirestore.date(firestoreObject.updated_at);
+    const updatedAt = firestoreObject.updated_at;
+    result.updated_at = isTimestamp(updatedAt) ? updatedAt.toDate() : updatedAt instanceof Date ? updatedAt : /* @__PURE__ */ new Date();
   }
   if ("created_by" in firestoreObject) {
     const createdBy = firestoreObject.created_by;
-    result.created_by = typeof createdBy === "string" ? createdBy : createdBy ? fromFirestore.ref(createdBy) : null;
+    if (typeof createdBy === "string") {
+      result.created_by = createdBy;
+    } else if (createdBy && "id" in createdBy && typeof createdBy.id === "string") {
+      result.created_by = createdBy.id;
+    } else {
+      result.created_by = null;
+    }
   }
   if ("updated_by" in firestoreObject) {
     const updatedBy = firestoreObject.updated_by;
-    result.updated_by = typeof updatedBy === "string" ? updatedBy : updatedBy ? fromFirestore.ref(updatedBy) : null;
+    if (typeof updatedBy === "string") {
+      result.updated_by = updatedBy;
+    } else if (updatedBy && "id" in updatedBy && typeof updatedBy.id === "string") {
+      result.updated_by = updatedBy.id;
+    } else {
+      result.updated_by = null;
+    }
   }
   dateFieldMappings9.forEach(({ field, nullable }) => {
     const value = firestoreObject[field];
     if (nullable && value === null) {
       result[field] = null;
     } else {
-      result[field] = convertToDate(value);
+      try {
+        result[field] = convertToDate(value);
+      } catch (error) {
+        console.warn(`Failed to convert field ${String(field)} to Date: ${error}`);
+        result[field] = value;
+      }
     }
   });
-  refFieldMappings7.forEach(({ app, firestore, nullable, isArray }) => {
-    const value = firestoreObject[firestore];
+  refFieldMappings7.forEach(({ app, firestore: firestoreField, nullable, isArray }) => {
+    const value = firestoreObject[firestoreField];
     if (isArray) {
       if (nullable && value === null) {
         result[app] = null;
       } else if (Array.isArray(value)) {
-        result[app] = value.map((ref) => fromFirestore.ref(ref));
+        result[app] = value.map((ref) => {
+          if (typeof ref === "string")
+            return ref;
+          return ref && "id" in ref ? ref.id : null;
+        }).filter(Boolean);
       }
     } else {
       if (nullable && value === null) {
         result[app] = null;
       } else if (value) {
-        result[app] = fromFirestore.ref(value);
+        if (typeof value === "string") {
+          result[app] = value;
+        } else if ("id" in value && typeof value.id === "string") {
+          result[app] = value.id;
+        } else {
+          result[app] = null;
+        }
       }
     }
   });
@@ -673,18 +761,20 @@ var dateFieldMappings = [
   { field: "return_date", nullable: true },
   { field: "departure_date" }
 ];
-var bookingToFirestore = (booking) => {
+var bookingToFirestore = (booking, firestore) => {
   return genericToFirestore({
     appObject: booking,
     refFieldMappings,
-    dateFieldMappings
+    dateFieldMappings,
+    firestore
   });
 };
-var bookingFromFirestore = (firestoreBooking) => {
+var bookingFromFirestore = (firestoreBooking, firestore) => {
   return genericFromFirestore({
     firestoreObject: firestoreBooking,
     refFieldMappings,
-    dateFieldMappings
+    dateFieldMappings,
+    firestore
   });
 };
 
@@ -1051,7 +1141,6 @@ var esimFromFirestore = (firestoreEsim) => {
 
 // src/schemas/message.ts
 var import_zod10 = require("zod");
-var import_firestore2 = require("firebase/firestore");
 var messageFirestoreSchema = import_zod10.z.object({
   id: import_zod10.z.string(),
   key: import_zod10.z.string(),
@@ -1074,49 +1163,52 @@ var dateFieldMappings5 = [
   { field: "created_at" },
   { field: "updated_at" }
 ];
-var messageToFirestore = (message) => {
+var messageToFirestore = (message, firestore) => {
   return genericToFirestore({
     appObject: message,
     refFieldMappings: [],
-    dateFieldMappings: dateFieldMappings5
+    dateFieldMappings: dateFieldMappings5,
+    firestore
   });
 };
-var messageFromFirestore = (firestoreMessage) => {
+var messageFromFirestore = (firestoreMessage, firestore) => {
   return genericFromFirestore({
     firestoreObject: firestoreMessage,
     refFieldMappings: [],
-    dateFieldMappings: dateFieldMappings5
+    dateFieldMappings: dateFieldMappings5,
+    firestore
   });
 };
-var sentMessagesToFirestore = (sentMessages) => {
+var sentMessagesToFirestore = (sentMessages, firestore) => {
   const result = {};
   for (const key in sentMessages) {
     const message = sentMessages[key];
     if (message) {
-      result[key] = messageToFirestore(message);
+      result[key] = messageToFirestore(message, firestore);
     }
   }
   return result;
 };
-var sentMessagesFromFirestore = (firestoreSentMessages) => {
+var sentMessagesFromFirestore = (firestoreSentMessages, firestore) => {
   const result = {};
   for (const key in firestoreSentMessages) {
     const firestoreMessage = firestoreSentMessages[key];
     if (firestoreMessage) {
-      result[key] = messageFromFirestore(firestoreMessage);
+      result[key] = messageFromFirestore(firestoreMessage, firestore);
     }
   }
   return result;
 };
-var convertSentMessagesToFirestore = (sentMessages) => {
+var convertSentMessagesToFirestore = (sentMessages, firestore) => {
   const result = {};
+  const firestoreHelpers = firestore ? createFirestoreHelpers(firestore) : null;
   for (const key in sentMessages) {
     const message = sentMessages[key];
     if (message) {
       const firestoreMessage = {
         ...message,
-        created_at: message.created_at instanceof Date ? import_firestore2.Timestamp.fromDate(message.created_at) : message.created_at,
-        updated_at: message.updated_at instanceof Date ? import_firestore2.Timestamp.fromDate(message.updated_at) : message.updated_at
+        created_at: message.created_at instanceof Date && firestoreHelpers ? firestoreHelpers.toFirestore.date(message.created_at) : message.created_at,
+        updated_at: message.updated_at instanceof Date && firestoreHelpers ? firestoreHelpers.toFirestore.date(message.updated_at) : message.updated_at
       };
       result[key] = firestoreMessage;
     }
@@ -1130,8 +1222,8 @@ var convertSentMessagesFromFirestore = (firestoreSentMessages) => {
     if (firestoreMessage) {
       const appMessage = {
         ...firestoreMessage,
-        created_at: firestoreMessage.created_at instanceof import_firestore2.Timestamp ? firestoreMessage.created_at.toDate() : firestoreMessage.created_at,
-        updated_at: firestoreMessage.updated_at instanceof import_firestore2.Timestamp ? firestoreMessage.updated_at.toDate() : firestoreMessage.updated_at
+        created_at: isTimestamp(firestoreMessage.created_at) ? firestoreMessage.created_at.toDate() : firestoreMessage.created_at,
+        updated_at: isTimestamp(firestoreMessage.updated_at) ? firestoreMessage.updated_at.toDate() : firestoreMessage.updated_at
       };
       result[key] = appMessage;
     }
@@ -1648,7 +1740,6 @@ var promoCodeFromFirestore = (firestorePromoCode) => {
 
 // src/schemas/user.ts
 var import_zod15 = require("zod");
-var import_firestore3 = require("firebase/firestore");
 var apiKeySchema = import_zod15.z.object({
   expires_at: timestampSchema,
   secret: import_zod15.z.string(),
@@ -1707,27 +1798,29 @@ var dateFieldMappings8 = [
   { field: "review_requested", nullable: true },
   { field: "last_seen", nullable: true }
 ];
-var userToFirestore = (user) => {
+var userToFirestore = (user, firestore) => {
   return genericToFirestore({
     appObject: user,
     refFieldMappings: refFieldMappings6,
-    dateFieldMappings: dateFieldMappings8
+    dateFieldMappings: dateFieldMappings8,
+    firestore
   });
 };
-var userFromFirestore = (firestoreUser) => {
+var userFromFirestore = (firestoreUser, firestore) => {
   return genericFromFirestore({
     firestoreObject: firestoreUser,
     refFieldMappings: refFieldMappings6,
     dateFieldMappings: dateFieldMappings8,
     specialCaseHandler: (result, firestoreData) => {
-      if (firestoreData.balance instanceof import_firestore3.FieldValue) {
+      if (isFieldValue(firestoreData.balance)) {
         result.balance = null;
       }
-    }
+    },
+    firestore
   });
 };
-var userToFirestoreWithBalance = (user) => {
-  const result = userToFirestore(user);
+var userToFirestoreWithBalance = (user, firestore) => {
+  const result = userToFirestore(user, firestore);
   if (user.balance === null || typeof user.balance === "number") {
     result.balance = user.balance;
   }
@@ -1805,6 +1898,7 @@ var userToFirestoreWithBalance = (user) => {
   countryRefStringNullable,
   countryToFirestore,
   createDocRefSchema,
+  createFirestoreHelpers,
   currencyAppSchema,
   currencyFirestoreSchema,
   currencyFromFirestore,
@@ -1840,6 +1934,9 @@ var userToFirestoreWithBalance = (user) => {
   hubbyModelAppSchema,
   hubbyModelFirestoreSchema,
   isDate,
+  isDocumentReference,
+  isFieldValue,
+  isTimestamp,
   messageAppSchema,
   messageFirestoreSchema,
   messageFromFirestore,
