@@ -1,9 +1,6 @@
 import { z } from 'zod';
 import { Timestamp, DocumentReference, FieldValue } from 'firebase-admin/firestore';
-
-// Flag to indicate if we're running in a test environment
-// Export as object to make it mutable in ESM context
-export const testEnv = { isTestEnvironment: false };
+import { baseModelAppSchema, testEnv } from '../base/helpers';
 
 // Test environment document references for mocking
 export class MockDocumentReference {
@@ -60,7 +57,7 @@ export const fromFirestore = {
     }
 };
 
-// Base model schema for common fields
+// Base model schema for common fields using Firebase types
 export const baseModelSchema = z.object({
     id: z.string(),
     created_at: timestampSchema,
@@ -69,14 +66,8 @@ export const baseModelSchema = z.object({
     updated_by: z.union([z.string(), z.null(), documentRefSchema])
 });
 
-// App version of the base model
-export const baseModelAppSchema = z.object({
-    id: z.string(),
-    created_at: z.date(),
-    updated_at: z.date(),
-    created_by: z.union([z.string(), z.null()]),
-    updated_by: z.union([z.string(), z.null()])
-});
+// Re-export the app schema
+export { baseModelAppSchema };
 
 // Define HubbyModel schemas explicitly
 export const hubbyModelFirestoreSchema = baseModelSchema;
@@ -108,4 +99,4 @@ export const createDocRefSchema = <T>(collectionPath: string) => {
 // Helper function to convert a document reference schema to a string schema
 export const docRefToStringSchema = <T>(docRefSchema: ReturnType<typeof createDocRefSchema<T>>) => {
     return z.string().describe(`ID from ${docRefSchema.collectionPath}`);
-};
+}; 

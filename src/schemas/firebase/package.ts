@@ -1,9 +1,7 @@
 import { z } from 'zod';
+import { DocumentReference } from 'firebase-admin/firestore';
 import {
-    baseModelSchema,
-    baseModelAppSchema,
-    fromFirestore,
-    toFirestore
+    baseModelSchema
 } from './helpers';
 import {
     GenericRefFieldMapping,
@@ -14,16 +12,21 @@ import {
     COUNTRY_COLLECTION,
     PARTNER_COLLECTION
 } from './utils/collections';
-import { countryFirestoreSchema, CountryFirestore, CountryApp } from './country';
-import { DocumentReference } from 'firebase-admin/firestore';
+import { countryFirestoreSchema, CountryFirestore } from './country';
 import {
     countryRefSchema,
-    partnerRefNullable,
-    countryRefString,
-    partnerRefStringNullable
+    partnerRefNullable
 } from './refs';
 
-// Common package fields shared between Firestore and App schemas
+// Import base schemas
+import {
+    PackageApp
+} from '../base/package';
+
+// Re-export base schemas
+export * from '../base/package';
+
+// Common package fields with Firebase types
 const commonPackageFields = {
     external_id: z.string(),
     provider: z.string(),
@@ -46,7 +49,6 @@ const commonPackageFields = {
     }).nullable()
 };
 
-
 // Firestore schema for Package
 export const packageFirestoreSchema = baseModelSchema.extend({
     ...commonPackageFields,
@@ -54,16 +56,8 @@ export const packageFirestoreSchema = baseModelSchema.extend({
     partner: partnerRefNullable,
 });
 
-// App schema for Package
-export const packageAppSchema = baseModelAppSchema.extend({
-    ...commonPackageFields,
-    country: countryRefString,
-    partner: partnerRefStringNullable,
-});
-
 // Define types based on schemas
 export type PackageFirestore = z.infer<typeof packageFirestoreSchema>;
-export type PackageApp = z.infer<typeof packageAppSchema>;
 
 // Field mapping for conversions
 const refFieldMappings: GenericRefFieldMapping<PackageApp, PackageFirestore>[] = [
@@ -89,5 +83,4 @@ export const packageFromFirestore = (firestorePackage: PackageFirestore): Packag
 };
 
 // For backwards compatibility
-export type Package = PackageFirestore;
-export type HPackage = PackageApp; 
+export type Package = PackageFirestore; 

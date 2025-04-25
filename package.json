@@ -1,6 +1,6 @@
 {
   "name": "@hubbyesim/types",
-  "version": "1.7.1",
+  "version": "1.9.3",
   "description": "Type definitions for the hubbyesim project",
   "type": "module",
   "main": "./dist/index.js",
@@ -11,6 +11,12 @@
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./firebase": {
+      "import": "./dist/firebase/index.js",
+      "require": "./dist/firebase/index.cjs",
+      "types": "./dist/firebase/index.d.ts",
+      "default": "./dist/firebase/index.js"
     }
   },
   "scripts": {

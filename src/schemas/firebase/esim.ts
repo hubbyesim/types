@@ -1,11 +1,8 @@
 import { z } from 'zod';
+import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 import {
     baseModelSchema,
-    baseModelAppSchema,
-    timestampSchema,
-    docRefToStringSchema,
-    fromFirestore,
-    toFirestore
+    timestampSchema
 } from './helpers';
 import {
     GenericRefFieldMapping,
@@ -19,7 +16,6 @@ import {
     PARTNER_COLLECTION,
     PAYMENT_COLLECTION
 } from './utils/collections';
-import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 import {
     countryRefNullable,
     userRefNullable,
@@ -27,28 +23,14 @@ import {
     paymentRefNullable
 } from './refs';
 
-// Common fields shared between Firestore and App schemas
-const commonESIMFields = {
-    imsi: z.number(),
-    qr: z.string(),
-    iccid: z.string(),
-    provider: z.string(),
-    coverage_label: z.string().nullable().optional(),
-    total_data: z.number().nullable(),
-    data_left: z.number().nullable(),
-    data_used: z.boolean().nullable(),
-    status: z.string().nullable(),
-    name: z.string(),
-    android_auto: z.boolean(),
-    partner_price: z.number().nullable(),
-    promo: z.string().nullable(),
-    type: z.enum(['api', 'promo', 'balance', 'code', 'external', 'payment']),
-    is_auto_install: z.boolean(),
-    is_archived: z.boolean(),
-    user: z.string().nullable(),
-    payment: z.string().nullable(),
-    apn: z.string().nullable()
-};
+// Import base schemas
+import {
+    commonESIMFields,
+    ESIMApp
+} from '../base/esim';
+
+// Re-export base schemas
+export * from '../base/esim';
 
 // Firestore schema for ESIM
 export const esimFirestoreSchema = baseModelSchema.extend({
@@ -59,18 +41,8 @@ export const esimFirestoreSchema = baseModelSchema.extend({
     partner: partnerRefNullable,
 });
 
-// App schema for ESIM
-export const esimAppSchema = baseModelAppSchema.extend({
-    ...commonESIMFields,
-    country: z.string().nullable(),
-    time_assigned: z.date().nullable(),
-    last_updated: z.date().nullable(),
-    partner: z.string().nullable(),
-});
-
 // Define types based on schemas
 export type ESIMFirestore = z.infer<typeof esimFirestoreSchema>;
-export type ESIMApp = z.infer<typeof esimAppSchema>;
 
 // Field mapping for conversions
 const refFieldMappings: GenericRefFieldMapping<ESIMApp, ESIMFirestore>[] = [
@@ -103,5 +75,4 @@ export const esimFromFirestore = (firestoreEsim: ESIMFirestore): ESIMApp => {
 };
 
 // For backwards compatibility
-export type ESIM = ESIMFirestore;
-export type HESIM = ESIMApp; 
+export type ESIM = ESIMFirestore; 

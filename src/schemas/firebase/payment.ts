@@ -1,9 +1,7 @@
 import { z } from 'zod';
 import {
     baseModelSchema,
-    baseModelAppSchema,
-    fromFirestore,
-    toFirestore
+    timestampSchema
 } from './helpers';
 import {
     GenericDateFieldMapping,
@@ -11,31 +9,28 @@ import {
     genericFromFirestore
 } from './utils';
 
+// Import base schemas
+import {
+    paymentAppSchema as basePaymentAppSchema,
+    PaymentApp
+} from '../base/payment';
+
+// Re-export base schemas
+export * from '../base/payment';
+
 // Firestore schema for Payment
 export const paymentFirestoreSchema = baseModelSchema.extend({
     amount: z.number(),
     customer: z.string(),
-    date: z.date(), // Note: In Firestore this would be a Timestamp, but we simplified for this example
+    date: timestampSchema, // In Firestore this is a Timestamp
     iccid: z.string(),
     package: z.string(),
     promo: z.string(),
     topup: z.boolean()
 });
 
-// App schema for Payment - identical to Firestore schema since no special types
-export const paymentAppSchema = baseModelAppSchema.extend({
-    amount: z.number(),
-    customer: z.string(),
-    date: z.date(),
-    iccid: z.string(),
-    package: z.string(),
-    promo: z.string(),
-    topup: z.boolean()
-});
-
-// Define types based on schemas
+// Define type based on schema
 export type PaymentFirestore = z.infer<typeof paymentFirestoreSchema>;
-export type PaymentApp = z.infer<typeof paymentAppSchema>;
 
 // Define date field mappings
 const dateFieldMappings: GenericDateFieldMapping<PaymentApp, PaymentFirestore>[] = [
@@ -60,5 +55,4 @@ export const paymentFromFirestore = (firestorePayment: PaymentFirestore): Paymen
 };
 
 // For backwards compatibility
-export type Payment = PaymentFirestore;
-export type HPayment = PaymentApp; 
+export type Payment = PaymentFirestore; 

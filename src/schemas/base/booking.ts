@@ -1,36 +1,14 @@
 import { z } from 'zod';
 import {
-    baseModelSchema,
-    baseModelAppSchema,
-    timestampSchema,
-    docRefToStringSchema,
-    fromFirestore,
-    toFirestore
+    baseModelAppSchema
 } from './helpers';
 import {
-    GenericRefFieldMapping,
-    GenericDateFieldMapping,
-    genericToFirestore,
-    genericFromFirestore
-} from './utils';
-import {
-    PARTNER_COLLECTION,
-    PROMO_CODE_COLLECTION,
-    USER_COLLECTION,
-    ESIM_COLLECTION
-} from './utils/collections';
-import { SupportedLocales, SUPPORTED_LOCALES, supportedLocalesSchema } from '../constants';
-import { DocumentReference, DocumentData, Timestamp } from 'firebase/firestore';
-import { 
-    partnerRefSchema, 
-    promoCodeRefArray, 
-    userRefArrayNullable, 
-    esimRefArrayNullable,
     partnerRefString,
     promoCodeRefStringArray,
     userRefStringArrayNullable,
     esimRefStringArrayNullable
 } from './refs';
+import { SupportedLocales, SUPPORTED_LOCALES, supportedLocalesSchema } from '../../constants';
 
 // Enum for communication channels
 export const communicationChannelSchema = z.enum([
@@ -69,8 +47,8 @@ export const bookingStatusSchema = z.enum([
 ]);
 export type BookingStatus = z.infer<typeof bookingStatusSchema>;
 
-// Common booking fields shared between Firestore and App schemas
-const commonBookingFields = {
+// Common booking fields shared between schemas
+export const commonBookingFields = {
     title: z.string().nullable(),
     first_name: z.string(),
     last_name: z.string(),
@@ -96,17 +74,6 @@ const commonBookingFields = {
     package_specifications: z.record(z.any()).optional()
 };
 
-// Firestore schema for Booking
-export const bookingFirestoreSchema = baseModelSchema.extend({
-    ...commonBookingFields,
-    return_date: timestampSchema.nullable(),
-    departure_date: timestampSchema,
-    partner: partnerRefSchema.schema,
-    promo_codes: promoCodeRefArray,
-    users: userRefArrayNullable,
-    esims: esimRefArrayNullable,
-});
-
 // App schema for Booking
 export const bookingAppSchema = baseModelAppSchema.extend({
     ...commonBookingFields,
@@ -119,40 +86,8 @@ export const bookingAppSchema = baseModelAppSchema.extend({
 });
 
 // Define types based on schemas
-export type BookingFirestore = z.infer<typeof bookingFirestoreSchema>;
 export type BookingApp = z.infer<typeof bookingAppSchema>;
 export type CommunicationOptions = z.infer<typeof communicationOptionsSchema>;
 
-// Field mapping types for conversions
-const refFieldMappings: GenericRefFieldMapping<BookingApp, BookingFirestore>[] = [
-    { app: 'partner', firestore: 'partner', collection: PARTNER_COLLECTION },
-    { app: 'promo_codes', firestore: 'promo_codes', collection: PROMO_CODE_COLLECTION, isArray: true },
-    { app: 'users', firestore: 'users', collection: USER_COLLECTION, isArray: true, nullable: true },
-    { app: 'esims', firestore: 'esims', collection: ESIM_COLLECTION, isArray: true, nullable: true }
-];
-
-const dateFieldMappings: GenericDateFieldMapping<BookingApp, BookingFirestore>[] = [
-    { field: 'return_date', nullable: true },
-    { field: 'departure_date' }
-];
-
-// Conversion functions
-export const bookingToFirestore = (booking: BookingApp): BookingFirestore => {
-    return genericToFirestore({
-        appObject: booking,
-        refFieldMappings,
-        dateFieldMappings
-    });
-};
-
-export const bookingFromFirestore = (firestoreBooking: BookingFirestore): BookingApp => {
-    return genericFromFirestore({
-        firestoreObject: firestoreBooking,
-        refFieldMappings,
-        dateFieldMappings
-    });
-};
-
 // For backwards compatibility
-export type Booking = BookingFirestore;
 export type HBooking = BookingApp; 

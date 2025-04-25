@@ -11,7 +11,6 @@ export const packageSpecificationSchema = z.object({
 
 export const packageSpecificationsSchema = z.array(packageSpecificationSchema);
 
-
 // ===== API TYPES FOR BOOKING =====
 // Booking API response schema
 export const bookingApiResponseSchema = z.object({
@@ -25,15 +24,15 @@ export const bookingApiResponseSchema = z.object({
     phone: z.string().nullable(),
     booking_id: z.string().nullable(),
     return_date: z.string().nullable(), // ISO string
-    partner: z.string(), // DocumentReference id
-    promo_codes: z.array(z.string()), // Array of DocumentReference ids
+    partner: z.string(), // ID string
+    promo_codes: z.array(z.string()), // Array of ID strings
     departure_date: z.string(), // ISO string
     flight_number: z.string().optional(),
     gender: z.enum(["M", "F", "O"]).optional(),
     package_size: z.string().optional(),
     sent_messages: z.record(z.any()).optional(),
-    users: z.array(z.string()), // Array of DocumentReference ids
-    esims: z.array(z.string()).nullable(), // Array of DocumentReference ids or null
+    users: z.array(z.string()), // Array of ID strings
+    esims: z.array(z.string()).nullable(), // Array of ID strings or null
     locale: z.string(),
     status: z.enum(['PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED', 'UNPAID', 'EXPIRED']),
     data: z.object({
@@ -98,7 +97,7 @@ export const partnerApiRequestSchema = z.object({
     type: z.string().nullable(),
     is_active: z.boolean().nullable().optional(),
     external_id: z.string().nullable().optional(),
-    parent: z.string().nullable(), // Previously DocumentReference
+    parent: z.string().nullable(), // String ID
     contact: z.object({
         email: z.string().nullable(),
         office_phone: z.string().nullable().optional()
@@ -126,8 +125,8 @@ export const partnerApiRequestSchema = z.object({
         commission_fee: z.number().optional(),
         payment_method: z.enum(["invoice", "direct"]),
         requires_card: z.boolean().nullable(),
-        next_invoice: z.date().nullable(), // Previously Timestamp
-        last_invoice: z.date().nullable(), // Previously Timestamp
+        next_invoice: z.date().nullable(),
+        last_invoice: z.date().nullable(),
         pricing_strategies: z.object({
             partner: z.object({
                 strategy: z.enum(["split", "bundle"]),
@@ -144,7 +143,7 @@ export const partnerApiRequestSchema = z.object({
     }).nullable(),
     platform_settings: z.any().optional(),
     visual_identity: z.any().nullable(),
-    users: z.array(z.string()).nullable(), // Previously DocumentReference[]
+    users: z.array(z.string()).nullable(), // Array of string IDs
     data: z.object({
         source: z.string(),
         manual: z.boolean()

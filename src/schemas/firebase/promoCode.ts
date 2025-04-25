@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import {
     baseModelSchema,
-    baseModelAppSchema,
     timestampSchema
 } from './helpers';
 import {
@@ -18,16 +17,20 @@ import {
     BOOKING_COLLECTION
 } from './utils/collections';
 import { packageSpecificationSchema } from './api';
-import { 
+import {
     partnerRefNullable,
     countryRefNullable,
     packageRefNullable,
-    bookingRefNullable,
-    partnerRefStringNullable,
-    countryRefStringNullable,
-    packageRefStringNullable,
-    bookingRefStringNullable
+    bookingRefNullable
 } from './refs';
+
+// Import base schemas
+import {
+    PromoCodeApp
+} from '../base/promoCode';
+
+// Re-export base schemas
+export * from '../base/promoCode';
 
 // Firestore schema for PromoCode
 export const promoCodeFirestoreSchema = baseModelSchema.extend({
@@ -54,34 +57,8 @@ export const promoCodeFirestoreSchema = baseModelSchema.extend({
     starter_data: z.number().optional()
 });
 
-// App schema for PromoCode
-export const promoCodeAppSchema = baseModelAppSchema.extend({
-    external_id: z.string(),
-    code: z.string(),
-    allowance_user: z.number(),
-    allowance_total: z.number(),
-    type: z.enum(['full-discount', 'partial-discount', 'booking', 'traveler']).nullable().or(z.string()),
-    usage: z.array(z.string()),
-    uuid_usage: z.array(z.string()),
-    package_specification: packageSpecificationSchema.optional(),
-    partner: partnerRefStringNullable,
-    valid_from: z.date(),
-    valid_to: z.date(),
-
-    // Optional fields based on the type
-    discount: z.number().optional(),
-    package_size: z.string().optional(),
-    package: packageRefStringNullable,
-    country: countryRefStringNullable,
-    booking: bookingRefStringNullable,
-    countries: z.array(z.string()).optional(),
-    max_bytes: z.number().optional(),
-    starter_data: z.number().optional()
-});
-
-// Type definitions
+// Type definition
 export type PromoCodeFirestore = z.infer<typeof promoCodeFirestoreSchema>;
-export type PromoCodeApp = z.infer<typeof promoCodeAppSchema>;
 
 // Field mapping for conversions
 const refFieldMappings: GenericRefFieldMapping<PromoCodeApp, PromoCodeFirestore>[] = [
@@ -114,5 +91,4 @@ export const promoCodeFromFirestore = (firestorePromoCode: PromoCodeFirestore): 
 };
 
 // For backwards compatibility
-export type PromoCode = PromoCodeFirestore;
-export type HPromoCode = PromoCodeApp; 
+export type PromoCode = PromoCodeFirestore; 
