@@ -1065,14 +1065,34 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             iso3_white_list?: string[] | undefined;
         }>>>;
         free_esim: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-            is_active: z.ZodBoolean;
-            limit: z.ZodNumber;
+            packackage_specification: z.ZodObject<{
+                size: z.ZodString;
+                type: z.ZodString;
+                destination: z.ZodString;
+            }, "strip", z.ZodTypeAny, {
+                type: string;
+                destination: string;
+                size: string;
+            }, {
+                type: string;
+                destination: string;
+                size: string;
+            }>;
+            allowance: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
-            is_active: boolean;
-            limit: number;
+            packackage_specification: {
+                type: string;
+                destination: string;
+                size: string;
+            };
+            allowance: number;
         }, {
-            is_active: boolean;
-            limit: number;
+            packackage_specification: {
+                type: string;
+                destination: string;
+                size: string;
+            };
+            allowance: number;
         }>>>;
         booking_defaults: z.ZodOptional<z.ZodNullable<z.ZodObject<{
             locale: z.ZodEnum<["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]>;
@@ -1206,8 +1226,12 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             iso3_white_list?: string[] | undefined;
         } | null | undefined;
         free_esim?: {
-            is_active: boolean;
-            limit: number;
+            packackage_specification: {
+                type: string;
+                destination: string;
+                size: string;
+            };
+            allowance: number;
         } | null | undefined;
         booking_defaults?: {
             locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
@@ -1257,8 +1281,12 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             iso3_white_list?: string[] | undefined;
         } | null | undefined;
         free_esim?: {
-            is_active: boolean;
-            limit: number;
+            packackage_specification: {
+                type: string;
+                destination: string;
+                size: string;
+            };
+            allowance: number;
         } | null | undefined;
         booking_defaults?: {
             locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
@@ -1558,8 +1586,12 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             iso3_white_list?: string[] | undefined;
         } | null | undefined;
         free_esim?: {
-            is_active: boolean;
-            limit: number;
+            packackage_specification: {
+                type: string;
+                destination: string;
+                size: string;
+            };
+            allowance: number;
         } | null | undefined;
         booking_defaults?: {
             locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
@@ -1707,8 +1739,12 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             iso3_white_list?: string[] | undefined;
         } | null | undefined;
         free_esim?: {
-            is_active: boolean;
-            limit: number;
+            packackage_specification: {
+                type: string;
+                destination: string;
+                size: string;
+            };
+            allowance: number;
         } | null | undefined;
         booking_defaults?: {
             locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";

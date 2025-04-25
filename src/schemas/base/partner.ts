@@ -153,8 +153,12 @@ export const scheduleSchema = z.object({
 export const platformSettingsSchema = z.object({
     package_strategy: packageStrategySchema.nullable().optional(),
     free_esim: z.object({
-        is_active: z.boolean(),
-        limit: z.number()
+        packackage_specification: z.object({
+            size: z.string(),
+            type: z.string(),
+            destination: z.string()
+        }),
+        allowance: z.number()
     }).nullable().optional(),
     booking_defaults: bookingDefaultsSchema.nullable().optional(),
     booking_confirmation: bookingConfirmationSchema.nullable().optional(),

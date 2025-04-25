@@ -333,8 +333,12 @@ var scheduleSchema = z6.object({
 var platformSettingsSchema = z6.object({
   package_strategy: packageStrategySchema.nullable().optional(),
   free_esim: z6.object({
-    is_active: z6.boolean(),
-    limit: z6.number()
+    packackage_specification: z6.object({
+      size: z6.string(),
+      type: z6.string(),
+      destination: z6.string()
+    }),
+    allowance: z6.number()
   }).nullable().optional(),
   booking_defaults: bookingDefaultsSchema.nullable().optional(),
   booking_confirmation: bookingConfirmationSchema.nullable().optional(),

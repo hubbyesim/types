@@ -693,8 +693,12 @@ var scheduleSchema = z9.object({
 var platformSettingsSchema = z9.object({
   package_strategy: packageStrategySchema.nullable().optional(),
   free_esim: z9.object({
-    is_active: z9.boolean(),
-    limit: z9.number()
+    packackage_specification: z9.object({
+      size: z9.string(),
+      type: z9.string(),
+      destination: z9.string()
+    }),
+    allowance: z9.number()
   }).nullable().optional(),
   booking_defaults: bookingDefaultsSchema.nullable().optional(),
   booking_confirmation: bookingConfirmationSchema.nullable().optional(),

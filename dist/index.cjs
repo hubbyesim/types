@@ -948,8 +948,12 @@ var scheduleSchema = import_zod9.z.object({
 var platformSettingsSchema = import_zod9.z.object({
   package_strategy: packageStrategySchema.nullable().optional(),
   free_esim: import_zod9.z.object({
-    is_active: import_zod9.z.boolean(),
-    limit: import_zod9.z.number()
+    packackage_specification: import_zod9.z.object({
+      size: import_zod9.z.string(),
+      type: import_zod9.z.string(),
+      destination: import_zod9.z.string()
+    }),
+    allowance: import_zod9.z.number()
   }).nullable().optional(),
   booking_defaults: bookingDefaultsSchema.nullable().optional(),
   booking_confirmation: bookingConfirmationSchema.nullable().optional(),
