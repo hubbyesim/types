@@ -256,7 +256,7 @@ var import_zod4 = require("zod");
 
 // src/schemas/helpers.ts
 var import_zod = require("zod");
-var import_firestore = require("firebase-admin/firestore");
+var import_firestore = require("firebase/firestore");
 var testEnv = { isTestEnvironment: false };
 var MockDocumentReference = class {
   path;
@@ -1648,7 +1648,7 @@ var promoCodeFromFirestore = (firestorePromoCode) => {
 
 // src/schemas/user.ts
 var import_zod15 = require("zod");
-var import_firestore3 = require("firebase-admin/firestore");
+var import_firestore3 = require("firebase/firestore");
 var apiKeySchema = import_zod15.z.object({
   expires_at: timestampSchema,
   secret: import_zod15.z.string(),

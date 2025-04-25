@@ -6,7 +6,7 @@ import { z as z4 } from "zod";
 
 // src/schemas/helpers.ts
 import { z } from "zod";
-import { Timestamp } from "firebase-admin/firestore";
+import { Timestamp } from "firebase/firestore";
 var testEnv = { isTestEnvironment: false };
 var MockDocumentReference = class {
   path;
@@ -1398,7 +1398,7 @@ var promoCodeFromFirestore = (firestorePromoCode) => {
 
 // src/schemas/user.ts
 import { z as z15 } from "zod";
-import { FieldValue as FieldValue2 } from "firebase-admin/firestore";
+import { FieldValue as FieldValue2 } from "firebase/firestore";
 var apiKeySchema = z15.object({
   expires_at: timestampSchema,
   secret: z15.string(),

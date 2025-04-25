@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { DocumentReference, Timestamp, FieldValue } from 'firebase-admin/firestore';
+import { DocumentReference, Timestamp, FieldValue } from 'firebase/firestore';
 import {
     baseModelSchema,
     baseModelAppSchema,
@@ -18,11 +18,11 @@ import {
     PROFILE_COLLECTION,
     PARTNER_COLLECTION
 } from './utils/collections';
-import { 
-    partnerRefNullable, 
-    profileRefNullable, 
-    partnerRefStringNullable, 
-    profileRefStringNullable 
+import {
+    partnerRefNullable,
+    profileRefNullable,
+    partnerRefStringNullable,
+    profileRefStringNullable
 } from './refs';
 
 // Schema for API Key
@@ -128,12 +128,12 @@ export const userFromFirestore = (firestoreUser: UserFirestore): UserApp => {
 // Handle the special case of balance field which can be FieldValue
 export const userToFirestoreWithBalance = (user: UserApp): UserFirestore => {
     const result = userToFirestore(user);
-    
+
     // Special handling for balance field if it's a FieldValue
     if (user.balance === null || typeof user.balance === 'number') {
         result.balance = user.balance;
     }
-    
+
     return result;
 };
 

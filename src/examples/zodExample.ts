@@ -1,4 +1,4 @@
-import { Timestamp, DocumentReference } from 'firebase-admin/firestore';
+import { Timestamp, DocumentReference } from 'firebase/firestore';
 import { z } from 'zod';
 import {
     userFirestoreSchema,

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Timestamp, DocumentReference, FieldValue } from 'firebase-admin/firestore';
+import { Timestamp, DocumentReference, FieldValue } from 'firebase/firestore';
 
 // Flag to indicate if we're running in a test environment
 // Export as object to make it mutable in ESM context

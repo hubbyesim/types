@@ -19,7 +19,6 @@ import {
     PARTNER_COLLECTION,
     PAYMENT_COLLECTION
 } from './utils/collections';
-import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 import {
     countryRefNullable,
     userRefNullable,

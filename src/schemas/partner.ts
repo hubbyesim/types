@@ -10,7 +10,6 @@ import {
     toFirestore
 } from './helpers';
 import { SUPPORTED_LOCALES, supportedLocalesSchema } from '../constants';
-import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 import {
     partnerRefSchema,
     priceListRefSchema,
