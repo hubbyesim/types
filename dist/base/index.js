@@ -297,8 +297,8 @@ var visualIdentitySchema = z6.object({
   secondary_color: z6.string(),
   logo: z6.string(),
   font: z6.string(),
-  top_banner: visualIdentityBannerStrategySchema,
-  mid_banner: visualIdentityBannerStrategySchema
+  top_banner: visualIdentityBannerStrategySchema.optional(),
+  mid_banner: visualIdentityBannerStrategySchema.optional()
 });
 var scheduleFilterSchema = z6.object({
   type: z6.enum(["iso3", "gender", "percentage", "age"]),

@@ -448,8 +448,8 @@ var visualIdentitySchema = import_zod6.z.object({
   secondary_color: import_zod6.z.string(),
   logo: import_zod6.z.string(),
   font: import_zod6.z.string(),
-  top_banner: visualIdentityBannerStrategySchema,
-  mid_banner: visualIdentityBannerStrategySchema
+  top_banner: visualIdentityBannerStrategySchema.optional(),
+  mid_banner: visualIdentityBannerStrategySchema.optional()
 });
 var scheduleFilterSchema = import_zod6.z.object({
   type: import_zod6.z.enum(["iso3", "gender", "percentage", "age"]),

@@ -913,8 +913,8 @@ var visualIdentitySchema = import_zod9.z.object({
   secondary_color: import_zod9.z.string(),
   logo: import_zod9.z.string(),
   font: import_zod9.z.string(),
-  top_banner: visualIdentityBannerStrategySchema,
-  mid_banner: visualIdentityBannerStrategySchema
+  top_banner: visualIdentityBannerStrategySchema.optional(),
+  mid_banner: visualIdentityBannerStrategySchema.optional()
 });
 var scheduleFilterSchema = import_zod9.z.object({
   type: import_zod9.z.enum(["iso3", "gender", "percentage", "age"]),
