@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import {
-    baseModelAppSchema
+    baseModelAppSchema,
+    zDateString
 } from './helpers';
 import {
     partnerRefStringNullable,
@@ -9,7 +10,7 @@ import {
 
 // Schema for API Key (base version with Date)
 export const apiKeySchema = z.object({
-    expires_at: z.date(),
+    expires_at: zDateString(),
     secret: z.string(),
     is_active: z.boolean()
 });
@@ -47,12 +48,12 @@ export const commonUserFields = {
 // Define App schema (with JavaScript-friendly types)
 export const userAppSchema = baseModelAppSchema.extend({
     ...commonUserFields,
-    createdAt: z.date(),
+    createdAt: zDateString(),
     partner: partnerRefStringNullable,
     profileRef: profileRefStringNullable,
     balance: z.number().nullable(),
-    review_requested: z.date().nullable(),
-    last_seen: z.date().nullable()
+    review_requested: zDateString().nullable(),
+    last_seen: zDateString().nullable()
 });
 
 // Define types based on schemas

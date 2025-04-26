@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import {
-    baseModelAppSchema
+    baseModelAppSchema,
+    zDateString
 } from './helpers';
 import { SUPPORTED_LOCALES, SupportedLocales, supportedLocalesSchema } from '../../constants';
 import {
@@ -70,8 +71,8 @@ export const commonFinancialPropertiesFields = {
     commission_fee: z.number().nullable().optional(),
     payment_method: z.enum(['invoice', 'direct']),
     requires_card: z.boolean().nullable(),
-    next_invoice: z.date().nullable().optional(),
-    last_invoice: z.date().nullable().optional(),
+    next_invoice: zDateString().nullable().optional(),
+    last_invoice: zDateString().nullable().optional(),
 };
 
 export const financialPropertiesAppSchema = z.object({

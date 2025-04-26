@@ -261,10 +261,27 @@ var import_firestore = require("firebase-admin/firestore");
 // src/schemas/base/helpers.ts
 var import_zod = require("zod");
 var testEnv = { isTestEnvironment: false };
+var iso8601Regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z$/;
+var zDateString = () => import_zod.z.preprocess((input) => {
+  if (typeof input === "string") {
+    if (!iso8601Regex.test(input)) {
+      return void 0;
+    }
+    const date = new Date(input);
+    if (!isNaN(date.getTime())) {
+      return date;
+    }
+    return void 0;
+  }
+  if (input instanceof Date && !isNaN(input.getTime())) {
+    return input;
+  }
+  return void 0;
+}, import_zod.z.date());
 var baseModelAppSchema = import_zod.z.object({
   id: import_zod.z.string(),
-  created_at: import_zod.z.date(),
-  updated_at: import_zod.z.date(),
+  created_at: zDateString(),
+  updated_at: zDateString(),
   created_by: import_zod.z.union([import_zod.z.string(), import_zod.z.null()]),
   updated_by: import_zod.z.union([import_zod.z.string(), import_zod.z.null()])
 });
@@ -592,7 +609,7 @@ function genericFromFirestore({
 // src/schemas/base/user.ts
 var import_zod5 = require("zod");
 var apiKeySchema = import_zod5.z.object({
-  expires_at: import_zod5.z.date(),
+  expires_at: zDateString(),
   secret: import_zod5.z.string(),
   is_active: import_zod5.z.boolean()
 });
@@ -624,12 +641,12 @@ var commonUserFields = {
 };
 var userAppSchema = baseModelAppSchema.extend({
   ...commonUserFields,
-  createdAt: import_zod5.z.date(),
+  createdAt: zDateString(),
   partner: partnerRefStringNullable,
   profileRef: profileRefStringNullable,
   balance: import_zod5.z.number().nullable(),
-  review_requested: import_zod5.z.date().nullable(),
-  last_seen: import_zod5.z.date().nullable()
+  review_requested: zDateString().nullable(),
+  last_seen: zDateString().nullable()
 });
 
 // src/schemas/firebase/user.ts
@@ -780,8 +797,8 @@ var commonBookingFields = {
 };
 var bookingAppSchema = baseModelAppSchema.extend({
   ...commonBookingFields,
-  return_date: import_zod8.z.date().nullable(),
-  departure_date: import_zod8.z.date(),
+  return_date: zDateString().nullable(),
+  departure_date: zDateString(),
   partner: partnerRefString,
   promo_codes: promoCodeRefStringArray,
   users: userRefStringArrayNullable,
@@ -875,8 +892,8 @@ var commonFinancialPropertiesFields = {
   commission_fee: import_zod9.z.number().nullable().optional(),
   payment_method: import_zod9.z.enum(["invoice", "direct"]),
   requires_card: import_zod9.z.boolean().nullable(),
-  next_invoice: import_zod9.z.date().nullable().optional(),
-  last_invoice: import_zod9.z.date().nullable().optional()
+  next_invoice: zDateString().nullable().optional(),
+  last_invoice: zDateString().nullable().optional()
 };
 var financialPropertiesAppSchema = import_zod9.z.object({
   ...commonFinancialPropertiesFields,
@@ -1331,9 +1348,9 @@ var bookingApiRequestSchema = import_zod14.z.object({
   email: import_zod14.z.string().nullable().optional(),
   phone: import_zod14.z.string().nullable().optional(),
   booking_id: import_zod14.z.string().min(3).nullable().optional(),
-  return_date: import_zod14.z.date().nullable(),
+  return_date: zDateString().nullable(),
   // Must be after departure_date
-  departure_date: import_zod14.z.date(),
+  departure_date: zDateString(),
   // ISO 8601 date string
   flight_number: import_zod14.z.string().nullable().optional(),
   gender: import_zod14.z.enum(["M", "F", "O"]).optional(),
@@ -1348,10 +1365,10 @@ var bookingApiRequestSchema = import_zod14.z.object({
   communication_options: communicationOptionsSchema,
   is_processed_for_esim_restoration: import_zod14.z.boolean(),
   is_pseudonymized: import_zod14.z.boolean(),
-  date_of_birth: import_zod14.z.date().optional(),
+  date_of_birth: zDateString().optional(),
   package_specifications: packageSpecificationsSchema,
-  created_at: import_zod14.z.date(),
-  updated_at: import_zod14.z.date()
+  created_at: zDateString(),
+  updated_at: zDateString()
 });
 var partnerApiRequestSchema = import_zod14.z.object({
   id: import_zod14.z.string(),
@@ -1388,8 +1405,8 @@ var partnerApiRequestSchema = import_zod14.z.object({
     commission_fee: import_zod14.z.number().optional(),
     payment_method: import_zod14.z.enum(["invoice", "direct"]),
     requires_card: import_zod14.z.boolean().nullable(),
-    next_invoice: import_zod14.z.date().nullable(),
-    last_invoice: import_zod14.z.date().nullable(),
+    next_invoice: zDateString().nullable(),
+    last_invoice: zDateString().nullable(),
     pricing_strategies: import_zod14.z.object({
       partner: import_zod14.z.object({
         strategy: import_zod14.z.enum(["split", "bundle"]),
@@ -1412,8 +1429,8 @@ var partnerApiRequestSchema = import_zod14.z.object({
     source: import_zod14.z.string(),
     manual: import_zod14.z.boolean()
   }).optional(),
-  created_at: import_zod14.z.date(),
-  updated_at: import_zod14.z.date(),
+  created_at: zDateString(),
+  updated_at: zDateString(),
   created_by: import_zod14.z.string().nullable(),
   updated_by: import_zod14.z.string().nullable()
 });
@@ -1431,8 +1448,8 @@ var promoCodeAppSchema = baseModelAppSchema.extend({
   uuid_usage: import_zod15.z.array(import_zod15.z.string()),
   package_specification: packageSpecificationSchema.optional(),
   partner: partnerRefStringNullable,
-  valid_from: import_zod15.z.date(),
-  valid_to: import_zod15.z.date(),
+  valid_from: zDateString(),
+  valid_to: zDateString(),
   // Optional fields based on the type
   discount: import_zod15.z.number().optional(),
   package_size: import_zod15.z.string().optional(),
@@ -1518,8 +1535,8 @@ var commonESIMFields = {
 var esimAppSchema = baseModelAppSchema.extend({
   ...commonESIMFields,
   country: import_zod17.z.string().nullable(),
-  time_assigned: import_zod17.z.date().nullable(),
-  last_updated: import_zod17.z.date().nullable(),
+  time_assigned: zDateString().nullable(),
+  last_updated: zDateString().nullable(),
   partner: import_zod17.z.string().nullable()
 });
 
@@ -1564,7 +1581,7 @@ var import_zod18 = require("zod");
 var paymentAppSchema = baseModelAppSchema.extend({
   amount: import_zod18.z.number(),
   customer: import_zod18.z.string(),
-  date: import_zod18.z.date(),
+  date: zDateString(),
   iccid: import_zod18.z.string(),
   package: import_zod18.z.string(),
   promo: import_zod18.z.string(),
@@ -1611,8 +1628,8 @@ var messageAppSchema = import_zod20.z.object({
   key: import_zod20.z.string(),
   method: import_zod20.z.enum(["push", "sms", "email"]),
   status: import_zod20.z.enum(["pending", "sent", "failed", "delivered"]),
-  created_at: import_zod20.z.date(),
-  updated_at: import_zod20.z.date()
+  created_at: zDateString(),
+  updated_at: zDateString()
 });
 var sentMessagesAppSchema = import_zod20.z.record(messageAppSchema);
 
@@ -1780,7 +1797,7 @@ var apiLogAppSchema = import_zod23.z.object({
   resource_id: import_zod23.z.string().optional(),
   partner_id: import_zod23.z.string().optional(),
   payload: import_zod23.z.record(import_zod23.z.unknown()).optional(),
-  timestamp: import_zod23.z.date(),
+  timestamp: zDateString(),
   status_code: import_zod23.z.number()
 });
 

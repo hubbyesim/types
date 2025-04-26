@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { zDateString } from './helpers';
 
 // App schema for ApiLog
 export const apiLogAppSchema = z.object({
@@ -10,7 +11,7 @@ export const apiLogAppSchema = z.object({
     resource_id: z.string().optional(),
     partner_id: z.string().optional(),
     payload: z.record(z.unknown()).optional(),
-    timestamp: z.date(),
+    timestamp: zDateString(),
     status_code: z.number()
 });
 

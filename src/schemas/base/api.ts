@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { communicationOptionsSchema } from './booking';
+import { zDateString } from './helpers';
 
 // Schema for package specification
 export const packageSpecificationSchema = z.object({
@@ -68,8 +69,8 @@ export const bookingApiRequestSchema = z.object({
     email: z.string().nullable().optional(),
     phone: z.string().nullable().optional(),
     booking_id: z.string().min(3).nullable().optional(),
-    return_date: z.date().nullable(), // Must be after departure_date
-    departure_date: z.date(), // ISO 8601 date string
+    return_date: zDateString().nullable(), // Must be after departure_date
+    departure_date: zDateString(), // ISO 8601 date string
     flight_number: z.string().nullable().optional(),
     gender: z.enum(["M", "F", "O"]).optional(),
     package_size: z.string().optional(),
@@ -83,10 +84,10 @@ export const bookingApiRequestSchema = z.object({
     communication_options: communicationOptionsSchema,
     is_processed_for_esim_restoration: z.boolean(),
     is_pseudonymized: z.boolean(),
-    date_of_birth: z.date().optional(),
+    date_of_birth: zDateString().optional(),
     package_specifications: packageSpecificationsSchema,
-    created_at: z.date(),
-    updated_at: z.date()
+    created_at: zDateString(),
+    updated_at: zDateString()
 });
 
 // ===== API TYPES FOR PARTNER =====
@@ -125,8 +126,8 @@ export const partnerApiRequestSchema = z.object({
         commission_fee: z.number().optional(),
         payment_method: z.enum(["invoice", "direct"]),
         requires_card: z.boolean().nullable(),
-        next_invoice: z.date().nullable(),
-        last_invoice: z.date().nullable(),
+        next_invoice: zDateString().nullable(),
+        last_invoice: zDateString().nullable(),
         pricing_strategies: z.object({
             partner: z.object({
                 strategy: z.enum(["split", "bundle"]),
@@ -148,8 +149,8 @@ export const partnerApiRequestSchema = z.object({
         source: z.string(),
         manual: z.boolean()
     }).optional(),
-    created_at: z.date(),
-    updated_at: z.date(),
+    created_at: zDateString(),
+    updated_at: zDateString(),
     created_by: z.string().nullable(),
     updated_by: z.string().nullable()
 });

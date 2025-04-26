@@ -60,8 +60,8 @@ declare const hubbyModelFirestoreSchema: z.ZodObject<{
 }>;
 declare const hubbyModelAppSchema: z.ZodObject<{
     id: z.ZodString;
-    created_at: z.ZodDate;
-    updated_at: z.ZodDate;
+    created_at: z.ZodEffects<z.ZodDate, Date, unknown>;
+    updated_at: z.ZodEffects<z.ZodDate, Date, unknown>;
     created_by: z.ZodUnion<[z.ZodString, z.ZodNull]>;
     updated_by: z.ZodUnion<[z.ZodString, z.ZodNull]>;
 }, "strip", z.ZodTypeAny, {
@@ -72,10 +72,10 @@ declare const hubbyModelAppSchema: z.ZodObject<{
     updated_by: string | null;
 }, {
     id: string;
-    created_at: Date;
-    updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    created_at?: unknown;
+    updated_at?: unknown;
 }>;
 type HubbyModelFirestore = z.infer<typeof hubbyModelFirestoreSchema>;
 type HubbyModelApp = z.infer<typeof hubbyModelAppSchema>;
@@ -425,10 +425,10 @@ declare const bookingFirestoreSchema: z.ZodObject<{
     package_specifications: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
 }, "strip", z.ZodTypeAny, {
     id: string;
+    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     users: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[] | null;
     promo_codes: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[];
@@ -463,10 +463,10 @@ declare const bookingFirestoreSchema: z.ZodObject<{
     package_specifications?: Record<string, any> | undefined;
 }, {
     id: string;
+    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     users: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[] | null;
     promo_codes: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[];
@@ -1493,10 +1493,10 @@ declare const partnerFirestoreSchema: z.ZodObject<{
     }>>>;
 }, "strip", z.ZodTypeAny, {
     id: string;
+    type: string | null;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    type: string | null;
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     users: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[] | null;
     name: string | null;
@@ -1634,10 +1634,10 @@ declare const partnerFirestoreSchema: z.ZodObject<{
     external_id?: string | null | undefined;
 }, {
     id: string;
+    type: string | null;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    type: string | null;
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     users: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[] | null;
     name: string | null;
@@ -1981,10 +1981,10 @@ declare const packageFirestoreSchema: z.ZodObject<{
     }>>;
 }, "strip", z.ZodTypeAny, {
     id: string;
+    type: "data-limited" | "time-limited" | null;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    type: "data-limited" | "time-limited" | null;
     updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     is_active: boolean;
     partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
@@ -2023,10 +2023,10 @@ declare const packageFirestoreSchema: z.ZodObject<{
     throttling?: number | undefined;
 }, {
     id: string;
+    type: "data-limited" | "time-limited" | null;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    type: "data-limited" | "time-limited" | null;
     updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     is_active: boolean;
     partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
@@ -2112,11 +2112,11 @@ declare const promoCodeFirestoreSchema: z.ZodObject<{
     starter_data: z.ZodOptional<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
     id: string;
+    code: string;
+    type: string | null;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    code: string;
-    type: string | null;
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     partner: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     country: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
@@ -2142,11 +2142,11 @@ declare const promoCodeFirestoreSchema: z.ZodObject<{
     starter_data?: number | undefined;
 }, {
     id: string;
+    code: string;
+    type: string | null;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    code: string;
-    type: string | null;
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     partner: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     country: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
@@ -2208,11 +2208,11 @@ declare const esimFirestoreSchema: z.ZodObject<{
     apn: z.ZodNullable<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     id: string;
+    type: "code" | "balance" | "api" | "promo" | "external" | "payment";
+    status: string | null;
     created_at: Timestamp;
     updated_at: Timestamp;
     created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    status: string | null;
-    type: "code" | "balance" | "api" | "promo" | "external" | "payment";
     updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     name: string;
@@ -2237,11 +2237,11 @@ declare const esimFirestoreSchema: z.ZodObject<{
     coverage_label?: string | null | undefined;
 }, {
     id: string;
+    type: "code" | "balance" | "api" | "promo" | "external" | "payment";
+    status: string | null;
     created_at: Timestamp;
     updated_at: Timestamp;
     created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    status: string | null;
-    type: "code" | "balance" | "api" | "promo" | "external" | "payment";
     updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     name: string;
@@ -2325,16 +2325,16 @@ declare const messageFirestoreSchema: z.ZodObject<{
     updated_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
 }, "strip", z.ZodTypeAny, {
     id: string;
+    status: "pending" | "sent" | "failed" | "delivered";
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
-    status: "pending" | "sent" | "failed" | "delivered";
     key: string;
     method: "push" | "email" | "sms";
 }, {
     id: string;
+    status: "pending" | "sent" | "failed" | "delivered";
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
-    status: "pending" | "sent" | "failed" | "delivered";
     key: string;
     method: "push" | "email" | "sms";
 }>;
@@ -2347,16 +2347,16 @@ declare const sentMessagesFirestoreSchema: z.ZodRecord<z.ZodString, z.ZodObject<
     updated_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
 }, "strip", z.ZodTypeAny, {
     id: string;
+    status: "pending" | "sent" | "failed" | "delivered";
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
-    status: "pending" | "sent" | "failed" | "delivered";
     key: string;
     method: "push" | "email" | "sms";
 }, {
     id: string;
+    status: "pending" | "sent" | "failed" | "delivered";
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
-    status: "pending" | "sent" | "failed" | "delivered";
     key: string;
     method: "push" | "email" | "sms";
 }>>;
@@ -2387,10 +2387,10 @@ declare const currencyFirestoreSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     symbol: string;
     id: string;
+    code: string;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    code: string;
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     name: string;
     rate: number;
@@ -2398,10 +2398,10 @@ declare const currencyFirestoreSchema: z.ZodObject<{
 }, {
     symbol: string;
     id: string;
+    code: string;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    code: string;
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     name: string;
     rate: number;

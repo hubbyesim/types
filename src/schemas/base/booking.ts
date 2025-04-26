@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import {
-    baseModelAppSchema
+    baseModelAppSchema,
+    zDateString
 } from './helpers';
 import {
     partnerRefString,
@@ -77,8 +78,8 @@ export const commonBookingFields = {
 // App schema for Booking
 export const bookingAppSchema = baseModelAppSchema.extend({
     ...commonBookingFields,
-    return_date: z.date().nullable(),
-    departure_date: z.date(),
+    return_date: zDateString().nullable(),
+    departure_date: zDateString(),
     partner: partnerRefString,
     promo_codes: promoCodeRefStringArray,
     users: userRefStringArrayNullable,

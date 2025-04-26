@@ -1,10 +1,27 @@
 // src/schemas/base/helpers.ts
 import { z } from "zod";
 var testEnv = { isTestEnvironment: false };
+var iso8601Regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z$/;
+var zDateString = () => z.preprocess((input) => {
+  if (typeof input === "string") {
+    if (!iso8601Regex.test(input)) {
+      return void 0;
+    }
+    const date = new Date(input);
+    if (!isNaN(date.getTime())) {
+      return date;
+    }
+    return void 0;
+  }
+  if (input instanceof Date && !isNaN(input.getTime())) {
+    return input;
+  }
+  return void 0;
+}, z.date());
 var baseModelAppSchema = z.object({
   id: z.string(),
-  created_at: z.date(),
-  updated_at: z.date(),
+  created_at: zDateString(),
+  updated_at: zDateString(),
   created_by: z.union([z.string(), z.null()]),
   updated_by: z.union([z.string(), z.null()])
 });
@@ -84,7 +101,7 @@ var apiLogRefStringArrayNullable = apiLogRefStringArray.nullable();
 // src/schemas/base/user.ts
 import { z as z3 } from "zod";
 var apiKeySchema = z3.object({
-  expires_at: z3.date(),
+  expires_at: zDateString(),
   secret: z3.string(),
   is_active: z3.boolean()
 });
@@ -116,12 +133,12 @@ var commonUserFields = {
 };
 var userAppSchema = baseModelAppSchema.extend({
   ...commonUserFields,
-  createdAt: z3.date(),
+  createdAt: zDateString(),
   partner: partnerRefStringNullable,
   profileRef: profileRefStringNullable,
   balance: z3.number().nullable(),
-  review_requested: z3.date().nullable(),
-  last_seen: z3.date().nullable()
+  review_requested: zDateString().nullable(),
+  last_seen: zDateString().nullable()
 });
 
 // src/schemas/base/booking.ts
@@ -202,8 +219,8 @@ var commonBookingFields = {
 };
 var bookingAppSchema = baseModelAppSchema.extend({
   ...commonBookingFields,
-  return_date: z5.date().nullable(),
-  departure_date: z5.date(),
+  return_date: zDateString().nullable(),
+  departure_date: zDateString(),
   partner: partnerRefString,
   promo_codes: promoCodeRefStringArray,
   users: userRefStringArrayNullable,
@@ -259,8 +276,8 @@ var commonFinancialPropertiesFields = {
   commission_fee: z6.number().nullable().optional(),
   payment_method: z6.enum(["invoice", "direct"]),
   requires_card: z6.boolean().nullable(),
-  next_invoice: z6.date().nullable().optional(),
-  last_invoice: z6.date().nullable().optional()
+  next_invoice: zDateString().nullable().optional(),
+  last_invoice: zDateString().nullable().optional()
 };
 var financialPropertiesAppSchema = z6.object({
   ...commonFinancialPropertiesFields,
@@ -504,9 +521,9 @@ var bookingApiRequestSchema = z9.object({
   email: z9.string().nullable().optional(),
   phone: z9.string().nullable().optional(),
   booking_id: z9.string().min(3).nullable().optional(),
-  return_date: z9.date().nullable(),
+  return_date: zDateString().nullable(),
   // Must be after departure_date
-  departure_date: z9.date(),
+  departure_date: zDateString(),
   // ISO 8601 date string
   flight_number: z9.string().nullable().optional(),
   gender: z9.enum(["M", "F", "O"]).optional(),
@@ -521,10 +538,10 @@ var bookingApiRequestSchema = z9.object({
   communication_options: communicationOptionsSchema,
   is_processed_for_esim_restoration: z9.boolean(),
   is_pseudonymized: z9.boolean(),
-  date_of_birth: z9.date().optional(),
+  date_of_birth: zDateString().optional(),
   package_specifications: packageSpecificationsSchema,
-  created_at: z9.date(),
-  updated_at: z9.date()
+  created_at: zDateString(),
+  updated_at: zDateString()
 });
 var partnerApiRequestSchema = z9.object({
   id: z9.string(),
@@ -561,8 +578,8 @@ var partnerApiRequestSchema = z9.object({
     commission_fee: z9.number().optional(),
     payment_method: z9.enum(["invoice", "direct"]),
     requires_card: z9.boolean().nullable(),
-    next_invoice: z9.date().nullable(),
-    last_invoice: z9.date().nullable(),
+    next_invoice: zDateString().nullable(),
+    last_invoice: zDateString().nullable(),
     pricing_strategies: z9.object({
       partner: z9.object({
         strategy: z9.enum(["split", "bundle"]),
@@ -585,8 +602,8 @@ var partnerApiRequestSchema = z9.object({
     source: z9.string(),
     manual: z9.boolean()
   }).optional(),
-  created_at: z9.date(),
-  updated_at: z9.date(),
+  created_at: zDateString(),
+  updated_at: zDateString(),
   created_by: z9.string().nullable(),
   updated_by: z9.string().nullable()
 });
@@ -603,8 +620,8 @@ var promoCodeAppSchema = baseModelAppSchema.extend({
   uuid_usage: z10.array(z10.string()),
   package_specification: packageSpecificationSchema.optional(),
   partner: partnerRefStringNullable,
-  valid_from: z10.date(),
-  valid_to: z10.date(),
+  valid_from: zDateString(),
+  valid_to: zDateString(),
   // Optional fields based on the type
   discount: z10.number().optional(),
   package_size: z10.string().optional(),
@@ -642,8 +659,8 @@ var commonESIMFields = {
 var esimAppSchema = baseModelAppSchema.extend({
   ...commonESIMFields,
   country: z11.string().nullable(),
-  time_assigned: z11.date().nullable(),
-  last_updated: z11.date().nullable(),
+  time_assigned: zDateString().nullable(),
+  last_updated: zDateString().nullable(),
   partner: z11.string().nullable()
 });
 
@@ -652,7 +669,7 @@ import { z as z12 } from "zod";
 var paymentAppSchema = baseModelAppSchema.extend({
   amount: z12.number(),
   customer: z12.string(),
-  date: z12.date(),
+  date: zDateString(),
   iccid: z12.string(),
   package: z12.string(),
   promo: z12.string(),
@@ -666,8 +683,8 @@ var messageAppSchema = z13.object({
   key: z13.string(),
   method: z13.enum(["push", "sms", "email"]),
   status: z13.enum(["pending", "sent", "failed", "delivered"]),
-  created_at: z13.date(),
-  updated_at: z13.date()
+  created_at: zDateString(),
+  updated_at: zDateString()
 });
 var sentMessagesAppSchema = z13.record(messageAppSchema);
 
@@ -725,7 +742,7 @@ var apiLogAppSchema = z15.object({
   resource_id: z15.string().optional(),
   partner_id: z15.string().optional(),
   payload: z15.record(z15.unknown()).optional(),
-  timestamp: z15.date(),
+  timestamp: zDateString(),
   status_code: z15.number()
 });
 
@@ -868,6 +885,7 @@ export {
   userRefStringNullable,
   visualIdentityBannerSchema,
   visualIdentityBannerStrategySchema,
-  visualIdentitySchema
+  visualIdentitySchema,
+  zDateString
 };
 //# sourceMappingURL=index.js.map

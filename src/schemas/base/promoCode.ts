@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import {
-    baseModelAppSchema
+    baseModelAppSchema,
+    zDateString
 } from './helpers';
 import {
     partnerRefStringNullable,
@@ -21,8 +22,8 @@ export const promoCodeAppSchema = baseModelAppSchema.extend({
     uuid_usage: z.array(z.string()),
     package_specification: packageSpecificationSchema.optional(),
     partner: partnerRefStringNullable,
-    valid_from: z.date(),
-    valid_to: z.date(),
+    valid_from: zDateString(),
+    valid_to: zDateString(),
 
     // Optional fields based on the type
     discount: z.number().optional(),

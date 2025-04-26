@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { baseModelAppSchema } from './helpers';
+import { baseModelAppSchema, zDateString } from './helpers';
 
 // App schema for Message
 export const messageAppSchema = z.object({
@@ -7,8 +7,8 @@ export const messageAppSchema = z.object({
     key: z.string(),
     method: z.enum(["push", "sms", "email"]),
     status: z.enum(["pending", "sent", "failed", "delivered"]),
-    created_at: z.date(),
-    updated_at: z.date()
+    created_at: zDateString(),
+    updated_at: zDateString()
 });
 
 // Define SentMessages schema (a record of messages)

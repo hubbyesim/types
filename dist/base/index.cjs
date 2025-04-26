@@ -145,17 +145,35 @@ __export(base_exports, {
   userRefStringNullable: () => userRefStringNullable,
   visualIdentityBannerSchema: () => visualIdentityBannerSchema,
   visualIdentityBannerStrategySchema: () => visualIdentityBannerStrategySchema,
-  visualIdentitySchema: () => visualIdentitySchema
+  visualIdentitySchema: () => visualIdentitySchema,
+  zDateString: () => zDateString
 });
 module.exports = __toCommonJS(base_exports);
 
 // src/schemas/base/helpers.ts
 var import_zod = require("zod");
 var testEnv = { isTestEnvironment: false };
+var iso8601Regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z$/;
+var zDateString = () => import_zod.z.preprocess((input) => {
+  if (typeof input === "string") {
+    if (!iso8601Regex.test(input)) {
+      return void 0;
+    }
+    const date = new Date(input);
+    if (!isNaN(date.getTime())) {
+      return date;
+    }
+    return void 0;
+  }
+  if (input instanceof Date && !isNaN(input.getTime())) {
+    return input;
+  }
+  return void 0;
+}, import_zod.z.date());
 var baseModelAppSchema = import_zod.z.object({
   id: import_zod.z.string(),
-  created_at: import_zod.z.date(),
-  updated_at: import_zod.z.date(),
+  created_at: zDateString(),
+  updated_at: zDateString(),
   created_by: import_zod.z.union([import_zod.z.string(), import_zod.z.null()]),
   updated_by: import_zod.z.union([import_zod.z.string(), import_zod.z.null()])
 });
@@ -235,7 +253,7 @@ var apiLogRefStringArrayNullable = apiLogRefStringArray.nullable();
 // src/schemas/base/user.ts
 var import_zod3 = require("zod");
 var apiKeySchema = import_zod3.z.object({
-  expires_at: import_zod3.z.date(),
+  expires_at: zDateString(),
   secret: import_zod3.z.string(),
   is_active: import_zod3.z.boolean()
 });
@@ -267,12 +285,12 @@ var commonUserFields = {
 };
 var userAppSchema = baseModelAppSchema.extend({
   ...commonUserFields,
-  createdAt: import_zod3.z.date(),
+  createdAt: zDateString(),
   partner: partnerRefStringNullable,
   profileRef: profileRefStringNullable,
   balance: import_zod3.z.number().nullable(),
-  review_requested: import_zod3.z.date().nullable(),
-  last_seen: import_zod3.z.date().nullable()
+  review_requested: zDateString().nullable(),
+  last_seen: zDateString().nullable()
 });
 
 // src/schemas/base/booking.ts
@@ -353,8 +371,8 @@ var commonBookingFields = {
 };
 var bookingAppSchema = baseModelAppSchema.extend({
   ...commonBookingFields,
-  return_date: import_zod5.z.date().nullable(),
-  departure_date: import_zod5.z.date(),
+  return_date: zDateString().nullable(),
+  departure_date: zDateString(),
   partner: partnerRefString,
   promo_codes: promoCodeRefStringArray,
   users: userRefStringArrayNullable,
@@ -410,8 +428,8 @@ var commonFinancialPropertiesFields = {
   commission_fee: import_zod6.z.number().nullable().optional(),
   payment_method: import_zod6.z.enum(["invoice", "direct"]),
   requires_card: import_zod6.z.boolean().nullable(),
-  next_invoice: import_zod6.z.date().nullable().optional(),
-  last_invoice: import_zod6.z.date().nullable().optional()
+  next_invoice: zDateString().nullable().optional(),
+  last_invoice: zDateString().nullable().optional()
 };
 var financialPropertiesAppSchema = import_zod6.z.object({
   ...commonFinancialPropertiesFields,
@@ -655,9 +673,9 @@ var bookingApiRequestSchema = import_zod9.z.object({
   email: import_zod9.z.string().nullable().optional(),
   phone: import_zod9.z.string().nullable().optional(),
   booking_id: import_zod9.z.string().min(3).nullable().optional(),
-  return_date: import_zod9.z.date().nullable(),
+  return_date: zDateString().nullable(),
   // Must be after departure_date
-  departure_date: import_zod9.z.date(),
+  departure_date: zDateString(),
   // ISO 8601 date string
   flight_number: import_zod9.z.string().nullable().optional(),
   gender: import_zod9.z.enum(["M", "F", "O"]).optional(),
@@ -672,10 +690,10 @@ var bookingApiRequestSchema = import_zod9.z.object({
   communication_options: communicationOptionsSchema,
   is_processed_for_esim_restoration: import_zod9.z.boolean(),
   is_pseudonymized: import_zod9.z.boolean(),
-  date_of_birth: import_zod9.z.date().optional(),
+  date_of_birth: zDateString().optional(),
   package_specifications: packageSpecificationsSchema,
-  created_at: import_zod9.z.date(),
-  updated_at: import_zod9.z.date()
+  created_at: zDateString(),
+  updated_at: zDateString()
 });
 var partnerApiRequestSchema = import_zod9.z.object({
   id: import_zod9.z.string(),
@@ -712,8 +730,8 @@ var partnerApiRequestSchema = import_zod9.z.object({
     commission_fee: import_zod9.z.number().optional(),
     payment_method: import_zod9.z.enum(["invoice", "direct"]),
     requires_card: import_zod9.z.boolean().nullable(),
-    next_invoice: import_zod9.z.date().nullable(),
-    last_invoice: import_zod9.z.date().nullable(),
+    next_invoice: zDateString().nullable(),
+    last_invoice: zDateString().nullable(),
     pricing_strategies: import_zod9.z.object({
       partner: import_zod9.z.object({
         strategy: import_zod9.z.enum(["split", "bundle"]),
@@ -736,8 +754,8 @@ var partnerApiRequestSchema = import_zod9.z.object({
     source: import_zod9.z.string(),
     manual: import_zod9.z.boolean()
   }).optional(),
-  created_at: import_zod9.z.date(),
-  updated_at: import_zod9.z.date(),
+  created_at: zDateString(),
+  updated_at: zDateString(),
   created_by: import_zod9.z.string().nullable(),
   updated_by: import_zod9.z.string().nullable()
 });
@@ -754,8 +772,8 @@ var promoCodeAppSchema = baseModelAppSchema.extend({
   uuid_usage: import_zod10.z.array(import_zod10.z.string()),
   package_specification: packageSpecificationSchema.optional(),
   partner: partnerRefStringNullable,
-  valid_from: import_zod10.z.date(),
-  valid_to: import_zod10.z.date(),
+  valid_from: zDateString(),
+  valid_to: zDateString(),
   // Optional fields based on the type
   discount: import_zod10.z.number().optional(),
   package_size: import_zod10.z.string().optional(),
@@ -793,8 +811,8 @@ var commonESIMFields = {
 var esimAppSchema = baseModelAppSchema.extend({
   ...commonESIMFields,
   country: import_zod11.z.string().nullable(),
-  time_assigned: import_zod11.z.date().nullable(),
-  last_updated: import_zod11.z.date().nullable(),
+  time_assigned: zDateString().nullable(),
+  last_updated: zDateString().nullable(),
   partner: import_zod11.z.string().nullable()
 });
 
@@ -803,7 +821,7 @@ var import_zod12 = require("zod");
 var paymentAppSchema = baseModelAppSchema.extend({
   amount: import_zod12.z.number(),
   customer: import_zod12.z.string(),
-  date: import_zod12.z.date(),
+  date: zDateString(),
   iccid: import_zod12.z.string(),
   package: import_zod12.z.string(),
   promo: import_zod12.z.string(),
@@ -817,8 +835,8 @@ var messageAppSchema = import_zod13.z.object({
   key: import_zod13.z.string(),
   method: import_zod13.z.enum(["push", "sms", "email"]),
   status: import_zod13.z.enum(["pending", "sent", "failed", "delivered"]),
-  created_at: import_zod13.z.date(),
-  updated_at: import_zod13.z.date()
+  created_at: zDateString(),
+  updated_at: zDateString()
 });
 var sentMessagesAppSchema = import_zod13.z.record(messageAppSchema);
 
@@ -876,7 +894,7 @@ var apiLogAppSchema = import_zod15.z.object({
   resource_id: import_zod15.z.string().optional(),
   partner_id: import_zod15.z.string().optional(),
   payload: import_zod15.z.record(import_zod15.z.unknown()).optional(),
-  timestamp: import_zod15.z.date(),
+  timestamp: zDateString(),
   status_code: import_zod15.z.number()
 });
 
@@ -1020,6 +1038,7 @@ var isDate = (value) => {
   userRefStringNullable,
   visualIdentityBannerSchema,
   visualIdentityBannerStrategySchema,
-  visualIdentitySchema
+  visualIdentitySchema,
+  zDateString
 });
 //# sourceMappingURL=index.cjs.map

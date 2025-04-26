@@ -1,13 +1,14 @@
 import { z } from 'zod';
 import {
-    baseModelAppSchema
+    baseModelAppSchema,
+    zDateString
 } from './helpers';
 
 // App schema for Payment
 export const paymentAppSchema = baseModelAppSchema.extend({
     amount: z.number(),
     customer: z.string(),
-    date: z.date(),
+    date: zDateString(),
     iccid: z.string(),
     package: z.string(),
     promo: z.string(),

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import {
-    baseModelAppSchema
+    baseModelAppSchema,
+    zDateString
 } from './helpers';
 
 // Common fields shared between schemas
@@ -30,8 +31,8 @@ export const commonESIMFields = {
 export const esimAppSchema = baseModelAppSchema.extend({
     ...commonESIMFields,
     country: z.string().nullable(),
-    time_assigned: z.date().nullable(),
-    last_updated: z.date().nullable(),
+    time_assigned: zDateString().nullable(),
+    last_updated: zDateString().nullable(),
     partner: z.string().nullable(),
 });
 

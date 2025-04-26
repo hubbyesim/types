@@ -5,10 +5,27 @@ import { Timestamp } from "firebase-admin/firestore";
 // src/schemas/base/helpers.ts
 import { z } from "zod";
 var testEnv = { isTestEnvironment: false };
+var iso8601Regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z$/;
+var zDateString = () => z.preprocess((input) => {
+  if (typeof input === "string") {
+    if (!iso8601Regex.test(input)) {
+      return void 0;
+    }
+    const date = new Date(input);
+    if (!isNaN(date.getTime())) {
+      return date;
+    }
+    return void 0;
+  }
+  if (input instanceof Date && !isNaN(input.getTime())) {
+    return input;
+  }
+  return void 0;
+}, z.date());
 var baseModelAppSchema = z.object({
   id: z.string(),
-  created_at: z.date(),
-  updated_at: z.date(),
+  created_at: zDateString(),
+  updated_at: zDateString(),
   created_by: z.union([z.string(), z.null()]),
   updated_by: z.union([z.string(), z.null()])
 });
@@ -336,7 +353,7 @@ function genericFromFirestore({
 // src/schemas/base/user.ts
 import { z as z5 } from "zod";
 var apiKeySchema = z5.object({
-  expires_at: z5.date(),
+  expires_at: zDateString(),
   secret: z5.string(),
   is_active: z5.boolean()
 });
@@ -368,12 +385,12 @@ var commonUserFields = {
 };
 var userAppSchema = baseModelAppSchema.extend({
   ...commonUserFields,
-  createdAt: z5.date(),
+  createdAt: zDateString(),
   partner: partnerRefStringNullable,
   profileRef: profileRefStringNullable,
   balance: z5.number().nullable(),
-  review_requested: z5.date().nullable(),
-  last_seen: z5.date().nullable()
+  review_requested: zDateString().nullable(),
+  last_seen: zDateString().nullable()
 });
 
 // src/schemas/firebase/user.ts
@@ -524,8 +541,8 @@ var commonBookingFields = {
 };
 var bookingAppSchema = baseModelAppSchema.extend({
   ...commonBookingFields,
-  return_date: z8.date().nullable(),
-  departure_date: z8.date(),
+  return_date: zDateString().nullable(),
+  departure_date: zDateString(),
   partner: partnerRefString,
   promo_codes: promoCodeRefStringArray,
   users: userRefStringArrayNullable,
@@ -619,8 +636,8 @@ var commonFinancialPropertiesFields = {
   commission_fee: z9.number().nullable().optional(),
   payment_method: z9.enum(["invoice", "direct"]),
   requires_card: z9.boolean().nullable(),
-  next_invoice: z9.date().nullable().optional(),
-  last_invoice: z9.date().nullable().optional()
+  next_invoice: zDateString().nullable().optional(),
+  last_invoice: zDateString().nullable().optional()
 };
 var financialPropertiesAppSchema = z9.object({
   ...commonFinancialPropertiesFields,
@@ -1075,9 +1092,9 @@ var bookingApiRequestSchema = z14.object({
   email: z14.string().nullable().optional(),
   phone: z14.string().nullable().optional(),
   booking_id: z14.string().min(3).nullable().optional(),
-  return_date: z14.date().nullable(),
+  return_date: zDateString().nullable(),
   // Must be after departure_date
-  departure_date: z14.date(),
+  departure_date: zDateString(),
   // ISO 8601 date string
   flight_number: z14.string().nullable().optional(),
   gender: z14.enum(["M", "F", "O"]).optional(),
@@ -1092,10 +1109,10 @@ var bookingApiRequestSchema = z14.object({
   communication_options: communicationOptionsSchema,
   is_processed_for_esim_restoration: z14.boolean(),
   is_pseudonymized: z14.boolean(),
-  date_of_birth: z14.date().optional(),
+  date_of_birth: zDateString().optional(),
   package_specifications: packageSpecificationsSchema,
-  created_at: z14.date(),
-  updated_at: z14.date()
+  created_at: zDateString(),
+  updated_at: zDateString()
 });
 var partnerApiRequestSchema = z14.object({
   id: z14.string(),
@@ -1132,8 +1149,8 @@ var partnerApiRequestSchema = z14.object({
     commission_fee: z14.number().optional(),
     payment_method: z14.enum(["invoice", "direct"]),
     requires_card: z14.boolean().nullable(),
-    next_invoice: z14.date().nullable(),
-    last_invoice: z14.date().nullable(),
+    next_invoice: zDateString().nullable(),
+    last_invoice: zDateString().nullable(),
     pricing_strategies: z14.object({
       partner: z14.object({
         strategy: z14.enum(["split", "bundle"]),
@@ -1156,8 +1173,8 @@ var partnerApiRequestSchema = z14.object({
     source: z14.string(),
     manual: z14.boolean()
   }).optional(),
-  created_at: z14.date(),
-  updated_at: z14.date(),
+  created_at: zDateString(),
+  updated_at: zDateString(),
   created_by: z14.string().nullable(),
   updated_by: z14.string().nullable()
 });
@@ -1175,8 +1192,8 @@ var promoCodeAppSchema = baseModelAppSchema.extend({
   uuid_usage: z15.array(z15.string()),
   package_specification: packageSpecificationSchema.optional(),
   partner: partnerRefStringNullable,
-  valid_from: z15.date(),
-  valid_to: z15.date(),
+  valid_from: zDateString(),
+  valid_to: zDateString(),
   // Optional fields based on the type
   discount: z15.number().optional(),
   package_size: z15.string().optional(),
@@ -1262,8 +1279,8 @@ var commonESIMFields = {
 var esimAppSchema = baseModelAppSchema.extend({
   ...commonESIMFields,
   country: z17.string().nullable(),
-  time_assigned: z17.date().nullable(),
-  last_updated: z17.date().nullable(),
+  time_assigned: zDateString().nullable(),
+  last_updated: zDateString().nullable(),
   partner: z17.string().nullable()
 });
 
@@ -1308,7 +1325,7 @@ import { z as z18 } from "zod";
 var paymentAppSchema = baseModelAppSchema.extend({
   amount: z18.number(),
   customer: z18.string(),
-  date: z18.date(),
+  date: zDateString(),
   iccid: z18.string(),
   package: z18.string(),
   promo: z18.string(),
@@ -1355,8 +1372,8 @@ var messageAppSchema = z20.object({
   key: z20.string(),
   method: z20.enum(["push", "sms", "email"]),
   status: z20.enum(["pending", "sent", "failed", "delivered"]),
-  created_at: z20.date(),
-  updated_at: z20.date()
+  created_at: zDateString(),
+  updated_at: zDateString()
 });
 var sentMessagesAppSchema = z20.record(messageAppSchema);
 
@@ -1524,7 +1541,7 @@ var apiLogAppSchema = z23.object({
   resource_id: z23.string().optional(),
   partner_id: z23.string().optional(),
   payload: z23.record(z23.unknown()).optional(),
-  timestamp: z23.date(),
+  timestamp: zDateString(),
   status_code: z23.number()
 });
 
