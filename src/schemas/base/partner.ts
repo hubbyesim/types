@@ -107,7 +107,7 @@ export const visualIdentityBannerSchema = z.object({
 
 export const visualIdentityBannerStrategySchema = z.object({
     strategy: z.enum(['fixed', 'rotating', 'destination', 'time_of_day']),
-    banners: z.array(visualIdentityBannerSchema)
+    banners: z.array(visualIdentityBannerSchema).nullable().optional()
 });
 
 export const visualIdentitySchema = z.object({
