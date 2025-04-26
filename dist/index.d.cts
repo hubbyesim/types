@@ -1352,7 +1352,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
         font: z.ZodString;
         top_banner: z.ZodOptional<z.ZodObject<{
             strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
-            banners: z.ZodArray<z.ZodObject<{
+            banners: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
                 image_url: z.ZodString;
                 alt: z.ZodString;
                 click_url: z.ZodString;
@@ -1370,29 +1370,29 @@ declare const partnerFirestoreSchema: z.ZodObject<{
                 alt: string;
                 click_url: string;
                 properties: Record<string, string>;
-            }>, "many">;
+            }>, "many">>>;
         }, "strip", z.ZodTypeAny, {
             strategy: "fixed" | "destination" | "rotating" | "time_of_day";
-            banners: {
+            banners?: {
                 locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
                 image_url: string;
                 alt: string;
                 click_url: string;
                 properties: Record<string, string>;
-            }[];
+            }[] | null | undefined;
         }, {
             strategy: "fixed" | "destination" | "rotating" | "time_of_day";
-            banners: {
+            banners?: {
                 locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
                 image_url: string;
                 alt: string;
                 click_url: string;
                 properties: Record<string, string>;
-            }[];
+            }[] | null | undefined;
         }>>;
         mid_banner: z.ZodOptional<z.ZodObject<{
             strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
-            banners: z.ZodArray<z.ZodObject<{
+            banners: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
                 image_url: z.ZodString;
                 alt: z.ZodString;
                 click_url: z.ZodString;
@@ -1410,25 +1410,25 @@ declare const partnerFirestoreSchema: z.ZodObject<{
                 alt: string;
                 click_url: string;
                 properties: Record<string, string>;
-            }>, "many">;
+            }>, "many">>>;
         }, "strip", z.ZodTypeAny, {
             strategy: "fixed" | "destination" | "rotating" | "time_of_day";
-            banners: {
+            banners?: {
                 locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
                 image_url: string;
                 alt: string;
                 click_url: string;
                 properties: Record<string, string>;
-            }[];
+            }[] | null | undefined;
         }, {
             strategy: "fixed" | "destination" | "rotating" | "time_of_day";
-            banners: {
+            banners?: {
                 locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
                 image_url: string;
                 alt: string;
                 click_url: string;
                 properties: Record<string, string>;
-            }[];
+            }[] | null | undefined;
         }>>;
     }, "strip", z.ZodTypeAny, {
         primary_color: string;
@@ -1437,23 +1437,23 @@ declare const partnerFirestoreSchema: z.ZodObject<{
         font: string;
         top_banner?: {
             strategy: "fixed" | "destination" | "rotating" | "time_of_day";
-            banners: {
+            banners?: {
                 locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
                 image_url: string;
                 alt: string;
                 click_url: string;
                 properties: Record<string, string>;
-            }[];
+            }[] | null | undefined;
         } | undefined;
         mid_banner?: {
             strategy: "fixed" | "destination" | "rotating" | "time_of_day";
-            banners: {
+            banners?: {
                 locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
                 image_url: string;
                 alt: string;
                 click_url: string;
                 properties: Record<string, string>;
-            }[];
+            }[] | null | undefined;
         } | undefined;
     }, {
         primary_color: string;
@@ -1462,23 +1462,23 @@ declare const partnerFirestoreSchema: z.ZodObject<{
         font: string;
         top_banner?: {
             strategy: "fixed" | "destination" | "rotating" | "time_of_day";
-            banners: {
+            banners?: {
                 locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
                 image_url: string;
                 alt: string;
                 click_url: string;
                 properties: Record<string, string>;
-            }[];
+            }[] | null | undefined;
         } | undefined;
         mid_banner?: {
             strategy: "fixed" | "destination" | "rotating" | "time_of_day";
-            banners: {
+            banners?: {
                 locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
                 image_url: string;
                 alt: string;
                 click_url: string;
                 properties: Record<string, string>;
-            }[];
+            }[] | null | undefined;
         } | undefined;
     }>>;
     data: z.ZodOptional<z.ZodNullable<z.ZodObject<{
@@ -1607,23 +1607,23 @@ declare const partnerFirestoreSchema: z.ZodObject<{
         font: string;
         top_banner?: {
             strategy: "fixed" | "destination" | "rotating" | "time_of_day";
-            banners: {
+            banners?: {
                 locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
                 image_url: string;
                 alt: string;
                 click_url: string;
                 properties: Record<string, string>;
-            }[];
+            }[] | null | undefined;
         } | undefined;
         mid_banner?: {
             strategy: "fixed" | "destination" | "rotating" | "time_of_day";
-            banners: {
+            banners?: {
                 locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
                 image_url: string;
                 alt: string;
                 click_url: string;
                 properties: Record<string, string>;
-            }[];
+            }[] | null | undefined;
         } | undefined;
     } | null;
     is_active?: boolean | null | undefined;
@@ -1748,23 +1748,23 @@ declare const partnerFirestoreSchema: z.ZodObject<{
         font: string;
         top_banner?: {
             strategy: "fixed" | "destination" | "rotating" | "time_of_day";
-            banners: {
+            banners?: {
                 locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
                 image_url: string;
                 alt: string;
                 click_url: string;
                 properties: Record<string, string>;
-            }[];
+            }[] | null | undefined;
         } | undefined;
         mid_banner?: {
             strategy: "fixed" | "destination" | "rotating" | "time_of_day";
-            banners: {
+            banners?: {
                 locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
                 image_url: string;
                 alt: string;
                 click_url: string;
                 properties: Record<string, string>;
-            }[];
+            }[] | null | undefined;
         } | undefined;
     } | null;
     is_active?: boolean | null | undefined;

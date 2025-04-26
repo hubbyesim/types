@@ -290,7 +290,7 @@ var visualIdentityBannerSchema = z6.object({
 });
 var visualIdentityBannerStrategySchema = z6.object({
   strategy: z6.enum(["fixed", "rotating", "destination", "time_of_day"]),
-  banners: z6.array(visualIdentityBannerSchema)
+  banners: z6.array(visualIdentityBannerSchema).nullable().optional()
 });
 var visualIdentitySchema = z6.object({
   primary_color: z6.string(),

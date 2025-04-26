@@ -906,7 +906,7 @@ var visualIdentityBannerSchema = import_zod9.z.object({
 });
 var visualIdentityBannerStrategySchema = import_zod9.z.object({
   strategy: import_zod9.z.enum(["fixed", "rotating", "destination", "time_of_day"]),
-  banners: import_zod9.z.array(visualIdentityBannerSchema)
+  banners: import_zod9.z.array(visualIdentityBannerSchema).nullable().optional()
 });
 var visualIdentitySchema = import_zod9.z.object({
   primary_color: import_zod9.z.string(),
