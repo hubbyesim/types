@@ -115,8 +115,8 @@ export const visualIdentitySchema = z.object({
     secondary_color: z.string(),
     logo: z.string(),
     font: z.string(),
-    top_banner: visualIdentityBannerStrategySchema,
-    mid_banner: visualIdentityBannerStrategySchema
+    top_banner: visualIdentityBannerStrategySchema.optional(),
+    mid_banner: visualIdentityBannerStrategySchema.optional()
 });
 
 export const scheduleFilterSchema = z.object({
