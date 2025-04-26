@@ -127,6 +127,7 @@ __export(src_exports, {
   fieldValueSchema: () => fieldValueSchema,
   financialPropertiesAppSchema: () => financialPropertiesAppSchema,
   financialPropertiesFirestoreSchema: () => financialPropertiesFirestoreSchema,
+  freeEsimSchema: () => freeEsimSchema,
   fromFirestore: () => fromFirestore,
   genericFromFirestore: () => genericFromFirestore,
   genericToFirestore: () => genericToFirestore,
@@ -931,8 +932,14 @@ var scheduleSchema = import_zod9.z.object({
   days: import_zod9.z.number(),
   email: import_zod9.z.object({
     brevo_template_id: import_zod9.z.number(),
-    subject: import_zod9.z.record(import_zod9.z.string()).optional(),
-    preview_text: import_zod9.z.record(import_zod9.z.string()).optional()
+    subject: import_zod9.z.record(import_zod9.z.string()).refine(
+      (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
+      { message: "Keys must be supported locales" }
+    ).optional(),
+    preview_text: import_zod9.z.record(import_zod9.z.string()).refine(
+      (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
+      { message: "Keys must be supported locales" }
+    ).optional()
   }).nullable().optional(),
   push: import_zod9.z.object({
     title: import_zod9.z.record(import_zod9.z.string()).optional(),
@@ -945,31 +952,20 @@ var scheduleSchema = import_zod9.z.object({
   moment: import_zod9.z.enum(["departure", "return", "immediate"]),
   filter: scheduleFilterSchema.nullable().optional()
 });
+var freeEsimSchema = import_zod9.z.object({
+  package_specification: import_zod9.z.object({
+    size: import_zod9.z.string(),
+    type: import_zod9.z.string(),
+    destination: import_zod9.z.string()
+  }),
+  allowance: import_zod9.z.number()
+});
 var platformSettingsSchema = import_zod9.z.object({
   package_strategy: packageStrategySchema.nullable().optional(),
-  free_esim: import_zod9.z.object({
-    packackage_specification: import_zod9.z.object({
-      size: import_zod9.z.string(),
-      type: import_zod9.z.string(),
-      destination: import_zod9.z.string()
-    }),
-    allowance: import_zod9.z.number()
-  }).nullable().optional(),
+  free_esim: freeEsimSchema.nullable().optional(),
   booking_defaults: bookingDefaultsSchema.nullable().optional(),
   booking_confirmation: bookingConfirmationSchema.nullable().optional(),
-  schedules: import_zod9.z.array(scheduleSchema).optional(),
-  ios_app_id: import_zod9.z.string().optional(),
-  android_package_id: import_zod9.z.string().optional(),
-  faq: import_zod9.z.object({
-    title: import_zod9.z.record(import_zod9.z.string()),
-    content: import_zod9.z.record(import_zod9.z.string()).optional(),
-    link: import_zod9.z.record(import_zod9.z.string())
-  }).array().optional(),
-  ios_config: import_zod9.z.string().optional(),
-  terms_of_service: import_zod9.z.record(import_zod9.z.string()).optional(),
-  privacy_policy: import_zod9.z.record(import_zod9.z.string()).optional(),
-  enabled_locales: import_zod9.z.array(supportedLocalesSchema).optional(),
-  custom_texts: import_zod9.z.record(import_zod9.z.record(import_zod9.z.string())).optional()
+  schedules: import_zod9.z.array(scheduleSchema).optional()
 }).nullable();
 var commonContactFields = {
   email: import_zod9.z.string().nullable(),
@@ -1927,6 +1923,7 @@ var apiLogFromFirestore = (firestoreApiLog) => {
   fieldValueSchema,
   financialPropertiesAppSchema,
   financialPropertiesFirestoreSchema,
+  freeEsimSchema,
   fromFirestore,
   genericFromFirestore,
   genericToFirestore,

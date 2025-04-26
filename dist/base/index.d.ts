@@ -1171,8 +1171,8 @@ declare const scheduleSchema: z.ZodObject<{
     days: z.ZodNumber;
     email: z.ZodOptional<z.ZodNullable<z.ZodObject<{
         brevo_template_id: z.ZodNumber;
-        subject: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
-        preview_text: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+        subject: z.ZodOptional<z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodString>, Record<string, string>, Record<string, string>>>;
+        preview_text: z.ZodOptional<z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodString>, Record<string, string>, Record<string, string>>>;
     }, "strip", z.ZodTypeAny, {
         brevo_template_id: number;
         subject?: Record<string, string> | undefined;
@@ -1255,6 +1255,36 @@ declare const scheduleSchema: z.ZodObject<{
         preview_text?: Record<string, string> | undefined;
     } | null | undefined;
 }>;
+declare const freeEsimSchema: z.ZodObject<{
+    package_specification: z.ZodObject<{
+        size: z.ZodString;
+        type: z.ZodString;
+        destination: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        type: string;
+        destination: string;
+        size: string;
+    }, {
+        type: string;
+        destination: string;
+        size: string;
+    }>;
+    allowance: z.ZodNumber;
+}, "strip", z.ZodTypeAny, {
+    package_specification: {
+        type: string;
+        destination: string;
+        size: string;
+    };
+    allowance: number;
+}, {
+    package_specification: {
+        type: string;
+        destination: string;
+        size: string;
+    };
+    allowance: number;
+}>;
 declare const platformSettingsSchema: z.ZodNullable<z.ZodObject<{
     package_strategy: z.ZodOptional<z.ZodNullable<z.ZodObject<{
         name: z.ZodString;
@@ -1270,7 +1300,7 @@ declare const platformSettingsSchema: z.ZodNullable<z.ZodObject<{
         iso3_white_list?: string[] | undefined;
     }>>>;
     free_esim: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-        packackage_specification: z.ZodObject<{
+        package_specification: z.ZodObject<{
             size: z.ZodString;
             type: z.ZodString;
             destination: z.ZodString;
@@ -1285,14 +1315,14 @@ declare const platformSettingsSchema: z.ZodNullable<z.ZodObject<{
         }>;
         allowance: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
-        packackage_specification: {
+        package_specification: {
             type: string;
             destination: string;
             size: string;
         };
         allowance: number;
     }, {
-        packackage_specification: {
+        package_specification: {
             type: string;
             destination: string;
             size: string;
@@ -1320,8 +1350,8 @@ declare const platformSettingsSchema: z.ZodNullable<z.ZodObject<{
         days: z.ZodNumber;
         email: z.ZodOptional<z.ZodNullable<z.ZodObject<{
             brevo_template_id: z.ZodNumber;
-            subject: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
-            preview_text: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+            subject: z.ZodOptional<z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodString>, Record<string, string>, Record<string, string>>>;
+            preview_text: z.ZodOptional<z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodString>, Record<string, string>, Record<string, string>>>;
         }, "strip", z.ZodTypeAny, {
             brevo_template_id: number;
             subject?: Record<string, string> | undefined;
@@ -1404,26 +1434,6 @@ declare const platformSettingsSchema: z.ZodNullable<z.ZodObject<{
             preview_text?: Record<string, string> | undefined;
         } | null | undefined;
     }>, "many">>;
-    ios_app_id: z.ZodOptional<z.ZodString>;
-    android_package_id: z.ZodOptional<z.ZodString>;
-    faq: z.ZodOptional<z.ZodArray<z.ZodObject<{
-        title: z.ZodRecord<z.ZodString, z.ZodString>;
-        content: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
-        link: z.ZodRecord<z.ZodString, z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        link: Record<string, string>;
-        title: Record<string, string>;
-        content?: Record<string, string> | undefined;
-    }, {
-        link: Record<string, string>;
-        title: Record<string, string>;
-        content?: Record<string, string> | undefined;
-    }>, "many">>;
-    ios_config: z.ZodOptional<z.ZodString>;
-    terms_of_service: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
-    privacy_policy: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
-    enabled_locales: z.ZodOptional<z.ZodArray<z.ZodEnum<["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]>, "many">>;
-    custom_texts: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodString>>>;
 }, "strip", z.ZodTypeAny, {
     package_strategy?: {
         name: string;
@@ -1431,7 +1441,7 @@ declare const platformSettingsSchema: z.ZodNullable<z.ZodObject<{
         iso3_white_list?: string[] | undefined;
     } | null | undefined;
     free_esim?: {
-        packackage_specification: {
+        package_specification: {
             type: string;
             destination: string;
             size: string;
@@ -1467,18 +1477,6 @@ declare const platformSettingsSchema: z.ZodNullable<z.ZodObject<{
             preview_text?: Record<string, string> | undefined;
         } | null | undefined;
     }[] | undefined;
-    ios_app_id?: string | undefined;
-    android_package_id?: string | undefined;
-    faq?: {
-        link: Record<string, string>;
-        title: Record<string, string>;
-        content?: Record<string, string> | undefined;
-    }[] | undefined;
-    ios_config?: string | undefined;
-    terms_of_service?: Record<string, string> | undefined;
-    privacy_policy?: Record<string, string> | undefined;
-    enabled_locales?: ("en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE")[] | undefined;
-    custom_texts?: Record<string, Record<string, string>> | undefined;
 }, {
     package_strategy?: {
         name: string;
@@ -1486,7 +1484,7 @@ declare const platformSettingsSchema: z.ZodNullable<z.ZodObject<{
         iso3_white_list?: string[] | undefined;
     } | null | undefined;
     free_esim?: {
-        packackage_specification: {
+        package_specification: {
             type: string;
             destination: string;
             size: string;
@@ -1522,18 +1520,6 @@ declare const platformSettingsSchema: z.ZodNullable<z.ZodObject<{
             preview_text?: Record<string, string> | undefined;
         } | null | undefined;
     }[] | undefined;
-    ios_app_id?: string | undefined;
-    android_package_id?: string | undefined;
-    faq?: {
-        link: Record<string, string>;
-        title: Record<string, string>;
-        content?: Record<string, string> | undefined;
-    }[] | undefined;
-    ios_config?: string | undefined;
-    terms_of_service?: Record<string, string> | undefined;
-    privacy_policy?: Record<string, string> | undefined;
-    enabled_locales?: ("en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE")[] | undefined;
-    custom_texts?: Record<string, Record<string, string>> | undefined;
 }>>;
 declare const commonPartnerFields: {
     name: z.ZodNullable<z.ZodString>;
@@ -1980,7 +1966,7 @@ declare const partnerAppSchema: z.ZodObject<{
             iso3_white_list?: string[] | undefined;
         }>>>;
         free_esim: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-            packackage_specification: z.ZodObject<{
+            package_specification: z.ZodObject<{
                 size: z.ZodString;
                 type: z.ZodString;
                 destination: z.ZodString;
@@ -1995,14 +1981,14 @@ declare const partnerAppSchema: z.ZodObject<{
             }>;
             allowance: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
-            packackage_specification: {
+            package_specification: {
                 type: string;
                 destination: string;
                 size: string;
             };
             allowance: number;
         }, {
-            packackage_specification: {
+            package_specification: {
                 type: string;
                 destination: string;
                 size: string;
@@ -2030,8 +2016,8 @@ declare const partnerAppSchema: z.ZodObject<{
             days: z.ZodNumber;
             email: z.ZodOptional<z.ZodNullable<z.ZodObject<{
                 brevo_template_id: z.ZodNumber;
-                subject: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
-                preview_text: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+                subject: z.ZodOptional<z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodString>, Record<string, string>, Record<string, string>>>;
+                preview_text: z.ZodOptional<z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodString>, Record<string, string>, Record<string, string>>>;
             }, "strip", z.ZodTypeAny, {
                 brevo_template_id: number;
                 subject?: Record<string, string> | undefined;
@@ -2114,26 +2100,6 @@ declare const partnerAppSchema: z.ZodObject<{
                 preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }>, "many">>;
-        ios_app_id: z.ZodOptional<z.ZodString>;
-        android_package_id: z.ZodOptional<z.ZodString>;
-        faq: z.ZodOptional<z.ZodArray<z.ZodObject<{
-            title: z.ZodRecord<z.ZodString, z.ZodString>;
-            content: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
-            link: z.ZodRecord<z.ZodString, z.ZodString>;
-        }, "strip", z.ZodTypeAny, {
-            link: Record<string, string>;
-            title: Record<string, string>;
-            content?: Record<string, string> | undefined;
-        }, {
-            link: Record<string, string>;
-            title: Record<string, string>;
-            content?: Record<string, string> | undefined;
-        }>, "many">>;
-        ios_config: z.ZodOptional<z.ZodString>;
-        terms_of_service: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
-        privacy_policy: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
-        enabled_locales: z.ZodOptional<z.ZodArray<z.ZodEnum<["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]>, "many">>;
-        custom_texts: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodString>>>;
     }, "strip", z.ZodTypeAny, {
         package_strategy?: {
             name: string;
@@ -2141,7 +2107,7 @@ declare const partnerAppSchema: z.ZodObject<{
             iso3_white_list?: string[] | undefined;
         } | null | undefined;
         free_esim?: {
-            packackage_specification: {
+            package_specification: {
                 type: string;
                 destination: string;
                 size: string;
@@ -2177,18 +2143,6 @@ declare const partnerAppSchema: z.ZodObject<{
                 preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }[] | undefined;
-        ios_app_id?: string | undefined;
-        android_package_id?: string | undefined;
-        faq?: {
-            link: Record<string, string>;
-            title: Record<string, string>;
-            content?: Record<string, string> | undefined;
-        }[] | undefined;
-        ios_config?: string | undefined;
-        terms_of_service?: Record<string, string> | undefined;
-        privacy_policy?: Record<string, string> | undefined;
-        enabled_locales?: ("en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE")[] | undefined;
-        custom_texts?: Record<string, Record<string, string>> | undefined;
     }, {
         package_strategy?: {
             name: string;
@@ -2196,7 +2150,7 @@ declare const partnerAppSchema: z.ZodObject<{
             iso3_white_list?: string[] | undefined;
         } | null | undefined;
         free_esim?: {
-            packackage_specification: {
+            package_specification: {
                 type: string;
                 destination: string;
                 size: string;
@@ -2232,18 +2186,6 @@ declare const partnerAppSchema: z.ZodObject<{
                 preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }[] | undefined;
-        ios_app_id?: string | undefined;
-        android_package_id?: string | undefined;
-        faq?: {
-            link: Record<string, string>;
-            title: Record<string, string>;
-            content?: Record<string, string> | undefined;
-        }[] | undefined;
-        ios_config?: string | undefined;
-        terms_of_service?: Record<string, string> | undefined;
-        privacy_policy?: Record<string, string> | undefined;
-        enabled_locales?: ("en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE")[] | undefined;
-        custom_texts?: Record<string, Record<string, string>> | undefined;
     }>>;
     name: z.ZodNullable<z.ZodString>;
     type: z.ZodNullable<z.ZodString>;
@@ -2501,7 +2443,7 @@ declare const partnerAppSchema: z.ZodObject<{
             iso3_white_list?: string[] | undefined;
         } | null | undefined;
         free_esim?: {
-            packackage_specification: {
+            package_specification: {
                 type: string;
                 destination: string;
                 size: string;
@@ -2537,18 +2479,6 @@ declare const partnerAppSchema: z.ZodObject<{
                 preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }[] | undefined;
-        ios_app_id?: string | undefined;
-        android_package_id?: string | undefined;
-        faq?: {
-            link: Record<string, string>;
-            title: Record<string, string>;
-            content?: Record<string, string> | undefined;
-        }[] | undefined;
-        ios_config?: string | undefined;
-        terms_of_service?: Record<string, string> | undefined;
-        privacy_policy?: Record<string, string> | undefined;
-        enabled_locales?: ("en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE")[] | undefined;
-        custom_texts?: Record<string, Record<string, string>> | undefined;
     } | null;
     contact: {
         email: string | null;
@@ -2654,7 +2584,7 @@ declare const partnerAppSchema: z.ZodObject<{
             iso3_white_list?: string[] | undefined;
         } | null | undefined;
         free_esim?: {
-            packackage_specification: {
+            package_specification: {
                 type: string;
                 destination: string;
                 size: string;
@@ -2690,18 +2620,6 @@ declare const partnerAppSchema: z.ZodObject<{
                 preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }[] | undefined;
-        ios_app_id?: string | undefined;
-        android_package_id?: string | undefined;
-        faq?: {
-            link: Record<string, string>;
-            title: Record<string, string>;
-            content?: Record<string, string> | undefined;
-        }[] | undefined;
-        ios_config?: string | undefined;
-        terms_of_service?: Record<string, string> | undefined;
-        privacy_policy?: Record<string, string> | undefined;
-        enabled_locales?: ("en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE")[] | undefined;
-        custom_texts?: Record<string, Record<string, string>> | undefined;
     } | null;
     contact: {
         email: string | null;
@@ -4472,4 +4390,9 @@ type PartnerApiResponse = z.infer<typeof partnerApiResponseSchema>;
 declare const convertToDate: (value: any) => Date;
 declare const isDate: (value: any) => value is Date;
 
-export { API_LOG_COLLECTION, Address, ApiKey, ApiKeys, ApiLogApp, BOOKING_COLLECTION, BankingDetails, BookingApiRequest, BookingApiResponse, BookingApp, BookingConfirmation, BookingDefaults, BookingStatus, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannel, CommunicationChannelType, CommunicationOptions, CountryApp, CoversionRate, CurrencyApp, ESIMApp, ESIM_COLLECTION, FinancialPropertiesApp, HApiLog, HBooking, HBookingConfirmation, HBookingDefaults, HCountry, HCurrency, HESIM, HFinancialProperties, HHubbyModel, HMessage, HPackage, HPackagePrice, HPackageStrategy, HPartner, HPayment, HPlatformSettings, HPriceList, HPromoCode, HSchedule, HScheduleFilter, HSentMessages, HUser, HVisualIdentity, HVisualIdentityBanner, HVisualIdentityBannerStrategy, HubbyModelApp, MESSAGE_COLLECTION, MessageApp, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, PackageApp, PackagePriceApp, PackageSpecification, PackageSpecifications, PackageStrategy, PartnerApiRequest, PartnerApiResponse, PartnerApp, PartnerPricingStrategyApp, PaymentApp, PlatformSettings, PriceListApp, PromoCodeApiResponse, PromoCodeApp, Registration, Schedule, ScheduleFilter, SentMessagesApp, USER_COLLECTION, UserApp, UserPricingStrategyApp, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerStrategy, addressSchema, apiKeySchema, apiKeysSchema, apiLogAppSchema, apiLogRefString, apiLogRefStringArray, apiLogRefStringArrayNullable, apiLogRefStringNullable, bankingDetailsSchema, baseModelAppSchema, bookingApiRequestSchema, bookingApiResponseSchema, bookingAppSchema, bookingConfirmationSchema, bookingDefaultsSchema, bookingRefString, bookingRefStringArray, bookingRefStringArrayNullable, bookingRefStringNullable, bookingStatusSchema, commonBookingFields, commonCurrencyFields, commonESIMFields, commonFinancialPropertiesFields, commonPackageFields, commonPackagePriceFields, commonPartnerFields, commonPricingStrategyFields, commonUserFields, communicationChannelSchema, communicationOptionsSchema, conversionRateSchema, convertToDate, countryAppSchema, countryRefString, countryRefStringArray, countryRefStringArrayNullable, countryRefStringNullable, createIdSchema, currencyAppSchema, currencyRefString, currencyRefStringArray, currencyRefStringArrayNullable, currencyRefStringNullable, esimAppSchema, esimRefString, esimRefStringArray, esimRefStringArrayNullable, esimRefStringNullable, financialPropertiesAppSchema, hubbyModelAppSchema, isDate, messageAppSchema, messageRefString, messageRefStringArray, messageRefStringArrayNullable, messageRefStringNullable, packageAppSchema, packagePriceAppSchema, packageRefString, packageRefStringArray, packageRefStringArrayNullable, packageRefStringNullable, packageSpecificationSchema, packageSpecificationsSchema, packageStrategySchema, partnerApiRequestSchema, partnerApiResponseSchema, partnerAppSchema, partnerPricingStrategyAppSchema, partnerRefString, partnerRefStringArray, partnerRefStringArrayNullable, partnerRefStringNullable, paymentAppSchema, paymentRefString, paymentRefStringArray, paymentRefStringArrayNullable, paymentRefStringNullable, platformSettingsSchema, priceListAppSchema, priceListRefString, priceListRefStringArray, priceListRefStringArrayNullable, priceListRefStringNullable, profileRefString, profileRefStringArray, profileRefStringArrayNullable, profileRefStringNullable, promoCodeApiResponseSchema, promoCodeAppSchema, promoCodeRefString, promoCodeRefStringArray, promoCodeRefStringArrayNullable, promoCodeRefStringNullable, registrationSchema, scheduleFilterSchema, scheduleSchema, sentMessagesAppSchema, testEnv, userAppSchema, userPricingStrategyAppSchema, userRefString, userRefStringArray, userRefStringArrayNullable, userRefStringNullable, visualIdentityBannerSchema, visualIdentityBannerStrategySchema, visualIdentitySchema };
+declare const SUPPORTED_LOCALES: readonly ["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"];
+type SupportedLocales = typeof SUPPORTED_LOCALES[number];
+declare const supportedLocalesSchema: z.ZodEnum<["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]>;
+type SupportedLocalesFromSchema = z.infer<typeof supportedLocalesSchema>;
+
+export { API_LOG_COLLECTION, Address, ApiKey, ApiKeys, ApiLogApp, BOOKING_COLLECTION, BankingDetails, BookingApiRequest, BookingApiResponse, BookingApp, BookingConfirmation, BookingDefaults, BookingStatus, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannel, CommunicationChannelType, CommunicationOptions, CountryApp, CoversionRate, CurrencyApp, ESIMApp, ESIM_COLLECTION, FinancialPropertiesApp, HApiLog, HBooking, HBookingConfirmation, HBookingDefaults, HCountry, HCurrency, HESIM, HFinancialProperties, HHubbyModel, HMessage, HPackage, HPackagePrice, HPackageStrategy, HPartner, HPayment, HPlatformSettings, HPriceList, HPromoCode, HSchedule, HScheduleFilter, HSentMessages, HUser, HVisualIdentity, HVisualIdentityBanner, HVisualIdentityBannerStrategy, HubbyModelApp, MESSAGE_COLLECTION, MessageApp, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, PackageApp, PackagePriceApp, PackageSpecification, PackageSpecifications, PackageStrategy, PartnerApiRequest, PartnerApiResponse, PartnerApp, PartnerPricingStrategyApp, PaymentApp, PlatformSettings, PriceListApp, PromoCodeApiResponse, PromoCodeApp, Registration, SUPPORTED_LOCALES, Schedule, ScheduleFilter, SentMessagesApp, SupportedLocales, SupportedLocalesFromSchema, USER_COLLECTION, UserApp, UserPricingStrategyApp, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerStrategy, addressSchema, apiKeySchema, apiKeysSchema, apiLogAppSchema, apiLogRefString, apiLogRefStringArray, apiLogRefStringArrayNullable, apiLogRefStringNullable, bankingDetailsSchema, baseModelAppSchema, bookingApiRequestSchema, bookingApiResponseSchema, bookingAppSchema, bookingConfirmationSchema, bookingDefaultsSchema, bookingRefString, bookingRefStringArray, bookingRefStringArrayNullable, bookingRefStringNullable, bookingStatusSchema, commonBookingFields, commonCurrencyFields, commonESIMFields, commonFinancialPropertiesFields, commonPackageFields, commonPackagePriceFields, commonPartnerFields, commonPricingStrategyFields, commonUserFields, communicationChannelSchema, communicationOptionsSchema, conversionRateSchema, convertToDate, countryAppSchema, countryRefString, countryRefStringArray, countryRefStringArrayNullable, countryRefStringNullable, createIdSchema, currencyAppSchema, currencyRefString, currencyRefStringArray, currencyRefStringArrayNullable, currencyRefStringNullable, esimAppSchema, esimRefString, esimRefStringArray, esimRefStringArrayNullable, esimRefStringNullable, financialPropertiesAppSchema, freeEsimSchema, hubbyModelAppSchema, isDate, messageAppSchema, messageRefString, messageRefStringArray, messageRefStringArrayNullable, messageRefStringNullable, packageAppSchema, packagePriceAppSchema, packageRefString, packageRefStringArray, packageRefStringArrayNullable, packageRefStringNullable, packageSpecificationSchema, packageSpecificationsSchema, packageStrategySchema, partnerApiRequestSchema, partnerApiResponseSchema, partnerAppSchema, partnerPricingStrategyAppSchema, partnerRefString, partnerRefStringArray, partnerRefStringArrayNullable, partnerRefStringNullable, paymentAppSchema, paymentRefString, paymentRefStringArray, paymentRefStringArrayNullable, paymentRefStringNullable, platformSettingsSchema, priceListAppSchema, priceListRefString, priceListRefStringArray, priceListRefStringArrayNullable, priceListRefStringNullable, profileRefString, profileRefStringArray, profileRefStringArrayNullable, profileRefStringNullable, promoCodeApiResponseSchema, promoCodeAppSchema, promoCodeRefString, promoCodeRefStringArray, promoCodeRefStringArrayNullable, promoCodeRefStringNullable, registrationSchema, scheduleFilterSchema, scheduleSchema, sentMessagesAppSchema, supportedLocalesSchema, testEnv, userAppSchema, userPricingStrategyAppSchema, userRefString, userRefStringArray, userRefStringArrayNullable, userRefStringNullable, visualIdentityBannerSchema, visualIdentityBannerStrategySchema, visualIdentitySchema };

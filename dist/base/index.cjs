@@ -33,6 +33,7 @@ __export(base_exports, {
   PRICE_LIST_COLLECTION: () => PRICE_LIST_COLLECTION,
   PROFILE_COLLECTION: () => PROFILE_COLLECTION,
   PROMO_CODE_COLLECTION: () => PROMO_CODE_COLLECTION,
+  SUPPORTED_LOCALES: () => SUPPORTED_LOCALES,
   USER_COLLECTION: () => USER_COLLECTION,
   addressSchema: () => addressSchema,
   apiKeySchema: () => apiKeySchema,
@@ -84,6 +85,7 @@ __export(base_exports, {
   esimRefStringArrayNullable: () => esimRefStringArrayNullable,
   esimRefStringNullable: () => esimRefStringNullable,
   financialPropertiesAppSchema: () => financialPropertiesAppSchema,
+  freeEsimSchema: () => freeEsimSchema,
   hubbyModelAppSchema: () => hubbyModelAppSchema,
   isDate: () => isDate,
   messageAppSchema: () => messageAppSchema,
@@ -133,6 +135,7 @@ __export(base_exports, {
   scheduleFilterSchema: () => scheduleFilterSchema,
   scheduleSchema: () => scheduleSchema,
   sentMessagesAppSchema: () => sentMessagesAppSchema,
+  supportedLocalesSchema: () => supportedLocalesSchema,
   testEnv: () => testEnv,
   userAppSchema: () => userAppSchema,
   userPricingStrategyAppSchema: () => userPricingStrategyAppSchema,
@@ -464,8 +467,14 @@ var scheduleSchema = import_zod6.z.object({
   days: import_zod6.z.number(),
   email: import_zod6.z.object({
     brevo_template_id: import_zod6.z.number(),
-    subject: import_zod6.z.record(import_zod6.z.string()).optional(),
-    preview_text: import_zod6.z.record(import_zod6.z.string()).optional()
+    subject: import_zod6.z.record(import_zod6.z.string()).refine(
+      (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
+      { message: "Keys must be supported locales" }
+    ).optional(),
+    preview_text: import_zod6.z.record(import_zod6.z.string()).refine(
+      (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
+      { message: "Keys must be supported locales" }
+    ).optional()
   }).nullable().optional(),
   push: import_zod6.z.object({
     title: import_zod6.z.record(import_zod6.z.string()).optional(),
@@ -478,31 +487,20 @@ var scheduleSchema = import_zod6.z.object({
   moment: import_zod6.z.enum(["departure", "return", "immediate"]),
   filter: scheduleFilterSchema.nullable().optional()
 });
+var freeEsimSchema = import_zod6.z.object({
+  package_specification: import_zod6.z.object({
+    size: import_zod6.z.string(),
+    type: import_zod6.z.string(),
+    destination: import_zod6.z.string()
+  }),
+  allowance: import_zod6.z.number()
+});
 var platformSettingsSchema = import_zod6.z.object({
   package_strategy: packageStrategySchema.nullable().optional(),
-  free_esim: import_zod6.z.object({
-    packackage_specification: import_zod6.z.object({
-      size: import_zod6.z.string(),
-      type: import_zod6.z.string(),
-      destination: import_zod6.z.string()
-    }),
-    allowance: import_zod6.z.number()
-  }).nullable().optional(),
+  free_esim: freeEsimSchema.nullable().optional(),
   booking_defaults: bookingDefaultsSchema.nullable().optional(),
   booking_confirmation: bookingConfirmationSchema.nullable().optional(),
-  schedules: import_zod6.z.array(scheduleSchema).optional(),
-  ios_app_id: import_zod6.z.string().optional(),
-  android_package_id: import_zod6.z.string().optional(),
-  faq: import_zod6.z.object({
-    title: import_zod6.z.record(import_zod6.z.string()),
-    content: import_zod6.z.record(import_zod6.z.string()).optional(),
-    link: import_zod6.z.record(import_zod6.z.string())
-  }).array().optional(),
-  ios_config: import_zod6.z.string().optional(),
-  terms_of_service: import_zod6.z.record(import_zod6.z.string()).optional(),
-  privacy_policy: import_zod6.z.record(import_zod6.z.string()).optional(),
-  enabled_locales: import_zod6.z.array(supportedLocalesSchema).optional(),
-  custom_texts: import_zod6.z.record(import_zod6.z.record(import_zod6.z.string())).optional()
+  schedules: import_zod6.z.array(scheduleSchema).optional()
 }).nullable();
 var commonContactFields = {
   email: import_zod6.z.string().nullable(),
@@ -910,6 +908,7 @@ var isDate = (value) => {
   PRICE_LIST_COLLECTION,
   PROFILE_COLLECTION,
   PROMO_CODE_COLLECTION,
+  SUPPORTED_LOCALES,
   USER_COLLECTION,
   addressSchema,
   apiKeySchema,
@@ -961,6 +960,7 @@ var isDate = (value) => {
   esimRefStringArrayNullable,
   esimRefStringNullable,
   financialPropertiesAppSchema,
+  freeEsimSchema,
   hubbyModelAppSchema,
   isDate,
   messageAppSchema,
@@ -1010,6 +1010,7 @@ var isDate = (value) => {
   scheduleFilterSchema,
   scheduleSchema,
   sentMessagesAppSchema,
+  supportedLocalesSchema,
   testEnv,
   userAppSchema,
   userPricingStrategyAppSchema,

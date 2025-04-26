@@ -676,8 +676,14 @@ var scheduleSchema = z9.object({
   days: z9.number(),
   email: z9.object({
     brevo_template_id: z9.number(),
-    subject: z9.record(z9.string()).optional(),
-    preview_text: z9.record(z9.string()).optional()
+    subject: z9.record(z9.string()).refine(
+      (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
+      { message: "Keys must be supported locales" }
+    ).optional(),
+    preview_text: z9.record(z9.string()).refine(
+      (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
+      { message: "Keys must be supported locales" }
+    ).optional()
   }).nullable().optional(),
   push: z9.object({
     title: z9.record(z9.string()).optional(),
@@ -690,31 +696,20 @@ var scheduleSchema = z9.object({
   moment: z9.enum(["departure", "return", "immediate"]),
   filter: scheduleFilterSchema.nullable().optional()
 });
+var freeEsimSchema = z9.object({
+  package_specification: z9.object({
+    size: z9.string(),
+    type: z9.string(),
+    destination: z9.string()
+  }),
+  allowance: z9.number()
+});
 var platformSettingsSchema = z9.object({
   package_strategy: packageStrategySchema.nullable().optional(),
-  free_esim: z9.object({
-    packackage_specification: z9.object({
-      size: z9.string(),
-      type: z9.string(),
-      destination: z9.string()
-    }),
-    allowance: z9.number()
-  }).nullable().optional(),
+  free_esim: freeEsimSchema.nullable().optional(),
   booking_defaults: bookingDefaultsSchema.nullable().optional(),
   booking_confirmation: bookingConfirmationSchema.nullable().optional(),
-  schedules: z9.array(scheduleSchema).optional(),
-  ios_app_id: z9.string().optional(),
-  android_package_id: z9.string().optional(),
-  faq: z9.object({
-    title: z9.record(z9.string()),
-    content: z9.record(z9.string()).optional(),
-    link: z9.record(z9.string())
-  }).array().optional(),
-  ios_config: z9.string().optional(),
-  terms_of_service: z9.record(z9.string()).optional(),
-  privacy_policy: z9.record(z9.string()).optional(),
-  enabled_locales: z9.array(supportedLocalesSchema).optional(),
-  custom_texts: z9.record(z9.record(z9.string())).optional()
+  schedules: z9.array(scheduleSchema).optional()
 }).nullable();
 var commonContactFields = {
   email: z9.string().nullable(),
@@ -1671,6 +1666,7 @@ export {
   fieldValueSchema,
   financialPropertiesAppSchema,
   financialPropertiesFirestoreSchema,
+  freeEsimSchema,
   fromFirestore,
   genericFromFirestore,
   genericToFirestore,

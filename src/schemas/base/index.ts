@@ -20,4 +20,6 @@ export * from './message';
 export * from './currency';
 export * from './apiLogs';
 export * from './api';
-export * from './utils'; 
+export * from './utils';
+
+export * from '../../constants'

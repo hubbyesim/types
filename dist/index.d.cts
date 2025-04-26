@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { Timestamp, DocumentReference, FieldValue } from 'firebase-admin/firestore';
 import { UserApp, BookingApp, financialPropertiesAppSchema, PartnerApp, PriceListApp, CountryApp, PackageApp, PromoCodeApp, ESIMApp, PaymentApp, MessageApp, SentMessagesApp, CurrencyApp, ApiLogApp } from './base/index.cjs';
-export { API_LOG_COLLECTION, Address, BOOKING_COLLECTION, BankingDetails, BookingApiRequest, BookingApiResponse, BookingConfirmation, BookingDefaults, BookingStatus, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannel, CommunicationChannelType, CommunicationOptions, CoversionRate, ESIM_COLLECTION, FinancialPropertiesApp, HApiLog, HBooking, HBookingConfirmation, HBookingDefaults, HCountry, HCurrency, HESIM, HFinancialProperties, HPackage, HPackagePrice, HPackageStrategy, HPartner, HPayment, HPlatformSettings, HPriceList, HPromoCode, HSchedule, HScheduleFilter, HVisualIdentity, HVisualIdentityBanner, HVisualIdentityBannerStrategy, MESSAGE_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, PackagePriceApp, PackageSpecification, PackageSpecifications, PackageStrategy, PartnerApiRequest, PartnerApiResponse, PartnerPricingStrategyApp, PlatformSettings, PromoCodeApiResponse, Registration, Schedule, ScheduleFilter, USER_COLLECTION, UserPricingStrategyApp, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerStrategy, addressSchema, apiLogAppSchema, apiLogRefString, apiLogRefStringArray, apiLogRefStringArrayNullable, apiLogRefStringNullable, bankingDetailsSchema, baseModelAppSchema, bookingApiRequestSchema, bookingApiResponseSchema, bookingAppSchema, bookingConfirmationSchema, bookingDefaultsSchema, bookingRefString, bookingRefStringArray, bookingRefStringArrayNullable, bookingRefStringNullable, bookingStatusSchema, commonBookingFields, commonCurrencyFields, commonESIMFields, commonFinancialPropertiesFields, commonPackageFields, commonPackagePriceFields, commonPartnerFields, commonPricingStrategyFields, communicationChannelSchema, communicationOptionsSchema, conversionRateSchema, convertToDate, countryAppSchema, countryRefString, countryRefStringArray, countryRefStringArrayNullable, countryRefStringNullable, currencyAppSchema, currencyRefString, currencyRefStringArray, currencyRefStringArrayNullable, currencyRefStringNullable, esimAppSchema, esimRefString, esimRefStringArray, esimRefStringArrayNullable, esimRefStringNullable, isDate, messageAppSchema, messageRefString, messageRefStringArray, messageRefStringArrayNullable, messageRefStringNullable, packageAppSchema, packagePriceAppSchema, packageRefString, packageRefStringArray, packageRefStringArrayNullable, packageRefStringNullable, packageSpecificationSchema, packageSpecificationsSchema, packageStrategySchema, partnerApiRequestSchema, partnerApiResponseSchema, partnerAppSchema, partnerPricingStrategyAppSchema, partnerRefString, partnerRefStringArray, partnerRefStringArrayNullable, partnerRefStringNullable, paymentAppSchema, paymentRefString, paymentRefStringArray, paymentRefStringArrayNullable, paymentRefStringNullable, platformSettingsSchema, priceListAppSchema, priceListRefString, priceListRefStringArray, priceListRefStringArrayNullable, priceListRefStringNullable, profileRefString, profileRefStringArray, profileRefStringArrayNullable, profileRefStringNullable, promoCodeApiResponseSchema, promoCodeAppSchema, promoCodeRefString, promoCodeRefStringArray, promoCodeRefStringArrayNullable, promoCodeRefStringNullable, registrationSchema, scheduleFilterSchema, scheduleSchema, userPricingStrategyAppSchema, userRefString, userRefStringArray, userRefStringArrayNullable, userRefStringNullable, visualIdentityBannerSchema, visualIdentityBannerStrategySchema, visualIdentitySchema } from './base/index.cjs';
+export { API_LOG_COLLECTION, Address, BOOKING_COLLECTION, BankingDetails, BookingApiRequest, BookingApiResponse, BookingConfirmation, BookingDefaults, BookingStatus, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannel, CommunicationChannelType, CommunicationOptions, CoversionRate, ESIM_COLLECTION, FinancialPropertiesApp, HApiLog, HBooking, HBookingConfirmation, HBookingDefaults, HCountry, HCurrency, HESIM, HFinancialProperties, HPackage, HPackagePrice, HPackageStrategy, HPartner, HPayment, HPlatformSettings, HPriceList, HPromoCode, HSchedule, HScheduleFilter, HVisualIdentity, HVisualIdentityBanner, HVisualIdentityBannerStrategy, MESSAGE_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, PackagePriceApp, PackageSpecification, PackageSpecifications, PackageStrategy, PartnerApiRequest, PartnerApiResponse, PartnerPricingStrategyApp, PlatformSettings, PromoCodeApiResponse, Registration, SUPPORTED_LOCALES, Schedule, ScheduleFilter, SupportedLocales, SupportedLocalesFromSchema, USER_COLLECTION, UserPricingStrategyApp, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerStrategy, addressSchema, apiLogAppSchema, apiLogRefString, apiLogRefStringArray, apiLogRefStringArrayNullable, apiLogRefStringNullable, bankingDetailsSchema, baseModelAppSchema, bookingApiRequestSchema, bookingApiResponseSchema, bookingAppSchema, bookingConfirmationSchema, bookingDefaultsSchema, bookingRefString, bookingRefStringArray, bookingRefStringArrayNullable, bookingRefStringNullable, bookingStatusSchema, commonBookingFields, commonCurrencyFields, commonESIMFields, commonFinancialPropertiesFields, commonPackageFields, commonPackagePriceFields, commonPartnerFields, commonPricingStrategyFields, communicationChannelSchema, communicationOptionsSchema, conversionRateSchema, convertToDate, countryAppSchema, countryRefString, countryRefStringArray, countryRefStringArrayNullable, countryRefStringNullable, currencyAppSchema, currencyRefString, currencyRefStringArray, currencyRefStringArrayNullable, currencyRefStringNullable, esimAppSchema, esimRefString, esimRefStringArray, esimRefStringArrayNullable, esimRefStringNullable, freeEsimSchema, isDate, messageAppSchema, messageRefString, messageRefStringArray, messageRefStringArrayNullable, messageRefStringNullable, packageAppSchema, packagePriceAppSchema, packageRefString, packageRefStringArray, packageRefStringArrayNullable, packageRefStringNullable, packageSpecificationSchema, packageSpecificationsSchema, packageStrategySchema, partnerApiRequestSchema, partnerApiResponseSchema, partnerAppSchema, partnerPricingStrategyAppSchema, partnerRefString, partnerRefStringArray, partnerRefStringArrayNullable, partnerRefStringNullable, paymentAppSchema, paymentRefString, paymentRefStringArray, paymentRefStringArrayNullable, paymentRefStringNullable, platformSettingsSchema, priceListAppSchema, priceListRefString, priceListRefStringArray, priceListRefStringArrayNullable, priceListRefStringNullable, profileRefString, profileRefStringArray, profileRefStringArrayNullable, profileRefStringNullable, promoCodeApiResponseSchema, promoCodeAppSchema, promoCodeRefString, promoCodeRefStringArray, promoCodeRefStringArrayNullable, promoCodeRefStringNullable, registrationSchema, scheduleFilterSchema, scheduleSchema, supportedLocalesSchema, userPricingStrategyAppSchema, userRefString, userRefStringArray, userRefStringArrayNullable, userRefStringNullable, visualIdentityBannerSchema, visualIdentityBannerStrategySchema, visualIdentitySchema } from './base/index.cjs';
 
 declare class MockDocumentReference {
     path: string;
@@ -1065,7 +1065,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             iso3_white_list?: string[] | undefined;
         }>>>;
         free_esim: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-            packackage_specification: z.ZodObject<{
+            package_specification: z.ZodObject<{
                 size: z.ZodString;
                 type: z.ZodString;
                 destination: z.ZodString;
@@ -1080,14 +1080,14 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             }>;
             allowance: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
-            packackage_specification: {
+            package_specification: {
                 type: string;
                 destination: string;
                 size: string;
             };
             allowance: number;
         }, {
-            packackage_specification: {
+            package_specification: {
                 type: string;
                 destination: string;
                 size: string;
@@ -1115,8 +1115,8 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             days: z.ZodNumber;
             email: z.ZodOptional<z.ZodNullable<z.ZodObject<{
                 brevo_template_id: z.ZodNumber;
-                subject: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
-                preview_text: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+                subject: z.ZodOptional<z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodString>, Record<string, string>, Record<string, string>>>;
+                preview_text: z.ZodOptional<z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodString>, Record<string, string>, Record<string, string>>>;
             }, "strip", z.ZodTypeAny, {
                 brevo_template_id: number;
                 subject?: Record<string, string> | undefined;
@@ -1199,26 +1199,6 @@ declare const partnerFirestoreSchema: z.ZodObject<{
                 preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }>, "many">>;
-        ios_app_id: z.ZodOptional<z.ZodString>;
-        android_package_id: z.ZodOptional<z.ZodString>;
-        faq: z.ZodOptional<z.ZodArray<z.ZodObject<{
-            title: z.ZodRecord<z.ZodString, z.ZodString>;
-            content: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
-            link: z.ZodRecord<z.ZodString, z.ZodString>;
-        }, "strip", z.ZodTypeAny, {
-            link: Record<string, string>;
-            title: Record<string, string>;
-            content?: Record<string, string> | undefined;
-        }, {
-            link: Record<string, string>;
-            title: Record<string, string>;
-            content?: Record<string, string> | undefined;
-        }>, "many">>;
-        ios_config: z.ZodOptional<z.ZodString>;
-        terms_of_service: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
-        privacy_policy: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
-        enabled_locales: z.ZodOptional<z.ZodArray<z.ZodEnum<["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]>, "many">>;
-        custom_texts: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodString>>>;
     }, "strip", z.ZodTypeAny, {
         package_strategy?: {
             name: string;
@@ -1226,7 +1206,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             iso3_white_list?: string[] | undefined;
         } | null | undefined;
         free_esim?: {
-            packackage_specification: {
+            package_specification: {
                 type: string;
                 destination: string;
                 size: string;
@@ -1262,18 +1242,6 @@ declare const partnerFirestoreSchema: z.ZodObject<{
                 preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }[] | undefined;
-        ios_app_id?: string | undefined;
-        android_package_id?: string | undefined;
-        faq?: {
-            link: Record<string, string>;
-            title: Record<string, string>;
-            content?: Record<string, string> | undefined;
-        }[] | undefined;
-        ios_config?: string | undefined;
-        terms_of_service?: Record<string, string> | undefined;
-        privacy_policy?: Record<string, string> | undefined;
-        enabled_locales?: ("en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE")[] | undefined;
-        custom_texts?: Record<string, Record<string, string>> | undefined;
     }, {
         package_strategy?: {
             name: string;
@@ -1281,7 +1249,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             iso3_white_list?: string[] | undefined;
         } | null | undefined;
         free_esim?: {
-            packackage_specification: {
+            package_specification: {
                 type: string;
                 destination: string;
                 size: string;
@@ -1317,18 +1285,6 @@ declare const partnerFirestoreSchema: z.ZodObject<{
                 preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }[] | undefined;
-        ios_app_id?: string | undefined;
-        android_package_id?: string | undefined;
-        faq?: {
-            link: Record<string, string>;
-            title: Record<string, string>;
-            content?: Record<string, string> | undefined;
-        }[] | undefined;
-        ios_config?: string | undefined;
-        terms_of_service?: Record<string, string> | undefined;
-        privacy_policy?: Record<string, string> | undefined;
-        enabled_locales?: ("en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE")[] | undefined;
-        custom_texts?: Record<string, Record<string, string>> | undefined;
     }>>;
     name: z.ZodNullable<z.ZodString>;
     type: z.ZodNullable<z.ZodString>;
@@ -1586,7 +1542,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             iso3_white_list?: string[] | undefined;
         } | null | undefined;
         free_esim?: {
-            packackage_specification: {
+            package_specification: {
                 type: string;
                 destination: string;
                 size: string;
@@ -1622,18 +1578,6 @@ declare const partnerFirestoreSchema: z.ZodObject<{
                 preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }[] | undefined;
-        ios_app_id?: string | undefined;
-        android_package_id?: string | undefined;
-        faq?: {
-            link: Record<string, string>;
-            title: Record<string, string>;
-            content?: Record<string, string> | undefined;
-        }[] | undefined;
-        ios_config?: string | undefined;
-        terms_of_service?: Record<string, string> | undefined;
-        privacy_policy?: Record<string, string> | undefined;
-        enabled_locales?: ("en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE")[] | undefined;
-        custom_texts?: Record<string, Record<string, string>> | undefined;
     } | null;
     contact: {
         email: string | null;
@@ -1739,7 +1683,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             iso3_white_list?: string[] | undefined;
         } | null | undefined;
         free_esim?: {
-            packackage_specification: {
+            package_specification: {
                 type: string;
                 destination: string;
                 size: string;
@@ -1775,18 +1719,6 @@ declare const partnerFirestoreSchema: z.ZodObject<{
                 preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }[] | undefined;
-        ios_app_id?: string | undefined;
-        android_package_id?: string | undefined;
-        faq?: {
-            link: Record<string, string>;
-            title: Record<string, string>;
-            content?: Record<string, string> | undefined;
-        }[] | undefined;
-        ios_config?: string | undefined;
-        terms_of_service?: Record<string, string> | undefined;
-        privacy_policy?: Record<string, string> | undefined;
-        enabled_locales?: ("en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE")[] | undefined;
-        custom_texts?: Record<string, Record<string, string>> | undefined;
     } | null;
     contact: {
         email: string | null;
@@ -2543,9 +2475,4 @@ declare function genericFromFirestore<FirestoreType extends Record<string, any>,
     specialCaseHandler?: (result: Record<string, any>, firestoreData: FirestoreType) => void;
 }): AppType;
 
-declare const SUPPORTED_LOCALES: readonly ["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"];
-type SupportedLocales = typeof SUPPORTED_LOCALES[number];
-declare const supportedLocalesSchema: z.ZodEnum<["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]>;
-type SupportedLocalesFromSchema = z.infer<typeof supportedLocalesSchema>;
-
-export { ApiKey, ApiKeys, ApiLog, ApiLogApp, ApiLogFirestore, Booking, BookingApp, BookingFirestore, Country, CountryApp, CountryFirestore, Currency, CurrencyApp, CurrencyFirestore, ESIM, ESIMApp, ESIMFirestore, FinancialProperties, FinancialPropertiesFirestore, GenericDateFieldMapping, GenericRefFieldMapping, HHubbyModel, HubbyModel, HubbyModelApp, HubbyModelFirestore, Message, MessageApp, MessageFirestore, MockDocumentReference, Package, PackageApp, PackageFirestore, PackagePrice, PackagePriceFirestore, Partner, PartnerApp, PartnerFirestore, PartnerPricingStrategyFirestore, Payment, PaymentApp, PaymentFirestore, PriceList, PriceListApp, PriceListFirestore, PromoCode, PromoCodeApp, PromoCodeFirestore, SUPPORTED_LOCALES, SentMessages, SentMessagesApp, SentMessagesFirestore, SupportedLocales, SupportedLocalesFromSchema, User, UserApp, UserFirestore, UserPricingStrategyFirestore, apiKeySchema, apiKeysSchema, apiLogFirestoreSchema, apiLogFromFirestore, apiLogRefArray, apiLogRefArrayNullable, apiLogRefNullable, apiLogRefSchema, apiLogToFirestore, baseModelSchema, bookingFirestoreSchema, bookingFromFirestore, bookingRefArray, bookingRefArrayNullable, bookingRefNullable, bookingRefSchema, bookingToFirestore, convertSentMessagesFromFirestore, convertSentMessagesToFirestore, countryFirestoreSchema, countryFromFirestore, countryRefArray, countryRefArrayNullable, countryRefNullable, countryRefSchema, countryToFirestore, createDocRefSchema, currencyFirestoreSchema, currencyFromFirestore, currencyRefArray, currencyRefArrayNullable, currencyRefNullable, currencyRefSchema, currencyToFirestore, docRefToStringSchema, documentRefSchema, esimFirestoreSchema, esimFromFirestore, esimRefArray, esimRefArrayNullable, esimRefNullable, esimRefSchema, esimToFirestore, fieldValueSchema, financialPropertiesAppSchema, financialPropertiesFirestoreSchema, fromFirestore, genericFromFirestore, genericToFirestore, hubbyModelAppSchema, hubbyModelFirestoreSchema, messageFirestoreSchema, messageFromFirestore, messageRefArray, messageRefArrayNullable, messageRefNullable, messageRefSchema, messageToFirestore, packageFirestoreSchema, packageFromFirestore, packagePriceFirestoreSchema, packageRefArray, packageRefArrayNullable, packageRefNullable, packageRefSchema, packageToFirestore, partnerFirestoreSchema, partnerFromFirestore, partnerPricingStrategyFirestoreSchema, partnerRefArray, partnerRefArrayNullable, partnerRefNullable, partnerRefSchema, partnerToFirestore, paymentFirestoreSchema, paymentFromFirestore, paymentRefArray, paymentRefArrayNullable, paymentRefNullable, paymentRefSchema, paymentToFirestore, priceListFirestoreSchema, priceListFromFirestore, priceListRefArray, priceListRefArrayNullable, priceListRefNullable, priceListRefSchema, priceListToFirestore, profileRefArray, profileRefArrayNullable, profileRefNullable, profileRefSchema, promoCodeFirestoreSchema, promoCodeFromFirestore, promoCodeRefArray, promoCodeRefArrayNullable, promoCodeRefNullable, promoCodeRefSchema, promoCodeToFirestore, sentMessagesFirestoreSchema, sentMessagesFromFirestore, sentMessagesToFirestore, supportedLocalesSchema, timestampSchema, toFirestore, userFirestoreSchema, userFromFirestore, userPricingStrategyFirestoreSchema, userRefArray, userRefArrayNullable, userRefNullable, userRefSchema, userToFirestore, userToFirestoreWithBalance };
+export { ApiKey, ApiKeys, ApiLog, ApiLogApp, ApiLogFirestore, Booking, BookingApp, BookingFirestore, Country, CountryApp, CountryFirestore, Currency, CurrencyApp, CurrencyFirestore, ESIM, ESIMApp, ESIMFirestore, FinancialProperties, FinancialPropertiesFirestore, GenericDateFieldMapping, GenericRefFieldMapping, HHubbyModel, HubbyModel, HubbyModelApp, HubbyModelFirestore, Message, MessageApp, MessageFirestore, MockDocumentReference, Package, PackageApp, PackageFirestore, PackagePrice, PackagePriceFirestore, Partner, PartnerApp, PartnerFirestore, PartnerPricingStrategyFirestore, Payment, PaymentApp, PaymentFirestore, PriceList, PriceListApp, PriceListFirestore, PromoCode, PromoCodeApp, PromoCodeFirestore, SentMessages, SentMessagesApp, SentMessagesFirestore, User, UserApp, UserFirestore, UserPricingStrategyFirestore, apiKeySchema, apiKeysSchema, apiLogFirestoreSchema, apiLogFromFirestore, apiLogRefArray, apiLogRefArrayNullable, apiLogRefNullable, apiLogRefSchema, apiLogToFirestore, baseModelSchema, bookingFirestoreSchema, bookingFromFirestore, bookingRefArray, bookingRefArrayNullable, bookingRefNullable, bookingRefSchema, bookingToFirestore, convertSentMessagesFromFirestore, convertSentMessagesToFirestore, countryFirestoreSchema, countryFromFirestore, countryRefArray, countryRefArrayNullable, countryRefNullable, countryRefSchema, countryToFirestore, createDocRefSchema, currencyFirestoreSchema, currencyFromFirestore, currencyRefArray, currencyRefArrayNullable, currencyRefNullable, currencyRefSchema, currencyToFirestore, docRefToStringSchema, documentRefSchema, esimFirestoreSchema, esimFromFirestore, esimRefArray, esimRefArrayNullable, esimRefNullable, esimRefSchema, esimToFirestore, fieldValueSchema, financialPropertiesAppSchema, financialPropertiesFirestoreSchema, fromFirestore, genericFromFirestore, genericToFirestore, hubbyModelAppSchema, hubbyModelFirestoreSchema, messageFirestoreSchema, messageFromFirestore, messageRefArray, messageRefArrayNullable, messageRefNullable, messageRefSchema, messageToFirestore, packageFirestoreSchema, packageFromFirestore, packagePriceFirestoreSchema, packageRefArray, packageRefArrayNullable, packageRefNullable, packageRefSchema, packageToFirestore, partnerFirestoreSchema, partnerFromFirestore, partnerPricingStrategyFirestoreSchema, partnerRefArray, partnerRefArrayNullable, partnerRefNullable, partnerRefSchema, partnerToFirestore, paymentFirestoreSchema, paymentFromFirestore, paymentRefArray, paymentRefArrayNullable, paymentRefNullable, paymentRefSchema, paymentToFirestore, priceListFirestoreSchema, priceListFromFirestore, priceListRefArray, priceListRefArrayNullable, priceListRefNullable, priceListRefSchema, priceListToFirestore, profileRefArray, profileRefArrayNullable, profileRefNullable, profileRefSchema, promoCodeFirestoreSchema, promoCodeFromFirestore, promoCodeRefArray, promoCodeRefArrayNullable, promoCodeRefNullable, promoCodeRefSchema, promoCodeToFirestore, sentMessagesFirestoreSchema, sentMessagesFromFirestore, sentMessagesToFirestore, timestampSchema, toFirestore, userFirestoreSchema, userFromFirestore, userPricingStrategyFirestoreSchema, userRefArray, userRefArrayNullable, userRefNullable, userRefSchema, userToFirestore, userToFirestoreWithBalance };

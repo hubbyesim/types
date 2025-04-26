@@ -2,13 +2,14 @@ import { z } from 'zod';
 import {
     baseModelAppSchema
 } from './helpers';
-import { SUPPORTED_LOCALES, supportedLocalesSchema } from '../../constants';
+import { SUPPORTED_LOCALES, SupportedLocales, supportedLocalesSchema } from '../../constants';
 import {
     packageRefString,
     partnerRefStringNullable,
     userRefStringArrayNullable,
     priceListRefStringNullable
 } from './refs';
+
 
 // Helper schemas for nested structures
 export const addressSchema = z.object({
@@ -135,8 +136,14 @@ export const scheduleSchema = z.object({
     days: z.number(),
     email: z.object({
         brevo_template_id: z.number(),
-        subject: z.record(z.string()).optional(),
-        preview_text: z.record(z.string()).optional()
+        subject: z.record(z.string()).refine(
+            (val: Record<string, string>) => Object.keys(val).every(key => SUPPORTED_LOCALES.includes(key as SupportedLocales)),
+            { message: "Keys must be supported locales" }
+        ).optional(),
+        preview_text: z.record(z.string()).refine(
+            (val: Record<string, string>) => Object.keys(val).every(key => SUPPORTED_LOCALES.includes(key as SupportedLocales)),
+            { message: "Keys must be supported locales" }
+        ).optional()
     }).nullable().optional(),
     push: z.object({
         title: z.record(z.string()).optional(),
@@ -150,31 +157,21 @@ export const scheduleSchema = z.object({
     filter: scheduleFilterSchema.nullable().optional()
 });
 
+export const freeEsimSchema = z.object({
+    package_specification: z.object({
+        size: z.string(),
+        type: z.string(),
+        destination: z.string()
+    }),
+    allowance: z.number()
+});
+
 export const platformSettingsSchema = z.object({
     package_strategy: packageStrategySchema.nullable().optional(),
-    free_esim: z.object({
-        package_specification: z.object({
-            size: z.string(),
-            type: z.string(),
-            destination: z.string()
-        }),
-        allowance: z.number()
-    }).nullable().optional(),
+    free_esim: freeEsimSchema.nullable().optional(),
     booking_defaults: bookingDefaultsSchema.nullable().optional(),
     booking_confirmation: bookingConfirmationSchema.nullable().optional(),
     schedules: z.array(scheduleSchema).optional(),
-    ios_app_id: z.string().optional(),
-    android_package_id: z.string().optional(),
-    faq: z.object({
-        title: z.record(z.string()),
-        content: z.record(z.string()).optional(),
-        link: z.record(z.string())
-    }).array().optional(),
-    ios_config: z.string().optional(),
-    terms_of_service: z.record(z.string()).optional(),
-    privacy_policy: z.record(z.string()).optional(),
-    enabled_locales: z.array(supportedLocalesSchema).optional(),
-    custom_texts: z.record(z.record(z.string())).optional()
 }).nullable();
 
 // Common contact information fields

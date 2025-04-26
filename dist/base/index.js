@@ -316,8 +316,14 @@ var scheduleSchema = z6.object({
   days: z6.number(),
   email: z6.object({
     brevo_template_id: z6.number(),
-    subject: z6.record(z6.string()).optional(),
-    preview_text: z6.record(z6.string()).optional()
+    subject: z6.record(z6.string()).refine(
+      (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
+      { message: "Keys must be supported locales" }
+    ).optional(),
+    preview_text: z6.record(z6.string()).refine(
+      (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
+      { message: "Keys must be supported locales" }
+    ).optional()
   }).nullable().optional(),
   push: z6.object({
     title: z6.record(z6.string()).optional(),
@@ -330,31 +336,20 @@ var scheduleSchema = z6.object({
   moment: z6.enum(["departure", "return", "immediate"]),
   filter: scheduleFilterSchema.nullable().optional()
 });
+var freeEsimSchema = z6.object({
+  package_specification: z6.object({
+    size: z6.string(),
+    type: z6.string(),
+    destination: z6.string()
+  }),
+  allowance: z6.number()
+});
 var platformSettingsSchema = z6.object({
   package_strategy: packageStrategySchema.nullable().optional(),
-  free_esim: z6.object({
-    packackage_specification: z6.object({
-      size: z6.string(),
-      type: z6.string(),
-      destination: z6.string()
-    }),
-    allowance: z6.number()
-  }).nullable().optional(),
+  free_esim: freeEsimSchema.nullable().optional(),
   booking_defaults: bookingDefaultsSchema.nullable().optional(),
   booking_confirmation: bookingConfirmationSchema.nullable().optional(),
-  schedules: z6.array(scheduleSchema).optional(),
-  ios_app_id: z6.string().optional(),
-  android_package_id: z6.string().optional(),
-  faq: z6.object({
-    title: z6.record(z6.string()),
-    content: z6.record(z6.string()).optional(),
-    link: z6.record(z6.string())
-  }).array().optional(),
-  ios_config: z6.string().optional(),
-  terms_of_service: z6.record(z6.string()).optional(),
-  privacy_policy: z6.record(z6.string()).optional(),
-  enabled_locales: z6.array(supportedLocalesSchema).optional(),
-  custom_texts: z6.record(z6.record(z6.string())).optional()
+  schedules: z6.array(scheduleSchema).optional()
 }).nullable();
 var commonContactFields = {
   email: z6.string().nullable(),
@@ -761,6 +756,7 @@ export {
   PRICE_LIST_COLLECTION,
   PROFILE_COLLECTION,
   PROMO_CODE_COLLECTION,
+  SUPPORTED_LOCALES,
   USER_COLLECTION,
   addressSchema,
   apiKeySchema,
@@ -812,6 +808,7 @@ export {
   esimRefStringArrayNullable,
   esimRefStringNullable,
   financialPropertiesAppSchema,
+  freeEsimSchema,
   hubbyModelAppSchema,
   isDate,
   messageAppSchema,
@@ -861,6 +858,7 @@ export {
   scheduleFilterSchema,
   scheduleSchema,
   sentMessagesAppSchema,
+  supportedLocalesSchema,
   testEnv,
   userAppSchema,
   userPricingStrategyAppSchema,
