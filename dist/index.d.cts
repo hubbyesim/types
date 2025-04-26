@@ -1783,6 +1783,7 @@ declare const priceListFirestoreSchema: z.ZodObject<{
 } & {
     name: z.ZodString;
     description: z.ZodNullable<z.ZodString>;
+    type: z.ZodEnum<["partner", "consumer"]>;
     partner: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
     package_prices: z.ZodArray<z.ZodObject<{
         package: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
@@ -1805,6 +1806,7 @@ declare const priceListFirestoreSchema: z.ZodObject<{
     }>, "many">;
 }, "strip", z.ZodTypeAny, {
     id: string;
+    type: "partner" | "consumer";
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
@@ -1821,6 +1823,7 @@ declare const priceListFirestoreSchema: z.ZodObject<{
     }[];
 }, {
     id: string;
+    type: "partner" | "consumer";
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;

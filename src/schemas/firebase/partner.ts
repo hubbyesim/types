@@ -123,6 +123,7 @@ export const partnerFirestoreSchema = baseModelSchema.extend({
 export const priceListFirestoreSchema = baseModelSchema.extend({
     name: z.string(),
     description: z.string().nullable(),
+    type: z.enum(['partner', 'consumer']),
     partner: partnerRefNullable,
     package_prices: z.array(packagePriceFirestoreSchema)
 });

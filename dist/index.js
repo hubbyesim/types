@@ -810,6 +810,7 @@ var partnerFirestoreSchema = baseModelSchema.extend({
 var priceListFirestoreSchema = baseModelSchema.extend({
   name: z10.string(),
   description: z10.string().nullable(),
+  type: z10.enum(["partner", "consumer"]),
   partner: partnerRefNullable,
   package_prices: z10.array(packagePriceFirestoreSchema)
 });
