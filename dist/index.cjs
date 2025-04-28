@@ -1660,7 +1660,7 @@ var paymentFromFirestore = (firestorePayment) => {
 
 // src/schemas/firebase/message.ts
 var import_zod21 = require("zod");
-var import_firestore3 = require("firebase/firestore");
+var import_firestore3 = require("firebase-admin/firestore");
 
 // src/schemas/base/message.ts
 var import_zod20 = require("zod");

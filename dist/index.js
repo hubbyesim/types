@@ -1392,7 +1392,7 @@ var paymentFromFirestore = (firestorePayment) => {
 
 // src/schemas/firebase/message.ts
 import { z as z21 } from "zod";
-import { Timestamp as Timestamp3 } from "firebase/firestore";
+import { Timestamp as Timestamp3 } from "firebase-admin/firestore";
 
 // src/schemas/base/message.ts
 import { z as z20 } from "zod";

@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { Timestamp } from 'firebase/firestore';
 import {
     baseModelSchema,
     timestampSchema
@@ -9,6 +8,7 @@ import {
     genericToFirestore,
     genericFromFirestore
 } from './utils';
+import { Timestamp } from 'firebase-admin/firestore';
 
 // Import base schemas
 import {

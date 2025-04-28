@@ -2327,20 +2327,20 @@ declare const messageFirestoreSchema: z.ZodObject<{
     key: z.ZodString;
     method: z.ZodEnum<["push", "sms", "email"]>;
     status: z.ZodEnum<["pending", "sent", "failed", "delivered"]>;
-    created_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
-    updated_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
+    created_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
+    updated_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
 }, "strip", z.ZodTypeAny, {
     id: string;
     status: "pending" | "sent" | "failed" | "delivered";
-    created_at: FirebaseFirestore.Timestamp;
-    updated_at: FirebaseFirestore.Timestamp;
+    created_at: Timestamp;
+    updated_at: Timestamp;
     key: string;
     method: "push" | "email" | "sms";
 }, {
     id: string;
     status: "pending" | "sent" | "failed" | "delivered";
-    created_at: FirebaseFirestore.Timestamp;
-    updated_at: FirebaseFirestore.Timestamp;
+    created_at: Timestamp;
+    updated_at: Timestamp;
     key: string;
     method: "push" | "email" | "sms";
 }>;
@@ -2349,20 +2349,20 @@ declare const sentMessagesFirestoreSchema: z.ZodRecord<z.ZodString, z.ZodObject<
     key: z.ZodString;
     method: z.ZodEnum<["push", "sms", "email"]>;
     status: z.ZodEnum<["pending", "sent", "failed", "delivered"]>;
-    created_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
-    updated_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
+    created_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
+    updated_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
 }, "strip", z.ZodTypeAny, {
     id: string;
     status: "pending" | "sent" | "failed" | "delivered";
-    created_at: FirebaseFirestore.Timestamp;
-    updated_at: FirebaseFirestore.Timestamp;
+    created_at: Timestamp;
+    updated_at: Timestamp;
     key: string;
     method: "push" | "email" | "sms";
 }, {
     id: string;
     status: "pending" | "sent" | "failed" | "delivered";
-    created_at: FirebaseFirestore.Timestamp;
-    updated_at: FirebaseFirestore.Timestamp;
+    created_at: Timestamp;
+    updated_at: Timestamp;
     key: string;
     method: "push" | "email" | "sms";
 }>>;
