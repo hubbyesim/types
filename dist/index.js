@@ -34,6 +34,14 @@ var createIdSchema = (collectionPath) => {
 };
 
 // src/schemas/firebase/helpers.ts
+import * as admin from "firebase-admin";
+var globalDb;
+try {
+  if (admin.apps.length > 0) {
+    globalDb = admin.firestore();
+  }
+} catch (e) {
+}
 var MockDocumentReference = class {
   path;
   id;
@@ -51,13 +59,33 @@ var documentRefSchema = z2.custom(
 var fieldValueSchema = z2.custom(
   (val) => typeof val === "object" && val !== null && "isEqual" in val
 );
+var firestoreInstance = null;
+var setFirestoreInstance = (db) => {
+  firestoreInstance = db;
+};
+var getFirestoreInstance = () => {
+  if (firestoreInstance) {
+    return firestoreInstance;
+  }
+  if (globalDb) {
+    return globalDb;
+  }
+  try {
+    if (admin.apps.length > 0) {
+      return admin.firestore();
+    }
+  } catch (e) {
+  }
+  throw new Error("Firestore instance not available. Initialize firebase-admin or call setFirestoreInstance first.");
+};
 var toFirestore = {
   date: (date) => Timestamp.fromDate(date),
-  ref: (collectionPath, id) => {
+  ref: (collectionPath, id, db) => {
     if (testEnv.isTestEnvironment) {
       return new MockDocumentReference(collectionPath, id);
     }
-    throw new Error("Implementation requires Firestore instance");
+    const firestore2 = db || getFirestoreInstance();
+    return firestore2.collection(collectionPath).doc(id);
   }
 };
 var fromFirestore = {
@@ -272,19 +300,19 @@ function genericToFirestore({
       result[field] = toFirestore.date(value);
     }
   });
-  refFieldMappings6.forEach(({ app, firestore, collection, isArray, nullable }) => {
+  refFieldMappings6.forEach(({ app, firestore: firestore2, collection, isArray, nullable }) => {
     const value = appObject[app];
     if (isArray) {
       if (nullable && value === null) {
-        result[firestore] = null;
+        result[firestore2] = null;
       } else if (Array.isArray(value)) {
-        result[firestore] = value.map((id) => toFirestore.ref(collection, id));
+        result[firestore2] = value.map((id) => toFirestore.ref(collection, id));
       }
     } else {
       if (nullable && value === null) {
-        result[firestore] = null;
+        result[firestore2] = null;
       } else if (typeof value === "string") {
-        result[firestore] = toFirestore.ref(collection, value);
+        result[firestore2] = toFirestore.ref(collection, value);
       }
     }
   });
@@ -328,8 +356,8 @@ function genericFromFirestore({
       result[field] = convertToDate(value);
     }
   });
-  refFieldMappings6.forEach(({ app, firestore, nullable, isArray }) => {
-    const value = firestoreObject[firestore];
+  refFieldMappings6.forEach(({ app, firestore: firestore2, nullable, isArray }) => {
+    const value = firestoreObject[firestore2];
     if (isArray) {
       if (nullable && value === null) {
         result[app] = null;
@@ -1688,6 +1716,7 @@ export {
   fromFirestore,
   genericFromFirestore,
   genericToFirestore,
+  getFirestoreInstance,
   hubbyModelAppSchema,
   hubbyModelFirestoreSchema,
   isDate2 as isDate,
@@ -1788,6 +1817,7 @@ export {
   sentMessagesFirestoreSchema,
   sentMessagesFromFirestore,
   sentMessagesToFirestore,
+  setFirestoreInstance,
   supportedLocalesSchema,
   timestampSchema,
   toFirestore,

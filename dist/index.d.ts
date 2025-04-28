@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { Timestamp, DocumentReference, FieldValue } from 'firebase-admin/firestore';
+import { Timestamp, DocumentReference, FieldValue, Firestore } from 'firebase-admin/firestore';
+import * as admin from 'firebase-admin';
 import { UserApp, BookingApp, financialPropertiesAppSchema, PartnerApp, PriceListApp, CountryApp, PackageApp, PromoCodeApp, ESIMApp, PaymentApp, MessageApp, SentMessagesApp, CurrencyApp, ApiLogApp } from './base/index.js';
 export { API_LOG_COLLECTION, Address, BOOKING_COLLECTION, BankingDetails, BookingApiRequest, BookingApiResponse, BookingConfirmation, BookingDefaults, BookingStatus, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannel, CommunicationChannelType, CommunicationOptions, CoversionRate, ESIM_COLLECTION, FinancialPropertiesApp, HApiLog, HBooking, HBookingConfirmation, HBookingDefaults, HCountry, HCurrency, HESIM, HFinancialProperties, HPackage, HPackagePrice, HPackageStrategy, HPartner, HPayment, HPlatformSettings, HPriceList, HPromoCode, HSchedule, HScheduleFilter, HVisualIdentity, HVisualIdentityBanner, HVisualIdentityBannerStrategy, MESSAGE_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, PackagePriceApp, PackageSpecification, PackageSpecifications, PackageStrategy, PartnerApiRequest, PartnerApiResponse, PartnerPricingStrategyApp, PlatformSettings, PromoCodeApiResponse, Registration, SUPPORTED_LOCALES, Schedule, ScheduleFilter, SupportedLocales, SupportedLocalesFromSchema, USER_COLLECTION, UserPricingStrategyApp, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerStrategy, addressSchema, apiLogAppSchema, apiLogRefString, apiLogRefStringArray, apiLogRefStringArrayNullable, apiLogRefStringNullable, bankingDetailsSchema, baseModelAppSchema, bookingApiRequestSchema, bookingApiResponseSchema, bookingAppSchema, bookingConfirmationSchema, bookingDefaultsSchema, bookingRefString, bookingRefStringArray, bookingRefStringArrayNullable, bookingRefStringNullable, bookingStatusSchema, commonBookingFields, commonCurrencyFields, commonESIMFields, commonFinancialPropertiesFields, commonPackageFields, commonPackagePriceFields, commonPartnerFields, commonPricingStrategyFields, communicationChannelSchema, communicationOptionsSchema, conversionRateSchema, convertToDate, countryAppSchema, countryRefString, countryRefStringArray, countryRefStringArrayNullable, countryRefStringNullable, currencyAppSchema, currencyRefString, currencyRefStringArray, currencyRefStringArrayNullable, currencyRefStringNullable, esimAppSchema, esimRefString, esimRefStringArray, esimRefStringArrayNullable, esimRefStringNullable, freeEsimSchema, isDate, messageAppSchema, messageRefString, messageRefStringArray, messageRefStringArrayNullable, messageRefStringNullable, packageAppSchema, packagePriceAppSchema, packageRefString, packageRefStringArray, packageRefStringArrayNullable, packageRefStringNullable, packageSpecificationSchema, packageSpecificationsSchema, packageStrategySchema, partnerApiRequestSchema, partnerApiResponseSchema, partnerAppSchema, partnerPricingStrategyAppSchema, partnerRefString, partnerRefStringArray, partnerRefStringArrayNullable, partnerRefStringNullable, paymentAppSchema, paymentRefString, paymentRefStringArray, paymentRefStringArrayNullable, paymentRefStringNullable, platformSettingsSchema, priceListAppSchema, priceListRefString, priceListRefStringArray, priceListRefStringArrayNullable, priceListRefStringNullable, profileRefString, profileRefStringArray, profileRefStringArrayNullable, profileRefStringNullable, promoCodeApiResponseSchema, promoCodeAppSchema, promoCodeRefString, promoCodeRefStringArray, promoCodeRefStringArrayNullable, promoCodeRefStringNullable, registrationSchema, scheduleFilterSchema, scheduleSchema, supportedLocalesSchema, userPricingStrategyAppSchema, userRefString, userRefStringArray, userRefStringArrayNullable, userRefStringNullable, visualIdentityBannerSchema, visualIdentityBannerStrategySchema, visualIdentitySchema } from './base/index.js';
 
@@ -9,11 +10,13 @@ declare class MockDocumentReference {
     constructor(collectionPath: string, id: string);
 }
 declare const timestampSchema: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
-declare const documentRefSchema: z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+declare const documentRefSchema: z.ZodType<DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>, z.ZodTypeDef, DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>>;
 declare const fieldValueSchema: z.ZodType<FieldValue, z.ZodTypeDef, FieldValue>;
+declare const setFirestoreInstance: (db: Firestore) => void;
+declare const getFirestoreInstance: () => Firestore;
 declare const toFirestore: {
     date: (date: Date) => Timestamp;
-    ref: <T>(collectionPath: string, id: string) => DocumentReference<T>;
+    ref: <T>(collectionPath: string, id: string, db?: Firestore) => DocumentReference<T>;
 };
 declare const fromFirestore: {
     date: (timestamp: Timestamp) => Date;
@@ -23,40 +26,40 @@ declare const baseModelSchema: z.ZodObject<{
     id: z.ZodString;
     created_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
     updated_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
-    created_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>]>;
-    updated_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>]>;
+    created_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>, z.ZodTypeDef, DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>>]>;
+    updated_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>, z.ZodTypeDef, DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>>]>;
 }, "strip", z.ZodTypeAny, {
     id: string;
     created_at: Timestamp;
     updated_at: Timestamp;
-    created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    created_by: string | DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData> | null;
+    updated_by: string | DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData> | null;
 }, {
     id: string;
     created_at: Timestamp;
     updated_at: Timestamp;
-    created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    created_by: string | DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData> | null;
+    updated_by: string | DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData> | null;
 }>;
 
 declare const hubbyModelFirestoreSchema: z.ZodObject<{
     id: z.ZodString;
     created_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
     updated_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
-    created_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>]>;
-    updated_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>]>;
+    created_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>, z.ZodTypeDef, DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>>]>;
+    updated_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>, z.ZodTypeDef, DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>>]>;
 }, "strip", z.ZodTypeAny, {
     id: string;
     created_at: Timestamp;
     updated_at: Timestamp;
-    created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    created_by: string | DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData> | null;
+    updated_by: string | DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData> | null;
 }, {
     id: string;
     created_at: Timestamp;
     updated_at: Timestamp;
-    created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    created_by: string | DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData> | null;
+    updated_by: string | DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData> | null;
 }>;
 declare const hubbyModelAppSchema: z.ZodObject<{
     id: z.ZodString;
@@ -82,7 +85,7 @@ type HubbyModelApp = z.infer<typeof hubbyModelAppSchema>;
 type HubbyModel = HubbyModelFirestore;
 type HHubbyModel = HubbyModelApp;
 declare const createDocRefSchema: <T>(collectionPath: string) => {
-    schema: z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+    schema: z.ZodEffects<z.ZodType<DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>, z.ZodTypeDef, DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>>, DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>, DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>>;
     collectionPath: string;
 };
 declare const docRefToStringSchema: <T>(docRefSchema: ReturnType<typeof createDocRefSchema<T>>) => z.ZodString;
@@ -2478,4 +2481,4 @@ declare function genericFromFirestore<FirestoreType extends Record<string, any>,
     specialCaseHandler?: (result: Record<string, any>, firestoreData: FirestoreType) => void;
 }): AppType;
 
-export { ApiKey, ApiKeys, ApiLog, ApiLogApp, ApiLogFirestore, Booking, BookingApp, BookingFirestore, Country, CountryApp, CountryFirestore, Currency, CurrencyApp, CurrencyFirestore, ESIM, ESIMApp, ESIMFirestore, FinancialProperties, FinancialPropertiesFirestore, GenericDateFieldMapping, GenericRefFieldMapping, HHubbyModel, HubbyModel, HubbyModelApp, HubbyModelFirestore, Message, MessageApp, MessageFirestore, MockDocumentReference, Package, PackageApp, PackageFirestore, PackagePrice, PackagePriceFirestore, Partner, PartnerApp, PartnerFirestore, PartnerPricingStrategyFirestore, Payment, PaymentApp, PaymentFirestore, PriceList, PriceListApp, PriceListFirestore, PromoCode, PromoCodeApp, PromoCodeFirestore, SentMessages, SentMessagesApp, SentMessagesFirestore, User, UserApp, UserFirestore, UserPricingStrategyFirestore, apiKeySchema, apiKeysSchema, apiLogFirestoreSchema, apiLogFromFirestore, apiLogRefArray, apiLogRefArrayNullable, apiLogRefNullable, apiLogRefSchema, apiLogToFirestore, baseModelSchema, bookingFirestoreSchema, bookingFromFirestore, bookingRefArray, bookingRefArrayNullable, bookingRefNullable, bookingRefSchema, bookingToFirestore, convertSentMessagesFromFirestore, convertSentMessagesToFirestore, countryFirestoreSchema, countryFromFirestore, countryRefArray, countryRefArrayNullable, countryRefNullable, countryRefSchema, countryToFirestore, createDocRefSchema, currencyFirestoreSchema, currencyFromFirestore, currencyRefArray, currencyRefArrayNullable, currencyRefNullable, currencyRefSchema, currencyToFirestore, docRefToStringSchema, documentRefSchema, esimFirestoreSchema, esimFromFirestore, esimRefArray, esimRefArrayNullable, esimRefNullable, esimRefSchema, esimToFirestore, fieldValueSchema, financialPropertiesAppSchema, financialPropertiesFirestoreSchema, fromFirestore, genericFromFirestore, genericToFirestore, hubbyModelAppSchema, hubbyModelFirestoreSchema, messageFirestoreSchema, messageFromFirestore, messageRefArray, messageRefArrayNullable, messageRefNullable, messageRefSchema, messageToFirestore, packageFirestoreSchema, packageFromFirestore, packagePriceFirestoreSchema, packageRefArray, packageRefArrayNullable, packageRefNullable, packageRefSchema, packageToFirestore, partnerFirestoreSchema, partnerFromFirestore, partnerPricingStrategyFirestoreSchema, partnerRefArray, partnerRefArrayNullable, partnerRefNullable, partnerRefSchema, partnerToFirestore, paymentFirestoreSchema, paymentFromFirestore, paymentRefArray, paymentRefArrayNullable, paymentRefNullable, paymentRefSchema, paymentToFirestore, priceListFirestoreSchema, priceListFromFirestore, priceListRefArray, priceListRefArrayNullable, priceListRefNullable, priceListRefSchema, priceListToFirestore, profileRefArray, profileRefArrayNullable, profileRefNullable, profileRefSchema, promoCodeFirestoreSchema, promoCodeFromFirestore, promoCodeRefArray, promoCodeRefArrayNullable, promoCodeRefNullable, promoCodeRefSchema, promoCodeToFirestore, sentMessagesFirestoreSchema, sentMessagesFromFirestore, sentMessagesToFirestore, timestampSchema, toFirestore, userFirestoreSchema, userFromFirestore, userPricingStrategyFirestoreSchema, userRefArray, userRefArrayNullable, userRefNullable, userRefSchema, userToFirestore, userToFirestoreWithBalance };
+export { ApiKey, ApiKeys, ApiLog, ApiLogApp, ApiLogFirestore, Booking, BookingApp, BookingFirestore, Country, CountryApp, CountryFirestore, Currency, CurrencyApp, CurrencyFirestore, ESIM, ESIMApp, ESIMFirestore, FinancialProperties, FinancialPropertiesFirestore, GenericDateFieldMapping, GenericRefFieldMapping, HHubbyModel, HubbyModel, HubbyModelApp, HubbyModelFirestore, Message, MessageApp, MessageFirestore, MockDocumentReference, Package, PackageApp, PackageFirestore, PackagePrice, PackagePriceFirestore, Partner, PartnerApp, PartnerFirestore, PartnerPricingStrategyFirestore, Payment, PaymentApp, PaymentFirestore, PriceList, PriceListApp, PriceListFirestore, PromoCode, PromoCodeApp, PromoCodeFirestore, SentMessages, SentMessagesApp, SentMessagesFirestore, User, UserApp, UserFirestore, UserPricingStrategyFirestore, apiKeySchema, apiKeysSchema, apiLogFirestoreSchema, apiLogFromFirestore, apiLogRefArray, apiLogRefArrayNullable, apiLogRefNullable, apiLogRefSchema, apiLogToFirestore, baseModelSchema, bookingFirestoreSchema, bookingFromFirestore, bookingRefArray, bookingRefArrayNullable, bookingRefNullable, bookingRefSchema, bookingToFirestore, convertSentMessagesFromFirestore, convertSentMessagesToFirestore, countryFirestoreSchema, countryFromFirestore, countryRefArray, countryRefArrayNullable, countryRefNullable, countryRefSchema, countryToFirestore, createDocRefSchema, currencyFirestoreSchema, currencyFromFirestore, currencyRefArray, currencyRefArrayNullable, currencyRefNullable, currencyRefSchema, currencyToFirestore, docRefToStringSchema, documentRefSchema, esimFirestoreSchema, esimFromFirestore, esimRefArray, esimRefArrayNullable, esimRefNullable, esimRefSchema, esimToFirestore, fieldValueSchema, financialPropertiesAppSchema, financialPropertiesFirestoreSchema, fromFirestore, genericFromFirestore, genericToFirestore, getFirestoreInstance, hubbyModelAppSchema, hubbyModelFirestoreSchema, messageFirestoreSchema, messageFromFirestore, messageRefArray, messageRefArrayNullable, messageRefNullable, messageRefSchema, messageToFirestore, packageFirestoreSchema, packageFromFirestore, packagePriceFirestoreSchema, packageRefArray, packageRefArrayNullable, packageRefNullable, packageRefSchema, packageToFirestore, partnerFirestoreSchema, partnerFromFirestore, partnerPricingStrategyFirestoreSchema, partnerRefArray, partnerRefArrayNullable, partnerRefNullable, partnerRefSchema, partnerToFirestore, paymentFirestoreSchema, paymentFromFirestore, paymentRefArray, paymentRefArrayNullable, paymentRefNullable, paymentRefSchema, paymentToFirestore, priceListFirestoreSchema, priceListFromFirestore, priceListRefArray, priceListRefArrayNullable, priceListRefNullable, priceListRefSchema, priceListToFirestore, profileRefArray, profileRefArrayNullable, profileRefNullable, profileRefSchema, promoCodeFirestoreSchema, promoCodeFromFirestore, promoCodeRefArray, promoCodeRefArrayNullable, promoCodeRefNullable, promoCodeRefSchema, promoCodeToFirestore, sentMessagesFirestoreSchema, sentMessagesFromFirestore, sentMessagesToFirestore, setFirestoreInstance, timestampSchema, toFirestore, userFirestoreSchema, userFromFirestore, userPricingStrategyFirestoreSchema, userRefArray, userRefArrayNullable, userRefNullable, userRefSchema, userToFirestore, userToFirestoreWithBalance };

@@ -1,6 +1,19 @@
 import { z } from 'zod';
-import { Timestamp, DocumentReference, FieldValue } from 'firebase-admin/firestore';
+import { Timestamp, DocumentReference, FieldValue, Firestore } from 'firebase-admin/firestore';
 import { baseModelAppSchema, testEnv } from '../base/helpers';
+import * as admin from 'firebase-admin';
+
+// Try to get the global Firestore instance
+let globalDb: Firestore | undefined;
+
+try {
+    // This will work if firebase-admin is already initialized elsewhere
+    if (admin.apps.length > 0) {
+        globalDb = admin.firestore();
+    }
+} catch (e) {
+    // Silently fail - we'll handle missing DB in the function calls
+}
 
 // Test environment document references for mocking
 export class MockDocumentReference {
@@ -33,17 +46,50 @@ export const fieldValueSchema = z.custom<FieldValue>(
         'isEqual' in val
 );
 
+// Singleton to hold the firestore instance
+let firestoreInstance: Firestore | null = null;
+
+// Setter for the Firestore instance
+export const setFirestoreInstance = (db: Firestore) => {
+    firestoreInstance = db;
+};
+
+// Getter for the Firestore instance
+export const getFirestoreInstance = (): Firestore => {
+    // First check our explicitly set instance
+    if (firestoreInstance) {
+        return firestoreInstance;
+    }
+    
+    // Then try the global instance
+    if (globalDb) {
+        return globalDb;
+    }
+    
+    // As a last resort, try to get it directly from firebase-admin
+    try {
+        if (admin.apps.length > 0) {
+            return admin.firestore();
+        }
+    } catch (e) {
+        // Fall through to error
+    }
+    
+    throw new Error('Firestore instance not available. Initialize firebase-admin or call setFirestoreInstance first.');
+};
+
 // Conversion helpers
 export const toFirestore = {
     date: (date: Date): Timestamp => Timestamp.fromDate(date),
-    ref: <T>(collectionPath: string, id: string): DocumentReference<T> => {
+    ref: <T>(collectionPath: string, id: string, db?: Firestore): DocumentReference<T> => {
         // For tests, return a mock document reference
         if (testEnv.isTestEnvironment) {
             return new MockDocumentReference(collectionPath, id) as any;
         }
 
-        // In a real environment, this requires a Firestore instance
-        throw new Error('Implementation requires Firestore instance');
+        // Use provided db instance or try to get the global instance
+        const firestore = db || getFirestoreInstance();
+        return firestore.collection(collectionPath).doc(id) as DocumentReference<T>;
     }
 };
 

@@ -195,7 +195,7 @@ export const commonPartnerFields = {
     data: z.object({
         source: z.string(),
         manual: z.boolean()
-    }).nullable().optional()
+    }).nullable().optional(),
 };
 
 // App schema for Partner
