@@ -1,5 +1,8 @@
 // Helper function to convert date-like values to Date
 export const convertToDate = (value: any, field: string): Date => {
+    if (typeof value === undefined) {
+        return new Date('1970-01-01');
+    }
     if (value && typeof value === 'object' && 'getTime' in value) {
         return value as Date;
     }

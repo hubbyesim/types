@@ -16,9 +16,6 @@ export interface GenericDateFieldMapping<AppType, FirestoreType> {
 
 // Helper function to convert date-like values to Date
 export const convertToDate = (value: any, field: string): Date => {
-    if (value && typeof value === 'object' && 'getTime' in value) {
-        return value as Date;
-    }
     if (typeof value === 'string') {
         return new Date(value);
     }
@@ -158,7 +155,7 @@ export function genericFromFirestore<FirestoreType extends Record<string, any>, 
     // Convert date fields
     dateFieldMappings.forEach(({ field, nullable }) => {
         const value = firestoreObject[field];
-        if (nullable && value === null) {
+        if ((nullable && value === null) || value === undefined) {
             result[field as string] = null;
         } else {
             result[field as string] = convertToDate(value, field as string);
