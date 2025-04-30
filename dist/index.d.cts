@@ -1867,6 +1867,7 @@ declare const countryFirestoreSchema: z.ZodObject<{
     global_price: z.ZodNullable<z.ZodNumber>;
     hubby: z.ZodNullable<z.ZodNumber>;
     imsi: z.ZodNullable<z.ZodNumber>;
+    has_esim: z.ZodBoolean;
     name: z.ZodNullable<z.ZodString>;
     region: z.ZodNullable<z.ZodBoolean>;
     is_region: z.ZodNullable<z.ZodBoolean>;
@@ -1884,6 +1885,7 @@ declare const countryFirestoreSchema: z.ZodObject<{
     global_price: number | null;
     hubby: number | null;
     imsi: number | null;
+    has_esim: boolean;
     region: boolean | null;
     is_region: boolean | null;
     tier: number | null;
@@ -1899,6 +1901,7 @@ declare const countryFirestoreSchema: z.ZodObject<{
     global_price: number | null;
     hubby: number | null;
     imsi: number | null;
+    has_esim: boolean;
     region: boolean | null;
     is_region: boolean | null;
     tier: number | null;
@@ -1936,6 +1939,7 @@ declare const packageFirestoreSchema: z.ZodObject<{
         global_price: z.ZodNullable<z.ZodNumber>;
         hubby: z.ZodNullable<z.ZodNumber>;
         imsi: z.ZodNullable<z.ZodNumber>;
+        has_esim: z.ZodBoolean;
         name: z.ZodNullable<z.ZodString>;
         region: z.ZodNullable<z.ZodBoolean>;
         is_region: z.ZodNullable<z.ZodBoolean>;
@@ -1953,6 +1957,7 @@ declare const packageFirestoreSchema: z.ZodObject<{
         global_price: number | null;
         hubby: number | null;
         imsi: number | null;
+        has_esim: boolean;
         region: boolean | null;
         is_region: boolean | null;
         tier: number | null;
@@ -1968,6 +1973,7 @@ declare const packageFirestoreSchema: z.ZodObject<{
         global_price: number | null;
         hubby: number | null;
         imsi: number | null;
+        has_esim: boolean;
         region: boolean | null;
         is_region: boolean | null;
         tier: number | null;
@@ -2018,6 +2024,7 @@ declare const packageFirestoreSchema: z.ZodObject<{
         global_price: number | null;
         hubby: number | null;
         imsi: number | null;
+        has_esim: boolean;
         region: boolean | null;
         is_region: boolean | null;
         tier: number | null;
@@ -2060,6 +2067,7 @@ declare const packageFirestoreSchema: z.ZodObject<{
         global_price: number | null;
         hubby: number | null;
         imsi: number | null;
+        has_esim: boolean;
         region: boolean | null;
         is_region: boolean | null;
         tier: number | null;

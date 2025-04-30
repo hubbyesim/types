@@ -948,6 +948,7 @@ var countryAppSchema = z11.object({
   global_price: z11.number().nullable(),
   hubby: z11.number().nullable(),
   imsi: z11.number().nullable(),
+  has_esim: z11.boolean(),
   name: z11.string().nullable(),
   region: z11.boolean().nullable(),
   is_region: z11.boolean().nullable(),

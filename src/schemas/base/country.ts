@@ -11,6 +11,7 @@ export const countryAppSchema = z.object({
     global_price: z.number().nullable(),
     hubby: z.number().nullable(),
     imsi: z.number().nullable(),
+    has_esim: z.boolean(),
     name: z.string().nullable(),
     region: z.boolean().nullable(),
     is_region: z.boolean().nullable(),

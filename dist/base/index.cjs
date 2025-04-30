@@ -566,6 +566,7 @@ var countryAppSchema = import_zod7.z.object({
   global_price: import_zod7.z.number().nullable(),
   hubby: import_zod7.z.number().nullable(),
   imsi: import_zod7.z.number().nullable(),
+  has_esim: import_zod7.z.boolean(),
   name: import_zod7.z.string().nullable(),
   region: import_zod7.z.boolean().nullable(),
   is_region: import_zod7.z.boolean().nullable(),

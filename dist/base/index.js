@@ -414,6 +414,7 @@ var countryAppSchema = z7.object({
   global_price: z7.number().nullable(),
   hubby: z7.number().nullable(),
   imsi: z7.number().nullable(),
+  has_esim: z7.boolean(),
   name: z7.string().nullable(),
   region: z7.boolean().nullable(),
   is_region: z7.boolean().nullable(),

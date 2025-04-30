@@ -1216,6 +1216,7 @@ var countryAppSchema = import_zod11.z.object({
   global_price: import_zod11.z.number().nullable(),
   hubby: import_zod11.z.number().nullable(),
   imsi: import_zod11.z.number().nullable(),
+  has_esim: import_zod11.z.boolean(),
   name: import_zod11.z.string().nullable(),
   region: import_zod11.z.boolean().nullable(),
   is_region: import_zod11.z.boolean().nullable(),
