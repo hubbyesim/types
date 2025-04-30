@@ -705,9 +705,9 @@ var userFirestoreSchema = baseModelSchema.extend({
   partner: partnerRefNullable,
   profileRef: profileRefNullable,
   balance: import_zod6.z.union([import_zod6.z.number(), import_zod6.z.null(), fieldValueSchema]),
-  review_requested: timestampSchema.nullable(),
-  last_seen: timestampSchema.nullable(),
-  api_keys: apiKeysSchema2.nullable()
+  review_requested: timestampSchema.nullable().optional(),
+  last_seen: timestampSchema.nullable().optional(),
+  api_keys: apiKeysSchema2.nullable().optional()
 });
 var refFieldMappings = [
   { app: "profileRef", firestore: "profileRef", collection: PROFILE_COLLECTION, nullable: true },

@@ -236,9 +236,9 @@ declare const userFirestoreSchema: z.ZodObject<{
     partner: z.ZodNullable<z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
     profileRef: z.ZodNullable<z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
     balance: z.ZodUnion<[z.ZodNumber, z.ZodNull, z.ZodType<FieldValue, z.ZodTypeDef, FieldValue>]>;
-    review_requested: z.ZodNullable<z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>>;
-    last_seen: z.ZodNullable<z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>>;
-    api_keys: z.ZodNullable<z.ZodObject<{
+    review_requested: z.ZodOptional<z.ZodNullable<z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>>>;
+    last_seen: z.ZodOptional<z.ZodNullable<z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>>>;
+    api_keys: z.ZodOptional<z.ZodNullable<z.ZodObject<{
         allowed_keys: z.ZodArray<z.ZodString, "many">;
         keys: z.ZodRecord<z.ZodString, z.ZodObject<{
             expires_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
@@ -267,7 +267,7 @@ declare const userFirestoreSchema: z.ZodObject<{
             is_active: boolean;
         }>;
         allowed_keys: string[];
-    }>>;
+    }>>>;
     name: z.ZodNullable<z.ZodString>;
     email: z.ZodNullable<z.ZodString>;
     stripe_id: z.ZodNullable<z.ZodString>;
@@ -297,8 +297,6 @@ declare const userFirestoreSchema: z.ZodObject<{
     partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     profileRef: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     balance: number | FieldValue | null;
-    review_requested: Timestamp | null;
-    last_seen: Timestamp | null;
     name: string | null;
     email: string | null;
     stripe_id: string | null;
@@ -314,18 +312,20 @@ declare const userFirestoreSchema: z.ZodObject<{
     ios: boolean | null;
     has_card_saved: boolean | null;
     admin: boolean | null;
-    api_keys: {
+    currency: string | null;
+    receipt_email: string | null;
+    review_requested?: Timestamp | null | undefined;
+    last_seen?: Timestamp | null | undefined;
+    fcm?: string | undefined;
+    parameters?: any;
+    api_keys?: {
         keys: Record<string, {
             expires_at: Timestamp;
             secret: string;
             is_active: boolean;
         }>;
         allowed_keys: string[];
-    } | null;
-    currency: string | null;
-    receipt_email: string | null;
-    fcm?: string | undefined;
-    parameters?: any;
+    } | null | undefined;
 }, {
     id: string;
     created_at: Timestamp;
@@ -336,8 +336,6 @@ declare const userFirestoreSchema: z.ZodObject<{
     partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     profileRef: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     balance: number | FieldValue | null;
-    review_requested: Timestamp | null;
-    last_seen: Timestamp | null;
     name: string | null;
     email: string | null;
     stripe_id: string | null;
@@ -353,18 +351,20 @@ declare const userFirestoreSchema: z.ZodObject<{
     ios: boolean | null;
     has_card_saved: boolean | null;
     admin: boolean | null;
-    api_keys: {
+    currency: string | null;
+    receipt_email: string | null;
+    review_requested?: Timestamp | null | undefined;
+    last_seen?: Timestamp | null | undefined;
+    fcm?: string | undefined;
+    parameters?: any;
+    api_keys?: {
         keys: Record<string, {
             expires_at: Timestamp;
             secret: string;
             is_active: boolean;
         }>;
         allowed_keys: string[];
-    } | null;
-    currency: string | null;
-    receipt_email: string | null;
-    fcm?: string | undefined;
-    parameters?: any;
+    } | null | undefined;
 }>;
 type UserFirestore = z.infer<typeof userFirestoreSchema>;
 type ApiKeys = z.infer<typeof apiKeysSchema>;

@@ -47,9 +47,9 @@ export const userFirestoreSchema = baseModelSchema.extend({
     partner: partnerRefNullable,
     profileRef: profileRefNullable,
     balance: z.union([z.number(), z.null(), fieldValueSchema]),
-    review_requested: timestampSchema.nullable(),
-    last_seen: timestampSchema.nullable(),
-    api_keys: apiKeysSchema.nullable(),
+    review_requested: timestampSchema.nullable().optional(),
+    last_seen: timestampSchema.nullable().optional(),
+    api_keys: apiKeysSchema.nullable().optional(),
 });
 
 // Define types based on schemas
