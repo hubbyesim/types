@@ -126,7 +126,7 @@ export function convertFromFirestore<TFirestore extends Record<string, any>, TAp
             const value = firestoreData[field];
             const fieldName = String(field);
 
-            if (nullable && value === null) {
+            if (nullable && value === null || value === undefined) {
                 result[fieldName] = null;
             } else {
                 result[fieldName] = convertToDate(value, fieldName);

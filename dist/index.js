@@ -253,9 +253,6 @@ import { FieldValue as FieldValue2 } from "firebase-admin/firestore";
 
 // src/schemas/utils.ts
 var convertToDate = (value, field) => {
-  if (value && typeof value === "object" && "getTime" in value) {
-    return value;
-  }
   if (typeof value === "string") {
     return new Date(value);
   }
@@ -350,7 +347,7 @@ function genericFromFirestore({
   }
   dateFieldMappings9.forEach(({ field, nullable }) => {
     const value = firestoreObject[field];
-    if (nullable && value === null) {
+    if (nullable && value === null || value === void 0) {
       result[field] = null;
     } else {
       result[field] = convertToDate(value, field);
@@ -479,6 +476,9 @@ var userToFirestoreWithBalance = (user) => {
 
 // src/schemas/base/utils.ts
 var convertToDate2 = (value, field) => {
+  if (typeof value === void 0) {
+    return /* @__PURE__ */ new Date("1970-01-01");
+  }
   if (value && typeof value === "object" && "getTime" in value) {
     return value;
   }

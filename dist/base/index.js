@@ -749,6 +749,9 @@ var apiLogAppSchema = z15.object({
 
 // src/schemas/base/utils.ts
 var convertToDate = (value, field) => {
+  if (typeof value === void 0) {
+    return /* @__PURE__ */ new Date("1970-01-01");
+  }
   if (value && typeof value === "object" && "getTime" in value) {
     return value;
   }
