@@ -252,7 +252,7 @@ import { z as z6 } from "zod";
 import { FieldValue as FieldValue2 } from "firebase-admin/firestore";
 
 // src/schemas/utils.ts
-var convertToDate = (value) => {
+var convertToDate = (value, field) => {
   if (value && typeof value === "object" && "getTime" in value) {
     return value;
   }
@@ -262,7 +262,7 @@ var convertToDate = (value) => {
   if (value && typeof value === "object" && typeof value.toDate === "function") {
     return value.toDate();
   }
-  throw new Error(`Unable to convert value to Date: ${value}`);
+  throw new Error(`Unable to convert value to Date: ${value} for field: ${field}`);
 };
 var isDate = (value) => {
   return value && typeof value === "object" && "getTime" in value;
@@ -353,7 +353,7 @@ function genericFromFirestore({
     if (nullable && value === null) {
       result[field] = null;
     } else {
-      result[field] = convertToDate(value);
+      result[field] = convertToDate(value, field);
     }
   });
   refFieldMappings6.forEach(({ app, firestore: firestore2, nullable, isArray }) => {
@@ -478,14 +478,14 @@ var userToFirestoreWithBalance = (user) => {
 };
 
 // src/schemas/base/utils.ts
-var convertToDate2 = (value) => {
+var convertToDate2 = (value, field) => {
   if (value && typeof value === "object" && "getTime" in value) {
     return value;
   }
   if (typeof value === "string") {
     return new Date(value);
   }
-  throw new Error(`Unable to convert value to Date: ${value}`);
+  throw new Error(`Unable to convert value to Date: ${value} for field: ${field}`);
 };
 var isDate2 = (value) => {
   return value && typeof value === "object" && "getTime" in value;

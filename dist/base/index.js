@@ -748,14 +748,14 @@ var apiLogAppSchema = z15.object({
 });
 
 // src/schemas/base/utils.ts
-var convertToDate = (value) => {
+var convertToDate = (value, field) => {
   if (value && typeof value === "object" && "getTime" in value) {
     return value;
   }
   if (typeof value === "string") {
     return new Date(value);
   }
-  throw new Error(`Unable to convert value to Date: ${value}`);
+  throw new Error(`Unable to convert value to Date: ${value} for field: ${field}`);
 };
 var isDate = (value) => {
   return value && typeof value === "object" && "getTime" in value;

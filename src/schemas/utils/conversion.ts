@@ -16,7 +16,7 @@ export interface DateFieldMapping<T> {
 }
 
 // Helper function to convert date-like values to Date
-export const convertToDate = (value: unknown): Date => {
+export const convertToDate = (value: unknown, field: string): Date => {
     if (value instanceof Date) {
         return value;
     }
@@ -26,7 +26,7 @@ export const convertToDate = (value: unknown): Date => {
     if (value && typeof (value as any).toDate === 'function') {
         return (value as Timestamp).toDate();
     }
-    throw new Error(`Unable to convert value to Date: ${value}`);
+    throw new Error(`Unable to convert value to Date: ${value} for field: ${field}`);
 };
 
 // Helper function to safely check if a value is a Date
@@ -42,7 +42,7 @@ export function convertToFirestore<TApp extends Record<string, any>, TFirestore 
 ): TFirestore {
     // Create base object with common fields but exclude reference fields
     const result: Record<string, any> = {};
-    
+
     // Copy all fields except references that will be handled separately
     const refFieldNames = refFieldMappings.map(mapping => String(mapping.app));
     Object.keys(appData).forEach(key => {
@@ -101,7 +101,7 @@ export function convertFromFirestore<TFirestore extends Record<string, any>, TAp
 ): TApp {
     // Create base object excluding reference fields that will be handled separately
     const result: Record<string, any> = {};
-    
+
     // Copy all fields except references that will be handled separately
     const refFieldNames = refFieldMappings.map(mapping => String(mapping.firestore));
     Object.keys(firestoreData).forEach(key => {
@@ -125,11 +125,11 @@ export function convertFromFirestore<TFirestore extends Record<string, any>, TAp
         dateFieldMappings.forEach(({ field, nullable }) => {
             const value = firestoreData[field];
             const fieldName = String(field);
-            
+
             if (nullable && value === null) {
                 result[fieldName] = null;
             } else {
-                result[fieldName] = convertToDate(value);
+                result[fieldName] = convertToDate(value, fieldName);
             }
         });
     }

@@ -4399,7 +4399,7 @@ type PromoCodeApiResponse = z.infer<typeof promoCodeApiResponseSchema>;
 type PartnerApiRequest = z.infer<typeof partnerApiRequestSchema>;
 type PartnerApiResponse = z.infer<typeof partnerApiResponseSchema>;
 
-declare const convertToDate: (value: any) => Date;
+declare const convertToDate: (value: any, field: string) => Date;
 declare const isDate: (value: any) => value is Date;
 
 declare const SUPPORTED_LOCALES: readonly ["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"];
