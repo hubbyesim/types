@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { createDocRefSchema } from './helpers';
+import { createDocRefSchema } from './core';
 
 // Re-export collection paths from base
 import {

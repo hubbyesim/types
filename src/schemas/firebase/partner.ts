@@ -1,7 +1,9 @@
 import { z } from 'zod';
 import {
     baseModelSchema,
-    timestampSchema,
+    timestampSchema
+} from './core';
+import {
     toFirestore,
     fromFirestore
 } from './helpers';
@@ -26,6 +28,7 @@ import {
     userRefArrayNullable,
     priceListRefNullable
 } from './refs';
+import { NestedFieldPathMapping } from '../utils/nested-conversions';
 
 // Import base types and schemas
 import {
@@ -148,44 +151,58 @@ const partnerRefFieldMappings: GenericRefFieldMapping<PartnerApp, PartnerFiresto
     { app: 'users', firestore: 'users', collection: USER_COLLECTION, isArray: true, nullable: true }
 ];
 
-// Special handling for nested date fields in the finance object
+// Date field mappings for partner conversions (using base fields from baseModelSchema)
+const partnerDateFieldMappings: GenericDateFieldMapping<PartnerApp, PartnerFirestore>[] = [];
+
+// Define nested field mappings for financial_properties timestamps and package references
+const nestedFieldMappings: NestedFieldPathMapping[] = [
+    // Financial properties nested timestamps
+    {
+        path: ['financial_properties', 'next_invoice'],
+        type: 'timestamp',
+        nullable: true
+    },
+    {
+        path: ['financial_properties', 'last_invoice'],
+        type: 'timestamp',
+        nullable: true
+    },
+    // Financial properties nested package references in pricing strategies
+    {
+        path: ['financial_properties', 'pricing_strategies', 'partner', 'custom_prices', '*', 'package'],
+        type: 'reference',
+        collection: PACKAGE_COLLECTION,
+        wildcardIndex: 4
+    },
+    {
+        path: ['financial_properties', 'pricing_strategies', 'user', 'custom_prices', '*', 'package'],
+        type: 'reference',
+        collection: PACKAGE_COLLECTION,
+        wildcardIndex: 4
+    },
+    // Price list references in pricing strategies
+    {
+        path: ['financial_properties', 'pricing_strategies', 'partner', 'default_price_list'],
+        type: 'reference',
+        collection: PRICE_LIST_COLLECTION,
+        nullable: true
+    },
+    {
+        path: ['financial_properties', 'pricing_strategies', 'user', 'default_price_list'],
+        type: 'reference',
+        collection: PRICE_LIST_COLLECTION,
+        nullable: true
+    }
+];
+
+// Conversion functions - use the nested field mappings
 export const partnerToFirestore = (partner: PartnerApp): PartnerFirestore => {
     const result = genericToFirestore({
         appObject: partner,
         refFieldMappings: partnerRefFieldMappings,
-        dateFieldMappings: []
+        dateFieldMappings: partnerDateFieldMappings,
+        nestedFieldMappings: nestedFieldMappings
     });
-
-    // Handle the nested finance date fields manually
-    if (partner.financial_properties?.next_invoice) {
-        if (!result.financial_properties) {
-            result.financial_properties = {
-                administration_fee: null,
-                income_per_gb: null,
-                payment_method: 'invoice',
-                requires_card: null,
-                next_invoice: null,
-                last_invoice: null,
-                pricing_strategies: null
-            };
-        }
-        result.financial_properties.next_invoice = toFirestore.date(partner.financial_properties.next_invoice);
-    }
-
-    if (partner.financial_properties?.last_invoice) {
-        if (!result.financial_properties) {
-            result.financial_properties = {
-                administration_fee: null,
-                income_per_gb: null,
-                payment_method: 'invoice',
-                requires_card: null,
-                next_invoice: null,
-                last_invoice: null,
-                pricing_strategies: null
-            };
-        }
-        result.financial_properties.last_invoice = toFirestore.date(partner.financial_properties.last_invoice);
-    }
 
     return result;
 };
@@ -194,39 +211,9 @@ export const partnerFromFirestore = (firestorePartner: PartnerFirestore): Partne
     const result = genericFromFirestore({
         firestoreObject: firestorePartner,
         refFieldMappings: partnerRefFieldMappings,
-        dateFieldMappings: []
+        dateFieldMappings: partnerDateFieldMappings,
+        nestedFieldMappings: nestedFieldMappings
     });
-
-    // Handle the nested finance date fields manually
-    if (firestorePartner.financial_properties?.next_invoice) {
-        if (!result.financial_properties) {
-            result.financial_properties = {
-                administration_fee: null,
-                income_per_gb: null,
-                payment_method: 'invoice',
-                requires_card: null,
-                next_invoice: null,
-                last_invoice: null,
-                pricing_strategies: null
-            };
-        }
-        result.financial_properties.next_invoice = fromFirestore.date(firestorePartner.financial_properties.next_invoice);
-    }
-
-    if (firestorePartner.financial_properties?.last_invoice) {
-        if (!result.financial_properties) {
-            result.financial_properties = {
-                administration_fee: null,
-                income_per_gb: null,
-                payment_method: 'invoice',
-                requires_card: null,
-                next_invoice: null,
-                last_invoice: null,
-                pricing_strategies: null
-            };
-        }
-        result.financial_properties.last_invoice = fromFirestore.date(firestorePartner.financial_properties.last_invoice);
-    }
 
     return result;
 };
@@ -236,11 +223,23 @@ const priceListRefFieldMappings: GenericRefFieldMapping<PriceListApp, PriceListF
     { app: 'partner', firestore: 'partner', collection: PARTNER_COLLECTION, nullable: true }
 ];
 
+// Define nested field mappings for price list
+const priceListNestedFieldMappings: NestedFieldPathMapping[] = [
+    // Package references in package_prices array
+    {
+        path: ['package_prices', '*', 'package'],
+        type: 'reference',
+        collection: PACKAGE_COLLECTION,
+        wildcardIndex: 1
+    }
+];
+
 export const priceListToFirestore = (priceList: PriceListApp): PriceListFirestore => {
     return genericToFirestore({
         appObject: priceList,
         refFieldMappings: priceListRefFieldMappings,
-        dateFieldMappings: []
+        dateFieldMappings: [],
+        nestedFieldMappings: priceListNestedFieldMappings
     });
 };
 
@@ -248,6 +247,7 @@ export const priceListFromFirestore = (firestorePriceList: PriceListFirestore): 
     return genericFromFirestore({
         firestoreObject: firestorePriceList,
         refFieldMappings: priceListRefFieldMappings,
-        dateFieldMappings: []
+        dateFieldMappings: [],
+        nestedFieldMappings: priceListNestedFieldMappings
     });
 }; 

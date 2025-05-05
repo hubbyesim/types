@@ -1,7 +1,8 @@
 import { z } from 'zod';
 import {
+    baseModelSchema,
     timestampSchema
-} from './helpers';
+} from './core';
 import {
     GenericDateFieldMapping,
     genericToFirestore,

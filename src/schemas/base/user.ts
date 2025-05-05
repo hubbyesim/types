@@ -52,8 +52,8 @@ export const userAppSchema = baseModelAppSchema.extend({
     partner: partnerRefStringNullable,
     profileRef: profileRefStringNullable,
     balance: z.number().nullable(),
-    review_requested: zDateString().nullable(),
-    last_seen: zDateString().nullable()
+    review_requested: zDateString().nullable().optional(),
+    last_seen: zDateString().nullable().optional()
 });
 
 // Define types based on schemas

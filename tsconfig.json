@@ -10,7 +10,8 @@
       "esModuleInterop": true,
       "resolveJsonModule": true,
       "noImplicitAny": true,
-      "skipLibCheck": true
+      "skipLibCheck": true,
+      "isolatedModules": true
     },
-    "include": ["src"]
+    "include": ["src", "test/user.test.ts"]
   }  

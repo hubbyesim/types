@@ -1,4 +1,10 @@
 import { toFirestore, fromFirestore } from './firebase/helpers';
+// Import nested conversions
+import { 
+    processNestedFieldsToFirestore, 
+    processNestedFieldsFromFirestore,
+    NestedFieldPathMapping
+} from './utils/nested-conversions';
 
 // Generic interfaces for field mappings
 export interface GenericRefFieldMapping<AppType, FirestoreType> {
@@ -34,12 +40,14 @@ export function genericToFirestore<AppType extends Record<string, any>, Firestor
     appObject,
     refFieldMappings,
     dateFieldMappings,
-    specialCaseHandler
+    specialCaseHandler,
+    nestedFieldMappings
 }: {
     appObject: AppType;
     refFieldMappings: GenericRefFieldMapping<AppType, FirestoreType>[];
     dateFieldMappings: GenericDateFieldMapping<AppType, FirestoreType>[];
     specialCaseHandler?: (result: Record<string, any>, appData: AppType) => void;
+    nestedFieldMappings?: NestedFieldPathMapping[];
 }): FirestoreType {
     // Create base object with common fields but exclude reference fields
     const result: Record<string, any> = {};
@@ -103,6 +111,11 @@ export function genericToFirestore<AppType extends Record<string, any>, Firestor
         specialCaseHandler(result, appObject);
     }
 
+    // Process nested fields if provided
+    if (nestedFieldMappings && nestedFieldMappings.length > 0) {
+        processNestedFieldsToFirestore(result, nestedFieldMappings);
+    }
+
     return result as unknown as FirestoreType;
 }
 
@@ -111,12 +124,14 @@ export function genericFromFirestore<FirestoreType extends Record<string, any>, 
     firestoreObject,
     refFieldMappings,
     dateFieldMappings,
-    specialCaseHandler
+    specialCaseHandler,
+    nestedFieldMappings
 }: {
     firestoreObject: FirestoreType;
     refFieldMappings: GenericRefFieldMapping<AppType, FirestoreType>[];
     dateFieldMappings: GenericDateFieldMapping<AppType, FirestoreType>[];
     specialCaseHandler?: (result: Record<string, any>, firestoreData: FirestoreType) => void;
+    nestedFieldMappings?: NestedFieldPathMapping[];
 }): AppType {
     // Create base object excluding reference fields that will be handled separately
     const result: Record<string, any> = {};
@@ -184,6 +199,11 @@ export function genericFromFirestore<FirestoreType extends Record<string, any>, 
     // Apply any special case handling
     if (specialCaseHandler) {
         specialCaseHandler(result, firestoreObject);
+    }
+    
+    // Process nested fields if provided
+    if (nestedFieldMappings && nestedFieldMappings.length > 0) {
+        processNestedFieldsFromFirestore(result, nestedFieldMappings);
     }
 
     return result as unknown as AppType;

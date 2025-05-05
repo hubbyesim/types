@@ -3,7 +3,7 @@ import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 import {
     baseModelSchema,
     timestampSchema
-} from './helpers';
+} from './core';
 import {
     GenericRefFieldMapping,
     GenericDateFieldMapping,

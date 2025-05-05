@@ -4,7 +4,7 @@ import {
     baseModelSchema,
     timestampSchema,
     fieldValueSchema
-} from './helpers';
+} from './core';
 import {
     GenericRefFieldMapping,
     GenericDateFieldMapping,
@@ -19,6 +19,8 @@ import {
     partnerRefNullable,
     profileRefNullable
 } from './refs';
+import { toFirestore, fromFirestore } from './helpers';
+import { NestedFieldPathMapping } from '../utils/nested-conversions';
 
 // Import base schemas
 import {
@@ -69,20 +71,61 @@ const dateFieldMappings: GenericDateFieldMapping<UserApp, UserFirestore>[] = [
     { field: 'last_seen', nullable: true }
 ];
 
+// Define nested field mappings for api_keys and any other nested structure
+const nestedFieldMappings: NestedFieldPathMapping[] = [
+    // API Keys nested timestamps
+    {
+        path: ['api_keys', 'keys', '*', 'expires_at'],
+        type: 'timestamp',
+        nullable: true,
+        wildcardIndex: 2
+    },
+    // Optional conversions for parameters field - only apply if needed
+    // Parameters nested timestamps - for example, if storing login timestamps
+    {
+        path: ['parameters', 'timestamps', 'lastLogin'],
+        type: 'timestamp',
+        nullable: true
+    },
+    {
+        path: ['parameters', 'timestamps', 'accountCreated'],
+        type: 'timestamp',
+        nullable: true
+    },
+    // Parameters nested partner references
+    {
+        path: ['parameters', 'relationships', 'primaryPartner'],
+        type: 'reference',
+        collection: PARTNER_COLLECTION,
+        nullable: true
+    },
+    {
+        path: ['parameters', 'relationships', 'otherPartners'],
+        type: 'reference',
+        collection: PARTNER_COLLECTION,
+        nullable: true,
+        arrayField: true
+    }
+];
+
 // Conversion functions
 export const userToFirestore = (user: UserApp): UserFirestore => {
-    return genericToFirestore({
+    const result = genericToFirestore({
         appObject: user,
         refFieldMappings,
-        dateFieldMappings
+        dateFieldMappings,
+        nestedFieldMappings
     });
+
+    return result;
 };
 
 export const userFromFirestore = (firestoreUser: UserFirestore): UserApp => {
-    return genericFromFirestore({
+    const result = genericFromFirestore({
         firestoreObject: firestoreUser,
         refFieldMappings,
         dateFieldMappings,
+        nestedFieldMappings,
         specialCaseHandler: (result, firestoreData) => {
             // Handle special case for balance field
             if (firestoreData.balance instanceof FieldValue) {
@@ -90,6 +133,8 @@ export const userFromFirestore = (firestoreUser: UserFirestore): UserApp => {
             }
         }
     });
+
+    return result;
 };
 
 // Handle the special case of balance field which can be FieldValue
@@ -105,7 +150,7 @@ export const userToFirestoreWithBalance = (user: UserApp): UserFirestore => {
 };
 
 // Re-export the App schema type for convenience
-export { UserApp };
+export type { UserApp };
 
 // For backwards compatibility
 export type User = UserFirestore; 

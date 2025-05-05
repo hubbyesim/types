@@ -1,8 +1,7 @@
 import { z } from 'zod';
 import {
-    baseModelSchema,
     timestampSchema
-} from './helpers';
+} from './core';
 import {
     GenericDateFieldMapping,
     genericToFirestore,
@@ -36,10 +35,9 @@ export type SentMessagesFirestore = z.infer<typeof sentMessagesFirestoreSchema>;
 
 // Re-export app schemas and types
 export {
-    baseMessageAppSchema as messageAppSchema,
-    MessageApp,
-    SentMessagesApp
+    baseMessageAppSchema as messageAppSchema
 };
+export type { MessageApp, SentMessagesApp };
 
 // Define date field mappings
 const dateFieldMappings: GenericDateFieldMapping<MessageApp, MessageFirestore>[] = [

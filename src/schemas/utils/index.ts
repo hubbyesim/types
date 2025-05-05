@@ -26,4 +26,10 @@ export {
     isDate,
     genericToFirestore,
     genericFromFirestore
-} from '../utils'; 
+} from '../utils';
+
+// Nested field conversions
+export { processNestedFieldsToFirestore, processNestedFieldsFromFirestore } from './nested-conversions';
+export type { NestedFieldPathMapping } from './nested-conversions';
+
+// Add other utility exports as needed 

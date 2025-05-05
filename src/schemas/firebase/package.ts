@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { DocumentReference } from 'firebase-admin/firestore';
 import {
     baseModelSchema
-} from './helpers';
+} from './core';
 import {
     GenericRefFieldMapping,
     genericToFirestore,

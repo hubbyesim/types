@@ -2,6 +2,8 @@ import { z } from 'zod';
 import { Timestamp, DocumentReference, FieldValue, Firestore } from 'firebase-admin/firestore';
 import { baseModelAppSchema, testEnv } from '../base/helpers';
 import * as admin from 'firebase-admin';
+import { baseModelSchema } from './core';
+import { createDocRefSchema } from './core';
 
 // Try to get the global Firestore instance
 let globalDb: Firestore | undefined;
@@ -25,26 +27,6 @@ export class MockDocumentReference {
         this.id = id;
     }
 }
-
-// Firebase type schemas with custom type guards instead of z.instanceof
-export const timestampSchema = z.custom<Timestamp>(
-    (val): val is Timestamp => val instanceof Timestamp
-);
-
-export const documentRefSchema = z.custom<DocumentReference>(
-    (val): val is DocumentReference =>
-        typeof val === 'object' &&
-        val !== null &&
-        'path' in val &&
-        'id' in val
-);
-
-export const fieldValueSchema = z.custom<FieldValue>(
-    (val): val is FieldValue =>
-        typeof val === 'object' &&
-        val !== null &&
-        'isEqual' in val
-);
 
 // Singleton to hold the firestore instance
 let firestoreInstance: Firestore | null = null;
@@ -103,15 +85,6 @@ export const fromFirestore = {
     }
 };
 
-// Base model schema for common fields using Firebase types
-export const baseModelSchema = z.object({
-    id: z.string(),
-    created_at: timestampSchema,
-    updated_at: timestampSchema,
-    created_by: z.union([z.string(), z.null(), documentRefSchema]),
-    updated_by: z.union([z.string(), z.null(), documentRefSchema])
-});
-
 // Re-export the app schema
 export { baseModelAppSchema };
 
@@ -120,27 +93,10 @@ export const hubbyModelFirestoreSchema = baseModelSchema;
 export const hubbyModelAppSchema = baseModelAppSchema;
 
 // Type for the base model
-export type HubbyModelFirestore = z.infer<typeof hubbyModelFirestoreSchema>;
 export type HubbyModelApp = z.infer<typeof hubbyModelAppSchema>;
 
 // For backwards compatibility
-export type HubbyModel = HubbyModelFirestore;
 export type HHubbyModel = HubbyModelApp;
-
-// Helper function to create document reference schemas
-export const createDocRefSchema = <T>(collectionPath: string) => {
-    const schema = documentRefSchema.refine(
-        (ref) => ref.path.startsWith(collectionPath),
-        {
-            message: `Document reference must be from collection ${collectionPath}`
-        }
-    );
-
-    return {
-        schema,
-        collectionPath
-    };
-};
 
 // Helper function to convert a document reference schema to a string schema
 export const docRefToStringSchema = <T>(docRefSchema: ReturnType<typeof createDocRefSchema<T>>) => {

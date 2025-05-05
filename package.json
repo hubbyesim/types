@@ -1,6 +1,6 @@
 {
   "name": "@hubbyesim/types",
-  "version": "1.9.91",
+  "version": "1.9.92",
   "description": "Type definitions for the hubbyesim project",
   "type": "module",
   "main": "./dist/index.js",
@@ -35,6 +35,9 @@
     "zod": "^3.24.3"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.3.2",
     "ts-node": "^10.9.2",
     "tsup": "^7.2.0",
     "typescript": "^5.3.2"
