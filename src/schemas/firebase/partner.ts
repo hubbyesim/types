@@ -36,6 +36,7 @@ import {
     packagePriceAppSchema,
     partnerPricingStrategyAppSchema,
     userPricingStrategyAppSchema,
+    scheduleSchema,
     financialPropertiesAppSchema,
     platformSettingsSchema,
     addressSchema,
@@ -58,7 +59,6 @@ import {
     VisualIdentityBannerStrategy,
     VisualIdentity,
     ScheduleFilter,
-    Schedule,
     commonFinancialPropertiesFields,
     PlatformSettings
 } from '../base/partner';
@@ -70,7 +70,7 @@ export * from '../base/partner';
 const commonPackagePriceFields = {
     destination: z.string(),
     label: z.string(),
-    type: z.enum(['data-limit', 'time-limit']),
+    type: z.enum(['data-limited', 'time-limited']),
     price: z.number()
 };
 
@@ -139,7 +139,7 @@ export type PartnerPricingStrategyFirestore = z.infer<typeof partnerPricingStrat
 export type UserPricingStrategyFirestore = z.infer<typeof userPricingStrategyFirestoreSchema>;
 export type FinancialPropertiesFirestore = z.infer<typeof financialPropertiesFirestoreSchema>;
 export type FinancialProperties = z.infer<typeof financialPropertiesAppSchema>;
-
+export type Schedule = z.infer<typeof scheduleSchema>;
 // For backwards compatibility
 export type Partner = PartnerFirestore;
 export type PriceList = PriceListFirestore;
@@ -250,4 +250,6 @@ export const priceListFromFirestore = (firestorePriceList: PriceListFirestore): 
         dateFieldMappings: [],
         nestedFieldMappings: priceListNestedFieldMappings
     });
-}; 
+};
+
+

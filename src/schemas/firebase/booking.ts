@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { DocumentReference, DocumentData, Timestamp } from 'firebase/firestore';
+import { Timestamp, DocumentReference, DocumentData } from 'firebase-admin/firestore';
 import {
     baseModelSchema,
     timestampSchema
