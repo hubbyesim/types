@@ -154,7 +154,7 @@ export const scheduleSchema = z.object({
     hour: z.number(),
     key: z.string(),
     method: z.enum(['email', 'sms', 'whatsapp', 'push']),
-    moment: z.enum(['departure', 'return', 'immediate']),
+    moment: z.enum(['departure_date', 'return_date', 'immediate']),
     filter: scheduleFilterSchema.nullable().optional()
 });
 

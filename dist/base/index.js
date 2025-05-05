@@ -137,8 +137,8 @@ var userAppSchema = baseModelAppSchema.extend({
   partner: partnerRefStringNullable,
   profileRef: profileRefStringNullable,
   balance: z3.number().nullable(),
-  review_requested: zDateString().nullable(),
-  last_seen: zDateString().nullable()
+  review_requested: zDateString().nullable().optional(),
+  last_seen: zDateString().nullable().optional()
 });
 
 // src/schemas/base/booking.ts
@@ -350,7 +350,7 @@ var scheduleSchema = z6.object({
   hour: z6.number(),
   key: z6.string(),
   method: z6.enum(["email", "sms", "whatsapp", "push"]),
-  moment: z6.enum(["departure", "return", "immediate"]),
+  moment: z6.enum(["departure_date", "return_date", "immediate"]),
   filter: scheduleFilterSchema.nullable().optional()
 });
 var freeEsimSchema = z6.object({

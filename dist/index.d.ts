@@ -1,620 +1,26 @@
 import { z } from 'zod';
-import { Timestamp, DocumentReference, FieldValue, Firestore } from 'firebase-admin/firestore';
-import * as admin from 'firebase-admin';
-import { UserApp, BookingApp, financialPropertiesAppSchema, PartnerApp, PriceListApp, CountryApp, PackageApp, PromoCodeApp, ESIMApp, PaymentApp, MessageApp, SentMessagesApp, CurrencyApp, ApiLogApp } from './base/index.js';
-export { API_LOG_COLLECTION, Address, BOOKING_COLLECTION, BankingDetails, BookingApiRequest, BookingApiResponse, BookingConfirmation, BookingDefaults, BookingStatus, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannel, CommunicationChannelType, CommunicationOptions, CoversionRate, ESIM_COLLECTION, FinancialPropertiesApp, HApiLog, HBooking, HBookingConfirmation, HBookingDefaults, HCountry, HCurrency, HESIM, HFinancialProperties, HPackage, HPackagePrice, HPackageStrategy, HPartner, HPayment, HPlatformSettings, HPriceList, HPromoCode, HSchedule, HScheduleFilter, HVisualIdentity, HVisualIdentityBanner, HVisualIdentityBannerStrategy, MESSAGE_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, PackagePriceApp, PackageSpecification, PackageSpecifications, PackageStrategy, PartnerApiRequest, PartnerApiResponse, PartnerPricingStrategyApp, PlatformSettings, PromoCodeApiResponse, Registration, SUPPORTED_LOCALES, Schedule, ScheduleFilter, SupportedLocales, SupportedLocalesFromSchema, USER_COLLECTION, UserPricingStrategyApp, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerStrategy, addressSchema, apiLogAppSchema, apiLogRefString, apiLogRefStringArray, apiLogRefStringArrayNullable, apiLogRefStringNullable, bankingDetailsSchema, baseModelAppSchema, bookingApiRequestSchema, bookingApiResponseSchema, bookingAppSchema, bookingConfirmationSchema, bookingDefaultsSchema, bookingRefString, bookingRefStringArray, bookingRefStringArrayNullable, bookingRefStringNullable, bookingStatusSchema, commonBookingFields, commonCurrencyFields, commonESIMFields, commonFinancialPropertiesFields, commonPackageFields, commonPackagePriceFields, commonPartnerFields, commonPricingStrategyFields, communicationChannelSchema, communicationOptionsSchema, conversionRateSchema, convertToDate, countryAppSchema, countryRefString, countryRefStringArray, countryRefStringArrayNullable, countryRefStringNullable, currencyAppSchema, currencyRefString, currencyRefStringArray, currencyRefStringArrayNullable, currencyRefStringNullable, esimAppSchema, esimRefString, esimRefStringArray, esimRefStringArrayNullable, esimRefStringNullable, freeEsimSchema, isDate, messageAppSchema, messageRefString, messageRefStringArray, messageRefStringArrayNullable, messageRefStringNullable, packageAppSchema, packagePriceAppSchema, packageRefString, packageRefStringArray, packageRefStringArrayNullable, packageRefStringNullable, packageSpecificationSchema, packageSpecificationsSchema, packageStrategySchema, partnerApiRequestSchema, partnerApiResponseSchema, partnerAppSchema, partnerPricingStrategyAppSchema, partnerRefString, partnerRefStringArray, partnerRefStringArrayNullable, partnerRefStringNullable, paymentAppSchema, paymentRefString, paymentRefStringArray, paymentRefStringArrayNullable, paymentRefStringNullable, platformSettingsSchema, priceListAppSchema, priceListRefString, priceListRefStringArray, priceListRefStringArrayNullable, priceListRefStringNullable, profileRefString, profileRefStringArray, profileRefStringArrayNullable, profileRefStringNullable, promoCodeApiResponseSchema, promoCodeAppSchema, promoCodeRefString, promoCodeRefStringArray, promoCodeRefStringArrayNullable, promoCodeRefStringNullable, registrationSchema, scheduleFilterSchema, scheduleSchema, supportedLocalesSchema, userPricingStrategyAppSchema, userRefString, userRefStringArray, userRefStringArrayNullable, userRefStringNullable, visualIdentityBannerSchema, visualIdentityBannerStrategySchema, visualIdentitySchema } from './base/index.js';
-
-declare class MockDocumentReference {
-    path: string;
-    id: string;
-    constructor(collectionPath: string, id: string);
-}
-declare const timestampSchema: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
-declare const documentRefSchema: z.ZodType<DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>, z.ZodTypeDef, DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>>;
-declare const fieldValueSchema: z.ZodType<FieldValue, z.ZodTypeDef, FieldValue>;
-declare const setFirestoreInstance: (db: Firestore) => void;
-declare const getFirestoreInstance: () => Firestore;
-declare const toFirestore: {
-    date: (date: Date) => Timestamp;
-    ref: <T>(collectionPath: string, id: string, db?: Firestore) => DocumentReference<T>;
-};
-declare const fromFirestore: {
-    date: (timestamp: Timestamp) => Date;
-    ref: <T>(docRef: DocumentReference<T> | MockDocumentReference) => string;
-};
-declare const baseModelSchema: z.ZodObject<{
-    id: z.ZodString;
-    created_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
-    updated_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
-    created_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>, z.ZodTypeDef, DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>>]>;
-    updated_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>, z.ZodTypeDef, DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>>]>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
-    created_at: Timestamp;
-    updated_at: Timestamp;
-    created_by: string | DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData> | null;
-    updated_by: string | DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData> | null;
-}, {
-    id: string;
-    created_at: Timestamp;
-    updated_at: Timestamp;
-    created_by: string | DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData> | null;
-    updated_by: string | DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData> | null;
-}>;
-
-declare const hubbyModelFirestoreSchema: z.ZodObject<{
-    id: z.ZodString;
-    created_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
-    updated_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
-    created_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>, z.ZodTypeDef, DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>>]>;
-    updated_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>, z.ZodTypeDef, DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>>]>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
-    created_at: Timestamp;
-    updated_at: Timestamp;
-    created_by: string | DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData> | null;
-    updated_by: string | DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData> | null;
-}, {
-    id: string;
-    created_at: Timestamp;
-    updated_at: Timestamp;
-    created_by: string | DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData> | null;
-    updated_by: string | DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData> | null;
-}>;
-declare const hubbyModelAppSchema: z.ZodObject<{
-    id: z.ZodString;
-    created_at: z.ZodEffects<z.ZodDate, Date, unknown>;
-    updated_at: z.ZodEffects<z.ZodDate, Date, unknown>;
-    created_by: z.ZodUnion<[z.ZodString, z.ZodNull]>;
-    updated_by: z.ZodUnion<[z.ZodString, z.ZodNull]>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
-    created_at: Date;
-    updated_at: Date;
-    created_by: string | null;
-    updated_by: string | null;
-}, {
-    id: string;
-    created_by: string | null;
-    updated_by: string | null;
-    created_at?: unknown;
-    updated_at?: unknown;
-}>;
-type HubbyModelFirestore = z.infer<typeof hubbyModelFirestoreSchema>;
-type HubbyModelApp = z.infer<typeof hubbyModelAppSchema>;
-type HubbyModel = HubbyModelFirestore;
-type HHubbyModel = HubbyModelApp;
-declare const createDocRefSchema: <T>(collectionPath: string) => {
-    schema: z.ZodEffects<z.ZodType<DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>, z.ZodTypeDef, DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>>, DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>, DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>>;
-    collectionPath: string;
-};
-declare const docRefToStringSchema: <T>(docRefSchema: ReturnType<typeof createDocRefSchema<T>>) => z.ZodString;
-
-declare const partnerRefSchema: {
-    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-    collectionPath: string;
-};
-declare const userRefSchema: {
-    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-    collectionPath: string;
-};
-declare const profileRefSchema: {
-    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-    collectionPath: string;
-};
-declare const packageRefSchema: {
-    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-    collectionPath: string;
-};
-declare const promoCodeRefSchema: {
-    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-    collectionPath: string;
-};
-declare const countryRefSchema: {
-    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-    collectionPath: string;
-};
-declare const esimRefSchema: {
-    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-    collectionPath: string;
-};
-declare const paymentRefSchema: {
-    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-    collectionPath: string;
-};
-declare const priceListRefSchema: {
-    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-    collectionPath: string;
-};
-declare const bookingRefSchema: {
-    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-    collectionPath: string;
-};
-declare const messageRefSchema: {
-    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-    collectionPath: string;
-};
-declare const currencyRefSchema: {
-    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-    collectionPath: string;
-};
-declare const apiLogRefSchema: {
-    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-    collectionPath: string;
-};
-declare const partnerRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
-declare const userRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
-declare const profileRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
-declare const packageRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
-declare const promoCodeRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
-declare const countryRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
-declare const esimRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
-declare const paymentRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
-declare const priceListRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
-declare const bookingRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
-declare const messageRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
-declare const currencyRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
-declare const apiLogRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
-declare const partnerRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
-declare const userRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
-declare const profileRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
-declare const packageRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
-declare const promoCodeRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
-declare const countryRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
-declare const esimRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
-declare const paymentRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
-declare const priceListRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
-declare const bookingRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
-declare const messageRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
-declare const currencyRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
-declare const apiLogRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
-declare const partnerRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
-declare const userRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
-declare const profileRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
-declare const packageRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
-declare const promoCodeRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
-declare const countryRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
-declare const esimRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
-declare const paymentRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
-declare const priceListRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
-declare const bookingRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
-declare const messageRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
-declare const currencyRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
-declare const apiLogRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
-
-declare const apiKeySchema: z.ZodObject<{
-    expires_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
-    secret: z.ZodString;
-    is_active: z.ZodBoolean;
-}, "strip", z.ZodTypeAny, {
-    expires_at: Timestamp;
-    secret: string;
-    is_active: boolean;
-}, {
-    expires_at: Timestamp;
-    secret: string;
-    is_active: boolean;
-}>;
-declare const apiKeysSchema: z.ZodObject<{
-    allowed_keys: z.ZodArray<z.ZodString, "many">;
-    keys: z.ZodRecord<z.ZodString, z.ZodObject<{
-        expires_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
-        secret: z.ZodString;
-        is_active: z.ZodBoolean;
-    }, "strip", z.ZodTypeAny, {
-        expires_at: Timestamp;
-        secret: string;
-        is_active: boolean;
-    }, {
-        expires_at: Timestamp;
-        secret: string;
-        is_active: boolean;
-    }>>;
-}, "strip", z.ZodTypeAny, {
-    keys: Record<string, {
-        expires_at: Timestamp;
-        secret: string;
-        is_active: boolean;
-    }>;
-    allowed_keys: string[];
-}, {
-    keys: Record<string, {
-        expires_at: Timestamp;
-        secret: string;
-        is_active: boolean;
-    }>;
-    allowed_keys: string[];
-}>;
-declare const userFirestoreSchema: z.ZodObject<{
-    id: z.ZodString;
-    created_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
-    updated_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
-    created_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>]>;
-    updated_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>]>;
-} & {
-    createdAt: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
-    partner: z.ZodNullable<z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
-    profileRef: z.ZodNullable<z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
-    balance: z.ZodUnion<[z.ZodNumber, z.ZodNull, z.ZodType<FieldValue, z.ZodTypeDef, FieldValue>]>;
-    review_requested: z.ZodOptional<z.ZodNullable<z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>>>;
-    last_seen: z.ZodOptional<z.ZodNullable<z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>>>;
-    api_keys: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-        allowed_keys: z.ZodArray<z.ZodString, "many">;
-        keys: z.ZodRecord<z.ZodString, z.ZodObject<{
-            expires_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
-            secret: z.ZodString;
-            is_active: z.ZodBoolean;
-        }, "strip", z.ZodTypeAny, {
-            expires_at: Timestamp;
-            secret: string;
-            is_active: boolean;
-        }, {
-            expires_at: Timestamp;
-            secret: string;
-            is_active: boolean;
-        }>>;
-    }, "strip", z.ZodTypeAny, {
-        keys: Record<string, {
-            expires_at: Timestamp;
-            secret: string;
-            is_active: boolean;
-        }>;
-        allowed_keys: string[];
-    }, {
-        keys: Record<string, {
-            expires_at: Timestamp;
-            secret: string;
-            is_active: boolean;
-        }>;
-        allowed_keys: string[];
-    }>>>;
-    name: z.ZodNullable<z.ZodString>;
-    email: z.ZodNullable<z.ZodString>;
-    stripe_id: z.ZodNullable<z.ZodString>;
-    referral: z.ZodNullable<z.ZodString>;
-    fcm: z.ZodOptional<z.ZodString>;
-    deeplink: z.ZodNullable<z.ZodString>;
-    gender: z.ZodNullable<z.ZodString>;
-    company: z.ZodNullable<z.ZodString>;
-    coordinates: z.ZodNullable<z.ZodString>;
-    parameters: z.ZodNullable<z.ZodAny>;
-    locale: z.ZodNullable<z.ZodString>;
-    phone_model: z.ZodNullable<z.ZodString>;
-    phone_os: z.ZodNullable<z.ZodString>;
-    phone_os_version: z.ZodNullable<z.ZodString>;
-    ios: z.ZodNullable<z.ZodBoolean>;
-    has_card_saved: z.ZodNullable<z.ZodBoolean>;
-    admin: z.ZodNullable<z.ZodBoolean>;
-    currency: z.ZodNullable<z.ZodString>;
-    receipt_email: z.ZodNullable<z.ZodString>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
-    created_at: Timestamp;
-    updated_at: Timestamp;
-    created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    createdAt: Timestamp;
-    partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    profileRef: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    balance: number | FieldValue | null;
-    name: string | null;
-    email: string | null;
-    stripe_id: string | null;
-    referral: string | null;
-    deeplink: string | null;
-    gender: string | null;
-    company: string | null;
-    coordinates: string | null;
-    locale: string | null;
-    phone_model: string | null;
-    phone_os: string | null;
-    phone_os_version: string | null;
-    ios: boolean | null;
-    has_card_saved: boolean | null;
-    admin: boolean | null;
-    currency: string | null;
-    receipt_email: string | null;
-    review_requested?: Timestamp | null | undefined;
-    last_seen?: Timestamp | null | undefined;
-    fcm?: string | undefined;
-    parameters?: any;
-    api_keys?: {
-        keys: Record<string, {
-            expires_at: Timestamp;
-            secret: string;
-            is_active: boolean;
-        }>;
-        allowed_keys: string[];
-    } | null | undefined;
-}, {
-    id: string;
-    created_at: Timestamp;
-    updated_at: Timestamp;
-    created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    createdAt: Timestamp;
-    partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    profileRef: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    balance: number | FieldValue | null;
-    name: string | null;
-    email: string | null;
-    stripe_id: string | null;
-    referral: string | null;
-    deeplink: string | null;
-    gender: string | null;
-    company: string | null;
-    coordinates: string | null;
-    locale: string | null;
-    phone_model: string | null;
-    phone_os: string | null;
-    phone_os_version: string | null;
-    ios: boolean | null;
-    has_card_saved: boolean | null;
-    admin: boolean | null;
-    currency: string | null;
-    receipt_email: string | null;
-    review_requested?: Timestamp | null | undefined;
-    last_seen?: Timestamp | null | undefined;
-    fcm?: string | undefined;
-    parameters?: any;
-    api_keys?: {
-        keys: Record<string, {
-            expires_at: Timestamp;
-            secret: string;
-            is_active: boolean;
-        }>;
-        allowed_keys: string[];
-    } | null | undefined;
-}>;
-type UserFirestore = z.infer<typeof userFirestoreSchema>;
-type ApiKeys = z.infer<typeof apiKeysSchema>;
-type ApiKey = z.infer<typeof apiKeySchema>;
-declare const userToFirestore: (user: UserApp) => UserFirestore;
-declare const userFromFirestore: (firestoreUser: UserFirestore) => UserApp;
-declare const userToFirestoreWithBalance: (user: UserApp) => UserFirestore;
-
-type User = UserFirestore;
-
-declare const bookingFirestoreSchema: z.ZodObject<{
-    id: z.ZodString;
-    created_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
-    updated_at: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
-    created_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>]>;
-    updated_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>]>;
-} & {
-    return_date: z.ZodNullable<z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>>;
-    departure_date: z.ZodType<FirebaseFirestore.Timestamp, z.ZodTypeDef, FirebaseFirestore.Timestamp>;
-    partner: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-    promo_codes: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
-    users: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
-    esims: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
-    title: z.ZodNullable<z.ZodString>;
-    first_name: z.ZodString;
-    last_name: z.ZodString;
-    full_name: z.ZodString;
-    pax: z.ZodNumber;
-    email: z.ZodNullable<z.ZodString>;
-    phone: z.ZodNullable<z.ZodString>;
-    booking_id: z.ZodNullable<z.ZodString>;
-    flight_number: z.ZodOptional<z.ZodString>;
-    gender: z.ZodOptional<z.ZodEnum<["M", "F", "O"]>>;
-    package_size: z.ZodOptional<z.ZodString>;
-    sent_messages: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
-    locale: z.ZodEnum<["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]>;
-    status: z.ZodEnum<["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED", "UNPAID", "EXPIRED"]>;
-    data: z.ZodObject<{
-        source: z.ZodString;
-        manual: z.ZodBoolean;
-    }, "strip", z.ZodTypeAny, {
-        source: string;
-        manual: boolean;
-    }, {
-        source: string;
-        manual: boolean;
-    }>;
-    communication_options: z.ZodObject<{
-        should_send_message: z.ZodBoolean;
-        channels: z.ZodArray<z.ZodEnum<["EMAIL", "WHATSAPP", "PUSH_NOTIFICATION", "SMS"]>, "many">;
-    }, "strip", z.ZodTypeAny, {
-        should_send_message: boolean;
-        channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
-    }, {
-        should_send_message: boolean;
-        channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
-    }>;
-    is_processed_for_esim_restoration: z.ZodBoolean;
-    is_pseudonymized: z.ZodBoolean;
-    import_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    package_specifications: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
-    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
-    created_at: FirebaseFirestore.Timestamp;
-    updated_at: FirebaseFirestore.Timestamp;
-    created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    users: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[] | null;
-    promo_codes: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[];
-    esims: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[] | null;
-    partner: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-    email: string | null;
-    locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
-    return_date: FirebaseFirestore.Timestamp | null;
-    departure_date: FirebaseFirestore.Timestamp;
-    title: string | null;
-    first_name: string;
-    last_name: string;
-    full_name: string;
-    pax: number;
-    phone: string | null;
-    booking_id: string | null;
-    data: {
-        source: string;
-        manual: boolean;
-    };
-    communication_options: {
-        should_send_message: boolean;
-        channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
-    };
-    is_processed_for_esim_restoration: boolean;
-    is_pseudonymized: boolean;
-    gender?: "M" | "F" | "O" | undefined;
-    flight_number?: string | undefined;
-    package_size?: string | undefined;
-    sent_messages?: Record<string, any> | undefined;
-    import_id?: string | null | undefined;
-    package_specifications?: Record<string, any> | undefined;
-}, {
-    id: string;
-    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
-    created_at: FirebaseFirestore.Timestamp;
-    updated_at: FirebaseFirestore.Timestamp;
-    created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    users: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[] | null;
-    promo_codes: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[];
-    esims: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[] | null;
-    partner: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-    email: string | null;
-    locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
-    return_date: FirebaseFirestore.Timestamp | null;
-    departure_date: FirebaseFirestore.Timestamp;
-    title: string | null;
-    first_name: string;
-    last_name: string;
-    full_name: string;
-    pax: number;
-    phone: string | null;
-    booking_id: string | null;
-    data: {
-        source: string;
-        manual: boolean;
-    };
-    communication_options: {
-        should_send_message: boolean;
-        channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
-    };
-    is_processed_for_esim_restoration: boolean;
-    is_pseudonymized: boolean;
-    gender?: "M" | "F" | "O" | undefined;
-    flight_number?: string | undefined;
-    package_size?: string | undefined;
-    sent_messages?: Record<string, any> | undefined;
-    import_id?: string | null | undefined;
-    package_specifications?: Record<string, any> | undefined;
-}>;
-type BookingFirestore = z.infer<typeof bookingFirestoreSchema>;
-declare const bookingToFirestore: (booking: BookingApp) => BookingFirestore;
-declare const bookingFromFirestore: (firestoreBooking: BookingFirestore) => BookingApp;
-type Booking = BookingFirestore;
+import { f as financialPropertiesAppSchema, s as scheduleSchema, P as PartnerApp, a as PriceListApp, U as UserApp, B as BookingApp, C as CountryApp, b as PackageApp, c as PromoCodeApp, E as ESIMApp, d as PaymentApp, M as MessageApp, S as SentMessagesApp, e as CurrencyApp, A as ApiLogApp } from './constants-c8dc7aed.js';
+export { J as API_LOG_COLLECTION, G as BOOKING_COLLECTION, aD as BookingApiRequest, aE as BookingApiResponse, y as COUNTRY_COLLECTION, I as CURRENCY_COLLECTION, aL as CommunicationChannel, aM as CommunicationOptions, z as ESIM_COLLECTION, H as MESSAGE_COLLECTION, w as PACKAGE_COLLECTION, t as PARTNER_COLLECTION, D as PAYMENT_COLLECTION, F as PRICE_LIST_COLLECTION, v as PROFILE_COLLECTION, x as PROMO_CODE_COLLECTION, aO as PackagePriceApp, aB as PackageSpecification, aC as PackageSpecifications, aG as PartnerApiRequest, aH as PartnerApiResponse, aN as PlatformSettings, aF as PromoCodeApiResponse, g as SUPPORTED_LOCALES, h as SupportedLocales, i as SupportedLocalesFromSchema, u as USER_COLLECTION, aI as VisualIdentity, aK as VisualIdentityBanner, aJ as VisualIdentityBannerStrategy, _ as apiLogRefString, am as apiLogRefStringArray, ay as apiLogRefStringArrayNullable, aa as apiLogRefStringNullable, p as apiPackageSpecificationSchema, l as apiPackageSpecificationsSchema, k as baseModelAppSchema, o as bookingApiRequestSchema, m as bookingApiResponseSchema, X as bookingRefString, ak as bookingRefStringArray, aw as bookingRefStringArrayNullable, a8 as bookingRefStringNullable, R as countryRefString, ag as countryRefStringArray, as as countryRefStringArrayNullable, a4 as countryRefStringNullable, Z as currencyRefString, az as currencyRefStringArrayNullable, T as esimRefString, ah as esimRefStringArray, at as esimRefStringArrayNullable, a5 as esimRefStringNullable, Y as messageRefString, al as messageRefStringArray, ax as messageRefStringArrayNullable, a9 as messageRefStringNullable, O as packageRefString, ae as packageRefStringArray, aq as packageRefStringArrayNullable, a2 as packageRefStringNullable, q as partnerApiRequestSchema, r as partnerApiResponseSchema, aA as partnerAppSchema, K as partnerRefString, ab as partnerRefStringArray, an as partnerRefStringArrayNullable, $ as partnerRefStringNullable, V as paymentRefString, ai as paymentRefStringArray, au as paymentRefStringArrayNullable, a6 as paymentRefStringNullable, W as priceListRefString, aj as priceListRefStringArray, av as priceListRefStringArrayNullable, a7 as priceListRefStringNullable, N as profileRefString, ad as profileRefStringArray, ap as profileRefStringArrayNullable, a1 as profileRefStringNullable, n as promoCodeApiResponseSchema, Q as promoCodeRefString, af as promoCodeRefStringArray, ar as promoCodeRefStringArrayNullable, a3 as promoCodeRefStringNullable, j as supportedLocalesSchema, L as userRefString, ac as userRefStringArray, ao as userRefStringArrayNullable, a0 as userRefStringNullable } from './constants-c8dc7aed.js';
+import { Timestamp, DocumentReference, FieldValue, Firestore, DocumentData } from 'firebase-admin/firestore';
 
 declare const packagePriceFirestoreSchema: z.ZodObject<{
     package: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
     destination: z.ZodString;
     label: z.ZodString;
-    type: z.ZodEnum<["data-limit", "time-limit"]>;
+    type: z.ZodEnum<["data-limited", "time-limited"]>;
     price: z.ZodNumber;
 }, "strip", z.ZodTypeAny, {
-    type: "data-limit" | "time-limit";
+    type: "data-limited" | "time-limited";
     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
     destination: string;
     label: string;
     price: number;
 }, {
-    type: "data-limit" | "time-limit";
+    type: "data-limited" | "time-limited";
     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
     destination: string;
     label: string;
     price: number;
-}>;
-declare const partnerPricingStrategyFirestoreSchema: z.ZodObject<{
-    strategy: z.ZodEnum<["split", "bundle"]>;
-    default_price_list: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
-    custom_prices: z.ZodArray<z.ZodObject<{
-        package: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-        destination: z.ZodString;
-        label: z.ZodString;
-        type: z.ZodEnum<["data-limit", "time-limit"]>;
-        price: z.ZodNumber;
-    }, "strip", z.ZodTypeAny, {
-        type: "data-limit" | "time-limit";
-        package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-        destination: string;
-        label: string;
-        price: number;
-    }, {
-        type: "data-limit" | "time-limit";
-        package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-        destination: string;
-        label: string;
-        price: number;
-    }>, "many">;
-    modification_percentage: z.ZodNumber;
-}, "strip", z.ZodTypeAny, {
-    strategy: "split" | "bundle";
-    default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    custom_prices: {
-        type: "data-limit" | "time-limit";
-        package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-        destination: string;
-        label: string;
-        price: number;
-    }[];
-    modification_percentage: number;
-}, {
-    strategy: "split" | "bundle";
-    default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    custom_prices: {
-        type: "data-limit" | "time-limit";
-        package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-        destination: string;
-        label: string;
-        price: number;
-    }[];
-    modification_percentage: number;
-}>;
-declare const userPricingStrategyFirestoreSchema: z.ZodObject<{
-    default_price_list: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
-    custom_prices: z.ZodArray<z.ZodObject<{
-        package: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
-        destination: z.ZodString;
-        label: z.ZodString;
-        type: z.ZodEnum<["data-limit", "time-limit"]>;
-        price: z.ZodNumber;
-    }, "strip", z.ZodTypeAny, {
-        type: "data-limit" | "time-limit";
-        package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-        destination: string;
-        label: string;
-        price: number;
-    }, {
-        type: "data-limit" | "time-limit";
-        package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-        destination: string;
-        label: string;
-        price: number;
-    }>, "many">;
-    modification_percentage: z.ZodNumber;
-}, "strip", z.ZodTypeAny, {
-    default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    custom_prices: {
-        type: "data-limit" | "time-limit";
-        package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-        destination: string;
-        label: string;
-        price: number;
-    }[];
-    modification_percentage: number;
-}, {
-    default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    custom_prices: {
-        type: "data-limit" | "time-limit";
-        package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
-        destination: string;
-        label: string;
-        price: number;
-    }[];
-    modification_percentage: number;
 }>;
 declare const financialPropertiesFirestoreSchema: z.ZodNullable<z.ZodObject<{
     pricing_strategies: z.ZodNullable<z.ZodObject<{
@@ -625,16 +31,16 @@ declare const financialPropertiesFirestoreSchema: z.ZodNullable<z.ZodObject<{
                 package: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
                 destination: z.ZodString;
                 label: z.ZodString;
-                type: z.ZodEnum<["data-limit", "time-limit"]>;
+                type: z.ZodEnum<["data-limited", "time-limited"]>;
                 price: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
-                type: "data-limit" | "time-limit";
+                type: "data-limited" | "time-limited";
                 package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 label: string;
                 price: number;
             }, {
-                type: "data-limit" | "time-limit";
+                type: "data-limited" | "time-limited";
                 package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 label: string;
@@ -645,7 +51,7 @@ declare const financialPropertiesFirestoreSchema: z.ZodNullable<z.ZodObject<{
             strategy: "split" | "bundle";
             default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
             custom_prices: {
-                type: "data-limit" | "time-limit";
+                type: "data-limited" | "time-limited";
                 package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 label: string;
@@ -656,7 +62,7 @@ declare const financialPropertiesFirestoreSchema: z.ZodNullable<z.ZodObject<{
             strategy: "split" | "bundle";
             default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
             custom_prices: {
-                type: "data-limit" | "time-limit";
+                type: "data-limited" | "time-limited";
                 package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 label: string;
@@ -670,16 +76,16 @@ declare const financialPropertiesFirestoreSchema: z.ZodNullable<z.ZodObject<{
                 package: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
                 destination: z.ZodString;
                 label: z.ZodString;
-                type: z.ZodEnum<["data-limit", "time-limit"]>;
+                type: z.ZodEnum<["data-limited", "time-limited"]>;
                 price: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
-                type: "data-limit" | "time-limit";
+                type: "data-limited" | "time-limited";
                 package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 label: string;
                 price: number;
             }, {
-                type: "data-limit" | "time-limit";
+                type: "data-limited" | "time-limited";
                 package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 label: string;
@@ -689,7 +95,7 @@ declare const financialPropertiesFirestoreSchema: z.ZodNullable<z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
             custom_prices: {
-                type: "data-limit" | "time-limit";
+                type: "data-limited" | "time-limited";
                 package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 label: string;
@@ -699,7 +105,7 @@ declare const financialPropertiesFirestoreSchema: z.ZodNullable<z.ZodObject<{
         }, {
             default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
             custom_prices: {
-                type: "data-limit" | "time-limit";
+                type: "data-limited" | "time-limited";
                 package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 label: string;
@@ -712,7 +118,7 @@ declare const financialPropertiesFirestoreSchema: z.ZodNullable<z.ZodObject<{
             strategy: "split" | "bundle";
             default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
             custom_prices: {
-                type: "data-limit" | "time-limit";
+                type: "data-limited" | "time-limited";
                 package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 label: string;
@@ -723,7 +129,7 @@ declare const financialPropertiesFirestoreSchema: z.ZodNullable<z.ZodObject<{
         user?: {
             default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
             custom_prices: {
-                type: "data-limit" | "time-limit";
+                type: "data-limited" | "time-limited";
                 package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 label: string;
@@ -736,7 +142,7 @@ declare const financialPropertiesFirestoreSchema: z.ZodNullable<z.ZodObject<{
             strategy: "split" | "bundle";
             default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
             custom_prices: {
-                type: "data-limit" | "time-limit";
+                type: "data-limited" | "time-limited";
                 package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 label: string;
@@ -747,7 +153,7 @@ declare const financialPropertiesFirestoreSchema: z.ZodNullable<z.ZodObject<{
         user?: {
             default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
             custom_prices: {
-                type: "data-limit" | "time-limit";
+                type: "data-limited" | "time-limited";
                 package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 label: string;
@@ -769,7 +175,7 @@ declare const financialPropertiesFirestoreSchema: z.ZodNullable<z.ZodObject<{
             strategy: "split" | "bundle";
             default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
             custom_prices: {
-                type: "data-limit" | "time-limit";
+                type: "data-limited" | "time-limited";
                 package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 label: string;
@@ -780,7 +186,7 @@ declare const financialPropertiesFirestoreSchema: z.ZodNullable<z.ZodObject<{
         user?: {
             default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
             custom_prices: {
-                type: "data-limit" | "time-limit";
+                type: "data-limited" | "time-limited";
                 package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 label: string;
@@ -802,7 +208,7 @@ declare const financialPropertiesFirestoreSchema: z.ZodNullable<z.ZodObject<{
             strategy: "split" | "bundle";
             default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
             custom_prices: {
-                type: "data-limit" | "time-limit";
+                type: "data-limited" | "time-limited";
                 package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 label: string;
@@ -813,7 +219,7 @@ declare const financialPropertiesFirestoreSchema: z.ZodNullable<z.ZodObject<{
         user?: {
             default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
             custom_prices: {
-                type: "data-limit" | "time-limit";
+                type: "data-limited" | "time-limited";
                 package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                 destination: string;
                 label: string;
@@ -848,16 +254,16 @@ declare const partnerFirestoreSchema: z.ZodObject<{
                     package: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
                     destination: z.ZodString;
                     label: z.ZodString;
-                    type: z.ZodEnum<["data-limit", "time-limit"]>;
+                    type: z.ZodEnum<["data-limited", "time-limited"]>;
                     price: z.ZodNumber;
                 }, "strip", z.ZodTypeAny, {
-                    type: "data-limit" | "time-limit";
+                    type: "data-limited" | "time-limited";
                     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     label: string;
                     price: number;
                 }, {
-                    type: "data-limit" | "time-limit";
+                    type: "data-limited" | "time-limited";
                     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     label: string;
@@ -868,7 +274,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
                 strategy: "split" | "bundle";
                 default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
-                    type: "data-limit" | "time-limit";
+                    type: "data-limited" | "time-limited";
                     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     label: string;
@@ -879,7 +285,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
                 strategy: "split" | "bundle";
                 default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
-                    type: "data-limit" | "time-limit";
+                    type: "data-limited" | "time-limited";
                     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     label: string;
@@ -893,16 +299,16 @@ declare const partnerFirestoreSchema: z.ZodObject<{
                     package: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
                     destination: z.ZodString;
                     label: z.ZodString;
-                    type: z.ZodEnum<["data-limit", "time-limit"]>;
+                    type: z.ZodEnum<["data-limited", "time-limited"]>;
                     price: z.ZodNumber;
                 }, "strip", z.ZodTypeAny, {
-                    type: "data-limit" | "time-limit";
+                    type: "data-limited" | "time-limited";
                     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     label: string;
                     price: number;
                 }, {
-                    type: "data-limit" | "time-limit";
+                    type: "data-limited" | "time-limited";
                     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     label: string;
@@ -912,7 +318,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             }, "strip", z.ZodTypeAny, {
                 default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
-                    type: "data-limit" | "time-limit";
+                    type: "data-limited" | "time-limited";
                     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     label: string;
@@ -922,7 +328,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             }, {
                 default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
-                    type: "data-limit" | "time-limit";
+                    type: "data-limited" | "time-limited";
                     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     label: string;
@@ -935,7 +341,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
                 strategy: "split" | "bundle";
                 default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
-                    type: "data-limit" | "time-limit";
+                    type: "data-limited" | "time-limited";
                     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     label: string;
@@ -946,7 +352,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             user?: {
                 default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
-                    type: "data-limit" | "time-limit";
+                    type: "data-limited" | "time-limited";
                     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     label: string;
@@ -959,7 +365,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
                 strategy: "split" | "bundle";
                 default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
-                    type: "data-limit" | "time-limit";
+                    type: "data-limited" | "time-limited";
                     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     label: string;
@@ -970,7 +376,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             user?: {
                 default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
-                    type: "data-limit" | "time-limit";
+                    type: "data-limited" | "time-limited";
                     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     label: string;
@@ -992,7 +398,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
                 strategy: "split" | "bundle";
                 default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
-                    type: "data-limit" | "time-limit";
+                    type: "data-limited" | "time-limited";
                     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     label: string;
@@ -1003,7 +409,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             user?: {
                 default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
-                    type: "data-limit" | "time-limit";
+                    type: "data-limited" | "time-limited";
                     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     label: string;
@@ -1025,7 +431,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
                 strategy: "split" | "bundle";
                 default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
-                    type: "data-limit" | "time-limit";
+                    type: "data-limited" | "time-limited";
                     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     label: string;
@@ -1036,7 +442,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             user?: {
                 default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
-                    type: "data-limit" | "time-limit";
+                    type: "data-limited" | "time-limited";
                     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     label: string;
@@ -1060,12 +466,12 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             parameters: z.ZodAny;
         }, "strip", z.ZodTypeAny, {
             name: string;
-            parameters?: any;
             iso3_white_list?: string[] | undefined;
+            parameters?: any;
         }, {
             name: string;
-            parameters?: any;
             iso3_white_list?: string[] | undefined;
+            parameters?: any;
         }>>>;
         free_esim: z.ZodOptional<z.ZodNullable<z.ZodObject<{
             package_specification: z.ZodObject<{
@@ -1145,18 +551,18 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             hour: z.ZodNumber;
             key: z.ZodString;
             method: z.ZodEnum<["email", "sms", "whatsapp", "push"]>;
-            moment: z.ZodEnum<["departure", "return", "immediate"]>;
+            moment: z.ZodEnum<["departure_date", "return_date", "immediate"]>;
             filter: z.ZodOptional<z.ZodNullable<z.ZodNullable<z.ZodObject<{
                 type: z.ZodEnum<["iso3", "gender", "percentage", "age"]>;
                 value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
                 comparison: z.ZodEnum<["equal", "not_equal", "greater_than", "less_than", "greater_than_or_equal", "less_than_or_equal"]>;
             }, "strip", z.ZodTypeAny, {
                 value: string | number;
-                type: "gender" | "iso3" | "percentage" | "age";
+                type: "iso3" | "gender" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             }, {
                 value: string | number;
-                type: "gender" | "iso3" | "percentage" | "age";
+                type: "iso3" | "gender" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             }>>>>;
         }, "strip", z.ZodTypeAny, {
@@ -1164,7 +570,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             hour: number;
             key: string;
             method: "push" | "email" | "sms" | "whatsapp";
-            moment: "departure" | "return" | "immediate";
+            moment: "departure_date" | "return_date" | "immediate";
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -1172,7 +578,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             } | null | undefined;
             filter?: {
                 value: string | number;
-                type: "gender" | "iso3" | "percentage" | "age";
+                type: "iso3" | "gender" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
             email?: {
@@ -1185,7 +591,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             hour: number;
             key: string;
             method: "push" | "email" | "sms" | "whatsapp";
-            moment: "departure" | "return" | "immediate";
+            moment: "departure_date" | "return_date" | "immediate";
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -1193,7 +599,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             } | null | undefined;
             filter?: {
                 value: string | number;
-                type: "gender" | "iso3" | "percentage" | "age";
+                type: "iso3" | "gender" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
             email?: {
@@ -1205,8 +611,8 @@ declare const partnerFirestoreSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         package_strategy?: {
             name: string;
-            parameters?: any;
             iso3_white_list?: string[] | undefined;
+            parameters?: any;
         } | null | undefined;
         free_esim?: {
             package_specification: {
@@ -1228,7 +634,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             hour: number;
             key: string;
             method: "push" | "email" | "sms" | "whatsapp";
-            moment: "departure" | "return" | "immediate";
+            moment: "departure_date" | "return_date" | "immediate";
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -1236,7 +642,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             } | null | undefined;
             filter?: {
                 value: string | number;
-                type: "gender" | "iso3" | "percentage" | "age";
+                type: "iso3" | "gender" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
             email?: {
@@ -1248,8 +654,8 @@ declare const partnerFirestoreSchema: z.ZodObject<{
     }, {
         package_strategy?: {
             name: string;
-            parameters?: any;
             iso3_white_list?: string[] | undefined;
+            parameters?: any;
         } | null | undefined;
         free_esim?: {
             package_specification: {
@@ -1271,7 +677,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             hour: number;
             key: string;
             method: "push" | "email" | "sms" | "whatsapp";
-            moment: "departure" | "return" | "immediate";
+            moment: "departure_date" | "return_date" | "immediate";
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -1279,7 +685,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             } | null | undefined;
             filter?: {
                 value: string | number;
-                type: "gender" | "iso3" | "percentage" | "age";
+                type: "iso3" | "gender" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
             email?: {
@@ -1496,10 +902,10 @@ declare const partnerFirestoreSchema: z.ZodObject<{
     }>>>;
 }, "strip", z.ZodTypeAny, {
     id: string;
-    type: string | null;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    type: string | null;
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     users: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[] | null;
     name: string | null;
@@ -1510,7 +916,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
                 strategy: "split" | "bundle";
                 default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
-                    type: "data-limit" | "time-limit";
+                    type: "data-limited" | "time-limited";
                     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     label: string;
@@ -1521,7 +927,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             user?: {
                 default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
-                    type: "data-limit" | "time-limit";
+                    type: "data-limited" | "time-limited";
                     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     label: string;
@@ -1541,8 +947,8 @@ declare const partnerFirestoreSchema: z.ZodObject<{
     platform_settings: {
         package_strategy?: {
             name: string;
-            parameters?: any;
             iso3_white_list?: string[] | undefined;
+            parameters?: any;
         } | null | undefined;
         free_esim?: {
             package_specification: {
@@ -1564,7 +970,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             hour: number;
             key: string;
             method: "push" | "email" | "sms" | "whatsapp";
-            moment: "departure" | "return" | "immediate";
+            moment: "departure_date" | "return_date" | "immediate";
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -1572,7 +978,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             } | null | undefined;
             filter?: {
                 value: string | number;
-                type: "gender" | "iso3" | "percentage" | "age";
+                type: "iso3" | "gender" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
             email?: {
@@ -1630,17 +1036,17 @@ declare const partnerFirestoreSchema: z.ZodObject<{
         } | undefined;
     } | null;
     is_active?: boolean | null | undefined;
+    external_id?: string | null | undefined;
     data?: {
         source: string;
         manual: boolean;
     } | null | undefined;
-    external_id?: string | null | undefined;
 }, {
     id: string;
-    type: string | null;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    type: string | null;
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     users: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>[] | null;
     name: string | null;
@@ -1651,7 +1057,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
                 strategy: "split" | "bundle";
                 default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
-                    type: "data-limit" | "time-limit";
+                    type: "data-limited" | "time-limited";
                     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     label: string;
@@ -1662,7 +1068,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             user?: {
                 default_price_list: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
                 custom_prices: {
-                    type: "data-limit" | "time-limit";
+                    type: "data-limited" | "time-limited";
                     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
                     destination: string;
                     label: string;
@@ -1682,8 +1088,8 @@ declare const partnerFirestoreSchema: z.ZodObject<{
     platform_settings: {
         package_strategy?: {
             name: string;
-            parameters?: any;
             iso3_white_list?: string[] | undefined;
+            parameters?: any;
         } | null | undefined;
         free_esim?: {
             package_specification: {
@@ -1705,7 +1111,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             hour: number;
             key: string;
             method: "push" | "email" | "sms" | "whatsapp";
-            moment: "departure" | "return" | "immediate";
+            moment: "departure_date" | "return_date" | "immediate";
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -1713,7 +1119,7 @@ declare const partnerFirestoreSchema: z.ZodObject<{
             } | null | undefined;
             filter?: {
                 value: string | number;
-                type: "gender" | "iso3" | "percentage" | "age";
+                type: "iso3" | "gender" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
             email?: {
@@ -1771,11 +1177,11 @@ declare const partnerFirestoreSchema: z.ZodObject<{
         } | undefined;
     } | null;
     is_active?: boolean | null | undefined;
+    external_id?: string | null | undefined;
     data?: {
         source: string;
         manual: boolean;
     } | null | undefined;
-    external_id?: string | null | undefined;
 }>;
 declare const priceListFirestoreSchema: z.ZodObject<{
     id: z.ZodString;
@@ -1792,16 +1198,16 @@ declare const priceListFirestoreSchema: z.ZodObject<{
         package: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
         destination: z.ZodString;
         label: z.ZodString;
-        type: z.ZodEnum<["data-limit", "time-limit"]>;
+        type: z.ZodEnum<["data-limited", "time-limited"]>;
         price: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
-        type: "data-limit" | "time-limit";
+        type: "data-limited" | "time-limited";
         package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
         destination: string;
         label: string;
         price: number;
     }, {
-        type: "data-limit" | "time-limit";
+        type: "data-limited" | "time-limited";
         package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
         destination: string;
         label: string;
@@ -1809,16 +1215,16 @@ declare const priceListFirestoreSchema: z.ZodObject<{
     }>, "many">;
 }, "strip", z.ZodTypeAny, {
     id: string;
-    type: "partner" | "consumer";
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    type: "partner" | "consumer";
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     description: string | null;
     partner: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     name: string;
     package_prices: {
-        type: "data-limit" | "time-limit";
+        type: "data-limited" | "time-limited";
         package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
         destination: string;
         label: string;
@@ -1826,16 +1232,16 @@ declare const priceListFirestoreSchema: z.ZodObject<{
     }[];
 }, {
     id: string;
-    type: "partner" | "consumer";
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    type: "partner" | "consumer";
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     description: string | null;
     partner: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     name: string;
     package_prices: {
-        type: "data-limit" | "time-limit";
+        type: "data-limited" | "time-limited";
         package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
         destination: string;
         label: string;
@@ -1845,17 +1251,495 @@ declare const priceListFirestoreSchema: z.ZodObject<{
 type PartnerFirestore = z.infer<typeof partnerFirestoreSchema>;
 type PriceListFirestore = z.infer<typeof priceListFirestoreSchema>;
 type PackagePriceFirestore = z.infer<typeof packagePriceFirestoreSchema>;
-type PartnerPricingStrategyFirestore = z.infer<typeof partnerPricingStrategyFirestoreSchema>;
-type UserPricingStrategyFirestore = z.infer<typeof userPricingStrategyFirestoreSchema>;
 type FinancialPropertiesFirestore = z.infer<typeof financialPropertiesFirestoreSchema>;
 type FinancialProperties = z.infer<typeof financialPropertiesAppSchema>;
-type Partner = PartnerFirestore;
-type PriceList = PriceListFirestore;
-type PackagePrice = PackagePriceFirestore;
+type Schedule = z.infer<typeof scheduleSchema>;
 declare const partnerToFirestore: (partner: PartnerApp) => PartnerFirestore;
 declare const partnerFromFirestore: (firestorePartner: PartnerFirestore) => PartnerApp;
 declare const priceListToFirestore: (priceList: PriceListApp) => PriceListFirestore;
 declare const priceListFromFirestore: (firestorePriceList: PriceListFirestore) => PriceListApp;
+
+declare const timestampSchema: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
+declare const documentRefSchema: z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+declare const fieldValueSchema: z.ZodType<FieldValue, z.ZodTypeDef, FieldValue>;
+declare const baseModelSchema: z.ZodObject<{
+    id: z.ZodString;
+    created_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
+    updated_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
+    created_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>]>;
+    updated_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>]>;
+}, "strip", z.ZodTypeAny, {
+    id: string;
+    created_at: Timestamp;
+    updated_at: Timestamp;
+    created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+}, {
+    id: string;
+    created_at: Timestamp;
+    updated_at: Timestamp;
+    created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+}>;
+declare const createDocRefSchema: <T>(collectionPath: string) => {
+    schema: z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+    collectionPath: string;
+};
+type HubbyModelFirestore = z.infer<typeof baseModelSchema>;
+type HubbyModel = HubbyModelFirestore;
+
+declare class MockDocumentReference {
+    path: string;
+    id: string;
+    constructor(collectionPath: string, id: string);
+}
+declare const setFirestoreInstance: (db: Firestore) => void;
+declare const getFirestoreInstance: () => Firestore;
+declare const toFirestore: {
+    date: (date: Date) => Timestamp;
+    ref: <T>(collectionPath: string, id: string, db?: Firestore) => DocumentReference<T>;
+};
+declare const fromFirestore: {
+    date: (timestamp: Timestamp) => Date;
+    ref: <T>(docRef: DocumentReference<T> | MockDocumentReference) => string;
+};
+
+declare const hubbyModelAppSchema: z.ZodObject<{
+    id: z.ZodString;
+    created_at: z.ZodEffects<z.ZodDate, Date, unknown>;
+    updated_at: z.ZodEffects<z.ZodDate, Date, unknown>;
+    created_by: z.ZodUnion<[z.ZodString, z.ZodNull]>;
+    updated_by: z.ZodUnion<[z.ZodString, z.ZodNull]>;
+}, "strip", z.ZodTypeAny, {
+    id: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    updated_by: string | null;
+}, {
+    id: string;
+    created_by: string | null;
+    updated_by: string | null;
+    created_at?: unknown;
+    updated_at?: unknown;
+}>;
+type HubbyModelApp = z.infer<typeof hubbyModelAppSchema>;
+type HHubbyModel = HubbyModelApp;
+declare const docRefToStringSchema: <T>(docRefSchema: ReturnType<typeof createDocRefSchema<T>>) => z.ZodString;
+
+declare const partnerRefSchema: {
+    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+    collectionPath: string;
+};
+declare const userRefSchema: {
+    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+    collectionPath: string;
+};
+declare const profileRefSchema: {
+    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+    collectionPath: string;
+};
+declare const packageRefSchema: {
+    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+    collectionPath: string;
+};
+declare const promoCodeRefSchema: {
+    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+    collectionPath: string;
+};
+declare const countryRefSchema: {
+    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+    collectionPath: string;
+};
+declare const esimRefSchema: {
+    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+    collectionPath: string;
+};
+declare const paymentRefSchema: {
+    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+    collectionPath: string;
+};
+declare const priceListRefSchema: {
+    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+    collectionPath: string;
+};
+declare const bookingRefSchema: {
+    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+    collectionPath: string;
+};
+declare const messageRefSchema: {
+    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+    collectionPath: string;
+};
+declare const currencyRefSchema: {
+    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+    collectionPath: string;
+};
+declare const apiLogRefSchema: {
+    schema: z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>;
+    collectionPath: string;
+};
+declare const partnerRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
+declare const userRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
+declare const profileRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
+declare const packageRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
+declare const promoCodeRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
+declare const countryRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
+declare const esimRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
+declare const paymentRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
+declare const priceListRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
+declare const bookingRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
+declare const messageRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
+declare const currencyRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
+declare const apiLogRefNullable: z.ZodNullable<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
+declare const partnerRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
+declare const userRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
+declare const profileRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
+declare const packageRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
+declare const promoCodeRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
+declare const countryRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
+declare const esimRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
+declare const paymentRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
+declare const priceListRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
+declare const bookingRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
+declare const messageRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
+declare const currencyRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
+declare const apiLogRefArray: z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">;
+declare const partnerRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
+declare const userRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
+declare const profileRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
+declare const packageRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
+declare const promoCodeRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
+declare const countryRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
+declare const esimRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
+declare const paymentRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
+declare const priceListRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
+declare const bookingRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
+declare const messageRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
+declare const apiLogRefArrayNullable: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, "many">>;
+
+declare const apiKeySchema: z.ZodObject<{
+    expires_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
+    secret: z.ZodString;
+    is_active: z.ZodBoolean;
+}, "strip", z.ZodTypeAny, {
+    is_active: boolean;
+    expires_at: Timestamp;
+    secret: string;
+}, {
+    is_active: boolean;
+    expires_at: Timestamp;
+    secret: string;
+}>;
+declare const apiKeysSchema: z.ZodObject<{
+    allowed_keys: z.ZodArray<z.ZodString, "many">;
+    keys: z.ZodRecord<z.ZodString, z.ZodObject<{
+        expires_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
+        secret: z.ZodString;
+        is_active: z.ZodBoolean;
+    }, "strip", z.ZodTypeAny, {
+        is_active: boolean;
+        expires_at: Timestamp;
+        secret: string;
+    }, {
+        is_active: boolean;
+        expires_at: Timestamp;
+        secret: string;
+    }>>;
+}, "strip", z.ZodTypeAny, {
+    keys: Record<string, {
+        is_active: boolean;
+        expires_at: Timestamp;
+        secret: string;
+    }>;
+    allowed_keys: string[];
+}, {
+    keys: Record<string, {
+        is_active: boolean;
+        expires_at: Timestamp;
+        secret: string;
+    }>;
+    allowed_keys: string[];
+}>;
+declare const userFirestoreSchema: z.ZodObject<{
+    id: z.ZodString;
+    created_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
+    updated_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
+    created_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>]>;
+    updated_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>]>;
+} & {
+    createdAt: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
+    partner: z.ZodNullable<z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
+    profileRef: z.ZodNullable<z.ZodEffects<z.ZodType<DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, z.ZodTypeDef, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>, DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>>>;
+    balance: z.ZodUnion<[z.ZodNumber, z.ZodNull, z.ZodType<FieldValue, z.ZodTypeDef, FieldValue>]>;
+    review_requested: z.ZodOptional<z.ZodNullable<z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>>>;
+    last_seen: z.ZodOptional<z.ZodNullable<z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>>>;
+    api_keys: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        allowed_keys: z.ZodArray<z.ZodString, "many">;
+        keys: z.ZodRecord<z.ZodString, z.ZodObject<{
+            expires_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
+            secret: z.ZodString;
+            is_active: z.ZodBoolean;
+        }, "strip", z.ZodTypeAny, {
+            is_active: boolean;
+            expires_at: Timestamp;
+            secret: string;
+        }, {
+            is_active: boolean;
+            expires_at: Timestamp;
+            secret: string;
+        }>>;
+    }, "strip", z.ZodTypeAny, {
+        keys: Record<string, {
+            is_active: boolean;
+            expires_at: Timestamp;
+            secret: string;
+        }>;
+        allowed_keys: string[];
+    }, {
+        keys: Record<string, {
+            is_active: boolean;
+            expires_at: Timestamp;
+            secret: string;
+        }>;
+        allowed_keys: string[];
+    }>>>;
+    name: z.ZodNullable<z.ZodString>;
+    email: z.ZodNullable<z.ZodString>;
+    stripe_id: z.ZodNullable<z.ZodString>;
+    referral: z.ZodNullable<z.ZodString>;
+    fcm: z.ZodOptional<z.ZodString>;
+    deeplink: z.ZodNullable<z.ZodString>;
+    gender: z.ZodNullable<z.ZodString>;
+    company: z.ZodNullable<z.ZodString>;
+    coordinates: z.ZodNullable<z.ZodString>;
+    parameters: z.ZodNullable<z.ZodAny>;
+    locale: z.ZodNullable<z.ZodString>;
+    phone_model: z.ZodNullable<z.ZodString>;
+    phone_os: z.ZodNullable<z.ZodString>;
+    phone_os_version: z.ZodNullable<z.ZodString>;
+    ios: z.ZodNullable<z.ZodBoolean>;
+    has_card_saved: z.ZodNullable<z.ZodBoolean>;
+    admin: z.ZodNullable<z.ZodBoolean>;
+    currency: z.ZodNullable<z.ZodString>;
+    receipt_email: z.ZodNullable<z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    id: string;
+    created_at: Timestamp;
+    updated_at: Timestamp;
+    created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    name: string | null;
+    locale: string | null;
+    gender: string | null;
+    email: string | null;
+    createdAt: Timestamp;
+    profileRef: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    balance: number | FieldValue | null;
+    stripe_id: string | null;
+    referral: string | null;
+    deeplink: string | null;
+    company: string | null;
+    coordinates: string | null;
+    phone_model: string | null;
+    phone_os: string | null;
+    phone_os_version: string | null;
+    ios: boolean | null;
+    has_card_saved: boolean | null;
+    admin: boolean | null;
+    currency: string | null;
+    receipt_email: string | null;
+    parameters?: any;
+    review_requested?: Timestamp | null | undefined;
+    last_seen?: Timestamp | null | undefined;
+    fcm?: string | undefined;
+    api_keys?: {
+        keys: Record<string, {
+            is_active: boolean;
+            expires_at: Timestamp;
+            secret: string;
+        }>;
+        allowed_keys: string[];
+    } | null | undefined;
+}, {
+    id: string;
+    created_at: Timestamp;
+    updated_at: Timestamp;
+    created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    name: string | null;
+    locale: string | null;
+    gender: string | null;
+    email: string | null;
+    createdAt: Timestamp;
+    profileRef: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    balance: number | FieldValue | null;
+    stripe_id: string | null;
+    referral: string | null;
+    deeplink: string | null;
+    company: string | null;
+    coordinates: string | null;
+    phone_model: string | null;
+    phone_os: string | null;
+    phone_os_version: string | null;
+    ios: boolean | null;
+    has_card_saved: boolean | null;
+    admin: boolean | null;
+    currency: string | null;
+    receipt_email: string | null;
+    parameters?: any;
+    review_requested?: Timestamp | null | undefined;
+    last_seen?: Timestamp | null | undefined;
+    fcm?: string | undefined;
+    api_keys?: {
+        keys: Record<string, {
+            is_active: boolean;
+            expires_at: Timestamp;
+            secret: string;
+        }>;
+        allowed_keys: string[];
+    } | null | undefined;
+}>;
+type UserFirestore = z.infer<typeof userFirestoreSchema>;
+type ApiKeys = z.infer<typeof apiKeysSchema>;
+type ApiKey = z.infer<typeof apiKeySchema>;
+declare const userToFirestore: (user: UserApp) => UserFirestore;
+declare const userFromFirestore: (firestoreUser: UserFirestore) => UserApp;
+type User = UserFirestore;
+
+declare const bookingFirestoreSchema: z.ZodObject<{
+    id: z.ZodString;
+    created_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
+    updated_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
+    created_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<DocumentData, DocumentData>, z.ZodTypeDef, DocumentReference<DocumentData, DocumentData>>]>;
+    updated_by: z.ZodUnion<[z.ZodString, z.ZodNull, z.ZodType<DocumentReference<DocumentData, DocumentData>, z.ZodTypeDef, DocumentReference<DocumentData, DocumentData>>]>;
+} & {
+    return_date: z.ZodNullable<z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>>;
+    departure_date: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
+    partner: z.ZodEffects<z.ZodType<DocumentReference<DocumentData, DocumentData>, z.ZodTypeDef, DocumentReference<DocumentData, DocumentData>>, DocumentReference<DocumentData, DocumentData>, DocumentReference<DocumentData, DocumentData>>;
+    promo_codes: z.ZodArray<z.ZodEffects<z.ZodType<DocumentReference<DocumentData, DocumentData>, z.ZodTypeDef, DocumentReference<DocumentData, DocumentData>>, DocumentReference<DocumentData, DocumentData>, DocumentReference<DocumentData, DocumentData>>, "many">;
+    users: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<DocumentReference<DocumentData, DocumentData>, z.ZodTypeDef, DocumentReference<DocumentData, DocumentData>>, DocumentReference<DocumentData, DocumentData>, DocumentReference<DocumentData, DocumentData>>, "many">>;
+    esims: z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodType<DocumentReference<DocumentData, DocumentData>, z.ZodTypeDef, DocumentReference<DocumentData, DocumentData>>, DocumentReference<DocumentData, DocumentData>, DocumentReference<DocumentData, DocumentData>>, "many">>;
+    title: z.ZodNullable<z.ZodString>;
+    first_name: z.ZodString;
+    last_name: z.ZodString;
+    full_name: z.ZodString;
+    pax: z.ZodNumber;
+    email: z.ZodNullable<z.ZodString>;
+    phone: z.ZodNullable<z.ZodString>;
+    booking_id: z.ZodNullable<z.ZodString>;
+    flight_number: z.ZodOptional<z.ZodString>;
+    gender: z.ZodOptional<z.ZodEnum<["M", "F", "O"]>>;
+    package_size: z.ZodOptional<z.ZodString>;
+    sent_messages: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
+    locale: z.ZodEnum<["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]>;
+    status: z.ZodEnum<["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED", "UNPAID", "EXPIRED"]>;
+    data: z.ZodObject<{
+        source: z.ZodString;
+        manual: z.ZodBoolean;
+    }, "strip", z.ZodTypeAny, {
+        source: string;
+        manual: boolean;
+    }, {
+        source: string;
+        manual: boolean;
+    }>;
+    communication_options: z.ZodObject<{
+        should_send_message: z.ZodBoolean;
+        channels: z.ZodArray<z.ZodEnum<["EMAIL", "WHATSAPP", "PUSH_NOTIFICATION", "SMS"]>, "many">;
+    }, "strip", z.ZodTypeAny, {
+        should_send_message: boolean;
+        channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
+    }, {
+        should_send_message: boolean;
+        channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
+    }>;
+    is_processed_for_esim_restoration: z.ZodBoolean;
+    is_pseudonymized: z.ZodBoolean;
+    import_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    package_specifications: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
+}, "strip", z.ZodTypeAny, {
+    id: string;
+    created_at: Timestamp;
+    updated_at: Timestamp;
+    created_by: string | DocumentReference<DocumentData, DocumentData> | null;
+    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
+    updated_by: string | DocumentReference<DocumentData, DocumentData> | null;
+    users: DocumentReference<DocumentData, DocumentData>[] | null;
+    promo_codes: DocumentReference<DocumentData, DocumentData>[];
+    esims: DocumentReference<DocumentData, DocumentData>[] | null;
+    partner: DocumentReference<DocumentData, DocumentData>;
+    locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+    email: string | null;
+    title: string | null;
+    departure_date: Timestamp;
+    return_date: Timestamp | null;
+    data: {
+        source: string;
+        manual: boolean;
+    };
+    first_name: string;
+    last_name: string;
+    full_name: string;
+    pax: number;
+    phone: string | null;
+    booking_id: string | null;
+    communication_options: {
+        should_send_message: boolean;
+        channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
+    };
+    is_processed_for_esim_restoration: boolean;
+    is_pseudonymized: boolean;
+    gender?: "M" | "F" | "O" | undefined;
+    flight_number?: string | undefined;
+    package_size?: string | undefined;
+    sent_messages?: Record<string, any> | undefined;
+    import_id?: string | null | undefined;
+    package_specifications?: Record<string, any> | undefined;
+}, {
+    id: string;
+    created_at: Timestamp;
+    updated_at: Timestamp;
+    created_by: string | DocumentReference<DocumentData, DocumentData> | null;
+    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
+    updated_by: string | DocumentReference<DocumentData, DocumentData> | null;
+    users: DocumentReference<DocumentData, DocumentData>[] | null;
+    promo_codes: DocumentReference<DocumentData, DocumentData>[];
+    esims: DocumentReference<DocumentData, DocumentData>[] | null;
+    partner: DocumentReference<DocumentData, DocumentData>;
+    locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+    email: string | null;
+    title: string | null;
+    departure_date: Timestamp;
+    return_date: Timestamp | null;
+    data: {
+        source: string;
+        manual: boolean;
+    };
+    first_name: string;
+    last_name: string;
+    full_name: string;
+    pax: number;
+    phone: string | null;
+    booking_id: string | null;
+    communication_options: {
+        should_send_message: boolean;
+        channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
+    };
+    is_processed_for_esim_restoration: boolean;
+    is_pseudonymized: boolean;
+    gender?: "M" | "F" | "O" | undefined;
+    flight_number?: string | undefined;
+    package_size?: string | undefined;
+    sent_messages?: Record<string, any> | undefined;
+    import_id?: string | null | undefined;
+    package_specifications?: Record<string, any> | undefined;
+}>;
+type BookingFirestore = z.infer<typeof bookingFirestoreSchema>;
+declare const bookingToFirestore: (booking: BookingApp) => BookingFirestore;
+declare const bookingFromFirestore: (firestoreBooking: BookingFirestore) => BookingApp;
 
 declare const countryFirestoreSchema: z.ZodObject<{
     id: z.ZodNullable<z.ZodString>;
@@ -1909,7 +1793,6 @@ declare const countryFirestoreSchema: z.ZodObject<{
 type CountryFirestore = z.infer<typeof countryFirestoreSchema>;
 declare const countryToFirestore: (country: CountryApp) => CountryFirestore;
 declare const countryFromFirestore: (firestoreCountry: CountryFirestore) => CountryApp;
-type Country = CountryFirestore;
 
 declare const packageFirestoreSchema: z.ZodObject<{
     id: z.ZodString;
@@ -1993,18 +1876,18 @@ declare const packageFirestoreSchema: z.ZodObject<{
     }>>;
 }, "strip", z.ZodTypeAny, {
     id: string;
-    type: "data-limited" | "time-limited" | null;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    type: "data-limited" | "time-limited" | null;
     updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    is_active: boolean;
-    partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    name: string;
     country: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
     label: string;
     price: number;
+    partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    name: string;
     days: number;
+    is_active: boolean;
     external_id: string;
     provider: string;
     coverage_label: string | null;
@@ -2036,18 +1919,18 @@ declare const packageFirestoreSchema: z.ZodObject<{
     throttling?: number | undefined;
 }, {
     id: string;
-    type: "data-limited" | "time-limited" | null;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    type: "data-limited" | "time-limited" | null;
     updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    is_active: boolean;
-    partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    name: string;
     country: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
     label: string;
     price: number;
+    partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    name: string;
     days: number;
+    is_active: boolean;
     external_id: string;
     provider: string;
     coverage_label: string | null;
@@ -2081,7 +1964,6 @@ declare const packageFirestoreSchema: z.ZodObject<{
 type PackageFirestore = z.infer<typeof packageFirestoreSchema>;
 declare const packageToFirestore: (packageData: PackageApp) => PackageFirestore;
 declare const packageFromFirestore: (firestorePackage: PackageFirestore) => PackageApp;
-type Package = PackageFirestore;
 
 declare const promoCodeFirestoreSchema: z.ZodObject<{
     id: z.ZodString;
@@ -2126,61 +2008,61 @@ declare const promoCodeFirestoreSchema: z.ZodObject<{
     starter_data: z.ZodOptional<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
     id: string;
-    code: string;
-    type: string | null;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    code: string;
+    type: string | null;
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    partner: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     country: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    partner: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     external_id: string;
     allowance_user: number;
     allowance_total: number;
     booking: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     usage: string[];
     uuid_usage: string[];
-    valid_from: string | Date | FirebaseFirestore.Timestamp;
-    valid_to: string | Date | FirebaseFirestore.Timestamp;
+    valid_from: string | FirebaseFirestore.Timestamp | Date;
+    valid_to: string | FirebaseFirestore.Timestamp | Date;
     countries?: string[] | undefined;
-    package_size?: string | undefined;
     package_specification?: {
         destination?: string | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
         iata_code?: string | undefined;
     } | undefined;
+    package_size?: string | undefined;
     discount?: number | undefined;
     max_bytes?: number | undefined;
     starter_data?: number | undefined;
 }, {
     id: string;
-    code: string;
-    type: string | null;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    code: string;
+    type: string | null;
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    partner: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     country: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     package: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    partner: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     external_id: string;
     allowance_user: number;
     allowance_total: number;
     booking: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     usage: string[];
     uuid_usage: string[];
-    valid_from: string | Date | FirebaseFirestore.Timestamp;
-    valid_to: string | Date | FirebaseFirestore.Timestamp;
+    valid_from: string | FirebaseFirestore.Timestamp | Date;
+    valid_to: string | FirebaseFirestore.Timestamp | Date;
     countries?: string[] | undefined;
-    package_size?: string | undefined;
     package_specification?: {
         destination?: string | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
         iata_code?: string | undefined;
     } | undefined;
+    package_size?: string | undefined;
     discount?: number | undefined;
     max_bytes?: number | undefined;
     starter_data?: number | undefined;
@@ -2188,7 +2070,6 @@ declare const promoCodeFirestoreSchema: z.ZodObject<{
 type PromoCodeFirestore = z.infer<typeof promoCodeFirestoreSchema>;
 declare const promoCodeToFirestore: (promoCode: PromoCodeApp) => PromoCodeFirestore;
 declare const promoCodeFromFirestore: (firestorePromoCode: PromoCodeFirestore) => PromoCodeApp;
-type PromoCode = PromoCodeFirestore;
 
 declare const esimFirestoreSchema: z.ZodObject<{
     id: z.ZodString;
@@ -2222,16 +2103,16 @@ declare const esimFirestoreSchema: z.ZodObject<{
     apn: z.ZodNullable<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     id: string;
-    type: "code" | "balance" | "api" | "promo" | "external" | "payment";
-    status: string | null;
     created_at: Timestamp;
     updated_at: Timestamp;
     created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    status: string | null;
+    type: "code" | "balance" | "api" | "promo" | "external" | "payment";
     updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    name: string;
     country: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     user: string | null;
+    name: string;
     apn: string | null;
     imsi: number;
     provider: string;
@@ -2251,16 +2132,16 @@ declare const esimFirestoreSchema: z.ZodObject<{
     coverage_label?: string | null | undefined;
 }, {
     id: string;
-    type: "code" | "balance" | "api" | "promo" | "external" | "payment";
-    status: string | null;
     created_at: Timestamp;
     updated_at: Timestamp;
     created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    status: string | null;
+    type: "code" | "balance" | "api" | "promo" | "external" | "payment";
     updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
-    name: string;
     country: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     user: string | null;
+    name: string;
     apn: string | null;
     imsi: number;
     provider: string;
@@ -2282,7 +2163,6 @@ declare const esimFirestoreSchema: z.ZodObject<{
 type ESIMFirestore = z.infer<typeof esimFirestoreSchema>;
 declare const esimToFirestore: (esim: ESIMApp) => ESIMFirestore;
 declare const esimFromFirestore: (firestoreEsim: ESIMFirestore) => ESIMApp;
-type ESIM = ESIMFirestore;
 
 declare const paymentFirestoreSchema: z.ZodObject<{
     id: z.ZodString;
@@ -2328,7 +2208,6 @@ declare const paymentFirestoreSchema: z.ZodObject<{
 type PaymentFirestore = z.infer<typeof paymentFirestoreSchema>;
 declare const paymentToFirestore: (payment: PaymentApp) => PaymentFirestore;
 declare const paymentFromFirestore: (firestorePayment: PaymentFirestore) => PaymentApp;
-type Payment = PaymentFirestore;
 
 declare const messageFirestoreSchema: z.ZodObject<{
     id: z.ZodString;
@@ -2339,16 +2218,16 @@ declare const messageFirestoreSchema: z.ZodObject<{
     updated_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
 }, "strip", z.ZodTypeAny, {
     id: string;
-    status: "pending" | "sent" | "failed" | "delivered";
     created_at: Timestamp;
     updated_at: Timestamp;
+    status: "pending" | "sent" | "failed" | "delivered";
     key: string;
     method: "push" | "email" | "sms";
 }, {
     id: string;
-    status: "pending" | "sent" | "failed" | "delivered";
     created_at: Timestamp;
     updated_at: Timestamp;
+    status: "pending" | "sent" | "failed" | "delivered";
     key: string;
     method: "push" | "email" | "sms";
 }>;
@@ -2361,16 +2240,16 @@ declare const sentMessagesFirestoreSchema: z.ZodRecord<z.ZodString, z.ZodObject<
     updated_at: z.ZodType<Timestamp, z.ZodTypeDef, Timestamp>;
 }, "strip", z.ZodTypeAny, {
     id: string;
-    status: "pending" | "sent" | "failed" | "delivered";
     created_at: Timestamp;
     updated_at: Timestamp;
+    status: "pending" | "sent" | "failed" | "delivered";
     key: string;
     method: "push" | "email" | "sms";
 }, {
     id: string;
-    status: "pending" | "sent" | "failed" | "delivered";
     created_at: Timestamp;
     updated_at: Timestamp;
+    status: "pending" | "sent" | "failed" | "delivered";
     key: string;
     method: "push" | "email" | "sms";
 }>>;
@@ -2381,10 +2260,6 @@ declare const messageToFirestore: (message: MessageApp) => MessageFirestore;
 declare const messageFromFirestore: (firestoreMessage: MessageFirestore) => MessageApp;
 declare const sentMessagesToFirestore: (sentMessages: SentMessagesApp) => SentMessagesFirestore;
 declare const sentMessagesFromFirestore: (firestoreSentMessages: SentMessagesFirestore) => SentMessagesApp;
-type Message = MessageFirestore;
-type SentMessages = SentMessagesFirestore;
-declare const convertSentMessagesToFirestore: (sentMessages: Record<string, MessageApp>) => Record<string, MessageFirestore>;
-declare const convertSentMessagesFromFirestore: (firestoreSentMessages: Record<string, MessageFirestore>) => Record<string, MessageApp>;
 
 declare const currencyFirestoreSchema: z.ZodObject<{
     id: z.ZodString;
@@ -2401,10 +2276,10 @@ declare const currencyFirestoreSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     symbol: string;
     id: string;
-    code: string;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    code: string;
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     name: string;
     rate: number;
@@ -2412,10 +2287,10 @@ declare const currencyFirestoreSchema: z.ZodObject<{
 }, {
     symbol: string;
     id: string;
-    code: string;
     created_at: FirebaseFirestore.Timestamp;
     updated_at: FirebaseFirestore.Timestamp;
     created_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
+    code: string;
     updated_by: string | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     name: string;
     rate: number;
@@ -2424,7 +2299,6 @@ declare const currencyFirestoreSchema: z.ZodObject<{
 type CurrencyFirestore = z.infer<typeof currencyFirestoreSchema>;
 declare const currencyToFirestore: (currency: CurrencyApp) => CurrencyFirestore;
 declare const currencyFromFirestore: (firestoreCurrency: CurrencyFirestore) => CurrencyApp;
-type Currency = CurrencyFirestore;
 
 declare const apiLogFirestoreSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
@@ -2439,8 +2313,8 @@ declare const apiLogFirestoreSchema: z.ZodObject<{
     status_code: z.ZodNumber;
 }, "strip", z.ZodTypeAny, {
     path: string;
-    method: string;
     timestamp: FirebaseFirestore.Timestamp;
+    method: string;
     status_code: number;
     id?: string | undefined;
     user_id?: string | undefined;
@@ -2450,8 +2324,8 @@ declare const apiLogFirestoreSchema: z.ZodObject<{
     payload?: Record<string, unknown> | undefined;
 }, {
     path: string;
-    method: string;
     timestamp: FirebaseFirestore.Timestamp;
+    method: string;
     status_code: number;
     id?: string | undefined;
     user_id?: string | undefined;
@@ -2463,30 +2337,5 @@ declare const apiLogFirestoreSchema: z.ZodObject<{
 type ApiLogFirestore = z.infer<typeof apiLogFirestoreSchema>;
 declare const apiLogToFirestore: (apiLog: ApiLogApp) => ApiLogFirestore;
 declare const apiLogFromFirestore: (firestoreApiLog: ApiLogFirestore) => ApiLogApp;
-type ApiLog = ApiLogFirestore;
 
-interface GenericRefFieldMapping<AppType, FirestoreType> {
-    app: keyof AppType;
-    firestore: keyof FirestoreType;
-    collection: string;
-    nullable?: boolean;
-    isArray?: boolean;
-}
-interface GenericDateFieldMapping<AppType, FirestoreType> {
-    field: keyof FirestoreType & keyof AppType;
-    nullable?: boolean;
-}
-declare function genericToFirestore<AppType extends Record<string, any>, FirestoreType extends Record<string, any>>({ appObject, refFieldMappings, dateFieldMappings, specialCaseHandler }: {
-    appObject: AppType;
-    refFieldMappings: GenericRefFieldMapping<AppType, FirestoreType>[];
-    dateFieldMappings: GenericDateFieldMapping<AppType, FirestoreType>[];
-    specialCaseHandler?: (result: Record<string, any>, appData: AppType) => void;
-}): FirestoreType;
-declare function genericFromFirestore<FirestoreType extends Record<string, any>, AppType extends Record<string, any>>({ firestoreObject, refFieldMappings, dateFieldMappings, specialCaseHandler }: {
-    firestoreObject: FirestoreType;
-    refFieldMappings: GenericRefFieldMapping<AppType, FirestoreType>[];
-    dateFieldMappings: GenericDateFieldMapping<AppType, FirestoreType>[];
-    specialCaseHandler?: (result: Record<string, any>, firestoreData: FirestoreType) => void;
-}): AppType;
-
-export { ApiKey, ApiKeys, ApiLog, ApiLogApp, ApiLogFirestore, Booking, BookingApp, BookingFirestore, Country, CountryApp, CountryFirestore, Currency, CurrencyApp, CurrencyFirestore, ESIM, ESIMApp, ESIMFirestore, FinancialProperties, FinancialPropertiesFirestore, GenericDateFieldMapping, GenericRefFieldMapping, HHubbyModel, HubbyModel, HubbyModelApp, HubbyModelFirestore, Message, MessageApp, MessageFirestore, MockDocumentReference, Package, PackageApp, PackageFirestore, PackagePrice, PackagePriceFirestore, Partner, PartnerApp, PartnerFirestore, PartnerPricingStrategyFirestore, Payment, PaymentApp, PaymentFirestore, PriceList, PriceListApp, PriceListFirestore, PromoCode, PromoCodeApp, PromoCodeFirestore, SentMessages, SentMessagesApp, SentMessagesFirestore, User, UserApp, UserFirestore, UserPricingStrategyFirestore, apiKeySchema, apiKeysSchema, apiLogFirestoreSchema, apiLogFromFirestore, apiLogRefArray, apiLogRefArrayNullable, apiLogRefNullable, apiLogRefSchema, apiLogToFirestore, baseModelSchema, bookingFirestoreSchema, bookingFromFirestore, bookingRefArray, bookingRefArrayNullable, bookingRefNullable, bookingRefSchema, bookingToFirestore, convertSentMessagesFromFirestore, convertSentMessagesToFirestore, countryFirestoreSchema, countryFromFirestore, countryRefArray, countryRefArrayNullable, countryRefNullable, countryRefSchema, countryToFirestore, createDocRefSchema, currencyFirestoreSchema, currencyFromFirestore, currencyRefArray, currencyRefArrayNullable, currencyRefNullable, currencyRefSchema, currencyToFirestore, docRefToStringSchema, documentRefSchema, esimFirestoreSchema, esimFromFirestore, esimRefArray, esimRefArrayNullable, esimRefNullable, esimRefSchema, esimToFirestore, fieldValueSchema, financialPropertiesAppSchema, financialPropertiesFirestoreSchema, fromFirestore, genericFromFirestore, genericToFirestore, getFirestoreInstance, hubbyModelAppSchema, hubbyModelFirestoreSchema, messageFirestoreSchema, messageFromFirestore, messageRefArray, messageRefArrayNullable, messageRefNullable, messageRefSchema, messageToFirestore, packageFirestoreSchema, packageFromFirestore, packagePriceFirestoreSchema, packageRefArray, packageRefArrayNullable, packageRefNullable, packageRefSchema, packageToFirestore, partnerFirestoreSchema, partnerFromFirestore, partnerPricingStrategyFirestoreSchema, partnerRefArray, partnerRefArrayNullable, partnerRefNullable, partnerRefSchema, partnerToFirestore, paymentFirestoreSchema, paymentFromFirestore, paymentRefArray, paymentRefArrayNullable, paymentRefNullable, paymentRefSchema, paymentToFirestore, priceListFirestoreSchema, priceListFromFirestore, priceListRefArray, priceListRefArrayNullable, priceListRefNullable, priceListRefSchema, priceListToFirestore, profileRefArray, profileRefArrayNullable, profileRefNullable, profileRefSchema, promoCodeFirestoreSchema, promoCodeFromFirestore, promoCodeRefArray, promoCodeRefArrayNullable, promoCodeRefNullable, promoCodeRefSchema, promoCodeToFirestore, sentMessagesFirestoreSchema, sentMessagesFromFirestore, sentMessagesToFirestore, setFirestoreInstance, timestampSchema, toFirestore, userFirestoreSchema, userFromFirestore, userPricingStrategyFirestoreSchema, userRefArray, userRefArrayNullable, userRefNullable, userRefSchema, userToFirestore, userToFirestoreWithBalance };
+export { ApiLogFirestore as ApiLog, ApiLogApp, BookingFirestore as Booking, CountryFirestore as Country, CountryApp, CurrencyFirestore as Currency, CurrencyApp, ESIMFirestore as ESIM, ESIMApp, FinancialPropertiesFirestore as FinancialProperties, FinancialProperties as FinancialPropertiesApp, BookingApp as HBooking, FinancialProperties as HFinancialProperties, HHubbyModel, PartnerApp as HPartner, HubbyModel, HubbyModelApp, HubbyModelFirestore, MessageFirestore as Message, MessageApp, MockDocumentReference, PackageFirestore as Package, PackageApp, PackagePriceFirestore as PackagePrice, PartnerFirestore as Partner, PaymentFirestore as Payment, PaymentApp, PriceListFirestore as PriceList, PriceListApp, PriceListFirestore, PromoCodeFirestore as PromoCode, PromoCodeApp, Schedule, SentMessagesFirestore as SentMessages, SentMessagesApp, User, ApiKey as UserApiKey, ApiKeys as UserApiKeys, UserApp, UserFirestore, apiLogFromFirestore, apiLogRefArray, apiLogRefArrayNullable, apiLogRefNullable, apiLogRefSchema, apiLogToFirestore, baseModelSchema, bookingFromFirestore, bookingRefArray, bookingRefArrayNullable, bookingRefNullable, bookingRefSchema, bookingToFirestore, countryFromFirestore, countryRefArray, countryRefArrayNullable, countryRefNullable, countryRefSchema, countryToFirestore, createDocRefSchema, currencyFromFirestore, currencyRefArray, currencyRefNullable, currencyRefSchema, currencyToFirestore, docRefToStringSchema, documentRefSchema, esimFromFirestore, esimRefArray, esimRefArrayNullable, esimRefNullable, esimRefSchema, esimToFirestore, fieldValueSchema, fromFirestore, getFirestoreInstance, messageFromFirestore, messageRefArray, messageRefArrayNullable, messageRefNullable, messageRefSchema, messageToFirestore, packageFromFirestore, packageRefArray, packageRefArrayNullable, packageRefNullable, packageRefSchema, packageToFirestore, partnerFirestoreSchema, partnerFromFirestore, partnerRefArray, partnerRefArrayNullable, partnerRefNullable, partnerRefSchema, partnerToFirestore, paymentFromFirestore, paymentRefArray, paymentRefArrayNullable, paymentRefNullable, paymentRefSchema, paymentToFirestore, priceListFromFirestore, priceListRefArray, priceListRefArrayNullable, priceListRefNullable, priceListRefSchema, priceListToFirestore, profileRefArray, profileRefArrayNullable, profileRefNullable, profileRefSchema, promoCodeFromFirestore, promoCodeRefArray, promoCodeRefArrayNullable, promoCodeRefNullable, promoCodeRefSchema, promoCodeToFirestore, sentMessagesFromFirestore, sentMessagesToFirestore, setFirestoreInstance, timestampSchema, toFirestore, userFromFirestore, userRefArray, userRefArrayNullable, userRefNullable, userRefSchema, userToFirestore };

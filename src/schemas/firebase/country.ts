@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import {
-    baseModelSchema
+    baseModelAppSchema
 } from './helpers';
 import {
     genericToFirestore,
