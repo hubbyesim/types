@@ -1,6 +1,6 @@
 {
   "name": "@hubbyesim/types",
-  "version": "1.9.92",
+  "version": "2.0.0",
   "description": "Type definitions for the hubbyesim project",
   "type": "module",
   "main": "./dist/index.js",
