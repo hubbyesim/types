@@ -4,7 +4,9 @@ export * from './firebase';
 // Export from constants
 export {
   SUPPORTED_LOCALES,
+} from '../constants';
+export type {
   SupportedLocales,
-  supportedLocalesSchema,
   SupportedLocalesFromSchema
 } from '../constants';
+export { supportedLocalesSchema } from '../constants';
