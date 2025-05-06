@@ -4230,6 +4230,7 @@ declare const paymentAppSchema: z.ZodObject<{
     package: z.ZodString;
     promo: z.ZodString;
     topup: z.ZodBoolean;
+    user: z.ZodNullable<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     id: string;
     created_at: Date;
@@ -4238,6 +4239,7 @@ declare const paymentAppSchema: z.ZodObject<{
     date: Date;
     updated_by: string | null;
     package: string;
+    user: string | null;
     promo: string;
     iccid: string;
     amount: number;
@@ -4248,6 +4250,7 @@ declare const paymentAppSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     package: string;
+    user: string | null;
     promo: string;
     iccid: string;
     amount: number;

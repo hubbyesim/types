@@ -42,7 +42,9 @@ export const commonUserFields = {
     admin: z.boolean().nullable(),
     api_keys: apiKeysSchema.nullable(),
     currency: z.string().nullable(),
-    receipt_email: z.string().nullable()
+    receipt_email: z.string().nullable(),
+    source: z.enum(['direct', 'promo', 'platform']).nullable(),
+    role: z.array(z.enum(['admin', 'user', 'platform'])).nullable()
 };
 
 // Define App schema (with JavaScript-friendly types)

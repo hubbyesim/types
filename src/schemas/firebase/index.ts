@@ -199,7 +199,7 @@ export type {
     PartnerApiResponse,
 
     // User types
-    UserApp, UserFirestore, ApiKeys as UserApiKeys, ApiKey as UserApiKey, User,
+    UserApp as HUser, UserFirestore as User, ApiKeys as UserApiKeys, ApiKey as UserApiKey,
 
     // Booking types
     BookingApp as HBooking, BookingFirestore as Booking,
@@ -208,47 +208,43 @@ export type {
     PartnerApp as HPartner, PartnerFirestore as Partner,
 
     // Country types
-    CountryApp, CountryFirestore as Country,
+    CountryApp as HCountry, CountryFirestore as Country,
 
     // Package types
-    PackageApp, PackageFirestore as Package,
+    PackageApp as HPackage, PackageFirestore as Package,
 
     // PromoCode types
-    PromoCodeApp, PromoCodeFirestore as PromoCode,
+    PromoCodeApp as HPromoCode, PromoCodeFirestore as PromoCode,
 
     // Esim types
-    ESIMApp, ESIMFirestore as ESIM,
+    ESIMApp as HESIM, ESIMFirestore as ESIM,
 
     // Payment types
-    PaymentApp, PaymentFirestore as Payment,
+    PaymentApp as HPayment, PaymentFirestore as Payment,
 
     // Message types
-    MessageApp, MessageFirestore as Message, SentMessagesApp, SentMessagesFirestore as SentMessages,
+    MessageApp as HMessage, MessageFirestore as Message,
+    SentMessagesApp as HSentMessages, SentMessagesFirestore as SentMessages,
 
     // Currency types
-    CurrencyApp, CurrencyFirestore as Currency,
+    CurrencyApp as HCurrency, CurrencyFirestore as Currency,
 
     // ApiLog types
-    ApiLogApp, ApiLogFirestore as ApiLog,
+    ApiLogApp as HApiLog, ApiLogFirestore as ApiLog,
 
     // VisualIdentity types
     VisualIdentity, VisualIdentityBannerStrategy, VisualIdentityBanner,
 
-    CommunicationChannel,
-
-    CommunicationOptions,
+    CommunicationChannel, CommunicationOptions,
 
     // PriceList types
-    PriceListApp, PriceListFirestore as PriceList,
-    PriceListFirestore,
+    PriceListApp as HPriceList, PriceListFirestore as PriceList,
 
     // Schedule types
     Schedule,
     PlatformSettings,
-    PackagePriceApp, PackagePriceFirestore as PackagePrice,
+    PackagePriceApp as HPackagePrice, PackagePriceFirestore as PackagePrice,
 
     // FinancialProperties types
     FinancialProperties as HFinancialProperties, FinancialPropertiesFirestore as FinancialProperties,
-    FinancialProperties as FinancialPropertiesApp,
-
 };

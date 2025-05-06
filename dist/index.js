@@ -219,13 +219,13 @@ var isDate = (value) => {
 };
 function genericToFirestore({
   appObject,
-  refFieldMappings: refFieldMappings6,
+  refFieldMappings: refFieldMappings7,
   dateFieldMappings: dateFieldMappings9,
   specialCaseHandler,
   nestedFieldMappings: nestedFieldMappings3
 }) {
   const result = {};
-  const refFieldNames = refFieldMappings6.map((mapping) => mapping.app);
+  const refFieldNames = refFieldMappings7.map((mapping) => mapping.app);
   Object.keys(appObject).forEach((key) => {
     if (!refFieldNames.includes(key)) {
       result[key] = appObject[key];
@@ -251,7 +251,7 @@ function genericToFirestore({
       result[field] = toFirestore.date(value);
     }
   });
-  refFieldMappings6.forEach(({ app, firestore: firestore2, collection, isArray, nullable }) => {
+  refFieldMappings7.forEach(({ app, firestore: firestore2, collection, isArray, nullable }) => {
     const value = appObject[app];
     if (isArray) {
       if (nullable && value === null) {
@@ -277,13 +277,13 @@ function genericToFirestore({
 }
 function genericFromFirestore({
   firestoreObject,
-  refFieldMappings: refFieldMappings6,
+  refFieldMappings: refFieldMappings7,
   dateFieldMappings: dateFieldMappings9,
   specialCaseHandler,
   nestedFieldMappings: nestedFieldMappings3
 }) {
   const result = {};
-  const refFieldNames = refFieldMappings6.map((mapping) => mapping.firestore);
+  const refFieldNames = refFieldMappings7.map((mapping) => mapping.firestore);
   Object.keys(firestoreObject).forEach((key) => {
     if (!refFieldNames.includes(key)) {
       result[key] = firestoreObject[key];
@@ -311,7 +311,7 @@ function genericFromFirestore({
       result[field] = convertToDate(value, field);
     }
   });
-  refFieldMappings6.forEach(({ app, firestore: firestore2, nullable, isArray }) => {
+  refFieldMappings7.forEach(({ app, firestore: firestore2, nullable, isArray }) => {
     const value = firestoreObject[firestore2];
     if (isArray) {
       if (nullable && value === null) {
@@ -1424,7 +1424,8 @@ var paymentAppSchema = baseModelAppSchema.extend({
   iccid: z19.string(),
   package: z19.string(),
   promo: z19.string(),
-  topup: z19.boolean()
+  topup: z19.boolean(),
+  user: userRefStringNullable
 });
 
 // src/schemas/firebase/payment.ts
@@ -1436,15 +1437,19 @@ var paymentFirestoreSchema = baseModelSchema.extend({
   iccid: z20.string(),
   package: z20.string(),
   promo: z20.string(),
-  topup: z20.boolean()
+  topup: z20.boolean(),
+  user: userRefStringNullable
 });
 var dateFieldMappings5 = [
   { field: "date" }
 ];
+var refFieldMappings6 = [
+  { app: "user", firestore: "user", collection: USER_COLLECTION }
+];
 var paymentToFirestore = (payment) => {
   return genericToFirestore({
     appObject: payment,
-    refFieldMappings: [],
+    refFieldMappings: refFieldMappings6,
     dateFieldMappings: dateFieldMappings5
   });
 };

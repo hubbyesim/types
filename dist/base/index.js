@@ -674,7 +674,8 @@ var paymentAppSchema = baseModelAppSchema.extend({
   iccid: z12.string(),
   package: z12.string(),
   promo: z12.string(),
-  topup: z12.boolean()
+  topup: z12.boolean(),
+  user: userRefStringNullable
 });
 
 // src/schemas/base/message.ts

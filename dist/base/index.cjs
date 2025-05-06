@@ -826,7 +826,8 @@ var paymentAppSchema = baseModelAppSchema.extend({
   iccid: import_zod12.z.string(),
   package: import_zod12.z.string(),
   promo: import_zod12.z.string(),
-  topup: import_zod12.z.boolean()
+  topup: import_zod12.z.boolean(),
+  user: userRefStringNullable
 });
 
 // src/schemas/base/message.ts

@@ -22,7 +22,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "test": "node --loader ts-node/esm --experimental-specifier-resolution=node test/index.ts",
+    "test": "jest",
     "generate-exports": "node scripts/generate-exports.js"
   },
   "author": "Daniel Fortuyn",
