@@ -3,7 +3,7 @@ import {
     baseModelAppSchema,
     zDateString
 } from './helpers';
-
+import { userRefStringNullable } from './refs';
 // App schema for Payment
 export const paymentAppSchema = baseModelAppSchema.extend({
     amount: z.number(),
@@ -12,7 +12,8 @@ export const paymentAppSchema = baseModelAppSchema.extend({
     iccid: z.string(),
     package: z.string(),
     promo: z.string(),
-    topup: z.boolean()
+    topup: z.boolean(),
+    user: userRefStringNullable
 });
 
 // Define type based on schema

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { USER_COLLECTION, userRefSchema, userRefString, userRefStringNullable } from './refs';
 import {
     baseModelSchema,
     timestampSchema
@@ -6,7 +7,8 @@ import {
 import {
     GenericDateFieldMapping,
     genericToFirestore,
-    genericFromFirestore
+    genericFromFirestore,
+    GenericRefFieldMapping
 } from './utils';
 
 // Import base schemas
@@ -26,7 +28,8 @@ export const paymentFirestoreSchema = baseModelSchema.extend({
     iccid: z.string(),
     package: z.string(),
     promo: z.string(),
-    topup: z.boolean()
+    topup: z.boolean(),
+    user: userRefStringNullable
 });
 
 // Define type based on schema
@@ -37,11 +40,15 @@ const dateFieldMappings: GenericDateFieldMapping<PaymentApp, PaymentFirestore>[]
     { field: 'date' }
 ];
 
+const refFieldMappings: GenericRefFieldMapping<PaymentApp, PaymentFirestore>[] = [
+    { app: 'user', firestore: 'user', collection: USER_COLLECTION },
+];
+
 // Conversion functions using generic utilities
 export const paymentToFirestore = (payment: PaymentApp): PaymentFirestore => {
     return genericToFirestore({
         appObject: payment,
-        refFieldMappings: [],
+        refFieldMappings: refFieldMappings,   
         dateFieldMappings
     });
 };

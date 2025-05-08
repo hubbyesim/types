@@ -1,6 +1,6 @@
 {
   "name": "@hubbyesim/types",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Type definitions for the hubbyesim project",
   "type": "module",
   "main": "./dist/index.js",
@@ -22,7 +22,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "test": "node --loader ts-node/esm --experimental-specifier-resolution=node test/index.ts",
+    "test": "jest",
     "generate-exports": "node scripts/generate-exports.js"
   },
   "author": "Daniel Fortuyn",
