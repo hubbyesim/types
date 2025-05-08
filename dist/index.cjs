@@ -148,6 +148,7 @@ __export(src_exports, {
   paymentRefStringArrayNullable: () => paymentRefStringArrayNullable,
   paymentRefStringNullable: () => paymentRefStringNullable,
   paymentToFirestore: () => paymentToFirestore,
+  priceListFromFirestore: () => priceListFromFirestore,
   priceListRefArray: () => priceListRefArray,
   priceListRefArrayNullable: () => priceListRefArrayNullable,
   priceListRefNullable: () => priceListRefNullable,
@@ -156,6 +157,7 @@ __export(src_exports, {
   priceListRefStringArray: () => priceListRefStringArray,
   priceListRefStringArrayNullable: () => priceListRefStringArrayNullable,
   priceListRefStringNullable: () => priceListRefStringNullable,
+  priceListToFirestore: () => priceListToFirestore,
   profileRefArray: () => profileRefArray,
   profileRefArrayNullable: () => profileRefArrayNullable,
   profileRefNullable: () => profileRefNullable,
@@ -969,6 +971,34 @@ var partnerFromFirestore = (firestorePartner) => {
   });
   return result;
 };
+var priceListRefFieldMappings = [
+  { app: "partner", firestore: "partner", collection: PARTNER_COLLECTION, nullable: true }
+];
+var priceListNestedFieldMappings = [
+  // Package references in package_prices array
+  {
+    path: ["package_prices", "*", "package"],
+    type: "reference",
+    collection: PACKAGE_COLLECTION,
+    wildcardIndex: 1
+  }
+];
+var priceListToFirestore = (priceList) => {
+  return genericToFirestore({
+    appObject: priceList,
+    refFieldMappings: priceListRefFieldMappings,
+    dateFieldMappings: [],
+    nestedFieldMappings: priceListNestedFieldMappings
+  });
+};
+var priceListFromFirestore = (firestorePriceList) => {
+  return genericFromFirestore({
+    firestoreObject: firestorePriceList,
+    refFieldMappings: priceListRefFieldMappings,
+    dateFieldMappings: [],
+    nestedFieldMappings: priceListNestedFieldMappings
+  });
+};
 
 // src/schemas/base/api.ts
 var import_zod10 = require("zod");
@@ -1218,7 +1248,9 @@ var commonUserFields = {
   admin: import_zod11.z.boolean().nullable(),
   api_keys: apiKeysSchema.nullable(),
   currency: import_zod11.z.string().nullable(),
-  receipt_email: import_zod11.z.string().nullable()
+  receipt_email: import_zod11.z.string().nullable(),
+  source: import_zod11.z.enum(["direct", "promo", "platform"]).nullable(),
+  role: import_zod11.z.array(import_zod11.z.enum(["admin", "user", "platform"])).nullable()
 };
 var userAppSchema = baseModelAppSchema.extend({
   ...commonUserFields,
@@ -1961,6 +1993,7 @@ var apiLogFromFirestore = (firestoreApiLog) => {
   paymentRefStringArrayNullable,
   paymentRefStringNullable,
   paymentToFirestore,
+  priceListFromFirestore,
   priceListRefArray,
   priceListRefArrayNullable,
   priceListRefNullable,
@@ -1969,6 +2002,7 @@ var apiLogFromFirestore = (firestoreApiLog) => {
   priceListRefStringArray,
   priceListRefStringArrayNullable,
   priceListRefStringNullable,
+  priceListToFirestore,
   profileRefArray,
   profileRefArrayNullable,
   profileRefNullable,

@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { f as financialPropertiesAppSchema, s as scheduleSchema, P as PartnerApp, a as PriceListApp, U as UserApp, B as BookingApp, C as CountryApp, b as PackageApp, c as PromoCodeApp, E as ESIMApp, d as PaymentApp, M as MessageApp, S as SentMessagesApp, e as CurrencyApp, A as ApiLogApp } from './constants-b7563763.js';
-export { J as API_LOG_COLLECTION, G as BOOKING_COLLECTION, aD as BookingApiRequest, aE as BookingApiResponse, y as COUNTRY_COLLECTION, I as CURRENCY_COLLECTION, aL as CommunicationChannel, aM as CommunicationOptions, z as ESIM_COLLECTION, aO as HPackagePrice, H as MESSAGE_COLLECTION, w as PACKAGE_COLLECTION, t as PARTNER_COLLECTION, D as PAYMENT_COLLECTION, F as PRICE_LIST_COLLECTION, v as PROFILE_COLLECTION, x as PROMO_CODE_COLLECTION, aB as PackageSpecification, aC as PackageSpecifications, aG as PartnerApiRequest, aH as PartnerApiResponse, aN as PlatformSettings, aF as PromoCodeApiResponse, g as SUPPORTED_LOCALES, h as SupportedLocales, i as SupportedLocalesFromSchema, u as USER_COLLECTION, aI as VisualIdentity, aK as VisualIdentityBanner, aJ as VisualIdentityBannerStrategy, _ as apiLogRefString, am as apiLogRefStringArray, ay as apiLogRefStringArrayNullable, aa as apiLogRefStringNullable, p as apiPackageSpecificationSchema, l as apiPackageSpecificationsSchema, k as baseModelAppSchema, o as bookingApiRequestSchema, m as bookingApiResponseSchema, X as bookingRefString, ak as bookingRefStringArray, aw as bookingRefStringArrayNullable, a8 as bookingRefStringNullable, R as countryRefString, ag as countryRefStringArray, as as countryRefStringArrayNullable, a4 as countryRefStringNullable, Z as currencyRefString, az as currencyRefStringArrayNullable, T as esimRefString, ah as esimRefStringArray, at as esimRefStringArrayNullable, a5 as esimRefStringNullable, Y as messageRefString, al as messageRefStringArray, ax as messageRefStringArrayNullable, a9 as messageRefStringNullable, O as packageRefString, ae as packageRefStringArray, aq as packageRefStringArrayNullable, a2 as packageRefStringNullable, q as partnerApiRequestSchema, r as partnerApiResponseSchema, aA as partnerAppSchema, K as partnerRefString, ab as partnerRefStringArray, an as partnerRefStringArrayNullable, $ as partnerRefStringNullable, V as paymentRefString, ai as paymentRefStringArray, au as paymentRefStringArrayNullable, a6 as paymentRefStringNullable, W as priceListRefString, aj as priceListRefStringArray, av as priceListRefStringArrayNullable, a7 as priceListRefStringNullable, N as profileRefString, ad as profileRefStringArray, ap as profileRefStringArrayNullable, a1 as profileRefStringNullable, n as promoCodeApiResponseSchema, Q as promoCodeRefString, af as promoCodeRefStringArray, ar as promoCodeRefStringArrayNullable, a3 as promoCodeRefStringNullable, j as supportedLocalesSchema, L as userRefString, ac as userRefStringArray, ao as userRefStringArrayNullable, a0 as userRefStringNullable } from './constants-b7563763.js';
+import { f as financialPropertiesAppSchema, s as scheduleSchema, P as PartnerApp, a as PriceListApp, U as UserApp, B as BookingApp, C as CountryApp, b as PackageApp, c as PromoCodeApp, E as ESIMApp, d as PaymentApp, M as MessageApp, S as SentMessagesApp, e as CurrencyApp, A as ApiLogApp } from './constants-56f6c4f3.js';
+export { J as API_LOG_COLLECTION, G as BOOKING_COLLECTION, aD as BookingApiRequest, aE as BookingApiResponse, y as COUNTRY_COLLECTION, I as CURRENCY_COLLECTION, aL as CommunicationChannel, aM as CommunicationOptions, z as ESIM_COLLECTION, aO as HPackagePrice, H as MESSAGE_COLLECTION, w as PACKAGE_COLLECTION, t as PARTNER_COLLECTION, D as PAYMENT_COLLECTION, F as PRICE_LIST_COLLECTION, v as PROFILE_COLLECTION, x as PROMO_CODE_COLLECTION, aB as PackageSpecification, aC as PackageSpecifications, aG as PartnerApiRequest, aH as PartnerApiResponse, aN as PlatformSettings, aF as PromoCodeApiResponse, g as SUPPORTED_LOCALES, h as SupportedLocales, i as SupportedLocalesFromSchema, u as USER_COLLECTION, aI as VisualIdentity, aK as VisualIdentityBanner, aJ as VisualIdentityBannerStrategy, _ as apiLogRefString, am as apiLogRefStringArray, ay as apiLogRefStringArrayNullable, aa as apiLogRefStringNullable, p as apiPackageSpecificationSchema, l as apiPackageSpecificationsSchema, k as baseModelAppSchema, o as bookingApiRequestSchema, m as bookingApiResponseSchema, X as bookingRefString, ak as bookingRefStringArray, aw as bookingRefStringArrayNullable, a8 as bookingRefStringNullable, R as countryRefString, ag as countryRefStringArray, as as countryRefStringArrayNullable, a4 as countryRefStringNullable, Z as currencyRefString, az as currencyRefStringArrayNullable, T as esimRefString, ah as esimRefStringArray, at as esimRefStringArrayNullable, a5 as esimRefStringNullable, Y as messageRefString, al as messageRefStringArray, ax as messageRefStringArrayNullable, a9 as messageRefStringNullable, O as packageRefString, ae as packageRefStringArray, aq as packageRefStringArrayNullable, a2 as packageRefStringNullable, q as partnerApiRequestSchema, r as partnerApiResponseSchema, aA as partnerAppSchema, K as partnerRefString, ab as partnerRefStringArray, an as partnerRefStringArrayNullable, $ as partnerRefStringNullable, V as paymentRefString, ai as paymentRefStringArray, au as paymentRefStringArrayNullable, a6 as paymentRefStringNullable, W as priceListRefString, aj as priceListRefStringArray, av as priceListRefStringArrayNullable, a7 as priceListRefStringNullable, N as profileRefString, ad as profileRefStringArray, ap as profileRefStringArrayNullable, a1 as profileRefStringNullable, n as promoCodeApiResponseSchema, Q as promoCodeRefString, af as promoCodeRefStringArray, ar as promoCodeRefStringArrayNullable, a3 as promoCodeRefStringNullable, j as supportedLocalesSchema, L as userRefString, ac as userRefStringArray, ao as userRefStringArrayNullable, a0 as userRefStringNullable } from './constants-56f6c4f3.js';
 import { Timestamp, DocumentReference, FieldValue, Firestore, DocumentData } from 'firebase-admin/firestore';
 
 declare const packagePriceFirestoreSchema: z.ZodObject<{
@@ -1523,6 +1523,8 @@ declare const userFirestoreSchema: z.ZodObject<{
     admin: z.ZodNullable<z.ZodBoolean>;
     currency: z.ZodNullable<z.ZodString>;
     receipt_email: z.ZodNullable<z.ZodString>;
+    source: z.ZodNullable<z.ZodEnum<["direct", "promo", "platform"]>>;
+    role: z.ZodNullable<z.ZodArray<z.ZodEnum<["admin", "user", "platform"]>, "many">>;
 }, "strip", z.ZodTypeAny, {
     id: string;
     created_at: Timestamp;
@@ -1534,6 +1536,8 @@ declare const userFirestoreSchema: z.ZodObject<{
     locale: string | null;
     gender: string | null;
     email: string | null;
+    source: "direct" | "promo" | "platform" | null;
+    admin: boolean | null;
     createdAt: Timestamp;
     profileRef: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     balance: number | FieldValue | null;
@@ -1547,9 +1551,9 @@ declare const userFirestoreSchema: z.ZodObject<{
     phone_os_version: string | null;
     ios: boolean | null;
     has_card_saved: boolean | null;
-    admin: boolean | null;
     currency: string | null;
     receipt_email: string | null;
+    role: ("user" | "platform" | "admin")[] | null;
     parameters?: any;
     review_requested?: Timestamp | null | undefined;
     last_seen?: Timestamp | null | undefined;
@@ -1573,6 +1577,8 @@ declare const userFirestoreSchema: z.ZodObject<{
     locale: string | null;
     gender: string | null;
     email: string | null;
+    source: "direct" | "promo" | "platform" | null;
+    admin: boolean | null;
     createdAt: Timestamp;
     profileRef: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     balance: number | FieldValue | null;
@@ -1586,9 +1592,9 @@ declare const userFirestoreSchema: z.ZodObject<{
     phone_os_version: string | null;
     ios: boolean | null;
     has_card_saved: boolean | null;
-    admin: boolean | null;
     currency: string | null;
     receipt_email: string | null;
+    role: ("user" | "platform" | "admin")[] | null;
     parameters?: any;
     review_requested?: Timestamp | null | undefined;
     last_seen?: Timestamp | null | undefined;
@@ -2106,17 +2112,17 @@ declare const esimFirestoreSchema: z.ZodObject<{
     updated_at: Timestamp;
     created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     status: string | null;
-    type: "code" | "balance" | "api" | "promo" | "external" | "payment";
+    type: "code" | "promo" | "balance" | "api" | "external" | "payment";
     updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     country: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     user: string | null;
     name: string;
+    promo: string | null;
     apn: string | null;
     imsi: number;
     provider: string;
     partner_price: number | null;
-    promo: string | null;
     payment: string | null;
     time_assigned: Timestamp | null;
     last_updated: Timestamp | null;
@@ -2135,17 +2141,17 @@ declare const esimFirestoreSchema: z.ZodObject<{
     updated_at: Timestamp;
     created_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     status: string | null;
-    type: "code" | "balance" | "api" | "promo" | "external" | "payment";
+    type: "code" | "promo" | "balance" | "api" | "external" | "payment";
     updated_by: string | DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     country: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     partner: DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | null;
     user: string | null;
     name: string;
+    promo: string | null;
     apn: string | null;
     imsi: number;
     provider: string;
     partner_price: number | null;
-    promo: string | null;
     payment: string | null;
     time_assigned: Timestamp | null;
     last_updated: Timestamp | null;

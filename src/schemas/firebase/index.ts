@@ -3,6 +3,8 @@
 import {
     partnerAppSchema,
     partnerFirestoreSchema,
+    priceListToFirestore, 
+    priceListFromFirestore
 } from './partner';
 
 // Import core schemas/types
@@ -85,7 +87,7 @@ import type { UserApp, UserFirestore, ApiKeys, ApiKey, User } from './user';
 import { userToFirestore, userFromFirestore } from './user';
 import type { BookingApp, BookingFirestore, CommunicationChannel, CommunicationOptions } from './booking';
 import { bookingToFirestore, bookingFromFirestore } from './booking';
-import type { PartnerApp, PartnerFirestore, PriceListApp, PriceListFirestore, priceListFromFirestore, priceListToFirestore } from './partner';
+import type { PartnerApp, PartnerFirestore, PriceListApp, PriceListFirestore } from './partner';
 import { partnerToFirestore, partnerFromFirestore } from './partner';
 import type { CountryApp, CountryFirestore } from './country';
 import { countryToFirestore, countryFromFirestore } from './country';

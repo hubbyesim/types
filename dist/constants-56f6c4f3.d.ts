@@ -3363,6 +3363,8 @@ declare const commonUserFields: {
     }>>;
     currency: z.ZodNullable<z.ZodString>;
     receipt_email: z.ZodNullable<z.ZodString>;
+    source: z.ZodNullable<z.ZodEnum<["direct", "promo", "platform"]>>;
+    role: z.ZodNullable<z.ZodArray<z.ZodEnum<["admin", "user", "platform"]>, "many">>;
 };
 declare const userAppSchema: z.ZodObject<{
     id: z.ZodString;
@@ -3426,6 +3428,8 @@ declare const userAppSchema: z.ZodObject<{
     }>>;
     currency: z.ZodNullable<z.ZodString>;
     receipt_email: z.ZodNullable<z.ZodString>;
+    source: z.ZodNullable<z.ZodEnum<["direct", "promo", "platform"]>>;
+    role: z.ZodNullable<z.ZodArray<z.ZodEnum<["admin", "user", "platform"]>, "many">>;
 }, "strip", z.ZodTypeAny, {
     id: string;
     created_at: Date;
@@ -3437,6 +3441,8 @@ declare const userAppSchema: z.ZodObject<{
     locale: string | null;
     gender: string | null;
     email: string | null;
+    source: "direct" | "promo" | "platform" | null;
+    admin: boolean | null;
     createdAt: Date;
     profileRef: string | null;
     balance: number | null;
@@ -3450,7 +3456,6 @@ declare const userAppSchema: z.ZodObject<{
     phone_os_version: string | null;
     ios: boolean | null;
     has_card_saved: boolean | null;
-    admin: boolean | null;
     api_keys: {
         keys: Record<string, {
             is_active: boolean;
@@ -3461,6 +3466,7 @@ declare const userAppSchema: z.ZodObject<{
     } | null;
     currency: string | null;
     receipt_email: string | null;
+    role: ("user" | "platform" | "admin")[] | null;
     parameters?: any;
     review_requested?: Date | null | undefined;
     last_seen?: Date | null | undefined;
@@ -3474,6 +3480,8 @@ declare const userAppSchema: z.ZodObject<{
     locale: string | null;
     gender: string | null;
     email: string | null;
+    source: "direct" | "promo" | "platform" | null;
+    admin: boolean | null;
     profileRef: string | null;
     balance: number | null;
     stripe_id: string | null;
@@ -3486,7 +3494,6 @@ declare const userAppSchema: z.ZodObject<{
     phone_os_version: string | null;
     ios: boolean | null;
     has_card_saved: boolean | null;
-    admin: boolean | null;
     api_keys: {
         keys: Record<string, {
             is_active: boolean;
@@ -3497,6 +3504,7 @@ declare const userAppSchema: z.ZodObject<{
     } | null;
     currency: string | null;
     receipt_email: string | null;
+    role: ("user" | "platform" | "admin")[] | null;
     created_at?: unknown;
     updated_at?: unknown;
     parameters?: any;
@@ -4160,17 +4168,17 @@ declare const esimAppSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     status: string | null;
-    type: "code" | "balance" | "api" | "promo" | "external" | "payment";
+    type: "code" | "promo" | "balance" | "api" | "external" | "payment";
     updated_by: string | null;
     country: string | null;
     partner: string | null;
     user: string | null;
     name: string;
+    promo: string | null;
     apn: string | null;
     imsi: number;
     provider: string;
     partner_price: number | null;
-    promo: string | null;
     payment: string | null;
     time_assigned: Date | null;
     last_updated: Date | null;
@@ -4187,17 +4195,17 @@ declare const esimAppSchema: z.ZodObject<{
     id: string;
     created_by: string | null;
     status: string | null;
-    type: "code" | "balance" | "api" | "promo" | "external" | "payment";
+    type: "code" | "promo" | "balance" | "api" | "external" | "payment";
     updated_by: string | null;
     country: string | null;
     partner: string | null;
     user: string | null;
     name: string;
+    promo: string | null;
     apn: string | null;
     imsi: number;
     provider: string;
     partner_price: number | null;
-    promo: string | null;
     payment: string | null;
     qr: string;
     iccid: string;

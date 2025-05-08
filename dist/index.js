@@ -773,6 +773,34 @@ var partnerFromFirestore = (firestorePartner) => {
   });
   return result;
 };
+var priceListRefFieldMappings = [
+  { app: "partner", firestore: "partner", collection: PARTNER_COLLECTION, nullable: true }
+];
+var priceListNestedFieldMappings = [
+  // Package references in package_prices array
+  {
+    path: ["package_prices", "*", "package"],
+    type: "reference",
+    collection: PACKAGE_COLLECTION,
+    wildcardIndex: 1
+  }
+];
+var priceListToFirestore = (priceList) => {
+  return genericToFirestore({
+    appObject: priceList,
+    refFieldMappings: priceListRefFieldMappings,
+    dateFieldMappings: [],
+    nestedFieldMappings: priceListNestedFieldMappings
+  });
+};
+var priceListFromFirestore = (firestorePriceList) => {
+  return genericFromFirestore({
+    firestoreObject: firestorePriceList,
+    refFieldMappings: priceListRefFieldMappings,
+    dateFieldMappings: [],
+    nestedFieldMappings: priceListNestedFieldMappings
+  });
+};
 
 // src/schemas/base/api.ts
 import { z as z10 } from "zod";
@@ -1022,7 +1050,9 @@ var commonUserFields = {
   admin: z11.boolean().nullable(),
   api_keys: apiKeysSchema.nullable(),
   currency: z11.string().nullable(),
-  receipt_email: z11.string().nullable()
+  receipt_email: z11.string().nullable(),
+  source: z11.enum(["direct", "promo", "platform"]).nullable(),
+  role: z11.array(z11.enum(["admin", "user", "platform"])).nullable()
 };
 var userAppSchema = baseModelAppSchema.extend({
   ...commonUserFields,
@@ -1764,6 +1794,7 @@ export {
   paymentRefStringArrayNullable,
   paymentRefStringNullable,
   paymentToFirestore,
+  priceListFromFirestore,
   priceListRefArray,
   priceListRefArrayNullable,
   priceListRefNullable,
@@ -1772,6 +1803,7 @@ export {
   priceListRefStringArray,
   priceListRefStringArrayNullable,
   priceListRefStringNullable,
+  priceListToFirestore,
   profileRefArray,
   profileRefArrayNullable,
   profileRefNullable,

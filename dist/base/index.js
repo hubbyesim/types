@@ -129,7 +129,9 @@ var commonUserFields = {
   admin: z3.boolean().nullable(),
   api_keys: apiKeysSchema.nullable(),
   currency: z3.string().nullable(),
-  receipt_email: z3.string().nullable()
+  receipt_email: z3.string().nullable(),
+  source: z3.enum(["direct", "promo", "platform"]).nullable(),
+  role: z3.array(z3.enum(["admin", "user", "platform"])).nullable()
 };
 var userAppSchema = baseModelAppSchema.extend({
   ...commonUserFields,
