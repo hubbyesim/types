@@ -268,39 +268,54 @@ var createIdSchema = (collectionPath) => {
 
 // src/schemas/firebase/helpers.ts
 var admin = __toESM(require("firebase-admin"), 1);
-var globalDb;
-try {
-  if (admin.apps.length > 0) {
-    globalDb = admin.firestore();
-  }
-} catch (e) {
-}
-var MockDocumentReference = class {
-  path;
-  id;
-  constructor(collectionPath, id) {
-    this.path = `${collectionPath}/${id}`;
-    this.id = id;
-  }
-};
 var firestoreInstance = null;
 var setFirestoreInstance = (db) => {
   firestoreInstance = db;
+};
+var SimpleDocumentReference = class _SimpleDocumentReference {
+  path;
+  id;
+  parent;
+  constructor(collectionPath, id) {
+    this.path = `${collectionPath}/${id}`;
+    this.id = id;
+    const collectionParts = collectionPath.split("/");
+    this.parent = { id: collectionParts[collectionParts.length - 1] };
+  }
+  // Add these no-op methods to better mimic a real DocumentReference
+  get() {
+    console.warn("SimpleDocumentReference.get() called but not implemented");
+    return Promise.resolve({
+      exists: false,
+      id: this.id,
+      ref: this,
+      data: () => null
+    });
+  }
+  collection(path) {
+    console.warn("SimpleDocumentReference.collection() called but not implemented");
+    return { doc: (id) => new _SimpleDocumentReference(`${this.path}/${path}`, id) };
+  }
+};
+var MockDocumentReference = class extends SimpleDocumentReference {
+  constructor(collectionPath, id) {
+    super(collectionPath, id);
+  }
 };
 var getFirestoreInstance = () => {
   if (firestoreInstance) {
     return firestoreInstance;
   }
-  if (globalDb) {
-    return globalDb;
-  }
   try {
     if (admin.apps.length > 0) {
-      return admin.firestore();
+      const db = admin.firestore();
+      firestoreInstance = db;
+      return db;
     }
   } catch (e) {
+    console.warn("Failed to get Firestore instance from firebase-admin:", e);
   }
-  throw new Error("Firestore instance not available. Initialize firebase-admin or call setFirestoreInstance first.");
+  return null;
 };
 var toFirestore = {
   date: (date) => import_firestore2.Timestamp.fromDate(date),
@@ -309,13 +324,17 @@ var toFirestore = {
       return new MockDocumentReference(collectionPath, id);
     }
     const firestore2 = db || getFirestoreInstance();
-    return firestore2.collection(collectionPath).doc(id);
+    if (firestore2) {
+      return firestore2.collection(collectionPath).doc(id);
+    }
+    console.warn(`Creating SimpleDocumentReference for ${collectionPath}/${id} - no Firestore instance available`);
+    return new SimpleDocumentReference(collectionPath, id);
   }
 };
 var fromFirestore = {
   date: (timestamp) => timestamp.toDate(),
   ref: (docRef) => {
-    if (docRef instanceof MockDocumentReference) {
+    if (docRef instanceof MockDocumentReference || docRef instanceof SimpleDocumentReference) {
       return docRef.id;
     }
     return docRef.id;

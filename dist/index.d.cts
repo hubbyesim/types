@@ -1288,20 +1288,35 @@ declare const createDocRefSchema: <T>(collectionPath: string) => {
 type HubbyModelFirestore = z.infer<typeof baseModelSchema>;
 type HubbyModel = HubbyModelFirestore;
 
-declare class MockDocumentReference {
+declare const setFirestoreInstance: (db: Firestore) => void;
+declare class SimpleDocumentReference {
     path: string;
     id: string;
+    parent: {
+        id: string;
+    };
+    constructor(collectionPath: string, id: string);
+    get(): Promise<{
+        exists: boolean;
+        id: string;
+        ref: SimpleDocumentReference;
+        data: () => null;
+    }>;
+    collection(path: string): {
+        doc: (id: string) => SimpleDocumentReference;
+    };
+}
+declare class MockDocumentReference extends SimpleDocumentReference {
     constructor(collectionPath: string, id: string);
 }
-declare const setFirestoreInstance: (db: Firestore) => void;
-declare const getFirestoreInstance: () => Firestore;
+declare const getFirestoreInstance: () => Firestore | null;
 declare const toFirestore: {
     date: (date: Date) => Timestamp;
-    ref: <T>(collectionPath: string, id: string, db?: Firestore) => DocumentReference<T>;
+    ref: <T>(collectionPath: string, id: string, db?: Firestore) => DocumentReference<T> | SimpleDocumentReference;
 };
 declare const fromFirestore: {
     date: (timestamp: Timestamp) => Date;
-    ref: <T>(docRef: DocumentReference<T> | MockDocumentReference) => string;
+    ref: <T>(docRef: DocumentReference<T> | MockDocumentReference | SimpleDocumentReference) => string;
 };
 
 declare const hubbyModelAppSchema: z.ZodObject<{

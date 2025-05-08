@@ -42,12 +42,12 @@ export const getFirestoreInstance = (): Firestore => {
     if (firestoreInstance) {
         return firestoreInstance;
     }
-    
+
     // Then try the global instance
     if (globalDb) {
         return globalDb;
     }
-    
+
     // As a last resort, try to get it directly from firebase-admin
     try {
         if (admin.apps.length > 0) {
@@ -56,7 +56,7 @@ export const getFirestoreInstance = (): Firestore => {
     } catch (e) {
         // Fall through to error
     }
-    
+
     throw new Error('Firestore instance not available. Initialize firebase-admin or call setFirestoreInstance first.');
 };
 
