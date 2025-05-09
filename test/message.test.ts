@@ -1,127 +1,99 @@
-import {
-    MessageApp, MessageFirestore, messageToFirestore, messageFromFirestore,
-    SentMessagesApp, SentMessagesFirestore, sentMessagesToFirestore, sentMessagesFromFirestore
-} from '../src/schemas/firebase/message';
+import { buildClientSchema } from '../src/schemas/builders/client';
+import { buildServerSchema } from '../src/schemas/builders/server';
+import { convertFirestoreToJS, convertJSToFirestore } from '../src/schemas/utils/firestoreTansformUtils';
+import { messageSchemaSpec } from '../src/schemas/specs/message';
 import { Timestamp } from 'firebase-admin/firestore';
 
-// --- Mock Helpers --- Need to mock the actual helpers file
-jest.mock('../src/schemas/firebase/helpers', () => {
-    const originalHelpers = jest.requireActual('../src/schemas/firebase/helpers');
-    return {
-        ...originalHelpers,
-        toFirestore: {
-            ...originalHelpers.toFirestore,
-            date: (date: Date) => ({ // Simple mock for Timestamp
-                toDate: () => date,
-                toMillis: () => date.getTime(),
-            } as Timestamp),
-            // ref mock not needed for Message schema
-        },
-        fromFirestore: {
-            ...originalHelpers.fromFirestore,
-            date: (timestamp: Timestamp) => timestamp.toDate(),
-            // ref mock not needed for Message schema
-        },
-    };
-});
+const ClientSchema = buildClientSchema(messageSchemaSpec);
+const ServerSchema = buildServerSchema(messageSchemaSpec);
 
-// Mock Timestamp for instanceof checks if necessary, though conversions use helpers
-const mockTimestamp = (date: Date): Timestamp => ({
-    toDate: () => date,
-    toMillis: () => date.getTime(),
-} as Timestamp);
-// --- End Mocks ---
+const roundtrip = (input: any) => {
+    const parsedForServer = ServerSchema.parse(input);
+    const firestoreData = convertJSToFirestore(parsedForServer, messageSchemaSpec);
+    const jsData = convertFirestoreToJS(firestoreData);
+    return ClientSchema.parse(jsData);
+};
 
-describe('Message Schema Conversion', () => {
-    it('should correctly convert between MessageApp and MessageFirestore (Roundtrip)', () => {
+describe('Message schema roundtrip', () => {
+    it('should support roundtrip from client to firestore and back', () => {
         const now = new Date();
-        const createdAt = new Date(Math.floor(now.getTime() / 1000) * 1000);
-        const messageId = 'msg_123';
 
-        const initialMessageApp: MessageApp = {
-            id: messageId,
-            key: 'welcome_email',
+        const input = {
+            id: 'message123',
+            key: 'activation-message',
             method: 'email',
             status: 'sent',
-            created_at: createdAt,
-            updated_at: createdAt,
+            created_at: now,
+            updated_at: now
         };
 
-        // Convert to Firestore
-        const messageFirestore = messageToFirestore(initialMessageApp);
+        const parsedForServer = ClientSchema.parse(input);
+        const firestoreData = convertJSToFirestore(parsedForServer, messageSchemaSpec);
 
-        // Basic checks
-        expect(messageFirestore.key).toBe('welcome_email');
-        expect(messageFirestore.status).toBe('sent');
-        expect(messageFirestore.created_at).toBeInstanceOf(Object);
-        expect(messageFirestore.created_at?.toDate()).toEqual(createdAt);
+        // Check timestamps are properly converted
+        expect(firestoreData.created_at).toBeInstanceOf(Timestamp);
+        expect(firestoreData.updated_at).toBeInstanceOf(Timestamp);
 
-        // Convert back to App
-        const finalMessageApp = messageFromFirestore(messageFirestore);
+        // Simulate Firestore snapshot conversion
+        const jsData = convertFirestoreToJS(firestoreData);
 
-        // Assertions
-        expect(finalMessageApp.created_at?.getTime()).toEqual(initialMessageApp.created_at?.getTime());
-        expect(finalMessageApp.updated_at?.getTime()).toEqual(initialMessageApp.updated_at?.getTime());
+        // Validate back with client schema
+        const parsedClient = ClientSchema.parse(jsData);
 
-        const finalFiltered = { ...finalMessageApp, created_at: undefined, updated_at: undefined };
-        const initialFiltered = { ...initialMessageApp, created_at: undefined, updated_at: undefined };
-        expect(finalFiltered).toEqual(initialFiltered);
+        // Check that all data round-trips correctly
+        expect(parsedClient.id).toBe(input.id);
+        expect(parsedClient.key).toBe(input.key);
+        expect(parsedClient.method).toBe(input.method);
+        expect(parsedClient.status).toBe(input.status);
+
+        // Check date conversions
+        expect(parsedClient.created_at.toISOString()).toBe(input.created_at.toISOString());
+        expect(parsedClient.updated_at.toISOString()).toBe(input.updated_at.toISOString());
     });
 
-    it('should correctly convert between SentMessagesApp and SentMessagesFirestore (Roundtrip)', () => {
-        const now1 = new Date();
-        const now2 = new Date(now1.getTime() - 5000);
-        const createdAt1 = new Date(Math.floor(now1.getTime() / 1000) * 1000);
-        const createdAt2 = new Date(Math.floor(now2.getTime() / 1000) * 1000);
-        const msgId1 = 'msg_abc';
-        const msgId2 = 'msg_def';
+    it('should support different message methods and statuses', () => {
+        const now = new Date();
 
-        const initialSentMessagesApp: SentMessagesApp = {
-            [msgId1]: {
-                id: msgId1,
-                key: 'order_confirmation',
-                method: 'email',
-                status: 'delivered',
-                created_at: createdAt1,
-                updated_at: createdAt1,
-            },
-            [msgId2]: {
-                id: msgId2,
-                key: 'shipping_update',
-                method: 'sms',
-                status: 'sent',
-                created_at: createdAt2,
-                updated_at: createdAt2,
-            },
+        // Test with SMS message that has pending status
+        const input = {
+            id: 'message456',
+            key: 'verification-code',
+            method: 'sms',
+            status: 'pending',
+            created_at: now,
+            updated_at: now
         };
 
-        // Convert to Firestore
-        const sentMessagesFirestore = sentMessagesToFirestore(initialSentMessagesApp);
+        const result = roundtrip(input);
 
-        // Basic checks
-        expect(sentMessagesFirestore[msgId1]).toBeDefined();
-        expect(sentMessagesFirestore[msgId1].status).toBe('delivered');
-        expect(sentMessagesFirestore[msgId1].created_at?.toDate()).toEqual(createdAt1);
-        expect(sentMessagesFirestore[msgId2]).toBeDefined();
-        expect(sentMessagesFirestore[msgId2].status).toBe('sent');
-        expect(sentMessagesFirestore[msgId2].created_at?.toDate()).toEqual(createdAt2);
+        expect(result.id).toBe(input.id);
+        expect(result.key).toBe(input.key);
+        expect(result.method).toBe('sms');
+        expect(result.status).toBe('pending');
+    });
 
-        // Convert back to App
-        const finalSentMessagesApp = sentMessagesFromFirestore(sentMessagesFirestore);
+    it('should reject invalid message data', () => {
+        const invalidMessage = {
+            // Missing required fields
+            id: 'message123',
+            key: 'test-message'
+        };
 
-        // Assertions (deep equality should work if dates are handled)
-        expect(finalSentMessagesApp[msgId1].created_at.getTime()).toEqual(initialSentMessagesApp[msgId1].created_at.getTime());
-        expect(finalSentMessagesApp[msgId2].created_at.getTime()).toEqual(initialSentMessagesApp[msgId2].created_at.getTime());
+        expect(() => ClientSchema.parse(invalidMessage)).toThrow();
+    });
 
-        // Compare the rest
-        const finalFiltered = {
-             [msgId1]: { ...finalSentMessagesApp[msgId1], created_at: undefined, updated_at: undefined },
-             [msgId2]: { ...finalSentMessagesApp[msgId2], created_at: undefined, updated_at: undefined },
-         };
-         const initialFiltered = {
-             [msgId1]: { ...initialSentMessagesApp[msgId1], created_at: undefined, updated_at: undefined },
-             [msgId2]: { ...initialSentMessagesApp[msgId2], created_at: undefined, updated_at: undefined },
-         };
-         expect(finalFiltered).toEqual(initialFiltered);
+    it('should reject invalid message method', () => {
+        const now = new Date();
+
+        const invalidMethod = {
+            id: 'message123',
+            key: 'test-message',
+            method: 'invalid-method', // Not a valid method
+            status: 'sent',
+            created_at: now,
+            updated_at: now
+        };
+
+        expect(() => ClientSchema.parse(invalidMethod)).toThrow();
     });
 }); 

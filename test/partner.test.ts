@@ -1,181 +1,242 @@
 import {
-    PartnerApp, PartnerFirestore, partnerToFirestore, partnerFromFirestore,
-    PriceListApp, PriceListFirestore, priceListToFirestore, priceListFromFirestore,
-    PackagePriceApp, PackagePriceFirestore // Import nested types if needed for data creation
-} from '../src/schemas/firebase/partner';
-import { Timestamp, DocumentReference } from 'firebase-admin/firestore';
-import { PARTNER_COLLECTION, USER_COLLECTION, PACKAGE_COLLECTION, PRICE_LIST_COLLECTION } from '../src/schemas/firebase/utils/collections';
+    PartnerSchema,
+    HPartnerSchema,
+    PriceListSchema,
+    HPriceListSchema
+} from "../src";
+import { Timestamp } from "firebase-admin/firestore";
+import { convertFirestoreToJS } from "../src/schemas/utils/firestoreTansformUtils";
 
-// --- Mock Helpers ---
-jest.mock('../src/schemas/firebase/helpers', () => {
-    const originalHelpers = jest.requireActual('../src/schemas/firebase/helpers');
-    return {
-        ...originalHelpers,
-        // Keep testEnv for mocking refs
-        testEnv: { isTestEnvironment: true }, // Ensure mock refs are used
-        toFirestore: {
-            ...originalHelpers.toFirestore,
-            date: (date: Date) => ({ toDate: () => date, toMillis: () => date.getTime() } as Timestamp),
-            ref: (collection: string, id: string) => ({ // Simple mock for DocumentReference
-                id: id,
-                path: `${collection}/${id}`,
-            } as DocumentReference),
-        },
-        fromFirestore: {
-            ...originalHelpers.fromFirestore,
-            date: (timestamp: Timestamp) => timestamp.toDate(),
-            ref: (ref: DocumentReference) => ref.id,
-        },
-    };
-});
-// --- End Mocks ---
-
-describe('Partner Schema Conversion', () => {
-
-    it('should correctly convert between PartnerApp and PartnerFirestore (Roundtrip)', () => {
+describe("Partner Schema", () => {
+    it("should convert from server to client and back", () => {
         const now = new Date();
-        const createdAt = new Date(Math.floor(now.getTime() / 1000) * 1000);
-        const nextInvoice = new Date(Math.floor((now.getTime() + 86400000 * 30) / 1000) * 1000); // ~30 days later
+        const timestamp = Timestamp.fromDate(now);
 
-        const partnerId = 'partner_main_123';
-        const parentId = 'partner_parent_456';
-        const userId1 = 'user_abc';
-        const userId2 = 'user_def';
-        const priceListId = 'pl_xyz';
-        const packageId = 'pkg_standard';
+        // Create a sample client side Partner object
+        const clientPartner = {
+            id: "test-partner-123",
+            created_at: now,
+            updated_at: now,
+            created_by: "user1",
+            updated_by: null,
 
-        const initialPartnerApp: PartnerApp = {
-            id: partnerId,
-            created_at: createdAt,
-            updated_at: createdAt,
-            created_by: 'system',
-            updated_by: 'system',
-            name: 'Main Partner Inc.',
-            type: 'reseller',
+            // Partner specific fields
+            name: "Test Partner LLC",
+            type: "travel-agency",
             is_active: true,
-            external_id: 'ext-main-123',
-            contact: { email: 'contact@mainpartner.com', office_phone: '+15551234' },
-            address: { street: '123 Main St', city: 'Anytown', postal_code: '12345', country: 'USA' },
-            registration: { chamber_of_commerce_number: 'COC123', vat_number: 'VAT456' },
-            banking_details: { account_holder: 'Main Partner Inc.', bank_name: 'Global Bank', iban: 'IBAN123...' },
-            visual_identity: {
-                 primary_color: '#0000FF', secondary_color: '#FFFFFF', logo: 'logo.png', font: 'Arial',
-                 top_banner: undefined,
-                 mid_banner: undefined
-             },
-            parent: parentId,
-            users: [userId1, userId2],
+            external_id: "ext-123",
+
+            // Nested objects
+            contact: {
+                email: "partner@example.com",
+                office_phone: "+1234567890"
+            },
+            address: {
+                street: "123 Main St",
+                city: "Amsterdam",
+                postal_code: "1000 AB",
+                country: "Netherlands"
+            },
+            registration: {
+                chamber_of_commerce_number: "12345678",
+                vat_number: "NL123456789B01",
+                anvr_number: 12345,
+                tax_number: "123-45-6789"
+            },
+            banking_details: {
+                account_holder: "Test Partner LLC",
+                bank_name: "Dutch Bank",
+                iban: "NL00BANK0123456789"
+            },
+
+            // References
+            parent: null,
+            users: [
+                "user-1",
+                "user-2"
+            ],
+
+            // Financial properties
             financial_properties: {
-                administration_fee: 50,
-                income_per_gb: 0.5,
-                commission_fee: 10,
-                payment_method: 'invoice',
+                administration_fee: 25.00,
+                income_per_gb: 5.00,
+                commission_fee: 10.00,
+                payment_method: "invoice",
                 requires_card: false,
-                next_invoice: nextInvoice,
-                last_invoice: null,
+                next_invoice: now,
+                last_invoice: now,
                 pricing_strategies: {
                     partner: {
-                        strategy: 'split', modification_percentage: 15,
-                        default_price_list: priceListId,
+                        strategy: "split",
+                        modification_percentage: 10,
+                        default_price_list: "price-list-1",
                         custom_prices: [
-                            { destination: 'USA', label: 'USA 5GB', type: 'data-limit', price: 10, package: packageId }
+                            {
+                                destination: "France",
+                                label: "5GB Package",
+                                type: "data-limited",
+                                price: 19.99,
+                                package: "package-1"
+                            }
                         ]
                     },
-                    user: undefined // Optional
+                    user: {
+                        modification_percentage: 5,
+                        default_price_list: "price-list-2",
+                        custom_prices: []
+                    }
                 }
             },
+
+            // Visual identity
+            visual_identity: {
+                primary_color: "#FF5733",
+                secondary_color: "#33FF57",
+                logo: "https://example.com/logo.png",
+                font: "Roboto",
+                top_banner: {
+                    strategy: "fixed",
+                    banners: [
+                        {
+                            image_url: "https://example.com/banner1.png",
+                            alt: "Summer Sale",
+                            click_url: "https://example.com/sale",
+                            locale: "en-US",
+                            properties: { theme: "summer" }
+                        }
+                    ]
+                }
+            },
+
+            // Platform settings
             platform_settings: {
-                 package_strategy: { name: 'Default', parameters: { default_gb: 5 } },
-                 free_esim: null,
-                 booking_defaults: { locale: 'en-US' },
-                 booking_confirmation: { brevo_template_id: 1, send_booking_confirmation: true },
-                 schedules: []
-             },
+                package_strategy: {
+                    name: "default",
+                    iso3_white_list: ["NLD", "DEU", "FRA"],
+                    parameters: { default_size: "5GB" }
+                },
+                booking_defaults: {
+                    locale: "en-US"
+                },
+                schedules: [
+                    {
+                        days: 1,
+                        hour: 12,
+                        key: "welcome",
+                        method: "email",
+                        moment: "departure_date",
+                        email: {
+                            brevo_template_id: 12345,
+                            subject: { "en-US": "Welcome" },
+                            preview_text: { "en-US": "Welcome to our service" }
+                        }
+                    }
+                ]
+            },
+
+            // Metadata
+            data: {
+                source: "manual",
+                manual: true
+            }
         };
 
-        // Convert to Firestore
-        const partnerFirestore = partnerToFirestore(initialPartnerApp);
+        // First convert to server format
+        const serverObj = PartnerSchema.parse(clientPartner);
 
-        // Basic Checks (checking a few key fields)
-        expect(partnerFirestore.name).toBe('Main Partner Inc.');
-        expect(partnerFirestore.parent?.id).toBe(parentId);
-        expect(partnerFirestore.users).toHaveLength(2);
-        expect(partnerFirestore.users?.[0].id).toBe(userId1);
-        expect(partnerFirestore.financial_properties?.next_invoice?.toDate()).toEqual(nextInvoice);
-        expect(partnerFirestore.financial_properties?.pricing_strategies?.partner?.default_price_list?.path).toContain(priceListId);
-        expect(partnerFirestore.financial_properties?.pricing_strategies?.partner?.custom_prices[0].package?.path).toContain(packageId);
-        expect(partnerFirestore.platform_settings?.booking_defaults?.locale).toBe('en-US');
+        // Verify the document references were properly created
+        expect(serverObj.financial_properties.pricing_strategies.partner.default_price_list.id).toBe(
+            clientPartner.financial_properties.pricing_strategies.partner.default_price_list
+        );
 
-        // Convert back to App
-        const finalPartnerApp = partnerFromFirestore(partnerFirestore);
+        // Convert server object to JS for client use
+        const jsData = convertFirestoreToJS(serverObj);
 
-        // Assertions
-        expect(finalPartnerApp.created_at?.getTime()).toEqual(initialPartnerApp.created_at?.getTime());
-        expect(finalPartnerApp.updated_at?.getTime()).toEqual(initialPartnerApp.updated_at?.getTime());
-        expect(finalPartnerApp.financial_properties?.next_invoice?.getTime()).toEqual(initialPartnerApp.financial_properties?.next_invoice?.getTime());
+        // Now parse with client schema to convert back
+        const roundtripClientObj = HPartnerSchema.parse(jsData);
 
-        // Compare the rest (might need a custom deep equal due to complexity/nested objects/dates)
-        // For simplicity, checking a few key non-date/ref top-level fields and nested ones
-        expect(finalPartnerApp.id).toEqual(initialPartnerApp.id);
-        expect(finalPartnerApp.name).toEqual(initialPartnerApp.name);
-        expect(finalPartnerApp.parent).toEqual(initialPartnerApp.parent);
-        expect(finalPartnerApp.users).toEqual(initialPartnerApp.users);
-        expect(finalPartnerApp.contact).toEqual(initialPartnerApp.contact);
-        expect(finalPartnerApp.address).toEqual(initialPartnerApp.address);
-        // Deep compare crucial nested objects minus dates/refs handled above
-        expect(finalPartnerApp.financial_properties?.pricing_strategies?.partner?.custom_prices)
-             .toEqual(initialPartnerApp.financial_properties?.pricing_strategies?.partner?.custom_prices);
-         expect(finalPartnerApp.platform_settings?.package_strategy)
-             .toEqual(initialPartnerApp.platform_settings?.package_strategy);
+        // Verify the conversion maintained the core data
+        expect(roundtripClientObj.id).toBe(clientPartner.id);
+        expect(roundtripClientObj.name).toBe(clientPartner.name);
+        expect(roundtripClientObj.type).toBe(clientPartner.type);
+        expect(roundtripClientObj.contact.email).toBe(clientPartner.contact.email);
+        expect(roundtripClientObj.address.city).toBe(clientPartner.address.city);
+        expect(roundtripClientObj.financial_properties.administration_fee).toBe(clientPartner.financial_properties.administration_fee);
+        expect(roundtripClientObj.users).toEqual(clientPartner.users);
 
-         // A full deep equal after filtering dates/refs might be more robust if needed
-         // expect(filterDeep(finalPartnerApp)).toEqual(filterDeep(initialPartnerApp));
+        // Verify nested document references were converted correctly
+        expect(roundtripClientObj.financial_properties.pricing_strategies.partner.default_price_list).toBe(
+            clientPartner.financial_properties.pricing_strategies.partner.default_price_list
+        );
+
+        // Verify nested object fields remained intact
+        expect(roundtripClientObj.contact.email).toBe(clientPartner.contact.email);
+        expect(roundtripClientObj.address.city).toBe(clientPartner.address.city);
+        expect(roundtripClientObj.visual_identity.primary_color).toBe(clientPartner.visual_identity.primary_color);
     });
+});
 
-    it('should correctly convert between PriceListApp and PriceListFirestore (Roundtrip)', () => {
+describe("PriceList Schema", () => {
+    it("should convert from server to client and back", () => {
         const now = new Date();
-        const createdAt = new Date(Math.floor(now.getTime() / 1000) * 1000);
-        const priceListId = 'pl_partner_abc';
-        const partnerId = 'partner_for_pl_1';
-        const packageId1 = 'pkg_eur_1gb';
-        const packageId2 = 'pkg_global_5gb';
+        const timestamp = Timestamp.fromDate(now);
 
-        const initialPriceListApp: PriceListApp = {
-            id: priceListId,
-            created_at: createdAt,
-            updated_at: createdAt,
-            created_by: 'admin',
-            updated_by: 'admin',
-            name: 'Partner Standard Prices',
-            description: 'Default price list for partners',
-            type: 'partner',
-            partner: partnerId,
+        // Create a sample client side PriceList object
+        const clientPriceList = {
+            id: "price-list-123",
+            created_at: now,
+            updated_at: now,
+            created_by: "user1",
+            updated_by: null,
+
+            // PriceList specific fields
+            name: "Standard Price List",
+            description: "Default prices for all packages",
+            type: "partner",
+            partner: "partner-1",
             package_prices: [
-                { destination: 'EUR', label: 'Europe 1GB', type: 'data-limit', price: 5, package: packageId1 },
-                { destination: 'GLOBAL', label: 'Global 5GB', type: 'data-limit', price: 25, package: packageId2 },
-            ],
+                {
+                    destination: "Spain",
+                    label: "10GB Package",
+                    type: "data-limited",
+                    price: 29.99,
+                    package: "package-3"
+                },
+                {
+                    destination: "Italy",
+                    label: "5GB Package",
+                    type: "data-limited",
+                    price: 19.99,
+                    package: "package-4"
+                }
+            ]
         };
 
-        // Convert to Firestore
-        const priceListFirestore = priceListToFirestore(initialPriceListApp);
+        // First convert to server format
+        const serverObj = PriceListSchema.parse(clientPriceList);
 
-        // Basic checks
-        expect(priceListFirestore.name).toBe('Partner Standard Prices');
-        expect(priceListFirestore.type).toBe('partner');
-        expect(priceListFirestore.partner?.id).toBe(partnerId);
-        expect(priceListFirestore.package_prices).toHaveLength(2);
-        expect(priceListFirestore.package_prices[0].package?.path).toContain(packageId1);
-        expect(priceListFirestore.package_prices[1].price).toBe(25);
+        // Verify the document references were properly created
+        expect(serverObj.partner.id).toBe(clientPriceList.partner);
+        expect(serverObj.package_prices[0].package.id).toBe(clientPriceList.package_prices[0].package);
 
-        // Convert back to App
-        const finalPriceListApp = priceListFromFirestore(priceListFirestore);
+        // Convert server object to JS for client use
+        const jsData = convertFirestoreToJS(serverObj);
 
-        // Assertions
-        expect(finalPriceListApp.created_at?.getTime()).toEqual(initialPriceListApp.created_at?.getTime());
-        expect(finalPriceListApp.updated_at?.getTime()).toEqual(initialPriceListApp.updated_at?.getTime());
+        // Now parse with client schema to convert back
+        const roundtripClientObj = HPriceListSchema.parse(jsData);
 
-        const finalFiltered = { ...finalPriceListApp, created_at: undefined, updated_at: undefined };
-        const initialFiltered = { ...initialPriceListApp, created_at: undefined, updated_at: undefined };
-        expect(finalFiltered).toEqual(initialFiltered);
+        // Verify the conversion maintained the core data
+        expect(roundtripClientObj.id).toBe(clientPriceList.id);
+        expect(roundtripClientObj.name).toBe(clientPriceList.name);
+        expect(roundtripClientObj.type).toBe(clientPriceList.type);
+        expect(roundtripClientObj.partner).toBe(clientPriceList.partner);
+        expect(roundtripClientObj.package_prices.length).toBe(clientPriceList.package_prices.length);
+
+        // Verify package references were converted correctly
+        expect(roundtripClientObj.package_prices[0].package).toBe(clientPriceList.package_prices[0].package);
+
+        // Verify other fields remained intact
+        expect(roundtripClientObj.name).toBe(clientPriceList.name);
+        expect(roundtripClientObj.description).toBe(clientPriceList.description);
     });
 }); 

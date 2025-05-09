@@ -1,7 +1,7 @@
 import { toFirestore, fromFirestore } from './firebase/helpers';
 // Import nested conversions
-import { 
-    processNestedFieldsToFirestore, 
+import {
+    processNestedFieldsToFirestore,
     processNestedFieldsFromFirestore,
     NestedFieldPathMapping
 } from './utils/nested-conversions';
@@ -56,7 +56,10 @@ export function genericToFirestore<AppType extends Record<string, any>, Firestor
     const refFieldNames = refFieldMappings.map(mapping => mapping.app);
     Object.keys(appObject as Record<string, any>).forEach(key => {
         if (!refFieldNames.includes(key as keyof AppType)) {
-            result[key] = appObject[key as keyof AppType];
+            // Only copy non-undefined values
+            if (appObject[key as keyof AppType] !== undefined) {
+                result[key] = appObject[key as keyof AppType];
+            }
         }
     });
 
@@ -114,9 +117,62 @@ export function genericToFirestore<AppType extends Record<string, any>, Firestor
     // Process nested fields if provided
     if (nestedFieldMappings && nestedFieldMappings.length > 0) {
         processNestedFieldsToFirestore(result, nestedFieldMappings);
+
+        // Special case for pricing_strategies.user and pricing_strategies.partner
+        if (result.financial_properties && result.financial_properties.pricing_strategies) {
+            const appPricingStrategies = appObject.financial_properties?.pricing_strategies;
+
+            // If the financial_properties.pricing_strategies.user is undefined or doesn't have key 'user', delete it
+            if (!appPricingStrategies?.user || Object.keys(appPricingStrategies?.user || {}).length === 0) {
+                delete result.financial_properties.pricing_strategies.user;
+            }
+
+            // If the financial_properties.pricing_strategies.partner is undefined or doesn't have key 'partner', delete it
+            if (!appPricingStrategies?.partner || Object.keys(appPricingStrategies?.partner || {}).length === 0) {
+                delete result.financial_properties.pricing_strategies.partner;
+            }
+
+            // If pricing_strategies object is empty after possible deletions, don't include it
+            if (Object.keys(result.financial_properties.pricing_strategies).length === 0) {
+                result.financial_properties.pricing_strategies = null;
+            }
+        }
     }
 
     return result as unknown as FirestoreType;
+}
+
+// Helper function to clean up empty objects in nested structures
+function cleanupEmptyObjects(obj: any): any {
+    if (obj === null || obj === undefined || typeof obj !== 'object') {
+        return obj;
+    }
+
+    if (Array.isArray(obj)) {
+        return obj.map(cleanupEmptyObjects).filter(item => item !== undefined);
+    }
+
+    const result: any = {};
+    for (const [key, value] of Object.entries(obj)) {
+        if (value === null) {
+            result[key] = null;
+        } else if (typeof value === 'object') {
+            // Recursively clean up nested objects
+            const cleaned = cleanupEmptyObjects(value);
+
+            // Only include non-empty objects
+            if (cleaned !== undefined &&
+                (typeof cleaned !== 'object' ||
+                    Array.isArray(cleaned) ||
+                    Object.keys(cleaned).length > 0)) {
+                result[key] = cleaned;
+            }
+        } else if (value !== undefined) {
+            result[key] = value;
+        }
+    }
+
+    return Object.keys(result).length > 0 ? result : undefined;
 }
 
 // Generic fromFirestore conversion function
@@ -140,7 +196,10 @@ export function genericFromFirestore<FirestoreType extends Record<string, any>, 
     const refFieldNames = refFieldMappings.map(mapping => mapping.firestore);
     Object.keys(firestoreObject as Record<string, any>).forEach(key => {
         if (!refFieldNames.includes(key as keyof FirestoreType)) {
-            result[key] = firestoreObject[key as keyof FirestoreType];
+            // Only copy non-undefined values
+            if (firestoreObject[key as keyof FirestoreType] !== undefined) {
+                result[key] = firestoreObject[key as keyof FirestoreType];
+            }
         }
     });
 
@@ -200,10 +259,50 @@ export function genericFromFirestore<FirestoreType extends Record<string, any>, 
     if (specialCaseHandler) {
         specialCaseHandler(result, firestoreObject);
     }
-    
+
     // Process nested fields if provided
     if (nestedFieldMappings && nestedFieldMappings.length > 0) {
         processNestedFieldsFromFirestore(result, nestedFieldMappings);
+
+        // Special case for pricing_strategies.user and pricing_strategies.partner
+        if (result.financial_properties && result.financial_properties.pricing_strategies) {
+            // If the user property doesn't exist in Firestore, make sure it stays undefined
+            if (!('user' in firestoreObject.financial_properties.pricing_strategies)) {
+                delete result.financial_properties.pricing_strategies.user;
+            }
+
+            // If the partner property doesn't exist in Firestore, make sure it stays undefined
+            if (!('partner' in firestoreObject.financial_properties.pricing_strategies)) {
+                delete result.financial_properties.pricing_strategies.partner;
+            }
+        }
+    }
+
+    // Clean up any empty objects in the result
+    if (result.financial_properties && result.financial_properties.pricing_strategies) {
+        // Clean up the pricing_strategies object
+        if (result.financial_properties.pricing_strategies.user &&
+            Object.keys(result.financial_properties.pricing_strategies.user).length === 0) {
+            delete result.financial_properties.pricing_strategies.user;
+        }
+
+        if (result.financial_properties.pricing_strategies.partner &&
+            Object.keys(result.financial_properties.pricing_strategies.partner).length === 0) {
+            delete result.financial_properties.pricing_strategies.partner;
+        }
+
+        // Special case for the custom_prices property
+        if (result.financial_properties.pricing_strategies.user &&
+            result.financial_properties.pricing_strategies.user.custom_prices &&
+            Object.keys(result.financial_properties.pricing_strategies.user.custom_prices).length === 0) {
+            result.financial_properties.pricing_strategies.user.custom_prices = [];
+        }
+
+        if (result.financial_properties.pricing_strategies.partner &&
+            result.financial_properties.pricing_strategies.partner.custom_prices &&
+            Object.keys(result.financial_properties.pricing_strategies.partner.custom_prices).length === 0) {
+            result.financial_properties.pricing_strategies.partner.custom_prices = [];
+        }
     }
 
     return result as unknown as AppType;

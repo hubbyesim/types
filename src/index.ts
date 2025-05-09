@@ -1,6 +1,5 @@
-// This file is auto-generated. Do not edit manually.
-// Export from schemas (which only exports from base)
-export * from "./schemas";
+// Main entry point for the Hubby types package
+// This file consolidates exports from both client and server schemas
 
-// Export from constants
-export * from "./constants";
+export * from './index.client';
+export * from './index.server'; 

@@ -1,67 +1,101 @@
-import {
-    CountryApp, CountryFirestore, countryToFirestore, countryFromFirestore
-} from '../src/schemas/firebase/country';
-import { Timestamp } from 'firebase-admin/firestore'; // Not strictly needed if no date fields
+import { buildClientSchema } from '../src/schemas/builders/client';
+import { buildServerSchema } from '../src/schemas/builders/server';
+import { convertFirestoreToJS, convertJSToFirestore } from '../src/schemas/utils/firestoreTansformUtils';
+import { countrySchemaSpec } from '../src/schemas/specs/country';
 
-// --- Mock Helpers ---
-jest.mock('../src/schemas/firebase/helpers', () => {
-    const originalHelpers = jest.requireActual('../src/schemas/firebase/helpers');
-    return {
-        ...originalHelpers,
-         // Need date mock for baseModelSchema fields
-         toFirestore: {
-             ...originalHelpers.toFirestore,
-             date: (date: Date) => ({ toDate: () => date, toMillis: () => date.getTime() } as Timestamp),
-         },
-         fromFirestore: {
-             ...originalHelpers.fromFirestore,
-             date: (timestamp: Timestamp) => timestamp.toDate(),
-         },
-    };
-});
-// --- End Mocks ---
+const ClientSchema = buildClientSchema(countrySchemaSpec);
+const ServerSchema = buildServerSchema(countrySchemaSpec);
 
-describe('Country Schema Conversion', () => {
-    it('should correctly convert between CountryApp and CountryFirestore (Roundtrip)', () => {
-        const countryId = 'country_usa'; // Assuming id is used, though schema says nullable
+const roundtrip = (input: any) => {
+    const parsedForServer = ServerSchema.parse(input);
+    const firestoreData = convertJSToFirestore(parsedForServer, countrySchemaSpec);
+    const jsData = convertFirestoreToJS(firestoreData);
+    return ClientSchema.parse(jsData);
+};
 
-        const initialCountryApp: CountryApp = {
-            id: countryId,
-            name: 'United States',
-            bokun_id: 12345,
+describe('Country schema roundtrip', () => {
+    it('should support roundtrip from client to firestore and back', () => {
+        const input = {
+            id: 'NL',
+            bokun_id: 1234,
             LTE: true,
-            apn: 'fast.internet',
-            click_count: 1500,
-            global_network: 'Network A',
-            global_price: 10.5,
+            apn: 'internet',
+            click_count: 100,
+            global_network: 'Global',
+            global_price: 9.99,
             hubby: 1,
-            imsi: 987654321012345,
+            imsi: 20810,
             has_esim: true,
-            region: null, // Field is boolean | null
+            name: 'Netherlands',
+            region: false,
             is_region: false,
-            countries: ['USA', 'CAN', 'MEX'],
-            tier: 1,
+            countries: ['NL'],
+            tier: 1
         };
 
-        // Convert to Firestore
-        const countryFirestore = countryToFirestore(initialCountryApp);
+        const parsedForServer = ClientSchema.parse(input);
+        const firestoreData = convertJSToFirestore(parsedForServer, countrySchemaSpec);
 
-        // Basic Checks (Firestore schema is same as App schema)
-        expect(countryFirestore.name).toBe('United States');
-        expect(countryFirestore.bokun_id).toBe(12345);
-        expect(countryFirestore.LTE).toBe(true);
-        expect(countryFirestore.apn).toBe('fast.internet');
-        expect(countryFirestore.has_esim).toBe(true);
-        expect(countryFirestore.is_region).toBe(false);
-        expect(countryFirestore.countries).toEqual(['USA', 'CAN', 'MEX']);
-        expect(countryFirestore.tier).toBe(1);
-        // Check a nullable field
-        expect(countryFirestore.region).toBeNull();
+        // No need to check for Timestamp or DocumentReference since Country doesn't have these
 
-        // Convert back to App
-        const finalCountryApp = countryFromFirestore(countryFirestore);
+        // Simulate Firestore snapshot conversion
+        const jsData = convertFirestoreToJS(firestoreData);
 
-        // Assertions (Should be identical as no conversions happen)
-        expect(finalCountryApp).toEqual(initialCountryApp);
+        // Validate back with client schema
+        const parsedClient = ClientSchema.parse(jsData);
+
+        // Check that all data round-trips correctly
+        expect(parsedClient.id).toBe(input.id);
+        expect(parsedClient.name).toBe(input.name);
+        expect(parsedClient.bokun_id).toBe(input.bokun_id);
+        expect(parsedClient.LTE).toBe(input.LTE);
+        expect(parsedClient.has_esim).toBe(input.has_esim);
+        expect(parsedClient.countries).toEqual(input.countries);
+    });
+
+    it('should support roundtrip with nullable fields', () => {
+        // Country with minimal fields and nulls
+        const input = {
+            id: null,
+            bokun_id: null,
+            LTE: null,
+            apn: null,
+            click_count: null,
+            global_network: null,
+            global_price: null,
+            hubby: null,
+            imsi: null,
+            has_esim: false,
+            name: null,
+            region: null,
+            is_region: null,
+            countries: null,
+            tier: null
+        };
+
+        const parsedForServer = ClientSchema.parse(input);
+        const firestoreData = convertJSToFirestore(parsedForServer, countrySchemaSpec);
+
+        // Simulate Firestore snapshot conversion
+        const jsData = convertFirestoreToJS(firestoreData);
+
+        // Validate back with client schema
+        const parsedClient = ClientSchema.parse(jsData);
+
+        // Check that all data round-trips correctly
+        expect(parsedClient.id).toBeNull();
+        expect(parsedClient.name).toBeNull();
+        expect(parsedClient.has_esim).toBe(false);
+        expect(parsedClient.countries).toBeNull();
+    });
+
+    it('should reject invalid country data', () => {
+        const invalidCountry = {
+            // Missing required has_esim field
+            id: 'NL',
+            name: 'Netherlands'
+        };
+
+        expect(() => ClientSchema.parse(invalidCountry)).toThrow();
     });
 }); 

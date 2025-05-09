@@ -1,7 +1,178 @@
-export { J as API_LOG_COLLECTION, bu as Address, b0 as ApiKey, a$ as ApiKeys, A as ApiLogApp, G as BOOKING_COLLECTION, bw as BankingDetails, aD as BookingApiRequest, aE as BookingApiResponse, B as BookingApp, bC as BookingConfirmation, bB as BookingDefaults, b6 as BookingStatus, y as COUNTRY_COLLECTION, I as CURRENCY_COLLECTION, aL as CommunicationChannel, b3 as CommunicationChannelType, aM as CommunicationOptions, C as CountryApp, c7 as CoversionRate, e as CurrencyApp, E as ESIMApp, z as ESIM_COLLECTION, bz as FinancialPropertiesApp, cc as HApiLog, b9 as HBooking, bO as HBookingConfirmation, bN as HBookingDefaults, bT as HCountry, ca as HCurrency, b$ as HESIM, bI as HFinancialProperties, aT as HHubbyModel, c4 as HMessage, bW as HPackage, bH as HPackagePrice, bM as HPackageStrategy, bF as HPartner, c1 as HPayment, bJ as HPlatformSettings, bG as HPriceList, bY as HPromoCode, bL as HSchedule, bR as HScheduleFilter, c5 as HSentMessages, b1 as HUser, bK as HVisualIdentity, bP as HVisualIdentityBanner, bQ as HVisualIdentityBannerStrategy, aS as HubbyModelApp, H as MESSAGE_COLLECTION, M as MessageApp, w as PACKAGE_COLLECTION, t as PARTNER_COLLECTION, D as PAYMENT_COLLECTION, F as PRICE_LIST_COLLECTION, v as PROFILE_COLLECTION, x as PROMO_CODE_COLLECTION, b as PackageApp, aO as PackagePriceApp, aB as PackageSpecification, aC as PackageSpecifications, bA as PackageStrategy, aG as PartnerApiRequest, aH as PartnerApiResponse, P as PartnerApp, bx as PartnerPricingStrategyApp, d as PaymentApp, aN as PlatformSettings, a as PriceListApp, aF as PromoCodeApiResponse, c as PromoCodeApp, bv as Registration, g as SUPPORTED_LOCALES, bE as Schedule, bD as ScheduleFilter, S as SentMessagesApp, h as SupportedLocales, i as SupportedLocalesFromSchema, u as USER_COLLECTION, U as UserApp, by as UserPricingStrategyApp, aI as VisualIdentity, aK as VisualIdentityBanner, aJ as VisualIdentityBannerStrategy, ba as addressSchema, aX as apiKeySchema, aY as apiKeysSchema, cb as apiLogAppSchema, _ as apiLogRefString, am as apiLogRefStringArray, ay as apiLogRefStringArrayNullable, aa as apiLogRefStringNullable, bc as bankingDetailsSchema, k as baseModelAppSchema, o as bookingApiRequestSchema, m as bookingApiResponseSchema, b8 as bookingAppSchema, bl as bookingConfirmationSchema, bk as bookingDefaultsSchema, X as bookingRefString, ak as bookingRefStringArray, aw as bookingRefStringArrayNullable, a8 as bookingRefStringNullable, b5 as bookingStatusSchema, b7 as commonBookingFields, c8 as commonCurrencyFields, bZ as commonESIMFields, bi as commonFinancialPropertiesFields, bU as commonPackageFields, bd as commonPackagePriceFields, bs as commonPartnerFields, bf as commonPricingStrategyFields, aZ as commonUserFields, b2 as communicationChannelSchema, b4 as communicationOptionsSchema, c6 as conversionRateSchema, bS as countryAppSchema, R as countryRefString, ag as countryRefStringArray, as as countryRefStringArrayNullable, a4 as countryRefStringNullable, aU as createIdSchema, c9 as currencyAppSchema, Z as currencyRefString, aW as currencyRefStringArray, az as currencyRefStringArrayNullable, aV as currencyRefStringNullable, b_ as esimAppSchema, T as esimRefString, ah as esimRefStringArray, at as esimRefStringArrayNullable, a5 as esimRefStringNullable, f as financialPropertiesAppSchema, bq as freeEsimSchema, aR as hubbyModelAppSchema, c2 as messageAppSchema, Y as messageRefString, al as messageRefStringArray, ax as messageRefStringArrayNullable, a9 as messageRefStringNullable, bV as packageAppSchema, be as packagePriceAppSchema, O as packageRefString, ae as packageRefStringArray, aq as packageRefStringArrayNullable, a2 as packageRefStringNullable, p as packageSpecificationSchema, l as packageSpecificationsSchema, bj as packageStrategySchema, q as partnerApiRequestSchema, r as partnerApiResponseSchema, aA as partnerAppSchema, bg as partnerPricingStrategyAppSchema, K as partnerRefString, ab as partnerRefStringArray, an as partnerRefStringArrayNullable, $ as partnerRefStringNullable, c0 as paymentAppSchema, V as paymentRefString, ai as paymentRefStringArray, au as paymentRefStringArrayNullable, a6 as paymentRefStringNullable, br as platformSettingsSchema, bt as priceListAppSchema, W as priceListRefString, aj as priceListRefStringArray, av as priceListRefStringArrayNullable, a7 as priceListRefStringNullable, N as profileRefString, ad as profileRefStringArray, ap as profileRefStringArrayNullable, a1 as profileRefStringNullable, n as promoCodeApiResponseSchema, bX as promoCodeAppSchema, Q as promoCodeRefString, af as promoCodeRefStringArray, ar as promoCodeRefStringArrayNullable, a3 as promoCodeRefStringNullable, bb as registrationSchema, bp as scheduleFilterSchema, s as scheduleSchema, c3 as sentMessagesAppSchema, j as supportedLocalesSchema, aP as testEnv, a_ as userAppSchema, bh as userPricingStrategyAppSchema, L as userRefString, ac as userRefStringArray, ao as userRefStringArrayNullable, a0 as userRefStringNullable, bm as visualIdentityBannerSchema, bn as visualIdentityBannerStrategySchema, bo as visualIdentitySchema, aQ as zDateString } from '../constants-56f6c4f3.js';
-import 'zod';
+import { z } from 'zod';
 
-declare const convertToDate: (value: any, field: string) => Date;
-declare const isDate: (value: any) => value is Date;
+declare const HUserSchema: z.ZodTypeAny;
+declare const HBookingSchema: z.ZodTypeAny;
+declare const HCountrySchema: z.ZodTypeAny;
+declare const HCurrencySchema: z.ZodTypeAny;
+declare const HESIMSchema: z.ZodTypeAny;
+declare const HPaymentSchema: z.ZodTypeAny;
+declare const HMessageSchema: z.ZodTypeAny;
+declare const HPackageSchema: z.ZodTypeAny;
+declare const HPromoCodeSchema: z.ZodTypeAny;
+declare const HPartnerSchema: z.ZodTypeAny;
+declare const HPriceListSchema: z.ZodTypeAny;
+declare const HApiLogSchema: z.ZodTypeAny;
+declare const HAddressSchema: z.ZodObject<{
+    street: z.ZodOptional<z.ZodString>;
+    city: z.ZodOptional<z.ZodString>;
+    postal_code: z.ZodOptional<z.ZodString>;
+    country: z.ZodOptional<z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    country?: string | undefined;
+    street?: string | undefined;
+    city?: string | undefined;
+    postal_code?: string | undefined;
+}, {
+    country?: string | undefined;
+    street?: string | undefined;
+    city?: string | undefined;
+    postal_code?: string | undefined;
+}>;
+declare const HRegistrationSchema: z.ZodObject<{
+    chamber_of_commerce_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    vat_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    anvr_number: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    tax_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+}, "strip", z.ZodTypeAny, {
+    chamber_of_commerce_number?: string | null | undefined;
+    vat_number?: string | null | undefined;
+    anvr_number?: number | null | undefined;
+    tax_number?: string | null | undefined;
+}, {
+    chamber_of_commerce_number?: string | null | undefined;
+    vat_number?: string | null | undefined;
+    anvr_number?: number | null | undefined;
+    tax_number?: string | null | undefined;
+}>;
+declare const HBankingDetailsSchema: z.ZodObject<{
+    account_holder: z.ZodString;
+    bank_name: z.ZodString;
+    iban: z.ZodString;
+}, "strip", z.ZodTypeAny, {
+    account_holder: string;
+    bank_name: string;
+    iban: string;
+}, {
+    account_holder: string;
+    bank_name: string;
+    iban: string;
+}>;
+declare const HPartnerPackageSpecificationSchema: z.ZodObject<{
+    size: z.ZodString;
+    type: z.ZodString;
+    destination: z.ZodString;
+}, "strip", z.ZodTypeAny, {
+    type: string;
+    destination: string;
+    size: string;
+}, {
+    type: string;
+    destination: string;
+    size: string;
+}>;
+declare const HPromoPackageSpecificationSchema: z.ZodObject<{
+    destination: z.ZodOptional<z.ZodString>;
+    size: z.ZodOptional<z.ZodString>;
+    package_id: z.ZodOptional<z.ZodString>;
+    iata_code: z.ZodOptional<z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    destination?: string | undefined;
+    size?: string | undefined;
+    package_id?: string | undefined;
+    iata_code?: string | undefined;
+}, {
+    destination?: string | undefined;
+    size?: string | undefined;
+    package_id?: string | undefined;
+    iata_code?: string | undefined;
+}>;
+declare const HVisualIdentityBannerSchema: z.ZodObject<{
+    image_url: z.ZodString;
+    alt: z.ZodString;
+    click_url: z.ZodString;
+    locale: z.ZodEnum<["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]>;
+    properties: z.ZodRecord<z.ZodString, z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+    image_url: string;
+    alt: string;
+    click_url: string;
+    properties: Record<string, string>;
+}, {
+    locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+    image_url: string;
+    alt: string;
+    click_url: string;
+    properties: Record<string, string>;
+}>;
+declare const HScheduleFilterSchema: z.ZodObject<{
+    type: z.ZodEnum<["iso3", "gender", "percentage", "age"]>;
+    value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
+    comparison: z.ZodEnum<["equal", "not_equal", "greater_than", "less_than", "greater_than_or_equal", "less_than_or_equal"]>;
+}, "strip", z.ZodTypeAny, {
+    value: string | number;
+    type: "gender" | "iso3" | "percentage" | "age";
+    comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+}, {
+    value: string | number;
+    type: "gender" | "iso3" | "percentage" | "age";
+    comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+}>;
+declare const HPartnerContactSchema: z.ZodObject<{
+    email: z.ZodNullable<z.ZodString>;
+    office_phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+}, "strip", z.ZodTypeAny, {
+    email: string | null;
+    office_phone?: string | null | undefined;
+}, {
+    email: string | null;
+    office_phone?: string | null | undefined;
+}>;
+declare const HPartnerDataSchema: z.ZodObject<{
+    source: z.ZodString;
+    manual: z.ZodBoolean;
+}, "strip", z.ZodTypeAny, {
+    source: string;
+    manual: boolean;
+}, {
+    source: string;
+    manual: boolean;
+}>;
+declare const HCommunicationChannelSchema: z.ZodEnum<["EMAIL", "WHATSAPP", "PUSH_NOTIFICATION", "SMS"]>;
+declare const HBookingStatusSchema: z.ZodEnum<["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED", "UNPAID", "EXPIRED"]>;
+declare const HCommunicationOptionsSchema: z.ZodObject<{
+    should_send_message: z.ZodBoolean;
+    channels: z.ZodArray<z.ZodEnum<["EMAIL", "WHATSAPP", "PUSH_NOTIFICATION", "SMS"]>, "many">;
+}, "strip", z.ZodTypeAny, {
+    should_send_message: boolean;
+    channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
+}, {
+    should_send_message: boolean;
+    channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
+}>;
+type HUser = z.infer<typeof HUserSchema>;
+type HBooking = z.infer<typeof HBookingSchema>;
+type HCountry = z.infer<typeof HCountrySchema>;
+type HCurrency = z.infer<typeof HCurrencySchema>;
+type HESIM = z.infer<typeof HESIMSchema>;
+type HPayment = z.infer<typeof HPaymentSchema>;
+type HMessage = z.infer<typeof HMessageSchema>;
+type HPackage = z.infer<typeof HPackageSchema>;
+type HPromoCode = z.infer<typeof HPromoCodeSchema>;
+type HPartner = z.infer<typeof HPartnerSchema>;
+type HPriceList = z.infer<typeof HPriceListSchema>;
+type HApiLog = z.infer<typeof HApiLogSchema>;
+type HAddress = z.infer<typeof HAddressSchema>;
+type HRegistration = z.infer<typeof HRegistrationSchema>;
+type HBankingDetails = z.infer<typeof HBankingDetailsSchema>;
+type HPartnerPackageSpecification = z.infer<typeof HPartnerPackageSpecificationSchema>;
+type HPromoPackageSpecification = z.infer<typeof HPromoPackageSpecificationSchema>;
+type HVisualIdentityBanner = z.infer<typeof HVisualIdentityBannerSchema>;
+type HScheduleFilter = z.infer<typeof HScheduleFilterSchema>;
+type HPartnerContact = z.infer<typeof HPartnerContactSchema>;
+type HPartnerData = z.infer<typeof HPartnerDataSchema>;
+type HCommunicationChannel = z.infer<typeof HCommunicationChannelSchema>;
+type HBookingStatus = z.infer<typeof HBookingStatusSchema>;
+type HCommunicationOptions = z.infer<typeof HCommunicationOptionsSchema>;
 
-export { convertToDate, isDate };
+export { HAddress, HAddressSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HESIM, HESIMSchema, HMessage, HMessageSchema, HPackage, HPackageSchema, HPartner, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPriceList, HPriceListSchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HScheduleFilter, HScheduleFilterSchema, HUser, HUserSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema };
