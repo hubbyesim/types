@@ -1,4 +1,7 @@
 import { z } from 'zod';
+import { Timestamp, DocumentReference } from 'firebase-admin/firestore';
+
+declare const SUPPORTED_LOCALES$1: readonly ["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"];
 
 declare const HUserSchema: z.ZodTypeAny;
 declare const HBookingSchema: z.ZodTypeAny;
@@ -11,6 +14,7 @@ declare const HPackageSchema: z.ZodTypeAny;
 declare const HPromoCodeSchema: z.ZodTypeAny;
 declare const HPartnerSchema: z.ZodTypeAny;
 declare const HPriceListSchema: z.ZodTypeAny;
+declare const HFinancialPropertiesSchema: z.ZodTypeAny;
 declare const HApiLogSchema: z.ZodTypeAny;
 declare const HAddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodString>;
@@ -168,14 +172,18 @@ type HBankingDetails = z.infer<typeof HBankingDetailsSchema>;
 type HPartnerPackageSpecification = z.infer<typeof HPartnerPackageSpecificationSchema>;
 type HPromoPackageSpecification = z.infer<typeof HPromoPackageSpecificationSchema>;
 type HVisualIdentityBanner = z.infer<typeof HVisualIdentityBannerSchema>;
+type HFinancialProperties = z.infer<typeof HFinancialPropertiesSchema>;
 type HScheduleFilter = z.infer<typeof HScheduleFilterSchema>;
 type HPartnerContact = z.infer<typeof HPartnerContactSchema>;
 type HPartnerData = z.infer<typeof HPartnerDataSchema>;
 type HCommunicationChannel = z.infer<typeof HCommunicationChannelSchema>;
 type HBookingStatus = z.infer<typeof HBookingStatusSchema>;
 type HCommunicationOptions = z.infer<typeof HCommunicationOptionsSchema>;
+type HHubbyModel = z.infer<typeof HubbyModelSchema>;
+type HubbyModelApp = HHubbyModel;
 
 declare const UserSchema: z.ZodTypeAny;
+declare const UserFirestoreSchema: z.ZodTypeAny;
 declare const BookingSchema: z.ZodTypeAny;
 declare const CountrySchema: z.ZodTypeAny;
 declare const CurrencySchema: z.ZodTypeAny;
@@ -187,6 +195,11 @@ declare const PromoCodeSchema: z.ZodTypeAny;
 declare const PartnerSchema: z.ZodTypeAny;
 declare const PriceListSchema: z.ZodTypeAny;
 declare const ApiLogSchema: z.ZodTypeAny;
+declare const HubbyModelSchema: z.ZodTypeAny;
+declare const VisualIdentitySchema: z.ZodTypeAny;
+declare const PackagePriceSchema: z.ZodTypeAny;
+declare const PlatformSettingsSchema: z.ZodTypeAny;
+declare const ScheduleSchema: z.ZodTypeAny;
 declare const AddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodString>;
     city: z.ZodOptional<z.ZodString>;
@@ -325,7 +338,48 @@ declare const CommunicationOptionsSchema: z.ZodObject<{
     should_send_message: boolean;
     channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
 }>;
+declare const VisualIdentityBannersSchema: z.ZodObject<{
+    strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
+    banners: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
+        image_url: z.ZodString;
+        alt: z.ZodString;
+        click_url: z.ZodString;
+        locale: z.ZodEnum<["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]>;
+        properties: z.ZodRecord<z.ZodString, z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+        image_url: string;
+        alt: string;
+        click_url: string;
+        properties: Record<string, string>;
+    }, {
+        locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+        image_url: string;
+        alt: string;
+        click_url: string;
+        properties: Record<string, string>;
+    }>, "many">>>;
+}, "strip", z.ZodTypeAny, {
+    strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+    banners?: {
+        locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+        image_url: string;
+        alt: string;
+        click_url: string;
+        properties: Record<string, string>;
+    }[] | null | undefined;
+}, {
+    strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+    banners?: {
+        locale: "en-US" | "en-GB" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "de-BE";
+        image_url: string;
+        alt: string;
+        click_url: string;
+        properties: Record<string, string>;
+    }[] | null | undefined;
+}>;
 type User = z.infer<typeof UserSchema>;
+type UserFirestore = z.infer<typeof UserFirestoreSchema>;
 type Booking = z.infer<typeof BookingSchema>;
 type Country = z.infer<typeof CountrySchema>;
 type Currency = z.infer<typeof CurrencySchema>;
@@ -337,17 +391,56 @@ type PromoCode = z.infer<typeof PromoCodeSchema>;
 type Partner = z.infer<typeof PartnerSchema>;
 type PriceList = z.infer<typeof PriceListSchema>;
 type ApiLog = z.infer<typeof ApiLogSchema>;
+type Schedule = z.infer<typeof ScheduleSchema>;
 type Address = z.infer<typeof AddressSchema>;
 type Registration = z.infer<typeof RegistrationSchema>;
 type BankingDetails = z.infer<typeof BankingDetailsSchema>;
 type PartnerPackageSpecification = z.infer<typeof PartnerPackageSpecificationSchema>;
-type PromoPackageSpecification = z.infer<typeof PromoPackageSpecificationSchema>;
+type PackageSpecification = z.infer<typeof PromoPackageSpecificationSchema>;
+type VisualIdentity = z.infer<typeof VisualIdentitySchema>;
 type VisualIdentityBanner = z.infer<typeof VisualIdentityBannerSchema>;
+type VisualIdentityBanners = z.infer<typeof VisualIdentityBannersSchema>;
+type VisualIdentityBannerStrategy = VisualIdentityBanners;
 type ScheduleFilter = z.infer<typeof ScheduleFilterSchema>;
 type PartnerContact = z.infer<typeof PartnerContactSchema>;
 type PartnerData = z.infer<typeof PartnerDataSchema>;
 type CommunicationChannel = z.infer<typeof CommunicationChannelSchema>;
 type BookingStatus = z.infer<typeof BookingStatusSchema>;
 type CommunicationOptions = z.infer<typeof CommunicationOptionsSchema>;
+type PackagePrice = z.infer<typeof PackagePriceSchema>;
+type PlatformSettings = z.infer<typeof PlatformSettingsSchema>;
+type BookingApiRequest = Booking;
+type BookingApiResponse = Booking;
+type PartnerApiRequest = Partner;
+type PartnerApiResponse = Partner;
+type PriceListApiRequest = PriceList;
+type PriceListApiResponse = PriceList;
+type ApiLogApiRequest = ApiLog;
+type ApiLogApiResponse = ApiLog;
+type HubbyModel = {
+    id: string;
+    created_at: Date;
+    updated_at: Date | null;
+    created_by: string;
+    updated_by: string | null;
+};
+type HubbyModelFirestore = {
+    id: string;
+    created_at: Timestamp;
+    updated_at: Timestamp | null;
+    created_by: DocumentReference | null | string;
+    updated_by: DocumentReference | null | string;
+};
+declare const partnerFromFirestore: (partner: Partner) => HPartner;
+declare const partnerToFirestore: (partner: HPartner) => Partner;
+declare const userToFirestore: (user: User) => UserFirestore;
+declare const userFromFirestore: (user: UserFirestore) => User;
+declare const priceListFromFirestore: (priceList: PriceList) => HPriceList;
+declare const priceListToFirestore: (priceList: HPriceList) => PriceList;
+declare const promoCodeFromFirestore: (promoCode: PromoCode) => HPromoCode;
+declare const promoCodeToFirestore: (promoCode: HPromoCode) => PromoCode;
+declare const partnerAppSchema: z.ZodTypeAny;
+type SupportedLocales = typeof SUPPORTED_LOCALES$1[number];
+declare const SUPPORTED_LOCALES: readonly ["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"];
 
-export { Address, AddressSchema, ApiLog, ApiLogSchema, BankingDetails, BankingDetailsSchema, Booking, BookingSchema, BookingStatus, BookingStatusSchema, CommunicationChannel, CommunicationChannelSchema, CommunicationOptions, CommunicationOptionsSchema, Country, CountrySchema, Currency, CurrencySchema, ESIM, ESIMSchema, HAddress, HAddressSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HESIM, HESIMSchema, HMessage, HMessageSchema, HPackage, HPackageSchema, HPartner, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPriceList, HPriceListSchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HScheduleFilter, HScheduleFilterSchema, HUser, HUserSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, Message, MessageSchema, Package, PackageSchema, Partner, PartnerContact, PartnerContactSchema, PartnerData, PartnerDataSchema, PartnerPackageSpecification, PartnerPackageSpecificationSchema, PartnerSchema, Payment, PaymentSchema, PriceList, PriceListSchema, PromoCode, PromoCodeSchema, PromoPackageSpecification, PromoPackageSpecificationSchema, Registration, RegistrationSchema, ScheduleFilter, ScheduleFilterSchema, User, UserSchema, VisualIdentityBanner, VisualIdentityBannerSchema };
+export { Address, AddressSchema, ApiLog, ApiLogApiRequest, ApiLogApiResponse, ApiLogSchema, BankingDetails, BankingDetailsSchema, Booking, BookingApiRequest, BookingApiResponse, BookingSchema, BookingStatus, BookingStatusSchema, CommunicationChannel, CommunicationChannelSchema, CommunicationOptions, CommunicationOptionsSchema, Country, CountrySchema, Currency, CurrencySchema, ESIM, ESIMSchema, HAddress, HAddressSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HHubbyModel, HMessage, HMessageSchema, HPackage, HPackageSchema, HPartner, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPriceList, HPriceListSchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HScheduleFilter, HScheduleFilterSchema, HUser, HUserSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HubbyModel, HubbyModelApp, HubbyModelFirestore, HubbyModelSchema, Message, MessageSchema, Package, PackagePrice, PackagePriceSchema, PackageSchema, PackageSpecification, Partner, PartnerApiRequest, PartnerApiResponse, PartnerContact, PartnerContactSchema, PartnerData, PartnerDataSchema, PartnerPackageSpecification, PartnerPackageSpecificationSchema, PartnerSchema, Payment, PaymentSchema, PlatformSettings, PlatformSettingsSchema, PriceList, PriceListApiRequest, PriceListApiResponse, PriceListSchema, PromoCode, PromoCodeSchema, PromoPackageSpecificationSchema, Registration, RegistrationSchema, SUPPORTED_LOCALES, Schedule, ScheduleFilter, ScheduleFilterSchema, ScheduleSchema, SupportedLocales, User, UserFirestore, UserFirestoreSchema, UserSchema, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerSchema, VisualIdentityBannerStrategy, VisualIdentityBanners, VisualIdentityBannersSchema, VisualIdentitySchema, partnerAppSchema, partnerFromFirestore, partnerToFirestore, priceListFromFirestore, priceListToFirestore, promoCodeFromFirestore, promoCodeToFirestore, userFromFirestore, userToFirestore };

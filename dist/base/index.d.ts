@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+declare const HubbyModelSchema: z.ZodTypeAny;
+
 declare const HUserSchema: z.ZodTypeAny;
 declare const HBookingSchema: z.ZodTypeAny;
 declare const HCountrySchema: z.ZodTypeAny;
@@ -11,6 +13,7 @@ declare const HPackageSchema: z.ZodTypeAny;
 declare const HPromoCodeSchema: z.ZodTypeAny;
 declare const HPartnerSchema: z.ZodTypeAny;
 declare const HPriceListSchema: z.ZodTypeAny;
+declare const HFinancialPropertiesSchema: z.ZodTypeAny;
 declare const HApiLogSchema: z.ZodTypeAny;
 declare const HAddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodString>;
@@ -168,11 +171,16 @@ type HBankingDetails = z.infer<typeof HBankingDetailsSchema>;
 type HPartnerPackageSpecification = z.infer<typeof HPartnerPackageSpecificationSchema>;
 type HPromoPackageSpecification = z.infer<typeof HPromoPackageSpecificationSchema>;
 type HVisualIdentityBanner = z.infer<typeof HVisualIdentityBannerSchema>;
+type HFinancialProperties = z.infer<typeof HFinancialPropertiesSchema>;
 type HScheduleFilter = z.infer<typeof HScheduleFilterSchema>;
 type HPartnerContact = z.infer<typeof HPartnerContactSchema>;
 type HPartnerData = z.infer<typeof HPartnerDataSchema>;
 type HCommunicationChannel = z.infer<typeof HCommunicationChannelSchema>;
 type HBookingStatus = z.infer<typeof HBookingStatusSchema>;
 type HCommunicationOptions = z.infer<typeof HCommunicationOptionsSchema>;
+type HHubbyModel = z.infer<typeof HubbyModelSchema>;
+type HubbyModelApp = HHubbyModel;
+type SupportedLocales = typeof SUPPORTED_LOCALES[number];
+declare const SUPPORTED_LOCALES: readonly ["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"];
 
-export { HAddress, HAddressSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HESIM, HESIMSchema, HMessage, HMessageSchema, HPackage, HPackageSchema, HPartner, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPriceList, HPriceListSchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HScheduleFilter, HScheduleFilterSchema, HUser, HUserSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema };
+export { HAddress, HAddressSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HHubbyModel, HMessage, HMessageSchema, HPackage, HPackageSchema, HPartner, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPriceList, HPriceListSchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HScheduleFilter, HScheduleFilterSchema, HUser, HUserSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HubbyModelApp, SUPPORTED_LOCALES, SupportedLocales };

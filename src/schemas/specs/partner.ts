@@ -36,11 +36,55 @@ export const bankingDetailsSchema = z.object({
     iban: z.string()
 });
 
+// Package price schema
+export const packagePriceSchema = z.object({
+    destination: z.string(),
+    label: z.string(),
+    type: z.enum(['data-limited', 'time-limited']),
+    price: z.number(),
+    package: z.object({ _type: z.literal('docRef'), collection: z.literal(PACKAGE_COLLECTION) })
+});
+
 // Package specification schema
 export const packageSpecificationSchema = z.object({
     size: z.string(),
     type: z.string(),
     destination: z.string()
+});
+
+// Pricing strategy schema
+export const pricingStrategySchema = z.object({
+    strategy: z.enum(['split', 'bundle']),
+    modification_percentage: z.number(),
+    default_price_list: z.object({
+        _type: z.literal('docRef'),
+        collection: z.literal(PRICE_LIST_COLLECTION),
+        nullable: z.literal(true)
+    }),
+    custom_prices: z.array(packagePriceSchema)
+});
+
+// Financial properties schema
+export const financialPropertiesSchema = z.object({
+    administration_fee: z.number().nullable(),
+    income_per_gb: z.number().nullable(),
+    commission_fee: z.number().nullable().optional(),
+    payment_method: z.enum(['invoice', 'direct']),
+    requires_card: z.boolean().nullable(),
+    next_invoice: z.object({
+        _type: z.literal('timestamp'),
+        nullable: z.literal(true),
+        optional: z.literal(true)
+    }),
+    last_invoice: z.object({
+        _type: z.literal('timestamp'),
+        nullable: z.literal(true),
+        optional: z.literal(true)
+    }),
+    pricing_strategies: z.object({
+        partner: pricingStrategySchema.optional(),
+        user: pricingStrategySchema.optional()
+    }).nullable()
 });
 
 // Visual identity banner schema
@@ -66,6 +110,21 @@ export const scheduleFilterSchema = z.object({
     ])
 });
 
+// Convert object-like schemas to proper Zod objects
+export const visualIdentityBannersSchema = z.object({
+    strategy: z.enum(['fixed', 'rotating', 'destination', 'time_of_day']),
+    banners: z.array(visualIdentityBannerSchema).nullable().optional()
+});
+
+export const visualIdentitySchema = z.object({
+    primary_color: z.string(),
+    secondary_color: z.string(),
+    logo: z.string(),
+    font: z.string(),
+    top_banner: visualIdentityBannersSchema.optional(),
+    mid_banner: visualIdentityBannerSchema.optional()
+});
+
 // Partner contact schema
 export const partnerContactSchema = z.object({
     email: z.string().nullable(),
@@ -76,6 +135,188 @@ export const partnerContactSchema = z.object({
 export const partnerDataSchema = z.object({
     source: z.string(),
     manual: z.boolean()
+});
+
+// Package strategy schema
+export const packageStrategySchema = z.object({
+    name: z.string(),
+    iso3_white_list: z.array(z.string()).optional(),
+    parameters: z.any()
+});
+
+// Schedule email schema
+export const scheduleEmailSchema = z.object({
+    brevo_template_id: z.number(),
+    subject: z.record(z.string()).refine(
+        (val: Record<string, string>) => Object.keys(val).every(key => SUPPORTED_LOCALES.includes(key as SupportedLocales)),
+        { message: "Keys must be supported locales" }
+    ).optional(),
+    preview_text: z.record(z.string()).refine(
+        (val: Record<string, string>) => Object.keys(val).every(key => SUPPORTED_LOCALES.includes(key as SupportedLocales)),
+        { message: "Keys must be supported locales" }
+    ).optional()
+}).nullable().optional();
+
+// Schedule push schema
+export const schedulePushSchema = z.object({
+    title: z.record(z.string()).optional(),
+    body: z.record(z.string()).optional(),
+    target: z.string()
+}).nullable().optional();
+
+// Schedule schema
+export const scheduleSchema = z.object({
+    days: z.number(),
+    email: scheduleEmailSchema,
+    push: schedulePushSchema,
+    hour: z.number(),
+    key: z.string(),
+    method: z.enum(['email', 'sms', 'whatsapp', 'push']),
+    moment: z.enum(['departure_date', 'return_date', 'immediate']),
+    filter: scheduleFilterSchema.nullable().optional()
+});
+
+// Platform settings schema
+export const platformSettingsSchema = z.object({
+    package_strategy: z.object({
+        name: z.string(),
+        iso3_white_list: z.array(z.string()).optional(),
+        parameters: z.any()
+    }).nullable().optional(),
+    free_esim: z.object({
+        package_specification: z.object({
+            size: z.string(),
+            type: z.string(),
+            destination: z.string()
+        }),
+        allowance: z.number()
+    }).nullable().optional(),
+    booking_defaults: z.object({
+        locale: supportedLocalesSchema
+    }).nullable().optional(),
+    booking_confirmation: z.object({
+        brevo_template_id: z.number(),
+        send_booking_confirmation: z.boolean()
+    }).nullable().optional(),
+    schedules: z.array(scheduleSchema).optional()
+});
+
+// ===== Exportable schema specs =====
+
+// Package price schema spec
+export const packagePriceSchemaSpec = markAsSchemaSpec({
+    destination: z.string(),
+    label: z.string(),
+    type: z.enum(['data-limited', 'time-limited']),
+    price: z.number(),
+    package: { _type: 'docRef' as const, collection: PACKAGE_COLLECTION }
+});
+
+// Financial properties schema spec
+export const financialPropertiesSchemaSpec = markAsSchemaSpec({
+    administration_fee: z.number().nullable(),
+    income_per_gb: z.number().nullable(),
+    commission_fee: z.number().nullable().optional(),
+    payment_method: z.enum(['invoice', 'direct']),
+    requires_card: z.boolean().nullable(),
+    next_invoice: timestampNullableOptional,
+    last_invoice: timestampNullableOptional,
+    pricing_strategies: {
+        _type: 'object' as const,
+        of: {
+            partner: {
+                _type: 'object' as const,
+                of: {
+                    strategy: z.enum(['split', 'bundle']),
+                    modification_percentage: z.number(),
+                    default_price_list: { _type: 'docRef' as const, collection: PRICE_LIST_COLLECTION, nullable: true },
+                    custom_prices: {
+                        _type: 'array' as const,
+                        of: {
+                            _type: 'object' as const,
+                            of: {
+                                destination: z.string(),
+                                label: z.string(),
+                                type: z.enum(['data-limited', 'time-limited']),
+                                price: z.number(),
+                                package: { _type: 'docRef' as const, collection: PACKAGE_COLLECTION }
+                            }
+                        }
+                    }
+                },
+                optional: true
+            },
+            user: {
+                _type: 'object' as const,
+                of: {
+                    modification_percentage: z.number(),
+                    default_price_list: { _type: 'docRef' as const, collection: PRICE_LIST_COLLECTION, nullable: true },
+                    custom_prices: {
+                        _type: 'array' as const,
+                        of: {
+                            _type: 'object' as const,
+                            of: {
+                                destination: z.string(),
+                                label: z.string(),
+                                type: z.enum(['data-limited', 'time-limited']),
+                                price: z.number(),
+                                package: { _type: 'docRef' as const, collection: PACKAGE_COLLECTION }
+                            }
+                        }
+                    }
+                },
+                optional: true
+            }
+        },
+        nullable: true
+    }
+});
+
+// Platform settings schema spec
+export const platformSettingsSchemaSpec = markAsSchemaSpec({
+    package_strategy: {
+        _type: 'object' as const,
+        of: packageStrategySchema.shape,
+        nullable: true,
+        optional: true
+    },
+    free_esim: {
+        _type: 'object' as const,
+        of: {
+            package_specification: {
+                _type: 'object' as const,
+                of: packageSpecificationSchema.shape
+            },
+            allowance: z.number()
+        },
+        nullable: true,
+        optional: true
+    },
+    booking_defaults: {
+        _type: 'object' as const,
+        of: {
+            locale: supportedLocalesSchema
+        },
+        nullable: true,
+        optional: true
+    },
+    booking_confirmation: {
+        _type: 'object' as const,
+        of: {
+            brevo_template_id: z.number(),
+            send_booking_confirmation: z.boolean()
+        },
+        nullable: true,
+        optional: true
+    },
+    schedules: {
+        _type: 'array' as const,
+        of: {
+            _type: 'object' as const,
+            of: scheduleSchema.shape
+        },
+        optional: true
+    }
 });
 
 // ===== Main partner schema =====
@@ -186,137 +427,14 @@ export const partnerSchemaSpec = markAsSchemaSpec({
     // Visual identity
     visual_identity: {
         _type: 'object' as const,
-        of: {
-            primary_color: z.string(),
-            secondary_color: z.string(),
-            logo: z.string(),
-            font: z.string(),
-            top_banner: {
-                _type: 'object' as const,
-                of: {
-                    strategy: z.enum(['fixed', 'rotating', 'destination', 'time_of_day']),
-                    banners: {
-                        _type: 'array' as const,
-                        of: {
-                            _type: 'object' as const,
-                            of: visualIdentityBannerSchema.shape
-                        },
-                        nullable: true,
-                        optional: true
-                    }
-                },
-                optional: true
-            },
-            mid_banner: {
-                _type: 'object' as const,
-                of: {
-                    strategy: z.enum(['fixed', 'rotating', 'destination', 'time_of_day']),
-                    banners: {
-                        _type: 'array' as const,
-                        of: {
-                            _type: 'object' as const,
-                            of: visualIdentityBannerSchema.shape
-                        },
-                        nullable: true,
-                        optional: true
-                    }
-                },
-                optional: true
-            }
-        },
+        of: visualIdentitySchema.shape,
         nullable: true
     },
 
     // Platform settings
     platform_settings: {
         _type: 'object' as const,
-        of: {
-            package_strategy: {
-                _type: 'object' as const,
-                of: {
-                    name: z.string(),
-                    iso3_white_list: z.array(z.string()).optional(),
-                    parameters: z.any()
-                },
-                nullable: true,
-                optional: true
-            },
-            free_esim: {
-                _type: 'object' as const,
-                of: {
-                    package_specification: {
-                        _type: 'object' as const,
-                        of: packageSpecificationSchema.shape
-                    },
-                    allowance: z.number()
-                },
-                nullable: true,
-                optional: true
-            },
-            booking_defaults: {
-                _type: 'object' as const,
-                of: {
-                    locale: supportedLocalesSchema
-                },
-                nullable: true,
-                optional: true
-            },
-            booking_confirmation: {
-                _type: 'object' as const,
-                of: {
-                    brevo_template_id: z.number(),
-                    send_booking_confirmation: z.boolean()
-                },
-                nullable: true,
-                optional: true
-            },
-            schedules: {
-                _type: 'array' as const,
-                of: {
-                    _type: 'object' as const,
-                    of: {
-                        days: z.number(),
-                        email: {
-                            _type: 'object' as const,
-                            of: {
-                                brevo_template_id: z.number(),
-                                subject: z.record(z.string()).refine(
-                                    (val: Record<string, string>) => Object.keys(val).every(key => SUPPORTED_LOCALES.includes(key as SupportedLocales)),
-                                    { message: "Keys must be supported locales" }
-                                ).optional(),
-                                preview_text: z.record(z.string()).refine(
-                                    (val: Record<string, string>) => Object.keys(val).every(key => SUPPORTED_LOCALES.includes(key as SupportedLocales)),
-                                    { message: "Keys must be supported locales" }
-                                ).optional()
-                            },
-                            nullable: true,
-                            optional: true
-                        },
-                        push: {
-                            _type: 'object' as const,
-                            of: {
-                                title: z.record(z.string()).optional(),
-                                body: z.record(z.string()).optional(),
-                                target: z.string()
-                            },
-                            nullable: true,
-                            optional: true
-                        },
-                        hour: z.number(),
-                        key: z.string(),
-                        method: z.enum(['email', 'sms', 'whatsapp', 'push']),
-                        moment: z.enum(['departure_date', 'return_date', 'immediate']),
-                        filter: {
-                            _type: 'object' as const,
-                            of: scheduleFilterSchema.shape,
-                            nullable: true,
-                            optional: true
-                        }
-                    }
-                },
-                optional: true
-            }
-        },
+        of: platformSettingsSchema.shape,
         nullable: true
     },
 

@@ -118,8 +118,6 @@ function buildClientSchema(spec, path = []) {
   }
   throw new Error(`Unknown or malformed spec at "${pathString}": ${JSON.stringify(spec)}`);
 }
-
-// src/schemas/specs/common.ts
 var PARTNER_COLLECTION = "partners";
 var USER_COLLECTION = "users";
 var PROFILE_COLLECTION = "profiles";
@@ -132,6 +130,32 @@ var BOOKING_COLLECTION = "bookings";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: false };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
+({
+  id: zod.z.string(),
+  created_at: timestampRequired,
+  updated_at: timestampNullableOptional,
+  created_by: { _type: "docRef", collection: "users", nullable: false, optional: false },
+  updated_by: { _type: "docRef", collection: "users", nullable: true, optional: true }
+});
+var SUPPORTED_LOCALES = [
+  "en-US",
+  "en-GB",
+  "nl-NL",
+  "de-DE",
+  "fr-FR",
+  "it-IT",
+  "es-ES",
+  "cs-CZ",
+  "pl-PL",
+  "pt-PT",
+  "fr-BE",
+  "nl-BE",
+  "de-AT",
+  "de-CH",
+  "fr-CH",
+  "it-CH",
+  "de-BE"
+];
 
 // src/schemas/specs/user.ts
 var apiKeySpec = {
@@ -185,7 +209,7 @@ var userSchemaSpec = markAsSchemaSpec({
   review_requested: timestampNullableOptional,
   last_seen: timestampNullableOptional
 });
-var SUPPORTED_LOCALES = [
+var SUPPORTED_LOCALES2 = [
   "en-US",
   "en-GB",
   "nl-NL",
@@ -204,7 +228,7 @@ var SUPPORTED_LOCALES = [
   "it-CH",
   "de-BE"
 ];
-var supportedLocalesSchema = zod.z.enum(SUPPORTED_LOCALES);
+var supportedLocalesSchema = zod.z.enum(SUPPORTED_LOCALES2);
 
 // src/schemas/specs/booking.ts
 var communicationChannelSchema = zod.z.enum([
@@ -464,10 +488,48 @@ var bankingDetailsSchema = zod.z.object({
   bank_name: zod.z.string(),
   iban: zod.z.string()
 });
+var packagePriceSchema = zod.z.object({
+  destination: zod.z.string(),
+  label: zod.z.string(),
+  type: zod.z.enum(["data-limited", "time-limited"]),
+  price: zod.z.number(),
+  package: zod.z.object({ _type: zod.z.literal("docRef"), collection: zod.z.literal(PACKAGE_COLLECTION) })
+});
 var packageSpecificationSchema2 = zod.z.object({
   size: zod.z.string(),
   type: zod.z.string(),
   destination: zod.z.string()
+});
+var pricingStrategySchema = zod.z.object({
+  strategy: zod.z.enum(["split", "bundle"]),
+  modification_percentage: zod.z.number(),
+  default_price_list: zod.z.object({
+    _type: zod.z.literal("docRef"),
+    collection: zod.z.literal(PRICE_LIST_COLLECTION),
+    nullable: zod.z.literal(true)
+  }),
+  custom_prices: zod.z.array(packagePriceSchema)
+});
+var financialPropertiesSchema = zod.z.object({
+  administration_fee: zod.z.number().nullable(),
+  income_per_gb: zod.z.number().nullable(),
+  commission_fee: zod.z.number().nullable().optional(),
+  payment_method: zod.z.enum(["invoice", "direct"]),
+  requires_card: zod.z.boolean().nullable(),
+  next_invoice: zod.z.object({
+    _type: zod.z.literal("timestamp"),
+    nullable: zod.z.literal(true),
+    optional: zod.z.literal(true)
+  }),
+  last_invoice: zod.z.object({
+    _type: zod.z.literal("timestamp"),
+    nullable: zod.z.literal(true),
+    optional: zod.z.literal(true)
+  }),
+  pricing_strategies: zod.z.object({
+    partner: pricingStrategySchema.optional(),
+    user: pricingStrategySchema.optional()
+  }).nullable()
 });
 var visualIdentityBannerSchema = zod.z.object({
   image_url: zod.z.string(),
@@ -488,6 +550,18 @@ var scheduleFilterSchema = zod.z.object({
     "less_than_or_equal"
   ])
 });
+var visualIdentityBannersSchema = zod.z.object({
+  strategy: zod.z.enum(["fixed", "rotating", "destination", "time_of_day"]),
+  banners: zod.z.array(visualIdentityBannerSchema).nullable().optional()
+});
+var visualIdentitySchema = zod.z.object({
+  primary_color: zod.z.string(),
+  secondary_color: zod.z.string(),
+  logo: zod.z.string(),
+  font: zod.z.string(),
+  top_banner: visualIdentityBannersSchema.optional(),
+  mid_banner: visualIdentityBannerSchema.optional()
+});
 var partnerContactSchema = zod.z.object({
   email: zod.z.string().nullable(),
   office_phone: zod.z.string().nullable().optional()
@@ -495,6 +569,170 @@ var partnerContactSchema = zod.z.object({
 var partnerDataSchema = zod.z.object({
   source: zod.z.string(),
   manual: zod.z.boolean()
+});
+var packageStrategySchema = zod.z.object({
+  name: zod.z.string(),
+  iso3_white_list: zod.z.array(zod.z.string()).optional(),
+  parameters: zod.z.any()
+});
+var scheduleEmailSchema = zod.z.object({
+  brevo_template_id: zod.z.number(),
+  subject: zod.z.record(zod.z.string()).refine(
+    (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES2.includes(key)),
+    { message: "Keys must be supported locales" }
+  ).optional(),
+  preview_text: zod.z.record(zod.z.string()).refine(
+    (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES2.includes(key)),
+    { message: "Keys must be supported locales" }
+  ).optional()
+}).nullable().optional();
+var schedulePushSchema = zod.z.object({
+  title: zod.z.record(zod.z.string()).optional(),
+  body: zod.z.record(zod.z.string()).optional(),
+  target: zod.z.string()
+}).nullable().optional();
+var scheduleSchema = zod.z.object({
+  days: zod.z.number(),
+  email: scheduleEmailSchema,
+  push: schedulePushSchema,
+  hour: zod.z.number(),
+  key: zod.z.string(),
+  method: zod.z.enum(["email", "sms", "whatsapp", "push"]),
+  moment: zod.z.enum(["departure_date", "return_date", "immediate"]),
+  filter: scheduleFilterSchema.nullable().optional()
+});
+var platformSettingsSchema = zod.z.object({
+  package_strategy: zod.z.object({
+    name: zod.z.string(),
+    iso3_white_list: zod.z.array(zod.z.string()).optional(),
+    parameters: zod.z.any()
+  }).nullable().optional(),
+  free_esim: zod.z.object({
+    package_specification: zod.z.object({
+      size: zod.z.string(),
+      type: zod.z.string(),
+      destination: zod.z.string()
+    }),
+    allowance: zod.z.number()
+  }).nullable().optional(),
+  booking_defaults: zod.z.object({
+    locale: supportedLocalesSchema
+  }).nullable().optional(),
+  booking_confirmation: zod.z.object({
+    brevo_template_id: zod.z.number(),
+    send_booking_confirmation: zod.z.boolean()
+  }).nullable().optional(),
+  schedules: zod.z.array(scheduleSchema).optional()
+});
+markAsSchemaSpec({
+  destination: zod.z.string(),
+  label: zod.z.string(),
+  type: zod.z.enum(["data-limited", "time-limited"]),
+  price: zod.z.number(),
+  package: { _type: "docRef", collection: PACKAGE_COLLECTION }
+});
+markAsSchemaSpec({
+  administration_fee: zod.z.number().nullable(),
+  income_per_gb: zod.z.number().nullable(),
+  commission_fee: zod.z.number().nullable().optional(),
+  payment_method: zod.z.enum(["invoice", "direct"]),
+  requires_card: zod.z.boolean().nullable(),
+  next_invoice: timestampNullableOptional,
+  last_invoice: timestampNullableOptional,
+  pricing_strategies: {
+    _type: "object",
+    of: {
+      partner: {
+        _type: "object",
+        of: {
+          strategy: zod.z.enum(["split", "bundle"]),
+          modification_percentage: zod.z.number(),
+          default_price_list: { _type: "docRef", collection: PRICE_LIST_COLLECTION, nullable: true },
+          custom_prices: {
+            _type: "array",
+            of: {
+              _type: "object",
+              of: {
+                destination: zod.z.string(),
+                label: zod.z.string(),
+                type: zod.z.enum(["data-limited", "time-limited"]),
+                price: zod.z.number(),
+                package: { _type: "docRef", collection: PACKAGE_COLLECTION }
+              }
+            }
+          }
+        },
+        optional: true
+      },
+      user: {
+        _type: "object",
+        of: {
+          modification_percentage: zod.z.number(),
+          default_price_list: { _type: "docRef", collection: PRICE_LIST_COLLECTION, nullable: true },
+          custom_prices: {
+            _type: "array",
+            of: {
+              _type: "object",
+              of: {
+                destination: zod.z.string(),
+                label: zod.z.string(),
+                type: zod.z.enum(["data-limited", "time-limited"]),
+                price: zod.z.number(),
+                package: { _type: "docRef", collection: PACKAGE_COLLECTION }
+              }
+            }
+          }
+        },
+        optional: true
+      }
+    },
+    nullable: true
+  }
+});
+markAsSchemaSpec({
+  package_strategy: {
+    _type: "object",
+    of: packageStrategySchema.shape,
+    nullable: true,
+    optional: true
+  },
+  free_esim: {
+    _type: "object",
+    of: {
+      package_specification: {
+        _type: "object",
+        of: packageSpecificationSchema2.shape
+      },
+      allowance: zod.z.number()
+    },
+    nullable: true,
+    optional: true
+  },
+  booking_defaults: {
+    _type: "object",
+    of: {
+      locale: supportedLocalesSchema
+    },
+    nullable: true,
+    optional: true
+  },
+  booking_confirmation: {
+    _type: "object",
+    of: {
+      brevo_template_id: zod.z.number(),
+      send_booking_confirmation: zod.z.boolean()
+    },
+    nullable: true,
+    optional: true
+  },
+  schedules: {
+    _type: "array",
+    of: {
+      _type: "object",
+      of: scheduleSchema.shape
+    },
+    optional: true
+  }
 });
 var partnerSchemaSpec = markAsSchemaSpec({
   // Base model fields
@@ -598,136 +836,13 @@ var partnerSchemaSpec = markAsSchemaSpec({
   // Visual identity
   visual_identity: {
     _type: "object",
-    of: {
-      primary_color: zod.z.string(),
-      secondary_color: zod.z.string(),
-      logo: zod.z.string(),
-      font: zod.z.string(),
-      top_banner: {
-        _type: "object",
-        of: {
-          strategy: zod.z.enum(["fixed", "rotating", "destination", "time_of_day"]),
-          banners: {
-            _type: "array",
-            of: {
-              _type: "object",
-              of: visualIdentityBannerSchema.shape
-            },
-            nullable: true,
-            optional: true
-          }
-        },
-        optional: true
-      },
-      mid_banner: {
-        _type: "object",
-        of: {
-          strategy: zod.z.enum(["fixed", "rotating", "destination", "time_of_day"]),
-          banners: {
-            _type: "array",
-            of: {
-              _type: "object",
-              of: visualIdentityBannerSchema.shape
-            },
-            nullable: true,
-            optional: true
-          }
-        },
-        optional: true
-      }
-    },
+    of: visualIdentitySchema.shape,
     nullable: true
   },
   // Platform settings
   platform_settings: {
     _type: "object",
-    of: {
-      package_strategy: {
-        _type: "object",
-        of: {
-          name: zod.z.string(),
-          iso3_white_list: zod.z.array(zod.z.string()).optional(),
-          parameters: zod.z.any()
-        },
-        nullable: true,
-        optional: true
-      },
-      free_esim: {
-        _type: "object",
-        of: {
-          package_specification: {
-            _type: "object",
-            of: packageSpecificationSchema2.shape
-          },
-          allowance: zod.z.number()
-        },
-        nullable: true,
-        optional: true
-      },
-      booking_defaults: {
-        _type: "object",
-        of: {
-          locale: supportedLocalesSchema
-        },
-        nullable: true,
-        optional: true
-      },
-      booking_confirmation: {
-        _type: "object",
-        of: {
-          brevo_template_id: zod.z.number(),
-          send_booking_confirmation: zod.z.boolean()
-        },
-        nullable: true,
-        optional: true
-      },
-      schedules: {
-        _type: "array",
-        of: {
-          _type: "object",
-          of: {
-            days: zod.z.number(),
-            email: {
-              _type: "object",
-              of: {
-                brevo_template_id: zod.z.number(),
-                subject: zod.z.record(zod.z.string()).refine(
-                  (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
-                  { message: "Keys must be supported locales" }
-                ).optional(),
-                preview_text: zod.z.record(zod.z.string()).refine(
-                  (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
-                  { message: "Keys must be supported locales" }
-                ).optional()
-              },
-              nullable: true,
-              optional: true
-            },
-            push: {
-              _type: "object",
-              of: {
-                title: zod.z.record(zod.z.string()).optional(),
-                body: zod.z.record(zod.z.string()).optional(),
-                target: zod.z.string()
-              },
-              nullable: true,
-              optional: true
-            },
-            hour: zod.z.number(),
-            key: zod.z.string(),
-            method: zod.z.enum(["email", "sms", "whatsapp", "push"]),
-            moment: zod.z.enum(["departure_date", "return_date", "immediate"]),
-            filter: {
-              _type: "object",
-              of: scheduleFilterSchema.shape,
-              nullable: true,
-              optional: true
-            }
-          }
-        },
-        optional: true
-      }
-    },
+    of: platformSettingsSchema.shape,
     nullable: true
   },
   // Metadata
@@ -794,6 +909,7 @@ var HPackageSchema = buildClientSchema(packageSchemaSpec);
 var HPromoCodeSchema = buildClientSchema(promoCodeSchemaSpec);
 var HPartnerSchema = buildClientSchema(partnerSchemaSpec);
 var HPriceListSchema = buildClientSchema(priceListSchemaSpec);
+var HFinancialPropertiesSchema = buildClientSchema(financialPropertiesSchema);
 var HApiLogSchema = buildClientSchema(apiLogSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
@@ -807,6 +923,7 @@ var HPartnerDataSchema = partnerDataSchema;
 var HCommunicationChannelSchema = communicationChannelSchema;
 var HBookingStatusSchema = bookingStatusSchema;
 var HCommunicationOptionsSchema = communicationOptionsSchema;
+var SUPPORTED_LOCALES3 = SUPPORTED_LOCALES;
 
 exports.HAddressSchema = HAddressSchema;
 exports.HApiLogSchema = HApiLogSchema;
@@ -818,6 +935,7 @@ exports.HCommunicationOptionsSchema = HCommunicationOptionsSchema;
 exports.HCountrySchema = HCountrySchema;
 exports.HCurrencySchema = HCurrencySchema;
 exports.HESIMSchema = HESIMSchema;
+exports.HFinancialPropertiesSchema = HFinancialPropertiesSchema;
 exports.HMessageSchema = HMessageSchema;
 exports.HPackageSchema = HPackageSchema;
 exports.HPartnerContactSchema = HPartnerContactSchema;
@@ -832,5 +950,6 @@ exports.HRegistrationSchema = HRegistrationSchema;
 exports.HScheduleFilterSchema = HScheduleFilterSchema;
 exports.HUserSchema = HUserSchema;
 exports.HVisualIdentityBannerSchema = HVisualIdentityBannerSchema;
+exports.SUPPORTED_LOCALES = SUPPORTED_LOCALES3;
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.cjs.map

@@ -116,8 +116,6 @@ function buildClientSchema(spec, path = []) {
   }
   throw new Error(`Unknown or malformed spec at "${pathString}": ${JSON.stringify(spec)}`);
 }
-
-// src/schemas/specs/common.ts
 var PARTNER_COLLECTION = "partners";
 var USER_COLLECTION = "users";
 var PROFILE_COLLECTION = "profiles";
@@ -130,6 +128,32 @@ var BOOKING_COLLECTION = "bookings";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: false };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
+({
+  id: z.string(),
+  created_at: timestampRequired,
+  updated_at: timestampNullableOptional,
+  created_by: { _type: "docRef", collection: "users", nullable: false, optional: false },
+  updated_by: { _type: "docRef", collection: "users", nullable: true, optional: true }
+});
+var SUPPORTED_LOCALES = [
+  "en-US",
+  "en-GB",
+  "nl-NL",
+  "de-DE",
+  "fr-FR",
+  "it-IT",
+  "es-ES",
+  "cs-CZ",
+  "pl-PL",
+  "pt-PT",
+  "fr-BE",
+  "nl-BE",
+  "de-AT",
+  "de-CH",
+  "fr-CH",
+  "it-CH",
+  "de-BE"
+];
 
 // src/schemas/specs/user.ts
 var apiKeySpec = {
@@ -183,7 +207,7 @@ var userSchemaSpec = markAsSchemaSpec({
   review_requested: timestampNullableOptional,
   last_seen: timestampNullableOptional
 });
-var SUPPORTED_LOCALES = [
+var SUPPORTED_LOCALES2 = [
   "en-US",
   "en-GB",
   "nl-NL",
@@ -202,7 +226,7 @@ var SUPPORTED_LOCALES = [
   "it-CH",
   "de-BE"
 ];
-var supportedLocalesSchema = z.enum(SUPPORTED_LOCALES);
+var supportedLocalesSchema = z.enum(SUPPORTED_LOCALES2);
 
 // src/schemas/specs/booking.ts
 var communicationChannelSchema = z.enum([
@@ -462,10 +486,48 @@ var bankingDetailsSchema = z.object({
   bank_name: z.string(),
   iban: z.string()
 });
+var packagePriceSchema = z.object({
+  destination: z.string(),
+  label: z.string(),
+  type: z.enum(["data-limited", "time-limited"]),
+  price: z.number(),
+  package: z.object({ _type: z.literal("docRef"), collection: z.literal(PACKAGE_COLLECTION) })
+});
 var packageSpecificationSchema2 = z.object({
   size: z.string(),
   type: z.string(),
   destination: z.string()
+});
+var pricingStrategySchema = z.object({
+  strategy: z.enum(["split", "bundle"]),
+  modification_percentage: z.number(),
+  default_price_list: z.object({
+    _type: z.literal("docRef"),
+    collection: z.literal(PRICE_LIST_COLLECTION),
+    nullable: z.literal(true)
+  }),
+  custom_prices: z.array(packagePriceSchema)
+});
+var financialPropertiesSchema = z.object({
+  administration_fee: z.number().nullable(),
+  income_per_gb: z.number().nullable(),
+  commission_fee: z.number().nullable().optional(),
+  payment_method: z.enum(["invoice", "direct"]),
+  requires_card: z.boolean().nullable(),
+  next_invoice: z.object({
+    _type: z.literal("timestamp"),
+    nullable: z.literal(true),
+    optional: z.literal(true)
+  }),
+  last_invoice: z.object({
+    _type: z.literal("timestamp"),
+    nullable: z.literal(true),
+    optional: z.literal(true)
+  }),
+  pricing_strategies: z.object({
+    partner: pricingStrategySchema.optional(),
+    user: pricingStrategySchema.optional()
+  }).nullable()
 });
 var visualIdentityBannerSchema = z.object({
   image_url: z.string(),
@@ -486,6 +548,18 @@ var scheduleFilterSchema = z.object({
     "less_than_or_equal"
   ])
 });
+var visualIdentityBannersSchema = z.object({
+  strategy: z.enum(["fixed", "rotating", "destination", "time_of_day"]),
+  banners: z.array(visualIdentityBannerSchema).nullable().optional()
+});
+var visualIdentitySchema = z.object({
+  primary_color: z.string(),
+  secondary_color: z.string(),
+  logo: z.string(),
+  font: z.string(),
+  top_banner: visualIdentityBannersSchema.optional(),
+  mid_banner: visualIdentityBannerSchema.optional()
+});
 var partnerContactSchema = z.object({
   email: z.string().nullable(),
   office_phone: z.string().nullable().optional()
@@ -493,6 +567,170 @@ var partnerContactSchema = z.object({
 var partnerDataSchema = z.object({
   source: z.string(),
   manual: z.boolean()
+});
+var packageStrategySchema = z.object({
+  name: z.string(),
+  iso3_white_list: z.array(z.string()).optional(),
+  parameters: z.any()
+});
+var scheduleEmailSchema = z.object({
+  brevo_template_id: z.number(),
+  subject: z.record(z.string()).refine(
+    (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES2.includes(key)),
+    { message: "Keys must be supported locales" }
+  ).optional(),
+  preview_text: z.record(z.string()).refine(
+    (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES2.includes(key)),
+    { message: "Keys must be supported locales" }
+  ).optional()
+}).nullable().optional();
+var schedulePushSchema = z.object({
+  title: z.record(z.string()).optional(),
+  body: z.record(z.string()).optional(),
+  target: z.string()
+}).nullable().optional();
+var scheduleSchema = z.object({
+  days: z.number(),
+  email: scheduleEmailSchema,
+  push: schedulePushSchema,
+  hour: z.number(),
+  key: z.string(),
+  method: z.enum(["email", "sms", "whatsapp", "push"]),
+  moment: z.enum(["departure_date", "return_date", "immediate"]),
+  filter: scheduleFilterSchema.nullable().optional()
+});
+var platformSettingsSchema = z.object({
+  package_strategy: z.object({
+    name: z.string(),
+    iso3_white_list: z.array(z.string()).optional(),
+    parameters: z.any()
+  }).nullable().optional(),
+  free_esim: z.object({
+    package_specification: z.object({
+      size: z.string(),
+      type: z.string(),
+      destination: z.string()
+    }),
+    allowance: z.number()
+  }).nullable().optional(),
+  booking_defaults: z.object({
+    locale: supportedLocalesSchema
+  }).nullable().optional(),
+  booking_confirmation: z.object({
+    brevo_template_id: z.number(),
+    send_booking_confirmation: z.boolean()
+  }).nullable().optional(),
+  schedules: z.array(scheduleSchema).optional()
+});
+markAsSchemaSpec({
+  destination: z.string(),
+  label: z.string(),
+  type: z.enum(["data-limited", "time-limited"]),
+  price: z.number(),
+  package: { _type: "docRef", collection: PACKAGE_COLLECTION }
+});
+markAsSchemaSpec({
+  administration_fee: z.number().nullable(),
+  income_per_gb: z.number().nullable(),
+  commission_fee: z.number().nullable().optional(),
+  payment_method: z.enum(["invoice", "direct"]),
+  requires_card: z.boolean().nullable(),
+  next_invoice: timestampNullableOptional,
+  last_invoice: timestampNullableOptional,
+  pricing_strategies: {
+    _type: "object",
+    of: {
+      partner: {
+        _type: "object",
+        of: {
+          strategy: z.enum(["split", "bundle"]),
+          modification_percentage: z.number(),
+          default_price_list: { _type: "docRef", collection: PRICE_LIST_COLLECTION, nullable: true },
+          custom_prices: {
+            _type: "array",
+            of: {
+              _type: "object",
+              of: {
+                destination: z.string(),
+                label: z.string(),
+                type: z.enum(["data-limited", "time-limited"]),
+                price: z.number(),
+                package: { _type: "docRef", collection: PACKAGE_COLLECTION }
+              }
+            }
+          }
+        },
+        optional: true
+      },
+      user: {
+        _type: "object",
+        of: {
+          modification_percentage: z.number(),
+          default_price_list: { _type: "docRef", collection: PRICE_LIST_COLLECTION, nullable: true },
+          custom_prices: {
+            _type: "array",
+            of: {
+              _type: "object",
+              of: {
+                destination: z.string(),
+                label: z.string(),
+                type: z.enum(["data-limited", "time-limited"]),
+                price: z.number(),
+                package: { _type: "docRef", collection: PACKAGE_COLLECTION }
+              }
+            }
+          }
+        },
+        optional: true
+      }
+    },
+    nullable: true
+  }
+});
+markAsSchemaSpec({
+  package_strategy: {
+    _type: "object",
+    of: packageStrategySchema.shape,
+    nullable: true,
+    optional: true
+  },
+  free_esim: {
+    _type: "object",
+    of: {
+      package_specification: {
+        _type: "object",
+        of: packageSpecificationSchema2.shape
+      },
+      allowance: z.number()
+    },
+    nullable: true,
+    optional: true
+  },
+  booking_defaults: {
+    _type: "object",
+    of: {
+      locale: supportedLocalesSchema
+    },
+    nullable: true,
+    optional: true
+  },
+  booking_confirmation: {
+    _type: "object",
+    of: {
+      brevo_template_id: z.number(),
+      send_booking_confirmation: z.boolean()
+    },
+    nullable: true,
+    optional: true
+  },
+  schedules: {
+    _type: "array",
+    of: {
+      _type: "object",
+      of: scheduleSchema.shape
+    },
+    optional: true
+  }
 });
 var partnerSchemaSpec = markAsSchemaSpec({
   // Base model fields
@@ -596,136 +834,13 @@ var partnerSchemaSpec = markAsSchemaSpec({
   // Visual identity
   visual_identity: {
     _type: "object",
-    of: {
-      primary_color: z.string(),
-      secondary_color: z.string(),
-      logo: z.string(),
-      font: z.string(),
-      top_banner: {
-        _type: "object",
-        of: {
-          strategy: z.enum(["fixed", "rotating", "destination", "time_of_day"]),
-          banners: {
-            _type: "array",
-            of: {
-              _type: "object",
-              of: visualIdentityBannerSchema.shape
-            },
-            nullable: true,
-            optional: true
-          }
-        },
-        optional: true
-      },
-      mid_banner: {
-        _type: "object",
-        of: {
-          strategy: z.enum(["fixed", "rotating", "destination", "time_of_day"]),
-          banners: {
-            _type: "array",
-            of: {
-              _type: "object",
-              of: visualIdentityBannerSchema.shape
-            },
-            nullable: true,
-            optional: true
-          }
-        },
-        optional: true
-      }
-    },
+    of: visualIdentitySchema.shape,
     nullable: true
   },
   // Platform settings
   platform_settings: {
     _type: "object",
-    of: {
-      package_strategy: {
-        _type: "object",
-        of: {
-          name: z.string(),
-          iso3_white_list: z.array(z.string()).optional(),
-          parameters: z.any()
-        },
-        nullable: true,
-        optional: true
-      },
-      free_esim: {
-        _type: "object",
-        of: {
-          package_specification: {
-            _type: "object",
-            of: packageSpecificationSchema2.shape
-          },
-          allowance: z.number()
-        },
-        nullable: true,
-        optional: true
-      },
-      booking_defaults: {
-        _type: "object",
-        of: {
-          locale: supportedLocalesSchema
-        },
-        nullable: true,
-        optional: true
-      },
-      booking_confirmation: {
-        _type: "object",
-        of: {
-          brevo_template_id: z.number(),
-          send_booking_confirmation: z.boolean()
-        },
-        nullable: true,
-        optional: true
-      },
-      schedules: {
-        _type: "array",
-        of: {
-          _type: "object",
-          of: {
-            days: z.number(),
-            email: {
-              _type: "object",
-              of: {
-                brevo_template_id: z.number(),
-                subject: z.record(z.string()).refine(
-                  (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
-                  { message: "Keys must be supported locales" }
-                ).optional(),
-                preview_text: z.record(z.string()).refine(
-                  (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
-                  { message: "Keys must be supported locales" }
-                ).optional()
-              },
-              nullable: true,
-              optional: true
-            },
-            push: {
-              _type: "object",
-              of: {
-                title: z.record(z.string()).optional(),
-                body: z.record(z.string()).optional(),
-                target: z.string()
-              },
-              nullable: true,
-              optional: true
-            },
-            hour: z.number(),
-            key: z.string(),
-            method: z.enum(["email", "sms", "whatsapp", "push"]),
-            moment: z.enum(["departure_date", "return_date", "immediate"]),
-            filter: {
-              _type: "object",
-              of: scheduleFilterSchema.shape,
-              nullable: true,
-              optional: true
-            }
-          }
-        },
-        optional: true
-      }
-    },
+    of: platformSettingsSchema.shape,
     nullable: true
   },
   // Metadata
@@ -792,6 +907,7 @@ var HPackageSchema = buildClientSchema(packageSchemaSpec);
 var HPromoCodeSchema = buildClientSchema(promoCodeSchemaSpec);
 var HPartnerSchema = buildClientSchema(partnerSchemaSpec);
 var HPriceListSchema = buildClientSchema(priceListSchemaSpec);
+var HFinancialPropertiesSchema = buildClientSchema(financialPropertiesSchema);
 var HApiLogSchema = buildClientSchema(apiLogSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
@@ -805,7 +921,8 @@ var HPartnerDataSchema = partnerDataSchema;
 var HCommunicationChannelSchema = communicationChannelSchema;
 var HBookingStatusSchema = bookingStatusSchema;
 var HCommunicationOptionsSchema = communicationOptionsSchema;
+var SUPPORTED_LOCALES3 = SUPPORTED_LOCALES;
 
-export { HAddressSchema, HApiLogSchema, HBankingDetailsSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HMessageSchema, HPackageSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPriceListSchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HScheduleFilterSchema, HUserSchema, HVisualIdentityBannerSchema };
+export { HAddressSchema, HApiLogSchema, HBankingDetailsSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HMessageSchema, HPackageSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPriceListSchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HScheduleFilterSchema, HUserSchema, HVisualIdentityBannerSchema, SUPPORTED_LOCALES3 as SUPPORTED_LOCALES };
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.js.map

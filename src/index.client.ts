@@ -11,6 +11,7 @@ import {
   bookingStatusSchema,
   communicationOptionsSchema
 } from './schemas/specs/booking';
+import { SUPPORTED_LOCALES as LOCALES } from './schemas/specs/common';
 import { countrySchemaSpec } from './schemas/specs/country';
 import { currencySchemaSpec } from './schemas/specs/currency';
 import { esimSchemaSpec } from './schemas/specs/esim';
@@ -28,10 +29,12 @@ import {
   visualIdentityBannerSchema,
   scheduleFilterSchema,
   partnerContactSchema,
-  partnerDataSchema
+  partnerDataSchema,
+  financialPropertiesSchema,
 } from './schemas/specs/partner';
 import { apiLogSchemaSpec } from './schemas/specs/apiLogs';
 import { z } from 'zod';
+import { HubbyModelSchema } from './index.server';
 
 export const HUserSchema = buildClientSchema(userSchemaSpec);
 export const HBookingSchema = buildClientSchema(bookingSchemaSpec);
@@ -44,6 +47,7 @@ export const HPackageSchema = buildClientSchema(packageSchemaSpec);
 export const HPromoCodeSchema = buildClientSchema(promoCodeSchemaSpec);
 export const HPartnerSchema = buildClientSchema(partnerSchemaSpec);
 export const HPriceListSchema = buildClientSchema(priceListSchemaSpec);
+export const HFinancialPropertiesSchema = buildClientSchema(financialPropertiesSchema);
 export const HApiLogSchema = buildClientSchema(apiLogSchemaSpec);
 
 // Additional lower-level schemas
@@ -59,6 +63,7 @@ export const HPartnerDataSchema = partnerDataSchema;
 export const HCommunicationChannelSchema = communicationChannelSchema;
 export const HBookingStatusSchema = bookingStatusSchema;
 export const HCommunicationOptionsSchema = communicationOptionsSchema;
+
 
 export type HUser = z.infer<typeof HUserSchema>;
 export type HBooking = z.infer<typeof HBookingSchema>;
@@ -80,9 +85,16 @@ export type HBankingDetails = z.infer<typeof HBankingDetailsSchema>;
 export type HPartnerPackageSpecification = z.infer<typeof HPartnerPackageSpecificationSchema>;
 export type HPromoPackageSpecification = z.infer<typeof HPromoPackageSpecificationSchema>;
 export type HVisualIdentityBanner = z.infer<typeof HVisualIdentityBannerSchema>;
+export type HFinancialProperties = z.infer<typeof HFinancialPropertiesSchema>;
 export type HScheduleFilter = z.infer<typeof HScheduleFilterSchema>;
 export type HPartnerContact = z.infer<typeof HPartnerContactSchema>;
 export type HPartnerData = z.infer<typeof HPartnerDataSchema>;
 export type HCommunicationChannel = z.infer<typeof HCommunicationChannelSchema>;
 export type HBookingStatus = z.infer<typeof HBookingStatusSchema>;
 export type HCommunicationOptions = z.infer<typeof HCommunicationOptionsSchema>;
+export type HHubbyModel = z.infer<typeof HubbyModelSchema>;
+
+export type HubbyModelApp = HHubbyModel;
+
+export type SupportedLocales = typeof SUPPORTED_LOCALES[number];
+export const SUPPORTED_LOCALES = LOCALES; 
