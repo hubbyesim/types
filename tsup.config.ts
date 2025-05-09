@@ -28,8 +28,16 @@ export default defineConfig([
     sourcemap: true,
     splitting: false,
     skipNodeModulesBundle: true,
-    treeshake: true,
-    external: ['firebase-admin'], // Ensure Firebase is excluded from client build
+    treeshake: {
+      preset: 'recommended',
+    },
+    external: [
+      'firebase-admin',
+      'firebase-admin/app',
+      'firebase-admin/firestore',
+      'firebase-admin/auth',
+      'firebase-admin/storage'
+    ], // Ensure Firebase and all its submodules are excluded from client build
     esbuildOptions: (options) => {
       options.conditions = ['browser'];
     },

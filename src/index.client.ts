@@ -11,7 +11,7 @@ import {
   bookingStatusSchema,
   communicationOptionsSchema
 } from './schemas/specs/booking';
-import { SUPPORTED_LOCALES as LOCALES } from './schemas/specs/common';
+import { SUPPORTED_LOCALES as LOCALES, hubbyModelSpec } from './schemas/specs/common';
 import { countrySchemaSpec } from './schemas/specs/country';
 import { currencySchemaSpec } from './schemas/specs/currency';
 import { esimSchemaSpec } from './schemas/specs/esim';
@@ -31,10 +31,14 @@ import {
   partnerContactSchema,
   partnerDataSchema,
   financialPropertiesSchema,
+  packagePriceSchema,
+  platformSettingsSchema,
+  visualIdentitySchema,
+  pricingStrategySchema,
+  freeEsimSchema
 } from './schemas/specs/partner';
 import { apiLogSchemaSpec } from './schemas/specs/apiLogs';
 import { z } from 'zod';
-import { HubbyModelSchema } from './index.server';
 
 export const HUserSchema = buildClientSchema(userSchemaSpec);
 export const HBookingSchema = buildClientSchema(bookingSchemaSpec);
@@ -49,7 +53,13 @@ export const HPartnerSchema = buildClientSchema(partnerSchemaSpec);
 export const HPriceListSchema = buildClientSchema(priceListSchemaSpec);
 export const HFinancialPropertiesSchema = buildClientSchema(financialPropertiesSchema);
 export const HApiLogSchema = buildClientSchema(apiLogSchemaSpec);
-
+export const HPackagePriceSchema = buildClientSchema(packagePriceSchema);
+export const HubbyModelSchema = buildClientSchema(hubbyModelSpec);
+export const HPartnerAppSchema = buildClientSchema(partnerSchemaSpec);
+export const HPlatformSettingsSchema = buildClientSchema(platformSettingsSchema);
+export const HVisualIdentitySchema = buildClientSchema(visualIdentitySchema);
+export const HPricingStrategySchema = buildClientSchema(pricingStrategySchema);
+export const HFreeEsimSchema = buildClientSchema(freeEsimSchema);
 // Additional lower-level schemas
 export const HAddressSchema = addressSchema;
 export const HRegistrationSchema = registrationSchema;
@@ -63,7 +73,6 @@ export const HPartnerDataSchema = partnerDataSchema;
 export const HCommunicationChannelSchema = communicationChannelSchema;
 export const HBookingStatusSchema = bookingStatusSchema;
 export const HCommunicationOptionsSchema = communicationOptionsSchema;
-
 
 export type HUser = z.infer<typeof HUserSchema>;
 export type HBooking = z.infer<typeof HBookingSchema>;

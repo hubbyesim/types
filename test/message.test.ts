@@ -1,6 +1,6 @@
 import { buildClientSchema } from '../src/schemas/builders/client';
 import { buildServerSchema } from '../src/schemas/builders/server';
-import { convertFirestoreToJS, convertJSToFirestore } from '../src/schemas/utils/firestoreTansformUtils';
+import { convertFirestoreToJS, convertJSToFirestore } from '../src/schemas/utils/firestoreTransformUtils';
 import { messageSchemaSpec } from '../src/schemas/specs/message';
 import { Timestamp } from 'firebase-admin/firestore';
 
@@ -10,7 +10,7 @@ const ServerSchema = buildServerSchema(messageSchemaSpec);
 const roundtrip = (input: any) => {
     const parsedForServer = ServerSchema.parse(input);
     const firestoreData = convertJSToFirestore(parsedForServer, messageSchemaSpec);
-    const jsData = convertFirestoreToJS(firestoreData);
+    const jsData = convertFirestoreToJS(firestoreData, messageSchemaSpec);
     return ClientSchema.parse(jsData);
 };
 
@@ -35,7 +35,7 @@ describe('Message schema roundtrip', () => {
         expect(firestoreData.updated_at).toBeInstanceOf(Timestamp);
 
         // Simulate Firestore snapshot conversion
-        const jsData = convertFirestoreToJS(firestoreData);
+        const jsData = convertFirestoreToJS(firestoreData, messageSchemaSpec);
 
         // Validate back with client schema
         const parsedClient = ClientSchema.parse(jsData);

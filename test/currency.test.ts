@@ -1,6 +1,6 @@
 import { buildClientSchema } from '../src/schemas/builders/client';
 import { buildServerSchema } from '../src/schemas/builders/server';
-import { convertFirestoreToJS, convertJSToFirestore } from '../src/schemas/utils/firestoreTansformUtils';
+import { convertFirestoreToJS, convertJSToFirestore } from '../src/schemas/utils/firestoreTransformUtils';
 import { currencySchemaSpec } from '../src/schemas/specs/currency';
 import { Timestamp } from 'firebase-admin/firestore';
 
@@ -10,7 +10,7 @@ const ServerSchema = buildServerSchema(currencySchemaSpec);
 const roundtrip = (input: any) => {
     const parsedForServer = ServerSchema.parse(input);
     const firestoreData = convertJSToFirestore(parsedForServer, currencySchemaSpec);
-    const jsData = convertFirestoreToJS(firestoreData);
+    const jsData = convertFirestoreToJS(firestoreData, currencySchemaSpec);
     return ClientSchema.parse(jsData);
 };
 
@@ -39,7 +39,7 @@ describe('Currency schema roundtrip', () => {
         expect(firestoreData.updated_at).toBeInstanceOf(Timestamp);
 
         // Simulate Firestore snapshot conversion
-        const jsData = convertFirestoreToJS(firestoreData);
+        const jsData = convertFirestoreToJS(firestoreData, currencySchemaSpec);
 
         // Validate back with client schema
         const parsedClient = ClientSchema.parse(jsData);

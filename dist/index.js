@@ -5,12 +5,6 @@ import { getApps, initializeApp, applicationDefault } from 'firebase-admin/app';
 // src/schemas/builders/server.ts
 function wrapZodSchema(schema, options) {
   let wrapped = schema;
-  if (options?.nullable && !wrapped.isNullable?.()) {
-    wrapped = wrapped.nullable();
-  }
-  if (options?.optional && !wrapped.isOptional?.()) {
-    wrapped = wrapped.optional();
-  }
   return wrapped;
 }
 function wrapObjectSchema(spec, path, builder) {
@@ -526,11 +520,11 @@ var pricingStrategySchema = z.object({
   custom_prices: z.array(packagePriceSchema)
 });
 var financialPropertiesSchema = z.object({
-  administration_fee: z.number().nullable(),
-  income_per_gb: z.number().nullable(),
+  administration_fee: z.number().nullable().optional(),
+  income_per_gb: z.number().nullable().optional(),
   commission_fee: z.number().nullable().optional(),
   payment_method: z.enum(["invoice", "direct"]),
-  requires_card: z.boolean().nullable(),
+  requires_card: z.boolean().nullable().optional(),
   next_invoice: z.object({
     _type: z.literal("timestamp"),
     nullable: z.literal(true),
@@ -573,9 +567,9 @@ var visualIdentitySchema = z.object({
   primary_color: z.string(),
   secondary_color: z.string(),
   logo: z.string(),
-  font: z.string(),
+  font: z.string().nullable().optional(),
   top_banner: visualIdentityBannersSchema.optional(),
-  mid_banner: visualIdentityBannerSchema.optional()
+  mid_banner: visualIdentityBannersSchema.optional()
 });
 var partnerContactSchema = z.object({
   email: z.string().nullable(),
@@ -616,20 +610,21 @@ var scheduleSchema = z.object({
   moment: z.enum(["departure_date", "return_date", "immediate"]),
   filter: scheduleFilterSchema.nullable().optional()
 });
+var freeEsimSchema = z.object({
+  package_specification: z.object({
+    size: z.string(),
+    type: z.string(),
+    destination: z.string()
+  }),
+  allowance: z.number()
+});
 var platformSettingsSchema = z.object({
   package_strategy: z.object({
     name: z.string(),
     iso3_white_list: z.array(z.string()).optional(),
     parameters: z.any()
   }).nullable().optional(),
-  free_esim: z.object({
-    package_specification: z.object({
-      size: z.string(),
-      type: z.string(),
-      destination: z.string()
-    }),
-    allowance: z.number()
-  }).nullable().optional(),
+  free_esim: freeEsimSchema.nullable().optional(),
   booking_defaults: z.object({
     locale: supportedLocalesSchema
   }).nullable().optional(),
@@ -789,11 +784,11 @@ var partnerSchemaSpec = markAsSchemaSpec({
   financial_properties: {
     _type: "object",
     of: {
-      administration_fee: z.number().nullable(),
-      income_per_gb: z.number().nullable(),
+      administration_fee: z.number().nullable().optional(),
+      income_per_gb: z.number().nullable().optional(),
       commission_fee: z.number().nullable().optional(),
       payment_method: z.enum(["invoice", "direct"]),
-      requires_card: z.boolean().nullable(),
+      requires_card: z.boolean().nullable().optional(),
       next_invoice: timestampNullableOptional,
       last_invoice: timestampNullableOptional,
       pricing_strategies: {
@@ -919,7 +914,14 @@ function buildClientSchema(spec, path = []) {
   if (spec instanceof z.ZodType) {
     return wrapZodSchema(spec);
   }
-  if ("_type" in spec && spec._type === "array") {
+  if (typeof spec === "object" && spec !== null && ("_def" in spec || "~standard" in spec && spec["~standard"]?.vendor === "zod")) {
+    try {
+      return wrapZodSchema(spec);
+    } catch (error) {
+      console.warn(`Failed to use object as Zod schema at "${pathString}":`, error);
+    }
+  }
+  if (typeof spec === "object" && spec !== null && "_type" in spec && spec._type === "array") {
     if (!("of" in spec)) {
       throw new Error(`Array spec at "${pathString}" is missing 'of'`);
     }
@@ -930,7 +932,7 @@ function buildClientSchema(spec, path = []) {
       schema = schema.optional();
     return schema;
   }
-  if ("_type" in spec && spec._type === "record") {
+  if (typeof spec === "object" && spec !== null && "_type" in spec && spec._type === "record") {
     if (!("of" in spec)) {
       throw new Error(`Record spec at "${pathString}" is missing 'of'`);
     }
@@ -941,15 +943,21 @@ function buildClientSchema(spec, path = []) {
       schema = schema.optional();
     return schema;
   }
-  if ("_type" in spec && spec._type === "timestamp") {
-    let schema = z.date();
+  if (typeof spec === "object" && spec !== null && "_type" in spec && spec._type === "timestamp") {
+    let schema = z.preprocess((val) => {
+      if (typeof val === "string" || typeof val === "number") {
+        const date = new Date(val);
+        return isNaN(date.getTime()) ? void 0 : date;
+      }
+      return val;
+    }, z.date({ required_error: "Date is required", invalid_type_error: "Invalid date format" }));
     if (spec.nullable)
       schema = schema.nullable();
     if (spec.optional)
       schema = schema.optional();
     return schema;
   }
-  if ("_type" in spec && spec._type === "docRef") {
+  if (typeof spec === "object" && spec !== null && "_type" in spec && spec._type === "docRef") {
     let schema = z.string();
     if (spec.nullable)
       schema = schema.nullable();
@@ -957,11 +965,18 @@ function buildClientSchema(spec, path = []) {
       schema = schema.optional();
     return schema;
   }
-  if (typeof spec === "object" && "_type" in spec && spec._type === "object" && "of" in spec) {
+  if (typeof spec === "object" && spec !== null && "_type" in spec && spec._type === "object" && "of" in spec) {
     return wrapObjectSchema(spec, path, buildClientSchema);
   }
-  if (isSchemaSpec(spec) || typeof spec === "object" && "_type" in spec && spec._type === "object") {
+  if (isSchemaSpec(spec) || typeof spec === "object" && spec !== null && "_type" in spec && spec._type === "object") {
     return wrapPlainObjectSchema(spec, path, buildClientSchema);
+  }
+  if (typeof spec === "object" && spec !== null) {
+    try {
+      return wrapPlainObjectSchema(spec, path, buildClientSchema);
+    } catch (error) {
+      console.warn(`Failed to handle object as plain schema at "${pathString}":`, error);
+    }
   }
   throw new Error(`Unknown or malformed spec at "${pathString}": ${JSON.stringify(spec)}`);
 }
@@ -980,6 +995,13 @@ var HPartnerSchema = buildClientSchema(partnerSchemaSpec);
 var HPriceListSchema = buildClientSchema(priceListSchemaSpec);
 var HFinancialPropertiesSchema = buildClientSchema(financialPropertiesSchema);
 var HApiLogSchema = buildClientSchema(apiLogSchemaSpec);
+var HPackagePriceSchema = buildClientSchema(packagePriceSchema);
+buildClientSchema(hubbyModelSpec);
+var HPartnerAppSchema = buildClientSchema(partnerSchemaSpec);
+var HPlatformSettingsSchema = buildClientSchema(platformSettingsSchema);
+var HVisualIdentitySchema = buildClientSchema(visualIdentitySchema);
+var HPricingStrategySchema = buildClientSchema(pricingStrategySchema);
+var HFreeEsimSchema = buildClientSchema(freeEsimSchema);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1003,7 +1025,7 @@ function convertJSToFirestore(input, spec) {
   if ("_type" in spec) {
     switch (spec._type) {
       case "timestamp":
-        return input instanceof Date ? Timestamp.fromDate(input) : input;
+        return input instanceof Date ? input : new Date(input);
       case "docRef":
         return db.doc(`${spec.collection}/${input}`);
       case "array":
@@ -1037,24 +1059,62 @@ function convertJSToFirestore(input, spec) {
   }
   return input;
 }
-function convertFirestoreToJS(data) {
-  if (data instanceof Timestamp) {
-    return data.toDate();
+function isDuckTimestamp(obj) {
+  return obj && typeof obj === "object" && typeof obj.toDate === "function" && Object.prototype.toString.call(obj.toDate()) === "[object Date]";
+}
+function isDuckDocumentRef(obj) {
+  return obj && typeof obj === "object" && typeof obj.id === "string" && typeof obj.path === "string";
+}
+function convertFirestoreToJS(input, spec, path = []) {
+  path.join(".") || "<root>";
+  if (input instanceof Timestamp || isDuckTimestamp(input)) {
+    return input.toDate();
   }
-  if (data instanceof DocumentReference) {
-    return data.id;
+  if (input instanceof DocumentReference || isDuckDocumentRef(input)) {
+    return input.id;
   }
-  if (Array.isArray(data)) {
-    return data.map((item) => convertFirestoreToJS(item));
+  if (input === null || input === void 0)
+    return input;
+  if (!spec)
+    return input;
+  if (spec instanceof z.ZodType) {
+    return input;
   }
-  if (data !== null && typeof data === "object") {
+  if ("_type" in spec) {
+    switch (spec._type) {
+      case "timestamp":
+        return input instanceof Timestamp || isDuckTimestamp(input) ? input.toDate() : input;
+      case "docRef":
+        return input instanceof DocumentReference || isDuckDocumentRef(input) ? input.id : input;
+      case "array":
+        return Array.isArray(input) ? input.map((item, i) => convertFirestoreToJS(item, spec.of, [...path, `[${i}]`])) : input;
+      case "record":
+        if (typeof input !== "object" || input === null)
+          return input;
+        return Object.fromEntries(
+          Object.entries(input).map(([k, v]) => [
+            k,
+            convertFirestoreToJS(v, spec.of, [...path, k])
+          ])
+        );
+      case "object":
+        if (!spec.of || typeof spec.of !== "object")
+          return input;
+        const result = {};
+        for (const [key, fieldSpec] of Object.entries(spec.of)) {
+          result[key] = convertFirestoreToJS(input[key], fieldSpec, [...path, key]);
+        }
+        return result;
+    }
+  }
+  if (typeof spec === "object" && typeof input === "object" && !Array.isArray(input)) {
     const result = {};
-    for (const [key, value] of Object.entries(data)) {
-      result[key] = convertFirestoreToJS(value);
+    for (const [key, valSpec] of Object.entries(spec)) {
+      result[key] = convertFirestoreToJS(input[key], valSpec, [...path, key]);
     }
     return result;
   }
-  return data;
+  return input;
 }
 
 // src/index.server.ts
@@ -1071,7 +1131,7 @@ var PromoCodeSchema = buildServerSchema(promoCodeSchemaSpec);
 var PartnerSchema = buildServerSchema(partnerSchemaSpec);
 var PriceListSchema = buildServerSchema(priceListSchemaSpec);
 var ApiLogSchema = buildServerSchema(apiLogSchemaSpec);
-var HubbyModelSchema = buildServerSchema(hubbyModelSpec);
+var HubbyModelSchema2 = buildServerSchema(hubbyModelSpec);
 var VisualIdentitySchema = buildServerSchema(visualIdentitySchema);
 var PackagePriceSchema = buildServerSchema(packagePriceSchemaSpec);
 var PlatformSettingsSchema = buildServerSchema(platformSettingsSchemaSpec);
@@ -1090,32 +1150,32 @@ var BookingStatusSchema = bookingStatusSchema;
 var CommunicationOptionsSchema = communicationOptionsSchema;
 var VisualIdentityBannersSchema = visualIdentityBannersSchema;
 var partnerFromFirestore = (partner) => {
-  convertFirestoreToJS(partner);
+  return convertFirestoreToJS(partner, partnerSchemaSpec);
 };
 var partnerToFirestore = (partner) => {
-  convertJSToFirestore(partner, partnerSchemaSpec);
+  return convertJSToFirestore(partner, partnerSchemaSpec);
 };
 var userToFirestore = (user) => {
-  convertJSToFirestore(user, userSchemaSpec);
+  return convertJSToFirestore(user, userSchemaSpec);
 };
 var userFromFirestore = (user) => {
-  convertFirestoreToJS(user);
+  return convertFirestoreToJS(user, userSchemaSpec);
 };
 var priceListFromFirestore = (priceList) => {
-  convertFirestoreToJS(priceList);
+  return convertFirestoreToJS(priceList, priceListSchemaSpec);
 };
 var priceListToFirestore = (priceList) => {
-  convertJSToFirestore(priceList, priceListSchemaSpec);
+  return convertJSToFirestore(priceList, priceListSchemaSpec);
 };
 var promoCodeFromFirestore = (promoCode) => {
-  convertFirestoreToJS(promoCode);
+  return convertFirestoreToJS(promoCode, promoCodeSchemaSpec);
 };
 var promoCodeToFirestore = (promoCode) => {
-  convertJSToFirestore(promoCode, promoCodeSchemaSpec);
+  return convertJSToFirestore(promoCode, promoCodeSchemaSpec);
 };
 var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 var SUPPORTED_LOCALES3 = SUPPORTED_LOCALES;
 
-export { AddressSchema, ApiLogSchema, BankingDetailsSchema, BookingSchema, BookingStatusSchema, CommunicationChannelSchema, CommunicationOptionsSchema, CountrySchema, CurrencySchema, ESIMSchema, HAddressSchema, HApiLogSchema, HBankingDetailsSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HMessageSchema, HPackageSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPriceListSchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HScheduleFilterSchema, HUserSchema, HVisualIdentityBannerSchema, HubbyModelSchema, MessageSchema, PackagePriceSchema, PackageSchema, PartnerContactSchema, PartnerDataSchema, PartnerPackageSpecificationSchema, PartnerSchema, PaymentSchema, PlatformSettingsSchema, PriceListSchema, PromoCodeSchema, PromoPackageSpecificationSchema, RegistrationSchema, SUPPORTED_LOCALES3 as SUPPORTED_LOCALES, ScheduleFilterSchema, ScheduleSchema, UserFirestoreSchema, UserSchema, VisualIdentityBannerSchema, VisualIdentityBannersSchema, VisualIdentitySchema, partnerAppSchema, partnerFromFirestore, partnerToFirestore, priceListFromFirestore, priceListToFirestore, promoCodeFromFirestore, promoCodeToFirestore, userFromFirestore, userToFirestore };
+export { AddressSchema, ApiLogSchema, BankingDetailsSchema, BookingSchema, BookingStatusSchema, CommunicationChannelSchema, CommunicationOptionsSchema, CountrySchema, CurrencySchema, ESIMSchema, HAddressSchema, HApiLogSchema, HBankingDetailsSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HScheduleFilterSchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema2 as HubbyModelSchema, MessageSchema, PackagePriceSchema, PackageSchema, PartnerContactSchema, PartnerDataSchema, PartnerPackageSpecificationSchema, PartnerSchema, PaymentSchema, PlatformSettingsSchema, PriceListSchema, PromoCodeSchema, PromoPackageSpecificationSchema, RegistrationSchema, SUPPORTED_LOCALES3 as SUPPORTED_LOCALES, ScheduleFilterSchema, ScheduleSchema, UserFirestoreSchema, UserSchema, VisualIdentityBannerSchema, VisualIdentityBannersSchema, VisualIdentitySchema, partnerAppSchema, partnerFromFirestore, partnerToFirestore, priceListFromFirestore, priceListToFirestore, promoCodeFromFirestore, promoCodeToFirestore, userFromFirestore, userToFirestore };
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.js.map

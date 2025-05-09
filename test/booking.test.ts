@@ -1,6 +1,6 @@
 import { buildClientSchema } from '../src/schemas/builders/client';
 import { buildServerSchema } from '../src/schemas/builders/server';
-import { convertFirestoreToJS, convertJSToFirestore } from '../src/schemas/utils/firestoreTansformUtils';
+import { convertFirestoreToJS, convertJSToFirestore } from '../src/schemas/utils/firestoreTransformUtils';
 import { bookingSchemaSpec } from '../src/schemas/specs/booking';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 
@@ -10,7 +10,7 @@ const ServerSchema = buildServerSchema(bookingSchemaSpec);
 const roundtrip = (input: any) => {
     const parsedForServer = ServerSchema.parse(input);
     const firestoreData = convertJSToFirestore(parsedForServer, bookingSchemaSpec);
-    const jsData = convertFirestoreToJS(firestoreData);
+    const jsData = convertFirestoreToJS(firestoreData, bookingSchemaSpec);
     return ClientSchema.parse(jsData);
 };
 
@@ -67,7 +67,7 @@ describe('Booking schema roundtrip', () => {
         expect(firestoreData.users[0]).toBeInstanceOf(DocumentReference);
 
         // Simulate Firestore snapshot conversion
-        const jsData = convertFirestoreToJS(firestoreData);
+        const jsData = convertFirestoreToJS(firestoreData, bookingSchemaSpec);
 
         // Validate back with client schema
         const parsedClient = ClientSchema.parse(jsData);
@@ -133,7 +133,7 @@ describe('Booking schema roundtrip', () => {
         const firestoreData = convertJSToFirestore(parsedForServer, bookingSchemaSpec);
 
         // Simulate Firestore snapshot conversion
-        const jsData = convertFirestoreToJS(firestoreData);
+        const jsData = convertFirestoreToJS(firestoreData, bookingSchemaSpec);
 
         // Validate back with client schema
         const parsedClient = ClientSchema.parse(jsData);

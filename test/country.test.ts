@@ -1,6 +1,6 @@
 import { buildClientSchema } from '../src/schemas/builders/client';
 import { buildServerSchema } from '../src/schemas/builders/server';
-import { convertFirestoreToJS, convertJSToFirestore } from '../src/schemas/utils/firestoreTansformUtils';
+import { convertFirestoreToJS, convertJSToFirestore } from '../src/schemas/utils/firestoreTransformUtils';
 import { countrySchemaSpec } from '../src/schemas/specs/country';
 
 const ClientSchema = buildClientSchema(countrySchemaSpec);
@@ -9,7 +9,7 @@ const ServerSchema = buildServerSchema(countrySchemaSpec);
 const roundtrip = (input: any) => {
     const parsedForServer = ServerSchema.parse(input);
     const firestoreData = convertJSToFirestore(parsedForServer, countrySchemaSpec);
-    const jsData = convertFirestoreToJS(firestoreData);
+    const jsData = convertFirestoreToJS(firestoreData, countrySchemaSpec);
     return ClientSchema.parse(jsData);
 };
 
@@ -39,7 +39,7 @@ describe('Country schema roundtrip', () => {
         // No need to check for Timestamp or DocumentReference since Country doesn't have these
 
         // Simulate Firestore snapshot conversion
-        const jsData = convertFirestoreToJS(firestoreData);
+        const jsData = convertFirestoreToJS(firestoreData, countrySchemaSpec);
 
         // Validate back with client schema
         const parsedClient = ClientSchema.parse(jsData);
@@ -77,7 +77,7 @@ describe('Country schema roundtrip', () => {
         const firestoreData = convertJSToFirestore(parsedForServer, countrySchemaSpec);
 
         // Simulate Firestore snapshot conversion
-        const jsData = convertFirestoreToJS(firestoreData);
+        const jsData = convertFirestoreToJS(firestoreData, countrySchemaSpec);
 
         // Validate back with client schema
         const parsedClient = ClientSchema.parse(jsData);

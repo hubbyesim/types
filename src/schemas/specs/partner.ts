@@ -66,11 +66,11 @@ export const pricingStrategySchema = z.object({
 
 // Financial properties schema
 export const financialPropertiesSchema = z.object({
-    administration_fee: z.number().nullable(),
-    income_per_gb: z.number().nullable(),
+    administration_fee: z.number().nullable().optional(),
+    income_per_gb: z.number().nullable().optional(),
     commission_fee: z.number().nullable().optional(),
     payment_method: z.enum(['invoice', 'direct']),
-    requires_card: z.boolean().nullable(),
+    requires_card: z.boolean().nullable().optional(),
     next_invoice: z.object({
         _type: z.literal('timestamp'),
         nullable: z.literal(true),
@@ -120,9 +120,9 @@ export const visualIdentitySchema = z.object({
     primary_color: z.string(),
     secondary_color: z.string(),
     logo: z.string(),
-    font: z.string(),
+    font: z.string().nullable().optional(),
     top_banner: visualIdentityBannersSchema.optional(),
-    mid_banner: visualIdentityBannerSchema.optional()
+    mid_banner: visualIdentityBannersSchema.optional()
 });
 
 // Partner contact schema
@@ -176,6 +176,15 @@ export const scheduleSchema = z.object({
     filter: scheduleFilterSchema.nullable().optional()
 });
 
+export const freeEsimSchema = z.object({
+    package_specification: z.object({
+        size: z.string(),
+        type: z.string(),
+        destination: z.string()
+    }),
+    allowance: z.number()
+});
+
 // Platform settings schema
 export const platformSettingsSchema = z.object({
     package_strategy: z.object({
@@ -183,14 +192,7 @@ export const platformSettingsSchema = z.object({
         iso3_white_list: z.array(z.string()).optional(),
         parameters: z.any()
     }).nullable().optional(),
-    free_esim: z.object({
-        package_specification: z.object({
-            size: z.string(),
-            type: z.string(),
-            destination: z.string()
-        }),
-        allowance: z.number()
-    }).nullable().optional(),
+    free_esim: freeEsimSchema.nullable().optional(),
     booking_defaults: z.object({
         locale: supportedLocalesSchema
     }).nullable().optional(),
@@ -364,11 +366,11 @@ export const partnerSchemaSpec = markAsSchemaSpec({
     financial_properties: {
         _type: 'object' as const,
         of: {
-            administration_fee: z.number().nullable(),
-            income_per_gb: z.number().nullable(),
+            administration_fee: z.number().nullable().optional(),
+            income_per_gb: z.number().nullable().optional(),
             commission_fee: z.number().nullable().optional(),
             payment_method: z.enum(['invoice', 'direct']),
-            requires_card: z.boolean().nullable(),
+            requires_card: z.boolean().nullable().optional(),
             next_invoice: timestampNullableOptional,
             last_invoice: timestampNullableOptional,
             pricing_strategies: {

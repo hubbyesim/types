@@ -5,7 +5,8 @@ import {
     HPriceListSchema
 } from "../src";
 import { Timestamp } from "firebase-admin/firestore";
-import { convertFirestoreToJS } from "../src/schemas/utils/firestoreTansformUtils";
+import { convertFirestoreToJS } from "../src/schemas/utils/firestoreTransformUtils";
+import { partnerSchemaSpec, priceListSchemaSpec } from "../src/schemas/specs/partner";
 
 describe("Partner Schema", () => {
     it("should convert from server to client and back", () => {
@@ -150,7 +151,7 @@ describe("Partner Schema", () => {
         );
 
         // Convert server object to JS for client use
-        const jsData = convertFirestoreToJS(serverObj);
+        const jsData = convertFirestoreToJS(serverObj, partnerSchemaSpec);
 
         // Now parse with client schema to convert back
         const roundtripClientObj = HPartnerSchema.parse(jsData);
@@ -220,7 +221,7 @@ describe("PriceList Schema", () => {
         expect(serverObj.package_prices[0].package.id).toBe(clientPriceList.package_prices[0].package);
 
         // Convert server object to JS for client use
-        const jsData = convertFirestoreToJS(serverObj);
+        const jsData = convertFirestoreToJS(serverObj, priceListSchemaSpec);
 
         // Now parse with client schema to convert back
         const roundtripClientObj = HPriceListSchema.parse(jsData);
@@ -238,5 +239,76 @@ describe("PriceList Schema", () => {
         // Verify other fields remained intact
         expect(roundtripClientObj.name).toBe(clientPriceList.name);
         expect(roundtripClientObj.description).toBe(clientPriceList.description);
+    });
+});
+
+describe("Firebase to JS conversion", () => {
+    it("should convert a Firebase partner object directly to JS", () => {
+        const now = new Date();
+        const timestamp = Timestamp.fromDate(now);
+
+        // Create a Firebase-style partner object (server format)
+        const firebasePartner = {
+            id: "firebase-partner-456",
+            created_at: timestamp,
+            updated_at: timestamp,
+            created_by: "user1",
+            updated_by: null,
+
+            // Partner specific fields
+            name: "Firebase Partner Inc",
+            type: "hotel-chain",
+            is_active: true,
+            external_id: "fb-456",
+
+            // Nested objects
+            contact: {
+                email: "firebase@example.com",
+                office_phone: "+9876543210"
+            },
+            address: {
+                street: "456 Cloud Ave",
+                city: "Rotterdam",
+                postal_code: "3000 XY",
+                country: "Netherlands"
+            },
+            registration: {
+                chamber_of_commerce_number: "87654321",
+                vat_number: "NL987654321B01"
+            },
+
+            // References - these would be DocumentReference in actual Firestore
+            parent: null,
+            users: [
+                "user-3",
+                "user-4"
+            ],
+
+            // Financial properties with nested document references
+            financial_properties: {
+                administration_fee: 30.00,
+                payment_method: "credit-card",
+                pricing_strategies: {
+                    partner: {
+                        default_price_list: "price-list-3"
+                    }
+                }
+            }
+        };
+
+        // Convert directly from Firebase format to JS
+        const jsPartner = convertFirestoreToJS(firebasePartner, partnerSchemaSpec);
+
+        // Verify conversion worked correctly
+        expect(jsPartner.id).toBe(firebasePartner.id);
+        expect(jsPartner.name).toBe(firebasePartner.name);
+        expect(jsPartner.type).toBe(firebasePartner.type);
+        expect(jsPartner.created_at).toBeInstanceOf(Date);
+        expect(jsPartner.contact.email).toBe(firebasePartner.contact.email);
+        expect(jsPartner.address.city).toBe(firebasePartner.address.city);
+
+        // Verify references were properly converted
+        expect(jsPartner.users).toEqual(["user-3", "user-4"]);
+        expect(jsPartner.financial_properties.pricing_strategies.partner.default_price_list).toBe("price-list-3");
     });
 }); 

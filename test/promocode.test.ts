@@ -1,6 +1,7 @@
 import { PromoCodeSchema, HPromoCodeSchema } from "../src";
 import { Timestamp } from "firebase-admin/firestore";
-import { convertFirestoreToJS } from "../src/schemas/utils/firestoreTansformUtils";
+import { convertFirestoreToJS } from "../src/schemas/utils/firestoreTransformUtils";
+import { promoCodeSchemaSpec } from "../src/schemas/specs/promocode";
 
 describe("PromoCode Schema", () => {
     it("should convert from server to client and back", () => {
@@ -54,7 +55,7 @@ describe("PromoCode Schema", () => {
         expect(serverObj.country.id).toBe(clientPromoCode.country);
 
         // Convert server object to JS for client use
-        const jsData = convertFirestoreToJS(serverObj);
+        const jsData = convertFirestoreToJS(serverObj, promoCodeSchemaSpec);
 
         // Now parse with client schema to convert back
         const roundtripClientObj = HPromoCodeSchema.parse(jsData);

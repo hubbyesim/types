@@ -5,12 +5,6 @@ var zod = require('zod');
 // src/schemas/builders/client.ts
 function wrapZodSchema(schema, options) {
   let wrapped = schema;
-  if (options?.nullable && !wrapped.isNullable?.()) {
-    wrapped = wrapped.nullable();
-  }
-  if (options?.optional && !wrapped.isOptional?.()) {
-    wrapped = wrapped.optional();
-  }
   return wrapped;
 }
 function wrapObjectSchema(spec, path, builder) {
@@ -72,7 +66,14 @@ function buildClientSchema(spec, path = []) {
   if (spec instanceof zod.z.ZodType) {
     return wrapZodSchema(spec);
   }
-  if ("_type" in spec && spec._type === "array") {
+  if (typeof spec === "object" && spec !== null && ("_def" in spec || "~standard" in spec && spec["~standard"]?.vendor === "zod")) {
+    try {
+      return wrapZodSchema(spec);
+    } catch (error) {
+      console.warn(`Failed to use object as Zod schema at "${pathString}":`, error);
+    }
+  }
+  if (typeof spec === "object" && spec !== null && "_type" in spec && spec._type === "array") {
     if (!("of" in spec)) {
       throw new Error(`Array spec at "${pathString}" is missing 'of'`);
     }
@@ -83,7 +84,7 @@ function buildClientSchema(spec, path = []) {
       schema = schema.optional();
     return schema;
   }
-  if ("_type" in spec && spec._type === "record") {
+  if (typeof spec === "object" && spec !== null && "_type" in spec && spec._type === "record") {
     if (!("of" in spec)) {
       throw new Error(`Record spec at "${pathString}" is missing 'of'`);
     }
@@ -94,15 +95,21 @@ function buildClientSchema(spec, path = []) {
       schema = schema.optional();
     return schema;
   }
-  if ("_type" in spec && spec._type === "timestamp") {
-    let schema = zod.z.date();
+  if (typeof spec === "object" && spec !== null && "_type" in spec && spec._type === "timestamp") {
+    let schema = zod.z.preprocess((val) => {
+      if (typeof val === "string" || typeof val === "number") {
+        const date = new Date(val);
+        return isNaN(date.getTime()) ? void 0 : date;
+      }
+      return val;
+    }, zod.z.date({ required_error: "Date is required", invalid_type_error: "Invalid date format" }));
     if (spec.nullable)
       schema = schema.nullable();
     if (spec.optional)
       schema = schema.optional();
     return schema;
   }
-  if ("_type" in spec && spec._type === "docRef") {
+  if (typeof spec === "object" && spec !== null && "_type" in spec && spec._type === "docRef") {
     let schema = zod.z.string();
     if (spec.nullable)
       schema = schema.nullable();
@@ -110,11 +117,18 @@ function buildClientSchema(spec, path = []) {
       schema = schema.optional();
     return schema;
   }
-  if (typeof spec === "object" && "_type" in spec && spec._type === "object" && "of" in spec) {
+  if (typeof spec === "object" && spec !== null && "_type" in spec && spec._type === "object" && "of" in spec) {
     return wrapObjectSchema(spec, path, buildClientSchema);
   }
-  if (isSchemaSpec(spec) || typeof spec === "object" && "_type" in spec && spec._type === "object") {
+  if (isSchemaSpec(spec) || typeof spec === "object" && spec !== null && "_type" in spec && spec._type === "object") {
     return wrapPlainObjectSchema(spec, path, buildClientSchema);
+  }
+  if (typeof spec === "object" && spec !== null) {
+    try {
+      return wrapPlainObjectSchema(spec, path, buildClientSchema);
+    } catch (error) {
+      console.warn(`Failed to handle object as plain schema at "${pathString}":`, error);
+    }
   }
   throw new Error(`Unknown or malformed spec at "${pathString}": ${JSON.stringify(spec)}`);
 }
@@ -130,13 +144,13 @@ var BOOKING_COLLECTION = "bookings";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: false };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
-({
+var hubbyModelSpec = {
   id: zod.z.string(),
   created_at: timestampRequired,
   updated_at: timestampNullableOptional,
   created_by: { _type: "docRef", collection: "users", nullable: false, optional: false },
   updated_by: { _type: "docRef", collection: "users", nullable: true, optional: true }
-});
+};
 var SUPPORTED_LOCALES = [
   "en-US",
   "en-GB",
@@ -511,11 +525,11 @@ var pricingStrategySchema = zod.z.object({
   custom_prices: zod.z.array(packagePriceSchema)
 });
 var financialPropertiesSchema = zod.z.object({
-  administration_fee: zod.z.number().nullable(),
-  income_per_gb: zod.z.number().nullable(),
+  administration_fee: zod.z.number().nullable().optional(),
+  income_per_gb: zod.z.number().nullable().optional(),
   commission_fee: zod.z.number().nullable().optional(),
   payment_method: zod.z.enum(["invoice", "direct"]),
-  requires_card: zod.z.boolean().nullable(),
+  requires_card: zod.z.boolean().nullable().optional(),
   next_invoice: zod.z.object({
     _type: zod.z.literal("timestamp"),
     nullable: zod.z.literal(true),
@@ -558,9 +572,9 @@ var visualIdentitySchema = zod.z.object({
   primary_color: zod.z.string(),
   secondary_color: zod.z.string(),
   logo: zod.z.string(),
-  font: zod.z.string(),
+  font: zod.z.string().nullable().optional(),
   top_banner: visualIdentityBannersSchema.optional(),
-  mid_banner: visualIdentityBannerSchema.optional()
+  mid_banner: visualIdentityBannersSchema.optional()
 });
 var partnerContactSchema = zod.z.object({
   email: zod.z.string().nullable(),
@@ -601,20 +615,21 @@ var scheduleSchema = zod.z.object({
   moment: zod.z.enum(["departure_date", "return_date", "immediate"]),
   filter: scheduleFilterSchema.nullable().optional()
 });
+var freeEsimSchema = zod.z.object({
+  package_specification: zod.z.object({
+    size: zod.z.string(),
+    type: zod.z.string(),
+    destination: zod.z.string()
+  }),
+  allowance: zod.z.number()
+});
 var platformSettingsSchema = zod.z.object({
   package_strategy: zod.z.object({
     name: zod.z.string(),
     iso3_white_list: zod.z.array(zod.z.string()).optional(),
     parameters: zod.z.any()
   }).nullable().optional(),
-  free_esim: zod.z.object({
-    package_specification: zod.z.object({
-      size: zod.z.string(),
-      type: zod.z.string(),
-      destination: zod.z.string()
-    }),
-    allowance: zod.z.number()
-  }).nullable().optional(),
+  free_esim: freeEsimSchema.nullable().optional(),
   booking_defaults: zod.z.object({
     locale: supportedLocalesSchema
   }).nullable().optional(),
@@ -774,11 +789,11 @@ var partnerSchemaSpec = markAsSchemaSpec({
   financial_properties: {
     _type: "object",
     of: {
-      administration_fee: zod.z.number().nullable(),
-      income_per_gb: zod.z.number().nullable(),
+      administration_fee: zod.z.number().nullable().optional(),
+      income_per_gb: zod.z.number().nullable().optional(),
       commission_fee: zod.z.number().nullable().optional(),
       payment_method: zod.z.enum(["invoice", "direct"]),
-      requires_card: zod.z.boolean().nullable(),
+      requires_card: zod.z.boolean().nullable().optional(),
       next_invoice: timestampNullableOptional,
       last_invoice: timestampNullableOptional,
       pricing_strategies: {
@@ -911,6 +926,13 @@ var HPartnerSchema = buildClientSchema(partnerSchemaSpec);
 var HPriceListSchema = buildClientSchema(priceListSchemaSpec);
 var HFinancialPropertiesSchema = buildClientSchema(financialPropertiesSchema);
 var HApiLogSchema = buildClientSchema(apiLogSchemaSpec);
+var HPackagePriceSchema = buildClientSchema(packagePriceSchema);
+var HubbyModelSchema = buildClientSchema(hubbyModelSpec);
+var HPartnerAppSchema = buildClientSchema(partnerSchemaSpec);
+var HPlatformSettingsSchema = buildClientSchema(platformSettingsSchema);
+var HVisualIdentitySchema = buildClientSchema(visualIdentitySchema);
+var HPricingStrategySchema = buildClientSchema(pricingStrategySchema);
+var HFreeEsimSchema = buildClientSchema(freeEsimSchema);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -936,20 +958,27 @@ exports.HCountrySchema = HCountrySchema;
 exports.HCurrencySchema = HCurrencySchema;
 exports.HESIMSchema = HESIMSchema;
 exports.HFinancialPropertiesSchema = HFinancialPropertiesSchema;
+exports.HFreeEsimSchema = HFreeEsimSchema;
 exports.HMessageSchema = HMessageSchema;
+exports.HPackagePriceSchema = HPackagePriceSchema;
 exports.HPackageSchema = HPackageSchema;
+exports.HPartnerAppSchema = HPartnerAppSchema;
 exports.HPartnerContactSchema = HPartnerContactSchema;
 exports.HPartnerDataSchema = HPartnerDataSchema;
 exports.HPartnerPackageSpecificationSchema = HPartnerPackageSpecificationSchema;
 exports.HPartnerSchema = HPartnerSchema;
 exports.HPaymentSchema = HPaymentSchema;
+exports.HPlatformSettingsSchema = HPlatformSettingsSchema;
 exports.HPriceListSchema = HPriceListSchema;
+exports.HPricingStrategySchema = HPricingStrategySchema;
 exports.HPromoCodeSchema = HPromoCodeSchema;
 exports.HPromoPackageSpecificationSchema = HPromoPackageSpecificationSchema;
 exports.HRegistrationSchema = HRegistrationSchema;
 exports.HScheduleFilterSchema = HScheduleFilterSchema;
 exports.HUserSchema = HUserSchema;
 exports.HVisualIdentityBannerSchema = HVisualIdentityBannerSchema;
+exports.HVisualIdentitySchema = HVisualIdentitySchema;
+exports.HubbyModelSchema = HubbyModelSchema;
 exports.SUPPORTED_LOCALES = SUPPORTED_LOCALES3;
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.cjs.map

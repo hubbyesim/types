@@ -39,7 +39,7 @@ import { z } from 'zod';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 export * from './index.client';
 
-import { convertFirestoreToJS, convertJSToFirestore } from './schemas/utils/firestoreTansformUtils';
+import { convertFirestoreToJS, convertJSToFirestore } from './schemas/utils/firestoreTransformUtils';
 import { HPartner, HPriceList, HPromoCode } from './index.client';
 import { buildClientSchema } from './schemas/builders/client';
 
@@ -136,35 +136,35 @@ export type HubbyModelFirestore = {
 }
 
 export const partnerFromFirestore = (partner: Partner): HPartner => {
-    convertFirestoreToJS(partner);
+    return convertFirestoreToJS(partner, partnerSchemaSpec);
 }
 
 export const partnerToFirestore = (partner: HPartner): Partner => {
-    convertJSToFirestore(partner, partnerSchemaSpec);
+    return convertJSToFirestore(partner, partnerSchemaSpec);
 }
 
 export const userToFirestore = (user: User): UserFirestore => {
-    convertJSToFirestore(user, userSchemaSpec);
+    return convertJSToFirestore(user, userSchemaSpec);
 }
 
 export const userFromFirestore = (user: UserFirestore): User => {
-    convertFirestoreToJS(user);
+    return convertFirestoreToJS(user, userSchemaSpec);
 }
 
 export const priceListFromFirestore = (priceList: PriceList): HPriceList => {
-    convertFirestoreToJS(priceList);
+    return convertFirestoreToJS(priceList, priceListSchemaSpec);
 }
 
 export const priceListToFirestore = (priceList: HPriceList): PriceList => {
-    convertJSToFirestore(priceList, priceListSchemaSpec);
+    return convertJSToFirestore(priceList, priceListSchemaSpec);
 }
 
 export const promoCodeFromFirestore = (promoCode: PromoCode): HPromoCode => {
-    convertFirestoreToJS(promoCode);
+    return convertFirestoreToJS(promoCode, promoCodeSchemaSpec);
 }
 
 export const promoCodeToFirestore = (promoCode: HPromoCode): PromoCode => {
-    convertJSToFirestore(promoCode, promoCodeSchemaSpec);
+    return convertJSToFirestore(promoCode, promoCodeSchemaSpec);
 }
 
 export const partnerAppSchema = buildClientSchema(partnerSchemaSpec);

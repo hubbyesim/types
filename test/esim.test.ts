@@ -1,6 +1,6 @@
 import { buildClientSchema } from '../src/schemas/builders/client';
 import { buildServerSchema } from '../src/schemas/builders/server';
-import { convertFirestoreToJS, convertJSToFirestore } from '../src/schemas/utils/firestoreTansformUtils';
+import { convertFirestoreToJS, convertJSToFirestore } from '../src/schemas/utils/firestoreTransformUtils';
 import { esimSchemaSpec } from '../src/schemas/specs/esim';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 
@@ -10,7 +10,7 @@ const ServerSchema = buildServerSchema(esimSchemaSpec);
 const roundtrip = (input: any) => {
     const parsedForServer = ServerSchema.parse(input);
     const firestoreData = convertJSToFirestore(parsedForServer, esimSchemaSpec);
-    const jsData = convertFirestoreToJS(firestoreData);
+    const jsData = convertFirestoreToJS(firestoreData, esimSchemaSpec);
     return ClientSchema.parse(jsData);
 };
 
@@ -63,7 +63,7 @@ describe('ESIM schema roundtrip', () => {
         expect(firestoreData.partner).toBeInstanceOf(DocumentReference);
 
         // Simulate Firestore snapshot conversion
-        const jsData = convertFirestoreToJS(firestoreData);
+        const jsData = convertFirestoreToJS(firestoreData, esimSchemaSpec);
 
         // Validate back with client schema
         const parsedClient = ClientSchema.parse(jsData);

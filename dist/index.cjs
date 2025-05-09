@@ -7,12 +7,6 @@ var app = require('firebase-admin/app');
 // src/schemas/builders/server.ts
 function wrapZodSchema(schema, options) {
   let wrapped = schema;
-  if (options?.nullable && !wrapped.isNullable?.()) {
-    wrapped = wrapped.nullable();
-  }
-  if (options?.optional && !wrapped.isOptional?.()) {
-    wrapped = wrapped.optional();
-  }
   return wrapped;
 }
 function wrapObjectSchema(spec, path, builder) {
@@ -528,11 +522,11 @@ var pricingStrategySchema = zod.z.object({
   custom_prices: zod.z.array(packagePriceSchema)
 });
 var financialPropertiesSchema = zod.z.object({
-  administration_fee: zod.z.number().nullable(),
-  income_per_gb: zod.z.number().nullable(),
+  administration_fee: zod.z.number().nullable().optional(),
+  income_per_gb: zod.z.number().nullable().optional(),
   commission_fee: zod.z.number().nullable().optional(),
   payment_method: zod.z.enum(["invoice", "direct"]),
-  requires_card: zod.z.boolean().nullable(),
+  requires_card: zod.z.boolean().nullable().optional(),
   next_invoice: zod.z.object({
     _type: zod.z.literal("timestamp"),
     nullable: zod.z.literal(true),
@@ -575,9 +569,9 @@ var visualIdentitySchema = zod.z.object({
   primary_color: zod.z.string(),
   secondary_color: zod.z.string(),
   logo: zod.z.string(),
-  font: zod.z.string(),
+  font: zod.z.string().nullable().optional(),
   top_banner: visualIdentityBannersSchema.optional(),
-  mid_banner: visualIdentityBannerSchema.optional()
+  mid_banner: visualIdentityBannersSchema.optional()
 });
 var partnerContactSchema = zod.z.object({
   email: zod.z.string().nullable(),
@@ -618,20 +612,21 @@ var scheduleSchema = zod.z.object({
   moment: zod.z.enum(["departure_date", "return_date", "immediate"]),
   filter: scheduleFilterSchema.nullable().optional()
 });
+var freeEsimSchema = zod.z.object({
+  package_specification: zod.z.object({
+    size: zod.z.string(),
+    type: zod.z.string(),
+    destination: zod.z.string()
+  }),
+  allowance: zod.z.number()
+});
 var platformSettingsSchema = zod.z.object({
   package_strategy: zod.z.object({
     name: zod.z.string(),
     iso3_white_list: zod.z.array(zod.z.string()).optional(),
     parameters: zod.z.any()
   }).nullable().optional(),
-  free_esim: zod.z.object({
-    package_specification: zod.z.object({
-      size: zod.z.string(),
-      type: zod.z.string(),
-      destination: zod.z.string()
-    }),
-    allowance: zod.z.number()
-  }).nullable().optional(),
+  free_esim: freeEsimSchema.nullable().optional(),
   booking_defaults: zod.z.object({
     locale: supportedLocalesSchema
   }).nullable().optional(),
@@ -791,11 +786,11 @@ var partnerSchemaSpec = markAsSchemaSpec({
   financial_properties: {
     _type: "object",
     of: {
-      administration_fee: zod.z.number().nullable(),
-      income_per_gb: zod.z.number().nullable(),
+      administration_fee: zod.z.number().nullable().optional(),
+      income_per_gb: zod.z.number().nullable().optional(),
       commission_fee: zod.z.number().nullable().optional(),
       payment_method: zod.z.enum(["invoice", "direct"]),
-      requires_card: zod.z.boolean().nullable(),
+      requires_card: zod.z.boolean().nullable().optional(),
       next_invoice: timestampNullableOptional,
       last_invoice: timestampNullableOptional,
       pricing_strategies: {
@@ -921,7 +916,14 @@ function buildClientSchema(spec, path = []) {
   if (spec instanceof zod.z.ZodType) {
     return wrapZodSchema(spec);
   }
-  if ("_type" in spec && spec._type === "array") {
+  if (typeof spec === "object" && spec !== null && ("_def" in spec || "~standard" in spec && spec["~standard"]?.vendor === "zod")) {
+    try {
+      return wrapZodSchema(spec);
+    } catch (error) {
+      console.warn(`Failed to use object as Zod schema at "${pathString}":`, error);
+    }
+  }
+  if (typeof spec === "object" && spec !== null && "_type" in spec && spec._type === "array") {
     if (!("of" in spec)) {
       throw new Error(`Array spec at "${pathString}" is missing 'of'`);
     }
@@ -932,7 +934,7 @@ function buildClientSchema(spec, path = []) {
       schema = schema.optional();
     return schema;
   }
-  if ("_type" in spec && spec._type === "record") {
+  if (typeof spec === "object" && spec !== null && "_type" in spec && spec._type === "record") {
     if (!("of" in spec)) {
       throw new Error(`Record spec at "${pathString}" is missing 'of'`);
     }
@@ -943,15 +945,21 @@ function buildClientSchema(spec, path = []) {
       schema = schema.optional();
     return schema;
   }
-  if ("_type" in spec && spec._type === "timestamp") {
-    let schema = zod.z.date();
+  if (typeof spec === "object" && spec !== null && "_type" in spec && spec._type === "timestamp") {
+    let schema = zod.z.preprocess((val) => {
+      if (typeof val === "string" || typeof val === "number") {
+        const date = new Date(val);
+        return isNaN(date.getTime()) ? void 0 : date;
+      }
+      return val;
+    }, zod.z.date({ required_error: "Date is required", invalid_type_error: "Invalid date format" }));
     if (spec.nullable)
       schema = schema.nullable();
     if (spec.optional)
       schema = schema.optional();
     return schema;
   }
-  if ("_type" in spec && spec._type === "docRef") {
+  if (typeof spec === "object" && spec !== null && "_type" in spec && spec._type === "docRef") {
     let schema = zod.z.string();
     if (spec.nullable)
       schema = schema.nullable();
@@ -959,11 +967,18 @@ function buildClientSchema(spec, path = []) {
       schema = schema.optional();
     return schema;
   }
-  if (typeof spec === "object" && "_type" in spec && spec._type === "object" && "of" in spec) {
+  if (typeof spec === "object" && spec !== null && "_type" in spec && spec._type === "object" && "of" in spec) {
     return wrapObjectSchema(spec, path, buildClientSchema);
   }
-  if (isSchemaSpec(spec) || typeof spec === "object" && "_type" in spec && spec._type === "object") {
+  if (isSchemaSpec(spec) || typeof spec === "object" && spec !== null && "_type" in spec && spec._type === "object") {
     return wrapPlainObjectSchema(spec, path, buildClientSchema);
+  }
+  if (typeof spec === "object" && spec !== null) {
+    try {
+      return wrapPlainObjectSchema(spec, path, buildClientSchema);
+    } catch (error) {
+      console.warn(`Failed to handle object as plain schema at "${pathString}":`, error);
+    }
   }
   throw new Error(`Unknown or malformed spec at "${pathString}": ${JSON.stringify(spec)}`);
 }
@@ -982,6 +997,13 @@ var HPartnerSchema = buildClientSchema(partnerSchemaSpec);
 var HPriceListSchema = buildClientSchema(priceListSchemaSpec);
 var HFinancialPropertiesSchema = buildClientSchema(financialPropertiesSchema);
 var HApiLogSchema = buildClientSchema(apiLogSchemaSpec);
+var HPackagePriceSchema = buildClientSchema(packagePriceSchema);
+buildClientSchema(hubbyModelSpec);
+var HPartnerAppSchema = buildClientSchema(partnerSchemaSpec);
+var HPlatformSettingsSchema = buildClientSchema(platformSettingsSchema);
+var HVisualIdentitySchema = buildClientSchema(visualIdentitySchema);
+var HPricingStrategySchema = buildClientSchema(pricingStrategySchema);
+var HFreeEsimSchema = buildClientSchema(freeEsimSchema);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1005,7 +1027,7 @@ function convertJSToFirestore(input, spec) {
   if ("_type" in spec) {
     switch (spec._type) {
       case "timestamp":
-        return input instanceof Date ? firestore.Timestamp.fromDate(input) : input;
+        return input instanceof Date ? input : new Date(input);
       case "docRef":
         return db.doc(`${spec.collection}/${input}`);
       case "array":
@@ -1039,24 +1061,62 @@ function convertJSToFirestore(input, spec) {
   }
   return input;
 }
-function convertFirestoreToJS(data) {
-  if (data instanceof firestore.Timestamp) {
-    return data.toDate();
+function isDuckTimestamp(obj) {
+  return obj && typeof obj === "object" && typeof obj.toDate === "function" && Object.prototype.toString.call(obj.toDate()) === "[object Date]";
+}
+function isDuckDocumentRef(obj) {
+  return obj && typeof obj === "object" && typeof obj.id === "string" && typeof obj.path === "string";
+}
+function convertFirestoreToJS(input, spec, path = []) {
+  path.join(".") || "<root>";
+  if (input instanceof firestore.Timestamp || isDuckTimestamp(input)) {
+    return input.toDate();
   }
-  if (data instanceof firestore.DocumentReference) {
-    return data.id;
+  if (input instanceof firestore.DocumentReference || isDuckDocumentRef(input)) {
+    return input.id;
   }
-  if (Array.isArray(data)) {
-    return data.map((item) => convertFirestoreToJS(item));
+  if (input === null || input === void 0)
+    return input;
+  if (!spec)
+    return input;
+  if (spec instanceof zod.z.ZodType) {
+    return input;
   }
-  if (data !== null && typeof data === "object") {
+  if ("_type" in spec) {
+    switch (spec._type) {
+      case "timestamp":
+        return input instanceof firestore.Timestamp || isDuckTimestamp(input) ? input.toDate() : input;
+      case "docRef":
+        return input instanceof firestore.DocumentReference || isDuckDocumentRef(input) ? input.id : input;
+      case "array":
+        return Array.isArray(input) ? input.map((item, i) => convertFirestoreToJS(item, spec.of, [...path, `[${i}]`])) : input;
+      case "record":
+        if (typeof input !== "object" || input === null)
+          return input;
+        return Object.fromEntries(
+          Object.entries(input).map(([k, v]) => [
+            k,
+            convertFirestoreToJS(v, spec.of, [...path, k])
+          ])
+        );
+      case "object":
+        if (!spec.of || typeof spec.of !== "object")
+          return input;
+        const result = {};
+        for (const [key, fieldSpec] of Object.entries(spec.of)) {
+          result[key] = convertFirestoreToJS(input[key], fieldSpec, [...path, key]);
+        }
+        return result;
+    }
+  }
+  if (typeof spec === "object" && typeof input === "object" && !Array.isArray(input)) {
     const result = {};
-    for (const [key, value] of Object.entries(data)) {
-      result[key] = convertFirestoreToJS(value);
+    for (const [key, valSpec] of Object.entries(spec)) {
+      result[key] = convertFirestoreToJS(input[key], valSpec, [...path, key]);
     }
     return result;
   }
-  return data;
+  return input;
 }
 
 // src/index.server.ts
@@ -1073,7 +1133,7 @@ var PromoCodeSchema = buildServerSchema(promoCodeSchemaSpec);
 var PartnerSchema = buildServerSchema(partnerSchemaSpec);
 var PriceListSchema = buildServerSchema(priceListSchemaSpec);
 var ApiLogSchema = buildServerSchema(apiLogSchemaSpec);
-var HubbyModelSchema = buildServerSchema(hubbyModelSpec);
+var HubbyModelSchema2 = buildServerSchema(hubbyModelSpec);
 var VisualIdentitySchema = buildServerSchema(visualIdentitySchema);
 var PackagePriceSchema = buildServerSchema(packagePriceSchemaSpec);
 var PlatformSettingsSchema = buildServerSchema(platformSettingsSchemaSpec);
@@ -1092,28 +1152,28 @@ var BookingStatusSchema = bookingStatusSchema;
 var CommunicationOptionsSchema = communicationOptionsSchema;
 var VisualIdentityBannersSchema = visualIdentityBannersSchema;
 var partnerFromFirestore = (partner) => {
-  convertFirestoreToJS(partner);
+  return convertFirestoreToJS(partner, partnerSchemaSpec);
 };
 var partnerToFirestore = (partner) => {
-  convertJSToFirestore(partner, partnerSchemaSpec);
+  return convertJSToFirestore(partner, partnerSchemaSpec);
 };
 var userToFirestore = (user) => {
-  convertJSToFirestore(user, userSchemaSpec);
+  return convertJSToFirestore(user, userSchemaSpec);
 };
 var userFromFirestore = (user) => {
-  convertFirestoreToJS(user);
+  return convertFirestoreToJS(user, userSchemaSpec);
 };
 var priceListFromFirestore = (priceList) => {
-  convertFirestoreToJS(priceList);
+  return convertFirestoreToJS(priceList, priceListSchemaSpec);
 };
 var priceListToFirestore = (priceList) => {
-  convertJSToFirestore(priceList, priceListSchemaSpec);
+  return convertJSToFirestore(priceList, priceListSchemaSpec);
 };
 var promoCodeFromFirestore = (promoCode) => {
-  convertFirestoreToJS(promoCode);
+  return convertFirestoreToJS(promoCode, promoCodeSchemaSpec);
 };
 var promoCodeToFirestore = (promoCode) => {
-  convertJSToFirestore(promoCode, promoCodeSchemaSpec);
+  return convertJSToFirestore(promoCode, promoCodeSchemaSpec);
 };
 var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 var SUPPORTED_LOCALES3 = SUPPORTED_LOCALES;
@@ -1139,21 +1199,27 @@ exports.HCountrySchema = HCountrySchema;
 exports.HCurrencySchema = HCurrencySchema;
 exports.HESIMSchema = HESIMSchema;
 exports.HFinancialPropertiesSchema = HFinancialPropertiesSchema;
+exports.HFreeEsimSchema = HFreeEsimSchema;
 exports.HMessageSchema = HMessageSchema;
+exports.HPackagePriceSchema = HPackagePriceSchema;
 exports.HPackageSchema = HPackageSchema;
+exports.HPartnerAppSchema = HPartnerAppSchema;
 exports.HPartnerContactSchema = HPartnerContactSchema;
 exports.HPartnerDataSchema = HPartnerDataSchema;
 exports.HPartnerPackageSpecificationSchema = HPartnerPackageSpecificationSchema;
 exports.HPartnerSchema = HPartnerSchema;
 exports.HPaymentSchema = HPaymentSchema;
+exports.HPlatformSettingsSchema = HPlatformSettingsSchema;
 exports.HPriceListSchema = HPriceListSchema;
+exports.HPricingStrategySchema = HPricingStrategySchema;
 exports.HPromoCodeSchema = HPromoCodeSchema;
 exports.HPromoPackageSpecificationSchema = HPromoPackageSpecificationSchema;
 exports.HRegistrationSchema = HRegistrationSchema;
 exports.HScheduleFilterSchema = HScheduleFilterSchema;
 exports.HUserSchema = HUserSchema;
 exports.HVisualIdentityBannerSchema = HVisualIdentityBannerSchema;
-exports.HubbyModelSchema = HubbyModelSchema;
+exports.HVisualIdentitySchema = HVisualIdentitySchema;
+exports.HubbyModelSchema = HubbyModelSchema2;
 exports.MessageSchema = MessageSchema;
 exports.PackagePriceSchema = PackagePriceSchema;
 exports.PackageSchema = PackageSchema;
