@@ -8,4 +8,16 @@
 // We're using a direct re-export which will be modified by the bundler
 // based on the target environment. The tsup configuration handles the exclusion
 // of firebase-admin from client builds.
+
+// Conditionally import and export based on the target environment.
+// This helps to prevent webpack from bundling firebase-admin
+// into client builds.
+export * from './index.client';
+
+// Export server-side types and utilities that depend on firebase-admin
+// These will only be included when explicitly imported
 export * from './index.server';
+
+// Export the Firebase service for dependency injection
+export { FirebaseService, createFirebaseService } from './services/firebase';
+export type { FirebaseConfig } from './services/firebase';

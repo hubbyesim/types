@@ -1,7 +1,19 @@
 import { PromoCodeSchema, HPromoCodeSchema } from "../src";
 import { Timestamp } from "firebase-admin/firestore";
-import { convertFirestoreToJS } from "../src/schemas/utils/firestoreTransformUtils";
-import { promoCodeSchemaSpec } from "../src/schemas/specs/promocode";
+import { convertFirestoreToJS } from "../src/utils/firestoreTransformUtils";
+import { promoCodeSchemaSpec } from "../src/specs/promocode";
+import { buildClientSchema } from '../src/builders/client';
+import { buildServerSchema } from '../src/builders/server';
+import { convertJSToFirestore } from '../src/utils/firestoreTransformUtils';
+import { DocumentReference } from 'firebase-admin/firestore';
+import { FirebaseService, createFirebaseService } from '../src/services/firebase';
+
+// Mock Firebase for tests
+beforeAll(() => {
+  // Set up a test instance with isTest flag
+  const testFirebase = createFirebaseService({ isTest: true });
+  FirebaseService.setDefaultInstance(testFirebase);
+});
 
 describe("PromoCode Schema", () => {
     it("should convert from server to client and back", () => {

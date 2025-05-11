@@ -1,8 +1,16 @@
-import { buildClientSchema } from '../src/schemas/builders/client';
-import { buildServerSchema } from '../src/schemas/builders/server';
-import { convertFirestoreToJS, convertJSToFirestore } from '../src/schemas/utils/firestoreTransformUtils';
-import { paymentSchemaSpec } from '../src/schemas/specs/payment';
+import { buildClientSchema } from '../src/builders/client';
+import { buildServerSchema } from '../src/builders/server';
+import { convertFirestoreToJS, convertJSToFirestore } from '../src/utils/firestoreTransformUtils';
+import { paymentSchemaSpec } from '../src/specs/payment';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
+import { FirebaseService, createFirebaseService } from '../src/services/firebase';
+
+// Mock Firebase for tests
+beforeAll(() => {
+  // Set up a test instance with isTest flag
+  const testFirebase = createFirebaseService({ isTest: true });
+  FirebaseService.setDefaultInstance(testFirebase);
+});
 
 const ClientSchema = buildClientSchema(paymentSchemaSpec);
 const ServerSchema = buildServerSchema(paymentSchemaSpec);

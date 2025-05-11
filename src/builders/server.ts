@@ -1,9 +1,8 @@
 import { z } from 'zod';
-import { getFirestore, Timestamp } from 'firebase-admin/firestore';
+import { Timestamp } from 'firebase-admin/firestore';
 import type { FieldSpec } from '../types';
 import { wrapZodSchema, wrapObjectSchema, wrapPlainObjectSchema, isSchemaSpec } from '../common';
-import { initializeApp, applicationDefault, getApps } from 'firebase-admin/app';
-import { db } from '../utils/firestore';
+import { db } from '../services/firebase';
 
 export const buildServerSchema = (spec: FieldSpec, path: string[] = []): z.ZodTypeAny => {
   const pathString = path.join('.');

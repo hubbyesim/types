@@ -26,7 +26,7 @@ export {
     isDate,
     genericToFirestore,
     genericFromFirestore
-} from '../utils';
+} from '.';
 
 // Nested field conversions
 export { processNestedFieldsToFirestore, processNestedFieldsFromFirestore } from './nested-conversions';

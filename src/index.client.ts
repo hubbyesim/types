@@ -1,24 +1,24 @@
-import { buildClientSchema } from './schemas/builders/client';
+import { buildClientSchema } from './builders/client';
 import {
   userSchemaSpec,
   apiKeySpec,
   apiKeysSpec,
   apiKeysObjectSpec
-} from './schemas/specs/user';
+} from './specs/user';
 import {
   bookingSchemaSpec,
   communicationChannelSchema,
   bookingStatusSchema,
   communicationOptionsSchema
-} from './schemas/specs/booking';
-import { SUPPORTED_LOCALES as LOCALES, hubbyModelSpec } from './schemas/specs/common';
-import { countrySchemaSpec } from './schemas/specs/country';
-import { currencySchemaSpec } from './schemas/specs/currency';
-import { esimSchemaSpec } from './schemas/specs/esim';
-import { paymentSchemaSpec } from './schemas/specs/payment';
-import { messageSchemaSpec } from './schemas/specs/message';
-import { packageSchemaSpec } from './schemas/specs/package';
-import { promoCodeSchemaSpec, packageSpecificationSchema as promoPackageSpecificationSchema } from './schemas/specs/promocode';
+} from './specs/booking';
+import { SUPPORTED_LOCALES as LOCALES, hubbyModelSpec } from './specs/common';
+import { countrySchemaSpec } from './specs/country';
+import { currencySchemaSpec } from './specs/currency';
+import { esimSchemaSpec } from './specs/esim';
+import { paymentSchemaSpec } from './specs/payment';
+import { messageSchemaSpec } from './specs/message';
+import { packageSchemaSpec } from './specs/package';
+import { promoCodeSchemaSpec, packageSpecificationSchema as promoPackageSpecificationSchema } from './specs/promocode';
 import {
   partnerSchemaSpec,
   priceListSchemaSpec,
@@ -30,14 +30,14 @@ import {
   scheduleFilterSchema,
   partnerContactSchema,
   partnerDataSchema,
-  financialPropertiesSchema,
+  financialPropertiesSchemaSpec as financialPropertiesSchema,
   packagePriceSchema,
   platformSettingsSchema,
   visualIdentitySchema,
   pricingStrategySchema,
   freeEsimSchema
-} from './schemas/specs/partner';
-import { apiLogSchemaSpec } from './schemas/specs/apiLogs';
+} from './specs/partner';
+import { apiLogSchemaSpec } from './specs/apiLogs';
 import { z } from 'zod';
 
 export const HUserSchema = buildClientSchema(userSchemaSpec);

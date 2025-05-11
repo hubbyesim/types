@@ -1,10 +1,16 @@
 import { z } from 'zod';
 import { getFirestore, Timestamp, DocumentReference } from 'firebase-admin/firestore';
-import { getApps, initializeApp, applicationDefault } from 'firebase-admin/app';
+import { applicationDefault, getApps, initializeApp } from 'firebase-admin/app';
 
-// src/schemas/builders/server.ts
+// src/builders/server.ts
 function wrapZodSchema(schema, options) {
   let wrapped = schema;
+  if (options?.nullable && !wrapped.isNullable?.()) {
+    wrapped = wrapped.nullable();
+  }
+  if (options?.optional && !wrapped.isOptional?.()) {
+    wrapped = wrapped.optional();
+  }
   return wrapped;
 }
 function wrapObjectSchema(spec, path, builder) {
@@ -56,14 +62,54 @@ function markAsSchemaSpec(spec) {
 function isSchemaSpec(obj) {
   return typeof obj === "object" && obj !== null && SCHEMA_MARKER in obj;
 }
-if (!getApps().length) {
-  initializeApp({
-    credential: applicationDefault()
-  });
+var defaultInstance = null;
+var FirebaseService = class _FirebaseService {
+  app;
+  firestoreInstance;
+  constructor(config = {}) {
+    const options = {
+      credential: config.credential || applicationDefault(),
+      projectId: config.projectId || process.env.FIREBASE_PROJECT_ID,
+      storageBucket: config.storageBucket,
+      databaseURL: config.databaseURL
+    };
+    if (config.isTest) {
+      if (getApps().length) {
+        this.app = getApps()[0];
+      } else {
+        this.app = initializeApp(options);
+      }
+    } else {
+      if (!getApps().length) {
+        this.app = initializeApp(options);
+      } else {
+        this.app = getApps()[0];
+      }
+    }
+    this.firestoreInstance = getFirestore(this.app);
+  }
+  get firestore() {
+    return this.firestoreInstance;
+  }
+  // Get default instance with singleton pattern
+  static getDefaultInstance() {
+    if (!defaultInstance) {
+      defaultInstance = new _FirebaseService();
+    }
+    return defaultInstance;
+  }
+  // Allow for setting a custom default instance (useful for tests)
+  static setDefaultInstance(instance) {
+    defaultInstance = instance;
+  }
+};
+var defaultService = FirebaseService.getDefaultInstance();
+var db = defaultService.firestore;
+function createFirebaseService(config) {
+  return new FirebaseService(config);
 }
-var db = getFirestore();
 
-// src/schemas/builders/server.ts
+// src/builders/server.ts
 var buildServerSchema = (spec, path = []) => {
   const pathString = path.join(".");
   if (spec === void 0 || spec === null) {
@@ -166,7 +212,7 @@ var SUPPORTED_LOCALES = [
   "de-BE"
 ];
 
-// src/schemas/specs/user.ts
+// src/specs/user.ts
 var apiKeySpec = {
   expires_at: { _type: "timestamp" },
   secret: z.string(),
@@ -239,7 +285,7 @@ var SUPPORTED_LOCALES2 = [
 ];
 var supportedLocalesSchema = z.enum(SUPPORTED_LOCALES2);
 
-// src/schemas/specs/booking.ts
+// src/specs/booking.ts
 var communicationChannelSchema = z.enum([
   "EMAIL",
   "WHATSAPP",
@@ -519,27 +565,6 @@ var pricingStrategySchema = z.object({
   }),
   custom_prices: z.array(packagePriceSchema)
 });
-var financialPropertiesSchema = z.object({
-  administration_fee: z.number().nullable().optional(),
-  income_per_gb: z.number().nullable().optional(),
-  commission_fee: z.number().nullable().optional(),
-  payment_method: z.enum(["invoice", "direct"]),
-  requires_card: z.boolean().nullable().optional(),
-  next_invoice: z.object({
-    _type: z.literal("timestamp"),
-    nullable: z.literal(true),
-    optional: z.literal(true)
-  }),
-  last_invoice: z.object({
-    _type: z.literal("timestamp"),
-    nullable: z.literal(true),
-    optional: z.literal(true)
-  }),
-  pricing_strategies: z.object({
-    partner: pricingStrategySchema.optional(),
-    user: pricingStrategySchema.optional()
-  }).nullable()
-});
 var visualIdentityBannerSchema = z.object({
   image_url: z.string(),
   alt: z.string(),
@@ -641,7 +666,7 @@ var packagePriceSchemaSpec = markAsSchemaSpec({
   price: z.number(),
   package: { _type: "docRef", collection: PACKAGE_COLLECTION }
 });
-markAsSchemaSpec({
+var financialPropertiesSchemaSpec = markAsSchemaSpec({
   administration_fee: z.number().nullable(),
   income_per_gb: z.number().nullable(),
   commission_fee: z.number().nullable().optional(),
@@ -781,68 +806,7 @@ var partnerSchemaSpec = markAsSchemaSpec({
   parent: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
   users: { _type: "array", of: { _type: "docRef", collection: USER_COLLECTION }, nullable: true },
   // Complex nested structures
-  financial_properties: {
-    _type: "object",
-    of: {
-      administration_fee: z.number().nullable().optional(),
-      income_per_gb: z.number().nullable().optional(),
-      commission_fee: z.number().nullable().optional(),
-      payment_method: z.enum(["invoice", "direct"]),
-      requires_card: z.boolean().nullable().optional(),
-      next_invoice: timestampNullableOptional,
-      last_invoice: timestampNullableOptional,
-      pricing_strategies: {
-        _type: "object",
-        of: {
-          partner: {
-            _type: "object",
-            of: {
-              strategy: z.enum(["split", "bundle"]),
-              modification_percentage: z.number(),
-              default_price_list: { _type: "docRef", collection: PRICE_LIST_COLLECTION, nullable: true },
-              custom_prices: {
-                _type: "array",
-                of: {
-                  _type: "object",
-                  of: {
-                    destination: z.string(),
-                    label: z.string(),
-                    type: z.enum(["data-limited", "time-limited"]),
-                    price: z.number(),
-                    package: { _type: "docRef", collection: PACKAGE_COLLECTION }
-                  }
-                }
-              }
-            },
-            optional: true
-          },
-          user: {
-            _type: "object",
-            of: {
-              modification_percentage: z.number(),
-              default_price_list: { _type: "docRef", collection: PRICE_LIST_COLLECTION, nullable: true },
-              custom_prices: {
-                _type: "array",
-                of: {
-                  _type: "object",
-                  of: {
-                    destination: z.string(),
-                    label: z.string(),
-                    type: z.enum(["data-limited", "time-limited"]),
-                    price: z.number(),
-                    package: { _type: "docRef", collection: PACKAGE_COLLECTION }
-                  }
-                }
-              }
-            },
-            optional: true
-          }
-        },
-        nullable: true
-      }
-    },
-    nullable: true
-  },
+  financial_properties: financialPropertiesSchemaSpec,
   // Visual identity
   visual_identity: {
     _type: "object",
@@ -906,6 +870,120 @@ var apiLogSchemaSpec = markAsSchemaSpec({
   timestamp: timestampRequired,
   status_code: z.number()
 });
+function createConvertJSToFirestore(db2) {
+  return function convertJSToFirestore2(input, spec) {
+    if (input === void 0 || input === null)
+      return input;
+    if (spec instanceof z.ZodType) {
+      if (input instanceof Date)
+        return Timestamp.fromDate(input);
+      return input;
+    }
+    if ("_type" in spec) {
+      switch (spec._type) {
+        case "timestamp":
+          if (input instanceof Date) {
+            return Timestamp.fromDate(input);
+          } else if (typeof input === "string" || typeof input === "number") {
+            return Timestamp.fromDate(new Date(input));
+          }
+          return input;
+        case "docRef":
+          console.log("convertJSToFirestore docRef", input, spec);
+          return db2.collection(spec.collection).doc(input);
+        case "array":
+          return input.map((item) => convertJSToFirestore2(item, spec.of));
+        case "record":
+          return Object.fromEntries(
+            Object.entries(input).map(([k, v]) => [k, convertJSToFirestore2(v, spec.of)])
+          );
+        case "object":
+          if ("of" in spec && typeof spec.of === "object") {
+            const result = {};
+            for (const [key, fieldSpec] of Object.entries(spec.of)) {
+              if (key in input) {
+                result[key] = convertJSToFirestore2(input[key], fieldSpec);
+              }
+            }
+            return result;
+          }
+          return input;
+        default:
+          throw new Error(`Unknown field type: ${spec._type}`);
+      }
+    }
+    if (typeof input === "object" && typeof spec === "object") {
+      return Object.fromEntries(
+        Object.entries(spec).map(([key, fieldSpec]) => [
+          key,
+          convertJSToFirestore2(input[key], fieldSpec)
+        ])
+      );
+    }
+    return input;
+  };
+}
+function isDuckTimestamp(obj) {
+  return obj && typeof obj === "object" && typeof obj.toDate === "function" && Object.prototype.toString.call(obj.toDate()) === "[object Date]";
+}
+function isDuckDocumentRef(obj) {
+  return obj && typeof obj === "object" && typeof obj.id === "string" && typeof obj.path === "string";
+}
+function createConvertFirestoreToJS() {
+  return function convertFirestoreToJS2(input, spec, path = []) {
+    path.join(".") || "<root>";
+    if (input instanceof Timestamp || isDuckTimestamp(input)) {
+      return input.toDate();
+    }
+    if (input instanceof DocumentReference || isDuckDocumentRef(input)) {
+      return input.id;
+    }
+    if (input === null || input === void 0)
+      return input;
+    if (!spec)
+      return input;
+    if (spec instanceof z.ZodType) {
+      return input;
+    }
+    if ("_type" in spec) {
+      switch (spec._type) {
+        case "timestamp":
+          return input instanceof Timestamp || isDuckTimestamp(input) ? input.toDate() : input;
+        case "docRef":
+          return input instanceof DocumentReference || isDuckDocumentRef(input) ? input.id : input;
+        case "array":
+          return Array.isArray(input) ? input.map((item, i) => convertFirestoreToJS2(item, spec.of, [...path, `[${i}]`])) : input;
+        case "record":
+          if (typeof input !== "object" || input === null)
+            return input;
+          return Object.fromEntries(
+            Object.entries(input).map(([k, v]) => [
+              k,
+              convertFirestoreToJS2(v, spec.of, [...path, k])
+            ])
+          );
+        case "object":
+          if (!spec.of || typeof spec.of !== "object")
+            return input;
+          const result = {};
+          for (const [key, fieldSpec] of Object.entries(spec.of)) {
+            result[key] = convertFirestoreToJS2(input[key], fieldSpec, [...path, key]);
+          }
+          return result;
+      }
+    }
+    if (typeof spec === "object" && typeof input === "object" && !Array.isArray(input)) {
+      const result = {};
+      for (const [key, valSpec] of Object.entries(spec)) {
+        result[key] = convertFirestoreToJS2(input[key], valSpec, [...path, key]);
+      }
+      return result;
+    }
+    return input;
+  };
+}
+var convertJSToFirestore = createConvertJSToFirestore(db);
+var convertFirestoreToJS = createConvertFirestoreToJS();
 function buildClientSchema(spec, path = []) {
   const pathString = path.join(".");
   if (spec === void 0 || spec === null) {
@@ -945,7 +1023,11 @@ function buildClientSchema(spec, path = []) {
   }
   if (typeof spec === "object" && spec !== null && "_type" in spec && spec._type === "timestamp") {
     let schema = z.preprocess((val) => {
-      if (typeof val === "string" || typeof val === "number") {
+      if (typeof val === "string") {
+        const date = new Date(val);
+        return isNaN(date.getTime()) ? void 0 : date;
+      }
+      if (typeof val === "number") {
         const date = new Date(val);
         return isNaN(date.getTime()) ? void 0 : date;
       }
@@ -993,7 +1075,7 @@ var HPackageSchema = buildClientSchema(packageSchemaSpec);
 var HPromoCodeSchema = buildClientSchema(promoCodeSchemaSpec);
 var HPartnerSchema = buildClientSchema(partnerSchemaSpec);
 var HPriceListSchema = buildClientSchema(priceListSchemaSpec);
-var HFinancialPropertiesSchema = buildClientSchema(financialPropertiesSchema);
+var HFinancialPropertiesSchema = buildClientSchema(financialPropertiesSchemaSpec);
 var HApiLogSchema = buildClientSchema(apiLogSchemaSpec);
 var HPackagePriceSchema = buildClientSchema(packagePriceSchema);
 buildClientSchema(hubbyModelSpec);
@@ -1014,107 +1096,28 @@ var HPartnerDataSchema = partnerDataSchema;
 var HCommunicationChannelSchema = communicationChannelSchema;
 var HBookingStatusSchema = bookingStatusSchema;
 var HCommunicationOptionsSchema = communicationOptionsSchema;
-function convertJSToFirestore(input, spec) {
-  if (input === void 0 || input === null)
-    return input;
-  if (spec instanceof z.ZodType) {
-    if (input instanceof Date)
-      return Timestamp.fromDate(input);
-    return input;
-  }
-  if ("_type" in spec) {
-    switch (spec._type) {
-      case "timestamp":
-        return input instanceof Date ? input : new Date(input);
-      case "docRef":
-        return db.doc(`${spec.collection}/${input}`);
-      case "array":
-        return input.map((item) => convertJSToFirestore(item, spec.of));
-      case "record":
-        return Object.fromEntries(
-          Object.entries(input).map(([k, v]) => [k, convertJSToFirestore(v, spec.of)])
-        );
-      case "object":
-        if ("of" in spec && typeof spec.of === "object") {
-          const result = {};
-          for (const [key, fieldSpec] of Object.entries(spec.of)) {
-            if (key in input) {
-              result[key] = convertJSToFirestore(input[key], fieldSpec);
-            }
-          }
-          return result;
-        }
-        return input;
-      default:
-        throw new Error(`Unknown field type: ${spec._type}`);
+
+// src/utils/modelConverterFactory.ts
+function createModelConverters(db2, modelSchemaSpec) {
+  const convertToFirestore = createConvertJSToFirestore(db2);
+  const convertFromFirestore = createConvertFirestoreToJS();
+  return {
+    /**
+     * Converts a model instance to Firestore format
+     */
+    toFirestore: (model) => {
+      console.log("Converting model to Firestore format, before:", model, modelSchemaSpec);
+      const result = convertToFirestore(model, modelSchemaSpec);
+      console.log("Converting model to Firestore format, after:", result);
+      return result;
+    },
+    /**
+     * Converts Firestore data to a model instance
+     */
+    fromFirestore: (firestoreData) => {
+      return convertFromFirestore(firestoreData, modelSchemaSpec);
     }
-  }
-  if (typeof input === "object" && typeof spec === "object") {
-    return Object.fromEntries(
-      Object.entries(spec).map(([key, fieldSpec]) => [
-        key,
-        convertJSToFirestore(input[key], fieldSpec)
-      ])
-    );
-  }
-  return input;
-}
-function isDuckTimestamp(obj) {
-  return obj && typeof obj === "object" && typeof obj.toDate === "function" && Object.prototype.toString.call(obj.toDate()) === "[object Date]";
-}
-function isDuckDocumentRef(obj) {
-  return obj && typeof obj === "object" && typeof obj.id === "string" && typeof obj.path === "string";
-}
-function convertFirestoreToJS(input, spec, path = []) {
-  path.join(".") || "<root>";
-  if (input instanceof Timestamp || isDuckTimestamp(input)) {
-    return input.toDate();
-  }
-  if (input instanceof DocumentReference || isDuckDocumentRef(input)) {
-    return input.id;
-  }
-  if (input === null || input === void 0)
-    return input;
-  if (!spec)
-    return input;
-  if (spec instanceof z.ZodType) {
-    return input;
-  }
-  if ("_type" in spec) {
-    switch (spec._type) {
-      case "timestamp":
-        return input instanceof Timestamp || isDuckTimestamp(input) ? input.toDate() : input;
-      case "docRef":
-        return input instanceof DocumentReference || isDuckDocumentRef(input) ? input.id : input;
-      case "array":
-        return Array.isArray(input) ? input.map((item, i) => convertFirestoreToJS(item, spec.of, [...path, `[${i}]`])) : input;
-      case "record":
-        if (typeof input !== "object" || input === null)
-          return input;
-        return Object.fromEntries(
-          Object.entries(input).map(([k, v]) => [
-            k,
-            convertFirestoreToJS(v, spec.of, [...path, k])
-          ])
-        );
-      case "object":
-        if (!spec.of || typeof spec.of !== "object")
-          return input;
-        const result = {};
-        for (const [key, fieldSpec] of Object.entries(spec.of)) {
-          result[key] = convertFirestoreToJS(input[key], fieldSpec, [...path, key]);
-        }
-        return result;
-    }
-  }
-  if (typeof spec === "object" && typeof input === "object" && !Array.isArray(input)) {
-    const result = {};
-    for (const [key, valSpec] of Object.entries(spec)) {
-      result[key] = convertFirestoreToJS(input[key], valSpec, [...path, key]);
-    }
-    return result;
-  }
-  return input;
+  };
 }
 
 // src/index.server.ts
@@ -1176,6 +1179,6 @@ var promoCodeToFirestore = (promoCode) => {
 var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 var SUPPORTED_LOCALES3 = SUPPORTED_LOCALES;
 
-export { AddressSchema, ApiLogSchema, BankingDetailsSchema, BookingSchema, BookingStatusSchema, CommunicationChannelSchema, CommunicationOptionsSchema, CountrySchema, CurrencySchema, ESIMSchema, HAddressSchema, HApiLogSchema, HBankingDetailsSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HScheduleFilterSchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema2 as HubbyModelSchema, MessageSchema, PackagePriceSchema, PackageSchema, PartnerContactSchema, PartnerDataSchema, PartnerPackageSpecificationSchema, PartnerSchema, PaymentSchema, PlatformSettingsSchema, PriceListSchema, PromoCodeSchema, PromoPackageSpecificationSchema, RegistrationSchema, SUPPORTED_LOCALES3 as SUPPORTED_LOCALES, ScheduleFilterSchema, ScheduleSchema, UserFirestoreSchema, UserSchema, VisualIdentityBannerSchema, VisualIdentityBannersSchema, VisualIdentitySchema, partnerAppSchema, partnerFromFirestore, partnerToFirestore, priceListFromFirestore, priceListToFirestore, promoCodeFromFirestore, promoCodeToFirestore, userFromFirestore, userToFirestore };
+export { AddressSchema, ApiLogSchema, BankingDetailsSchema, BookingSchema, BookingStatusSchema, CommunicationChannelSchema, CommunicationOptionsSchema, CountrySchema, CurrencySchema, ESIMSchema, FirebaseService, HAddressSchema, HApiLogSchema, HBankingDetailsSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HScheduleFilterSchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema2 as HubbyModelSchema, MessageSchema, PackagePriceSchema, PackageSchema, PartnerContactSchema, PartnerDataSchema, PartnerPackageSpecificationSchema, PartnerSchema, PaymentSchema, PlatformSettingsSchema, PriceListSchema, PromoCodeSchema, PromoPackageSpecificationSchema, RegistrationSchema, SUPPORTED_LOCALES3 as SUPPORTED_LOCALES, ScheduleFilterSchema, ScheduleSchema, UserFirestoreSchema, UserSchema, VisualIdentityBannerSchema, VisualIdentityBannersSchema, VisualIdentitySchema, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, priceListFromFirestore, priceListToFirestore, promoCodeFromFirestore, promoCodeToFirestore, userFromFirestore, userToFirestore };
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.js.map

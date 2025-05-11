@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { markAsSchemaSpec } from '../common';
-import { supportedLocalesSchema, SUPPORTED_LOCALES, SupportedLocales } from '../../constants';
+import { supportedLocalesSchema, SUPPORTED_LOCALES, SupportedLocales } from '../constants';
 import {
     PARTNER_COLLECTION,
     USER_COLLECTION,
@@ -62,29 +62,6 @@ export const pricingStrategySchema = z.object({
         nullable: z.literal(true)
     }),
     custom_prices: z.array(packagePriceSchema)
-});
-
-// Financial properties schema
-export const financialPropertiesSchema = z.object({
-    administration_fee: z.number().nullable().optional(),
-    income_per_gb: z.number().nullable().optional(),
-    commission_fee: z.number().nullable().optional(),
-    payment_method: z.enum(['invoice', 'direct']),
-    requires_card: z.boolean().nullable().optional(),
-    next_invoice: z.object({
-        _type: z.literal('timestamp'),
-        nullable: z.literal(true),
-        optional: z.literal(true)
-    }),
-    last_invoice: z.object({
-        _type: z.literal('timestamp'),
-        nullable: z.literal(true),
-        optional: z.literal(true)
-    }),
-    pricing_strategies: z.object({
-        partner: pricingStrategySchema.optional(),
-        user: pricingStrategySchema.optional()
-    }).nullable()
 });
 
 // Visual identity banner schema
@@ -363,69 +340,7 @@ export const partnerSchemaSpec = markAsSchemaSpec({
     users: { _type: 'array' as const, of: { _type: 'docRef' as const, collection: USER_COLLECTION }, nullable: true },
 
     // Complex nested structures
-    financial_properties: {
-        _type: 'object' as const,
-        of: {
-            administration_fee: z.number().nullable().optional(),
-            income_per_gb: z.number().nullable().optional(),
-            commission_fee: z.number().nullable().optional(),
-            payment_method: z.enum(['invoice', 'direct']),
-            requires_card: z.boolean().nullable().optional(),
-            next_invoice: timestampNullableOptional,
-            last_invoice: timestampNullableOptional,
-            pricing_strategies: {
-                _type: 'object' as const,
-                of: {
-                    partner: {
-                        _type: 'object' as const,
-                        of: {
-                            strategy: z.enum(['split', 'bundle']),
-                            modification_percentage: z.number(),
-                            default_price_list: { _type: 'docRef' as const, collection: PRICE_LIST_COLLECTION, nullable: true },
-                            custom_prices: {
-                                _type: 'array' as const,
-                                of: {
-                                    _type: 'object' as const,
-                                    of: {
-                                        destination: z.string(),
-                                        label: z.string(),
-                                        type: z.enum(['data-limited', 'time-limited']),
-                                        price: z.number(),
-                                        package: { _type: 'docRef' as const, collection: PACKAGE_COLLECTION }
-                                    }
-                                }
-                            }
-                        },
-                        optional: true
-                    },
-                    user: {
-                        _type: 'object' as const,
-                        of: {
-                            modification_percentage: z.number(),
-                            default_price_list: { _type: 'docRef' as const, collection: PRICE_LIST_COLLECTION, nullable: true },
-                            custom_prices: {
-                                _type: 'array' as const,
-                                of: {
-                                    _type: 'object' as const,
-                                    of: {
-                                        destination: z.string(),
-                                        label: z.string(),
-                                        type: z.enum(['data-limited', 'time-limited']),
-                                        price: z.number(),
-                                        package: { _type: 'docRef' as const, collection: PACKAGE_COLLECTION }
-                                    }
-                                }
-                            }
-                        },
-                        optional: true
-                    }
-                },
-                nullable: true
-            }
-        },
-        nullable: true
-    },
-
+    financial_properties: financialPropertiesSchemaSpec,
     // Visual identity
     visual_identity: {
         _type: 'object' as const,

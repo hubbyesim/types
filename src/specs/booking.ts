@@ -8,7 +8,7 @@ import {
     timestampRequired
 } from './common';
 import { markAsSchemaSpec } from '../common';
-import { supportedLocalesSchema } from '../../constants';
+import { supportedLocalesSchema } from '../constants';
 
 // Enum for communication channels
 export const communicationChannelSchema = z.enum([

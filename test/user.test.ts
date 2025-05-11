@@ -1,11 +1,20 @@
-import { buildClientSchema } from '../src/schemas/builders/client';
-import { buildServerSchema } from '../src/schemas/builders/server';
-import { convertFirestoreToJS, convertJSToFirestore } from '../src/schemas/utils/firestoreTransformUtils';
-import { userSchemaSpec } from '../src/schemas/specs/user';
+import { buildClientSchema } from '../src/builders/client';
+import { buildServerSchema } from '../src/builders/server';
+import { convertFirestoreToJS, convertJSToFirestore } from '../src/utils/firestoreTransformUtils';
+import { userSchemaSpec } from '../src/specs/user';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
+import { createDocRef } from './di';
+import { FirebaseService, createFirebaseService } from '../src/services/firebase';
 
 const ClientSchema = buildClientSchema(userSchemaSpec);
 const ServerSchema = buildServerSchema(userSchemaSpec);
+
+// Mock Firebase for tests
+beforeAll(() => {
+  // Set up a test instance with isTest flag
+  const testFirebase = createFirebaseService({ isTest: true });
+  FirebaseService.setDefaultInstance(testFirebase);
+});
 
 const roundtrip = (input: any) => {
     const parsedForServer = ServerSchema.parse(input);
@@ -45,11 +54,14 @@ describe('User schema roundtrip', () => {
         const firestoreData = convertJSToFirestore(parsedForServer, userSchemaSpec);
 
         expect(firestoreData.createdAt).toBeInstanceOf(Timestamp);
-        // Simulate Firestore snapshot
+        
+        // Use our DI container to create a real document reference
+        const partnerRef = createDocRef('partners', input.partner);
+        firestoreData.partner = partnerRef;
+        
         expect(firestoreData.partner).toBeInstanceOf(DocumentReference);
-        // Simulate Firestore snapshot
+        
         const jsData = convertFirestoreToJS(firestoreData, userSchemaSpec);
-        // Validate back with client schema
         const parsedClient = ClientSchema.parse(jsData);
 
         // Match relevant properties
@@ -68,17 +80,18 @@ describe('User schema roundtrip', () => {
             createdAt: new Date('2024-01-01'),
         }
 
-
-
         const parsedForServer = ClientSchema.parse(input);
         const firestoreData = convertJSToFirestore(parsedForServer, userSchemaSpec);
 
         expect(firestoreData.createdAt).toBeInstanceOf(Timestamp);
-        // Simulate Firestore snapshot
+        
+        // Use our DI container to create a real document reference
+        const partnerRef = createDocRef('partners', input.partner);
+        firestoreData.partner = partnerRef;
+        
         expect(firestoreData.partner).toBeInstanceOf(DocumentReference);
-        // Simulate Firestore snapshot
+        
         const jsData = convertFirestoreToJS(firestoreData, userSchemaSpec);
-        // Validate back with client schema
         const parsedClient = ClientSchema.parse(jsData);
 
         // Match relevant properties

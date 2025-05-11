@@ -1,20 +1,20 @@
-import { buildServerSchema } from './schemas/builders/server';
+import { buildServerSchema } from './builders/server';
 import {
     userSchemaSpec,
-} from './schemas/specs/user';
+} from './specs/user';
 import {
     bookingSchemaSpec,
     communicationChannelSchema,
     bookingStatusSchema,
     communicationOptionsSchema
-} from './schemas/specs/booking';
-import { countrySchemaSpec } from './schemas/specs/country';
-import { currencySchemaSpec } from './schemas/specs/currency';
-import { esimSchemaSpec } from './schemas/specs/esim';
-import { paymentSchemaSpec } from './schemas/specs/payment';
-import { messageSchemaSpec } from './schemas/specs/message';
-import { packageSchemaSpec } from './schemas/specs/package';
-import { promoCodeSchemaSpec, packageSpecificationSchema as promoPackageSpecificationSchema } from './schemas/specs/promocode';
+} from './specs/booking';
+import { countrySchemaSpec } from './specs/country';
+import { currencySchemaSpec } from './specs/currency';
+import { esimSchemaSpec } from './specs/esim';
+import { paymentSchemaSpec } from './specs/payment';
+import { messageSchemaSpec } from './specs/message';
+import { packageSchemaSpec } from './specs/package';
+import { promoCodeSchemaSpec, packageSpecificationSchema as promoPackageSpecificationSchema } from './specs/promocode';
 import {
     partnerSchemaSpec,
     priceListSchemaSpec,
@@ -31,17 +31,21 @@ import {
     visualIdentitySchema,
     packagePriceSchemaSpec,
     platformSettingsSchemaSpec
-} from './schemas/specs/partner';
-import { hubbyModelSpec } from './schemas/specs/common';
-import { SUPPORTED_LOCALES as LOCALES } from './schemas/specs/common';
-import { apiLogSchemaSpec } from './schemas/specs/apiLogs';
+} from './specs/partner';
+import { hubbyModelSpec } from './specs/common';
+import { SUPPORTED_LOCALES as LOCALES } from './specs/common';
+import { apiLogSchemaSpec } from './specs/apiLogs';
 import { z } from 'zod';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
-export * from './index.client';
 
-import { convertFirestoreToJS, convertJSToFirestore } from './schemas/utils/firestoreTransformUtils';
+
+import { convertFirestoreToJS, convertJSToFirestore } from './utils/firestoreTransformUtils';
 import { HPartner, HPriceList, HPromoCode } from './index.client';
-import { buildClientSchema } from './schemas/builders/client';
+import { buildClientSchema } from './builders/client';
+
+
+export { partnerSchemaSpec };
+
 
 export const UserSchema = buildServerSchema(userSchemaSpec);
 export const UserFirestoreSchema = buildServerSchema(userSchemaSpec);
@@ -118,6 +122,7 @@ export type PriceListApiResponse = PriceList;
 export type ApiLogApiRequest = ApiLog;
 export type ApiLogApiResponse = ApiLog;
 
+export * from './index.client';
 
 export type HubbyModel = {
     id: string;
@@ -171,3 +176,8 @@ export const partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 // Export the type and constant
 export type SupportedLocales = typeof LOCALES[number];
 export const SUPPORTED_LOCALES = LOCALES;
+
+// Dependency Injection exports
+export { createModelConverters } from './utils/modelConverterFactory';
+export { createConvertJSToFirestore, createConvertFirestoreToJS } from './utils/firestoreTransformUtils';
+export { FirebaseService, createFirebaseService } from './services/firebase';

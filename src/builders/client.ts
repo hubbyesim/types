@@ -51,10 +51,17 @@ export function buildClientSchema(spec: FieldSpec, path: string[] = []): ZodType
   // ----- Timestamp -----
   if (typeof spec === 'object' && spec !== null && '_type' in spec && spec._type === 'timestamp') {
     let schema = z.preprocess((val) => {
-      if (typeof val === 'string' || typeof val === 'number') {
+      if (typeof val === 'string') {
+        // Try to parse the string to a Date object
         const date = new Date(val);
         return isNaN(date.getTime()) ? undefined : date; // undefined will cause z.date() to fail
       }
+      if (typeof val === 'number') {
+        // Handle numeric timestamps
+        const date = new Date(val);
+        return isNaN(date.getTime()) ? undefined : date;
+      }
+      // If it's already a Date or something else, return it as is
       return val;
     }, z.date({ required_error: 'Date is required', invalid_type_error: 'Invalid date format' }));
     if (spec.nullable) schema = schema.nullable() as any;
