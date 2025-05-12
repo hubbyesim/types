@@ -6,7 +6,8 @@ import {
     PACKAGE_COLLECTION,
     BOOKING_COLLECTION,
     PROMO_CODE_COLLECTION,
-    timestampRequired
+    timestampRequired,
+    timestampNullableOptional
 } from './common';
 
 // Define package specification schema for use in promo code
@@ -20,6 +21,7 @@ export const packageSpecificationSchema = z.object({
 // Define the promo code schema spec
 export const promoCodeSchemaSpec = markAsSchemaSpec({
     id: z.string(),
+    redeemed_at: timestampNullableOptional,
     created_at: timestampRequired,
     updated_at: timestampRequired,
     created_by: z.string().nullable(),

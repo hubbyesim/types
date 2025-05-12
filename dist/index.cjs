@@ -302,6 +302,7 @@ var communicationOptionsSchema = zod.z.object({
 });
 var bookingSchemaSpec = markAsSchemaSpec({
   id: zod.z.string(),
+  external_id: zod.z.string().nullable(),
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: zod.z.string().nullable(),
@@ -495,6 +496,7 @@ var packageSpecificationSchema = zod.z.object({
 });
 var promoCodeSchemaSpec = markAsSchemaSpec({
   id: zod.z.string(),
+  redeemed_at: timestampNullableOptional,
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: zod.z.string().nullable(),
