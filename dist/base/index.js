@@ -3,6 +3,12 @@ import { z } from 'zod';
 // src/builders/client.ts
 function wrapZodSchema(schema, options) {
   let wrapped = schema;
+  if (options?.nullable && !wrapped.isNullable?.()) {
+    wrapped = wrapped.nullable();
+  }
+  if (options?.optional && !wrapped.isOptional?.()) {
+    wrapped = wrapped.optional();
+  }
   return wrapped;
 }
 function wrapObjectSchema(spec, path, builder) {
