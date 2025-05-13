@@ -7,7 +7,6 @@ import {
     PACKAGE_COLLECTION,
     PRICE_LIST_COLLECTION,
     timestampRequired,
-    timestampNullable,
     timestampNullableOptional
 } from './common';
 

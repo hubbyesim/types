@@ -7,8 +7,6 @@ import {
 import { Timestamp } from "firebase-admin/firestore";
 import { convertFirestoreToJS } from "../src/utils/firestoreTransformUtils";
 import { partnerSchemaSpec, priceListSchemaSpec } from "../src/specs/partner";
-import { buildClientSchema } from '../src/builders/client';
-import { buildServerSchema } from '../src/builders/server';
 import { convertJSToFirestore } from '../src/utils/firestoreTransformUtils';
 import { FirebaseService, createFirebaseService } from '../src/services/firebase';
 import { createModelConverters } from '../src/utils/modelConverterFactory';
@@ -23,7 +21,6 @@ beforeAll(() => {
 describe("Partner Schema", () => {
     it("should convert from server to client and back", () => {
         const now = new Date();
-        const timestamp = Timestamp.fromDate(now);
 
         // Create a sample client side Partner object
         const clientPartner = {
