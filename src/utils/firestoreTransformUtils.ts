@@ -7,7 +7,8 @@ import { db as defaultDb } from '../services/firebase';
 
 export function createConvertJSToFirestore(db: Firestore) {
     return function convertJSToFirestore(input: any, spec: FieldSpec): any {
-        if (input === undefined || input === null) return input;
+        // Handle null/undefined at the top level
+        if (input === undefined || input === null) return null;
 
         if (spec instanceof z.ZodType) {
             if (input instanceof Date) return Timestamp.fromDate(input);
@@ -28,15 +29,33 @@ export function createConvertJSToFirestore(db: Firestore) {
                 case 'array':
                     return input.map((item: any) => convertJSToFirestore(item, spec.of));
                 case 'record':
+                    // For records, filter out undefined values
                     return Object.fromEntries(
-                        Object.entries(input).map(([k, v]) => [k, convertJSToFirestore(v, spec.of)])
+                        Object.entries(input)
+                            .filter(([_, v]) => v !== undefined)
+                            .map(([k, v]) => [k, convertJSToFirestore(v, spec.of)])
                     );
                 case 'object':
                     if ('of' in spec && typeof spec.of === 'object') {
                         const result: any = {};
                         for (const [key, fieldSpec] of Object.entries(spec.of)) {
+                            // Check if the field exists in the input
                             if (key in input) {
-                                result[key] = convertJSToFirestore(input[key], fieldSpec);
+                                const value = input[key];
+
+                                // Handle based on field optionality and nullability
+                                if (value === undefined) {
+                                    // Check if field is optional by looking at its spec
+                                    const isOptional = typeof fieldSpec === 'object' && '_type' in fieldSpec && fieldSpec._type === 'optional';
+                                    if (!isOptional) {
+                                        // If not optional but nullable, convert to null
+                                        result[key] = null;
+                                    }
+                                    // If optional, just skip it (don't add to result)
+                                } else {
+                                    // Normal case - value exists and is not undefined
+                                    result[key] = convertJSToFirestore(value, fieldSpec);
+                                }
                             }
                         }
                         return result;
@@ -47,14 +66,31 @@ export function createConvertJSToFirestore(db: Firestore) {
             }
         }
 
-        // fallback: plain object shape
-        if (typeof input === 'object' && typeof spec === 'object') {
-            return Object.fromEntries(
-                Object.entries(spec).map(([key, fieldSpec]) => [
-                    key,
-                    convertJSToFirestore(input[key], fieldSpec),
-                ])
-            );
+        // fallback: plain object shape with explicit schema
+        if (typeof input === 'object' && !Array.isArray(input) && typeof spec === 'object') {
+            const result: any = {};
+
+            for (const [key, fieldSpec] of Object.entries(spec)) {
+                if (key in input) {
+                    const value = input[key];
+
+                    // Handle undefined values
+                    if (value === undefined) {
+                        // Check if field is optional
+                        const isOptional = typeof fieldSpec === 'object' && '_type' in fieldSpec && fieldSpec._type === 'optional';
+                        if (!isOptional) {
+                            // If not optional but nullable, convert to null
+                            result[key] = null;
+                        }
+                        // If optional, don't include in the result
+                    } else {
+                        // Normal case - value exists
+                        result[key] = convertJSToFirestore(value, fieldSpec);
+                    }
+                }
+            }
+
+            return result;
         }
 
         return input;
@@ -117,17 +153,22 @@ export function createConvertFirestoreToJS() {
                 case 'record':
                     if (typeof input !== 'object' || input === null) return input;
                     return Object.fromEntries(
-                        Object.entries(input).map(([k, v]) => [
-                            k,
-                            convertFirestoreToJS(v, spec.of, [...path, k]),
-                        ])
+                        Object.entries(input)
+                            .filter(([_, v]) => v !== undefined)
+                            .map(([k, v]) => [
+                                k,
+                                convertFirestoreToJS(v, spec.of, [...path, k]),
+                            ])
                     );
 
                 case 'object':
                     if (!spec.of || typeof spec.of !== 'object') return input;
                     const result: Record<string, any> = {};
                     for (const [key, fieldSpec] of Object.entries(spec.of)) {
-                        result[key] = convertFirestoreToJS(input[key], fieldSpec, [...path, key]);
+                        // Only include properties that exist in the input and aren't undefined
+                        if (key in input && input[key] !== undefined) {
+                            result[key] = convertFirestoreToJS(input[key], fieldSpec, [...path, key]);
+                        }
                     }
                     return result;
             }
@@ -136,7 +177,10 @@ export function createConvertFirestoreToJS() {
         if (typeof spec === 'object' && typeof input === 'object' && !Array.isArray(input)) {
             const result: Record<string, any> = {};
             for (const [key, valSpec] of Object.entries(spec)) {
-                result[key] = convertFirestoreToJS(input[key], valSpec, [...path, key]);
+                // Only include properties that exist in the input and aren't undefined
+                if (key in input && input[key] !== undefined) {
+                    result[key] = convertFirestoreToJS(input[key], valSpec, [...path, key]);
+                }
             }
             return result;
         }

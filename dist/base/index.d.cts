@@ -21,20 +21,20 @@ declare const HVisualIdentitySchema: z.ZodTypeAny;
 declare const HPricingStrategySchema: z.ZodTypeAny;
 declare const HFreeEsimSchema: z.ZodTypeAny;
 declare const HAddressSchema: z.ZodObject<{
-    street: z.ZodOptional<z.ZodString>;
-    city: z.ZodOptional<z.ZodString>;
-    postal_code: z.ZodOptional<z.ZodString>;
-    country: z.ZodOptional<z.ZodString>;
+    street: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    city: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    postal_code: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    country: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
-    country?: string | undefined;
-    street?: string | undefined;
-    city?: string | undefined;
-    postal_code?: string | undefined;
+    country?: string | null | undefined;
+    street?: string | null | undefined;
+    city?: string | null | undefined;
+    postal_code?: string | null | undefined;
 }, {
-    country?: string | undefined;
-    street?: string | undefined;
-    city?: string | undefined;
-    postal_code?: string | undefined;
+    country?: string | null | undefined;
+    street?: string | null | undefined;
+    city?: string | null | undefined;
+    postal_code?: string | null | undefined;
 }>;
 declare const HRegistrationSchema: z.ZodObject<{
     chamber_of_commerce_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -53,17 +53,17 @@ declare const HRegistrationSchema: z.ZodObject<{
     tax_number?: string | null | undefined;
 }>;
 declare const HBankingDetailsSchema: z.ZodObject<{
-    account_holder: z.ZodString;
-    bank_name: z.ZodString;
-    iban: z.ZodString;
+    account_holder: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    bank_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    iban: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
-    account_holder: string;
-    bank_name: string;
-    iban: string;
+    account_holder?: string | null | undefined;
+    bank_name?: string | null | undefined;
+    iban?: string | null | undefined;
 }, {
-    account_holder: string;
-    bank_name: string;
-    iban: string;
+    account_holder?: string | null | undefined;
+    bank_name?: string | null | undefined;
+    iban?: string | null | undefined;
 }>;
 declare const HPartnerPackageSpecificationSchema: z.ZodObject<{
     size: z.ZodString;

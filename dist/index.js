@@ -539,10 +539,16 @@ var promoCodeSchemaSpec = markAsSchemaSpec({
   starter_data: z.number().optional()
 });
 var addressSchema = z.object({
-  street: z.string().optional(),
-  city: z.string().optional(),
-  postal_code: z.string().optional(),
-  country: z.string().optional()
+  street: z.string().nullable().optional(),
+  city: z.string().nullable().optional(),
+  postal_code: z.string().nullable().optional(),
+  country: z.string().nullable().optional()
+});
+var emitEventSchema = z.object({
+  topup: z.boolean().optional().default(false),
+  redemption: z.boolean().optional().default(false),
+  activation: z.boolean().optional().default(false),
+  depletion: z.boolean().optional().default(false)
 });
 var registrationSchema = z.object({
   chamber_of_commerce_number: z.string().nullable().optional(),
@@ -551,9 +557,9 @@ var registrationSchema = z.object({
   tax_number: z.string().nullable().optional()
 });
 var bankingDetailsSchema = z.object({
-  account_holder: z.string(),
-  bank_name: z.string(),
-  iban: z.string()
+  account_holder: z.string().nullable().optional(),
+  bank_name: z.string().nullable().optional(),
+  iban: z.string().nullable().optional()
 });
 var packagePriceSchema = z.object({
   destination: z.string(),
@@ -669,6 +675,7 @@ var platformSettingsSchema = z.object({
     brevo_template_id: z.number(),
     send_booking_confirmation: z.boolean()
   }).nullable().optional(),
+  emit_events: emitEventSchema.nullable().optional(),
   schedules: z.array(scheduleSchema).optional()
 });
 var packagePriceSchemaSpec = markAsSchemaSpec({
@@ -885,7 +892,7 @@ var apiLogSchemaSpec = markAsSchemaSpec({
 function createConvertJSToFirestore(db2) {
   return function convertJSToFirestore2(input, spec) {
     if (input === void 0 || input === null)
-      return input;
+      return null;
     if (spec instanceof z.ZodType) {
       if (input instanceof Date)
         return Timestamp.fromDate(input);
@@ -906,14 +913,22 @@ function createConvertJSToFirestore(db2) {
           return input.map((item) => convertJSToFirestore2(item, spec.of));
         case "record":
           return Object.fromEntries(
-            Object.entries(input).map(([k, v]) => [k, convertJSToFirestore2(v, spec.of)])
+            Object.entries(input).filter(([_, v]) => v !== void 0).map(([k, v]) => [k, convertJSToFirestore2(v, spec.of)])
           );
         case "object":
           if ("of" in spec && typeof spec.of === "object") {
             const result = {};
             for (const [key, fieldSpec] of Object.entries(spec.of)) {
               if (key in input) {
-                result[key] = convertJSToFirestore2(input[key], fieldSpec);
+                const value = input[key];
+                if (value === void 0) {
+                  const isOptional = typeof fieldSpec === "object" && "_type" in fieldSpec && fieldSpec._type === "optional";
+                  if (!isOptional) {
+                    result[key] = null;
+                  }
+                } else {
+                  result[key] = convertJSToFirestore2(value, fieldSpec);
+                }
               }
             }
             return result;
@@ -923,13 +938,22 @@ function createConvertJSToFirestore(db2) {
           throw new Error(`Unknown field type: ${spec._type}`);
       }
     }
-    if (typeof input === "object" && typeof spec === "object") {
-      return Object.fromEntries(
-        Object.entries(spec).map(([key, fieldSpec]) => [
-          key,
-          convertJSToFirestore2(input[key], fieldSpec)
-        ])
-      );
+    if (typeof input === "object" && !Array.isArray(input) && typeof spec === "object") {
+      const result = {};
+      for (const [key, fieldSpec] of Object.entries(spec)) {
+        if (key in input) {
+          const value = input[key];
+          if (value === void 0) {
+            const isOptional = typeof fieldSpec === "object" && "_type" in fieldSpec && fieldSpec._type === "optional";
+            if (!isOptional) {
+              result[key] = null;
+            }
+          } else {
+            result[key] = convertJSToFirestore2(value, fieldSpec);
+          }
+        }
+      }
+      return result;
     }
     return input;
   };
@@ -968,7 +992,7 @@ function createConvertFirestoreToJS() {
           if (typeof input !== "object" || input === null)
             return input;
           return Object.fromEntries(
-            Object.entries(input).map(([k, v]) => [
+            Object.entries(input).filter(([_, v]) => v !== void 0).map(([k, v]) => [
               k,
               convertFirestoreToJS2(v, spec.of, [...path, k])
             ])
@@ -978,7 +1002,9 @@ function createConvertFirestoreToJS() {
             return input;
           const result = {};
           for (const [key, fieldSpec] of Object.entries(spec.of)) {
-            result[key] = convertFirestoreToJS2(input[key], fieldSpec, [...path, key]);
+            if (key in input && input[key] !== void 0) {
+              result[key] = convertFirestoreToJS2(input[key], fieldSpec, [...path, key]);
+            }
           }
           return result;
       }
@@ -986,7 +1012,9 @@ function createConvertFirestoreToJS() {
     if (typeof spec === "object" && typeof input === "object" && !Array.isArray(input)) {
       const result = {};
       for (const [key, valSpec] of Object.entries(spec)) {
-        result[key] = convertFirestoreToJS2(input[key], valSpec, [...path, key]);
+        if (key in input && input[key] !== void 0) {
+          result[key] = convertFirestoreToJS2(input[key], valSpec, [...path, key]);
+        }
       }
       return result;
     }

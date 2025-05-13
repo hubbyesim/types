@@ -7,9 +7,9 @@ import { FirebaseService, createFirebaseService } from '../src/services/firebase
 
 // Mock Firebase for tests
 beforeAll(() => {
-  // Set up a test instance with isTest flag
-  const testFirebase = createFirebaseService({ isTest: true });
-  FirebaseService.setDefaultInstance(testFirebase);
+    // Set up a test instance with isTest flag
+    const testFirebase = createFirebaseService({ isTest: true });
+    FirebaseService.setDefaultInstance(testFirebase);
 });
 
 const ClientSchema = buildClientSchema(esimSchemaSpec);
@@ -128,7 +128,14 @@ describe('ESIM schema roundtrip', () => {
             total_data: 0
         };
 
-        const result = roundtrip(input);
+        const parsedForServer = ServerSchema.parse(input);
+        const firestoreData = convertJSToFirestore(parsedForServer, esimSchemaSpec);
+
+        // Verify the optional field is not added
+        expect(firestoreData).not.toHaveProperty('coverage_label');
+
+        const jsData = convertFirestoreToJS(firestoreData, esimSchemaSpec);
+        const result = ClientSchema.parse(jsData);
 
         expect(result.id).toBe(input.id);
         expect(result.imsi).toBe(input.imsi);
@@ -138,7 +145,7 @@ describe('ESIM schema roundtrip', () => {
         expect(result.country).toBeNull();
         expect(result.partner).toBeNull();
         expect(result.time_assigned).toBeNull();
-        expect(result.coverage_label).toBeUndefined();
+        expect(result).not.toHaveProperty('coverage_label');
     });
 
     it('should reject invalid eSIM data', () => {

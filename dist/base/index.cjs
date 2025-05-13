@@ -508,10 +508,16 @@ var promoCodeSchemaSpec = markAsSchemaSpec({
   starter_data: zod.z.number().optional()
 });
 var addressSchema = zod.z.object({
-  street: zod.z.string().optional(),
-  city: zod.z.string().optional(),
-  postal_code: zod.z.string().optional(),
-  country: zod.z.string().optional()
+  street: zod.z.string().nullable().optional(),
+  city: zod.z.string().nullable().optional(),
+  postal_code: zod.z.string().nullable().optional(),
+  country: zod.z.string().nullable().optional()
+});
+var emitEventSchema = zod.z.object({
+  topup: zod.z.boolean().optional().default(false),
+  redemption: zod.z.boolean().optional().default(false),
+  activation: zod.z.boolean().optional().default(false),
+  depletion: zod.z.boolean().optional().default(false)
 });
 var registrationSchema = zod.z.object({
   chamber_of_commerce_number: zod.z.string().nullable().optional(),
@@ -520,9 +526,9 @@ var registrationSchema = zod.z.object({
   tax_number: zod.z.string().nullable().optional()
 });
 var bankingDetailsSchema = zod.z.object({
-  account_holder: zod.z.string(),
-  bank_name: zod.z.string(),
-  iban: zod.z.string()
+  account_holder: zod.z.string().nullable().optional(),
+  bank_name: zod.z.string().nullable().optional(),
+  iban: zod.z.string().nullable().optional()
 });
 var packagePriceSchema = zod.z.object({
   destination: zod.z.string(),
@@ -638,6 +644,7 @@ var platformSettingsSchema = zod.z.object({
     brevo_template_id: zod.z.number(),
     send_booking_confirmation: zod.z.boolean()
   }).nullable().optional(),
+  emit_events: emitEventSchema.nullable().optional(),
   schedules: zod.z.array(scheduleSchema).optional()
 });
 markAsSchemaSpec({

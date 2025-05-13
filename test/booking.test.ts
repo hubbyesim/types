@@ -7,9 +7,9 @@ import { FirebaseService, createFirebaseService } from '../src/services/firebase
 
 // Mock Firebase for tests
 beforeAll(() => {
-  // Set up a test instance with isTest flag
-  const testFirebase = createFirebaseService({ isTest: true });
-  FirebaseService.setDefaultInstance(testFirebase);
+    // Set up a test instance with isTest flag
+    const testFirebase = createFirebaseService({ isTest: true });
+    FirebaseService.setDefaultInstance(testFirebase);
 });
 
 const ClientSchema = buildClientSchema(bookingSchemaSpec);
@@ -97,6 +97,9 @@ describe('Booking schema roundtrip', () => {
         expect(parsedClient.created_at.toISOString()).toBe(input.created_at.toISOString());
         expect(parsedClient.departure_date.toISOString()).toBe(input.departure_date.toISOString());
         expect(parsedClient.return_date.toISOString()).toBe(input.return_date.toISOString());
+
+        // Verify optional properties that weren't provided don't exist
+        expect(parsedClient).not.toHaveProperty('flight_number');
     });
 
     it('should support roundtrip with optional fields', () => {
@@ -150,8 +153,9 @@ describe('Booking schema roundtrip', () => {
         expect(parsedClient.id).toBe(input.id);
         expect(parsedClient.first_name).toBe(input.first_name);
         expect(parsedClient.email).toBeNull();
-        expect(parsedClient.flight_number).toBeUndefined();
-        expect(parsedClient.gender).toBeUndefined();
+        // Verify these properties don't exist on the parsed client object
+        expect(parsedClient).not.toHaveProperty('flight_number');
+        expect(parsedClient).not.toHaveProperty('gender');
         expect(parsedClient.return_date).toBeNull();
         expect(parsedClient.promo_codes).toEqual([]);
         expect(parsedClient.users).toBeNull();

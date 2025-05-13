@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z, ZodLazy } from 'zod';
 import { markAsSchemaSpec } from '../common';
 import { supportedLocalesSchema, SUPPORTED_LOCALES, SupportedLocales } from '../constants';
 import {
@@ -14,10 +14,18 @@ import {
 
 // Address schema
 export const addressSchema = z.object({
-    street: z.string().optional(),
-    city: z.string().optional(),
-    postal_code: z.string().optional(),
-    country: z.string().optional()
+    street: z.string().nullable().optional(),
+    city: z.string().nullable().optional(),
+    postal_code: z.string().nullable().optional(),
+    country: z.string().nullable().optional()
+});
+
+// Emit event schema
+export const emitEventSchema = z.object({
+    topup: z.boolean().optional().default(false),
+    redemption: z.boolean().optional().default(false),
+    activation: z.boolean().optional().default(false),
+    depletion: z.boolean().optional().default(false),
 });
 
 // Registration schema
@@ -30,9 +38,9 @@ export const registrationSchema = z.object({
 
 // Banking details schema
 export const bankingDetailsSchema = z.object({
-    account_holder: z.string(),
-    bank_name: z.string(),
-    iban: z.string()
+    account_holder: z.string().nullable().optional(),
+    bank_name: z.string().nullable().optional(),
+    iban: z.string().nullable().optional()
 });
 
 // Package price schema
@@ -176,6 +184,7 @@ export const platformSettingsSchema = z.object({
         brevo_template_id: z.number(),
         send_booking_confirmation: z.boolean()
     }).nullable().optional(),
+    emit_events: emitEventSchema.nullable().optional(),
     schedules: z.array(scheduleSchema).optional()
 });
 

@@ -877,4 +877,84 @@ describe("Partner Name Validation", () => {
             HPartnerSchema.parse(invalidPartner);
         }).toThrow(/String must contain at least 3 character/i);
     });
+
+    it("should convert undefined address fields to null when transforming to Firebase", () => {
+        // Create a sample partner with undefined values in address
+        const partnerWithUndefinedFields = {
+            id: "undefined-fields-partner",
+            created_at: new Date(),
+            updated_at: new Date(),
+            created_by: "user1",
+            updated_by: null,
+            name: "Test Partner",
+            type: "travel-agency",
+            is_active: true,
+            contact: {
+                email: "test@example.com",
+                office_phone: null
+            },
+            address: {
+                street: undefined, // Undefined field that should be converted to null
+                city: "Amsterdam",
+                postal_code: undefined, // Undefined field that should be converted to null
+                country: "Netherlands"
+            },
+            registration: {},
+            banking_details: {
+                account_holder: "Test Partner LLC",
+                bank_name: "Test Bank",
+                iban: "NL00TEST0123456789"
+            },
+            parent: null,
+            users: [],
+            financial_properties: {
+                administration_fee: 25.00,
+                income_per_gb: 5.00,
+                payment_method: "invoice",
+                requires_card: false,
+                pricing_strategies: {
+                    partner: {
+                        strategy: "split",
+                        modification_percentage: 10,
+                        default_price_list: null,
+                        custom_prices: []
+                    }
+                }
+            },
+            visual_identity: {
+                primary_color: "#FF5733",
+                secondary_color: "#33FF57",
+                logo: "https://example.com/logo.png"
+            },
+            platform_settings: {
+                package_strategy: {
+                    name: "default",
+                    parameters: {}
+                },
+                booking_defaults: {
+                    locale: "en-US"
+                }
+            },
+            data: {
+                source: "test",
+                manual: true
+            }
+        };
+
+        // Convert to Firestore format
+        const firestoreObj = convertJSToFirestore(partnerWithUndefinedFields, partnerSchemaSpec);
+
+        // Verify undefined fields are converted to null
+        expect(firestoreObj.address.street).toBeNull();
+        expect(firestoreObj.address.postal_code).toBeNull();
+
+        // Verify other fields are maintained
+        expect(firestoreObj.address.city).toBe("Amsterdam");
+        expect(firestoreObj.address.country).toBe("Netherlands");
+
+        // Converting back to client format should maintain nulls
+        const jsData = convertFirestoreToJS(firestoreObj, partnerSchemaSpec);
+        expect(jsData.address.street).toBeNull();
+        expect(jsData.address.postal_code).toBeNull();
+    });
 }); 
