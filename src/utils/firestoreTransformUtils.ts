@@ -24,7 +24,6 @@ export function createConvertJSToFirestore(db: Firestore) {
                     }
                     return input;
                 case 'docRef':
-                    console.log('convertJSToFirestore docRef', input, spec);
                     return db.collection(spec.collection).doc(input);
                 case 'array':
                     return input.map((item: any) => convertJSToFirestore(item, spec.of));

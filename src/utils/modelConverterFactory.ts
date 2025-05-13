@@ -25,10 +25,7 @@ export function createModelConverters<TModel, TFirestore>(
      * Converts a model instance to Firestore format
      */
     toFirestore: (model: TModel): TFirestore => {
-      console.log('Converting model to Firestore format, before:', model, modelSchemaSpec);
-      const result = convertToFirestore(model, modelSchemaSpec);
-      console.log('Converting model to Firestore format, after:', result);
-      return result;
+      return convertToFirestore(model, modelSchemaSpec);
     },
 
     /**

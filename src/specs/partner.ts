@@ -308,7 +308,7 @@ export const partnerSchemaSpec = markAsSchemaSpec({
     updated_by: z.string().nullable(),
 
     // Partner specific fields
-    name: z.string().nullable(),
+    name: z.string().min(3),
     type: z.string().nullable(),
     is_active: z.boolean().nullable().optional(),
     external_id: z.string().nullable().optional(),
@@ -374,7 +374,7 @@ export const priceListSchemaSpec = markAsSchemaSpec({
     updated_by: z.string().nullable(),
 
     // Price list specific fields
-    name: z.string(),
+    name: z.string().min(3),
     description: z.string().nullable(),
     type: z.enum(['partner', 'consumer']),
     partner: { _type: 'docRef' as const, collection: PARTNER_COLLECTION, nullable: true },

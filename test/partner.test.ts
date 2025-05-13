@@ -641,7 +641,7 @@ describe("JS to Firestore conversion", () => {
 describe("ModelConverterFactory", () => {
     it("should properly use createModelConverters to convert Partner model to/from Firestore", () => {
         // Get the Firebase service instance
-        const firebase = FirebaseService.getInstance();
+        const firebase = FirebaseService.getDefaultInstance();
         const db = firebase.firestore;
 
         const now = new Date();
@@ -751,11 +751,9 @@ describe("ModelConverterFactory", () => {
         const partnerConverters = createModelConverters(db, partnerSchemaSpec);
 
         // Convert to Firestore format using the factory
-        const firestoreData = partnerConverters.toFirestore(clientPartner);
+        const firestoreData: any = partnerConverters.toFirestore(clientPartner);
 
         // Log how many times the console.log was called
-        console.log('firestoreData conversion result:', firestoreData);
-
         // Verify Timestamps were properly converted
         expect(firestoreData.created_at).toBeInstanceOf(Timestamp);
         expect(firestoreData.updated_at).toBeInstanceOf(Timestamp);
@@ -788,7 +786,7 @@ describe("ModelConverterFactory", () => {
             .toHaveProperty('path');
 
         // Now convert back to client model
-        const clientData = partnerConverters.fromFirestore(firestoreData);
+        const clientData: any = partnerConverters.fromFirestore(firestoreData);
 
         // Verify dates were properly converted back
         expect(clientData.created_at).toBeInstanceOf(Date);
@@ -806,5 +804,80 @@ describe("ModelConverterFactory", () => {
         expect(clientData.name).toBe(clientPartner.name);
         expect(clientData.contact.email).toBe(clientPartner.contact.email);
         expect(clientData.financial_properties.administration_fee).toBe(clientPartner.financial_properties.administration_fee);
+    });
+});
+
+describe("Partner Name Validation", () => {
+    it("should disallow a partner name with just one character", () => {
+        // Create a sample partner with a single character name
+        const invalidPartner = {
+            id: "single-char-name-partner",
+            created_at: new Date(),
+            updated_at: new Date(),
+            created_by: "user1",
+            updated_by: null,
+            name: "A", // Single character name - should be disallowed
+            type: "travel-agency",
+            is_active: true,
+            contact: {
+                email: "test@example.com",
+                office_phone: null
+            },
+            address: {
+                street: "123 Main St",
+                city: "Amsterdam",
+                country: "Netherlands"
+            },
+            registration: {},
+            banking_details: {
+                account_holder: "Test Partner LLC",
+                bank_name: "Test Bank",
+                iban: "NL00TEST0123456789"
+            },
+            parent: null,
+            users: [],
+            financial_properties: {
+                administration_fee: 25.00,
+                income_per_gb: 5.00,
+                payment_method: "invoice",
+                requires_card: false,
+                pricing_strategies: {
+                    partner: {
+                        strategy: "split",
+                        modification_percentage: 10,
+                        default_price_list: null,
+                        custom_prices: []
+                    }
+                }
+            },
+            visual_identity: {
+                primary_color: "#FF5733",
+                secondary_color: "#33FF57",
+                logo: "https://example.com/logo.png"
+            },
+            platform_settings: {
+                package_strategy: {
+                    name: "default",
+                    parameters: {}
+                },
+                booking_defaults: {
+                    locale: "en-US"
+                }
+            },
+            data: {
+                source: "test",
+                manual: true
+            }
+        };
+
+        // Expect the PartnerSchema validation to throw an error due to the name length constraint
+        expect(() => {
+            PartnerSchema.parse(invalidPartner);
+        }).toThrow(/String must contain at least 3 character/i);
+
+        // Also expect the HPartnerSchema validation to throw an error
+        expect(() => {
+            HPartnerSchema.parse(invalidPartner);
+        }).toThrow(/String must contain at least 3 character/i);
     });
 }); 

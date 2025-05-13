@@ -4,19 +4,43 @@ import type { SchemaBuilder } from './types';
 /**
  * Ensures a Zod schema is wrapped to be optional and/or nullable,
  * if not already. Use this in recursive schema builders.
+ * Also applies any other supported schema transformations provided in options.
  */
 export function wrapZodSchema(
     schema: ZodTypeAny,
-    options?: { optional?: boolean; nullable?: boolean }
+    options?: {
+        optional?: boolean;
+        nullable?: boolean;
+        min?: number;
+        max?: number;
+        // Allow arbitrary extensions via dynamic property
+        [key: string]: any;
+    }
 ): ZodTypeAny {
+    if (!options) return schema;
+
     let wrapped = schema;
 
-    if (options?.nullable && !wrapped.isNullable?.()) {
+    // Handle nullable and optional specially since they're common
+    if (options.nullable && !wrapped.isNullable?.()) {
         wrapped = wrapped.nullable();
     }
 
-    if (options?.optional && !wrapped.isOptional?.()) {
+    if (options.optional && !wrapped.isOptional?.()) {
         wrapped = wrapped.optional();
+    }
+
+    // Process all other options dynamically
+    for (const [key, value] of Object.entries(options)) {
+        // Skip the already handled properties and undefined values
+        if (['nullable', 'optional'].includes(key) || value === undefined) {
+            continue;
+        }
+
+        // Check if the schema has a method matching the option key
+        if (typeof (wrapped as any)[key] === 'function') {
+            wrapped = (wrapped as any)[key](value);
+        }
     }
 
     return wrapped;
@@ -35,10 +59,10 @@ export function wrapObjectSchema(
 
     const shape: Record<string, ZodTypeAny> = {};
     for (const [key, value] of Object.entries(spec.of)) {
-        shape[key] = builder(value, [...path, key]);
+        shape[key] = builder(value as any, [...path, key]);
     }
 
-    let objectSchema = z.object(shape);
+    let objectSchema: ZodTypeAny = z.object(shape);
     if (spec.nullable) objectSchema = objectSchema.nullable();
     if (spec.optional) objectSchema = objectSchema.optional();
     return objectSchema;
@@ -70,7 +94,7 @@ export function wrapPlainObjectSchema(
     }
 
     // Create the base object schema
-    let schema = z.object(shape);
+    let schema: ZodTypeAny = z.object(shape);
 
     // Apply nullable/optional modifiers if needed
     if ('nullable' in spec && spec.nullable === true) {
