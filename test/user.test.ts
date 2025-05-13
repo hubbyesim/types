@@ -3,17 +3,22 @@ import { buildServerSchema } from '../src/builders/server';
 import { convertFirestoreToJS, convertJSToFirestore } from '../src/utils/firestoreTransformUtils';
 import { userSchemaSpec } from '../src/specs/user';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
-import { createDocRef } from './di';
 import { FirebaseService, createFirebaseService } from '../src/services/firebase';
 
 const ClientSchema = buildClientSchema(userSchemaSpec);
 const ServerSchema = buildServerSchema(userSchemaSpec);
 
+// Create a function to generate document references
+function createDocRef(collection: string, id: string): DocumentReference {
+    const firestore = FirebaseService.getDefaultInstance().firestore;
+    return firestore.collection(collection).doc(id);
+}
+
 // Mock Firebase for tests
 beforeAll(() => {
-  // Set up a test instance with isTest flag
-  const testFirebase = createFirebaseService({ isTest: true });
-  FirebaseService.setDefaultInstance(testFirebase);
+    // Set up a test instance with isTest flag
+    const testFirebase = createFirebaseService({ isTest: true });
+    FirebaseService.setDefaultInstance(testFirebase);
 });
 
 const roundtrip = (input: any) => {
@@ -54,13 +59,13 @@ describe('User schema roundtrip', () => {
         const firestoreData = convertJSToFirestore(parsedForServer, userSchemaSpec);
 
         expect(firestoreData.createdAt).toBeInstanceOf(Timestamp);
-        
+
         // Use our DI container to create a real document reference
         const partnerRef = createDocRef('partners', input.partner);
         firestoreData.partner = partnerRef;
-        
+
         expect(firestoreData.partner).toBeInstanceOf(DocumentReference);
-        
+
         const jsData = convertFirestoreToJS(firestoreData, userSchemaSpec);
         const parsedClient = ClientSchema.parse(jsData);
 
@@ -84,13 +89,13 @@ describe('User schema roundtrip', () => {
         const firestoreData = convertJSToFirestore(parsedForServer, userSchemaSpec);
 
         expect(firestoreData.createdAt).toBeInstanceOf(Timestamp);
-        
+
         // Use our DI container to create a real document reference
         const partnerRef = createDocRef('partners', input.partner);
         firestoreData.partner = partnerRef;
-        
+
         expect(firestoreData.partner).toBeInstanceOf(DocumentReference);
-        
+
         const jsData = convertFirestoreToJS(firestoreData, userSchemaSpec);
         const parsedClient = ClientSchema.parse(jsData);
 

@@ -4,12 +4,22 @@ import { applicationDefault, getApps, initializeApp } from 'firebase-admin/app';
 
 // src/builders/server.ts
 function wrapZodSchema(schema, options) {
+  if (!options)
+    return schema;
   let wrapped = schema;
-  if (options?.nullable && !wrapped.isNullable?.()) {
+  if (options.nullable && !wrapped.isNullable?.()) {
     wrapped = wrapped.nullable();
   }
-  if (options?.optional && !wrapped.isOptional?.()) {
+  if (options.optional && !wrapped.isOptional?.()) {
     wrapped = wrapped.optional();
+  }
+  for (const [key, value] of Object.entries(options)) {
+    if (["nullable", "optional"].includes(key) || value === void 0) {
+      continue;
+    }
+    if (typeof wrapped[key] === "function") {
+      wrapped = wrapped[key](value);
+    }
   }
   return wrapped;
 }
@@ -306,7 +316,7 @@ var communicationOptionsSchema = z.object({
 });
 var bookingSchemaSpec = markAsSchemaSpec({
   id: z.string(),
-  external_id: z.string().nullable(),
+  external_id: z.string().nullable().optional(),
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: z.string().nullable(),
@@ -779,7 +789,7 @@ var partnerSchemaSpec = markAsSchemaSpec({
   created_by: z.string().nullable(),
   updated_by: z.string().nullable(),
   // Partner specific fields
-  name: z.string().nullable(),
+  name: z.string().min(3),
   type: z.string().nullable(),
   is_active: z.boolean().nullable().optional(),
   external_id: z.string().nullable().optional(),
@@ -837,7 +847,7 @@ var priceListSchemaSpec = markAsSchemaSpec({
   created_by: z.string().nullable(),
   updated_by: z.string().nullable(),
   // Price list specific fields
-  name: z.string(),
+  name: z.string().min(3),
   description: z.string().nullable(),
   type: z.enum(["partner", "consumer"]),
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
@@ -891,7 +901,6 @@ function createConvertJSToFirestore(db2) {
           }
           return input;
         case "docRef":
-          console.log("convertJSToFirestore docRef", input, spec);
           return db2.collection(spec.collection).doc(input);
         case "array":
           return input.map((item) => convertJSToFirestore2(item, spec.of));
@@ -1108,10 +1117,7 @@ function createModelConverters(db2, modelSchemaSpec) {
      * Converts a model instance to Firestore format
      */
     toFirestore: (model) => {
-      console.log("Converting model to Firestore format, before:", model, modelSchemaSpec);
-      const result = convertToFirestore(model, modelSchemaSpec);
-      console.log("Converting model to Firestore format, after:", result);
-      return result;
+      return convertToFirestore(model, modelSchemaSpec);
     },
     /**
      * Converts Firestore data to a model instance

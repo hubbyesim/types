@@ -16,7 +16,7 @@ declare const partnerSchemaSpec: {
     };
     created_by: z.ZodNullable<z.ZodString>;
     updated_by: z.ZodNullable<z.ZodString>;
-    name: z.ZodNullable<z.ZodString>;
+    name: z.ZodString;
     type: z.ZodNullable<z.ZodString>;
     is_active: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;

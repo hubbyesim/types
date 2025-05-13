@@ -4,12 +4,22 @@ var zod = require('zod');
 
 // src/builders/client.ts
 function wrapZodSchema(schema, options) {
+  if (!options)
+    return schema;
   let wrapped = schema;
-  if (options?.nullable && !wrapped.isNullable?.()) {
+  if (options.nullable && !wrapped.isNullable?.()) {
     wrapped = wrapped.nullable();
   }
-  if (options?.optional && !wrapped.isOptional?.()) {
+  if (options.optional && !wrapped.isOptional?.()) {
     wrapped = wrapped.optional();
+  }
+  for (const [key, value] of Object.entries(options)) {
+    if (["nullable", "optional"].includes(key) || value === void 0) {
+      continue;
+    }
+    if (typeof wrapped[key] === "function") {
+      wrapped = wrapped[key](value);
+    }
   }
   return wrapped;
 }
@@ -275,7 +285,7 @@ var communicationOptionsSchema = zod.z.object({
 });
 var bookingSchemaSpec = markAsSchemaSpec({
   id: zod.z.string(),
-  external_id: zod.z.string().nullable(),
+  external_id: zod.z.string().nullable().optional(),
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: zod.z.string().nullable(),
@@ -748,7 +758,7 @@ var partnerSchemaSpec = markAsSchemaSpec({
   created_by: zod.z.string().nullable(),
   updated_by: zod.z.string().nullable(),
   // Partner specific fields
-  name: zod.z.string().nullable(),
+  name: zod.z.string().min(3),
   type: zod.z.string().nullable(),
   is_active: zod.z.boolean().nullable().optional(),
   external_id: zod.z.string().nullable().optional(),
@@ -806,7 +816,7 @@ var priceListSchemaSpec = markAsSchemaSpec({
   created_by: zod.z.string().nullable(),
   updated_by: zod.z.string().nullable(),
   // Price list specific fields
-  name: zod.z.string(),
+  name: zod.z.string().min(3),
   description: zod.z.string().nullable(),
   type: zod.z.enum(["partner", "consumer"]),
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
