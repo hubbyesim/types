@@ -757,6 +757,8 @@ var platformSettingsSchemaSpec = markAsSchemaSpec({
         _type: "object",
         of: packageSpecificationSchema2.shape
       },
+      booking_id_verification: z.boolean().nullable().optional(),
+      //This could be a regex pattern to test the booking id
       booking_id_verification_pattern: z.string().nullable().optional(),
       //This could be a regex pattern to test the booking id
       allowance: z.number()
