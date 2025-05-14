@@ -724,7 +724,8 @@ markAsSchemaSpec({
         _type: "object",
         of: packageSpecificationSchema2.shape
       },
-      verify_booking_id: z.boolean().optional().default(false),
+      booking_id_verification_pattern: z.string().nullable().optional(),
+      //This could be a regex pattern to test the booking id
       allowance: z.number()
     },
     nullable: true,

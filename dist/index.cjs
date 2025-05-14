@@ -759,7 +759,8 @@ var platformSettingsSchemaSpec = markAsSchemaSpec({
         _type: "object",
         of: packageSpecificationSchema2.shape
       },
-      verify_booking_id: zod.z.boolean().optional().default(false),
+      booking_id_verification_pattern: zod.z.string().nullable().optional(),
+      //This could be a regex pattern to test the booking id
       allowance: zod.z.number()
     },
     nullable: true,
