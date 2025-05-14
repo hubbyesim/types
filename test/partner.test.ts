@@ -933,6 +933,13 @@ describe("Partner Name Validation", () => {
                 },
                 booking_defaults: {
                     locale: "en-US"
+                },
+                free_esim: {
+                    package_specification: {
+                        size: "5GB",
+                    },
+                    booking_id_verification_pattern: "",
+                    allowance: 10
                 }
             },
             data: {
@@ -956,5 +963,7 @@ describe("Partner Name Validation", () => {
         const jsData = convertFirestoreToJS(firestoreObj, partnerSchemaSpec);
         expect(jsData.address.street).toBeNull();
         expect(jsData.address.postal_code).toBeNull();
+
+        expect(jsData.platform_settings.free_esim.booking_id_verification).toBe(false);
     });
 }); 
