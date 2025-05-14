@@ -661,6 +661,8 @@ var freeEsimSchema = zod.z.object({
     type: zod.z.string(),
     destination: zod.z.string()
   }),
+  booking_id_verification: zod.z.boolean().default(false),
+  booking_id_verification_pattern: zod.z.string().nullable().optional(),
   allowance: zod.z.number()
 });
 var platformSettingsSchema = zod.z.object({
@@ -754,17 +756,7 @@ var platformSettingsSchemaSpec = markAsSchemaSpec({
   },
   free_esim: {
     _type: "object",
-    of: {
-      package_specification: {
-        _type: "object",
-        of: packageSpecificationSchema2.shape
-      },
-      booking_id_verification: zod.z.boolean().nullable().optional(),
-      //This could be a regex pattern to test the booking id
-      booking_id_verification_pattern: zod.z.string().nullable().optional(),
-      //This could be a regex pattern to test the booking id
-      allowance: zod.z.number()
-    },
+    of: freeEsimSchema.shape,
     nullable: true,
     optional: true
   },

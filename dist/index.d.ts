@@ -270,6 +270,8 @@ declare const partnerSchemaSpec: {
                     destination: string;
                     size: string;
                 }>;
+                booking_id_verification: z.ZodDefault<z.ZodBoolean>;
+                booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
                 allowance: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
                 package_specification: {
@@ -277,7 +279,9 @@ declare const partnerSchemaSpec: {
                     destination: string;
                     size: string;
                 };
+                booking_id_verification: boolean;
                 allowance: number;
+                booking_id_verification_pattern?: string | null | undefined;
             }, {
                 package_specification: {
                     type: string;
@@ -285,6 +289,8 @@ declare const partnerSchemaSpec: {
                     size: string;
                 };
                 allowance: number;
+                booking_id_verification?: boolean | undefined;
+                booking_id_verification_pattern?: string | null | undefined;
             }>>>;
             booking_defaults: z.ZodOptional<z.ZodNullable<z.ZodObject<{
                 locale: z.ZodEnum<["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "de-BE"]>;
