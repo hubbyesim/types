@@ -569,9 +569,9 @@ var packagePriceSchema = z.object({
   package: z.object({ _type: z.literal("docRef"), collection: z.literal(PACKAGE_COLLECTION) })
 });
 var packageSpecificationSchema2 = z.object({
-  size: z.string(),
-  type: z.string(),
-  destination: z.string()
+  size: z.string().nullable().optional(),
+  type: z.string().nullable().optional(),
+  destination: z.string().nullable().optional()
 });
 var pricingStrategySchema = z.object({
   strategy: z.enum(["split", "bundle"]),

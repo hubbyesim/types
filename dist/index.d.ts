@@ -489,17 +489,17 @@ declare const HBankingDetailsSchema: z.ZodObject<{
     iban?: string | null | undefined;
 }>;
 declare const HPartnerPackageSpecificationSchema: z.ZodObject<{
-    size: z.ZodString;
-    type: z.ZodString;
-    destination: z.ZodString;
+    size: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    destination: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
-    type: string;
-    destination: string;
-    size: string;
+    type?: string | null | undefined;
+    destination?: string | null | undefined;
+    size?: string | null | undefined;
 }, {
-    type: string;
-    destination: string;
-    size: string;
+    type?: string | null | undefined;
+    destination?: string | null | undefined;
+    size?: string | null | undefined;
 }>;
 declare const HPromoPackageSpecificationSchema: z.ZodObject<{
     destination: z.ZodOptional<z.ZodString>;
@@ -745,17 +745,17 @@ declare const BankingDetailsSchema: z.ZodObject<{
     iban?: string | null | undefined;
 }>;
 declare const PartnerPackageSpecificationSchema: z.ZodObject<{
-    size: z.ZodString;
-    type: z.ZodString;
-    destination: z.ZodString;
+    size: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    destination: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
-    type: string;
-    destination: string;
-    size: string;
+    type?: string | null | undefined;
+    destination?: string | null | undefined;
+    size?: string | null | undefined;
 }, {
-    type: string;
-    destination: string;
-    size: string;
+    type?: string | null | undefined;
+    destination?: string | null | undefined;
+    size?: string | null | undefined;
 }>;
 declare const PromoPackageSpecificationSchema: z.ZodObject<{
     destination: z.ZodOptional<z.ZodString>;

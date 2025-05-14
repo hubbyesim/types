@@ -538,9 +538,9 @@ var packagePriceSchema = zod.z.object({
   package: zod.z.object({ _type: zod.z.literal("docRef"), collection: zod.z.literal(PACKAGE_COLLECTION) })
 });
 var packageSpecificationSchema2 = zod.z.object({
-  size: zod.z.string(),
-  type: zod.z.string(),
-  destination: zod.z.string()
+  size: zod.z.string().nullable().optional(),
+  type: zod.z.string().nullable().optional(),
+  destination: zod.z.string().nullable().optional()
 });
 var pricingStrategySchema = zod.z.object({
   strategy: zod.z.enum(["split", "bundle"]),

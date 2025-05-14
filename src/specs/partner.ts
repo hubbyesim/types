@@ -54,9 +54,9 @@ export const packagePriceSchema = z.object({
 
 // Package specification schema
 export const packageSpecificationSchema = z.object({
-    size: z.string(),
-    type: z.string(),
-    destination: z.string()
+    size: z.string().nullable().optional(),
+    type: z.string().nullable().optional(),
+    destination: z.string().nullable().optional()
 });
 
 // Pricing strategy schema
