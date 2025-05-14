@@ -356,6 +356,12 @@ export const partnerSchemaSpec = markAsSchemaSpec({
         nullable: true
     },
 
+    visualIdentity: {
+        _type: 'object' as const,
+        of: visualIdentitySchema.shape,
+        nullable: true
+    },
+
     // Platform settings
     platform_settings: {
         _type: 'object' as const,

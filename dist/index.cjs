@@ -834,6 +834,11 @@ var partnerSchemaSpec = markAsSchemaSpec({
     of: visualIdentitySchema.shape,
     nullable: true
   },
+  visualIdentity: {
+    _type: "object",
+    of: visualIdentitySchema.shape,
+    nullable: true
+  },
   // Platform settings
   platform_settings: {
     _type: "object",
