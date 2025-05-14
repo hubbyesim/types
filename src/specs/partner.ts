@@ -274,6 +274,7 @@ export const platformSettingsSchemaSpec = markAsSchemaSpec({
                 _type: 'object' as const,
                 of: packageSpecificationSchema.shape
             },
+            verify_booking_id: z.boolean().optional().default(false),
             allowance: z.number()
         },
         nullable: true,

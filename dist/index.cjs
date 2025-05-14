@@ -759,6 +759,7 @@ var platformSettingsSchemaSpec = markAsSchemaSpec({
         _type: "object",
         of: packageSpecificationSchema2.shape
       },
+      verify_booking_id: zod.z.boolean().optional().default(false),
       allowance: zod.z.number()
     },
     nullable: true,
