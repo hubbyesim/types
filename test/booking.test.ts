@@ -1,96 +1,174 @@
-import {
-    BookingApp, BookingFirestore, bookingToFirestore, bookingFromFirestore
-} from '../src/schemas/firebase/booking';
-import { Timestamp, DocumentReference } from 'firebase-admin/firestore';
-import { PARTNER_COLLECTION, PROMO_CODE_COLLECTION, USER_COLLECTION, ESIM_COLLECTION } from '../src/schemas/firebase/utils/collections';
+import { buildClientSchema } from '../src/builders/client';
+import { buildServerSchema } from '../src/builders/server';
+import { convertFirestoreToJS, convertJSToFirestore } from '../src/utils/firestoreTransformUtils';
+import { bookingSchemaSpec } from '../src/specs/booking';
+import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
+import { FirebaseService, createFirebaseService } from '../src/services/firebase';
 
-// --- Mock Helpers ---
-jest.mock('../src/schemas/firebase/helpers', () => {
-    const originalHelpers = jest.requireActual('../src/schemas/firebase/helpers');
-    return {
-        ...originalHelpers,
-        testEnv: { isTestEnvironment: true }, // Ensure mock refs are used
-        toFirestore: {
-            ...originalHelpers.toFirestore,
-            date: (date: Date) => ({ toDate: () => date, toMillis: () => date.getTime() } as Timestamp),
-            ref: (collection: string, id: string) => ({ id: id, path: `${collection}/${id}` } as DocumentReference),
-        },
-        fromFirestore: {
-            ...originalHelpers.fromFirestore,
-            date: (timestamp: Timestamp) => timestamp.toDate(),
-            ref: (ref: DocumentReference) => ref.id,
-        },
-    };
+// Mock Firebase for tests
+beforeAll(() => {
+    // Set up a test instance with isTest flag
+    const testFirebase = createFirebaseService({ isTest: true });
+    FirebaseService.setDefaultInstance(testFirebase);
 });
-// --- End Mocks ---
 
-describe('Booking Schema Conversion', () => {
-    it('should correctly convert between BookingApp and BookingFirestore (Roundtrip)', () => {
+const ClientSchema = buildClientSchema(bookingSchemaSpec);
+const ServerSchema = buildServerSchema(bookingSchemaSpec);
+
+const roundtrip = (input: any) => {
+    const parsedForServer = ServerSchema.parse(input);
+    const firestoreData = convertJSToFirestore(parsedForServer, bookingSchemaSpec);
+    const jsData = convertFirestoreToJS(firestoreData, bookingSchemaSpec);
+    return ClientSchema.parse(jsData);
+};
+
+describe('Booking schema roundtrip', () => {
+    it('should support roundtrip from client to firestore and back', () => {
         const now = new Date();
-        const createdAt = new Date(Math.floor(now.getTime() / 1000) * 1000);
-        const departureDate = new Date(Math.floor((now.getTime() + 86400000 * 7) / 1000) * 1000); // 7 days later
-        const returnDate = new Date(Math.floor((now.getTime() + 86400000 * 14) / 1000) * 1000); // 14 days later
 
-        const bookingId = 'booking_xyz789';
-        const partnerId = 'partner_booking_1';
-        const promoId1 = 'promo_summer24';
-        const userId1 = 'user_traveler_1';
-        const esimId1 = 'esim_abc111';
-
-        const initialBookingApp: BookingApp = {
-            id: bookingId,
-            created_at: createdAt,
-            updated_at: createdAt,
-            created_by: partnerId,
-            updated_by: partnerId,
-            title: 'Mr.',
-            first_name: 'Test',
-            last_name: 'Traveler',
-            full_name: 'Test Traveler',
-            pax: 1,
-            email: 'test@traveler.com',
-            phone: '+11234567890',
-            booking_id: 'BK123',
-            data: { source: 'web', manual: false },
+        const input = {
+            id: '123',
+            created_at: now,
+            updated_at: now,
+            created_by: 'user123',
+            updated_by: 'user123',
+            title: 'Mr',
+            first_name: 'John',
+            last_name: 'Doe',
+            full_name: 'John Doe',
+            pax: 2,
+            email: 'john@example.com',
+            phone: '+1234567890',
+            booking_id: 'B12345',
+            locale: 'en-US',
+            status: 'CONFIRMED',
+            data: {
+                source: 'web',
+                manual: false
+            },
+            communication_options: {
+                should_send_message: true,
+                channels: ['EMAIL', 'WHATSAPP']
+            },
             is_processed_for_esim_restoration: false,
             is_pseudonymized: false,
-            departure_date: departureDate,
-            return_date: returnDate,
-            status: 'CONFIRMED',
-            locale: 'nl-NL',
-            partner: partnerId,
-            promo_codes: [promoId1],
-            users: [userId1],
-            esims: [esimId1],
-            communication_options: { should_send_message: true, channels: ['EMAIL', 'SMS'] },
+            departure_date: now,
+            return_date: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000),
+            partner: 'partner123',
+            promo_codes: ['promo1', 'promo2'],
+            users: ['user1', 'user2'],
+            esims: null
         };
 
-        // Convert to Firestore
-        const bookingFirestore = bookingToFirestore(initialBookingApp);
+        const parsedForServer = ClientSchema.parse(input);
+        const firestoreData = convertJSToFirestore(parsedForServer, bookingSchemaSpec);
 
-        // Basic Checks
-        expect(bookingFirestore.status).toBe('CONFIRMED');
-        expect(bookingFirestore.partner?.id).toBe(partnerId);
-        expect(bookingFirestore.departure_date?.toDate()).toEqual(departureDate);
-        expect(bookingFirestore.return_date?.toDate()).toEqual(returnDate);
-        expect(bookingFirestore.promo_codes).toHaveLength(1);
-        expect(bookingFirestore.promo_codes[0].id).toBe(promoId1);
-        expect(bookingFirestore.users).toHaveLength(1);
-        expect(bookingFirestore.users?.[0].id).toBe(userId1);
-        expect(bookingFirestore.esims).toHaveLength(1);
-        expect(bookingFirestore.esims?.[0].id).toBe(esimId1);
+        // Check timestamps are properly converted
+        expect(firestoreData.created_at).toBeInstanceOf(Timestamp);
+        expect(firestoreData.updated_at).toBeInstanceOf(Timestamp);
+        expect(firestoreData.departure_date).toBeInstanceOf(Timestamp);
+        expect(firestoreData.return_date).toBeInstanceOf(Timestamp);
 
-        // Convert back to App
-        const finalBookingApp = bookingFromFirestore(bookingFirestore);
+        // Check document references are properly converted
+        expect(firestoreData.partner).toBeInstanceOf(DocumentReference);
+        expect(firestoreData.promo_codes[0]).toBeInstanceOf(DocumentReference);
+        expect(firestoreData.users[0]).toBeInstanceOf(DocumentReference);
 
-        // Assertions
-        expect(finalBookingApp.created_at?.getTime()).toEqual(initialBookingApp.created_at?.getTime());
-        expect(finalBookingApp.updated_at?.getTime()).toEqual(initialBookingApp.updated_at?.getTime());
-        expect(finalBookingApp.departure_date?.getTime()).toEqual(initialBookingApp.departure_date?.getTime());
-        expect(finalBookingApp.return_date?.getTime()).toEqual(initialBookingApp.return_date?.getTime());
+        // Simulate Firestore snapshot conversion
+        const jsData = convertFirestoreToJS(firestoreData, bookingSchemaSpec);
 
-        const finalFiltered = { ...finalBookingApp, created_at: undefined, updated_at: undefined, departure_date: undefined, return_date: undefined };
-        const initialFiltered = { ...initialBookingApp, created_at: undefined, updated_at: undefined, departure_date: undefined, return_date: undefined };
-        expect(finalFiltered).toEqual(initialFiltered);
+        // Validate back with client schema
+        const parsedClient = ClientSchema.parse(jsData);
+
+        // Check that all data round-trips correctly
+        expect(parsedClient.id).toBe(input.id);
+        expect(parsedClient.first_name).toBe(input.first_name);
+        expect(parsedClient.last_name).toBe(input.last_name);
+        expect(parsedClient.email).toBe(input.email);
+        expect(parsedClient.status).toBe(input.status);
+        expect(parsedClient.locale).toBe(input.locale);
+        expect(parsedClient.partner).toBe(input.partner);
+        expect(parsedClient.promo_codes).toEqual(input.promo_codes);
+        expect(parsedClient.users).toEqual(input.users);
+        expect(parsedClient.esims).toBeNull();
+        expect(parsedClient.communication_options.channels).toEqual(input.communication_options.channels);
+
+        // Check date conversions
+        expect(parsedClient.created_at.toISOString()).toBe(input.created_at.toISOString());
+        expect(parsedClient.departure_date.toISOString()).toBe(input.departure_date.toISOString());
+        expect(parsedClient.return_date.toISOString()).toBe(input.return_date.toISOString());
+
+        // Verify optional properties that weren't provided don't exist
+        expect(parsedClient).not.toHaveProperty('flight_number');
+    });
+
+    it('should support roundtrip with optional fields', () => {
+        const now = new Date();
+
+        // Minimal booking with just required fields
+        const input = {
+            id: '123',
+            created_at: now,
+            updated_at: now,
+            created_by: null,
+            updated_by: null,
+            title: null,
+            first_name: 'John',
+            last_name: 'Doe',
+            full_name: 'John Doe',
+            pax: 1,
+            email: null,
+            phone: null,
+            booking_id: null,
+            locale: 'en-US',
+            status: 'PENDING',
+            data: {
+                source: 'api',
+                manual: true
+            },
+            communication_options: {
+                should_send_message: false,
+                channels: []
+            },
+            is_processed_for_esim_restoration: false,
+            is_pseudonymized: false,
+            departure_date: now,
+            return_date: null,
+            partner: 'partner123',
+            promo_codes: [],
+            users: null,
+            esims: null
+        };
+
+        const parsedForServer = ClientSchema.parse(input);
+        const firestoreData = convertJSToFirestore(parsedForServer, bookingSchemaSpec);
+
+        // Simulate Firestore snapshot conversion
+        const jsData = convertFirestoreToJS(firestoreData, bookingSchemaSpec);
+
+        // Validate back with client schema
+        const parsedClient = ClientSchema.parse(jsData);
+
+        // Check that all data round-trips correctly
+        expect(parsedClient.id).toBe(input.id);
+        expect(parsedClient.first_name).toBe(input.first_name);
+        expect(parsedClient.email).toBeNull();
+        // Verify these properties don't exist on the parsed client object
+        expect(parsedClient).not.toHaveProperty('flight_number');
+        expect(parsedClient).not.toHaveProperty('gender');
+        expect(parsedClient.return_date).toBeNull();
+        expect(parsedClient.promo_codes).toEqual([]);
+        expect(parsedClient.users).toBeNull();
+    });
+
+    it('should reject invalid booking data', () => {
+        const invalidBooking = {
+            // Missing required fields
+            id: '123',
+            first_name: 'John',
+            last_name: 'Doe'
+        };
+
+        expect(() => ClientSchema.parse(invalidBooking)).toThrow();
     });
 }); 

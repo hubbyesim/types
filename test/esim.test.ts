@@ -1,100 +1,161 @@
-import {
-    ESIMApp, ESIMFirestore, esimToFirestore, esimFromFirestore
-} from '../src/schemas/firebase/esim';
-import { Timestamp, DocumentReference } from 'firebase-admin/firestore';
-import { COUNTRY_COLLECTION, USER_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION } from '../src/schemas/firebase/utils/collections';
+import { buildClientSchema } from '../src/builders/client';
+import { buildServerSchema } from '../src/builders/server';
+import { convertFirestoreToJS, convertJSToFirestore } from '../src/utils/firestoreTransformUtils';
+import { esimSchemaSpec } from '../src/specs/esim';
+import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
+import { FirebaseService, createFirebaseService } from '../src/services/firebase';
 
-// --- Mock Helpers ---
-jest.mock('../src/schemas/firebase/helpers', () => {
-    const originalHelpers = jest.requireActual('../src/schemas/firebase/helpers');
-    return {
-        ...originalHelpers,
-        testEnv: { isTestEnvironment: true }, // Ensure mock refs are used
-        toFirestore: {
-            ...originalHelpers.toFirestore,
-            date: (date: Date) => ({ toDate: () => date, toMillis: () => date.getTime() } as Timestamp),
-            ref: (collection: string, id: string) => ({ id: id, path: `${collection}/${id}` } as DocumentReference),
-        },
-        fromFirestore: {
-            ...originalHelpers.fromFirestore,
-            date: (timestamp: Timestamp) => timestamp.toDate(),
-            ref: (ref: DocumentReference) => ref.id,
-        },
-    };
+// Mock Firebase for tests
+beforeAll(() => {
+    // Set up a test instance with isTest flag
+    const testFirebase = createFirebaseService({ isTest: true });
+    FirebaseService.setDefaultInstance(testFirebase);
 });
-// --- End Mocks ---
 
-describe('ESIM Schema Conversion', () => {
-    it('should correctly convert between ESIMApp and ESIMFirestore (Roundtrip)', () => {
+const ClientSchema = buildClientSchema(esimSchemaSpec);
+const ServerSchema = buildServerSchema(esimSchemaSpec);
+
+const roundtrip = (input: any) => {
+    const parsedForServer = ServerSchema.parse(input);
+    const firestoreData = convertJSToFirestore(parsedForServer, esimSchemaSpec);
+    const jsData = convertFirestoreToJS(firestoreData, esimSchemaSpec);
+    return ClientSchema.parse(jsData);
+};
+
+describe('ESIM schema roundtrip', () => {
+    it('should support roundtrip from client to firestore and back', () => {
         const now = new Date();
-        const createdAt = new Date(Math.floor(now.getTime() / 1000) * 1000);
-        const timeAssigned = new Date(Math.floor((now.getTime() + 60000) / 1000) * 1000); // 1 min later
-        const lastUpdated = new Date(Math.floor((now.getTime() + 120000) / 1000) * 1000); // 2 min later
 
-        const esimId = 'esim_def456';
-        const countryId = 'country_jpn';
-        const userId = 'user_esim_holder';
-        const partnerId = 'partner_esim_prov';
-        const paymentId = 'pay_esim_fee';
-
-        const initialESIMApp: ESIMApp = {
-            id: esimId,
-            created_at: createdAt,
-            updated_at: lastUpdated, // Use lastUpdated here
-            created_by: 'system',
-            updated_by: 'system',
-            // Common Fields
-            imsi: 123456789012345, // Example IMSI
-            qr: 'qr_code_data_here',
-            iccid: '89...iccid...123',
-            provider: 'providerA',
-            status: 'ASSIGNED',
-            name: 'My Esim',
-            android_auto: false,
-            type: 'payment', // Example type
-            is_auto_install: false,
+        const input = {
+            id: 'esim123',
+            created_at: now,
+            updated_at: now,
+            created_by: 'user123',
+            updated_by: 'user123',
+            imsi: 123456789,
+            qr: 'qr-data-string',
+            iccid: 'iccid-string',
+            provider: 'Provider Name',
+            coverage_label: 'EU Coverage',
+            total_data: 5000,
+            data_left: 4500,
+            data_used: false,
+            status: 'active',
+            name: 'My eSIM',
+            android_auto: true,
+            partner_price: 19.99,
+            promo: 'SUMMER2023',
+            type: 'api',
+            is_auto_install: true,
             is_archived: false,
-            user: userId,
-            payment: paymentId,
+            user: 'user456',
+            payment: 'payment789',
             apn: 'internet',
-            // Nullable common fields
-            coverage_label: 'Global',
-            total_data: 5000000000, // 5GB
-            data_left: 4000000000, // 4GB
-            data_used: true,
-            partner_price: 10.0,
-            promo: null,
-            // ESIMApp specific fields
-            time_assigned: timeAssigned,
-            last_updated: lastUpdated,
-            country: countryId,
-            partner: partnerId,
+            country: 'country123',
+            partner: 'partner456',
+            time_assigned: now,
+            last_updated: now
         };
 
-        // Convert to Firestore
-        const esimFirestore = esimToFirestore(initialESIMApp);
+        const parsedForServer = ClientSchema.parse(input);
+        const firestoreData = convertJSToFirestore(parsedForServer, esimSchemaSpec);
 
-        // Basic Checks
-        expect(esimFirestore.iccid).toBe('89...iccid...123');
-        expect(esimFirestore.status).toBe('ASSIGNED');
-        expect(esimFirestore.country?.id).toBe(countryId); // Country is ref
-        expect((esimFirestore.user as any)?.id).toBe(userId);
-        expect(esimFirestore.partner?.id).toBe(partnerId); // Partner is ref
-        expect((esimFirestore.payment as any)?.id).toBe(paymentId);
-        expect(esimFirestore.time_assigned?.toDate()).toEqual(timeAssigned);
-        expect(esimFirestore.last_updated?.toDate()).toEqual(lastUpdated);
+        // Check timestamps are properly converted
+        expect(firestoreData.created_at).toBeInstanceOf(Timestamp);
+        expect(firestoreData.updated_at).toBeInstanceOf(Timestamp);
+        expect(firestoreData.time_assigned).toBeInstanceOf(Timestamp);
+        expect(firestoreData.last_updated).toBeInstanceOf(Timestamp);
 
-        // Convert back to App
-        const finalESIMApp = esimFromFirestore(esimFirestore);
+        // Check document references are properly converted
+        expect(firestoreData.country).toBeInstanceOf(DocumentReference);
+        expect(firestoreData.partner).toBeInstanceOf(DocumentReference);
 
-        // Assertions
-        expect(finalESIMApp.created_at?.getTime()).toEqual(initialESIMApp.created_at?.getTime());
-        expect(finalESIMApp.updated_at?.getTime()).toEqual(initialESIMApp.updated_at?.getTime());
-        expect(finalESIMApp.time_assigned?.getTime()).toEqual(initialESIMApp.time_assigned?.getTime());
-        expect(finalESIMApp.last_updated?.getTime()).toEqual(initialESIMApp.last_updated?.getTime());
+        // Simulate Firestore snapshot conversion
+        const jsData = convertFirestoreToJS(firestoreData, esimSchemaSpec);
 
-        const finalFiltered = { ...finalESIMApp, created_at: undefined, updated_at: undefined, time_assigned: undefined, last_updated: undefined };
-        const initialFiltered = { ...initialESIMApp, created_at: undefined, updated_at: undefined, time_assigned: undefined, last_updated: undefined };
-        expect(finalFiltered).toEqual(initialFiltered);
+        // Validate back with client schema
+        const parsedClient = ClientSchema.parse(jsData);
+
+        // Check that all data round-trips correctly
+        expect(parsedClient.id).toBe(input.id);
+        expect(parsedClient.imsi).toBe(input.imsi);
+        expect(parsedClient.qr).toBe(input.qr);
+        expect(parsedClient.iccid).toBe(input.iccid);
+        expect(parsedClient.provider).toBe(input.provider);
+        expect(parsedClient.coverage_label).toBe(input.coverage_label);
+        expect(parsedClient.name).toBe(input.name);
+        expect(parsedClient.type).toBe(input.type);
+        expect(parsedClient.is_auto_install).toBe(input.is_auto_install);
+        expect(parsedClient.country).toBe(input.country);
+        expect(parsedClient.partner).toBe(input.partner);
+
+        // Check date conversions
+        expect(parsedClient.created_at.toISOString()).toBe(input.created_at.toISOString());
+        expect(parsedClient.time_assigned.toISOString()).toBe(input.time_assigned.toISOString());
+    });
+
+    it('should support nullable and optional fields', () => {
+        const now = new Date();
+
+        // eSIM with minimal required fields and nulls
+        const input = {
+            id: 'esim456',
+            created_at: now,
+            updated_at: now,
+            created_by: null,
+            updated_by: null,
+            imsi: 987654321,
+            qr: 'qr-code-data',
+            iccid: 'iccid-data',
+            provider: 'Another Provider',
+            status: null,
+            name: 'Minimal eSIM',
+            android_auto: false,
+            partner_price: null,
+            promo: null,
+            type: 'payment',
+            is_auto_install: false,
+            is_archived: false,
+            user: null,
+            payment: null,
+            apn: null,
+            country: null,
+            partner: null,
+            time_assigned: null,
+            last_updated: null,
+            data_left: 0,
+            data_used: false,
+            total_data: 0
+        };
+
+        const parsedForServer = ServerSchema.parse(input);
+        const firestoreData = convertJSToFirestore(parsedForServer, esimSchemaSpec);
+
+        // Verify the optional field is not added
+        expect(firestoreData).not.toHaveProperty('coverage_label');
+
+        const jsData = convertFirestoreToJS(firestoreData, esimSchemaSpec);
+        const result = ClientSchema.parse(jsData);
+
+        expect(result.id).toBe(input.id);
+        expect(result.imsi).toBe(input.imsi);
+        expect(result.provider).toBe(input.provider);
+        expect(result.status).toBeNull();
+        expect(result.partner_price).toBeNull();
+        expect(result.country).toBeNull();
+        expect(result.partner).toBeNull();
+        expect(result.time_assigned).toBeNull();
+        expect(result).not.toHaveProperty('coverage_label');
+    });
+
+    it('should reject invalid eSIM data', () => {
+        const invalidESIM = {
+            // Missing required fields
+            id: 'esim123',
+            created_at: new Date(),
+            name: 'Invalid eSIM'
+        };
+
+        expect(() => ClientSchema.parse(invalidESIM)).toThrow();
     });
 }); 

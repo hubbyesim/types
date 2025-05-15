@@ -9,4 +9,15 @@ export default {
     '^(\.{1,2}/.*)\.js$': '$1',
   },
   // extensionsToTreatAsEsm is handled by the preset
+  
+  // Add global setup configuration
+  globalSetup: './test/setup.ts',
+  setupFilesAfterEnv: ['./test/setup.ts'],
+  
+  // Use test-specific TypeScript configuration
+  transform: {
+    '^.+\\.tsx?$': ['ts-jest', {
+      tsconfig: 'tsconfig.test.json'
+    }]
+  }
 }; 

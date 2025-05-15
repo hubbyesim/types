@@ -4,7 +4,7 @@
       "module": "ESNext",
       "moduleResolution": "Bundler",
       "outDir": "dist",
-      "rootDir": "src",
+      "rootDir": "./",
       "declaration": true,
       "strict": true,
       "esModuleInterop": true,
@@ -13,5 +13,5 @@
       "skipLibCheck": true,
       "isolatedModules": true
     },
-    "include": ["src", "test/user.test.ts"]
+    "include": ["src/**/*", "test/**/*"]
   }  
