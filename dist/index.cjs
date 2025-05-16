@@ -221,6 +221,8 @@ var SUPPORTED_LOCALES = [
   "de-CH",
   "fr-CH",
   "it-CH",
+  "sv-SE",
+  "sk-SK",
   "de-BE"
 ];
 
@@ -247,6 +249,7 @@ var apiKeysObjectSpec = {
   optional: true
 };
 var userSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string(),
   name: zod.z.string().nullable(),
   email: zod.z.string().email().nullable(),
   stripe_id: zod.z.string().nullable().optional(),
