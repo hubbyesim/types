@@ -20,6 +20,7 @@ declare const HPlatformSettingsSchema: z.ZodTypeAny;
 declare const HVisualIdentitySchema: z.ZodTypeAny;
 declare const HPricingStrategySchema: z.ZodTypeAny;
 declare const HFreeEsimSchema: z.ZodTypeAny;
+declare const HAnalyticsSchema: z.ZodTypeAny;
 declare const HAddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     city: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -158,6 +159,7 @@ declare const HCommunicationOptionsSchema: z.ZodObject<{
     should_send_message: boolean;
     channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
 }>;
+type HAnalytics = z.infer<typeof HAnalyticsSchema>;
 type HUser = z.infer<typeof HUserSchema>;
 type HBooking = z.infer<typeof HBookingSchema>;
 type HCountry = z.infer<typeof HCountrySchema>;
@@ -188,4 +190,4 @@ type HubbyModelApp = HHubbyModel;
 type SupportedLocales = typeof SUPPORTED_LOCALES[number];
 declare const SUPPORTED_LOCALES: readonly ["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE"];
 
-export { HAddress, HAddressSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HScheduleFilter, HScheduleFilterSchema, HUser, HUserSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelApp, HubbyModelSchema, SUPPORTED_LOCALES, SupportedLocales };
+export { HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HScheduleFilter, HScheduleFilterSchema, HUser, HUserSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelApp, HubbyModelSchema, SUPPORTED_LOCALES, SupportedLocales };

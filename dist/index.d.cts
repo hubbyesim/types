@@ -2,6 +2,36 @@ import { z } from 'zod';
 import { Firestore, Timestamp, DocumentReference } from 'firebase-admin/firestore';
 import { AppOptions } from 'firebase-admin/app';
 
+declare const analyticsSpec: {
+    date: z.ZodString;
+    partner: z.ZodString;
+    event: z.ZodString;
+    sum: z.ZodNumber;
+    id: z.ZodString;
+    created_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    updated_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    created_by: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+        optional: boolean;
+    };
+    updated_by: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+        optional: boolean;
+    };
+};
+
 declare const partnerSchemaSpec: {
     id: z.ZodString;
     created_at: {
@@ -449,6 +479,7 @@ declare const HPlatformSettingsSchema: z.ZodTypeAny;
 declare const HVisualIdentitySchema: z.ZodTypeAny;
 declare const HPricingStrategySchema: z.ZodTypeAny;
 declare const HFreeEsimSchema: z.ZodTypeAny;
+declare const HAnalyticsSchema: z.ZodTypeAny;
 declare const HAddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     city: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -587,6 +618,7 @@ declare const HCommunicationOptionsSchema: z.ZodObject<{
     should_send_message: boolean;
     channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
 }>;
+type HAnalytics = z.infer<typeof HAnalyticsSchema>;
 type HUser = z.infer<typeof HUserSchema>;
 type HBooking = z.infer<typeof HBookingSchema>;
 type HCountry = z.infer<typeof HCountrySchema>;
@@ -705,6 +737,7 @@ declare const VisualIdentitySchema: z.ZodTypeAny;
 declare const PackagePriceSchema: z.ZodTypeAny;
 declare const PlatformSettingsSchema: z.ZodTypeAny;
 declare const ScheduleSchema: z.ZodTypeAny;
+declare const AnalyticsSchema: z.ZodTypeAny;
 declare const AddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     city: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -896,6 +929,7 @@ type PromoCode = z.infer<typeof PromoCodeSchema>;
 type Partner = z.infer<typeof PartnerSchema>;
 type PriceList = z.infer<typeof PriceListSchema>;
 type ApiLog = z.infer<typeof ApiLogSchema>;
+type Analytics = z.infer<typeof AnalyticsSchema>;
 type Schedule = z.infer<typeof ScheduleSchema>;
 type Address = z.infer<typeof AddressSchema>;
 type Registration = z.infer<typeof RegistrationSchema>;
@@ -949,4 +983,4 @@ declare const partnerAppSchema: z.ZodTypeAny;
 type SupportedLocales = typeof SUPPORTED_LOCALES$1[number];
 declare const SUPPORTED_LOCALES: readonly ["en-US", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE"];
 
-export { Address, AddressSchema, ApiLog, ApiLogApiRequest, ApiLogApiResponse, ApiLogSchema, BankingDetails, BankingDetailsSchema, Booking, BookingApiRequest, BookingApiResponse, BookingSchema, BookingStatus, BookingStatusSchema, CommunicationChannel, CommunicationChannelSchema, CommunicationOptions, CommunicationOptionsSchema, Country, CountrySchema, Currency, CurrencySchema, ESIM, ESIMSchema, FirebaseService, HAddress, HAddressSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HScheduleFilter, HScheduleFilterSchema, HUser, HUserSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModel, HubbyModelApp, HubbyModelFirestore, HubbyModelSchema, Message, MessageSchema, Package, PackagePrice, PackagePriceSchema, PackageSchema, PackageSpecification, Partner, PartnerApiRequest, PartnerApiResponse, PartnerContact, PartnerContactSchema, PartnerData, PartnerDataSchema, PartnerPackageSpecification, PartnerPackageSpecificationSchema, PartnerSchema, Payment, PaymentSchema, PlatformSettings, PlatformSettingsSchema, PriceList, PriceListApiRequest, PriceListApiResponse, PriceListSchema, PromoCode, PromoCodeSchema, PromoPackageSpecificationSchema, Registration, RegistrationSchema, SUPPORTED_LOCALES, Schedule, ScheduleFilter, ScheduleFilterSchema, ScheduleSchema, SupportedLocales, User, UserFirestore, UserFirestoreSchema, UserSchema, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerSchema, VisualIdentityBannerStrategy, VisualIdentityBanners, VisualIdentityBannersSchema, VisualIdentitySchema, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, priceListFromFirestore, priceListToFirestore, promoCodeFromFirestore, promoCodeToFirestore, userFromFirestore, userToFirestore };
+export { Address, AddressSchema, Analytics, AnalyticsSchema, ApiLog, ApiLogApiRequest, ApiLogApiResponse, ApiLogSchema, BankingDetails, BankingDetailsSchema, Booking, BookingApiRequest, BookingApiResponse, BookingSchema, BookingStatus, BookingStatusSchema, CommunicationChannel, CommunicationChannelSchema, CommunicationOptions, CommunicationOptionsSchema, Country, CountrySchema, Currency, CurrencySchema, ESIM, ESIMSchema, FirebaseService, HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HScheduleFilter, HScheduleFilterSchema, HUser, HUserSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModel, HubbyModelApp, HubbyModelFirestore, HubbyModelSchema, Message, MessageSchema, Package, PackagePrice, PackagePriceSchema, PackageSchema, PackageSpecification, Partner, PartnerApiRequest, PartnerApiResponse, PartnerContact, PartnerContactSchema, PartnerData, PartnerDataSchema, PartnerPackageSpecification, PartnerPackageSpecificationSchema, PartnerSchema, Payment, PaymentSchema, PlatformSettings, PlatformSettingsSchema, PriceList, PriceListApiRequest, PriceListApiResponse, PriceListSchema, PromoCode, PromoCodeSchema, PromoPackageSpecificationSchema, Registration, RegistrationSchema, SUPPORTED_LOCALES, Schedule, ScheduleFilter, ScheduleFilterSchema, ScheduleSchema, SupportedLocales, User, UserFirestore, UserFirestoreSchema, UserSchema, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerSchema, VisualIdentityBannerStrategy, VisualIdentityBanners, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, priceListFromFirestore, priceListToFirestore, promoCodeFromFirestore, promoCodeToFirestore, userFromFirestore, userToFirestore };

@@ -840,6 +840,13 @@ var priceListSchemaSpec = markAsSchemaSpec({
     }
   }
 });
+var analyticsSpec = markAsSchemaSpec({
+  ...hubbyModelSpec,
+  date: zod.z.string(),
+  partner: zod.z.string(),
+  event: zod.z.string(),
+  sum: zod.z.number()
+});
 var payloadSpec = {
   _type: "record",
   of: zod.z.unknown(),
@@ -879,6 +886,7 @@ var HPlatformSettingsSchema = buildClientSchema(platformSettingsSchema);
 var HVisualIdentitySchema = buildClientSchema(visualIdentitySchema);
 var HPricingStrategySchema = buildClientSchema(pricingStrategySchema);
 var HFreeEsimSchema = buildClientSchema(freeEsimSchema);
+var HAnalyticsSchema = buildClientSchema(analyticsSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -894,6 +902,7 @@ var HCommunicationOptionsSchema = communicationOptionsSchema;
 var SUPPORTED_LOCALES3 = SUPPORTED_LOCALES;
 
 exports.HAddressSchema = HAddressSchema;
+exports.HAnalyticsSchema = HAnalyticsSchema;
 exports.HApiLogSchema = HApiLogSchema;
 exports.HBankingDetailsSchema = HBankingDetailsSchema;
 exports.HBookingSchema = HBookingSchema;

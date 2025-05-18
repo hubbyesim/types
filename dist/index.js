@@ -464,6 +464,13 @@ var paymentSchemaSpec = markAsSchemaSpec({
   // Reference fields
   user: { _type: "docRef", collection: USER_COLLECTION, nullable: true }
 });
+var analyticsSpec = markAsSchemaSpec({
+  ...hubbyModelSpec,
+  date: z.string(),
+  partner: z.string(),
+  event: z.string(),
+  sum: z.number()
+});
 var messageSchemaSpec = markAsSchemaSpec({
   id: z.string(),
   key: z.string(),
@@ -1122,6 +1129,7 @@ var HPlatformSettingsSchema = buildClientSchema(platformSettingsSchema);
 var HVisualIdentitySchema = buildClientSchema(visualIdentitySchema);
 var HPricingStrategySchema = buildClientSchema(pricingStrategySchema);
 var HFreeEsimSchema = buildClientSchema(freeEsimSchema);
+var HAnalyticsSchema = buildClientSchema(analyticsSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1174,6 +1182,7 @@ var VisualIdentitySchema = buildServerSchema(visualIdentitySchema);
 var PackagePriceSchema = buildServerSchema(packagePriceSchemaSpec);
 var PlatformSettingsSchema = buildServerSchema(platformSettingsSchemaSpec);
 var ScheduleSchema = buildServerSchema(scheduleSchema);
+var AnalyticsSchema = buildServerSchema(analyticsSpec);
 var AddressSchema = addressSchema;
 var RegistrationSchema = registrationSchema;
 var BankingDetailsSchema = bankingDetailsSchema;
@@ -1214,6 +1223,6 @@ var promoCodeToFirestore = (promoCode) => {
 var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 var SUPPORTED_LOCALES3 = SUPPORTED_LOCALES;
 
-export { AddressSchema, ApiLogSchema, BankingDetailsSchema, BookingSchema, BookingStatusSchema, CommunicationChannelSchema, CommunicationOptionsSchema, CountrySchema, CurrencySchema, ESIMSchema, FirebaseService, HAddressSchema, HApiLogSchema, HBankingDetailsSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HScheduleFilterSchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema2 as HubbyModelSchema, MessageSchema, PackagePriceSchema, PackageSchema, PartnerContactSchema, PartnerDataSchema, PartnerPackageSpecificationSchema, PartnerSchema, PaymentSchema, PlatformSettingsSchema, PriceListSchema, PromoCodeSchema, PromoPackageSpecificationSchema, RegistrationSchema, SUPPORTED_LOCALES3 as SUPPORTED_LOCALES, ScheduleFilterSchema, ScheduleSchema, UserFirestoreSchema, UserSchema, VisualIdentityBannerSchema, VisualIdentityBannersSchema, VisualIdentitySchema, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, priceListFromFirestore, priceListToFirestore, promoCodeFromFirestore, promoCodeToFirestore, userFromFirestore, userToFirestore };
+export { AddressSchema, AnalyticsSchema, ApiLogSchema, BankingDetailsSchema, BookingSchema, BookingStatusSchema, CommunicationChannelSchema, CommunicationOptionsSchema, CountrySchema, CurrencySchema, ESIMSchema, FirebaseService, HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HScheduleFilterSchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema2 as HubbyModelSchema, MessageSchema, PackagePriceSchema, PackageSchema, PartnerContactSchema, PartnerDataSchema, PartnerPackageSpecificationSchema, PartnerSchema, PaymentSchema, PlatformSettingsSchema, PriceListSchema, PromoCodeSchema, PromoPackageSpecificationSchema, RegistrationSchema, SUPPORTED_LOCALES3 as SUPPORTED_LOCALES, ScheduleFilterSchema, ScheduleSchema, UserFirestoreSchema, UserSchema, VisualIdentityBannerSchema, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, priceListFromFirestore, priceListToFirestore, promoCodeFromFirestore, promoCodeToFirestore, userFromFirestore, userToFirestore };
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.js.map
