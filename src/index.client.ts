@@ -35,11 +35,11 @@ import {
   platformSettingsSchema,
   visualIdentitySchema,
   pricingStrategySchema,
-  freeEsimSchema
+  freeEsimSchema,
 } from './specs/partner';
+import { analyticsSpec } from './specs/analytics';
 import { apiLogSchemaSpec } from './specs/apiLogs';
 import { z } from 'zod';
-
 export const HUserSchema = buildClientSchema(userSchemaSpec);
 export const HBookingSchema = buildClientSchema(bookingSchemaSpec);
 export const HCountrySchema = buildClientSchema(countrySchemaSpec);
@@ -60,6 +60,7 @@ export const HPlatformSettingsSchema = buildClientSchema(platformSettingsSchema)
 export const HVisualIdentitySchema = buildClientSchema(visualIdentitySchema);
 export const HPricingStrategySchema = buildClientSchema(pricingStrategySchema);
 export const HFreeEsimSchema = buildClientSchema(freeEsimSchema);
+export const HAnalyticsSchema = buildClientSchema(analyticsSpec);
 // Additional lower-level schemas
 export const HAddressSchema = addressSchema;
 export const HRegistrationSchema = registrationSchema;
@@ -74,6 +75,8 @@ export const HCommunicationChannelSchema = communicationChannelSchema;
 export const HBookingStatusSchema = bookingStatusSchema;
 export const HCommunicationOptionsSchema = communicationOptionsSchema;
 
+
+export type HAnalytics = z.infer<typeof HAnalyticsSchema>;
 export type HUser = z.infer<typeof HUserSchema>;
 export type HBooking = z.infer<typeof HBookingSchema>;
 export type HCountry = z.infer<typeof HCountrySchema>;

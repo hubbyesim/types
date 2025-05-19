@@ -466,6 +466,15 @@ var paymentSchemaSpec = markAsSchemaSpec({
   // Reference fields
   user: { _type: "docRef", collection: USER_COLLECTION, nullable: true }
 });
+var analyticsSpec = markAsSchemaSpec({
+  ...hubbyModelSpec,
+  service: zod.z.string(),
+  date: zod.z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  // YYYY-MM-DD
+  partner: zod.z.string(),
+  event: zod.z.string(),
+  sum: zod.z.number()
+});
 var messageSchemaSpec = markAsSchemaSpec({
   id: zod.z.string(),
   key: zod.z.string(),
@@ -1124,6 +1133,7 @@ var HPlatformSettingsSchema = buildClientSchema(platformSettingsSchema);
 var HVisualIdentitySchema = buildClientSchema(visualIdentitySchema);
 var HPricingStrategySchema = buildClientSchema(pricingStrategySchema);
 var HFreeEsimSchema = buildClientSchema(freeEsimSchema);
+var HAnalyticsSchema = buildClientSchema(analyticsSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1176,6 +1186,7 @@ var VisualIdentitySchema = buildServerSchema(visualIdentitySchema);
 var PackagePriceSchema = buildServerSchema(packagePriceSchemaSpec);
 var PlatformSettingsSchema = buildServerSchema(platformSettingsSchemaSpec);
 var ScheduleSchema = buildServerSchema(scheduleSchema);
+var AnalyticsSchema = buildServerSchema(analyticsSpec);
 var AddressSchema = addressSchema;
 var RegistrationSchema = registrationSchema;
 var BankingDetailsSchema = bankingDetailsSchema;
@@ -1217,6 +1228,7 @@ var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 var SUPPORTED_LOCALES3 = SUPPORTED_LOCALES;
 
 exports.AddressSchema = AddressSchema;
+exports.AnalyticsSchema = AnalyticsSchema;
 exports.ApiLogSchema = ApiLogSchema;
 exports.BankingDetailsSchema = BankingDetailsSchema;
 exports.BookingSchema = BookingSchema;
@@ -1228,6 +1240,7 @@ exports.CurrencySchema = CurrencySchema;
 exports.ESIMSchema = ESIMSchema;
 exports.FirebaseService = FirebaseService;
 exports.HAddressSchema = HAddressSchema;
+exports.HAnalyticsSchema = HAnalyticsSchema;
 exports.HApiLogSchema = HApiLogSchema;
 exports.HBankingDetailsSchema = HBankingDetailsSchema;
 exports.HBookingSchema = HBookingSchema;
@@ -1280,6 +1293,7 @@ exports.UserSchema = UserSchema;
 exports.VisualIdentityBannerSchema = VisualIdentityBannerSchema;
 exports.VisualIdentityBannersSchema = VisualIdentityBannersSchema;
 exports.VisualIdentitySchema = VisualIdentitySchema;
+exports.analyticsSpec = analyticsSpec;
 exports.createConvertFirestoreToJS = createConvertFirestoreToJS;
 exports.createConvertJSToFirestore = createConvertJSToFirestore;
 exports.createFirebaseService = createFirebaseService;

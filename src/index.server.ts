@@ -12,6 +12,7 @@ import { countrySchemaSpec } from './specs/country';
 import { currencySchemaSpec } from './specs/currency';
 import { esimSchemaSpec } from './specs/esim';
 import { paymentSchemaSpec } from './specs/payment';
+import { analyticsSpec } from './specs/analytics';
 import { messageSchemaSpec } from './specs/message';
 import { packageSchemaSpec } from './specs/package';
 import { promoCodeSchemaSpec, packageSpecificationSchema as promoPackageSpecificationSchema } from './specs/promocode';
@@ -44,7 +45,7 @@ import { HPartner, HPriceList, HPromoCode } from './index.client';
 import { buildClientSchema } from './builders/client';
 
 
-export { partnerSchemaSpec };
+export { partnerSchemaSpec, analyticsSpec };
 
 
 export const UserSchema = buildServerSchema(userSchemaSpec);
@@ -65,6 +66,7 @@ export const VisualIdentitySchema = buildServerSchema(visualIdentitySchema);
 export const PackagePriceSchema = buildServerSchema(packagePriceSchemaSpec);
 export const PlatformSettingsSchema = buildServerSchema(platformSettingsSchemaSpec);
 export const ScheduleSchema = buildServerSchema(scheduleSchema);
+export const AnalyticsSchema = buildServerSchema(analyticsSpec);
 // Additional lower-level schemas
 export const AddressSchema = addressSchema;
 export const RegistrationSchema = registrationSchema;
@@ -93,6 +95,7 @@ export type PromoCode = z.infer<typeof PromoCodeSchema>;
 export type Partner = z.infer<typeof PartnerSchema>;
 export type PriceList = z.infer<typeof PriceListSchema>;
 export type ApiLog = z.infer<typeof ApiLogSchema>;
+export type Analytics = z.infer<typeof AnalyticsSchema>;
 export type Schedule = z.infer<typeof ScheduleSchema>;
 // Additional lower-level types
 export type Address = z.infer<typeof AddressSchema>;
@@ -112,7 +115,6 @@ export type BookingStatus = z.infer<typeof BookingStatusSchema>;
 export type CommunicationOptions = z.infer<typeof CommunicationOptionsSchema>;
 export type PackagePrice = z.infer<typeof PackagePriceSchema>;
 export type PlatformSettings = z.infer<typeof PlatformSettingsSchema>;
-
 export type BookingApiRequest = Booking;
 export type BookingApiResponse = Booking;
 export type PartnerApiRequest = Partner;
