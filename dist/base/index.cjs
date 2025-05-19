@@ -842,7 +842,9 @@ var priceListSchemaSpec = markAsSchemaSpec({
 });
 var analyticsSpec = markAsSchemaSpec({
   ...hubbyModelSpec,
-  date: zod.z.string(),
+  service: zod.z.string(),
+  date: zod.z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  // YYYY-MM-DD
   partner: zod.z.string(),
   event: zod.z.string(),
   sum: zod.z.number()

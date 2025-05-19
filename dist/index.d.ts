@@ -3,6 +3,7 @@ import { Firestore, Timestamp, DocumentReference } from 'firebase-admin/firestor
 import { AppOptions } from 'firebase-admin/app';
 
 declare const analyticsSpec: {
+    service: z.ZodString;
     date: z.ZodString;
     partner: z.ZodString;
     event: z.ZodString;
