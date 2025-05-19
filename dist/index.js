@@ -183,11 +183,11 @@ var buildServerSchema = (spec, path = []) => {
   }
   throw new Error(`Unknown or malformed spec at "${pathString}": ${JSON.stringify(spec)}`);
 };
-var PARTNER_COLLECTION = "partners";
+var PARTNER_COLLECTION = "/companies/hubby/partners";
 var USER_COLLECTION = "users";
-var PROFILE_COLLECTION = "profiles";
-var PACKAGE_COLLECTION = "packages";
-var PROMO_CODE_COLLECTION = "promo_codes";
+var PROFILE_COLLECTION = "/companies/hubby/profiles";
+var PACKAGE_COLLECTION = "/companies/hubby/packages";
+var PROMO_CODE_COLLECTION = "/companies/hubby/promo_codes";
 var COUNTRY_COLLECTION = "countries";
 var ESIM_COLLECTION = "esims";
 var PRICE_LIST_COLLECTION = "price_lists";
@@ -469,7 +469,7 @@ var analyticsSpec = markAsSchemaSpec({
   service: z.string(),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   // YYYY-MM-DD
-  partner: z.string(),
+  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
   event: z.string(),
   sum: z.number()
 });

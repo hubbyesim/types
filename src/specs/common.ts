@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
 // Collection paths
-export const PARTNER_COLLECTION = 'partners';
+export const PARTNER_COLLECTION = '/companies/hubby/partners';
 export const USER_COLLECTION = 'users';
-export const PROFILE_COLLECTION = 'profiles';
-export const PACKAGE_COLLECTION = 'packages';
-export const PROMO_CODE_COLLECTION = 'promo_codes';
+export const PROFILE_COLLECTION = '/companies/hubby/profiles';
+export const PACKAGE_COLLECTION = '/companies/hubby/packages';
+export const PROMO_CODE_COLLECTION = '/companies/hubby/promo_codes';
 export const COUNTRY_COLLECTION = 'countries';
 export const ESIM_COLLECTION = 'esims';
 export const PAYMENT_COLLECTION = 'payments';

@@ -5,7 +5,11 @@ import { AppOptions } from 'firebase-admin/app';
 declare const analyticsSpec: {
     service: z.ZodString;
     date: z.ZodString;
-    partner: z.ZodString;
+    partner: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+    };
     event: z.ZodString;
     sum: z.ZodNumber;
     id: z.ZodString;
