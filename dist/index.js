@@ -199,7 +199,7 @@ var hubbyModelSpec = {
   id: z.string(),
   created_at: timestampRequired,
   updated_at: timestampNullableOptional,
-  created_by: { _type: "docRef", collection: "users", nullable: false, optional: false },
+  created_by: { _type: "docRef", collection: "users", nullable: true, optional: true },
   updated_by: { _type: "docRef", collection: "users", nullable: true, optional: true }
 };
 var SUPPORTED_LOCALES = [

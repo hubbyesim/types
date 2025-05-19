@@ -23,7 +23,7 @@ export const hubbyModelSpec = {
     id: z.string(),
     created_at: timestampRequired,
     updated_at: timestampNullableOptional,
-    created_by: { _type: 'docRef' as const, collection: 'users', nullable: false, optional: false },
+    created_by: { _type: 'docRef' as const, collection: 'users', nullable: true, optional: true },
     updated_by: { _type: 'docRef' as const, collection: 'users', nullable: true, optional: true },
 }
 
