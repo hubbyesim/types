@@ -847,6 +847,7 @@ var analyticsSpec = markAsSchemaSpec({
   // YYYY-MM-DD
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
   event: zod.z.string(),
+  parameter: zod.z.string().nullable(),
   sum: zod.z.number()
 });
 var payloadSpec = {

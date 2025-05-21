@@ -11,6 +11,7 @@ declare const analyticsSpec: {
         nullable: boolean;
     };
     event: z.ZodString;
+    parameter: z.ZodNullable<z.ZodString>;
     sum: z.ZodNumber;
     id: z.ZodString;
     created_at: {

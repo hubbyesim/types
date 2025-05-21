@@ -471,6 +471,7 @@ var analyticsSpec = markAsSchemaSpec({
   // YYYY-MM-DD
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
   event: z.string(),
+  parameter: z.string().nullable(),
   sum: z.number()
 });
 var messageSchemaSpec = markAsSchemaSpec({
