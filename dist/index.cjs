@@ -1226,6 +1226,7 @@ var promoCodeToFirestore = (promoCode) => {
   return convertJSToFirestore(promoCode, promoCodeSchemaSpec);
 };
 var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
+var bookingAppSchema = buildClientSchema(bookingSchemaSpec);
 var SUPPORTED_LOCALES3 = SUPPORTED_LOCALES;
 
 exports.AddressSchema = AddressSchema;
@@ -1295,6 +1296,7 @@ exports.VisualIdentityBannerSchema = VisualIdentityBannerSchema;
 exports.VisualIdentityBannersSchema = VisualIdentityBannersSchema;
 exports.VisualIdentitySchema = VisualIdentitySchema;
 exports.analyticsSpec = analyticsSpec;
+exports.bookingAppSchema = bookingAppSchema;
 exports.createConvertFirestoreToJS = createConvertFirestoreToJS;
 exports.createConvertJSToFirestore = createConvertJSToFirestore;
 exports.createFirebaseService = createFirebaseService;
