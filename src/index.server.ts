@@ -41,11 +41,11 @@ import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 
 
 import { convertFirestoreToJS, convertJSToFirestore } from './utils/firestoreTransformUtils';
-import { HPartner, HPriceList, HPromoCode } from './index.client';
+import { HBooking, HPartner, HPriceList, HPromoCode } from './index.client';
 import { buildClientSchema } from './builders/client';
 
 
-export { partnerSchemaSpec, analyticsSpec };
+export { partnerSchemaSpec, analyticsSpec, bookingSchemaSpec };
 
 
 export const UserSchema = buildServerSchema(userSchemaSpec);
@@ -172,6 +172,14 @@ export const promoCodeFromFirestore = (promoCode: PromoCode): HPromoCode => {
 
 export const promoCodeToFirestore = (promoCode: HPromoCode): PromoCode => {
     return convertJSToFirestore(promoCode, promoCodeSchemaSpec);
+}
+
+export const bookingFromFirestore = (booking: Booking): HBooking => {
+    return convertFirestoreToJS(booking, bookingSchemaSpec);
+}
+
+export const bookingToFirestore = (booking: HBooking): Booking => {
+    return convertJSToFirestore(booking, bookingSchemaSpec);
 }
 
 export const partnerAppSchema = buildClientSchema(partnerSchemaSpec);

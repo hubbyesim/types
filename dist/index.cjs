@@ -1225,6 +1225,12 @@ var promoCodeFromFirestore = (promoCode) => {
 var promoCodeToFirestore = (promoCode) => {
   return convertJSToFirestore(promoCode, promoCodeSchemaSpec);
 };
+var bookingFromFirestore = (booking) => {
+  return convertFirestoreToJS(booking, bookingSchemaSpec);
+};
+var bookingToFirestore = (booking) => {
+  return convertJSToFirestore(booking, bookingSchemaSpec);
+};
 var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 var bookingAppSchema = buildClientSchema(bookingSchemaSpec);
 var SUPPORTED_LOCALES3 = SUPPORTED_LOCALES;
@@ -1297,6 +1303,9 @@ exports.VisualIdentityBannersSchema = VisualIdentityBannersSchema;
 exports.VisualIdentitySchema = VisualIdentitySchema;
 exports.analyticsSpec = analyticsSpec;
 exports.bookingAppSchema = bookingAppSchema;
+exports.bookingFromFirestore = bookingFromFirestore;
+exports.bookingSchemaSpec = bookingSchemaSpec;
+exports.bookingToFirestore = bookingToFirestore;
 exports.createConvertFirestoreToJS = createConvertFirestoreToJS;
 exports.createConvertJSToFirestore = createConvertJSToFirestore;
 exports.createFirebaseService = createFirebaseService;
