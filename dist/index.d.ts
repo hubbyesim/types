@@ -107,11 +107,11 @@ declare const partnerSchemaSpec: {
         nullable: boolean;
     };
     financial_properties: {
-        administration_fee: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-        income_per_gb: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        administration_fee: z.ZodNullable<z.ZodNumber>;
+        income_per_gb: z.ZodNullable<z.ZodNumber>;
         commission_fee: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
         payment_method: z.ZodEnum<["invoice", "direct"]>;
-        requires_card: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
+        requires_card: z.ZodNullable<z.ZodBoolean>;
         next_invoice: {
             _type: "timestamp";
             nullable: boolean;
