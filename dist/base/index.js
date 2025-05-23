@@ -188,7 +188,8 @@ var SUPPORTED_LOCALES = [
   "it-CH",
   "sv-SE",
   "sk-SK",
-  "de-BE"
+  "de-BE",
+  "en-AU"
 ];
 
 // src/specs/user.ts
@@ -261,7 +262,10 @@ var SUPPORTED_LOCALES2 = [
   "de-CH",
   "fr-CH",
   "it-CH",
-  "de-BE"
+  "sv-SE",
+  "sk-SK",
+  "de-BE",
+  "en-AU"
 ];
 var supportedLocalesSchema = z.enum(SUPPORTED_LOCALES2);
 
