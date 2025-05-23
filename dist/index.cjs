@@ -707,11 +707,11 @@ var packagePriceSchemaSpec = markAsSchemaSpec({
   package: { _type: "docRef", collection: PACKAGE_COLLECTION }
 });
 var financialPropertiesSchemaSpec = markAsSchemaSpec({
-  administration_fee: zod.z.number().nullable(),
-  income_per_gb: zod.z.number().nullable(),
+  administration_fee: zod.z.number().nullable().optional(),
+  income_per_gb: zod.z.number().nullable().optional(),
   commission_fee: zod.z.number().nullable().optional(),
   payment_method: zod.z.enum(["invoice", "direct"]),
-  requires_card: zod.z.boolean().nullable(),
+  requires_card: zod.z.boolean().nullable().optional(),
   next_invoice: timestampNullableOptional,
   last_invoice: timestampNullableOptional,
   pricing_strategies: {
