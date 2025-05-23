@@ -5,10 +5,13 @@ import {
     USER_COLLECTION,
     ESIM_COLLECTION,
     timestampNullable,
-    timestampRequired
+    timestampRequired,
+    timestampNullableOptional,
+    hubbyModelSpec
 } from './common';
 import { markAsSchemaSpec } from '../common';
 import { supportedLocalesSchema } from '../constants';
+import { packageSpecificationSchema } from './promocode';
 
 // Enum for communication channels
 export const communicationChannelSchema = z.enum([
@@ -51,19 +54,14 @@ export type CommunicationOptions = z.infer<typeof communicationOptionsSchema>;
 
 // Define the booking schema spec
 export const bookingSchemaSpec = markAsSchemaSpec({
-    id: z.string(),
     external_id: z.string().nullable().optional(),
-    created_at: timestampRequired,
-    updated_at: timestampRequired,
-    created_by: z.string().nullable(),
-    updated_by: z.string().nullable(),
-    title: z.string().nullable(),
-    first_name: z.string(),
-    last_name: z.string(),
-    full_name: z.string(),
-    pax: z.number(),
-    email: z.string().email().nullable(),
-    phone: z.string().nullable(),
+    title: z.string().nullable().optional(),
+    first_name: z.string().nullable().optional(),
+    last_name: z.string().nullable().optional(),
+    full_name: z.string().nullable().optional(),
+    pax: z.number().optional(),
+    email: z.string().email().nullable().optional(),
+    phone: z.string().nullable().optional(),
     booking_id: z.string().nullable(),
     flight_number: z.string().optional(),
     gender: z.enum(['M', 'F', 'O']).optional(),
@@ -71,43 +69,40 @@ export const bookingSchemaSpec = markAsSchemaSpec({
     sent_messages: z.record(z.any()).optional(),
     locale: supportedLocalesSchema,
     status: bookingStatusSchema,
-    data: {
-        _type: 'object' as const,
-        of: {
-            source: z.string(),
-            manual: z.boolean()
-        }
-    },
-    communication_options: {
-        _type: 'object' as const,
-        of: {
-            should_send_message: z.boolean(),
-            channels: {
-                _type: 'array' as const,
-                of: communicationChannelSchema
-            }
-        }
-    },
+    data: z.object({
+        source: z.string(),
+        manual: z.boolean()
+    }),
+    communication_options: z.object({
+        should_send_message: z.boolean(),
+        channels: z.array(communicationChannelSchema)
+    }),
     is_processed_for_esim_restoration: z.boolean(),
     is_pseudonymized: z.boolean(),
     import_id: z.string().nullable().optional(),
-    package_specifications: z.record(z.any()).optional(),
+    package_specifications: z.array(packageSpecificationSchema).nullable().optional().default([]),
     departure_date: timestampRequired,
-    return_date: timestampNullable,
+    return_date: timestampNullableOptional,
     partner: { _type: 'docRef' as const, collection: PARTNER_COLLECTION },
     promo_codes: {
         _type: 'array' as const,
-        of: { _type: 'docRef' as const, collection: PROMO_CODE_COLLECTION }
+        of: { _type: 'docRef' as const, collection: PROMO_CODE_COLLECTION },
+        nullable: true,
+        optional: true,
+        default: []
     },
     users: {
         _type: 'array' as const,
         of: { _type: 'docRef' as const, collection: USER_COLLECTION },
-        nullable: true
+        nullable: true,
+        optional: true
     },
     esims: {
         _type: 'array' as const,
         of: { _type: 'docRef' as const, collection: ESIM_COLLECTION },
-        nullable: true
-    }
+        nullable: true,
+        optional: true
+    },
+    ...hubbyModelSpec
 });
 

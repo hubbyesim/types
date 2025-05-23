@@ -141,7 +141,17 @@ describe("Partner Schema", () => {
                             preview_text: { "en-US": "Welcome to our service" }
                         }
                     }
-                ]
+                ],
+                free_esim: {
+                    package_specification: {
+                        size: "5GB",
+                        type: "data-limited",
+                        destination: "EU"
+                    },
+                    booking_id_verification: false,
+                    booking_id_verification_pattern: "",
+                    allowance: 10
+                }
             },
 
             // Metadata
@@ -937,7 +947,10 @@ describe("Partner Name Validation", () => {
                 free_esim: {
                     package_specification: {
                         size: "5GB",
+                        type: "data-limited",
+                        destination: "EU"
                     },
+                    booking_id_verification: false,
                     booking_id_verification_pattern: "",
                     allowance: 10
                 }

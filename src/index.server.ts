@@ -44,13 +44,11 @@ import { convertFirestoreToJS, convertJSToFirestore } from './utils/firestoreTra
 import { HPartner, HPriceList, HPromoCode } from './index.client';
 import { buildClientSchema } from './builders/client';
 
-
 export { partnerSchemaSpec, analyticsSpec };
-
 
 export const UserSchema = buildServerSchema(userSchemaSpec);
 export const UserFirestoreSchema = buildServerSchema(userSchemaSpec);
-export const BookingSchema = buildServerSchema(bookingSchemaSpec);
+export const BookingSchema: z.ZodTypeAny = buildServerSchema(bookingSchemaSpec as any);
 export const CountrySchema = buildServerSchema(countrySchemaSpec);
 export const CurrencySchema = buildServerSchema(currencySchemaSpec);
 export const ESIMSchema = buildServerSchema(esimSchemaSpec);

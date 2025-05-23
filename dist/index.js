@@ -120,7 +120,15 @@ function createFirebaseService(config) {
 }
 
 // src/builders/server.ts
-var buildServerSchema = (spec, path = []) => {
+var applyModifiers = (schema, nullable, optional) => {
+  let result = schema;
+  if (nullable)
+    result = result.nullable();
+  if (optional)
+    result = result.optional();
+  return result;
+};
+var buildServerSchema = (spec, path = [], depth = 0) => {
   const pathString = path.join(".");
   if (spec === void 0 || spec === null) {
     throw new Error(`Invalid spec at "${pathString || "<root>"}": received ${spec}`);
@@ -132,75 +140,41 @@ var buildServerSchema = (spec, path = []) => {
     if (!("of" in spec)) {
       throw new Error(`Array spec at "${pathString}" is missing 'of'`);
     }
-    const itemSchema = spec.of instanceof z.ZodType ? spec.of : buildServerSchema(spec.of, [...path, "[i]"]);
-    let arraySchema = z.array(itemSchema);
-    if (spec.nullable)
-      arraySchema = arraySchema.nullable();
-    if (spec.optional)
-      arraySchema = arraySchema.optional();
-    return arraySchema;
+    const itemSchema = spec.of instanceof z.ZodType ? spec.of : buildServerSchema(spec.of, [...path, "[i]"], depth + 1);
+    return applyModifiers(z.array(itemSchema), spec.nullable, spec.optional);
   }
   if ("_type" in spec && spec._type === "record") {
     if (!("of" in spec)) {
       throw new Error(`Record spec at "${pathString}" is missing 'of'`);
     }
-    const valueSchema = spec.of instanceof z.ZodType ? spec.of : buildServerSchema(spec.of, [...path, "[key]"]);
-    let recordSchema = z.record(valueSchema);
-    if (spec.nullable)
-      recordSchema = recordSchema.nullable();
-    if (spec.optional)
-      recordSchema = recordSchema.optional();
-    return recordSchema;
+    const valueSchema = spec.of instanceof z.ZodType ? spec.of : buildServerSchema(spec.of, [...path, "[key]"], depth + 1);
+    return applyModifiers(z.record(valueSchema), spec.nullable, spec.optional);
   }
   if ("_type" in spec && spec._type === "timestamp") {
-    let tsSchema = z.date().transform((date) => Timestamp.fromDate(date));
-    if (spec.nullable)
-      tsSchema = tsSchema.nullable();
-    if (spec.optional)
-      tsSchema = tsSchema.optional();
-    return tsSchema;
+    const baseSchema = z.preprocess(
+      (arg) => typeof arg === "string" || typeof arg === "number" ? new Date(arg) : arg,
+      z.date()
+    ).transform((date) => Timestamp.fromDate(date));
+    return applyModifiers(baseSchema, spec.nullable, spec.optional);
   }
   if ("_type" in spec && spec._type === "docRef") {
-    let refSchema = z.string().transform((id) => db.doc(`${spec.collection}/${id}`));
-    if (spec.nullable)
-      refSchema = refSchema.nullable();
-    if (spec.optional)
-      refSchema = refSchema.optional();
-    return refSchema;
+    const baseSchema = z.string().transform((id) => db.doc(`${spec.collection}/${id}`));
+    return applyModifiers(baseSchema, spec.nullable, spec.optional);
   }
   if (typeof spec === "object" && !("_type" in spec)) {
     const shape = {};
     for (const [key, val] of Object.entries(spec)) {
-      shape[key] = buildServerSchema(val, [...path, key]);
+      shape[key] = buildServerSchema(val, [...path, key], depth + 1);
     }
     return z.object(shape);
   }
   if (typeof spec === "object" && "_type" in spec && spec._type === "object" && "of" in spec) {
-    return wrapObjectSchema(spec, path, buildServerSchema);
+    return wrapObjectSchema(spec, path, (s, p) => buildServerSchema(s, p, depth + 1));
   }
   if (isSchemaSpec(spec) || typeof spec === "object" && "_type" in spec && spec._type === "object") {
-    return wrapPlainObjectSchema(spec, path, buildServerSchema);
+    return wrapPlainObjectSchema(spec, path, (s, p) => buildServerSchema(s, p, depth + 1));
   }
   throw new Error(`Unknown or malformed spec at "${pathString}": ${JSON.stringify(spec)}`);
-};
-var PARTNER_COLLECTION = "/companies/hubby/partners";
-var USER_COLLECTION = "users";
-var PROFILE_COLLECTION = "/companies/hubby/profiles";
-var PACKAGE_COLLECTION = "/companies/hubby/packages";
-var PROMO_CODE_COLLECTION = "/companies/hubby/promo_codes";
-var COUNTRY_COLLECTION = "countries";
-var ESIM_COLLECTION = "esims";
-var PRICE_LIST_COLLECTION = "price_lists";
-var BOOKING_COLLECTION = "bookings";
-var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
-var timestampNullable = { _type: "timestamp", nullable: true, optional: false };
-var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
-var hubbyModelSpec = {
-  id: z.string(),
-  created_at: timestampRequired,
-  updated_at: timestampNullableOptional,
-  created_by: { _type: "docRef", collection: "users", nullable: true, optional: true },
-  updated_by: { _type: "docRef", collection: "users", nullable: true, optional: true }
 };
 var SUPPORTED_LOCALES = [
   "en-US",
@@ -222,8 +196,32 @@ var SUPPORTED_LOCALES = [
   "sv-SE",
   "sk-SK",
   "de-BE",
-  "en-AU"
+  "en-AU",
+  "en-CA"
 ];
+var supportedLocalesSchema = z.enum(SUPPORTED_LOCALES);
+
+// src/specs/common.ts
+var PARTNER_COLLECTION = "/companies/hubby/partners";
+var USER_COLLECTION = "users";
+var PROFILE_COLLECTION = "/companies/hubby/profiles";
+var PACKAGE_COLLECTION = "/companies/hubby/packages";
+var PROMO_CODE_COLLECTION = "/companies/hubby/promo_codes";
+var COUNTRY_COLLECTION = "countries";
+var ESIM_COLLECTION = "esims";
+var PRICE_LIST_COLLECTION = "price_lists";
+var BOOKING_COLLECTION = "bookings";
+var baseTimestamp = { _type: "timestamp" };
+var timestampRequired = { ...baseTimestamp, nullable: false, optional: false };
+var timestampNullable = { ...baseTimestamp, nullable: true, optional: false };
+var timestampNullableOptional = { ...baseTimestamp, nullable: true, optional: true };
+var hubbyModelSpec = {
+  id: z.string().nullable().optional(),
+  created_at: timestampRequired,
+  updated_at: timestampNullableOptional,
+  created_by: { _type: "docRef", collection: "users", nullable: true, optional: true },
+  updated_by: { _type: "docRef", collection: "users", nullable: true, optional: true }
+};
 
 // src/specs/user.ts
 var apiKeySpec = {
@@ -248,7 +246,7 @@ var apiKeysObjectSpec = {
   optional: true
 };
 var userSchemaSpec = markAsSchemaSpec({
-  id: z.string(),
+  id: z.string().optional(),
   name: z.string().nullable(),
   email: z.string().email().nullable(),
   stripe_id: z.string().nullable().optional(),
@@ -278,29 +276,42 @@ var userSchemaSpec = markAsSchemaSpec({
   review_requested: timestampNullableOptional,
   last_seen: timestampNullableOptional
 });
-var SUPPORTED_LOCALES2 = [
-  "en-US",
-  "en-GB",
-  "nl-NL",
-  "de-DE",
-  "fr-FR",
-  "it-IT",
-  "es-ES",
-  "cs-CZ",
-  "pl-PL",
-  "pt-PT",
-  "fr-BE",
-  "nl-BE",
-  "de-AT",
-  "de-CH",
-  "fr-CH",
-  "it-CH",
-  "sv-SE",
-  "sk-SK",
-  "de-BE",
-  "en-AU"
-];
-var supportedLocalesSchema = z.enum(SUPPORTED_LOCALES2);
+var packageSpecificationSchema = z.object({
+  destination: z.string().optional(),
+  size: z.string().optional(),
+  package_id: z.string().optional(),
+  iata_code: z.string().optional()
+});
+var promoCodeSchemaSpec = markAsSchemaSpec({
+  id: z.string(),
+  redeemed_at: timestampNullableOptional,
+  created_at: timestampRequired,
+  updated_at: timestampRequired,
+  created_by: z.string().nullable(),
+  updated_by: z.string().nullable(),
+  // PromoCode specific fields
+  external_id: z.string(),
+  code: z.string(),
+  allowance_user: z.number(),
+  allowance_total: z.number(),
+  type: z.enum(["full-discount", "partial-discount", "booking", "traveler"]).nullable().or(z.string()),
+  usage: z.array(z.string()),
+  uuid_usage: z.array(z.string()),
+  package_specification: packageSpecificationSchema.optional(),
+  valid_from: timestampRequired,
+  valid_to: timestampRequired,
+  // Reference fields
+  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
+  package: { _type: "docRef", collection: PACKAGE_COLLECTION, nullable: true },
+  country: { _type: "docRef", collection: COUNTRY_COLLECTION, nullable: true },
+  booking: { _type: "docRef", collection: BOOKING_COLLECTION, nullable: true },
+  // Optional fields based on the type
+  discount: z.number().optional(),
+  package_size: z.string().optional(),
+  countries: z.array(z.string()).optional(),
+  max_bytes: z.number().optional(),
+  starter_data: z.number().optional()
+});
 
 // src/specs/booking.ts
 var communicationChannelSchema = z.enum([
@@ -322,19 +333,14 @@ var communicationOptionsSchema = z.object({
   channels: z.array(communicationChannelSchema)
 });
 var bookingSchemaSpec = markAsSchemaSpec({
-  id: z.string(),
   external_id: z.string().nullable().optional(),
-  created_at: timestampRequired,
-  updated_at: timestampRequired,
-  created_by: z.string().nullable(),
-  updated_by: z.string().nullable(),
-  title: z.string().nullable(),
-  first_name: z.string(),
-  last_name: z.string(),
-  full_name: z.string(),
-  pax: z.number(),
-  email: z.string().email().nullable(),
-  phone: z.string().nullable(),
+  title: z.string().nullable().optional(),
+  first_name: z.string().nullable().optional(),
+  last_name: z.string().nullable().optional(),
+  full_name: z.string().nullable().optional(),
+  pax: z.number().optional(),
+  email: z.string().email().nullable().optional(),
+  phone: z.string().nullable().optional(),
   booking_id: z.string().nullable(),
   flight_number: z.string().optional(),
   gender: z.enum(["M", "F", "O"]).optional(),
@@ -342,44 +348,41 @@ var bookingSchemaSpec = markAsSchemaSpec({
   sent_messages: z.record(z.any()).optional(),
   locale: supportedLocalesSchema,
   status: bookingStatusSchema,
-  data: {
-    _type: "object",
-    of: {
-      source: z.string(),
-      manual: z.boolean()
-    }
-  },
-  communication_options: {
-    _type: "object",
-    of: {
-      should_send_message: z.boolean(),
-      channels: {
-        _type: "array",
-        of: communicationChannelSchema
-      }
-    }
-  },
+  data: z.object({
+    source: z.string(),
+    manual: z.boolean()
+  }),
+  communication_options: z.object({
+    should_send_message: z.boolean(),
+    channels: z.array(communicationChannelSchema)
+  }),
   is_processed_for_esim_restoration: z.boolean(),
   is_pseudonymized: z.boolean(),
   import_id: z.string().nullable().optional(),
-  package_specifications: z.record(z.any()).optional(),
+  package_specifications: z.array(packageSpecificationSchema).nullable().optional().default([]),
   departure_date: timestampRequired,
-  return_date: timestampNullable,
+  return_date: timestampNullableOptional,
   partner: { _type: "docRef", collection: PARTNER_COLLECTION },
   promo_codes: {
     _type: "array",
-    of: { _type: "docRef", collection: PROMO_CODE_COLLECTION }
+    of: { _type: "docRef", collection: PROMO_CODE_COLLECTION },
+    nullable: true,
+    optional: true,
+    default: []
   },
   users: {
     _type: "array",
     of: { _type: "docRef", collection: USER_COLLECTION },
-    nullable: true
+    nullable: true,
+    optional: true
   },
   esims: {
     _type: "array",
     of: { _type: "docRef", collection: ESIM_COLLECTION },
-    nullable: true
-  }
+    nullable: true,
+    optional: true
+  },
+  ...hubbyModelSpec
 });
 var countrySchemaSpec = markAsSchemaSpec({
   id: z.string().nullable(),
@@ -519,42 +522,6 @@ var packageSchemaSpec = markAsSchemaSpec({
   // but for simplicity, we're using any type here
   country_data: z.any().nullable()
 });
-var packageSpecificationSchema = z.object({
-  destination: z.string().optional(),
-  size: z.string().optional(),
-  package_id: z.string().optional(),
-  iata_code: z.string().optional()
-});
-var promoCodeSchemaSpec = markAsSchemaSpec({
-  id: z.string(),
-  redeemed_at: timestampNullableOptional,
-  created_at: timestampRequired,
-  updated_at: timestampRequired,
-  created_by: z.string().nullable(),
-  updated_by: z.string().nullable(),
-  // PromoCode specific fields
-  external_id: z.string(),
-  code: z.string(),
-  allowance_user: z.number(),
-  allowance_total: z.number(),
-  type: z.enum(["full-discount", "partial-discount", "booking", "traveler"]).nullable().or(z.string()),
-  usage: z.array(z.string()),
-  uuid_usage: z.array(z.string()),
-  package_specification: packageSpecificationSchema.optional(),
-  valid_from: timestampRequired,
-  valid_to: timestampRequired,
-  // Reference fields
-  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
-  package: { _type: "docRef", collection: PACKAGE_COLLECTION, nullable: true },
-  country: { _type: "docRef", collection: COUNTRY_COLLECTION, nullable: true },
-  booking: { _type: "docRef", collection: BOOKING_COLLECTION, nullable: true },
-  // Optional fields based on the type
-  discount: z.number().optional(),
-  package_size: z.string().optional(),
-  countries: z.array(z.string()).optional(),
-  max_bytes: z.number().optional(),
-  starter_data: z.number().optional()
-});
 var addressSchema = z.object({
   street: z.string().nullable().optional(),
   city: z.string().nullable().optional(),
@@ -647,11 +614,11 @@ var packageStrategySchema = z.object({
 var scheduleEmailSchema = z.object({
   brevo_template_id: z.number(),
   subject: z.record(z.string()).refine(
-    (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES2.includes(key)),
+    (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
     { message: "Keys must be supported locales" }
   ).optional(),
   preview_text: z.record(z.string()).refine(
-    (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES2.includes(key)),
+    (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
     { message: "Keys must be supported locales" }
   ).optional()
 }).nullable().optional();
@@ -1228,8 +1195,8 @@ var promoCodeToFirestore = (promoCode) => {
   return convertJSToFirestore(promoCode, promoCodeSchemaSpec);
 };
 var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
-var SUPPORTED_LOCALES3 = SUPPORTED_LOCALES;
+var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
-export { AddressSchema, AnalyticsSchema, ApiLogSchema, BankingDetailsSchema, BookingSchema, BookingStatusSchema, CommunicationChannelSchema, CommunicationOptionsSchema, CountrySchema, CurrencySchema, ESIMSchema, FirebaseService, HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HScheduleFilterSchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema2 as HubbyModelSchema, MessageSchema, PackagePriceSchema, PackageSchema, PartnerContactSchema, PartnerDataSchema, PartnerPackageSpecificationSchema, PartnerSchema, PaymentSchema, PlatformSettingsSchema, PriceListSchema, PromoCodeSchema, PromoPackageSpecificationSchema, RegistrationSchema, SUPPORTED_LOCALES3 as SUPPORTED_LOCALES, ScheduleFilterSchema, ScheduleSchema, UserFirestoreSchema, UserSchema, VisualIdentityBannerSchema, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, priceListFromFirestore, priceListToFirestore, promoCodeFromFirestore, promoCodeToFirestore, userFromFirestore, userToFirestore };
+export { AddressSchema, AnalyticsSchema, ApiLogSchema, BankingDetailsSchema, BookingSchema, BookingStatusSchema, CommunicationChannelSchema, CommunicationOptionsSchema, CountrySchema, CurrencySchema, ESIMSchema, FirebaseService, HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HScheduleFilterSchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema2 as HubbyModelSchema, MessageSchema, PackagePriceSchema, PackageSchema, PartnerContactSchema, PartnerDataSchema, PartnerPackageSpecificationSchema, PartnerSchema, PaymentSchema, PlatformSettingsSchema, PriceListSchema, PromoCodeSchema, PromoPackageSpecificationSchema, RegistrationSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES, ScheduleFilterSchema, ScheduleSchema, UserFirestoreSchema, UserSchema, VisualIdentityBannerSchema, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, priceListFromFirestore, priceListToFirestore, promoCodeFromFirestore, promoCodeToFirestore, userFromFirestore, userToFirestore };
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.js.map

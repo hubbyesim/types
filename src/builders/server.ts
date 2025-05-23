@@ -4,7 +4,19 @@ import type { FieldSpec } from '../types';
 import { wrapZodSchema, wrapObjectSchema, wrapPlainObjectSchema, isSchemaSpec } from '../common';
 import { db } from '../services/firebase';
 
-export const buildServerSchema = (spec: FieldSpec, path: string[] = []): z.ZodTypeAny => {
+// Helper function to apply nullable and optional modifiers
+const applyModifiers = <T extends z.ZodTypeAny>(
+  schema: T,
+  nullable?: boolean,
+  optional?: boolean
+): z.ZodTypeAny => {
+  let result: z.ZodTypeAny = schema;
+  if (nullable) result = result.nullable();
+  if (optional) result = result.optional();
+  return result;
+};
+
+export const buildServerSchema = (spec: FieldSpec, path: string[] = [], depth: number = 0): z.ZodTypeAny => {
   const pathString = path.join('.');
 
   if (spec === undefined || spec === null) {
@@ -25,12 +37,9 @@ export const buildServerSchema = (spec: FieldSpec, path: string[] = []): z.ZodTy
     const itemSchema =
       spec.of instanceof z.ZodType
         ? spec.of
-        : buildServerSchema(spec.of, [...path, '[i]']);
+        : buildServerSchema(spec.of, [...path, '[i]'], depth + 1);
 
-    let arraySchema = z.array(itemSchema);
-    if (spec.nullable) arraySchema = arraySchema.nullable();
-    if (spec.optional) arraySchema = arraySchema.optional();
-    return arraySchema;
+    return applyModifiers(z.array(itemSchema), spec.nullable, spec.optional);
   }
 
   // ----- Record -----
@@ -42,35 +51,32 @@ export const buildServerSchema = (spec: FieldSpec, path: string[] = []): z.ZodTy
     const valueSchema =
       spec.of instanceof z.ZodType
         ? spec.of
-        : buildServerSchema(spec.of, [...path, '[key]']);
+        : buildServerSchema(spec.of, [...path, '[key]'], depth + 1);
 
-    let recordSchema = z.record(valueSchema);
-    if (spec.nullable) recordSchema = recordSchema.nullable();
-    if (spec.optional) recordSchema = recordSchema.optional();
-    return recordSchema;
+    return applyModifiers(z.record(valueSchema), spec.nullable, spec.optional);
   }
 
   // ----- Timestamp -----
   if ('_type' in spec && spec._type === 'timestamp') {
-    let tsSchema = z.date().transform(date => Timestamp.fromDate(date));
-    if (spec.nullable) tsSchema = tsSchema.nullable();
-    if (spec.optional) tsSchema = tsSchema.optional();
-    return tsSchema;
+    const baseSchema = z.preprocess(
+      (arg) => (typeof arg === 'string' || typeof arg === 'number') ? new Date(arg) : arg,
+      z.date()
+    ).transform(date => Timestamp.fromDate(date));
+
+    return applyModifiers(baseSchema, spec.nullable, spec.optional);
   }
 
   // ----- Document Reference -----
   if ('_type' in spec && spec._type === 'docRef') {
-    let refSchema = z.string().transform(id => db.doc(`${spec.collection}/${id}`));
-    if (spec.nullable) refSchema = refSchema.nullable();
-    if (spec.optional) refSchema = refSchema.optional();
-    return refSchema;
+    const baseSchema = z.string().transform(id => db.doc(`${spec.collection}/${id}`));
+    return applyModifiers(baseSchema, spec.nullable, spec.optional);
   }
 
   // ----- Nested object shape -----
   if (typeof spec === 'object' && !('_type' in spec)) {
     const shape: Record<string, z.ZodTypeAny> = {};
     for (const [key, val] of Object.entries(spec)) {
-      shape[key] = buildServerSchema(val, [...path, key]);
+      shape[key] = buildServerSchema(val, [...path, key], depth + 1);
     }
     return z.object(shape);
   }
@@ -82,12 +88,12 @@ export const buildServerSchema = (spec: FieldSpec, path: string[] = []): z.ZodTy
     spec._type === 'object' &&
     'of' in spec
   ) {
-    return wrapObjectSchema(spec, path, buildServerSchema);
+    return wrapObjectSchema(spec, path, (s, p) => buildServerSchema(s, p, depth + 1));
   }
 
   // ----- Plain object shape -----
   if (isSchemaSpec(spec) || typeof spec === 'object' && '_type' in spec && spec._type === 'object') {
-    return wrapPlainObjectSchema(spec, path, buildServerSchema);
+    return wrapPlainObjectSchema(spec, path, (s, p) => buildServerSchema(s, p, depth + 1));
   }
 
   // ----- Unknown or malformed spec -----
