@@ -203,11 +203,11 @@ export const packagePriceSchemaSpec = markAsSchemaSpec({
 
 // Financial properties schema spec
 export const financialPropertiesSchemaSpec = markAsSchemaSpec({
-    administration_fee: z.number().nullable().optional(),
-    income_per_gb: z.number().nullable().optional(),
+    administration_fee: z.number().nullable(),
+    income_per_gb: z.number().nullable(),
     commission_fee: z.number().nullable().optional(),
     payment_method: z.enum(['invoice', 'direct']),
-    requires_card: z.boolean().nullable().optional(),
+    requires_card: z.boolean().nullable(),
     next_invoice: timestampNullableOptional,
     last_invoice: timestampNullableOptional,
     pricing_strategies: {
