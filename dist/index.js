@@ -211,6 +211,7 @@ var tagModelSpec = {
 };
 var SUPPORTED_LOCALES = [
   "en-US",
+  "en-EU",
   "en-GB",
   "nl-NL",
   "de-DE",

@@ -37,6 +37,7 @@ export const tagModelSpec = {
 
 export const SUPPORTED_LOCALES = [
     'en-US',
+    'en-EU',
     'en-GB',
     'nl-NL',
     'de-DE',
