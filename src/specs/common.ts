@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { markAsSchemaSpec } from '../common';
 
 // Collection paths
 export const PARTNER_COLLECTION = '/companies/hubby/partners';
@@ -14,17 +15,24 @@ export const BOOKING_COLLECTION = 'bookings';
 export const MESSAGE_COLLECTION = 'messages';
 export const CURRENCY_COLLECTION = 'currencies';
 export const API_LOG_COLLECTION = 'api_logs'
-
 export const timestampNullableOptional = { _type: 'timestamp' as const, nullable: true, optional: true };
 export const timestampNullable = { _type: 'timestamp' as const, nullable: true, optional: false };
 export const timestampRequired = { _type: 'timestamp' as const, nullable: false, optional: false };
 
 export const hubbyModelSpec = {
-    id: z.string(),
+    id: z.string().nullable().optional(),
     created_at: timestampRequired,
     updated_at: timestampNullableOptional,
     created_by: { _type: 'docRef' as const, collection: 'users', nullable: true, optional: true },
     updated_by: { _type: 'docRef' as const, collection: 'users', nullable: true, optional: true },
+}
+
+export const tagModelSpec = {
+    ...hubbyModelSpec,
+    slug: z.string(),
+    name: z.string(),
+    description: z.string().nullable().optional(),
+    color: z.string().nullable().optional(),
 }
 
 export const SUPPORTED_LOCALES = [

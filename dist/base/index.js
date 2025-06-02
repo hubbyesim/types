@@ -163,11 +163,18 @@ var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: 
 var timestampNullable = { _type: "timestamp", nullable: true, optional: false };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
 var hubbyModelSpec = {
-  id: z.string(),
+  id: z.string().nullable().optional(),
   created_at: timestampRequired,
   updated_at: timestampNullableOptional,
   created_by: { _type: "docRef", collection: "users", nullable: true, optional: true },
   updated_by: { _type: "docRef", collection: "users", nullable: true, optional: true }
+};
+var tagModelSpec = {
+  ...hubbyModelSpec,
+  slug: z.string(),
+  name: z.string(),
+  description: z.string().nullable().optional(),
+  color: z.string().nullable().optional()
 };
 var SUPPORTED_LOCALES = [
   "en-US",
@@ -215,7 +222,7 @@ var apiKeysObjectSpec = {
   optional: true
 };
 var userSchemaSpec = markAsSchemaSpec({
-  id: z.string(),
+  id: z.string().nullable().optional(),
   name: z.string().nullable(),
   email: z.string().email().nullable(),
   stripe_id: z.string().nullable().optional(),
@@ -807,6 +814,13 @@ var partnerSchemaSpec = markAsSchemaSpec({
     _type: "object",
     of: platformSettingsSchema.shape,
     nullable: true
+  },
+  // Tags
+  tags: {
+    _type: "array",
+    of: tagModelSpec,
+    nullable: true,
+    optional: true
   },
   // Metadata
   data: {

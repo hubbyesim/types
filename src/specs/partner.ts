@@ -6,6 +6,7 @@ import {
     USER_COLLECTION,
     PACKAGE_COLLECTION,
     PRICE_LIST_COLLECTION,
+    tagModelSpec,
     timestampRequired,
     timestampNullableOptional
 } from './common';
@@ -357,6 +358,14 @@ export const partnerSchemaSpec = markAsSchemaSpec({
         _type: 'object' as const,
         of: platformSettingsSchema.shape,
         nullable: true
+    },
+
+    // Tags
+    tags: {
+        _type: 'array' as const,
+        of: tagModelSpec,
+        nullable: true,
+        optional: true
     },
 
     // Metadata

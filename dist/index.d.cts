@@ -13,7 +13,7 @@ declare const analyticsSpec: {
     event: z.ZodString;
     parameter: z.ZodNullable<z.ZodString>;
     sum: z.ZodNumber;
-    id: z.ZodString;
+    id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     created_at: {
         _type: "timestamp";
         nullable: boolean;
@@ -451,6 +451,40 @@ declare const partnerSchemaSpec: {
             }>, "many">>;
         };
         nullable: boolean;
+    };
+    tags: {
+        _type: "array";
+        of: {
+            slug: z.ZodString;
+            name: z.ZodString;
+            description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            color: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            created_at: {
+                _type: "timestamp";
+                nullable: boolean;
+                optional: boolean;
+            };
+            updated_at: {
+                _type: "timestamp";
+                nullable: boolean;
+                optional: boolean;
+            };
+            created_by: {
+                _type: "docRef";
+                collection: string;
+                nullable: boolean;
+                optional: boolean;
+            };
+            updated_by: {
+                _type: "docRef";
+                collection: string;
+                nullable: boolean;
+                optional: boolean;
+            };
+        };
+        nullable: boolean;
+        optional: boolean;
     };
     data: {
         _type: "object";
