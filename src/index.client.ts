@@ -11,7 +11,8 @@ import {
   bookingStatusSchema,
   communicationOptionsSchema
 } from './specs/booking';
-import { SUPPORTED_LOCALES as LOCALES, hubbyModelSpec } from './specs/common';
+import { hubbyModelSpec } from './specs/common';
+import { SUPPORTED_LOCALES as LOCALES } from './constants';
 import { countrySchemaSpec } from './specs/country';
 import { currencySchemaSpec } from './specs/currency';
 import { esimSchemaSpec } from './specs/esim';

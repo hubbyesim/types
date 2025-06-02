@@ -196,34 +196,19 @@ var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: 
 var timestampNullable = { _type: "timestamp", nullable: true, optional: false };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
 var hubbyModelSpec = {
-  id: z.string(),
+  id: z.string().nullable().optional(),
   created_at: timestampRequired,
   updated_at: timestampNullableOptional,
   created_by: { _type: "docRef", collection: "users", nullable: true, optional: true },
   updated_by: { _type: "docRef", collection: "users", nullable: true, optional: true }
 };
-var SUPPORTED_LOCALES = [
-  "en-US",
-  "en-GB",
-  "nl-NL",
-  "de-DE",
-  "fr-FR",
-  "it-IT",
-  "es-ES",
-  "cs-CZ",
-  "pl-PL",
-  "pt-PT",
-  "fr-BE",
-  "nl-BE",
-  "de-AT",
-  "de-CH",
-  "fr-CH",
-  "it-CH",
-  "sv-SE",
-  "sk-SK",
-  "de-BE",
-  "en-AU"
-];
+var tagModelSpec = {
+  ...hubbyModelSpec,
+  slug: z.string(),
+  name: z.string(),
+  description: z.string().nullable().optional(),
+  color: z.string().nullable().optional()
+};
 
 // src/specs/user.ts
 var apiKeySpec = {
@@ -248,7 +233,7 @@ var apiKeysObjectSpec = {
   optional: true
 };
 var userSchemaSpec = markAsSchemaSpec({
-  id: z.string(),
+  id: z.string().nullable().optional(),
   name: z.string().nullable(),
   email: z.string().email().nullable(),
   stripe_id: z.string().nullable().optional(),
@@ -278,8 +263,9 @@ var userSchemaSpec = markAsSchemaSpec({
   review_requested: timestampNullableOptional,
   last_seen: timestampNullableOptional
 });
-var SUPPORTED_LOCALES2 = [
+var SUPPORTED_LOCALES = [
   "en-US",
+  "en-EU",
   "en-GB",
   "nl-NL",
   "de-DE",
@@ -300,7 +286,7 @@ var SUPPORTED_LOCALES2 = [
   "de-BE",
   "en-AU"
 ];
-var supportedLocalesSchema = z.enum(SUPPORTED_LOCALES2);
+var supportedLocalesSchema = z.enum(SUPPORTED_LOCALES);
 
 // src/specs/booking.ts
 var communicationChannelSchema = z.enum([
@@ -647,11 +633,11 @@ var packageStrategySchema = z.object({
 var scheduleEmailSchema = z.object({
   brevo_template_id: z.number(),
   subject: z.record(z.string()).refine(
-    (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES2.includes(key)),
+    (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
     { message: "Keys must be supported locales" }
   ).optional(),
   preview_text: z.record(z.string()).refine(
-    (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES2.includes(key)),
+    (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
     { message: "Keys must be supported locales" }
   ).optional()
 }).nullable().optional();
@@ -850,6 +836,13 @@ var partnerSchemaSpec = markAsSchemaSpec({
     _type: "object",
     of: platformSettingsSchema.shape,
     nullable: true
+  },
+  // Tags
+  tags: {
+    _type: "array",
+    of: tagModelSpec,
+    nullable: true,
+    optional: true
   },
   // Metadata
   data: {
@@ -1228,8 +1221,8 @@ var promoCodeToFirestore = (promoCode) => {
   return convertJSToFirestore(promoCode, promoCodeSchemaSpec);
 };
 var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
-var SUPPORTED_LOCALES3 = SUPPORTED_LOCALES;
+var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
-export { AddressSchema, AnalyticsSchema, ApiLogSchema, BankingDetailsSchema, BookingSchema, BookingStatusSchema, CommunicationChannelSchema, CommunicationOptionsSchema, CountrySchema, CurrencySchema, ESIMSchema, FirebaseService, HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HScheduleFilterSchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema2 as HubbyModelSchema, MessageSchema, PackagePriceSchema, PackageSchema, PartnerContactSchema, PartnerDataSchema, PartnerPackageSpecificationSchema, PartnerSchema, PaymentSchema, PlatformSettingsSchema, PriceListSchema, PromoCodeSchema, PromoPackageSpecificationSchema, RegistrationSchema, SUPPORTED_LOCALES3 as SUPPORTED_LOCALES, ScheduleFilterSchema, ScheduleSchema, UserFirestoreSchema, UserSchema, VisualIdentityBannerSchema, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, priceListFromFirestore, priceListToFirestore, promoCodeFromFirestore, promoCodeToFirestore, userFromFirestore, userToFirestore };
+export { AddressSchema, AnalyticsSchema, ApiLogSchema, BankingDetailsSchema, BookingSchema, BookingStatusSchema, CommunicationChannelSchema, CommunicationOptionsSchema, CountrySchema, CurrencySchema, ESIMSchema, FirebaseService, HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HScheduleFilterSchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema2 as HubbyModelSchema, MessageSchema, PackagePriceSchema, PackageSchema, PartnerContactSchema, PartnerDataSchema, PartnerPackageSpecificationSchema, PartnerSchema, PaymentSchema, PlatformSettingsSchema, PriceListSchema, PromoCodeSchema, PromoPackageSpecificationSchema, RegistrationSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES, ScheduleFilterSchema, ScheduleSchema, UserFirestoreSchema, UserSchema, VisualIdentityBannerSchema, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, priceListFromFirestore, priceListToFirestore, promoCodeFromFirestore, promoCodeToFirestore, userFromFirestore, userToFirestore };
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.js.map
