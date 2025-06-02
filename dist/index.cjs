@@ -211,29 +211,6 @@ var tagModelSpec = {
   description: zod.z.string().nullable().optional(),
   color: zod.z.string().nullable().optional()
 };
-var SUPPORTED_LOCALES = [
-  "en-US",
-  "en-EU",
-  "en-GB",
-  "nl-NL",
-  "de-DE",
-  "fr-FR",
-  "it-IT",
-  "es-ES",
-  "cs-CZ",
-  "pl-PL",
-  "pt-PT",
-  "fr-BE",
-  "nl-BE",
-  "de-AT",
-  "de-CH",
-  "fr-CH",
-  "it-CH",
-  "sv-SE",
-  "sk-SK",
-  "de-BE",
-  "en-AU"
-];
 
 // src/specs/user.ts
 var apiKeySpec = {
@@ -288,8 +265,9 @@ var userSchemaSpec = markAsSchemaSpec({
   review_requested: timestampNullableOptional,
   last_seen: timestampNullableOptional
 });
-var SUPPORTED_LOCALES2 = [
+var SUPPORTED_LOCALES = [
   "en-US",
+  "en-EU",
   "en-GB",
   "nl-NL",
   "de-DE",
@@ -310,7 +288,7 @@ var SUPPORTED_LOCALES2 = [
   "de-BE",
   "en-AU"
 ];
-var supportedLocalesSchema = zod.z.enum(SUPPORTED_LOCALES2);
+var supportedLocalesSchema = zod.z.enum(SUPPORTED_LOCALES);
 
 // src/specs/booking.ts
 var communicationChannelSchema = zod.z.enum([
@@ -657,11 +635,11 @@ var packageStrategySchema = zod.z.object({
 var scheduleEmailSchema = zod.z.object({
   brevo_template_id: zod.z.number(),
   subject: zod.z.record(zod.z.string()).refine(
-    (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES2.includes(key)),
+    (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
     { message: "Keys must be supported locales" }
   ).optional(),
   preview_text: zod.z.record(zod.z.string()).refine(
-    (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES2.includes(key)),
+    (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
     { message: "Keys must be supported locales" }
   ).optional()
 }).nullable().optional();
@@ -1245,7 +1223,7 @@ var promoCodeToFirestore = (promoCode) => {
   return convertJSToFirestore(promoCode, promoCodeSchemaSpec);
 };
 var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
-var SUPPORTED_LOCALES3 = SUPPORTED_LOCALES;
+var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
 exports.AddressSchema = AddressSchema;
 exports.AnalyticsSchema = AnalyticsSchema;
@@ -1305,7 +1283,7 @@ exports.PriceListSchema = PriceListSchema;
 exports.PromoCodeSchema = PromoCodeSchema;
 exports.PromoPackageSpecificationSchema = PromoPackageSpecificationSchema;
 exports.RegistrationSchema = RegistrationSchema;
-exports.SUPPORTED_LOCALES = SUPPORTED_LOCALES3;
+exports.SUPPORTED_LOCALES = SUPPORTED_LOCALES2;
 exports.ScheduleFilterSchema = ScheduleFilterSchema;
 exports.ScheduleSchema = ScheduleSchema;
 exports.UserFirestoreSchema = UserFirestoreSchema;

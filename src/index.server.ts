@@ -34,7 +34,7 @@ import {
     platformSettingsSchemaSpec
 } from './specs/partner';
 import { hubbyModelSpec } from './specs/common';
-import { SUPPORTED_LOCALES as LOCALES } from './specs/common';
+import { SUPPORTED_LOCALES as LOCALES } from './constants';
 import { apiLogSchemaSpec } from './specs/apiLogs';
 import { z } from 'zod';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
@@ -44,9 +44,7 @@ import { convertFirestoreToJS, convertJSToFirestore } from './utils/firestoreTra
 import { HPartner, HPriceList, HPromoCode } from './index.client';
 import { buildClientSchema } from './builders/client';
 
-
 export { partnerSchemaSpec, analyticsSpec };
-
 
 export const UserSchema = buildServerSchema(userSchemaSpec);
 export const UserFirestoreSchema = buildServerSchema(userSchemaSpec);

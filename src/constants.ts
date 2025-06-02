@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 export const SUPPORTED_LOCALES = [
     'en-US',
+    'en-EU',
     'en-GB',
     'nl-NL',
     'de-DE',
@@ -22,6 +23,8 @@ export const SUPPORTED_LOCALES = [
     'de-BE',
     'en-AU'
 ] as const;
+
+// Define the type using TypeScript's typeof and indexing
 
 // Define the type using TypeScript's typeof and indexing
 export type SupportedLocales = typeof SUPPORTED_LOCALES[number];
