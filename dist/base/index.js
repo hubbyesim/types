@@ -614,6 +614,7 @@ var scheduleSchema = z.object({
   filter: scheduleFilterSchema.nullable().optional()
 });
 var freeEsimSchema = z.object({
+  enabled: z.boolean(),
   package_specification: z.object({
     size: z.string(),
     type: z.string(),

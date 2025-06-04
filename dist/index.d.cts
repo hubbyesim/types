@@ -293,6 +293,7 @@ declare const partnerSchemaSpec: {
                 iso3_white_list?: string[] | undefined;
             }>>>;
             free_esim: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+                enabled: z.ZodBoolean;
                 package_specification: z.ZodObject<{
                     size: z.ZodString;
                     type: z.ZodString;
@@ -315,6 +316,7 @@ declare const partnerSchemaSpec: {
                     destination: string;
                     size: string;
                 };
+                enabled: boolean;
                 booking_id_verification: boolean;
                 allowance: number;
                 booking_id_verification_pattern?: string | null | undefined;
@@ -324,6 +326,7 @@ declare const partnerSchemaSpec: {
                     destination: string;
                     size: string;
                 };
+                enabled: boolean;
                 allowance: number;
                 booking_id_verification?: boolean | undefined;
                 booking_id_verification_pattern?: string | null | undefined;

@@ -659,6 +659,7 @@ var scheduleSchema = zod.z.object({
   filter: scheduleFilterSchema.nullable().optional()
 });
 var freeEsimSchema = zod.z.object({
+  enabled: zod.z.boolean(),
   package_specification: zod.z.object({
     size: zod.z.string(),
     type: zod.z.string(),
