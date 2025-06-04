@@ -52,6 +52,7 @@ export type CommunicationOptions = z.infer<typeof communicationOptionsSchema>;
 
 // Define the booking schema spec
 export const bookingSchemaSpec = markAsSchemaSpec({
+    id: z.string().optional(),
     external_id: z.string().nullable().optional(),
     created_at: timestampRequired,
     updated_at: timestampRequired,

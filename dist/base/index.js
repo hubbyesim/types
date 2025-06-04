@@ -311,6 +311,7 @@ var communicationOptionsSchema = z.object({
   channels: z.array(communicationChannelSchema)
 });
 var bookingSchemaSpec = markAsSchemaSpec({
+  id: z.string().optional(),
   external_id: z.string().nullable().optional(),
   created_at: timestampRequired,
   updated_at: timestampRequired,

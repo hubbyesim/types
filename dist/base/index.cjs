@@ -313,6 +313,7 @@ var communicationOptionsSchema = zod.z.object({
   channels: zod.z.array(communicationChannelSchema)
 });
 var bookingSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string().optional(),
   external_id: zod.z.string().nullable().optional(),
   created_at: timestampRequired,
   updated_at: timestampRequired,
