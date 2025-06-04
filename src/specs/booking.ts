@@ -9,6 +9,7 @@ import {
 } from './common';
 import { markAsSchemaSpec } from '../common';
 import { supportedLocalesSchema } from '../constants';
+import { packageSpecificationSchema } from './promocode';
 
 // Enum for communication channels
 export const communicationChannelSchema = z.enum([
@@ -51,7 +52,6 @@ export type CommunicationOptions = z.infer<typeof communicationOptionsSchema>;
 
 // Define the booking schema spec
 export const bookingSchemaSpec = markAsSchemaSpec({
-    id: z.string(),
     external_id: z.string().nullable().optional(),
     created_at: timestampRequired,
     updated_at: timestampRequired,
@@ -91,7 +91,7 @@ export const bookingSchemaSpec = markAsSchemaSpec({
     is_processed_for_esim_restoration: z.boolean(),
     is_pseudonymized: z.boolean(),
     import_id: z.string().nullable().optional(),
-    package_specifications: z.record(z.any()).optional(),
+    package_specifications: z.array(packageSpecificationSchema).min(1),
     departure_date: timestampRequired,
     return_date: timestampNullable,
     partner: { _type: 'docRef' as const, collection: PARTNER_COLLECTION },
