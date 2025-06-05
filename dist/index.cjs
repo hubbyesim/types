@@ -287,8 +287,6 @@ var SUPPORTED_LOCALES = [
   "sk-SK",
   "de-BE",
   "en-AU",
-  "pl-PL",
-  "sv-SE",
   "da-DK"
 ];
 var supportedLocalesSchema = zod.z.enum(SUPPORTED_LOCALES);

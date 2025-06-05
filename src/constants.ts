@@ -22,8 +22,6 @@ export const SUPPORTED_LOCALES = [
     'sk-SK',
     'de-BE',
     'en-AU',
-    'pl-PL',
-    'sv-SE',
     'da-DK'
 ] as const;
 
