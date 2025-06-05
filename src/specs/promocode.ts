@@ -15,7 +15,8 @@ export const packageSpecificationSchema = z.object({
     destination: z.string().optional(),
     size: z.string().optional(),
     package_id: z.string().optional(),
-    iata_code: z.string().optional()
+    iata_code: z.string().optional(),
+    package_type: z.string().optional()
 });
 
 // Define the promo code schema spec

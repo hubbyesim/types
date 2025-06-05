@@ -84,16 +84,19 @@ declare const HPromoPackageSpecificationSchema: z.ZodObject<{
     size: z.ZodOptional<z.ZodString>;
     package_id: z.ZodOptional<z.ZodString>;
     iata_code: z.ZodOptional<z.ZodString>;
+    package_type: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     destination?: string | undefined;
     size?: string | undefined;
     package_id?: string | undefined;
     iata_code?: string | undefined;
+    package_type?: string | undefined;
 }, {
     destination?: string | undefined;
     size?: string | undefined;
     package_id?: string | undefined;
     iata_code?: string | undefined;
+    package_type?: string | undefined;
 }>;
 declare const HVisualIdentityBannerSchema: z.ZodObject<{
     image_url: z.ZodString;
