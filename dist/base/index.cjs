@@ -260,7 +260,8 @@ var packageSpecificationSchema = zod.z.object({
   destination: zod.z.string().optional(),
   size: zod.z.string().optional(),
   package_id: zod.z.string().optional(),
-  iata_code: zod.z.string().optional()
+  iata_code: zod.z.string().optional(),
+  package_type: zod.z.string().optional()
 });
 var promoCodeSchemaSpec = markAsSchemaSpec({
   id: zod.z.string(),
