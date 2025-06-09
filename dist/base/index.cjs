@@ -321,9 +321,9 @@ var bookingSchemaSpec = markAsSchemaSpec({
   created_by: zod.z.string().nullable(),
   updated_by: zod.z.string().nullable(),
   title: zod.z.string().nullable(),
-  first_name: zod.z.string(),
-  last_name: zod.z.string(),
-  full_name: zod.z.string(),
+  first_name: zod.z.string().nullable().optional(),
+  last_name: zod.z.string().nullable().optional(),
+  full_name: zod.z.string().nullable().optional(),
   pax: zod.z.number(),
   email: zod.z.string().email().nullable(),
   phone: zod.z.string().nullable(),
@@ -617,6 +617,7 @@ var scheduleSchema = zod.z.object({
   filter: scheduleFilterSchema.nullable().optional()
 });
 var freeEsimSchema = zod.z.object({
+  enabled: zod.z.boolean(),
   package_specification: zod.z.object({
     size: zod.z.string(),
     type: zod.z.string(),

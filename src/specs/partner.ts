@@ -162,6 +162,7 @@ export const scheduleSchema = z.object({
 });
 
 export const freeEsimSchema = z.object({
+    enabled: z.boolean(),
     package_specification: z.object({
         size: z.string(),
         type: z.string(),
