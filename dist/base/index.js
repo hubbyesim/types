@@ -251,7 +251,8 @@ var SUPPORTED_LOCALES = [
   "sv-SE",
   "sk-SK",
   "de-BE",
-  "en-AU"
+  "en-AU",
+  "da-DK"
 ];
 var supportedLocalesSchema = z.enum(SUPPORTED_LOCALES);
 var packageSpecificationSchema = z.object({
