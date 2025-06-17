@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - run: npm install
 
@@ -78,4 +78,4 @@ jobs:
             🛠 Auto-generated release for schema build.
             Changes based on updates in `src/`.
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
