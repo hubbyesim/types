@@ -163,3 +163,9 @@ npm run generate-exports
 ```
 
 > **Note:** The individual .d.ts files in the src/ directory (like booking.d.ts, etc.) are deprecated and will be removed in a future version. All types are now exported directly from the schema files through the generated index.ts. 
+
+include like this:
+
+  "dependencies": {
+    "@hubbyesim/types": "git+https://github.com/hubbyesim/types.git#v1.0.5"
+  }
