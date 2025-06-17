@@ -7,6 +7,10 @@ on:
     paths:
       - 'src/**'
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,7 +18,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.PAT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git authentication
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git config --global credential.helper store
+          echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -36,8 +47,8 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/hubbyesim/types.git
           git commit -m "chore: build dist [skip ci]"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/hubbyesim/types.git
           git push origin main
 
       - name: Get latest tag
@@ -79,4 +90,4 @@ jobs:
             🛠 Auto-generated release for schema build.
             Changes based on updates in `src/`.
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
