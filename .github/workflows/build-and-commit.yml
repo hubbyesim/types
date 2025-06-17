@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -37,7 +37,7 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git commit -m "chore: build dist [skip ci]"
-          git push
+          git push origin main
 
       - name: Get latest tag
         if: env.changes == 'true'
@@ -78,4 +78,4 @@ jobs:
             🛠 Auto-generated release for schema build.
             Changes based on updates in `src/`.
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} 
