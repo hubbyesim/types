@@ -1,93 +1,34 @@
-name: Build, Commit Dist, and Tag Version
+name: Build and Publish to GitHub Packages
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
     paths:
       - 'src/**'
-
-permissions:
-  contents: write
-  packages: write
+      - 'package.json'
+      - 'tsconfig.json'
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Configure git authentication
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git config --global credential.helper store
-          echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          registry-url: https://npm.pkg.github.com/
+          scope: '@yourusername'
 
-      - run: npm install
-
-      - run: npm run build
-
-      - name: Check if dist/ has changes
-        id: check_changes
+      - name: Install and build
         run: |
-          git add dist/
-          git diff --cached --exit-code || echo "changes=true" >> $GITHUB_ENV
+          npm ci
+          npm run build
 
-      - name: Commit and Push compiled dist
-        if: env.changes == 'true'
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git commit -m "chore: build dist [skip ci]"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/hubbyesim/types.git
-          git push origin main
-
-      - name: Get latest tag
-        if: env.changes == 'true'
-        id: get_tag
-        run: |
-          git fetch --tags
-          TAG=$(git tag --sort=-v:refname | head -n 1)
-          echo "Latest tag: $TAG"
-          echo "tag=$TAG" >> $GITHUB_ENV
-
-      - name: Bump patch version and create new tag
-        if: env.changes == 'true'
-        id: bump_tag
-        run: |
-          if [ -z "${{ env.tag }}" ]; then
-            NEW_TAG="v1.0.0"
-          else
-            VERSION=${{ env.tag }}
-            VERSION=${VERSION#v} # remove leading v
-            IFS='.' read -ra PARTS <<< "$VERSION"
-            MAJOR=${PARTS[0]}
-            MINOR=${PARTS[1]}
-            PATCH=${PARTS[2]}
-            PATCH=$((PATCH + 1))
-            NEW_TAG="v${MAJOR}.${MINOR}.${PATCH}"
-          fi
-          echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
-          git tag $NEW_TAG
-          git push origin $NEW_TAG
-
-      - name: Create GitHub Release
-        if: env.changes == 'true'
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ env.NEW_TAG }}
-          name: "Schemas ${{ env.NEW_TAG }}"
-          body: |
-            🛠 Auto-generated release for schema build.
-            Changes based on updates in `src/`.
+      - name: Publish to GitHub Packages
+        run: npm publish
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
