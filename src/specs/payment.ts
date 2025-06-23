@@ -23,5 +23,5 @@ export const paymentSchemaSpec = markAsSchemaSpec({
     topup: z.boolean(),
 
     // Reference fields
-    user: { _type: 'docRef' as const, collection: USER_COLLECTION, nullable: true }
+    user: { _type: 'docRef' as const, collection: USER_COLLECTION, nullable: true, optional: true }
 });

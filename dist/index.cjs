@@ -491,7 +491,7 @@ var paymentSchemaSpec = markAsSchemaSpec({
   promo: zod.z.string(),
   topup: zod.z.boolean(),
   // Reference fields
-  user: { _type: "docRef", collection: USER_COLLECTION, nullable: true }
+  user: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true }
 });
 var analyticsSpec = markAsSchemaSpec({
   ...hubbyModelSpec,
