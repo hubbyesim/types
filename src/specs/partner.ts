@@ -304,6 +304,16 @@ export const platformSettingsSchemaSpec = markAsSchemaSpec({
     }
 });
 
+// Webhook settings schema
+export const webhookSettingsSchema = z.object({
+    url: z.string().url().nullable().optional(),
+    api_key: z.string().nullable().optional(),
+    enabled: z.boolean().default(false),
+    events: z.object({
+        promocode_redemption: z.boolean().default(false)
+    }).default({})
+});
+
 // ===== Main partner schema =====
 export const partnerSchemaSpec = markAsSchemaSpec({
     // Base model fields
@@ -373,6 +383,14 @@ export const partnerSchemaSpec = markAsSchemaSpec({
     data: {
         _type: 'object' as const,
         of: partnerDataSchema.shape,
+        nullable: true,
+        optional: true
+    },
+
+    // Webhook settings
+    webhook_settings: {
+        _type: 'object' as const,
+        of: webhookSettingsSchema.shape,
         nullable: true,
         optional: true
     }

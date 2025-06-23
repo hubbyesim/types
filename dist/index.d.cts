@@ -498,6 +498,23 @@ declare const partnerSchemaSpec: {
         nullable: boolean;
         optional: boolean;
     };
+    webhook_settings: {
+        _type: "object";
+        of: {
+            url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            api_key: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            enabled: z.ZodDefault<z.ZodBoolean>;
+            events: z.ZodDefault<z.ZodObject<{
+                promocode_redemption: z.ZodDefault<z.ZodBoolean>;
+            }, "strip", z.ZodTypeAny, {
+                promocode_redemption: boolean;
+            }, {
+                promocode_redemption?: boolean | undefined;
+            }>>;
+        };
+        nullable: boolean;
+        optional: boolean;
+    };
 };
 
 declare const SUPPORTED_LOCALES$1: readonly ["en-US", "en-EU", "en-GB", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK"];

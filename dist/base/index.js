@@ -746,6 +746,14 @@ markAsSchemaSpec({
     optional: true
   }
 });
+var webhookSettingsSchema = z.object({
+  url: z.string().url().nullable().optional(),
+  api_key: z.string().nullable().optional(),
+  enabled: z.boolean().default(false),
+  events: z.object({
+    promocode_redemption: z.boolean().default(false)
+  }).default({})
+});
 var partnerSchemaSpec = markAsSchemaSpec({
   // Base model fields
   id: z.string(),
@@ -807,6 +815,13 @@ var partnerSchemaSpec = markAsSchemaSpec({
   data: {
     _type: "object",
     of: partnerDataSchema.shape,
+    nullable: true,
+    optional: true
+  },
+  // Webhook settings
+  webhook_settings: {
+    _type: "object",
+    of: webhookSettingsSchema.shape,
     nullable: true,
     optional: true
   }
