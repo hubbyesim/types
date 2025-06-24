@@ -292,7 +292,8 @@ var packageSpecificationSchema = z.object({
   destination: z.string().optional(),
   size: z.string().optional(),
   package_id: z.string().optional(),
-  iata_code: z.string().optional()
+  iata_code: z.string().optional(),
+  package_type: z.enum(["data-limited", "time-limited", "starter"]).optional()
 });
 var promoCodeSchemaSpec = markAsSchemaSpec({
   id: z.string(),
@@ -306,7 +307,7 @@ var promoCodeSchemaSpec = markAsSchemaSpec({
   code: z.string(),
   allowance_user: z.number(),
   allowance_total: z.number(),
-  type: z.enum(["full-discount", "partial-discount", "booking", "traveler"]).nullable().or(z.string()),
+  type: z.enum(["discount", "booking", "booking_without_destination"]).nullable().or(z.string()),
   usage: z.array(z.string()),
   uuid_usage: z.array(z.string()),
   package_specification: packageSpecificationSchema.optional(),
@@ -529,7 +530,7 @@ var packageSchemaSpec = markAsSchemaSpec({
   partner_price: z.number(),
   days: z.number(),
   name: z.string(),
-  type: z.enum(["data-limited", "time-limited"]).nullable(),
+  type: z.enum(["data-limited", "time-limited", "starter"]).nullable(),
   throttling: z.number().optional(),
   provider_parameters: z.object({
     imsi: z.number()
