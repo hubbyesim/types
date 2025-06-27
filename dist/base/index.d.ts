@@ -84,18 +84,21 @@ declare const HPromoPackageSpecificationSchema: z.ZodObject<{
     size: z.ZodOptional<z.ZodString>;
     package_id: z.ZodOptional<z.ZodString>;
     iata_code: z.ZodOptional<z.ZodString>;
+    package_duration: z.ZodOptional<z.ZodNumber>;
     package_type: z.ZodOptional<z.ZodEnum<["data-limited", "time-limited", "starter"]>>;
 }, "strip", z.ZodTypeAny, {
     destination?: string | undefined;
     size?: string | undefined;
     package_id?: string | undefined;
     iata_code?: string | undefined;
+    package_duration?: number | undefined;
     package_type?: "data-limited" | "time-limited" | "starter" | undefined;
 }, {
     destination?: string | undefined;
     size?: string | undefined;
     package_id?: string | undefined;
     iata_code?: string | undefined;
+    package_duration?: number | undefined;
     package_type?: "data-limited" | "time-limited" | "starter" | undefined;
 }>;
 declare const HVisualIdentityBannerSchema: z.ZodObject<{
