@@ -261,7 +261,9 @@ var packageSpecificationSchema = zod.z.object({
   destination: zod.z.string().optional(),
   size: zod.z.string().optional(),
   package_id: zod.z.string().optional(),
-  iata_code: zod.z.string().optional()
+  iata_code: zod.z.string().optional(),
+  package_duration: zod.z.number().optional(),
+  package_type: zod.z.enum(["data-limited", "time-limited", "starter"]).optional()
 });
 var promoCodeSchemaSpec = markAsSchemaSpec({
   id: zod.z.string(),
@@ -275,7 +277,7 @@ var promoCodeSchemaSpec = markAsSchemaSpec({
   code: zod.z.string(),
   allowance_user: zod.z.number(),
   allowance_total: zod.z.number(),
-  type: zod.z.enum(["full-discount", "partial-discount", "booking", "traveler"]).nullable().or(zod.z.string()),
+  type: zod.z.enum(["discount", "booking", "booking_without_destination"]).nullable().or(zod.z.string()),
   usage: zod.z.array(zod.z.string()),
   uuid_usage: zod.z.array(zod.z.string()),
   package_specification: packageSpecificationSchema.optional(),
@@ -488,7 +490,7 @@ var packageSchemaSpec = markAsSchemaSpec({
   partner_price: zod.z.number(),
   days: zod.z.number(),
   name: zod.z.string(),
-  type: zod.z.enum(["data-limited", "time-limited"]).nullable(),
+  type: zod.z.enum(["data-limited", "time-limited", "starter"]).nullable(),
   throttling: zod.z.number().optional(),
   provider_parameters: zod.z.object({
     imsi: zod.z.number()

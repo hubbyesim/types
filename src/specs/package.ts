@@ -28,7 +28,7 @@ export const packageSchemaSpec = markAsSchemaSpec({
     partner_price: z.number(),
     days: z.number(),
     name: z.string(),
-    type: z.enum(['data-limited', 'time-limited']).nullable(),
+    type: z.enum(['data-limited', 'time-limited', 'starter']).nullable(),
     throttling: z.number().optional(),
     provider_parameters: z.object({
         imsi: z.number()
