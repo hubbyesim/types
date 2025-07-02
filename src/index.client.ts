@@ -41,6 +41,9 @@ import {
 import { analyticsSpec } from './specs/analytics';
 import { apiLogSchemaSpec } from './specs/apiLogs';
 import { z } from 'zod';
+import { roleSchemaSpec } from './specs/role';
+import { permissionSchemaSpec } from './specs/permission';
+
 export const HUserSchema = buildClientSchema(userSchemaSpec);
 export const HBookingSchema = buildClientSchema(bookingSchemaSpec);
 export const HCountrySchema = buildClientSchema(countrySchemaSpec);
@@ -62,6 +65,9 @@ export const HVisualIdentitySchema = buildClientSchema(visualIdentitySchema);
 export const HPricingStrategySchema = buildClientSchema(pricingStrategySchema);
 export const HFreeEsimSchema = buildClientSchema(freeEsimSchema);
 export const HAnalyticsSchema = buildClientSchema(analyticsSpec);
+export const HRoleSchema = buildClientSchema(roleSchemaSpec);
+export const HPermissionSchema = buildClientSchema(permissionSchemaSpec);
+
 // Additional lower-level schemas
 export const HAddressSchema = addressSchema;
 export const HRegistrationSchema = registrationSchema;
@@ -111,3 +117,6 @@ export type HubbyModelApp = HHubbyModel;
 
 export type SupportedLocales = typeof SUPPORTED_LOCALES[number];
 export const SUPPORTED_LOCALES = LOCALES; 
+
+export type HRole = z.infer<typeof HRoleSchema>;
+export type HPermission = z.infer<typeof HPermissionSchema>; 

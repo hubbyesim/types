@@ -159,6 +159,8 @@ var COUNTRY_COLLECTION = "countries";
 var ESIM_COLLECTION = "esims";
 var PRICE_LIST_COLLECTION = "price_lists";
 var BOOKING_COLLECTION = "bookings";
+var ROLE_COLLECTION = "roles";
+var PERMISSION_COLLECTION = "permissions";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: false };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
@@ -222,7 +224,8 @@ var userSchemaSpec = markAsSchemaSpec({
   currency: z.string().nullable().optional(),
   receipt_email: z.string().nullable().optional(),
   source: z.enum(["direct", "promo", "platform"]).nullable().optional(),
-  role: z.array(z.enum(["admin", "user", "platform"])).nullable().optional(),
+  role: { _type: "docRef", collection: ROLE_COLLECTION, optional: true, nullable: true },
+  permissions: { _type: "array", of: { _type: "docRef", collection: PERMISSION_COLLECTION }, optional: true, nullable: true },
   balance: z.number().nullable().optional(),
   createdAt: { _type: "timestamp" },
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, optional: true, nullable: true },
@@ -881,6 +884,21 @@ var apiLogSchemaSpec = markAsSchemaSpec({
   timestamp: timestampRequired,
   status_code: z.number()
 });
+var roleSchemaSpec = markAsSchemaSpec({
+  id: z.string().nullable().optional(),
+  name: z.string(),
+  description: z.string(),
+  permissions: { _type: "array", of: { _type: "docRef", collection: PERMISSION_COLLECTION }, optional: true, nullable: true },
+  created_at: timestampRequired,
+  updated_at: timestampNullableOptional
+});
+var permissionSchemaSpec = markAsSchemaSpec({
+  id: z.string().nullable().optional(),
+  name: z.string(),
+  description: z.string(),
+  created_at: timestampRequired,
+  updated_at: timestampNullableOptional
+});
 
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
@@ -904,6 +922,8 @@ var HVisualIdentitySchema = buildClientSchema(visualIdentitySchema);
 var HPricingStrategySchema = buildClientSchema(pricingStrategySchema);
 var HFreeEsimSchema = buildClientSchema(freeEsimSchema);
 var HAnalyticsSchema = buildClientSchema(analyticsSpec);
+var HRoleSchema = buildClientSchema(roleSchemaSpec);
+var HPermissionSchema = buildClientSchema(permissionSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -918,6 +938,6 @@ var HBookingStatusSchema = bookingStatusSchema;
 var HCommunicationOptionsSchema = communicationOptionsSchema;
 var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
-export { HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HScheduleFilterSchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES };
+export { HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HRoleSchema, HScheduleFilterSchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES };
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.js.map
