@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { PARTNER_COLLECTION, PROFILE_COLLECTION, timestampNullableOptional, timestampRequired, timestampNullable } from './common';
+import { PARTNER_COLLECTION, PROFILE_COLLECTION, timestampNullableOptional, timestampRequired, timestampNullable, ROLE_COLLECTION, PERMISSION_COLLECTION } from './common';
 import { markAsSchemaSpec } from '../common'
 
 export const apiKeySpec = {
@@ -49,7 +49,8 @@ export const userSchemaSpec = markAsSchemaSpec({
     currency: z.string().nullable().optional(),
     receipt_email: z.string().nullable().optional(),
     source: z.enum(['direct', 'promo', 'platform']).nullable().optional(),
-    role: z.array(z.enum(['admin', 'user', 'platform'])).nullable().optional(),
+    role: { _type: 'docRef' as const, collection: ROLE_COLLECTION, optional: true, nullable: true },
+    permissions: { _type: 'array' as const, of: { _type: 'docRef' as const, collection: PERMISSION_COLLECTION }, optional: true, nullable: true },
     balance: z.number().nullable().optional(),
     createdAt: { _type: 'timestamp' as const },
     partner: { _type: 'docRef' as const, collection: PARTNER_COLLECTION, optional: true, nullable: true },

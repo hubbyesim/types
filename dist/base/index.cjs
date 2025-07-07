@@ -161,6 +161,8 @@ var COUNTRY_COLLECTION = "countries";
 var ESIM_COLLECTION = "esims";
 var PRICE_LIST_COLLECTION = "price_lists";
 var BOOKING_COLLECTION = "bookings";
+var ROLE_COLLECTION = "roles";
+var PERMISSION_COLLECTION = "permissions";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: false };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
@@ -224,7 +226,8 @@ var userSchemaSpec = markAsSchemaSpec({
   currency: zod.z.string().nullable().optional(),
   receipt_email: zod.z.string().nullable().optional(),
   source: zod.z.enum(["direct", "promo", "platform"]).nullable().optional(),
-  role: zod.z.array(zod.z.enum(["admin", "user", "platform"])).nullable().optional(),
+  role: { _type: "docRef", collection: ROLE_COLLECTION, optional: true, nullable: true },
+  permissions: { _type: "array", of: { _type: "docRef", collection: PERMISSION_COLLECTION }, optional: true, nullable: true },
   balance: zod.z.number().nullable().optional(),
   createdAt: { _type: "timestamp" },
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, optional: true, nullable: true },
@@ -883,6 +886,21 @@ var apiLogSchemaSpec = markAsSchemaSpec({
   timestamp: timestampRequired,
   status_code: zod.z.number()
 });
+var roleSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string().nullable().optional(),
+  name: zod.z.string(),
+  description: zod.z.string(),
+  permissions: { _type: "array", of: { _type: "docRef", collection: PERMISSION_COLLECTION }, optional: true, nullable: true },
+  created_at: timestampRequired,
+  updated_at: timestampNullableOptional
+});
+var permissionSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string().nullable().optional(),
+  name: zod.z.string(),
+  description: zod.z.string(),
+  created_at: timestampRequired,
+  updated_at: timestampNullableOptional
+});
 
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
@@ -906,6 +924,8 @@ var HVisualIdentitySchema = buildClientSchema(visualIdentitySchema);
 var HPricingStrategySchema = buildClientSchema(pricingStrategySchema);
 var HFreeEsimSchema = buildClientSchema(freeEsimSchema);
 var HAnalyticsSchema = buildClientSchema(analyticsSpec);
+var HRoleSchema = buildClientSchema(roleSchemaSpec);
+var HPermissionSchema = buildClientSchema(permissionSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -942,12 +962,14 @@ exports.HPartnerDataSchema = HPartnerDataSchema;
 exports.HPartnerPackageSpecificationSchema = HPartnerPackageSpecificationSchema;
 exports.HPartnerSchema = HPartnerSchema;
 exports.HPaymentSchema = HPaymentSchema;
+exports.HPermissionSchema = HPermissionSchema;
 exports.HPlatformSettingsSchema = HPlatformSettingsSchema;
 exports.HPriceListSchema = HPriceListSchema;
 exports.HPricingStrategySchema = HPricingStrategySchema;
 exports.HPromoCodeSchema = HPromoCodeSchema;
 exports.HPromoPackageSpecificationSchema = HPromoPackageSpecificationSchema;
 exports.HRegistrationSchema = HRegistrationSchema;
+exports.HRoleSchema = HRoleSchema;
 exports.HScheduleFilterSchema = HScheduleFilterSchema;
 exports.HUserSchema = HUserSchema;
 exports.HVisualIdentityBannerSchema = HVisualIdentityBannerSchema;
