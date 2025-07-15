@@ -455,33 +455,18 @@ declare const partnerSchemaSpec: {
             review_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
                 enabled: z.ZodOptional<z.ZodBoolean>;
                 question: z.ZodOptional<z.ZodString>;
-                reward_data: z.ZodOptional<z.ZodString>;
-                package: z.ZodOptional<z.ZodObject<{
-                    _type: z.ZodLiteral<"docRef">;
-                    collection: z.ZodLiteral<"/companies/hubby/packages">;
-                }, "strip", z.ZodTypeAny, {
-                    _type: "docRef";
-                    collection: "/companies/hubby/packages";
-                }, {
-                    _type: "docRef";
-                    collection: "/companies/hubby/packages";
-                }>>;
+                size: z.ZodOptional<z.ZodString>;
+                package_type: z.ZodOptional<z.ZodNullable<z.ZodEnum<["data-limited", "time-limited", "starter"]>>>;
             }, "strip", z.ZodTypeAny, {
-                package?: {
-                    _type: "docRef";
-                    collection: "/companies/hubby/packages";
-                } | undefined;
+                size?: string | undefined;
+                package_type?: "data-limited" | "time-limited" | "starter" | null | undefined;
                 enabled?: boolean | undefined;
                 question?: string | undefined;
-                reward_data?: string | undefined;
             }, {
-                package?: {
-                    _type: "docRef";
-                    collection: "/companies/hubby/packages";
-                } | undefined;
+                size?: string | undefined;
+                package_type?: "data-limited" | "time-limited" | "starter" | null | undefined;
                 enabled?: boolean | undefined;
                 question?: string | undefined;
-                reward_data?: string | undefined;
             }>>>;
         };
         nullable: boolean;

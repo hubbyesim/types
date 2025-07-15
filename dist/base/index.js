@@ -633,8 +633,8 @@ var freeEsimSchema = z.object({
 var reviewSettingsSchema = z.object({
   enabled: z.boolean().optional(),
   question: z.string().optional(),
-  reward_data: z.string().optional(),
-  package: z.object({ _type: z.literal("docRef"), collection: z.literal(PACKAGE_COLLECTION) }).optional()
+  size: z.string().regex(/^(\d+GB|500MB)$/, "Reward data must be a number followed by 'GB' or exactly '500MB' (e.g., '1GB', '3GB', '500MB')").optional(),
+  package_type: z.enum(["data-limited", "time-limited", "starter"]).nullable().optional()
 });
 var platformSettingsSchema = z.object({
   package_strategy: z.object({

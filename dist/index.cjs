@@ -678,8 +678,8 @@ var freeEsimSchema = zod.z.object({
 var reviewSettingsSchema = zod.z.object({
   enabled: zod.z.boolean().optional(),
   question: zod.z.string().optional(),
-  reward_data: zod.z.string().optional(),
-  package: zod.z.object({ _type: zod.z.literal("docRef"), collection: zod.z.literal(PACKAGE_COLLECTION) }).optional()
+  size: zod.z.string().regex(/^(\d+GB|500MB)$/, "Reward data must be a number followed by 'GB' or exactly '500MB' (e.g., '1GB', '3GB', '500MB')").optional(),
+  package_type: zod.z.enum(["data-limited", "time-limited", "starter"]).nullable().optional()
 });
 var platformSettingsSchema = zod.z.object({
   package_strategy: zod.z.object({
