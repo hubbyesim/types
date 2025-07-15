@@ -456,15 +456,12 @@ declare const partnerSchemaSpec: {
                 enabled: z.ZodOptional<z.ZodBoolean>;
                 question: z.ZodOptional<z.ZodString>;
                 size: z.ZodOptional<z.ZodString>;
-                package_type: z.ZodOptional<z.ZodNullable<z.ZodEnum<["data-limited", "time-limited", "starter"]>>>;
             }, "strip", z.ZodTypeAny, {
                 size?: string | undefined;
-                package_type?: "data-limited" | "time-limited" | "starter" | null | undefined;
                 enabled?: boolean | undefined;
                 question?: string | undefined;
             }, {
                 size?: string | undefined;
-                package_type?: "data-limited" | "time-limited" | "starter" | null | undefined;
                 enabled?: boolean | undefined;
                 question?: string | undefined;
             }>>>;

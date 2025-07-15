@@ -676,8 +676,7 @@ var freeEsimSchema = z.object({
 var reviewSettingsSchema = z.object({
   enabled: z.boolean().optional(),
   question: z.string().optional(),
-  size: z.string().regex(/^(\d+GB|500MB)$/, "Reward data must be a number followed by 'GB' or exactly '500MB' (e.g., '1GB', '3GB', '500MB')").optional(),
-  package_type: z.enum(["data-limited", "time-limited", "starter"]).nullable().optional()
+  size: z.string().regex(/^(\d+GB|500MB)$/, "Reward data must be a number followed by 'GB' or exactly '500MB' (e.g., '1GB', '3GB', '500MB')").optional()
 });
 var platformSettingsSchema = z.object({
   package_strategy: z.object({
