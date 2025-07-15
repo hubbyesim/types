@@ -173,6 +173,14 @@ export const freeEsimSchema = z.object({
     allowance: z.number()
 });
 
+// Review settings schema
+export const reviewSettingsSchema = z.object({
+    enabled: z.boolean().optional(),
+    question: z.string().optional(),
+    reward_data: z.string().optional(),
+    package: z.object({ _type: z.literal('docRef'), collection: z.literal(PACKAGE_COLLECTION) }).optional()
+});
+
 // Platform settings schema
 export const platformSettingsSchema = z.object({
     package_strategy: z.object({
@@ -189,7 +197,8 @@ export const platformSettingsSchema = z.object({
         send_booking_confirmation: z.boolean()
     }).nullable().optional(),
     emit_events: emitEventSchema.nullable().optional(),
-    schedules: z.array(scheduleSchema).optional()
+    schedules: z.array(scheduleSchema).optional(),
+    review_settings: reviewSettingsSchema.nullable().optional()
 });
 
 // ===== Exportable schema specs =====
@@ -300,6 +309,12 @@ export const platformSettingsSchemaSpec = markAsSchemaSpec({
             _type: 'object' as const,
             of: scheduleSchema.shape
         },
+        optional: true
+    },
+    review_settings: {
+        _type: 'object' as const,
+        of: reviewSettingsSchema.shape,
+        nullable: true,
         optional: true
     }
 });

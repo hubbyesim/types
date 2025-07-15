@@ -675,6 +675,12 @@ var freeEsimSchema = zod.z.object({
   booking_id_verification_pattern: zod.z.string().nullable().optional(),
   allowance: zod.z.number()
 });
+var reviewSettingsSchema = zod.z.object({
+  enabled: zod.z.boolean().optional(),
+  question: zod.z.string().optional(),
+  reward_data: zod.z.string().optional(),
+  package: zod.z.object({ _type: zod.z.literal("docRef"), collection: zod.z.literal(PACKAGE_COLLECTION) }).optional()
+});
 var platformSettingsSchema = zod.z.object({
   package_strategy: zod.z.object({
     name: zod.z.string(),
@@ -690,7 +696,8 @@ var platformSettingsSchema = zod.z.object({
     send_booking_confirmation: zod.z.boolean()
   }).nullable().optional(),
   emit_events: emitEventSchema.nullable().optional(),
-  schedules: zod.z.array(scheduleSchema).optional()
+  schedules: zod.z.array(scheduleSchema).optional(),
+  review_settings: reviewSettingsSchema.nullable().optional()
 });
 var packagePriceSchemaSpec = markAsSchemaSpec({
   destination: zod.z.string(),
@@ -793,6 +800,12 @@ var platformSettingsSchemaSpec = markAsSchemaSpec({
       _type: "object",
       of: scheduleSchema.shape
     },
+    optional: true
+  },
+  review_settings: {
+    _type: "object",
+    of: reviewSettingsSchema.shape,
+    nullable: true,
     optional: true
   }
 });

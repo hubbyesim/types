@@ -630,6 +630,12 @@ var freeEsimSchema = z.object({
   booking_id_verification_pattern: z.string().nullable().optional(),
   allowance: z.number()
 });
+var reviewSettingsSchema = z.object({
+  enabled: z.boolean().optional(),
+  question: z.string().optional(),
+  reward_data: z.string().optional(),
+  package: z.object({ _type: z.literal("docRef"), collection: z.literal(PACKAGE_COLLECTION) }).optional()
+});
 var platformSettingsSchema = z.object({
   package_strategy: z.object({
     name: z.string(),
@@ -645,7 +651,8 @@ var platformSettingsSchema = z.object({
     send_booking_confirmation: z.boolean()
   }).nullable().optional(),
   emit_events: emitEventSchema.nullable().optional(),
-  schedules: z.array(scheduleSchema).optional()
+  schedules: z.array(scheduleSchema).optional(),
+  review_settings: reviewSettingsSchema.nullable().optional()
 });
 markAsSchemaSpec({
   destination: z.string(),
@@ -748,6 +755,12 @@ markAsSchemaSpec({
       _type: "object",
       of: scheduleSchema.shape
     },
+    optional: true
+  },
+  review_settings: {
+    _type: "object",
+    of: reviewSettingsSchema.shape,
+    nullable: true,
     optional: true
   }
 });

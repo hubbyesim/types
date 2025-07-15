@@ -452,6 +452,37 @@ declare const partnerSchemaSpec: {
                     comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
                 } | null | undefined;
             }>, "many">>;
+            review_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+                enabled: z.ZodOptional<z.ZodBoolean>;
+                question: z.ZodOptional<z.ZodString>;
+                reward_data: z.ZodOptional<z.ZodString>;
+                package: z.ZodOptional<z.ZodObject<{
+                    _type: z.ZodLiteral<"docRef">;
+                    collection: z.ZodLiteral<"/companies/hubby/packages">;
+                }, "strip", z.ZodTypeAny, {
+                    _type: "docRef";
+                    collection: "/companies/hubby/packages";
+                }, {
+                    _type: "docRef";
+                    collection: "/companies/hubby/packages";
+                }>>;
+            }, "strip", z.ZodTypeAny, {
+                package?: {
+                    _type: "docRef";
+                    collection: "/companies/hubby/packages";
+                } | undefined;
+                enabled?: boolean | undefined;
+                question?: string | undefined;
+                reward_data?: string | undefined;
+            }, {
+                package?: {
+                    _type: "docRef";
+                    collection: "/companies/hubby/packages";
+                } | undefined;
+                enabled?: boolean | undefined;
+                question?: string | undefined;
+                reward_data?: string | undefined;
+            }>>>;
         };
         nullable: boolean;
     };
