@@ -11,7 +11,7 @@ import {
   bookingStatusSchema,
   communicationOptionsSchema
 } from './specs/booking';
-import { hubbyModelSpec } from './specs/common';
+import { hubbyModelSpec, tagModelSpec } from './specs/common';
 import { SUPPORTED_LOCALES as LOCALES } from './constants';
 import { countrySchemaSpec } from './specs/country';
 import { currencySchemaSpec } from './specs/currency';
@@ -67,7 +67,7 @@ export const HFreeEsimSchema = buildClientSchema(freeEsimSchema);
 export const HAnalyticsSchema = buildClientSchema(analyticsSpec);
 export const HRoleSchema = buildClientSchema(roleSchemaSpec);
 export const HPermissionSchema = buildClientSchema(permissionSchemaSpec);
-
+export const HTagSchema = buildClientSchema(tagModelSpec);
 // Additional lower-level schemas
 export const HAddressSchema = addressSchema;
 export const HRegistrationSchema = registrationSchema;
@@ -96,7 +96,7 @@ export type HPromoCode = z.infer<typeof HPromoCodeSchema>;
 export type HPartner = z.infer<typeof HPartnerSchema>;
 export type HPriceList = z.infer<typeof HPriceListSchema>;
 export type HApiLog = z.infer<typeof HApiLogSchema>;
-
+export type HTag = z.infer<typeof HTagSchema>;
 // Additional lower-level types
 export type HAddress = z.infer<typeof HAddressSchema>;
 export type HRegistration = z.infer<typeof HRegistrationSchema>;
@@ -116,7 +116,7 @@ export type HHubbyModel = z.infer<typeof HubbyModelSchema>;
 export type HubbyModelApp = HHubbyModel;
 
 export type SupportedLocales = typeof SUPPORTED_LOCALES[number];
-export const SUPPORTED_LOCALES = LOCALES; 
+export const SUPPORTED_LOCALES = LOCALES;
 
 export type HRole = z.infer<typeof HRoleSchema>;
 export type HPermission = z.infer<typeof HPermissionSchema>; 
