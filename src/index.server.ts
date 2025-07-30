@@ -33,7 +33,7 @@ import {
     packagePriceSchemaSpec,
     platformSettingsSchemaSpec
 } from './specs/partner';
-import { hubbyModelSpec } from './specs/common';
+import { hubbyModelSpec, tagModelSpec } from './specs/common';
 import { SUPPORTED_LOCALES as LOCALES } from './constants';
 import { apiLogSchemaSpec } from './specs/apiLogs';
 import { z } from 'zod';
@@ -65,6 +65,8 @@ export const PackagePriceSchema = buildServerSchema(packagePriceSchemaSpec);
 export const PlatformSettingsSchema = buildServerSchema(platformSettingsSchemaSpec);
 export const ScheduleSchema = buildServerSchema(scheduleSchema);
 export const AnalyticsSchema = buildServerSchema(analyticsSpec);
+export const TagSchema = buildServerSchema(tagModelSpec);
+
 // Additional lower-level schemas
 export const AddressSchema = addressSchema;
 export const RegistrationSchema = registrationSchema;
@@ -121,6 +123,7 @@ export type PriceListApiRequest = PriceList;
 export type PriceListApiResponse = PriceList;
 export type ApiLogApiRequest = ApiLog;
 export type ApiLogApiResponse = ApiLog;
+export type Tag = z.infer<typeof TagSchema>;
 
 export * from './index.client';
 
