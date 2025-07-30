@@ -270,6 +270,7 @@ var SUPPORTED_LOCALES = [
   "en-US",
   "en-EU",
   "en-GB",
+  "en-CA",
   "nl-NL",
   "de-DE",
   "fr-FR",
