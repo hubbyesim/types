@@ -87,21 +87,21 @@ declare const HPromoPackageSpecificationSchema: z.ZodObject<{
     package_id: z.ZodOptional<z.ZodString>;
     iata_code: z.ZodOptional<z.ZodString>;
     package_duration: z.ZodOptional<z.ZodNumber>;
-    package_type: z.ZodOptional<z.ZodEnum<["data-limited", "time-limited", "starter"]>>;
+    package_type: z.ZodOptional<z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>>;
 }, "strip", z.ZodTypeAny, {
     destination?: string | undefined;
     size?: string | undefined;
     package_id?: string | undefined;
     iata_code?: string | undefined;
     package_duration?: number | undefined;
-    package_type?: "data-limited" | "time-limited" | "starter" | undefined;
+    package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
 }, {
     destination?: string | undefined;
     size?: string | undefined;
     package_id?: string | undefined;
     iata_code?: string | undefined;
     package_duration?: number | undefined;
-    package_type?: "data-limited" | "time-limited" | "starter" | undefined;
+    package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
 }>;
 declare const HVisualIdentityBannerSchema: z.ZodObject<{
     image_url: z.ZodString;
