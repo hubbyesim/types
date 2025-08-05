@@ -1,9 +1,10 @@
 import { z } from 'zod';
 import { markAsSchemaSpec } from '../common';
+import { hubbyModelSpec } from './common';
 
 // Country schema spec
 export const countrySchemaSpec = markAsSchemaSpec({
-    id: z.string().nullable(),
+    ...hubbyModelSpec,
     bokun_id: z.number().nullable(),
     LTE: z.boolean().nullable(),
     apn: z.string().nullable(),
@@ -15,6 +16,7 @@ export const countrySchemaSpec = markAsSchemaSpec({
     has_esim: z.boolean(),
     name: z.string().nullable(),
     region: z.boolean().nullable(),
+    i18n_name: z.record(z.string()),
     is_region: z.boolean().nullable(),
     countries: z.array(z.string()).nullable(),
     tier: z.number().nullable()

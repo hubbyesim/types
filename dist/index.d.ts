@@ -38,6 +38,108 @@ declare const analyticsSpec: {
     };
 };
 
+declare const packageSchemaSpec: {
+    external_id: z.ZodString;
+    provider: z.ZodString;
+    coverage_label: z.ZodNullable<z.ZodString>;
+    label: z.ZodString;
+    bytes: z.ZodNumber;
+    hidden: z.ZodBoolean;
+    is_hidden: z.ZodBoolean;
+    is_active: z.ZodBoolean;
+    priority: z.ZodNumber;
+    price: z.ZodNumber;
+    partner_price: z.ZodNumber;
+    days: z.ZodNumber;
+    name: z.ZodString;
+    type: z.ZodNullable<z.ZodEnum<["data-limited", "time-limited", "starter"]>>;
+    throttling: z.ZodOptional<z.ZodNumber>;
+    provider_parameters: z.ZodNullable<z.ZodObject<{
+        imsi: z.ZodNumber;
+    }, "strip", z.ZodTypeAny, {
+        imsi: number;
+    }, {
+        imsi: number;
+    }>>;
+    country: {
+        _type: "docRef";
+        collection: string;
+    };
+    partner: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+    };
+    country_data: {
+        _type: "object";
+        of: {
+            bokun_id: z.ZodNullable<z.ZodNumber>;
+            LTE: z.ZodNullable<z.ZodBoolean>;
+            apn: z.ZodNullable<z.ZodString>;
+            click_count: z.ZodNullable<z.ZodNumber>;
+            global_network: z.ZodNullable<z.ZodString>;
+            global_price: z.ZodNullable<z.ZodNumber>;
+            hubby: z.ZodNullable<z.ZodNumber>;
+            imsi: z.ZodNullable<z.ZodNumber>;
+            has_esim: z.ZodBoolean;
+            name: z.ZodNullable<z.ZodString>;
+            region: z.ZodNullable<z.ZodBoolean>;
+            i18n_name: z.ZodRecord<z.ZodString, z.ZodString>;
+            is_region: z.ZodNullable<z.ZodBoolean>;
+            countries: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
+            tier: z.ZodNullable<z.ZodNumber>;
+            id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            created_at: {
+                _type: "timestamp";
+                nullable: boolean;
+                optional: boolean;
+            };
+            updated_at: {
+                _type: "timestamp";
+                nullable: boolean;
+                optional: boolean;
+            };
+            created_by: {
+                _type: "docRef";
+                collection: string;
+                nullable: boolean;
+                optional: boolean;
+            };
+            updated_by: {
+                _type: "docRef";
+                collection: string;
+                nullable: boolean;
+                optional: boolean;
+            };
+        };
+        nullable: boolean;
+        optional: boolean;
+    };
+    id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    created_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    updated_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    created_by: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+        optional: boolean;
+    };
+    updated_by: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+        optional: boolean;
+    };
+};
+
 declare const partnerSchemaSpec: {
     id: z.ZodString;
     created_at: {
@@ -555,6 +657,9 @@ declare const HFreeEsimSchema: z.ZodTypeAny;
 declare const HAnalyticsSchema: z.ZodTypeAny;
 declare const HRoleSchema: z.ZodTypeAny;
 declare const HPermissionSchema: z.ZodTypeAny;
+declare const HTagSchema: z.ZodTypeAny;
+declare const HTelnaPackageSchema: z.ZodTypeAny;
+declare const HBondioPackageSchema: z.ZodTypeAny;
 declare const HAddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     city: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -712,6 +817,7 @@ type HPromoCode = z.infer<typeof HPromoCodeSchema>;
 type HPartner = z.infer<typeof HPartnerSchema>;
 type HPriceList = z.infer<typeof HPriceListSchema>;
 type HApiLog = z.infer<typeof HApiLogSchema>;
+type HTag = z.infer<typeof HTagSchema>;
 type HAddress = z.infer<typeof HAddressSchema>;
 type HRegistration = z.infer<typeof HRegistrationSchema>;
 type HBankingDetails = z.infer<typeof HBankingDetailsSchema>;
@@ -821,6 +927,9 @@ declare const PackagePriceSchema: z.ZodTypeAny;
 declare const PlatformSettingsSchema: z.ZodTypeAny;
 declare const ScheduleSchema: z.ZodTypeAny;
 declare const AnalyticsSchema: z.ZodTypeAny;
+declare const TagSchema: z.ZodTypeAny;
+declare const TelnaPackageSchema: z.ZodTypeAny;
+declare const BondioPackageSchema: z.ZodTypeAny;
 declare const AddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     city: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -1020,6 +1129,8 @@ type PriceList = z.infer<typeof PriceListSchema>;
 type ApiLog = z.infer<typeof ApiLogSchema>;
 type Analytics = z.infer<typeof AnalyticsSchema>;
 type Schedule = z.infer<typeof ScheduleSchema>;
+type TelnaPackage = z.infer<typeof TelnaPackageSchema>;
+type BondioPackage = z.infer<typeof BondioPackageSchema>;
 type Address = z.infer<typeof AddressSchema>;
 type Registration = z.infer<typeof RegistrationSchema>;
 type BankingDetails = z.infer<typeof BankingDetailsSchema>;
@@ -1045,6 +1156,7 @@ type PriceListApiRequest = PriceList;
 type PriceListApiResponse = PriceList;
 type ApiLogApiRequest = ApiLog;
 type ApiLogApiResponse = ApiLog;
+type Tag = z.infer<typeof TagSchema>;
 
 type HubbyModel = {
     id: string;
@@ -1072,4 +1184,4 @@ declare const partnerAppSchema: z.ZodTypeAny;
 type SupportedLocales = typeof SUPPORTED_LOCALES$1[number];
 declare const SUPPORTED_LOCALES: readonly ["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK"];
 
-export { Address, AddressSchema, Analytics, AnalyticsSchema, ApiLog, ApiLogApiRequest, ApiLogApiResponse, ApiLogSchema, BankingDetails, BankingDetailsSchema, Booking, BookingApiRequest, BookingApiResponse, BookingSchema, BookingStatus, BookingStatusSchema, CommunicationChannel, CommunicationChannelSchema, CommunicationOptions, CommunicationOptionsSchema, Country, CountrySchema, Currency, CurrencySchema, ESIM, ESIMSchema, FirebaseService, HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HUser, HUserSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModel, HubbyModelApp, HubbyModelFirestore, HubbyModelSchema, Message, MessageSchema, Package, PackagePrice, PackagePriceSchema, PackageSchema, PackageSpecification, Partner, PartnerApiRequest, PartnerApiResponse, PartnerContact, PartnerContactSchema, PartnerData, PartnerDataSchema, PartnerPackageSpecification, PartnerPackageSpecificationSchema, PartnerSchema, Payment, PaymentSchema, PlatformSettings, PlatformSettingsSchema, PriceList, PriceListApiRequest, PriceListApiResponse, PriceListSchema, PromoCode, PromoCodeSchema, PromoPackageSpecificationSchema, Registration, RegistrationSchema, SUPPORTED_LOCALES, Schedule, ScheduleFilter, ScheduleFilterSchema, ScheduleSchema, SupportedLocales, User, UserFirestore, UserFirestoreSchema, UserSchema, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerSchema, VisualIdentityBannerStrategy, VisualIdentityBanners, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, priceListFromFirestore, priceListToFirestore, promoCodeFromFirestore, promoCodeToFirestore, userFromFirestore, userToFirestore };
+export { Address, AddressSchema, Analytics, AnalyticsSchema, ApiLog, ApiLogApiRequest, ApiLogApiResponse, ApiLogSchema, BankingDetails, BankingDetailsSchema, BondioPackage, BondioPackageSchema, Booking, BookingApiRequest, BookingApiResponse, BookingSchema, BookingStatus, BookingStatusSchema, CommunicationChannel, CommunicationChannelSchema, CommunicationOptions, CommunicationOptionsSchema, Country, CountrySchema, Currency, CurrencySchema, ESIM, ESIMSchema, FirebaseService, HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HTag, HTagSchema, HTelnaPackageSchema, HUser, HUserSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModel, HubbyModelApp, HubbyModelFirestore, HubbyModelSchema, Message, MessageSchema, Package, PackagePrice, PackagePriceSchema, PackageSchema, PackageSpecification, Partner, PartnerApiRequest, PartnerApiResponse, PartnerContact, PartnerContactSchema, PartnerData, PartnerDataSchema, PartnerPackageSpecification, PartnerPackageSpecificationSchema, PartnerSchema, Payment, PaymentSchema, PlatformSettings, PlatformSettingsSchema, PriceList, PriceListApiRequest, PriceListApiResponse, PriceListSchema, PromoCode, PromoCodeSchema, PromoPackageSpecificationSchema, Registration, RegistrationSchema, SUPPORTED_LOCALES, Schedule, ScheduleFilter, ScheduleFilterSchema, ScheduleSchema, SupportedLocales, Tag, TagSchema, TelnaPackage, TelnaPackageSchema, User, UserFirestore, UserFirestoreSchema, UserSchema, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerSchema, VisualIdentityBannerStrategy, VisualIdentityBanners, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, packageSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, priceListFromFirestore, priceListToFirestore, promoCodeFromFirestore, promoCodeToFirestore, userFromFirestore, userToFirestore };

@@ -14,7 +14,7 @@ import { esimSchemaSpec } from './specs/esim';
 import { paymentSchemaSpec } from './specs/payment';
 import { analyticsSpec } from './specs/analytics';
 import { messageSchemaSpec } from './specs/message';
-import { packageSchemaSpec } from './specs/package';
+import { packageSchemaSpec, telnaPackageSchema, bondioPackageSchema } from './specs/package';
 import { promoCodeSchemaSpec, packageSpecificationSchema as promoPackageSpecificationSchema } from './specs/promocode';
 import {
     partnerSchemaSpec,
@@ -44,7 +44,7 @@ import { convertFirestoreToJS, convertJSToFirestore } from './utils/firestoreTra
 import { HPartner, HPriceList, HPromoCode } from './index.client';
 import { buildClientSchema } from './builders/client';
 
-export { partnerSchemaSpec, analyticsSpec };
+export { partnerSchemaSpec, analyticsSpec, packageSchemaSpec };
 
 export const UserSchema = buildServerSchema(userSchemaSpec);
 export const UserFirestoreSchema = buildServerSchema(userSchemaSpec);
@@ -66,6 +66,9 @@ export const PlatformSettingsSchema = buildServerSchema(platformSettingsSchemaSp
 export const ScheduleSchema = buildServerSchema(scheduleSchema);
 export const AnalyticsSchema = buildServerSchema(analyticsSpec);
 export const TagSchema = buildServerSchema(tagModelSpec);
+export const TelnaPackageSchema = buildServerSchema(telnaPackageSchema);
+export const BondioPackageSchema = buildServerSchema(bondioPackageSchema);
+
 
 // Additional lower-level schemas
 export const AddressSchema = addressSchema;
@@ -97,6 +100,9 @@ export type PriceList = z.infer<typeof PriceListSchema>;
 export type ApiLog = z.infer<typeof ApiLogSchema>;
 export type Analytics = z.infer<typeof AnalyticsSchema>;
 export type Schedule = z.infer<typeof ScheduleSchema>;
+export type TelnaPackage = z.infer<typeof TelnaPackageSchema>;
+export type BondioPackage = z.infer<typeof BondioPackageSchema>;
+
 // Additional lower-level types
 export type Address = z.infer<typeof AddressSchema>;
 export type Registration = z.infer<typeof RegistrationSchema>;

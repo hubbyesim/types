@@ -380,7 +380,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
   }
 });
 var countrySchemaSpec = markAsSchemaSpec({
-  id: zod.z.string().nullable(),
+  ...hubbyModelSpec,
   bokun_id: zod.z.number().nullable(),
   LTE: zod.z.boolean().nullable(),
   apn: zod.z.string().nullable(),
@@ -392,6 +392,7 @@ var countrySchemaSpec = markAsSchemaSpec({
   has_esim: zod.z.boolean(),
   name: zod.z.string().nullable(),
   region: zod.z.boolean().nullable(),
+  i18n_name: zod.z.record(zod.z.string()),
   is_region: zod.z.boolean().nullable(),
   countries: zod.z.array(zod.z.string()).nullable(),
   tier: zod.z.number().nullable()
@@ -475,11 +476,7 @@ var messageSchemaSpec = markAsSchemaSpec({
   updated_at: timestampRequired
 });
 var packageSchemaSpec = markAsSchemaSpec({
-  id: zod.z.string(),
-  created_at: timestampRequired,
-  updated_at: timestampRequired,
-  created_by: zod.z.string().nullable(),
-  updated_by: zod.z.string().nullable(),
+  ...hubbyModelSpec,
   // Package specific fields
   external_id: zod.z.string(),
   provider: zod.z.string(),
@@ -505,7 +502,31 @@ var packageSchemaSpec = markAsSchemaSpec({
   // Nested country data - need to use dynamic reference to country schema
   // This would typically be handled better with a proper recursive schema definition
   // but for simplicity, we're using any type here
-  country_data: zod.z.any().nullable()
+  country_data: {
+    _type: "object",
+    of: countrySchemaSpec,
+    nullable: true,
+    optional: true
+  }
+  // country_data: z.any().nullable()
+});
+var commonPackageSchema = markAsSchemaSpec({
+  size: zod.z.string(),
+  iso: zod.z.string(),
+  days: zod.z.number(),
+  price: zod.z.number(),
+  is_hidden: zod.z.boolean(),
+  is_active: zod.z.boolean(),
+  priority: zod.z.number(),
+  packageType: zod.z.string(),
+  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true }
+});
+var telnaPackageSchema = markAsSchemaSpec({
+  ...commonPackageSchema
+});
+var bondioPackageSchema = markAsSchemaSpec({
+  ...commonPackageSchema,
+  label: zod.z.enum(["lambda", "tau"])
 });
 var addressSchema = zod.z.object({
   street: zod.z.string().nullable().optional(),
@@ -939,6 +960,9 @@ var HFreeEsimSchema = buildClientSchema(freeEsimSchema);
 var HAnalyticsSchema = buildClientSchema(analyticsSpec);
 var HRoleSchema = buildClientSchema(roleSchemaSpec);
 var HPermissionSchema = buildClientSchema(permissionSchemaSpec);
+var HTagSchema = buildClientSchema(tagModelSpec);
+var HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
+var HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -957,6 +981,7 @@ exports.HAddressSchema = HAddressSchema;
 exports.HAnalyticsSchema = HAnalyticsSchema;
 exports.HApiLogSchema = HApiLogSchema;
 exports.HBankingDetailsSchema = HBankingDetailsSchema;
+exports.HBondioPackageSchema = HBondioPackageSchema;
 exports.HBookingSchema = HBookingSchema;
 exports.HBookingStatusSchema = HBookingStatusSchema;
 exports.HCommunicationChannelSchema = HCommunicationChannelSchema;
@@ -984,6 +1009,8 @@ exports.HPromoPackageSpecificationSchema = HPromoPackageSpecificationSchema;
 exports.HRegistrationSchema = HRegistrationSchema;
 exports.HRoleSchema = HRoleSchema;
 exports.HScheduleFilterSchema = HScheduleFilterSchema;
+exports.HTagSchema = HTagSchema;
+exports.HTelnaPackageSchema = HTelnaPackageSchema;
 exports.HUserSchema = HUserSchema;
 exports.HVisualIdentityBannerSchema = HVisualIdentityBannerSchema;
 exports.HVisualIdentitySchema = HVisualIdentitySchema;

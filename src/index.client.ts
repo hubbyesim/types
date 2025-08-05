@@ -18,7 +18,7 @@ import { currencySchemaSpec } from './specs/currency';
 import { esimSchemaSpec } from './specs/esim';
 import { paymentSchemaSpec } from './specs/payment';
 import { messageSchemaSpec } from './specs/message';
-import { packageSchemaSpec } from './specs/package';
+import { bondioPackageSchema, packageSchemaSpec, telnaPackageSchema } from './specs/package';
 import { promoCodeSchemaSpec, packageSpecificationSchema as promoPackageSpecificationSchema } from './specs/promocode';
 import {
   partnerSchemaSpec,
@@ -68,6 +68,8 @@ export const HAnalyticsSchema = buildClientSchema(analyticsSpec);
 export const HRoleSchema = buildClientSchema(roleSchemaSpec);
 export const HPermissionSchema = buildClientSchema(permissionSchemaSpec);
 export const HTagSchema = buildClientSchema(tagModelSpec);
+export const HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
+export const HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
 // Additional lower-level schemas
 export const HAddressSchema = addressSchema;
 export const HRegistrationSchema = registrationSchema;
