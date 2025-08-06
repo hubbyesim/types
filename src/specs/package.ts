@@ -3,6 +3,7 @@ import { markAsSchemaSpec } from '../common';
 import {
     COUNTRY_COLLECTION,
     PARTNER_COLLECTION,
+    TRAFFIC_POLICY_COLLECTION,
     timestampRequired,
     hubbyModelSpec
 } from './common';
@@ -22,6 +23,7 @@ export const packageSchemaSpec = markAsSchemaSpec({
     is_hidden: z.boolean(),
     is_active: z.boolean(),
     priority: z.number(),
+    traffic_policy: { _type: 'docRef' as const, collection: TRAFFIC_POLICY_COLLECTION, nullable: true },
     price: z.number(),
     partner_price: z.number(),
     days: z.number(),
@@ -61,6 +63,7 @@ export const commonPackageSchema = markAsSchemaSpec({
 });
 
 export const telnaPackageSchema = markAsSchemaSpec({
+    traffic_policy: { _type: 'docRef' as const, collection: TRAFFIC_POLICY_COLLECTION, nullable: true },
     ...commonPackageSchema,
 });
 

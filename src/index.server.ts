@@ -14,6 +14,7 @@ import { esimSchemaSpec } from './specs/esim';
 import { paymentSchemaSpec } from './specs/payment';
 import { analyticsSpec } from './specs/analytics';
 import { messageSchemaSpec } from './specs/message';
+import { trafficPolicySpec } from './specs/traffic_policy';
 import { packageSchemaSpec, telnaPackageSchema, bondioPackageSchema } from './specs/package';
 import { promoCodeSchemaSpec, packageSpecificationSchema as promoPackageSpecificationSchema } from './specs/promocode';
 import {
@@ -68,7 +69,7 @@ export const AnalyticsSchema = buildServerSchema(analyticsSpec);
 export const TagSchema = buildServerSchema(tagModelSpec);
 export const TelnaPackageSchema = buildServerSchema(telnaPackageSchema);
 export const BondioPackageSchema = buildServerSchema(bondioPackageSchema);
-
+export const TrafficPolicySchema = buildServerSchema(trafficPolicySpec);
 
 // Additional lower-level schemas
 export const AddressSchema = addressSchema;
@@ -102,6 +103,7 @@ export type Analytics = z.infer<typeof AnalyticsSchema>;
 export type Schedule = z.infer<typeof ScheduleSchema>;
 export type TelnaPackage = z.infer<typeof TelnaPackageSchema>;
 export type BondioPackage = z.infer<typeof BondioPackageSchema>;
+export type TrafficPolicy = z.infer<typeof TrafficPolicySchema>;
 
 // Additional lower-level types
 export type Address = z.infer<typeof AddressSchema>;

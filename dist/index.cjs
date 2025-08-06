@@ -196,6 +196,7 @@ var PRICE_LIST_COLLECTION = "price_lists";
 var BOOKING_COLLECTION = "bookings";
 var ROLE_COLLECTION = "roles";
 var PERMISSION_COLLECTION = "permissions";
+var TRAFFIC_POLICY_COLLECTION = "traffic_policies";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: false };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
@@ -518,6 +519,13 @@ var messageSchemaSpec = markAsSchemaSpec({
   created_at: timestampRequired,
   updated_at: timestampRequired
 });
+var trafficPolicySpec = markAsSchemaSpec({
+  ...hubbyModelSpec,
+  name: zod.z.string(),
+  description: zod.z.string(),
+  external_id: zod.z.string(),
+  provider: zod.z.string()
+});
 var packageSchemaSpec = markAsSchemaSpec({
   ...hubbyModelSpec,
   // Package specific fields
@@ -530,6 +538,7 @@ var packageSchemaSpec = markAsSchemaSpec({
   is_hidden: zod.z.boolean(),
   is_active: zod.z.boolean(),
   priority: zod.z.number(),
+  traffic_policy: { _type: "docRef", collection: TRAFFIC_POLICY_COLLECTION, nullable: true },
   price: zod.z.number(),
   partner_price: zod.z.number(),
   days: zod.z.number(),
@@ -565,6 +574,7 @@ var commonPackageSchema = markAsSchemaSpec({
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true }
 });
 var telnaPackageSchema = markAsSchemaSpec({
+  traffic_policy: { _type: "docRef", collection: TRAFFIC_POLICY_COLLECTION, nullable: true },
   ...commonPackageSchema
 });
 var bondioPackageSchema = markAsSchemaSpec({
@@ -1206,6 +1216,7 @@ var HAnalyticsSchema = buildClientSchema(analyticsSpec);
 var HRoleSchema = buildClientSchema(roleSchemaSpec);
 var HPermissionSchema = buildClientSchema(permissionSchemaSpec);
 var HTagSchema = buildClientSchema(tagModelSpec);
+var HTrafficPolicySchema = buildClientSchema(trafficPolicySpec);
 var HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
 var HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
 var HAddressSchema = addressSchema;
@@ -1264,6 +1275,7 @@ var AnalyticsSchema = buildServerSchema(analyticsSpec);
 var TagSchema = buildServerSchema(tagModelSpec);
 var TelnaPackageSchema = buildServerSchema(telnaPackageSchema);
 var BondioPackageSchema = buildServerSchema(bondioPackageSchema);
+var TrafficPolicySchema = buildServerSchema(trafficPolicySpec);
 var AddressSchema = addressSchema;
 var RegistrationSchema = registrationSchema;
 var BankingDetailsSchema = bankingDetailsSchema;
@@ -1351,6 +1363,7 @@ exports.HRoleSchema = HRoleSchema;
 exports.HScheduleFilterSchema = HScheduleFilterSchema;
 exports.HTagSchema = HTagSchema;
 exports.HTelnaPackageSchema = HTelnaPackageSchema;
+exports.HTrafficPolicySchema = HTrafficPolicySchema;
 exports.HUserSchema = HUserSchema;
 exports.HVisualIdentityBannerSchema = HVisualIdentityBannerSchema;
 exports.HVisualIdentitySchema = HVisualIdentitySchema;
@@ -1373,6 +1386,7 @@ exports.ScheduleFilterSchema = ScheduleFilterSchema;
 exports.ScheduleSchema = ScheduleSchema;
 exports.TagSchema = TagSchema;
 exports.TelnaPackageSchema = TelnaPackageSchema;
+exports.TrafficPolicySchema = TrafficPolicySchema;
 exports.UserFirestoreSchema = UserFirestoreSchema;
 exports.UserSchema = UserSchema;
 exports.VisualIdentityBannerSchema = VisualIdentityBannerSchema;
