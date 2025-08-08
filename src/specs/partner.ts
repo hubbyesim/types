@@ -187,7 +187,8 @@ export const platformSettingsSchema = z.object({
     package_strategy: z.object({
         name: z.string(),
         iso3_white_list: z.array(z.string()).optional(),
-        parameters: z.any()
+        parameters: z.any(),
+        supported_package_types: z.enum(['data-limited', 'unlimited']).optional()
     }).nullable().optional(),
     free_esim: freeEsimSchema.nullable().optional(),
     booking_defaults: z.object({
