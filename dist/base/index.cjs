@@ -673,7 +673,8 @@ var platformSettingsSchema = zod.z.object({
   package_strategy: zod.z.object({
     name: zod.z.string(),
     iso3_white_list: zod.z.array(zod.z.string()).optional(),
-    parameters: zod.z.any()
+    parameters: zod.z.any(),
+    supported_package_types: zod.z.enum(["data-limited", "unlimited"]).optional()
   }).nullable().optional(),
   free_esim: freeEsimSchema.nullable().optional(),
   booking_defaults: zod.z.object({

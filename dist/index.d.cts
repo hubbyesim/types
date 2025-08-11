@@ -390,14 +390,17 @@ declare const partnerSchemaSpec: {
                 name: z.ZodString;
                 iso3_white_list: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
                 parameters: z.ZodAny;
+                supported_package_types: z.ZodOptional<z.ZodEnum<["data-limited", "unlimited"]>>;
             }, "strip", z.ZodTypeAny, {
                 name: string;
                 parameters?: any;
                 iso3_white_list?: string[] | undefined;
+                supported_package_types?: "data-limited" | "unlimited" | undefined;
             }, {
                 name: string;
                 parameters?: any;
                 iso3_white_list?: string[] | undefined;
+                supported_package_types?: "data-limited" | "unlimited" | undefined;
             }>>>;
             free_esim: z.ZodOptional<z.ZodNullable<z.ZodObject<{
                 enabled: z.ZodBoolean;
