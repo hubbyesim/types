@@ -196,6 +196,7 @@ var PRICE_LIST_COLLECTION = "price_lists";
 var BOOKING_COLLECTION = "bookings";
 var ROLE_COLLECTION = "roles";
 var PERMISSION_COLLECTION = "permissions";
+var TRAFFIC_POLICY_COLLECTION = "traffic_policies";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: false };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
@@ -413,7 +414,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
   }
 });
 var countrySchemaSpec = markAsSchemaSpec({
-  id: zod.z.string().nullable(),
+  ...hubbyModelSpec,
   bokun_id: zod.z.number().nullable(),
   LTE: zod.z.boolean().nullable(),
   apn: zod.z.string().nullable(),
@@ -425,6 +426,7 @@ var countrySchemaSpec = markAsSchemaSpec({
   has_esim: zod.z.boolean(),
   name: zod.z.string().nullable(),
   region: zod.z.boolean().nullable(),
+  i18n_name: zod.z.record(zod.z.string()),
   is_region: zod.z.boolean().nullable(),
   countries: zod.z.array(zod.z.string()).nullable(),
   tier: zod.z.number().nullable()
@@ -517,12 +519,15 @@ var messageSchemaSpec = markAsSchemaSpec({
   created_at: timestampRequired,
   updated_at: timestampRequired
 });
+var trafficPolicySpec = markAsSchemaSpec({
+  ...hubbyModelSpec,
+  name: zod.z.string(),
+  description: zod.z.string(),
+  external_id: zod.z.string(),
+  provider: zod.z.string()
+});
 var packageSchemaSpec = markAsSchemaSpec({
-  id: zod.z.string(),
-  created_at: timestampRequired,
-  updated_at: timestampRequired,
-  created_by: zod.z.string().nullable(),
-  updated_by: zod.z.string().nullable(),
+  ...hubbyModelSpec,
   // Package specific fields
   external_id: zod.z.string(),
   provider: zod.z.string(),
@@ -533,6 +538,7 @@ var packageSchemaSpec = markAsSchemaSpec({
   is_hidden: zod.z.boolean(),
   is_active: zod.z.boolean(),
   priority: zod.z.number(),
+  traffic_policy: { _type: "docRef", collection: TRAFFIC_POLICY_COLLECTION, nullable: true },
   price: zod.z.number(),
   partner_price: zod.z.number(),
   days: zod.z.number(),
@@ -548,7 +554,32 @@ var packageSchemaSpec = markAsSchemaSpec({
   // Nested country data - need to use dynamic reference to country schema
   // This would typically be handled better with a proper recursive schema definition
   // but for simplicity, we're using any type here
-  country_data: zod.z.any().nullable()
+  country_data: {
+    _type: "object",
+    of: countrySchemaSpec,
+    nullable: true,
+    optional: true
+  }
+  // country_data: z.any().nullable()
+});
+var commonPackageSchema = markAsSchemaSpec({
+  size: zod.z.string(),
+  iso: zod.z.string(),
+  days: zod.z.number(),
+  price: zod.z.number(),
+  is_hidden: zod.z.boolean(),
+  is_active: zod.z.boolean(),
+  priority: zod.z.number(),
+  packageType: zod.z.string(),
+  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true }
+});
+var telnaPackageSchema = markAsSchemaSpec({
+  traffic_policy: { _type: "docRef", collection: TRAFFIC_POLICY_COLLECTION, nullable: true },
+  ...commonPackageSchema
+});
+var bondioPackageSchema = markAsSchemaSpec({
+  ...commonPackageSchema,
+  label: zod.z.enum(["lambda", "tau"])
 });
 var addressSchema = zod.z.object({
   street: zod.z.string().nullable().optional(),
@@ -1184,6 +1215,10 @@ var HFreeEsimSchema = buildClientSchema(freeEsimSchema);
 var HAnalyticsSchema = buildClientSchema(analyticsSpec);
 var HRoleSchema = buildClientSchema(roleSchemaSpec);
 var HPermissionSchema = buildClientSchema(permissionSchemaSpec);
+var HTagSchema = buildClientSchema(tagModelSpec);
+var HTrafficPolicySchema = buildClientSchema(trafficPolicySpec);
+var HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
+var HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1237,6 +1272,10 @@ var PackagePriceSchema = buildServerSchema(packagePriceSchemaSpec);
 var PlatformSettingsSchema = buildServerSchema(platformSettingsSchemaSpec);
 var ScheduleSchema = buildServerSchema(scheduleSchema);
 var AnalyticsSchema = buildServerSchema(analyticsSpec);
+var TagSchema = buildServerSchema(tagModelSpec);
+var TelnaPackageSchema = buildServerSchema(telnaPackageSchema);
+var BondioPackageSchema = buildServerSchema(bondioPackageSchema);
+var TrafficPolicySchema = buildServerSchema(trafficPolicySpec);
 var AddressSchema = addressSchema;
 var RegistrationSchema = registrationSchema;
 var BankingDetailsSchema = bankingDetailsSchema;
@@ -1281,6 +1320,7 @@ exports.AddressSchema = AddressSchema;
 exports.AnalyticsSchema = AnalyticsSchema;
 exports.ApiLogSchema = ApiLogSchema;
 exports.BankingDetailsSchema = BankingDetailsSchema;
+exports.BondioPackageSchema = BondioPackageSchema;
 exports.BookingSchema = BookingSchema;
 exports.BookingStatusSchema = BookingStatusSchema;
 exports.CommunicationChannelSchema = CommunicationChannelSchema;
@@ -1293,6 +1333,7 @@ exports.HAddressSchema = HAddressSchema;
 exports.HAnalyticsSchema = HAnalyticsSchema;
 exports.HApiLogSchema = HApiLogSchema;
 exports.HBankingDetailsSchema = HBankingDetailsSchema;
+exports.HBondioPackageSchema = HBondioPackageSchema;
 exports.HBookingSchema = HBookingSchema;
 exports.HBookingStatusSchema = HBookingStatusSchema;
 exports.HCommunicationChannelSchema = HCommunicationChannelSchema;
@@ -1320,6 +1361,9 @@ exports.HPromoPackageSpecificationSchema = HPromoPackageSpecificationSchema;
 exports.HRegistrationSchema = HRegistrationSchema;
 exports.HRoleSchema = HRoleSchema;
 exports.HScheduleFilterSchema = HScheduleFilterSchema;
+exports.HTagSchema = HTagSchema;
+exports.HTelnaPackageSchema = HTelnaPackageSchema;
+exports.HTrafficPolicySchema = HTrafficPolicySchema;
 exports.HUserSchema = HUserSchema;
 exports.HVisualIdentityBannerSchema = HVisualIdentityBannerSchema;
 exports.HVisualIdentitySchema = HVisualIdentitySchema;
@@ -1340,6 +1384,9 @@ exports.RegistrationSchema = RegistrationSchema;
 exports.SUPPORTED_LOCALES = SUPPORTED_LOCALES2;
 exports.ScheduleFilterSchema = ScheduleFilterSchema;
 exports.ScheduleSchema = ScheduleSchema;
+exports.TagSchema = TagSchema;
+exports.TelnaPackageSchema = TelnaPackageSchema;
+exports.TrafficPolicySchema = TrafficPolicySchema;
 exports.UserFirestoreSchema = UserFirestoreSchema;
 exports.UserSchema = UserSchema;
 exports.VisualIdentityBannerSchema = VisualIdentityBannerSchema;
@@ -1350,6 +1397,7 @@ exports.createConvertFirestoreToJS = createConvertFirestoreToJS;
 exports.createConvertJSToFirestore = createConvertJSToFirestore;
 exports.createFirebaseService = createFirebaseService;
 exports.createModelConverters = createModelConverters;
+exports.packageSchemaSpec = packageSchemaSpec;
 exports.partnerAppSchema = partnerAppSchema;
 exports.partnerFromFirestore = partnerFromFirestore;
 exports.partnerSchemaSpec = partnerSchemaSpec;

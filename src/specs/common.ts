@@ -17,6 +17,9 @@ export const CURRENCY_COLLECTION = 'currencies';
 export const API_LOG_COLLECTION = 'api_logs'
 export const ROLE_COLLECTION = 'roles';
 export const PERMISSION_COLLECTION = 'permissions';
+export const TRAFFIC_POLICY_COLLECTION = 'traffic_policies';
+
+// Timestamp specs
 export const timestampNullableOptional = { _type: 'timestamp' as const, nullable: true, optional: true };
 export const timestampNullable = { _type: 'timestamp' as const, nullable: true, optional: false };
 export const timestampRequired = { _type: 'timestamp' as const, nullable: false, optional: false };

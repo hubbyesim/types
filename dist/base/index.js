@@ -161,6 +161,7 @@ var PRICE_LIST_COLLECTION = "price_lists";
 var BOOKING_COLLECTION = "bookings";
 var ROLE_COLLECTION = "roles";
 var PERMISSION_COLLECTION = "permissions";
+var TRAFFIC_POLICY_COLLECTION = "traffic_policies";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: false };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
@@ -378,7 +379,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
   }
 });
 var countrySchemaSpec = markAsSchemaSpec({
-  id: z.string().nullable(),
+  ...hubbyModelSpec,
   bokun_id: z.number().nullable(),
   LTE: z.boolean().nullable(),
   apn: z.string().nullable(),
@@ -390,6 +391,7 @@ var countrySchemaSpec = markAsSchemaSpec({
   has_esim: z.boolean(),
   name: z.string().nullable(),
   region: z.boolean().nullable(),
+  i18n_name: z.record(z.string()),
   is_region: z.boolean().nullable(),
   countries: z.array(z.string()).nullable(),
   tier: z.number().nullable()
@@ -472,12 +474,15 @@ var messageSchemaSpec = markAsSchemaSpec({
   created_at: timestampRequired,
   updated_at: timestampRequired
 });
+var trafficPolicySpec = markAsSchemaSpec({
+  ...hubbyModelSpec,
+  name: z.string(),
+  description: z.string(),
+  external_id: z.string(),
+  provider: z.string()
+});
 var packageSchemaSpec = markAsSchemaSpec({
-  id: z.string(),
-  created_at: timestampRequired,
-  updated_at: timestampRequired,
-  created_by: z.string().nullable(),
-  updated_by: z.string().nullable(),
+  ...hubbyModelSpec,
   // Package specific fields
   external_id: z.string(),
   provider: z.string(),
@@ -488,6 +493,7 @@ var packageSchemaSpec = markAsSchemaSpec({
   is_hidden: z.boolean(),
   is_active: z.boolean(),
   priority: z.number(),
+  traffic_policy: { _type: "docRef", collection: TRAFFIC_POLICY_COLLECTION, nullable: true },
   price: z.number(),
   partner_price: z.number(),
   days: z.number(),
@@ -503,7 +509,32 @@ var packageSchemaSpec = markAsSchemaSpec({
   // Nested country data - need to use dynamic reference to country schema
   // This would typically be handled better with a proper recursive schema definition
   // but for simplicity, we're using any type here
-  country_data: z.any().nullable()
+  country_data: {
+    _type: "object",
+    of: countrySchemaSpec,
+    nullable: true,
+    optional: true
+  }
+  // country_data: z.any().nullable()
+});
+var commonPackageSchema = markAsSchemaSpec({
+  size: z.string(),
+  iso: z.string(),
+  days: z.number(),
+  price: z.number(),
+  is_hidden: z.boolean(),
+  is_active: z.boolean(),
+  priority: z.number(),
+  packageType: z.string(),
+  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true }
+});
+var telnaPackageSchema = markAsSchemaSpec({
+  traffic_policy: { _type: "docRef", collection: TRAFFIC_POLICY_COLLECTION, nullable: true },
+  ...commonPackageSchema
+});
+var bondioPackageSchema = markAsSchemaSpec({
+  ...commonPackageSchema,
+  label: z.enum(["lambda", "tau"])
 });
 var addressSchema = z.object({
   street: z.string().nullable().optional(),
@@ -937,6 +968,10 @@ var HFreeEsimSchema = buildClientSchema(freeEsimSchema);
 var HAnalyticsSchema = buildClientSchema(analyticsSpec);
 var HRoleSchema = buildClientSchema(roleSchemaSpec);
 var HPermissionSchema = buildClientSchema(permissionSchemaSpec);
+var HTagSchema = buildClientSchema(tagModelSpec);
+var HTrafficPolicySchema = buildClientSchema(trafficPolicySpec);
+var HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
+var HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -951,6 +986,6 @@ var HBookingStatusSchema = bookingStatusSchema;
 var HCommunicationOptionsSchema = communicationOptionsSchema;
 var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
-export { HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HRoleSchema, HScheduleFilterSchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES };
+export { HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBondioPackageSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HRoleSchema, HScheduleFilterSchema, HTagSchema, HTelnaPackageSchema, HTrafficPolicySchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES };
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.js.map

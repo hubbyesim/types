@@ -11,14 +11,15 @@ import {
   bookingStatusSchema,
   communicationOptionsSchema
 } from './specs/booking';
-import { hubbyModelSpec } from './specs/common';
+import { hubbyModelSpec, tagModelSpec } from './specs/common';
 import { SUPPORTED_LOCALES as LOCALES } from './constants';
 import { countrySchemaSpec } from './specs/country';
 import { currencySchemaSpec } from './specs/currency';
 import { esimSchemaSpec } from './specs/esim';
 import { paymentSchemaSpec } from './specs/payment';
 import { messageSchemaSpec } from './specs/message';
-import { packageSchemaSpec } from './specs/package';
+import { trafficPolicySpec } from './specs/traffic_policy';
+import { bondioPackageSchema, packageSchemaSpec, telnaPackageSchema } from './specs/package';
 import { promoCodeSchemaSpec, packageSpecificationSchema as promoPackageSpecificationSchema } from './specs/promocode';
 import {
   partnerSchemaSpec,
@@ -67,7 +68,10 @@ export const HFreeEsimSchema = buildClientSchema(freeEsimSchema);
 export const HAnalyticsSchema = buildClientSchema(analyticsSpec);
 export const HRoleSchema = buildClientSchema(roleSchemaSpec);
 export const HPermissionSchema = buildClientSchema(permissionSchemaSpec);
-
+export const HTagSchema = buildClientSchema(tagModelSpec);
+export const HTrafficPolicySchema = buildClientSchema(trafficPolicySpec);
+export const HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
+export const HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
 // Additional lower-level schemas
 export const HAddressSchema = addressSchema;
 export const HRegistrationSchema = registrationSchema;
@@ -82,7 +86,6 @@ export const HCommunicationChannelSchema = communicationChannelSchema;
 export const HBookingStatusSchema = bookingStatusSchema;
 export const HCommunicationOptionsSchema = communicationOptionsSchema;
 
-
 export type HAnalytics = z.infer<typeof HAnalyticsSchema>;
 export type HUser = z.infer<typeof HUserSchema>;
 export type HBooking = z.infer<typeof HBookingSchema>;
@@ -96,7 +99,10 @@ export type HPromoCode = z.infer<typeof HPromoCodeSchema>;
 export type HPartner = z.infer<typeof HPartnerSchema>;
 export type HPriceList = z.infer<typeof HPriceListSchema>;
 export type HApiLog = z.infer<typeof HApiLogSchema>;
-
+export type HTag = z.infer<typeof HTagSchema>;
+export type HTrafficPolicy = z.infer<typeof HTrafficPolicySchema>;
+export type HBondioPackage = z.infer<typeof HBondioPackageSchema>;
+export type HTelnaPackage = z.infer<typeof HTelnaPackageSchema>;
 // Additional lower-level types
 export type HAddress = z.infer<typeof HAddressSchema>;
 export type HRegistration = z.infer<typeof HRegistrationSchema>;
@@ -116,7 +122,7 @@ export type HHubbyModel = z.infer<typeof HubbyModelSchema>;
 export type HubbyModelApp = HHubbyModel;
 
 export type SupportedLocales = typeof SUPPORTED_LOCALES[number];
-export const SUPPORTED_LOCALES = LOCALES; 
+export const SUPPORTED_LOCALES = LOCALES;
 
 export type HRole = z.infer<typeof HRoleSchema>;
 export type HPermission = z.infer<typeof HPermissionSchema>; 

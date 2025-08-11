@@ -14,7 +14,8 @@ import { esimSchemaSpec } from './specs/esim';
 import { paymentSchemaSpec } from './specs/payment';
 import { analyticsSpec } from './specs/analytics';
 import { messageSchemaSpec } from './specs/message';
-import { packageSchemaSpec } from './specs/package';
+import { trafficPolicySpec } from './specs/traffic_policy';
+import { packageSchemaSpec, telnaPackageSchema, bondioPackageSchema } from './specs/package';
 import { promoCodeSchemaSpec, packageSpecificationSchema as promoPackageSpecificationSchema } from './specs/promocode';
 import {
     partnerSchemaSpec,
@@ -33,7 +34,7 @@ import {
     packagePriceSchemaSpec,
     platformSettingsSchemaSpec
 } from './specs/partner';
-import { hubbyModelSpec } from './specs/common';
+import { hubbyModelSpec, tagModelSpec } from './specs/common';
 import { SUPPORTED_LOCALES as LOCALES } from './constants';
 import { apiLogSchemaSpec } from './specs/apiLogs';
 import { z } from 'zod';
@@ -44,7 +45,7 @@ import { convertFirestoreToJS, convertJSToFirestore } from './utils/firestoreTra
 import { HPartner, HPriceList, HPromoCode } from './index.client';
 import { buildClientSchema } from './builders/client';
 
-export { partnerSchemaSpec, analyticsSpec };
+export { partnerSchemaSpec, analyticsSpec, packageSchemaSpec };
 
 export const UserSchema = buildServerSchema(userSchemaSpec);
 export const UserFirestoreSchema = buildServerSchema(userSchemaSpec);
@@ -65,6 +66,11 @@ export const PackagePriceSchema = buildServerSchema(packagePriceSchemaSpec);
 export const PlatformSettingsSchema = buildServerSchema(platformSettingsSchemaSpec);
 export const ScheduleSchema = buildServerSchema(scheduleSchema);
 export const AnalyticsSchema = buildServerSchema(analyticsSpec);
+export const TagSchema = buildServerSchema(tagModelSpec);
+export const TelnaPackageSchema = buildServerSchema(telnaPackageSchema);
+export const BondioPackageSchema = buildServerSchema(bondioPackageSchema);
+export const TrafficPolicySchema = buildServerSchema(trafficPolicySpec);
+
 // Additional lower-level schemas
 export const AddressSchema = addressSchema;
 export const RegistrationSchema = registrationSchema;
@@ -95,6 +101,10 @@ export type PriceList = z.infer<typeof PriceListSchema>;
 export type ApiLog = z.infer<typeof ApiLogSchema>;
 export type Analytics = z.infer<typeof AnalyticsSchema>;
 export type Schedule = z.infer<typeof ScheduleSchema>;
+export type TelnaPackage = z.infer<typeof TelnaPackageSchema>;
+export type BondioPackage = z.infer<typeof BondioPackageSchema>;
+export type TrafficPolicy = z.infer<typeof TrafficPolicySchema>;
+
 // Additional lower-level types
 export type Address = z.infer<typeof AddressSchema>;
 export type Registration = z.infer<typeof RegistrationSchema>;
@@ -121,6 +131,7 @@ export type PriceListApiRequest = PriceList;
 export type PriceListApiResponse = PriceList;
 export type ApiLogApiRequest = ApiLog;
 export type ApiLogApiResponse = ApiLog;
+export type Tag = z.infer<typeof TagSchema>;
 
 export * from './index.client';
 
