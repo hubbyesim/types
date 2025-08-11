@@ -37,11 +37,11 @@ export class FirebaseService {
       }
     } else {
       // Standard initialization for non-test environments
-      if (!getApps().length) {
-        this.app = initializeApp(options);
-      } else {
-        this.app = getApps()[0];
-      }
+      this.app = getApps()[0];
+    }
+
+    if (!this.app) {
+      throw new Error('Firebase app not initialized');
     }
 
     this.firestoreInstance = getFirestore(this.app);

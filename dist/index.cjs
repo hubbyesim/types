@@ -92,11 +92,10 @@ var FirebaseService = class {
         this.app = app.initializeApp(options);
       }
     } else {
-      if (!app.getApps().length) {
-        this.app = app.initializeApp(options);
-      } else {
-        this.app = app.getApps()[0];
-      }
+      this.app = app.getApps()[0];
+    }
+    if (!this.app) {
+      throw new Error("Firebase app not initialized");
     }
     this.firestoreInstance = firestore.getFirestore(this.app);
   }
