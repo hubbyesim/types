@@ -3,7 +3,8 @@
 import { z } from 'zod';
 import { DocumentReference, Timestamp, Firestore } from 'firebase-admin/firestore';
 import { FieldSpec } from '../types';
-import { db as defaultDb } from '../services/firebase';
+import { FirebaseService } from '../services/firebase';
+// Note: Firestore instance must be injected by consumers/tests via factory
 
 export function createConvertJSToFirestore(db: Firestore) {
     return function convertJSToFirestore(input: any, spec: FieldSpec): any {
@@ -190,5 +191,10 @@ export function createConvertFirestoreToJS() {
 }
 
 // For backward compatibility, export the default functions
-export const convertJSToFirestore = createConvertJSToFirestore(defaultDb);
 export const convertFirestoreToJS = createConvertFirestoreToJS();
+
+// Backward-compatible helper that lazily uses injected default Firestore instance
+export function convertJSToFirestore(input: any, spec: FieldSpec): any {
+    const firestore = FirebaseService.getDefaultInstance().firestore;
+    return createConvertJSToFirestore(firestore)(input, spec);
+}

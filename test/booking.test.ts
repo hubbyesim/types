@@ -50,6 +50,11 @@ describe('Booking schema roundtrip', () => {
                 should_send_message: true,
                 channels: ['EMAIL', 'WHATSAPP']
             },
+            package_specifications: [
+                {
+                    destination: 'Netherlands',
+                }
+            ],
             is_processed_for_esim_restoration: false,
             is_pseudonymized: false,
             departure_date: now,
@@ -130,6 +135,11 @@ describe('Booking schema roundtrip', () => {
                 should_send_message: false,
                 channels: []
             },
+            package_specifications: [
+                {
+                    destination: 'Netherlands',
+                }
+            ],
             is_processed_for_esim_restoration: false,
             is_pseudonymized: false,
             departure_date: now,

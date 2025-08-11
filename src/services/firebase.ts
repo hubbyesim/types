@@ -11,7 +11,7 @@ export interface FirebaseConfig {
   isTest?: boolean;
 }
 
-// Define variable to hold singleton instance
+// Define variable to hold singleton instance (must be injected by consumer/tests)
 let defaultInstance: FirebaseService | null = null;
 
 export class FirebaseService {
@@ -54,7 +54,9 @@ export class FirebaseService {
   // Get default instance with singleton pattern
   public static getDefaultInstance(): FirebaseService {
     if (!defaultInstance) {
-      defaultInstance = new FirebaseService();
+      throw new Error(
+        "FirebaseService default instance not set. Inject a FirebaseService via FirebaseService.setDefaultInstance(...) in your application startup or test setup."
+      );
     }
     return defaultInstance;
   }
@@ -65,11 +67,7 @@ export class FirebaseService {
   }
 }
 
-// For backward compatibility, export a default instance
-const defaultService = FirebaseService.getDefaultInstance();
-export const db = defaultService.firestore;
-
-// Function to create a new Firebase service instance
+// Function to create a new Firebase service instance (use in tests or by consumers before injection)
 export function createFirebaseService(config?: FirebaseConfig): FirebaseService {
   return new FirebaseService(config);
 }

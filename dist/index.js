@@ -73,7 +73,7 @@ function isSchemaSpec(obj) {
   return typeof obj === "object" && obj !== null && SCHEMA_MARKER in obj;
 }
 var defaultInstance = null;
-var FirebaseService = class _FirebaseService {
+var FirebaseService = class {
   app;
   firestoreInstance;
   constructor(config = {}) {
@@ -104,7 +104,9 @@ var FirebaseService = class _FirebaseService {
   // Get default instance with singleton pattern
   static getDefaultInstance() {
     if (!defaultInstance) {
-      defaultInstance = new _FirebaseService();
+      throw new Error(
+        "FirebaseService default instance not set. Inject a FirebaseService via FirebaseService.setDefaultInstance(...) in your application startup or test setup."
+      );
     }
     return defaultInstance;
   }
@@ -113,8 +115,6 @@ var FirebaseService = class _FirebaseService {
     defaultInstance = instance;
   }
 };
-var defaultService = FirebaseService.getDefaultInstance();
-var db = defaultService.firestore;
 function createFirebaseService(config) {
   return new FirebaseService(config);
 }
@@ -161,7 +161,10 @@ var buildServerSchema = (spec, path = []) => {
     return tsSchema;
   }
   if ("_type" in spec && spec._type === "docRef") {
-    let refSchema = z.string().transform((id) => db.doc(`${spec.collection}/${id}`));
+    let refSchema = z.string().transform((id) => {
+      const firestore = FirebaseService.getDefaultInstance().firestore;
+      return firestore.doc(`${spec.collection}/${id}`);
+    });
     if (spec.nullable)
       refSchema = refSchema.nullable();
     if (spec.optional)
@@ -962,7 +965,7 @@ var apiLogSchemaSpec = markAsSchemaSpec({
   timestamp: timestampRequired,
   status_code: z.number()
 });
-function createConvertJSToFirestore(db2) {
+function createConvertJSToFirestore(db) {
   return function convertJSToFirestore2(input, spec) {
     if (input === void 0 || input === null)
       return null;
@@ -981,7 +984,7 @@ function createConvertJSToFirestore(db2) {
           }
           return input;
         case "docRef":
-          return db2.collection(spec.collection).doc(input);
+          return db.collection(spec.collection).doc(input);
         case "array":
           return input.map((item) => convertJSToFirestore2(item, spec.of));
         case "record":
@@ -1094,8 +1097,11 @@ function createConvertFirestoreToJS() {
     return input;
   };
 }
-var convertJSToFirestore = createConvertJSToFirestore(db);
 var convertFirestoreToJS = createConvertFirestoreToJS();
+function convertJSToFirestore(input, spec) {
+  const firestore = FirebaseService.getDefaultInstance().firestore;
+  return createConvertJSToFirestore(firestore)(input, spec);
+}
 function buildClientSchema(spec, path = []) {
   const pathString = path.join(".");
   if (spec === void 0 || spec === null) {
@@ -1205,7 +1211,7 @@ var HPriceListSchema = buildClientSchema(priceListSchemaSpec);
 var HFinancialPropertiesSchema = buildClientSchema(financialPropertiesSchemaSpec);
 var HApiLogSchema = buildClientSchema(apiLogSchemaSpec);
 var HPackagePriceSchema = buildClientSchema(packagePriceSchema);
-buildClientSchema(hubbyModelSpec);
+var HubbyModelSchema = buildClientSchema(hubbyModelSpec);
 var HPartnerAppSchema = buildClientSchema(partnerSchemaSpec);
 var HPlatformSettingsSchema = buildClientSchema(platformSettingsSchema);
 var HVisualIdentitySchema = buildClientSchema(visualIdentitySchema);
@@ -1232,8 +1238,8 @@ var HBookingStatusSchema = bookingStatusSchema;
 var HCommunicationOptionsSchema = communicationOptionsSchema;
 
 // src/utils/modelConverterFactory.ts
-function createModelConverters(db2, modelSchemaSpec) {
-  const convertToFirestore = createConvertJSToFirestore(db2);
+function createModelConverters(db, modelSchemaSpec) {
+  const convertToFirestore = createConvertJSToFirestore(db);
   const convertFromFirestore = createConvertFirestoreToJS();
   return {
     /**
@@ -1265,7 +1271,6 @@ var PromoCodeSchema = buildServerSchema(promoCodeSchemaSpec);
 var PartnerSchema = buildServerSchema(partnerSchemaSpec);
 var PriceListSchema = buildServerSchema(priceListSchemaSpec);
 var ApiLogSchema = buildServerSchema(apiLogSchemaSpec);
-var HubbyModelSchema2 = buildServerSchema(hubbyModelSpec);
 var VisualIdentitySchema = buildServerSchema(visualIdentitySchema);
 var PackagePriceSchema = buildServerSchema(packagePriceSchemaSpec);
 var PlatformSettingsSchema = buildServerSchema(platformSettingsSchemaSpec);
@@ -1315,6 +1320,6 @@ var promoCodeToFirestore = (promoCode) => {
 var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
-export { AddressSchema, AnalyticsSchema, ApiLogSchema, BankingDetailsSchema, BondioPackageSchema, BookingSchema, BookingStatusSchema, CommunicationChannelSchema, CommunicationOptionsSchema, CountrySchema, CurrencySchema, ESIMSchema, FirebaseService, HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBondioPackageSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HRoleSchema, HScheduleFilterSchema, HTagSchema, HTelnaPackageSchema, HTrafficPolicySchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema2 as HubbyModelSchema, MessageSchema, PackagePriceSchema, PackageSchema, PartnerContactSchema, PartnerDataSchema, PartnerPackageSpecificationSchema, PartnerSchema, PaymentSchema, PlatformSettingsSchema, PriceListSchema, PromoCodeSchema, PromoPackageSpecificationSchema, RegistrationSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES, ScheduleFilterSchema, ScheduleSchema, TagSchema, TelnaPackageSchema, TrafficPolicySchema, UserFirestoreSchema, UserSchema, VisualIdentityBannerSchema, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, packageSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, priceListFromFirestore, priceListToFirestore, promoCodeFromFirestore, promoCodeToFirestore, userFromFirestore, userToFirestore };
+export { AddressSchema, AnalyticsSchema, ApiLogSchema, BankingDetailsSchema, BondioPackageSchema, BookingSchema, BookingStatusSchema, CommunicationChannelSchema, CommunicationOptionsSchema, CountrySchema, CurrencySchema, ESIMSchema, FirebaseService, HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBondioPackageSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HRoleSchema, HScheduleFilterSchema, HTagSchema, HTelnaPackageSchema, HTrafficPolicySchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema, MessageSchema, PackagePriceSchema, PackageSchema, PartnerContactSchema, PartnerDataSchema, PartnerPackageSpecificationSchema, PartnerSchema, PaymentSchema, PlatformSettingsSchema, PriceListSchema, PromoCodeSchema, PromoPackageSpecificationSchema, RegistrationSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES, ScheduleFilterSchema, ScheduleSchema, TagSchema, TelnaPackageSchema, TrafficPolicySchema, UserFirestoreSchema, UserSchema, VisualIdentityBannerSchema, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, packageSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, priceListFromFirestore, priceListToFirestore, promoCodeFromFirestore, promoCodeToFirestore, userFromFirestore, userToFirestore };
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.js.map

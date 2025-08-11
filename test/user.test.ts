@@ -50,7 +50,7 @@ describe('User schema roundtrip', () => {
                 }
             },
             balance: 100,
-            role: ['user'],
+            role: 'user',
             review_requested: null,
             last_seen: null,
         };
