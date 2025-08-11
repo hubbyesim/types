@@ -268,7 +268,7 @@ var packageSpecificationSchema = zod.z.object({
   package_id: zod.z.string().optional(),
   iata_code: zod.z.string().optional(),
   package_duration: zod.z.number().optional(),
-  package_type: zod.z.enum(["data-limited", "time-limited", "starter"]).optional()
+  package_type: zod.z.enum(["data-limited", "time-limited", "starter", "unlimited"]).optional()
 });
 var promoCodeSchemaSpec = markAsSchemaSpec({
   id: zod.z.string(),
