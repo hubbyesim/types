@@ -2,7 +2,6 @@
 
 var zod = require('zod');
 var firestore = require('firebase-admin/firestore');
-var app = require('firebase-admin/app');
 
 // src/builders/server.ts
 function wrapZodSchema(schema, options) {
@@ -74,38 +73,20 @@ function markAsSchemaSpec(spec) {
 function isSchemaSpec(obj) {
   return typeof obj === "object" && obj !== null && SCHEMA_MARKER in obj;
 }
+
+// src/services/firebase.ts
 var defaultInstance = null;
 var FirebaseService = class {
-  app;
   firestoreInstance;
-  constructor(config = {}) {
-    const options = {
-      credential: config.credential || app.applicationDefault(),
-      projectId: config.projectId || process.env.FIREBASE_PROJECT_ID,
-      storageBucket: config.storageBucket,
-      databaseURL: config.databaseURL
-    };
-    if (config.isTest) {
-      if (app.getApps().length) {
-        this.app = app.getApps()[0];
-      } else {
-        console.log("Initializing Firebase app for test environment SHOULD NEVER APPEAR IN ANY LOGS OUTSIDE OF THE TEST SUITE");
-        this.app = app.initializeApp(options);
-      }
-    } else {
-      this.app = app.getApps()[0];
-    }
-    if (!this.app) {
-      throw new Error("Firebase app not initialized");
-    }
-    this.firestoreInstance = firestore.getFirestore(this.app);
+  constructor(db) {
+    this.firestoreInstance = db;
   }
-  get firestore() {
+  getFirestore() {
     return this.firestoreInstance;
   }
   // Get default instance with singleton pattern
   static getDefaultInstance() {
-    if (!defaultInstance) {
+    if (defaultInstance === null) {
       throw new Error(
         "FirebaseService default instance not set. Inject a FirebaseService via FirebaseService.setDefaultInstance(...) in your application startup or test setup."
       );
@@ -117,8 +98,8 @@ var FirebaseService = class {
     defaultInstance = instance;
   }
 };
-function createFirebaseService(config) {
-  return new FirebaseService(config);
+function createFirebaseService(db) {
+  return new FirebaseService(db);
 }
 
 // src/builders/server.ts
@@ -164,8 +145,8 @@ var buildServerSchema = (spec, path = []) => {
   }
   if ("_type" in spec && spec._type === "docRef") {
     let refSchema = zod.z.string().transform((id) => {
-      const firestore = FirebaseService.getDefaultInstance().firestore;
-      return firestore.doc(`${spec.collection}/${id}`);
+      const firestore = FirebaseService.getDefaultInstance().getFirestore();
+      return firestore.collection(spec.collection).doc(id);
     });
     if (spec.nullable)
       refSchema = refSchema.nullable();
@@ -1101,7 +1082,7 @@ function createConvertFirestoreToJS() {
 }
 var convertFirestoreToJS = createConvertFirestoreToJS();
 function convertJSToFirestore(input, spec) {
-  const firestore = FirebaseService.getDefaultInstance().firestore;
+  const firestore = FirebaseService.getDefaultInstance().getFirestore();
   return createConvertJSToFirestore(firestore)(input, spec);
 }
 function buildClientSchema(spec, path = []) {

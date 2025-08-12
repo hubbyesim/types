@@ -4,12 +4,15 @@ import { convertFirestoreToJS, convertJSToFirestore } from '../src/utils/firesto
 import { bookingSchemaSpec } from '../src/specs/booking';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 import { FirebaseService, createFirebaseService } from '../src/services/firebase';
+import { firestore } from './setup';
 
 // Mock Firebase for tests
 beforeAll(() => {
     // Set up a test instance with isTest flag
-    const testFirebase = createFirebaseService({ isTest: true });
+    const testFirebase = createFirebaseService(firestore);
     FirebaseService.setDefaultInstance(testFirebase);
+    console.log('setting default in test instance', FirebaseService.getDefaultInstance().getFirestore());
+
 });
 
 const ClientSchema = buildClientSchema(bookingSchemaSpec);

@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { Firestore, Timestamp, DocumentReference } from 'firebase-admin/firestore';
-import { AppOptions } from 'firebase-admin/app';
 
 declare const analyticsSpec: {
     service: z.ZodString;
@@ -5163,22 +5162,14 @@ declare function createModelConverters<TModel, TFirestore>(db: Firestore, modelS
 declare function createConvertJSToFirestore(db: Firestore): (input: any, spec: FieldSpec) => any;
 declare function createConvertFirestoreToJS(): (input: any, spec: FieldSpec, path?: string[]) => any;
 
-interface FirebaseConfig {
-    credential?: AppOptions['credential'];
-    projectId?: string;
-    storageBucket?: string;
-    databaseURL?: string;
-    isTest?: boolean;
-}
 declare class FirebaseService {
-    private app;
     private firestoreInstance;
-    constructor(config?: FirebaseConfig);
-    get firestore(): Firestore;
+    constructor(db: Firestore);
+    getFirestore(): Firestore;
     static getDefaultInstance(): FirebaseService;
     static setDefaultInstance(instance: FirebaseService): void;
 }
-declare function createFirebaseService(config?: FirebaseConfig): FirebaseService;
+declare function createFirebaseService(db: Firestore): FirebaseService;
 
 declare const UserSchema: z.ZodTypeAny;
 declare const UserFirestoreSchema: z.ZodTypeAny;

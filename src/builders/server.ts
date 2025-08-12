@@ -61,8 +61,8 @@ export const buildServerSchema = (spec: FieldSpec, path: string[] = []): z.ZodTy
   // ----- Document Reference -----
   if ('_type' in spec && spec._type === 'docRef') {
     let refSchema = z.string().transform(id => {
-      const firestore = FirebaseService.getDefaultInstance().firestore;
-      return firestore.doc(`${spec.collection}/${id}`);
+      const firestore = FirebaseService.getDefaultInstance().getFirestore()
+      return firestore.collection(spec.collection).doc(id);
     });
     if (spec.nullable) refSchema = refSchema.nullable();
     if (spec.optional) refSchema = refSchema.optional();

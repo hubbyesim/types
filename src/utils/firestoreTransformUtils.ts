@@ -195,6 +195,6 @@ export const convertFirestoreToJS = createConvertFirestoreToJS();
 
 // Backward-compatible helper that lazily uses injected default Firestore instance
 export function convertJSToFirestore(input: any, spec: FieldSpec): any {
-    const firestore = FirebaseService.getDefaultInstance().firestore;
+    const firestore = FirebaseService.getDefaultInstance().getFirestore();
     return createConvertJSToFirestore(firestore)(input, spec);
 }
