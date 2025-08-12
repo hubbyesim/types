@@ -89,6 +89,7 @@ var FirebaseService = class {
       if (app.getApps().length) {
         this.app = app.getApps()[0];
       } else {
+        console.log("Initializing Firebase app for test environment SHOULD NEVER APPEAR IN ANY LOGS OUTSIDE OF THE TEST SUITE");
         this.app = app.initializeApp(options);
       }
     } else {

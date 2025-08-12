@@ -33,6 +33,7 @@ export class FirebaseService {
       if (getApps().length) {
         this.app = getApps()[0];
       } else {
+        console.log('Initializing Firebase app for test environment SHOULD NEVER APPEAR IN ANY LOGS OUTSIDE OF THE TEST SUITE');
         this.app = initializeApp(options);
       }
     } else {
