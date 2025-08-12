@@ -71,7 +71,13 @@ export function buildClientSchema<S extends FieldSpec>(spec: S, path: string[] =
 
   // ----- DocRef -----
   if (typeof spec === 'object' && spec !== null && '_type' in spec && spec._type === 'docRef') {
-    let schema: ZodTypeAny = z.string(); // only ID on client
+    // Accept plain string id, and coerce duck-typed DocumentReference to id
+    let schema: ZodTypeAny = z.preprocess((val) => {
+      if (val && typeof val === 'object' && 'id' in (val as any) && typeof (val as any).id === 'string') {
+        return (val as any).id;
+      }
+      return val;
+    }, z.string()); // only ID on client
     if (spec.nullable) schema = schema.nullable();
     if (spec.optional) schema = schema.optional();
     return schema as unknown as SchemaFromSpec<S>;

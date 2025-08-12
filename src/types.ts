@@ -89,3 +89,8 @@ export type SchemaFromSpec<S> =
     : never;
 
 export type SchemaBuilder = <S extends FieldSpec>(spec: S, path: string[]) => SchemaFromSpec<S>;
+
+// ----- Public helper types (client-only) -----
+
+export type ClientSchema<S extends FieldSpec> = SchemaFromSpec<S>;
+export type ClientType<S extends FieldSpec> = z.infer<ClientSchema<S>>;

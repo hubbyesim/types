@@ -122,72 +122,75 @@ function createFirebaseService(config) {
 }
 
 // src/builders/server.ts
-var buildServerSchema = (spec, path = []) => {
-  const pathString = path.join(".");
-  if (spec === void 0 || spec === null) {
-    throw new Error(`Invalid spec at "${pathString || "<root>"}": received ${spec}`);
-  }
-  if (spec instanceof zod.z.ZodType) {
-    return wrapZodSchema(spec);
-  }
-  if ("_type" in spec && spec._type === "array") {
-    if (!("of" in spec)) {
-      throw new Error(`Array spec at "${pathString}" is missing 'of'`);
+function createServerSchemaBuilder(db) {
+  return function buildServerSchema2(spec, path = []) {
+    const pathString = path.join(".");
+    if (spec === void 0 || spec === null) {
+      throw new Error(`Invalid spec at "${pathString || "<root>"}": received ${spec}`);
     }
-    const itemSchema = spec.of instanceof zod.z.ZodType ? spec.of : buildServerSchema(spec.of, [...path, "[i]"]);
-    let arraySchema = zod.z.array(itemSchema);
-    if (spec.nullable)
-      arraySchema = arraySchema.nullable();
-    if (spec.optional)
-      arraySchema = arraySchema.optional();
-    return arraySchema;
-  }
-  if ("_type" in spec && spec._type === "record") {
-    if (!("of" in spec)) {
-      throw new Error(`Record spec at "${pathString}" is missing 'of'`);
+    if (spec instanceof zod.z.ZodType) {
+      return wrapZodSchema(spec);
     }
-    const valueSchema = spec.of instanceof zod.z.ZodType ? spec.of : buildServerSchema(spec.of, [...path, "[key]"]);
-    let recordSchema = zod.z.record(valueSchema);
-    if (spec.nullable)
-      recordSchema = recordSchema.nullable();
-    if (spec.optional)
-      recordSchema = recordSchema.optional();
-    return recordSchema;
-  }
-  if ("_type" in spec && spec._type === "timestamp") {
-    let tsSchema = zod.z.date().transform((date) => firestore.Timestamp.fromDate(date));
-    if (spec.nullable)
-      tsSchema = tsSchema.nullable();
-    if (spec.optional)
-      tsSchema = tsSchema.optional();
-    return tsSchema;
-  }
-  if ("_type" in spec && spec._type === "docRef") {
-    let refSchema = zod.z.string().transform((id) => {
-      const firestore = FirebaseService.getDefaultInstance().firestore;
-      return firestore.doc(`${spec.collection}/${id}`);
-    });
-    if (spec.nullable)
-      refSchema = refSchema.nullable();
-    if (spec.optional)
-      refSchema = refSchema.optional();
-    return refSchema;
-  }
-  if (typeof spec === "object" && !("_type" in spec)) {
-    const shape = {};
-    for (const [key, val] of Object.entries(spec)) {
-      shape[key] = buildServerSchema(val, [...path, key]);
+    if ("_type" in spec && spec._type === "array") {
+      if (!("of" in spec)) {
+        throw new Error(`Array spec at "${pathString}" is missing 'of'`);
+      }
+      const itemSchema = spec.of instanceof zod.z.ZodType ? spec.of : buildServerSchema2(spec.of, [...path, "[i]"]);
+      let arraySchema = zod.z.array(itemSchema);
+      if (spec.nullable)
+        arraySchema = arraySchema.nullable();
+      if (spec.optional)
+        arraySchema = arraySchema.optional();
+      return arraySchema;
     }
-    return zod.z.object(shape);
-  }
-  if (typeof spec === "object" && "_type" in spec && spec._type === "object" && "of" in spec) {
-    return wrapObjectSchema(spec, path, buildServerSchema);
-  }
-  if (isSchemaSpec(spec) || typeof spec === "object" && "_type" in spec && spec._type === "object") {
-    return wrapPlainObjectSchema(spec, path, buildServerSchema);
-  }
-  throw new Error(`Unknown or malformed spec at "${pathString}": ${JSON.stringify(spec)}`);
-};
+    if ("_type" in spec && spec._type === "record") {
+      if (!("of" in spec)) {
+        throw new Error(`Record spec at "${pathString}" is missing 'of'`);
+      }
+      const valueSchema = spec.of instanceof zod.z.ZodType ? spec.of : buildServerSchema2(spec.of, [...path, "[key]"]);
+      let recordSchema = zod.z.record(valueSchema);
+      if (spec.nullable)
+        recordSchema = recordSchema.nullable();
+      if (spec.optional)
+        recordSchema = recordSchema.optional();
+      return recordSchema;
+    }
+    if ("_type" in spec && spec._type === "timestamp") {
+      let tsSchema = zod.z.date().transform((date) => firestore.Timestamp.fromDate(date));
+      if (spec.nullable)
+        tsSchema = tsSchema.nullable();
+      if (spec.optional)
+        tsSchema = tsSchema.optional();
+      return tsSchema;
+    }
+    if ("_type" in spec && spec._type === "docRef") {
+      let refSchema = zod.z.string().transform((id) => {
+        const firestore = db ?? FirebaseService.getDefaultInstance().firestore;
+        return firestore.doc(`${spec.collection}/${id}`);
+      });
+      if (spec.nullable)
+        refSchema = refSchema.nullable();
+      if (spec.optional)
+        refSchema = refSchema.optional();
+      return refSchema;
+    }
+    if (typeof spec === "object" && !("_type" in spec)) {
+      const shape = {};
+      for (const [key, val] of Object.entries(spec)) {
+        shape[key] = buildServerSchema2(val, [...path, key]);
+      }
+      return zod.z.object(shape);
+    }
+    if (typeof spec === "object" && "_type" in spec && spec._type === "object" && "of" in spec) {
+      return wrapObjectSchema(spec, path, buildServerSchema2);
+    }
+    if (isSchemaSpec(spec) || typeof spec === "object" && "_type" in spec && spec._type === "object") {
+      return wrapPlainObjectSchema(spec, path, buildServerSchema2);
+    }
+    throw new Error(`Unknown or malformed spec at "${pathString}": ${JSON.stringify(spec)}`);
+  };
+}
+var buildServerSchema = createServerSchemaBuilder();
 var PARTNER_COLLECTION = "/companies/hubby/partners";
 var USER_COLLECTION = "users";
 var PROFILE_COLLECTION = "/companies/hubby/profiles";
@@ -1160,7 +1163,12 @@ function buildClientSchema(spec, path = []) {
     return schema;
   }
   if (typeof spec === "object" && spec !== null && "_type" in spec && spec._type === "docRef") {
-    let schema = zod.z.string();
+    let schema = zod.z.preprocess((val) => {
+      if (val && typeof val === "object" && "id" in val && typeof val.id === "string") {
+        return val.id;
+      }
+      return val;
+    }, zod.z.string());
     if (spec.nullable)
       schema = schema.nullable();
     if (spec.optional)

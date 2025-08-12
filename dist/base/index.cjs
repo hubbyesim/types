@@ -130,7 +130,12 @@ function buildClientSchema(spec, path = []) {
     return schema;
   }
   if (typeof spec === "object" && spec !== null && "_type" in spec && spec._type === "docRef") {
-    let schema = zod.z.string();
+    let schema = zod.z.preprocess((val) => {
+      if (val && typeof val === "object" && "id" in val && typeof val.id === "string") {
+        return val.id;
+      }
+      return val;
+    }, zod.z.string());
     if (spec.nullable)
       schema = schema.nullable();
     if (spec.optional)

@@ -1,5 +1,6 @@
 import { ZodTypeAny, z } from 'zod';
-import type { SchemaBuilder } from './types';
+// Accept any schema builder signature returning a Zod schema
+type AnySchemaBuilder = (spec: any, path: string[]) => ZodTypeAny;
 
 /**
  * Ensures a Zod schema is wrapped to be optional and/or nullable,
@@ -49,7 +50,7 @@ export function wrapZodSchema(
 export function wrapObjectSchema(
     spec: any, // using any to support dynamic `spec.type === 'object'`
     path: string[],
-    builder: SchemaBuilder
+    builder: AnySchemaBuilder
 ): ZodTypeAny {
     const pathString = path.join('.');
 
@@ -75,7 +76,7 @@ export function wrapObjectSchema(
 export function wrapPlainObjectSchema(
     spec: Record<string, any>,
     path: string[],
-    builder: SchemaBuilder
+    builder: AnySchemaBuilder
 ): ZodTypeAny {
     const pathString = path.join('.');
 

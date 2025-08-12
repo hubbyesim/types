@@ -3,7 +3,8 @@ import {
   createConvertJSToFirestore,
   createConvertFirestoreToJS
 } from './firestoreTransformUtils';
-import { FieldSpec } from '../types';
+import { FieldSpec, ClientType } from '../types';
+import type { ServerType } from '../types.server';
 
 /**
  * Creates converter functions for a specific model type with dependency injection.
@@ -13,9 +14,9 @@ import { FieldSpec } from '../types';
  * @param modelSchemaSpec - Schema specification for the model
  * @returns Object with to/from Firestore conversion functions
  */
-export function createModelConverters<TModel, TFirestore>(
+export function createModelConverters<S extends FieldSpec>(
   db: Firestore,
-  modelSchemaSpec: FieldSpec
+  modelSchemaSpec: S
 ) {
   const convertToFirestore = createConvertJSToFirestore(db);
   const convertFromFirestore = createConvertFirestoreToJS();
@@ -24,14 +25,14 @@ export function createModelConverters<TModel, TFirestore>(
     /**
      * Converts a model instance to Firestore format
      */
-    toFirestore: (model: TModel): TFirestore => {
+    toFirestore: (model: ClientType<S>): ServerType<S> => {
       return convertToFirestore(model, modelSchemaSpec);
     },
 
     /**
      * Converts Firestore data to a model instance
      */
-    fromFirestore: (firestoreData: TFirestore): TModel => {
+    fromFirestore: (firestoreData: ServerType<S>): ClientType<S> => {
       return convertFromFirestore(firestoreData, modelSchemaSpec);
     }
   };
