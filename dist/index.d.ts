@@ -829,6 +829,7 @@ declare const HBookingSchema: z.ZodObject<{
         iata_code: z.ZodOptional<z.ZodString>;
         package_duration: z.ZodOptional<z.ZodNumber>;
         package_type: z.ZodOptional<z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>>;
+        traffic_policy: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         destination?: string | undefined;
         size?: string | undefined;
@@ -836,6 +837,7 @@ declare const HBookingSchema: z.ZodObject<{
         iata_code?: string | undefined;
         package_duration?: number | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
+        traffic_policy?: string | undefined;
     }, {
         destination?: string | undefined;
         size?: string | undefined;
@@ -843,6 +845,7 @@ declare const HBookingSchema: z.ZodObject<{
         iata_code?: string | undefined;
         package_duration?: number | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
+        traffic_policy?: string | undefined;
     }>, "many">;
     departure_date: z.ZodEffects<z.ZodDate, Date, Date>;
     return_date: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -880,6 +883,7 @@ declare const HBookingSchema: z.ZodObject<{
         iata_code?: string | undefined;
         package_duration?: number | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
+        traffic_policy?: string | undefined;
     }[];
     departure_date: Date;
     return_date: Date;
@@ -926,6 +930,7 @@ declare const HBookingSchema: z.ZodObject<{
         iata_code?: string | undefined;
         package_duration?: number | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
+        traffic_policy?: string | undefined;
     }[];
     departure_date: Date;
     return_date: Date;
@@ -1299,6 +1304,7 @@ declare const HPackageSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    traffic_policy: string;
     provider: string;
     coverage_label: string | null;
     partner_price: number;
@@ -1308,7 +1314,6 @@ declare const HPackageSchema: z.ZodObject<{
     hidden: boolean;
     is_hidden: boolean;
     priority: number;
-    traffic_policy: string;
     price: number;
     days: number;
     provider_parameters: {
@@ -1348,6 +1353,7 @@ declare const HPackageSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    traffic_policy: string;
     provider: string;
     coverage_label: string | null;
     partner_price: number;
@@ -1357,7 +1363,6 @@ declare const HPackageSchema: z.ZodObject<{
     hidden: boolean;
     is_hidden: boolean;
     priority: number;
-    traffic_policy: string;
     price: number;
     days: number;
     provider_parameters: {
@@ -1409,6 +1414,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
         iata_code: z.ZodOptional<z.ZodString>;
         package_duration: z.ZodOptional<z.ZodNumber>;
         package_type: z.ZodOptional<z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>>;
+        traffic_policy: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         destination?: string | undefined;
         size?: string | undefined;
@@ -1416,6 +1422,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
         iata_code?: string | undefined;
         package_duration?: number | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
+        traffic_policy?: string | undefined;
     }, {
         destination?: string | undefined;
         size?: string | undefined;
@@ -1423,6 +1430,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
         iata_code?: string | undefined;
         package_duration?: number | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
+        traffic_policy?: string | undefined;
     }>>;
     valid_from: z.ZodEffects<z.ZodDate, Date, Date>;
     valid_to: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -1465,6 +1473,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
         iata_code?: string | undefined;
         package_duration?: number | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
+        traffic_policy?: string | undefined;
     } | undefined;
     max_bytes?: number | undefined;
     starter_data?: number | undefined;
@@ -1498,6 +1507,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
         iata_code?: string | undefined;
         package_duration?: number | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
+        traffic_policy?: string | undefined;
     } | undefined;
     max_bytes?: number | undefined;
     starter_data?: number | undefined;
@@ -4875,9 +4885,9 @@ declare const HTelnaPackageSchema: z.ZodObject<{
     partner: string;
     is_active: boolean;
     size: string;
+    traffic_policy: string;
     is_hidden: boolean;
     priority: number;
-    traffic_policy: string;
     price: number;
     days: number;
     iso: string;
@@ -4886,9 +4896,9 @@ declare const HTelnaPackageSchema: z.ZodObject<{
     partner: string;
     is_active: boolean;
     size: string;
+    traffic_policy: string;
     is_hidden: boolean;
     priority: number;
-    traffic_policy: string;
     price: number;
     days: number;
     iso: string;
@@ -4993,6 +5003,7 @@ declare const HPromoPackageSpecificationSchema: z.ZodObject<{
     iata_code: z.ZodOptional<z.ZodString>;
     package_duration: z.ZodOptional<z.ZodNumber>;
     package_type: z.ZodOptional<z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>>;
+    traffic_policy: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     destination?: string | undefined;
     size?: string | undefined;
@@ -5000,6 +5011,7 @@ declare const HPromoPackageSpecificationSchema: z.ZodObject<{
     iata_code?: string | undefined;
     package_duration?: number | undefined;
     package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
+    traffic_policy?: string | undefined;
 }, {
     destination?: string | undefined;
     size?: string | undefined;
@@ -5007,6 +5019,7 @@ declare const HPromoPackageSpecificationSchema: z.ZodObject<{
     iata_code?: string | undefined;
     package_duration?: number | undefined;
     package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
+    traffic_policy?: string | undefined;
 }>;
 declare const HVisualIdentityBannerSchema: z.ZodObject<{
     image_url: z.ZodString;
@@ -5258,6 +5271,7 @@ declare const PromoPackageSpecificationSchema: z.ZodObject<{
     iata_code: z.ZodOptional<z.ZodString>;
     package_duration: z.ZodOptional<z.ZodNumber>;
     package_type: z.ZodOptional<z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>>;
+    traffic_policy: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     destination?: string | undefined;
     size?: string | undefined;
@@ -5265,6 +5279,7 @@ declare const PromoPackageSpecificationSchema: z.ZodObject<{
     iata_code?: string | undefined;
     package_duration?: number | undefined;
     package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
+    traffic_policy?: string | undefined;
 }, {
     destination?: string | undefined;
     size?: string | undefined;
@@ -5272,6 +5287,7 @@ declare const PromoPackageSpecificationSchema: z.ZodObject<{
     iata_code?: string | undefined;
     package_duration?: number | undefined;
     package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
+    traffic_policy?: string | undefined;
 }>;
 declare const VisualIdentityBannerSchema: z.ZodObject<{
     image_url: z.ZodString;
