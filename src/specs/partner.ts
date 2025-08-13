@@ -41,7 +41,8 @@ export const registrationSchema = z.object({
 export const bankingDetailsSchema = z.object({
     account_holder: z.string().nullable().optional(),
     bank_name: z.string().nullable().optional(),
-    iban: z.string().nullable().optional()
+    iban: z.string().nullable().optional(),
+    currency: z.string().nullable().optional()
 });
 
 // Package price schema

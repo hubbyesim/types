@@ -587,7 +587,8 @@ var registrationSchema = zod.z.object({
 var bankingDetailsSchema = zod.z.object({
   account_holder: zod.z.string().nullable().optional(),
   bank_name: zod.z.string().nullable().optional(),
-  iban: zod.z.string().nullable().optional()
+  iban: zod.z.string().nullable().optional(),
+  currency: zod.z.string().nullable().optional()
 });
 var packagePriceSchema = zod.z.object({
   destination: zod.z.string(),

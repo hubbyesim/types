@@ -927,11 +927,14 @@ declare const HPartnerSchema: z.ZodObject<{
         account_holder: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         bank_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         iban: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        currency: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     }, {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
@@ -1692,6 +1695,7 @@ declare const HPartnerSchema: z.ZodObject<{
         tax_number?: string | null | undefined;
     };
     banking_details: {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
@@ -1867,6 +1871,7 @@ declare const HPartnerSchema: z.ZodObject<{
         tax_number?: string | null | undefined;
     };
     banking_details: {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
@@ -2434,11 +2439,14 @@ declare const HPartnerAppSchema: z.ZodObject<{
         account_holder: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         bank_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         iban: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        currency: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     }, {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
@@ -3199,6 +3207,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         tax_number?: string | null | undefined;
     };
     banking_details: {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
@@ -3374,6 +3383,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         tax_number?: string | null | undefined;
     };
     banking_details: {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
@@ -4333,11 +4343,14 @@ declare const HBankingDetailsSchema: z.ZodObject<{
     account_holder: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     bank_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     iban: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    currency: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
+    currency?: string | null | undefined;
     account_holder?: string | null | undefined;
     bank_name?: string | null | undefined;
     iban?: string | null | undefined;
 }, {
+    currency?: string | null | undefined;
     account_holder?: string | null | undefined;
     bank_name?: string | null | undefined;
     iban?: string | null | undefined;
