@@ -36,7 +36,7 @@ This workflow automatically builds the TypeScript package, runs tests, and creat
 
 #### Required Secrets
 
-To run tests with Firebase, you need to set up the following secret in your repository:
+To run tests with Firebase, you need to set up the following secret in the **Test** environment:
 
 **`FIREBASE_SERVICE_ACCOUNT_TEST_ENCODED`**
 
@@ -56,11 +56,19 @@ This should be a base64-encoded Firebase service account JSON file for testing p
    base64 -i path/to/serviceAccountKey.json
    ```
 
-3. **Add to GitHub Secrets:**
-   - Go to your repository → Settings → Secrets and variables → Actions
-   - Click "New repository secret"
+3. **Add to GitHub Test Environment:**
+   - Go to your repository → Settings → Environments
+   - Click on "Test" environment (or create it if it doesn't exist)
+   - Click "Environment secrets" → "Add secret"
    - Name: `FIREBASE_SERVICE_ACCOUNT_TEST_ENCODED`
    - Value: Paste the base64-encoded string from step 2
+
+#### Environment Configuration
+
+The workflow uses the **Test** environment for:
+- Managing Firebase service account secrets
+- Environment-specific configurations
+- Enhanced security and access control
 
 #### Test Configuration
 
@@ -107,10 +115,33 @@ The workflow uses `hubby-esim-dev` as the default Firebase project for testing. 
    - Check that the project ID in the service account matches `FIREBASE_PROJECT_ID`
    - Ensure the service account has access to Firestore
 
-3. **Timeout issues:**
+3. **Service account JSON errors:**
+   - **"Unexpected end of JSON input"**: Usually means the secret is empty or malformed
+   - **"Failed to parse contents"**: Check if the base64 encoding is correct
+   - **Missing required fields**: Ensure the JSON has `project_id`, `private_key`, and `client_email`
+   - **Empty file**: The secret might not be set or the base64 decode failed
+
+4. **Timeout issues:**
    - Tests timeout after 10 minutes
    - Build job times out after 15 minutes
    - Check for hanging Firebase operations in your tests
+
+#### Common Service Account Issues:
+
+**"Unexpected end of JSON input" Error:**
+```bash
+# This usually means the secret is empty or malformed
+# Check your secret value:
+echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_TEST_ENCODED }}" | base64 -d | head -c 100
+
+# If empty, the secret isn't set correctly
+# If malformed, check the base64 encoding:
+base64 -i your-service-account.json
+```
+
+**Missing Secret:**
+- If `FIREBASE_SERVICE_ACCOUNT_TEST_ENCODED` is not set, tests will run with application default credentials
+- This is fine for local development but may fail in CI if no default credentials are available
 
 ### Local vs CI differences
 
@@ -124,3 +155,20 @@ The workflow uses `hubby-esim-dev` as the default Firebase project for testing. 
 - Credentials are not persisted between workflow runs
 - Service account files are created temporarily and cleaned up automatically
 - Use a dedicated test service account with minimal permissions
+
+## Environment Protection
+
+The **Test** environment provides additional security:
+- **Environment-specific secrets**: Secrets are isolated to the test environment
+- **Access control**: You can restrict who can deploy to this environment
+- **Approval workflows**: Optional approval requirements for environment access
+- **Branch restrictions**: Limit which branches can access the environment
+
+### Setting Up Environment Protection
+
+1. Go to Settings → Environments → Test
+2. Configure protection rules as needed:
+   - **Required reviewers**: Add team members who must approve deployments
+   - **Wait timer**: Delay deployments by a specified time
+   - **Deployment branches**: Restrict which branches can access the environment
+   - **Environment secrets**: Manage environment-specific secrets
