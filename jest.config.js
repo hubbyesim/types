@@ -10,7 +10,7 @@ export default {
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   // extensionsToTreatAsEsm is handled by the preset
-  
+
   // Add global setup configuration
   globalSetup: './test/setup.ts',
   setupFilesAfterEnv: ['./test/setup.ts'],
@@ -18,7 +18,7 @@ export default {
     '/node_modules/',
     '<rootDir>/test/analytics.test.ts',
   ],
-  
+
   // Use test-specific TypeScript configuration
   transform: {
     '^.+\\.tsx?$': ['ts-jest', {
