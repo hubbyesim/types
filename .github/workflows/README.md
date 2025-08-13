@@ -10,6 +10,10 @@ This directory contains GitHub Actions workflows for the `@hubbyesim/types` pack
 
 This workflow automatically builds the TypeScript package, runs tests, and creates releases when changes are pushed to the `main` branch.
 
+**Triggers:**
+- **Push to main branch**: Runs tests, builds, commits dist files, creates tags and releases
+- **Pull request to main branch**: Runs tests and builds (verification only, no commits/releases)
+
 #### What it does:
 
 1. **Test Job** (runs first):
@@ -19,11 +23,16 @@ This workflow automatically builds the TypeScript package, runs tests, and creat
    - Runs all tests with Firebase instance injection
    - Provides detailed error reporting and verification
 
-2. **Build Job** (runs after tests pass):
+2. **Build Job** (runs after tests pass on push to main):
    - Builds the TypeScript package using `tsup`
    - Commits compiled `dist/` files if changes exist
    - Creates new version tags automatically
    - Publishes GitHub releases
+
+3. **PR Build Job** (runs after tests pass on pull requests):
+   - Builds the TypeScript package using `tsup`
+   - Verifies build output without committing changes
+   - Provides build verification for code review
 
 #### Required Secrets
 
