@@ -11,7 +11,6 @@ beforeAll(() => {
     // Set up a test instance with isTest flag
     const testFirebase = createFirebaseService(firestore);
     FirebaseService.setDefaultInstance(testFirebase);
-    console.log('setting default in test instance', FirebaseService.getDefaultInstance().getFirestore());
 
 });
 

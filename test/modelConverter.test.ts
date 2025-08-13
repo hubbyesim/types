@@ -3,12 +3,14 @@ import { PartnerSchema, HPartnerSchema } from '../src';
 import { partnerSchemaSpec } from '../src/specs/partner';
 import { DocumentReference, Firestore } from 'firebase-admin/firestore';
 import { FirebaseService, createFirebaseService } from '../src/services/firebase';
+import { firestore } from "./setup";
 
 // Mock Firebase for tests
 beforeAll(() => {
     // Set up a test instance with isTest flag
-    const testFirebase = createFirebaseService({ isTest: true });
+    const testFirebase = createFirebaseService(firestore);
     FirebaseService.setDefaultInstance(testFirebase);
+
 });
 
 // Helper function to check if an object is a proper Firebase Admin DocumentReference
@@ -30,7 +32,7 @@ describe('Model Converter Document References', () => {
     let db: Firestore;
 
     beforeAll(() => {
-        db = FirebaseService.getDefaultInstance().firestore;
+        db = FirebaseService.getDefaultInstance().getFirestore();
     });
 
     it('should convert string IDs to proper DocumentReferences', () => {

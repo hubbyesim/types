@@ -4,22 +4,21 @@ import { convertFirestoreToJS, convertJSToFirestore } from '../src/utils/firesto
 import { userSchemaSpec } from '../src/specs/user';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 import { FirebaseService, createFirebaseService } from '../src/services/firebase';
+import { firestore } from './setup';
 
 const ClientSchema = buildClientSchema(userSchemaSpec);
 const ServerSchema = buildServerSchema(userSchemaSpec);
 
 // Create a function to generate document references
-function createDocRef(collection: string, id: string): DocumentReference {
-    const firestore = FirebaseService.getDefaultInstance().firestore;
-    return firestore.collection(collection).doc(id);
-}
-
 // Mock Firebase for tests
 beforeAll(() => {
     // Set up a test instance with isTest flag
-    const testFirebase = createFirebaseService({ isTest: true });
+    const testFirebase = createFirebaseService(firestore);
     FirebaseService.setDefaultInstance(testFirebase);
+
 });
+
+
 
 const roundtrip = (input: any) => {
     const parsedForServer = ServerSchema.parse(input);
@@ -61,7 +60,7 @@ describe('User schema roundtrip', () => {
         expect(firestoreData.createdAt).toBeInstanceOf(Timestamp);
 
         // Use our DI container to create a real document reference
-        const partnerRef = createDocRef('partners', input.partner);
+        const partnerRef = FirebaseService.getDefaultInstance().getFirestore().collection('partners').doc(input.partner);
         firestoreData.partner = partnerRef;
 
         expect(firestoreData.partner).toBeInstanceOf(DocumentReference);
@@ -91,7 +90,7 @@ describe('User schema roundtrip', () => {
         expect(firestoreData.createdAt).toBeInstanceOf(Timestamp);
 
         // Use our DI container to create a real document reference
-        const partnerRef = createDocRef('partners', input.partner);
+        const partnerRef = FirebaseService.getDefaultInstance().getFirestore().collection('partners').doc(input.partner);
         firestoreData.partner = partnerRef;
 
         expect(firestoreData.partner).toBeInstanceOf(DocumentReference);
