@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { Timestamp } from 'firebase-admin/firestore';
 import type { FieldSpec } from '../types';
 import { wrapZodSchema, wrapObjectSchema, wrapPlainObjectSchema, isSchemaSpec } from '../common';
-import { db } from '../services/firebase';
+import { FirebaseService } from '../services/firebase';
 
 export const buildServerSchema = (spec: FieldSpec, path: string[] = []): z.ZodTypeAny => {
   const pathString = path.join('.');
@@ -60,7 +60,10 @@ export const buildServerSchema = (spec: FieldSpec, path: string[] = []): z.ZodTy
 
   // ----- Document Reference -----
   if ('_type' in spec && spec._type === 'docRef') {
-    let refSchema = z.string().transform(id => db.doc(`${spec.collection}/${id}`));
+    let refSchema = z.string().transform(id => {
+      const firestore = FirebaseService.getDefaultInstance().getFirestore()
+      return firestore.collection(spec.collection).doc(id);
+    });
     if (spec.nullable) refSchema = refSchema.nullable();
     if (spec.optional) refSchema = refSchema.optional();
     return refSchema;

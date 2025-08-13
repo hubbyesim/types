@@ -7,12 +7,14 @@ import { buildServerSchema } from '../src/builders/server';
 import { convertJSToFirestore } from '../src/utils/firestoreTransformUtils';
 import { DocumentReference } from 'firebase-admin/firestore';
 import { FirebaseService, createFirebaseService } from '../src/services/firebase';
+import { firestore } from "./setup";
 
 // Mock Firebase for tests
 beforeAll(() => {
-  // Set up a test instance with isTest flag
-  const testFirebase = createFirebaseService({ isTest: true });
-  FirebaseService.setDefaultInstance(testFirebase);
+    // Set up a test instance with isTest flag
+    const testFirebase = createFirebaseService(firestore);
+    FirebaseService.setDefaultInstance(testFirebase);
+
 });
 
 describe("PromoCode Schema", () => {

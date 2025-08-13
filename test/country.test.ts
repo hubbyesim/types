@@ -7,9 +7,9 @@ import { FirebaseService, createFirebaseService } from '../src/services/firebase
 
 // Mock Firebase for tests
 beforeAll(() => {
-  // Set up a test instance with isTest flag
-  const testFirebase = createFirebaseService({ isTest: true });
-  FirebaseService.setDefaultInstance(testFirebase);
+    // Set up a test instance with isTest flag
+    const testFirebase = createFirebaseService({ isTest: true });
+    FirebaseService.setDefaultInstance(testFirebase);
 });
 
 const ClientSchema = buildClientSchema(countrySchemaSpec);
@@ -39,7 +39,12 @@ describe('Country schema roundtrip', () => {
             region: false,
             is_region: false,
             countries: ['NL'],
-            tier: 1
+            tier: 1,
+            created_at: new Date('2024-01-01'),
+            i18n_name: {
+                en: 'Netherlands',
+                nl: 'Nederland'
+            }
         };
 
         const parsedForServer = ClientSchema.parse(input);
@@ -79,7 +84,12 @@ describe('Country schema roundtrip', () => {
             region: null,
             is_region: null,
             countries: null,
-            tier: null
+            tier: null,
+            created_at: new Date('2024-01-01'),
+            i18n_name: {
+                en: 'Netherlands',
+                nl: 'Nederland'
+            }
         };
 
         const parsedForServer = ClientSchema.parse(input);

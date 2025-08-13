@@ -20,4 +20,3 @@ export * from './index.server';
 
 // Export the Firebase service for dependency injection
 export { FirebaseService, createFirebaseService } from './services/firebase';
-export type { FirebaseConfig } from './services/firebase';
