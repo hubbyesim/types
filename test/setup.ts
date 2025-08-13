@@ -43,7 +43,6 @@ const initFirebase = () => {
     } else {
       // Local development - use application default credentials
       credential = applicationDefault();
-      console.log('ℹ️ Using application default credentials');
     }
 
     const app = initializeApp({
@@ -82,5 +81,4 @@ export default async () => {
   console.log('✅ Global test setup complete');
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🔥 Firebase Project: ${process.env.FIREBASE_PROJECT_ID || 'hubby-esim-dev'}`);
-  console.log(`🔑 Credentials: ${process.env.GOOGLE_APPLICATION_CREDENTIALS ? 'Service Account' : 'Application Default'}`);
 }; 

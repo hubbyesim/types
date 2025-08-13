@@ -47,7 +47,7 @@ export function createConvertJSToFirestore(db: Firestore) {
                                 // Handle based on field optionality and nullability
                                 if (value === undefined) {
                                     // Check if field is optional by looking at its spec
-                                    const isOptional = typeof fieldSpec === 'object' && '_type' in fieldSpec && fieldSpec._type === 'optional';
+                                    const isOptional = typeof fieldSpec === 'object' && fieldSpec !== null && 'optional' in fieldSpec && fieldSpec.optional === true;
                                     if (!isOptional) {
                                         // If not optional but nullable, convert to null
                                         result[key] = null;
@@ -78,7 +78,7 @@ export function createConvertJSToFirestore(db: Firestore) {
                     // Handle undefined values
                     if (value === undefined) {
                         // Check if field is optional
-                        const isOptional = typeof fieldSpec === 'object' && '_type' in fieldSpec && fieldSpec._type === 'optional';
+                        const isOptional = typeof fieldSpec === 'object' && fieldSpec !== null && 'optional' in fieldSpec && fieldSpec.optional === true;
                         if (!isOptional) {
                             // If not optional but nullable, convert to null
                             result[key] = null;

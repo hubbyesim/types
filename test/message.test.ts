@@ -4,12 +4,13 @@ import { convertFirestoreToJS, convertJSToFirestore } from '../src/utils/firesto
 import { messageSchemaSpec } from '../src/specs/message';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 import { FirebaseService, createFirebaseService } from '../src/services/firebase';
+import { firestore } from './setup';
 
 // Mock Firebase for tests
 beforeAll(() => {
-  // Set up a test instance with isTest flag
-  const testFirebase = createFirebaseService({ isTest: true });
-  FirebaseService.setDefaultInstance(testFirebase);
+    // Set up a test instance with isTest flag
+    const testFirebase = createFirebaseService(firestore);
+    FirebaseService.setDefaultInstance(testFirebase);
 });
 
 const ClientSchema = buildClientSchema(messageSchemaSpec);

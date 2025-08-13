@@ -16,7 +16,7 @@ export const countrySchemaSpec = markAsSchemaSpec({
     has_esim: z.boolean(),
     name: z.string().nullable(),
     region: z.boolean().nullable(),
-    i18n_name: z.record(z.string()),
+    i18n_name: z.record(z.string(), z.string()),
     is_region: z.boolean().nullable(),
     countries: z.array(z.string()).nullable(),
     tier: z.number().nullable()

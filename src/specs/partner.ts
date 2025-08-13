@@ -78,7 +78,7 @@ export const visualIdentityBannerSchema = z.object({
     alt: z.string(),
     click_url: z.string(),
     locale: supportedLocalesSchema,
-    properties: z.record(z.string())
+    properties: z.record(z.string(), z.string())
 });
 
 // Schedule filter schema
@@ -132,11 +132,11 @@ export const packageStrategySchema = z.object({
 // Schedule email schema
 export const scheduleEmailSchema = z.object({
     brevo_template_id: z.number(),
-    subject: z.record(z.string()).refine(
+    subject: z.record(z.string(), z.string()).refine(
         (val: Record<string, string>) => Object.keys(val).every(key => SUPPORTED_LOCALES.includes(key as SupportedLocales)),
         { message: "Keys must be supported locales" }
     ).optional(),
-    preview_text: z.record(z.string()).refine(
+    preview_text: z.record(z.string(), z.string()).refine(
         (val: Record<string, string>) => Object.keys(val).every(key => SUPPORTED_LOCALES.includes(key as SupportedLocales)),
         { message: "Keys must be supported locales" }
     ).optional()
@@ -144,8 +144,8 @@ export const scheduleEmailSchema = z.object({
 
 // Schedule push schema
 export const schedulePushSchema = z.object({
-    title: z.record(z.string()).optional(),
-    body: z.record(z.string()).optional(),
+    title: z.record(z.string(), z.string()).optional(),
+    body: z.record(z.string(), z.string()).optional(),
     target: z.string()
 }).nullable().optional();
 
@@ -328,7 +328,7 @@ export const webhookSettingsSchema = z.object({
     enabled: z.boolean().default(false),
     events: z.object({
         promocode_redemption: z.boolean().default(false)
-    }).default({})
+    }).default(() => ({ promocode_redemption: false }))
 });
 
 // ===== Main partner schema =====

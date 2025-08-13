@@ -102,7 +102,7 @@ function buildClientSchema(spec, path = []) {
     if (!("of" in spec)) {
       throw new Error(`Record spec at "${pathString}" is missing 'of'`);
     }
-    let schema = z.record(buildClientSchema(spec.of, [...path, "[key]"]));
+    let schema = z.record(z.string(), buildClientSchema(spec.of, [...path, "[key]"]));
     if (spec.nullable)
       schema = schema.nullable();
     if (spec.optional)
@@ -120,7 +120,7 @@ function buildClientSchema(spec, path = []) {
         return isNaN(date.getTime()) ? void 0 : date;
       }
       return val;
-    }, z.date({ required_error: "Date is required", invalid_type_error: "Invalid date format" }));
+    }, z.date({ message: "Invalid date format" }));
     if (spec.nullable)
       schema = schema.nullable();
     if (spec.optional)
@@ -337,7 +337,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
   flight_number: z.string().optional(),
   gender: z.enum(["M", "F", "O"]).optional(),
   package_size: z.string().optional(),
-  sent_messages: z.record(z.any()).optional(),
+  sent_messages: z.record(z.string(), z.any()).optional(),
   locale: supportedLocalesSchema,
   status: bookingStatusSchema,
   data: {
@@ -392,7 +392,7 @@ var countrySchemaSpec = markAsSchemaSpec({
   has_esim: z.boolean(),
   name: z.string().nullable(),
   region: z.boolean().nullable(),
-  i18n_name: z.record(z.string()),
+  i18n_name: z.record(z.string(), z.string()),
   is_region: z.boolean().nullable(),
   countries: z.array(z.string()).nullable(),
   tier: z.number().nullable()
@@ -587,7 +587,7 @@ var visualIdentityBannerSchema = z.object({
   alt: z.string(),
   click_url: z.string(),
   locale: supportedLocalesSchema,
-  properties: z.record(z.string())
+  properties: z.record(z.string(), z.string())
 });
 var scheduleFilterSchema = z.object({
   type: z.enum(["iso3", "gender", "percentage", "age"]),
@@ -628,18 +628,18 @@ var packageStrategySchema = z.object({
 });
 var scheduleEmailSchema = z.object({
   brevo_template_id: z.number(),
-  subject: z.record(z.string()).refine(
+  subject: z.record(z.string(), z.string()).refine(
     (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
     { message: "Keys must be supported locales" }
   ).optional(),
-  preview_text: z.record(z.string()).refine(
+  preview_text: z.record(z.string(), z.string()).refine(
     (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
     { message: "Keys must be supported locales" }
   ).optional()
 }).nullable().optional();
 var schedulePushSchema = z.object({
-  title: z.record(z.string()).optional(),
-  body: z.record(z.string()).optional(),
+  title: z.record(z.string(), z.string()).optional(),
+  body: z.record(z.string(), z.string()).optional(),
   target: z.string()
 }).nullable().optional();
 var scheduleSchema = z.object({
@@ -803,7 +803,7 @@ var webhookSettingsSchema = z.object({
   enabled: z.boolean().default(false),
   events: z.object({
     promocode_redemption: z.boolean().default(false)
-  }).default({})
+  }).default(() => ({ promocode_redemption: false }))
 });
 var partnerSchemaSpec = markAsSchemaSpec({
   // Base model fields

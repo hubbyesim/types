@@ -128,7 +128,7 @@ var buildServerSchema = (spec, path = []) => {
       throw new Error(`Record spec at "${pathString}" is missing 'of'`);
     }
     const valueSchema = spec.of instanceof zod.z.ZodType ? spec.of : buildServerSchema(spec.of, [...path, "[key]"]);
-    let recordSchema = zod.z.record(valueSchema);
+    let recordSchema = zod.z.record(zod.z.string(), valueSchema);
     if (spec.nullable)
       recordSchema = recordSchema.nullable();
     if (spec.optional)
@@ -164,7 +164,7 @@ var buildServerSchema = (spec, path = []) => {
   if (typeof spec === "object" && "_type" in spec && spec._type === "object" && "of" in spec) {
     return wrapObjectSchema(spec, path, buildServerSchema);
   }
-  if (isSchemaSpec(spec) || typeof spec === "object" && "_type" in spec && spec._type === "object") {
+  if (isSchemaSpec(spec) || typeof spec === "object" && spec !== null && "_type" in spec && spec._type === "object") {
     return wrapPlainObjectSchema(spec, path, buildServerSchema);
   }
   throw new Error(`Unknown or malformed spec at "${pathString}": ${JSON.stringify(spec)}`);
@@ -356,7 +356,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
   flight_number: zod.z.string().optional(),
   gender: zod.z.enum(["M", "F", "O"]).optional(),
   package_size: zod.z.string().optional(),
-  sent_messages: zod.z.record(zod.z.any()).optional(),
+  sent_messages: zod.z.record(zod.z.string(), zod.z.any()).optional(),
   locale: supportedLocalesSchema,
   status: bookingStatusSchema,
   data: {
@@ -411,7 +411,7 @@ var countrySchemaSpec = markAsSchemaSpec({
   has_esim: zod.z.boolean(),
   name: zod.z.string().nullable(),
   region: zod.z.boolean().nullable(),
-  i18n_name: zod.z.record(zod.z.string()),
+  i18n_name: zod.z.record(zod.z.string(), zod.z.string()),
   is_region: zod.z.boolean().nullable(),
   countries: zod.z.array(zod.z.string()).nullable(),
   tier: zod.z.number().nullable()
@@ -616,7 +616,7 @@ var visualIdentityBannerSchema = zod.z.object({
   alt: zod.z.string(),
   click_url: zod.z.string(),
   locale: supportedLocalesSchema,
-  properties: zod.z.record(zod.z.string())
+  properties: zod.z.record(zod.z.string(), zod.z.string())
 });
 var scheduleFilterSchema = zod.z.object({
   type: zod.z.enum(["iso3", "gender", "percentage", "age"]),
@@ -657,18 +657,18 @@ var packageStrategySchema = zod.z.object({
 });
 var scheduleEmailSchema = zod.z.object({
   brevo_template_id: zod.z.number(),
-  subject: zod.z.record(zod.z.string()).refine(
+  subject: zod.z.record(zod.z.string(), zod.z.string()).refine(
     (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
     { message: "Keys must be supported locales" }
   ).optional(),
-  preview_text: zod.z.record(zod.z.string()).refine(
+  preview_text: zod.z.record(zod.z.string(), zod.z.string()).refine(
     (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
     { message: "Keys must be supported locales" }
   ).optional()
 }).nullable().optional();
 var schedulePushSchema = zod.z.object({
-  title: zod.z.record(zod.z.string()).optional(),
-  body: zod.z.record(zod.z.string()).optional(),
+  title: zod.z.record(zod.z.string(), zod.z.string()).optional(),
+  body: zod.z.record(zod.z.string(), zod.z.string()).optional(),
   target: zod.z.string()
 }).nullable().optional();
 var scheduleSchema = zod.z.object({
@@ -832,7 +832,7 @@ var webhookSettingsSchema = zod.z.object({
   enabled: zod.z.boolean().default(false),
   events: zod.z.object({
     promocode_redemption: zod.z.boolean().default(false)
-  }).default({})
+  }).default(() => ({ promocode_redemption: false }))
 });
 var partnerSchemaSpec = markAsSchemaSpec({
   // Base model fields
@@ -982,7 +982,7 @@ function createConvertJSToFirestore(db) {
               if (key in input) {
                 const value = input[key];
                 if (value === void 0) {
-                  const isOptional = typeof fieldSpec === "object" && "_type" in fieldSpec && fieldSpec._type === "optional";
+                  const isOptional = typeof fieldSpec === "object" && fieldSpec !== null && "optional" in fieldSpec && fieldSpec.optional === true;
                   if (!isOptional) {
                     result[key] = null;
                   }
@@ -1004,7 +1004,7 @@ function createConvertJSToFirestore(db) {
         if (key in input) {
           const value = input[key];
           if (value === void 0) {
-            const isOptional = typeof fieldSpec === "object" && "_type" in fieldSpec && fieldSpec._type === "optional";
+            const isOptional = typeof fieldSpec === "object" && fieldSpec !== null && "optional" in fieldSpec && fieldSpec.optional === true;
             if (!isOptional) {
               result[key] = null;
             }
@@ -1116,7 +1116,7 @@ function buildClientSchema(spec, path = []) {
     if (!("of" in spec)) {
       throw new Error(`Record spec at "${pathString}" is missing 'of'`);
     }
-    let schema = zod.z.record(buildClientSchema(spec.of, [...path, "[key]"]));
+    let schema = zod.z.record(zod.z.string(), buildClientSchema(spec.of, [...path, "[key]"]));
     if (spec.nullable)
       schema = schema.nullable();
     if (spec.optional)
@@ -1134,7 +1134,7 @@ function buildClientSchema(spec, path = []) {
         return isNaN(date.getTime()) ? void 0 : date;
       }
       return val;
-    }, zod.z.date({ required_error: "Date is required", invalid_type_error: "Invalid date format" }));
+    }, zod.z.date({ message: "Invalid date format" }));
     if (spec.nullable)
       schema = schema.nullable();
     if (spec.optional)
@@ -1220,6 +1220,7 @@ var HPartnerDataSchema = partnerDataSchema;
 var HCommunicationChannelSchema = communicationChannelSchema;
 var HBookingStatusSchema = bookingStatusSchema;
 var HCommunicationOptionsSchema = communicationOptionsSchema;
+var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
 // src/utils/modelConverterFactory.ts
 function createModelConverters(db, modelSchemaSpec) {
@@ -1302,7 +1303,6 @@ var promoCodeToFirestore = (promoCode) => {
   return convertJSToFirestore(promoCode, promoCodeSchemaSpec);
 };
 var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
-var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
 exports.AddressSchema = AddressSchema;
 exports.AnalyticsSchema = AnalyticsSchema;

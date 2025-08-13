@@ -69,7 +69,7 @@ export const bookingSchemaSpec = markAsSchemaSpec({
     flight_number: z.string().optional(),
     gender: z.enum(['M', 'F', 'O']).optional(),
     package_size: z.string().optional(),
-    sent_messages: z.record(z.any()).optional(),
+    sent_messages: z.record(z.string(), z.any()).optional(),
     locale: supportedLocalesSchema,
     status: bookingStatusSchema,
     data: {

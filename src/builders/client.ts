@@ -2,7 +2,7 @@ import { z, ZodTypeAny } from 'zod';
 import type { FieldSpec, SchemaFromSpec } from '../types';
 import { wrapZodSchema, wrapObjectSchema, wrapPlainObjectSchema, isSchemaSpec } from '../common';
 
-export function buildClientSchema<S extends FieldSpec>(spec: S, path: string[] = []): SchemaFromSpec<S> {
+export function buildClientSchema<S extends FieldSpec>(spec: S, path: string[] = []): any {
   const pathString = path.join('.');
 
   if (spec === undefined || spec === null) {
@@ -42,7 +42,7 @@ export function buildClientSchema<S extends FieldSpec>(spec: S, path: string[] =
     if (!('of' in spec)) {
       throw new Error(`Record spec at "${pathString}" is missing 'of'`);
     }
-    let schema: ZodTypeAny = z.record(buildClientSchema(spec.of, [...path, '[key]']));
+    let schema: ZodTypeAny = z.record(z.string(), buildClientSchema(spec.of, [...path, '[key]']));
     if (spec.nullable) schema = schema.nullable();
     if (spec.optional) schema = schema.optional();
     return schema as unknown as SchemaFromSpec<S>;
@@ -63,7 +63,7 @@ export function buildClientSchema<S extends FieldSpec>(spec: S, path: string[] =
       }
       // If it's already a Date or something else, return it as is
       return val;
-    }, z.date({ required_error: 'Date is required', invalid_type_error: 'Invalid date format' }));
+    }, z.date({ message: 'Invalid date format' }));
     if (spec.nullable) schema = schema.nullable();
     if (spec.optional) schema = schema.optional();
     return schema as unknown as SchemaFromSpec<S>;

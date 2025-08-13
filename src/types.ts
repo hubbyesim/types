@@ -66,9 +66,9 @@ type WithModifiers<S, T extends ZodTypeAny> = OptionalIf<S, NullableIf<S, T>>;
 export type SchemaFromSpec<S> =
     // Already a Zod schema → keep exact type (e.g., ZodString, ZodObject, ...)
     S extends z.ZodTypeAny ? S
-    // Timestamp → ZodEffects<ZodDate> with optional/nullable modifiers
+    // Timestamp → ZodPipe<ZodDate> with optional/nullable modifiers
     : S extends { _type: 'timestamp' }
-    ? WithModifiers<S, z.ZodEffects<z.ZodDate>>
+    ? WithModifiers<S, z.ZodPipe<z.ZodDate, any>>
     // DocRef → ZodString with modifiers
     : S extends { _type: 'docRef' }
     ? WithModifiers<S, z.ZodString>

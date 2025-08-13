@@ -104,7 +104,7 @@ function buildClientSchema(spec, path = []) {
     if (!("of" in spec)) {
       throw new Error(`Record spec at "${pathString}" is missing 'of'`);
     }
-    let schema = zod.z.record(buildClientSchema(spec.of, [...path, "[key]"]));
+    let schema = zod.z.record(zod.z.string(), buildClientSchema(spec.of, [...path, "[key]"]));
     if (spec.nullable)
       schema = schema.nullable();
     if (spec.optional)
@@ -122,7 +122,7 @@ function buildClientSchema(spec, path = []) {
         return isNaN(date.getTime()) ? void 0 : date;
       }
       return val;
-    }, zod.z.date({ required_error: "Date is required", invalid_type_error: "Invalid date format" }));
+    }, zod.z.date({ message: "Invalid date format" }));
     if (spec.nullable)
       schema = schema.nullable();
     if (spec.optional)
@@ -339,7 +339,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
   flight_number: zod.z.string().optional(),
   gender: zod.z.enum(["M", "F", "O"]).optional(),
   package_size: zod.z.string().optional(),
-  sent_messages: zod.z.record(zod.z.any()).optional(),
+  sent_messages: zod.z.record(zod.z.string(), zod.z.any()).optional(),
   locale: supportedLocalesSchema,
   status: bookingStatusSchema,
   data: {
@@ -394,7 +394,7 @@ var countrySchemaSpec = markAsSchemaSpec({
   has_esim: zod.z.boolean(),
   name: zod.z.string().nullable(),
   region: zod.z.boolean().nullable(),
-  i18n_name: zod.z.record(zod.z.string()),
+  i18n_name: zod.z.record(zod.z.string(), zod.z.string()),
   is_region: zod.z.boolean().nullable(),
   countries: zod.z.array(zod.z.string()).nullable(),
   tier: zod.z.number().nullable()
@@ -589,7 +589,7 @@ var visualIdentityBannerSchema = zod.z.object({
   alt: zod.z.string(),
   click_url: zod.z.string(),
   locale: supportedLocalesSchema,
-  properties: zod.z.record(zod.z.string())
+  properties: zod.z.record(zod.z.string(), zod.z.string())
 });
 var scheduleFilterSchema = zod.z.object({
   type: zod.z.enum(["iso3", "gender", "percentage", "age"]),
@@ -630,18 +630,18 @@ var packageStrategySchema = zod.z.object({
 });
 var scheduleEmailSchema = zod.z.object({
   brevo_template_id: zod.z.number(),
-  subject: zod.z.record(zod.z.string()).refine(
+  subject: zod.z.record(zod.z.string(), zod.z.string()).refine(
     (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
     { message: "Keys must be supported locales" }
   ).optional(),
-  preview_text: zod.z.record(zod.z.string()).refine(
+  preview_text: zod.z.record(zod.z.string(), zod.z.string()).refine(
     (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
     { message: "Keys must be supported locales" }
   ).optional()
 }).nullable().optional();
 var schedulePushSchema = zod.z.object({
-  title: zod.z.record(zod.z.string()).optional(),
-  body: zod.z.record(zod.z.string()).optional(),
+  title: zod.z.record(zod.z.string(), zod.z.string()).optional(),
+  body: zod.z.record(zod.z.string(), zod.z.string()).optional(),
   target: zod.z.string()
 }).nullable().optional();
 var scheduleSchema = zod.z.object({
@@ -805,7 +805,7 @@ var webhookSettingsSchema = zod.z.object({
   enabled: zod.z.boolean().default(false),
   events: zod.z.object({
     promocode_redemption: zod.z.boolean().default(false)
-  }).default({})
+  }).default(() => ({ promocode_redemption: false }))
 });
 var partnerSchemaSpec = markAsSchemaSpec({
   // Base model fields

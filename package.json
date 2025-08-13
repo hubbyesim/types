@@ -28,7 +28,7 @@
   "author": "Daniel Fortuyn",
   "license": "ISC",
   "dependencies": {
-    "zod": "^3.24.3"
+    "zod": "^4.0.0"
   },
   "peerDependencies": {
     "firebase-admin": "^12.2.0"

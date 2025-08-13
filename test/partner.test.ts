@@ -979,12 +979,12 @@ describe("Partner Name Validation", () => {
         // Expect the PartnerSchema validation to throw an error due to the name length constraint
         expect(() => {
             PartnerSchema.parse(invalidPartner);
-        }).toThrow(/String must contain at least 3 character/i);
+        }).toThrow(/Too small: expected string to have >=3 characters/);
 
         // Also expect the HPartnerSchema validation to throw an error
         expect(() => {
             HPartnerSchema.parse(invalidPartner);
-        }).toThrow(/String must contain at least 3 character/i);
+        }).toThrow(/Too small: expected string to have >=3 characters/);
     });
 
     it("should convert undefined address fields to null when transforming to Firebase", () => {

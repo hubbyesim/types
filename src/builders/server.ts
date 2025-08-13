@@ -4,7 +4,7 @@ import type { FieldSpec } from '../types';
 import { wrapZodSchema, wrapObjectSchema, wrapPlainObjectSchema, isSchemaSpec } from '../common';
 import { FirebaseService } from '../services/firebase';
 
-export const buildServerSchema = (spec: FieldSpec, path: string[] = []): z.ZodTypeAny => {
+export const buildServerSchema = (spec: FieldSpec, path: string[] = []): any => {
   const pathString = path.join('.');
 
   if (spec === undefined || spec === null) {
@@ -27,7 +27,7 @@ export const buildServerSchema = (spec: FieldSpec, path: string[] = []): z.ZodTy
         ? spec.of
         : buildServerSchema(spec.of, [...path, '[i]']);
 
-    let arraySchema = z.array(itemSchema);
+    let arraySchema: any = z.array(itemSchema);
     if (spec.nullable) arraySchema = arraySchema.nullable();
     if (spec.optional) arraySchema = arraySchema.optional();
     return arraySchema;
@@ -44,7 +44,7 @@ export const buildServerSchema = (spec: FieldSpec, path: string[] = []): z.ZodTy
         ? spec.of
         : buildServerSchema(spec.of, [...path, '[key]']);
 
-    let recordSchema = z.record(valueSchema);
+    let recordSchema: any = z.record(z.string(), valueSchema);
     if (spec.nullable) recordSchema = recordSchema.nullable();
     if (spec.optional) recordSchema = recordSchema.optional();
     return recordSchema;
@@ -52,7 +52,7 @@ export const buildServerSchema = (spec: FieldSpec, path: string[] = []): z.ZodTy
 
   // ----- Timestamp -----
   if ('_type' in spec && spec._type === 'timestamp') {
-    let tsSchema = z.date().transform(date => Timestamp.fromDate(date));
+    let tsSchema: any = z.date().transform(date => Timestamp.fromDate(date));
     if (spec.nullable) tsSchema = tsSchema.nullable();
     if (spec.optional) tsSchema = tsSchema.optional();
     return tsSchema;
@@ -60,7 +60,7 @@ export const buildServerSchema = (spec: FieldSpec, path: string[] = []): z.ZodTy
 
   // ----- Document Reference -----
   if ('_type' in spec && spec._type === 'docRef') {
-    let refSchema = z.string().transform(id => {
+    let refSchema: any = z.string().transform(id => {
       const firestore = FirebaseService.getDefaultInstance().getFirestore()
       return firestore.collection(spec.collection).doc(id);
     });
@@ -89,7 +89,7 @@ export const buildServerSchema = (spec: FieldSpec, path: string[] = []): z.ZodTy
   }
 
   // ----- Plain object shape -----
-  if (isSchemaSpec(spec) || typeof spec === 'object' && '_type' in spec && spec._type === 'object') {
+  if (isSchemaSpec(spec) || (typeof spec === 'object' && spec !== null && '_type' in spec && (spec as any)._type === 'object')) {
     return wrapPlainObjectSchema(spec, path, buildServerSchema);
   }
 

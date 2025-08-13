@@ -126,7 +126,7 @@ var buildServerSchema = (spec, path = []) => {
       throw new Error(`Record spec at "${pathString}" is missing 'of'`);
     }
     const valueSchema = spec.of instanceof z.ZodType ? spec.of : buildServerSchema(spec.of, [...path, "[key]"]);
-    let recordSchema = z.record(valueSchema);
+    let recordSchema = z.record(z.string(), valueSchema);
     if (spec.nullable)
       recordSchema = recordSchema.nullable();
     if (spec.optional)
@@ -162,7 +162,7 @@ var buildServerSchema = (spec, path = []) => {
   if (typeof spec === "object" && "_type" in spec && spec._type === "object" && "of" in spec) {
     return wrapObjectSchema(spec, path, buildServerSchema);
   }
-  if (isSchemaSpec(spec) || typeof spec === "object" && "_type" in spec && spec._type === "object") {
+  if (isSchemaSpec(spec) || typeof spec === "object" && spec !== null && "_type" in spec && spec._type === "object") {
     return wrapPlainObjectSchema(spec, path, buildServerSchema);
   }
   throw new Error(`Unknown or malformed spec at "${pathString}": ${JSON.stringify(spec)}`);
@@ -354,7 +354,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
   flight_number: z.string().optional(),
   gender: z.enum(["M", "F", "O"]).optional(),
   package_size: z.string().optional(),
-  sent_messages: z.record(z.any()).optional(),
+  sent_messages: z.record(z.string(), z.any()).optional(),
   locale: supportedLocalesSchema,
   status: bookingStatusSchema,
   data: {
@@ -409,7 +409,7 @@ var countrySchemaSpec = markAsSchemaSpec({
   has_esim: z.boolean(),
   name: z.string().nullable(),
   region: z.boolean().nullable(),
-  i18n_name: z.record(z.string()),
+  i18n_name: z.record(z.string(), z.string()),
   is_region: z.boolean().nullable(),
   countries: z.array(z.string()).nullable(),
   tier: z.number().nullable()
@@ -614,7 +614,7 @@ var visualIdentityBannerSchema = z.object({
   alt: z.string(),
   click_url: z.string(),
   locale: supportedLocalesSchema,
-  properties: z.record(z.string())
+  properties: z.record(z.string(), z.string())
 });
 var scheduleFilterSchema = z.object({
   type: z.enum(["iso3", "gender", "percentage", "age"]),
@@ -655,18 +655,18 @@ var packageStrategySchema = z.object({
 });
 var scheduleEmailSchema = z.object({
   brevo_template_id: z.number(),
-  subject: z.record(z.string()).refine(
+  subject: z.record(z.string(), z.string()).refine(
     (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
     { message: "Keys must be supported locales" }
   ).optional(),
-  preview_text: z.record(z.string()).refine(
+  preview_text: z.record(z.string(), z.string()).refine(
     (val) => Object.keys(val).every((key) => SUPPORTED_LOCALES.includes(key)),
     { message: "Keys must be supported locales" }
   ).optional()
 }).nullable().optional();
 var schedulePushSchema = z.object({
-  title: z.record(z.string()).optional(),
-  body: z.record(z.string()).optional(),
+  title: z.record(z.string(), z.string()).optional(),
+  body: z.record(z.string(), z.string()).optional(),
   target: z.string()
 }).nullable().optional();
 var scheduleSchema = z.object({
@@ -830,7 +830,7 @@ var webhookSettingsSchema = z.object({
   enabled: z.boolean().default(false),
   events: z.object({
     promocode_redemption: z.boolean().default(false)
-  }).default({})
+  }).default(() => ({ promocode_redemption: false }))
 });
 var partnerSchemaSpec = markAsSchemaSpec({
   // Base model fields
@@ -980,7 +980,7 @@ function createConvertJSToFirestore(db) {
               if (key in input) {
                 const value = input[key];
                 if (value === void 0) {
-                  const isOptional = typeof fieldSpec === "object" && "_type" in fieldSpec && fieldSpec._type === "optional";
+                  const isOptional = typeof fieldSpec === "object" && fieldSpec !== null && "optional" in fieldSpec && fieldSpec.optional === true;
                   if (!isOptional) {
                     result[key] = null;
                   }
@@ -1002,7 +1002,7 @@ function createConvertJSToFirestore(db) {
         if (key in input) {
           const value = input[key];
           if (value === void 0) {
-            const isOptional = typeof fieldSpec === "object" && "_type" in fieldSpec && fieldSpec._type === "optional";
+            const isOptional = typeof fieldSpec === "object" && fieldSpec !== null && "optional" in fieldSpec && fieldSpec.optional === true;
             if (!isOptional) {
               result[key] = null;
             }
@@ -1114,7 +1114,7 @@ function buildClientSchema(spec, path = []) {
     if (!("of" in spec)) {
       throw new Error(`Record spec at "${pathString}" is missing 'of'`);
     }
-    let schema = z.record(buildClientSchema(spec.of, [...path, "[key]"]));
+    let schema = z.record(z.string(), buildClientSchema(spec.of, [...path, "[key]"]));
     if (spec.nullable)
       schema = schema.nullable();
     if (spec.optional)
@@ -1132,7 +1132,7 @@ function buildClientSchema(spec, path = []) {
         return isNaN(date.getTime()) ? void 0 : date;
       }
       return val;
-    }, z.date({ required_error: "Date is required", invalid_type_error: "Invalid date format" }));
+    }, z.date({ message: "Invalid date format" }));
     if (spec.nullable)
       schema = schema.nullable();
     if (spec.optional)
@@ -1218,6 +1218,7 @@ var HPartnerDataSchema = partnerDataSchema;
 var HCommunicationChannelSchema = communicationChannelSchema;
 var HBookingStatusSchema = bookingStatusSchema;
 var HCommunicationOptionsSchema = communicationOptionsSchema;
+var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
 // src/utils/modelConverterFactory.ts
 function createModelConverters(db, modelSchemaSpec) {
@@ -1300,7 +1301,6 @@ var promoCodeToFirestore = (promoCode) => {
   return convertJSToFirestore(promoCode, promoCodeSchemaSpec);
 };
 var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
-var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
 export { AddressSchema, AnalyticsSchema, ApiLogSchema, BankingDetailsSchema, BondioPackageSchema, BookingSchema, BookingStatusSchema, CommunicationChannelSchema, CommunicationOptionsSchema, CountrySchema, CurrencySchema, ESIMSchema, FirebaseService, HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBondioPackageSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HRoleSchema, HScheduleFilterSchema, HTagSchema, HTelnaPackageSchema, HTrafficPolicySchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema, MessageSchema, PackagePriceSchema, PackageSchema, PartnerContactSchema, PartnerDataSchema, PartnerPackageSpecificationSchema, PartnerSchema, PaymentSchema, PlatformSettingsSchema, PriceListSchema, PromoCodeSchema, PromoPackageSpecificationSchema, RegistrationSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES, ScheduleFilterSchema, ScheduleSchema, TagSchema, TelnaPackageSchema, TrafficPolicySchema, UserFirestoreSchema, UserSchema, VisualIdentityBannerSchema, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, packageSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, priceListFromFirestore, priceListToFirestore, promoCodeFromFirestore, promoCodeToFirestore, userFromFirestore, userToFirestore };
 //# sourceMappingURL=out.js.map

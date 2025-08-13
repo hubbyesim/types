@@ -183,9 +183,8 @@ export const promoCodeToFirestore = (promoCode: HPromoCode): PromoCode => {
 }
 
 export const partnerAppSchema = buildClientSchema(partnerSchemaSpec);
-// Export the type and constant
-export type SupportedLocales = typeof LOCALES[number];
-export const SUPPORTED_LOCALES = LOCALES;
+// Export the type only (constant is exported from client)
+// export type SupportedLocales = typeof LOCALES[number]; // Commented out to avoid duplicate export
 
 // Dependency Injection exports
 export { createModelConverters } from './utils/modelConverterFactory';
