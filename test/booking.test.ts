@@ -4,12 +4,14 @@ import { convertFirestoreToJS, convertJSToFirestore } from '../src/utils/firesto
 import { bookingSchemaSpec } from '../src/specs/booking';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 import { FirebaseService, createFirebaseService } from '../src/services/firebase';
+import { firestore } from './setup';
 
 // Mock Firebase for tests
 beforeAll(() => {
     // Set up a test instance with isTest flag
-    const testFirebase = createFirebaseService({ isTest: true });
+    const testFirebase = createFirebaseService(firestore);
     FirebaseService.setDefaultInstance(testFirebase);
+
 });
 
 const ClientSchema = buildClientSchema(bookingSchemaSpec);
@@ -50,6 +52,11 @@ describe('Booking schema roundtrip', () => {
                 should_send_message: true,
                 channels: ['EMAIL', 'WHATSAPP']
             },
+            package_specifications: [
+                {
+                    destination: 'Netherlands',
+                }
+            ],
             is_processed_for_esim_restoration: false,
             is_pseudonymized: false,
             departure_date: now,
@@ -130,6 +137,11 @@ describe('Booking schema roundtrip', () => {
                 should_send_message: false,
                 channels: []
             },
+            package_specifications: [
+                {
+                    destination: 'Netherlands',
+                }
+            ],
             is_processed_for_esim_restoration: false,
             is_pseudonymized: false,
             departure_date: now,

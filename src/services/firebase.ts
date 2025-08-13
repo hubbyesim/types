@@ -11,50 +11,26 @@ export interface FirebaseConfig {
   isTest?: boolean;
 }
 
-// Define variable to hold singleton instance
+// Define variable to hold singleton instance (must be injected by consumer/tests)
 let defaultInstance: FirebaseService | null = null;
 
 export class FirebaseService {
-  private app: App;
+
   private firestoreInstance: Firestore;
-
-  constructor(config: FirebaseConfig = {}) {
-    // Use default credentials if none provided
-    const options: AppOptions = {
-      credential: config.credential || applicationDefault(),
-      projectId: config.projectId || process.env.FIREBASE_PROJECT_ID,
-      storageBucket: config.storageBucket,
-      databaseURL: config.databaseURL
-    };
-
-    // For test environments, we may want to use a different initialization strategy
-    if (config.isTest) {
-      // Check if we already have apps initialized - reuse if available
-      if (getApps().length) {
-        this.app = getApps()[0];
-      } else {
-        this.app = initializeApp(options);
-      }
-    } else {
-      // Standard initialization for non-test environments
-      if (!getApps().length) {
-        this.app = initializeApp(options);
-      } else {
-        this.app = getApps()[0];
-      }
-    }
-
-    this.firestoreInstance = getFirestore(this.app);
+  constructor(db: Firestore) {
+    this.firestoreInstance = db;
   }
 
-  get firestore(): Firestore {
+  getFirestore(): Firestore {
     return this.firestoreInstance;
   }
 
   // Get default instance with singleton pattern
   public static getDefaultInstance(): FirebaseService {
-    if (!defaultInstance) {
-      defaultInstance = new FirebaseService();
+    if (defaultInstance === null) {
+      throw new Error(
+        "FirebaseService default instance not set. Inject a FirebaseService via FirebaseService.setDefaultInstance(...) in your application startup or test setup."
+      );
     }
     return defaultInstance;
   }
@@ -65,11 +41,7 @@ export class FirebaseService {
   }
 }
 
-// For backward compatibility, export a default instance
-const defaultService = FirebaseService.getDefaultInstance();
-export const db = defaultService.firestore;
-
-// Function to create a new Firebase service instance
-export function createFirebaseService(config?: FirebaseConfig): FirebaseService {
-  return new FirebaseService(config);
+// Function to create a new Firebase service instance (use in tests or by consumers before injection)
+export function createFirebaseService(db: Firestore): FirebaseService {
+  return new FirebaseService(db);
 }
