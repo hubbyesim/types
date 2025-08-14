@@ -1,93 +1,5 @@
 import { z } from 'zod';
 
-/**
- * @summary IBAN Specification class
- */
-declare class IBANSpecification {
-    /** the code of the country */
-    readonly countryCode: string;
-    /** the length of the IBAN */
-    readonly length: number;
-    /** the structure of the underlying BBAN (for validation and formatting) */
-    readonly structure: string;
-    /** an example valid IBAN */
-    readonly example: string;
-    constructor(countryCode: string, length: number, structure: string, example: string);
-    /**
-     * Check if the passed iban is valid according to this specification.
-     */
-    isValid(iban: string): boolean;
-    /**
-     * Convert the passed IBAN to a country-specific BBAN.
-     */
-    toBBAN(iban: string, separator?: string): string;
-    /**
-     * Convert the passed BBAN to an IBAN for this country specification.
-     * Please note that "generation of the IBAN shall be the exclusive responsibility of the bank/branch servicing the account".
-     * This method implements the preferred algorithm described in http://en.wikipedia.org/wiki/International_Bank_Account_Number#Generating_IBAN_check_digits
-     */
-    fromBBAN(bban: string): string;
-    /**
-     * Check if the passed BBAN is valid.
-     * This function only checks the format of the BBAN (length and matching the letter/number specs) but does not
-     * verify the check digit.
-     */
-    isValidBBAN(bban: string): boolean;
-}
-/**
- * @summary Main IBAN validation class
- * @author Cyril Schumacher
- */
-declare class IBAN {
-    /**
-     * An object containing all the known IBAN specifications
-     */
-    static countries: Record<string, IBANSpecification>;
-    /**
-     * @summary Returns the IBAN in electronic format.
-     * @param iban The IBAN to convert.
-     * @returns The IBAN in electronic format.
-     */
-    static electronicFormat(iban: string): string;
-    /**
-     * @summary Convert the passed BBAN to an IBAN for this country specification.
-     * @param countryCode The country of the BBAN.
-     * @param bban The BBAN to convert to IBAN.
-     * @returns The IBAN.
-     */
-    static fromBBAN(countryCode: string, bban: string): string;
-    /**
-     * @summary Check if the passed iban is valid according to this specification.
-     * @param iban The iban to validate.
-     * @returns True if valid, false otherwise.
-     */
-    static isValid(iban: string): boolean;
-    /**
-     * @summary Check if the passed BBAN is valid.
-     * @param countryCode The country of the BBAN.
-     * @param bban The BBAN to validate.
-     * @returns True if valid, false otherwise.
-     */
-    static isValidBBAN(countryCode: string, bban: string): boolean;
-    /**
-     * @summary Returns the IBAN in print format.
-     * @param iban The IBAN to convert.
-     * @param separator The separator to use between IBAN blocks, defaults to ' '.
-     */
-    static printFormat(iban: string, separator?: string): string;
-    /**
-     * @summary Convert the passed IBAN to a country-specific BBAN.
-     * @param iban The IBAN to convert.
-     * @param separator The separator to use between BBAN blocks, defaults to ' '.
-     * @returns The BBAN
-     */
-    static toBBAN(iban: string, separator?: string): string;
-    /**
-     * Register a new IBAN specification for a country
-     */
-    static registerCountry(specification: IBANSpecification): void;
-}
-
 declare const HUserSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     name: z.ZodNullable<z.ZodString>;
@@ -4582,4 +4494,4 @@ declare const SUPPORTED_LOCALES: readonly ["en-US", "en-EU", "en-GB", "en-CA", "
 type HRole = z.infer<typeof HRoleSchema>;
 type HPermission = z.infer<typeof HPermissionSchema>;
 
-export { HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBondioPackage, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelApp, HubbyModelSchema, IBAN, IBANSpecification, SUPPORTED_LOCALES, SupportedLocales };
+export { HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBondioPackage, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelApp, HubbyModelSchema, SUPPORTED_LOCALES, SupportedLocales };

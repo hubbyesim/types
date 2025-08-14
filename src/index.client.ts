@@ -44,7 +44,6 @@ import { apiLogSchemaSpec } from './specs/apiLogs';
 import { z } from 'zod';
 import { roleSchemaSpec } from './specs/role';
 import { permissionSchemaSpec } from './specs/permission';
-import { IBAN, IBANSpecification } from './custom_validations/iban';
 
 export const HUserSchema = buildClientSchema(userSchemaSpec);
 export const HBookingSchema = buildClientSchema(bookingSchemaSpec);
@@ -126,6 +125,4 @@ export type SupportedLocales = typeof SUPPORTED_LOCALES[number];
 export const SUPPORTED_LOCALES = LOCALES;
 
 export type HRole = z.infer<typeof HRoleSchema>;
-export type HPermission = z.infer<typeof HPermissionSchema>;
-
-export { IBAN, IBANSpecification } from './custom_validations/iban'; 
+export type HPermission = z.infer<typeof HPermissionSchema>; 
