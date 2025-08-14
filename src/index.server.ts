@@ -191,3 +191,5 @@ export const SUPPORTED_LOCALES = LOCALES;
 export { createModelConverters } from './utils/modelConverterFactory';
 export { createConvertJSToFirestore, createConvertFirestoreToJS } from './utils/firestoreTransformUtils';
 export { FirebaseService, createFirebaseService } from './services/firebase';
+
+export { IBAN, IBANSpecification } from './custom_validations/iban';
