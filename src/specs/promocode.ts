@@ -17,7 +17,8 @@ export const packageSpecificationSchema = z.object({
     package_id: z.string().optional(),
     iata_code: z.string().optional(),
     package_duration: z.number().optional(),
-    package_type: z.enum(['data-limited', 'time-limited', 'starter', 'unlimited']).optional()
+    package_type: z.enum(['data-limited', 'time-limited', 'starter', 'unlimited']).optional(),
+    traffic_policy: z.string().optional(),
 });
 
 // Define the promo code schema spec

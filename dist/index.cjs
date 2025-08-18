@@ -2,7 +2,6 @@
 
 var zod = require('zod');
 var firestore = require('firebase-admin/firestore');
-var app = require('firebase-admin/app');
 
 // src/builders/server.ts
 function wrapZodSchema(schema, options) {
@@ -74,39 +73,23 @@ function markAsSchemaSpec(spec) {
 function isSchemaSpec(obj) {
   return typeof obj === "object" && obj !== null && SCHEMA_MARKER in obj;
 }
+
+// src/services/firebase.ts
 var defaultInstance = null;
-var FirebaseService = class _FirebaseService {
-  app;
+var FirebaseService = class {
   firestoreInstance;
-  constructor(config = {}) {
-    const options = {
-      credential: config.credential || app.applicationDefault(),
-      projectId: config.projectId || process.env.FIREBASE_PROJECT_ID,
-      storageBucket: config.storageBucket,
-      databaseURL: config.databaseURL
-    };
-    if (config.isTest) {
-      if (app.getApps().length) {
-        this.app = app.getApps()[0];
-      } else {
-        this.app = app.initializeApp(options);
-      }
-    } else {
-      if (!app.getApps().length) {
-        this.app = app.initializeApp(options);
-      } else {
-        this.app = app.getApps()[0];
-      }
-    }
-    this.firestoreInstance = firestore.getFirestore(this.app);
+  constructor(db) {
+    this.firestoreInstance = db;
   }
-  get firestore() {
+  getFirestore() {
     return this.firestoreInstance;
   }
   // Get default instance with singleton pattern
   static getDefaultInstance() {
-    if (!defaultInstance) {
-      defaultInstance = new _FirebaseService();
+    if (defaultInstance === null) {
+      throw new Error(
+        "FirebaseService default instance not set. Inject a FirebaseService via FirebaseService.setDefaultInstance(...) in your application startup or test setup."
+      );
     }
     return defaultInstance;
   }
@@ -115,10 +98,8 @@ var FirebaseService = class _FirebaseService {
     defaultInstance = instance;
   }
 };
-var defaultService = FirebaseService.getDefaultInstance();
-var db = defaultService.firestore;
-function createFirebaseService(config) {
-  return new FirebaseService(config);
+function createFirebaseService(db) {
+  return new FirebaseService(db);
 }
 
 // src/builders/server.ts
@@ -163,7 +144,10 @@ var buildServerSchema = (spec, path = []) => {
     return tsSchema;
   }
   if ("_type" in spec && spec._type === "docRef") {
-    let refSchema = zod.z.string().transform((id) => db.doc(`${spec.collection}/${id}`));
+    let refSchema = zod.z.string().transform((id) => {
+      const firestore = FirebaseService.getDefaultInstance().getFirestore();
+      return firestore.collection(spec.collection).doc(id);
+    });
     if (spec.nullable)
       refSchema = refSchema.nullable();
     if (spec.optional)
@@ -301,7 +285,8 @@ var packageSpecificationSchema = zod.z.object({
   package_id: zod.z.string().optional(),
   iata_code: zod.z.string().optional(),
   package_duration: zod.z.number().optional(),
-  package_type: zod.z.enum(["data-limited", "time-limited", "starter", "unlimited"]).optional()
+  package_type: zod.z.enum(["data-limited", "time-limited", "starter", "unlimited"]).optional(),
+  traffic_policy: zod.z.string().optional()
 });
 var promoCodeSchemaSpec = markAsSchemaSpec({
   id: zod.z.string(),
@@ -964,7 +949,7 @@ var apiLogSchemaSpec = markAsSchemaSpec({
   timestamp: timestampRequired,
   status_code: zod.z.number()
 });
-function createConvertJSToFirestore(db2) {
+function createConvertJSToFirestore(db) {
   return function convertJSToFirestore2(input, spec) {
     if (input === void 0 || input === null)
       return null;
@@ -983,7 +968,7 @@ function createConvertJSToFirestore(db2) {
           }
           return input;
         case "docRef":
-          return db2.collection(spec.collection).doc(input);
+          return db.collection(spec.collection).doc(input);
         case "array":
           return input.map((item) => convertJSToFirestore2(item, spec.of));
         case "record":
@@ -1096,8 +1081,11 @@ function createConvertFirestoreToJS() {
     return input;
   };
 }
-var convertJSToFirestore = createConvertJSToFirestore(db);
 var convertFirestoreToJS = createConvertFirestoreToJS();
+function convertJSToFirestore(input, spec) {
+  const firestore = FirebaseService.getDefaultInstance().getFirestore();
+  return createConvertJSToFirestore(firestore)(input, spec);
+}
 function buildClientSchema(spec, path = []) {
   const pathString = path.join(".");
   if (spec === void 0 || spec === null) {
@@ -1207,7 +1195,7 @@ var HPriceListSchema = buildClientSchema(priceListSchemaSpec);
 var HFinancialPropertiesSchema = buildClientSchema(financialPropertiesSchemaSpec);
 var HApiLogSchema = buildClientSchema(apiLogSchemaSpec);
 var HPackagePriceSchema = buildClientSchema(packagePriceSchema);
-buildClientSchema(hubbyModelSpec);
+var HubbyModelSchema = buildClientSchema(hubbyModelSpec);
 var HPartnerAppSchema = buildClientSchema(partnerSchemaSpec);
 var HPlatformSettingsSchema = buildClientSchema(platformSettingsSchema);
 var HVisualIdentitySchema = buildClientSchema(visualIdentitySchema);
@@ -1234,8 +1222,8 @@ var HBookingStatusSchema = bookingStatusSchema;
 var HCommunicationOptionsSchema = communicationOptionsSchema;
 
 // src/utils/modelConverterFactory.ts
-function createModelConverters(db2, modelSchemaSpec) {
-  const convertToFirestore = createConvertJSToFirestore(db2);
+function createModelConverters(db, modelSchemaSpec) {
+  const convertToFirestore = createConvertJSToFirestore(db);
   const convertFromFirestore = createConvertFirestoreToJS();
   return {
     /**
@@ -1267,7 +1255,6 @@ var PromoCodeSchema = buildServerSchema(promoCodeSchemaSpec);
 var PartnerSchema = buildServerSchema(partnerSchemaSpec);
 var PriceListSchema = buildServerSchema(priceListSchemaSpec);
 var ApiLogSchema = buildServerSchema(apiLogSchemaSpec);
-var HubbyModelSchema2 = buildServerSchema(hubbyModelSpec);
 var VisualIdentitySchema = buildServerSchema(visualIdentitySchema);
 var PackagePriceSchema = buildServerSchema(packagePriceSchemaSpec);
 var PlatformSettingsSchema = buildServerSchema(platformSettingsSchemaSpec);
@@ -1368,7 +1355,7 @@ exports.HTrafficPolicySchema = HTrafficPolicySchema;
 exports.HUserSchema = HUserSchema;
 exports.HVisualIdentityBannerSchema = HVisualIdentityBannerSchema;
 exports.HVisualIdentitySchema = HVisualIdentitySchema;
-exports.HubbyModelSchema = HubbyModelSchema2;
+exports.HubbyModelSchema = HubbyModelSchema;
 exports.MessageSchema = MessageSchema;
 exports.PackagePriceSchema = PackagePriceSchema;
 exports.PackageSchema = PackageSchema;

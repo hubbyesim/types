@@ -6,14 +6,140 @@ on:
       - main
     paths:
       - 'src/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'src/**'
 
 permissions:
   contents: write
   packages: write
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: Test
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Firebase Admin SDK
+        run: npm install firebase-admin@^12.2.0
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Install jq for JSON parsing
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Verify Test Environment
+        run: |
+          echo "🔍 Verifying Test Environment Configuration..."
+          echo "Environment: ${{ github.ref_name }}"
+          echo "Event: ${{ github.event_name }}"
+          echo "Actor: ${{ github.actor }}"
+          echo "Repository: ${{ github.repository }}"
+
+      - name: Set up Firebase Authentication for Testing
+        run: |
+          if [ -z "${{ secrets.FIREBASE_SERVICE_ACCOUNT_TEST_ENCODED }}" ]; then
+            echo "❌ FIREBASE_SERVICE_ACCOUNT_TEST_ENCODED secret is not set in Test environment"
+            echo "⚠️ Tests will run with application default credentials"
+            echo "💡 To use Firebase service account, set the secret in the Test environment"
+            echo "   Go to: Settings → Environments → Test → Environment secrets"
+            exit 0
+          fi
+          
+          echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_TEST_ENCODED }}" | base64 --decode > "/home/runner/firebaseServiceAccount.json"
+          chmod 644 /home/runner/firebaseServiceAccount.json
+          
+      - name: Verify Firebase Service Account
+        run: |
+          if [ -f "/home/runner/firebaseServiceAccount.json" ]; then
+            echo "✅ Firebase service account file created successfully"
+            echo "File size: $(wc -c < /home/runner/firebaseServiceAccount.json) bytes"
+            
+            # Check if file is valid JSON
+            if jq empty /home/runner/firebaseServiceAccount.json 2>/dev/null; then
+              echo "✅ File is valid JSON"
+              echo "Project ID: $(jq -r '.project_id' /home/runner/firebaseServiceAccount.json)"
+              echo "Client Email: $(jq -r '.client_email' /home/runner/firebaseServiceAccount.json)"
+              echo "Private Key Length: $(jq -r '.private_key' /home/runner/firebaseServiceAccount.json | wc -c) characters"
+            else
+              echo "❌ File is not valid JSON"
+              echo "First 100 characters of file:"
+              head -c 100 /home/runner/firebaseServiceAccount.json
+              echo ""
+              exit 1
+            fi
+          else
+            echo "ℹ️ No Firebase service account file found - will use application default credentials"
+          fi
+
+      - name: Show test environment
+        run: |
+          echo "🔍 Test Environment Configuration:"
+          echo "🌍 GitHub Environment: Test"
+          echo "NODE_ENV: ${NODE_ENV:-'not set'}"
+          echo "CI: ${CI:-'not set'}"
+          echo "FIREBASE_PROJECT_ID: ${FIREBASE_PROJECT_ID:-'not set'}"
+          if [ -f "/home/runner/firebaseServiceAccount.json" ]; then
+            echo "GOOGLE_APPLICATION_CREDENTIALS: /home/runner/firebaseServiceAccount.json (exists)"
+          else
+            echo "GOOGLE_APPLICATION_CREDENTIALS: not set (will use application default)"
+          fi
+          
+      - name: Run tests
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: "/home/runner/firebaseServiceAccount.json"
+          FIREBASE_PROJECT_ID: "hubby-esim-dev"
+          NODE_ENV: "test"
+          CI: "true"
+        run: |
+          # Try to run tests with Firebase first
+          if [ -f "/home/runner/firebaseServiceAccount.json" ]; then
+            echo "🔥 Running tests with Firebase service account"
+            npm test
+          else
+            echo "⚠️ No Firebase service account, running tests with application default credentials"
+            # Unset the credentials path so tests use application default
+            unset GOOGLE_APPLICATION_CREDENTIALS
+            npm test
+          fi
+
+      - name: Test coverage report
+        if: always()
+        run: |
+          echo "Test execution completed"
+          echo "Firebase project used: ${{ env.FIREBASE_PROJECT_ID }}"
+          
+      - name: Handle test failures
+        if: failure()
+        run: |
+          echo "❌ Tests failed! Check the test output above for details."
+          echo "Firebase configuration used:"
+          echo "- Project ID: ${{ env.FIREBASE_PROJECT_ID }}"
+          echo "- Service Account: ${{ env.GOOGLE_APPLICATION_CREDENTIALS }}"
+          echo "- Node Environment: ${{ env.NODE_ENV }}"
+
   build:
     runs-on: ubuntu-latest
+    needs: test
+    timeout-minutes: 15
+    if: github.event_name == 'push'
 
     steps:
       - uses: actions/checkout@v4
@@ -31,6 +157,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'npm'
 
       - run: npm install
 
@@ -91,3 +218,31 @@ jobs:
             Changes based on updates in `src/`.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Build-only job for PRs (no commits/tags/releases)
+  build-pr:
+    runs-on: ubuntu-latest
+    needs: test
+    timeout-minutes: 15
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - run: npm install
+
+      - run: npm run build
+
+      - name: Verify build output
+        run: |
+          echo "✅ Build completed successfully"
+          echo "📁 Generated files in dist/:"
+          ls -la dist/
+          echo "📊 Build size:"
+          du -sh dist/

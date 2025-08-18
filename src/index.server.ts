@@ -60,7 +60,6 @@ export const PromoCodeSchema = buildServerSchema(promoCodeSchemaSpec);
 export const PartnerSchema = buildServerSchema(partnerSchemaSpec);
 export const PriceListSchema = buildServerSchema(priceListSchemaSpec);
 export const ApiLogSchema = buildServerSchema(apiLogSchemaSpec);
-export const HubbyModelSchema = buildServerSchema(hubbyModelSpec);
 export const VisualIdentitySchema = buildServerSchema(visualIdentitySchema);
 export const PackagePriceSchema = buildServerSchema(packagePriceSchemaSpec);
 export const PlatformSettingsSchema = buildServerSchema(platformSettingsSchemaSpec);

@@ -10,11 +10,12 @@ import { partnerSchemaSpec, priceListSchemaSpec } from "../src/specs/partner";
 import { convertJSToFirestore } from '../src/utils/firestoreTransformUtils';
 import { FirebaseService, createFirebaseService } from '../src/services/firebase';
 import { createModelConverters } from '../src/utils/modelConverterFactory';
+import { firestore } from "./setup";
 
 // Mock Firebase for tests
 beforeAll(() => {
     // Set up a test instance with isTest flag
-    const testFirebase = createFirebaseService({ isTest: true });
+    const testFirebase = createFirebaseService(firestore);
     FirebaseService.setDefaultInstance(testFirebase);
 });
 
@@ -465,7 +466,7 @@ describe("Partner Schema", () => {
 
         // Convert server object to JS for client use
         const jsData = convertFirestoreToJS(serverObj, partnerSchemaSpec);
-        
+
         expect(jsData.tags).toEqual(clientPartner.tags);
 
         // Now parse with client schema to convert back
@@ -747,7 +748,7 @@ describe("ModelConverterFactory", () => {
     it("should properly use createModelConverters to convert Partner model to/from Firestore", () => {
         // Get the Firebase service instance
         const firebase = FirebaseService.getDefaultInstance();
-        const db = firebase.firestore;
+        const db = firebase.getFirestore();
 
         const now = new Date();
 
@@ -1070,7 +1071,7 @@ describe("Partner Name Validation", () => {
 
         // Converting back to client format should maintain nulls
         const jsData = convertFirestoreToJS(firestoreObj, partnerSchemaSpec);
-        
+
         // See above comment about undefined vs null
         expect(jsData.address.street).toBeNull();
         expect(jsData.address.postal_code).toBeNull();

@@ -4,13 +4,16 @@ import { convertFirestoreToJS, convertJSToFirestore } from '../src/utils/firesto
 import { esimSchemaSpec } from '../src/specs/esim';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 import { FirebaseService, createFirebaseService } from '../src/services/firebase';
+import { firestore } from "./setup";
 
 // Mock Firebase for tests
 beforeAll(() => {
     // Set up a test instance with isTest flag
-    const testFirebase = createFirebaseService({ isTest: true });
+    const testFirebase = createFirebaseService(firestore);
     FirebaseService.setDefaultInstance(testFirebase);
+
 });
+
 
 const ClientSchema = buildClientSchema(esimSchemaSpec);
 const ServerSchema = buildServerSchema(esimSchemaSpec);
