@@ -56,7 +56,7 @@ declare const packageSchemaSpec: {
     partner_price: z.ZodNumber;
     days: z.ZodNumber;
     name: z.ZodString;
-    type: z.ZodNullable<z.ZodEnum<["data-limited", "time-limited", "starter"]>>;
+    type: z.ZodNullable<z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>>;
     throttling: z.ZodOptional<z.ZodNumber>;
     provider_parameters: z.ZodNullable<z.ZodObject<{
         imsi: z.ZodNumber;
@@ -1214,7 +1214,7 @@ declare const HPackageSchema: z.ZodObject<{
     partner_price: z.ZodNumber;
     days: z.ZodNumber;
     name: z.ZodString;
-    type: z.ZodNullable<z.ZodEnum<["data-limited", "time-limited", "starter"]>>;
+    type: z.ZodNullable<z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>>;
     throttling: z.ZodOptional<z.ZodNumber>;
     provider_parameters: z.ZodNullable<z.ZodObject<{
         imsi: z.ZodNumber;
@@ -1297,7 +1297,7 @@ declare const HPackageSchema: z.ZodObject<{
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     name: string;
     partner: string;
-    type: "data-limited" | "time-limited" | "starter" | null;
+    type: "data-limited" | "time-limited" | "starter" | "unlimited" | null;
     is_active: boolean;
     external_id: string;
     created_at: Date;
@@ -1346,7 +1346,7 @@ declare const HPackageSchema: z.ZodObject<{
 }, {
     name: string;
     partner: string;
-    type: "data-limited" | "time-limited" | "starter" | null;
+    type: "data-limited" | "time-limited" | "starter" | "unlimited" | null;
     is_active: boolean;
     external_id: string;
     created_at: Date;
