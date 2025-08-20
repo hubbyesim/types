@@ -644,6 +644,7 @@ var visualIdentitySchema = zod.z.object({
   mid_banner: visualIdentityBannersSchema.optional()
 });
 var partnerContactSchema = zod.z.object({
+  name: zod.z.string().nullable().optional(),
   email: zod.z.string().nullable(),
   office_phone: zod.z.string().nullable().optional()
 });
@@ -715,7 +716,8 @@ var platformSettingsSchema = zod.z.object({
   }).nullable().optional(),
   emit_events: emitEventSchema.nullable().optional(),
   schedules: zod.z.array(scheduleSchema).optional(),
-  review_settings: reviewSettingsSchema.nullable().optional()
+  review_settings: reviewSettingsSchema.nullable().optional(),
+  type: zod.z.enum(["agent"]).optional().nullable().default(null)
 });
 var packagePriceSchemaSpec = markAsSchemaSpec({
   destination: zod.z.string(),

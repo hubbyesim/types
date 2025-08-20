@@ -113,6 +113,7 @@ export const visualIdentitySchema = z.object({
 
 // Partner contact schema
 export const partnerContactSchema = z.object({
+    name: z.string().nullable().optional(),
     email: z.string().nullable(),
     office_phone: z.string().nullable().optional()
 });
@@ -201,7 +202,8 @@ export const platformSettingsSchema = z.object({
     }).nullable().optional(),
     emit_events: emitEventSchema.nullable().optional(),
     schedules: z.array(scheduleSchema).optional(),
-    review_settings: reviewSettingsSchema.nullable().optional()
+    review_settings: reviewSettingsSchema.nullable().optional(),
+    type: z.enum(['agent']).optional().nullable().default(null)
 });
 
 // ===== Exportable schema specs =====

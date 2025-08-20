@@ -165,6 +165,7 @@ declare const partnerSchemaSpec: {
     contact: {
         _type: "object";
         of: {
+            name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             email: z.ZodNullable<z.ZodString>;
             office_phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         };
@@ -575,6 +576,7 @@ declare const partnerSchemaSpec: {
                 enabled?: boolean | undefined;
                 question?: string | undefined;
             }>>>;
+            type: z.ZodDefault<z.ZodNullable<z.ZodOptional<z.ZodEnum<["agent"]>>>>;
         };
         nullable: boolean;
     };
@@ -1524,13 +1526,16 @@ declare const HPartnerSchema: z.ZodObject<{
     is_active: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     contact: z.ZodObject<{
+        name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         email: z.ZodNullable<z.ZodString>;
         office_phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     }, {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     }>;
     address: z.ZodObject<{
@@ -2123,7 +2128,9 @@ declare const HPartnerSchema: z.ZodObject<{
             enabled?: boolean | undefined;
             question?: string | undefined;
         }>>>;
+        type: z.ZodDefault<z.ZodNullable<z.ZodOptional<z.ZodEnum<["agent"]>>>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
+        type: "agent" | null;
         package_strategy?: {
             name: string;
             parameters?: any;
@@ -2182,6 +2189,7 @@ declare const HPartnerSchema: z.ZodObject<{
             question?: string | undefined;
         } | null | undefined;
     }, {
+        type?: "agent" | null | undefined;
         package_strategy?: {
             name: string;
             parameters?: any;
@@ -2322,6 +2330,7 @@ declare const HPartnerSchema: z.ZodObject<{
     users: string[];
     contact: {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     };
     address: {
@@ -2404,6 +2413,7 @@ declare const HPartnerSchema: z.ZodObject<{
         } | undefined;
     };
     platform_settings: {
+        type: "agent" | null;
         package_strategy?: {
             name: string;
             parameters?: any;
@@ -2498,6 +2508,7 @@ declare const HPartnerSchema: z.ZodObject<{
     users: string[];
     contact: {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     };
     address: {
@@ -2580,6 +2591,7 @@ declare const HPartnerSchema: z.ZodObject<{
         } | undefined;
     };
     platform_settings: {
+        type?: "agent" | null | undefined;
         package_strategy?: {
             name: string;
             parameters?: any;
@@ -3036,13 +3048,16 @@ declare const HPartnerAppSchema: z.ZodObject<{
     is_active: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     contact: z.ZodObject<{
+        name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         email: z.ZodNullable<z.ZodString>;
         office_phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     }, {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     }>;
     address: z.ZodObject<{
@@ -3635,7 +3650,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
             enabled?: boolean | undefined;
             question?: string | undefined;
         }>>>;
+        type: z.ZodDefault<z.ZodNullable<z.ZodOptional<z.ZodEnum<["agent"]>>>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
+        type: "agent" | null;
         package_strategy?: {
             name: string;
             parameters?: any;
@@ -3694,6 +3711,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             question?: string | undefined;
         } | null | undefined;
     }, {
+        type?: "agent" | null | undefined;
         package_strategy?: {
             name: string;
             parameters?: any;
@@ -3834,6 +3852,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     users: string[];
     contact: {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     };
     address: {
@@ -3916,6 +3935,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         } | undefined;
     };
     platform_settings: {
+        type: "agent" | null;
         package_strategy?: {
             name: string;
             parameters?: any;
@@ -4010,6 +4030,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     users: string[];
     contact: {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     };
     address: {
@@ -4092,6 +4113,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         } | undefined;
     };
     platform_settings: {
+        type?: "agent" | null | undefined;
         package_strategy?: {
             name: string;
             parameters?: any;
@@ -4362,7 +4384,9 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         enabled?: boolean | undefined;
         question?: string | undefined;
     }>>>;
+    type: z.ZodDefault<z.ZodNullable<z.ZodOptional<z.ZodEnum<["agent"]>>>>;
 }, "strip", z.ZodTypeAny, {
+    type: "agent" | null;
     package_strategy?: {
         name: string;
         parameters?: any;
@@ -4421,6 +4445,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         question?: string | undefined;
     } | null | undefined;
 }, {
+    type?: "agent" | null | undefined;
     package_strategy?: {
         name: string;
         parameters?: any;
@@ -5068,13 +5093,16 @@ declare const HScheduleFilterSchema: z.ZodObject<{
     comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
 }>;
 declare const HPartnerContactSchema: z.ZodObject<{
+    name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     email: z.ZodNullable<z.ZodString>;
     office_phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     email: string | null;
+    name?: string | null | undefined;
     office_phone?: string | null | undefined;
 }, {
     email: string | null;
+    name?: string | null | undefined;
     office_phone?: string | null | undefined;
 }>;
 declare const HPartnerDataSchema: z.ZodObject<{
@@ -5339,13 +5367,16 @@ declare const ScheduleFilterSchema: z.ZodObject<{
     comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
 }>;
 declare const PartnerContactSchema: z.ZodObject<{
+    name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     email: z.ZodNullable<z.ZodString>;
     office_phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     email: string | null;
+    name?: string | null | undefined;
     office_phone?: string | null | undefined;
 }, {
     email: string | null;
+    name?: string | null | undefined;
     office_phone?: string | null | undefined;
 }>;
 declare const PartnerDataSchema: z.ZodObject<{
@@ -5488,13 +5519,16 @@ declare const partnerAppSchema: z.ZodObject<{
     is_active: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     contact: z.ZodObject<{
+        name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         email: z.ZodNullable<z.ZodString>;
         office_phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     }, {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     }>;
     address: z.ZodObject<{
@@ -6087,7 +6121,9 @@ declare const partnerAppSchema: z.ZodObject<{
             enabled?: boolean | undefined;
             question?: string | undefined;
         }>>>;
+        type: z.ZodDefault<z.ZodNullable<z.ZodOptional<z.ZodEnum<["agent"]>>>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
+        type: "agent" | null;
         package_strategy?: {
             name: string;
             parameters?: any;
@@ -6146,6 +6182,7 @@ declare const partnerAppSchema: z.ZodObject<{
             question?: string | undefined;
         } | null | undefined;
     }, {
+        type?: "agent" | null | undefined;
         package_strategy?: {
             name: string;
             parameters?: any;
@@ -6286,6 +6323,7 @@ declare const partnerAppSchema: z.ZodObject<{
     users: string[];
     contact: {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     };
     address: {
@@ -6368,6 +6406,7 @@ declare const partnerAppSchema: z.ZodObject<{
         } | undefined;
     };
     platform_settings: {
+        type: "agent" | null;
         package_strategy?: {
             name: string;
             parameters?: any;
@@ -6462,6 +6501,7 @@ declare const partnerAppSchema: z.ZodObject<{
     users: string[];
     contact: {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     };
     address: {
@@ -6544,6 +6584,7 @@ declare const partnerAppSchema: z.ZodObject<{
         } | undefined;
     };
     platform_settings: {
+        type?: "agent" | null | undefined;
         package_strategy?: {
             name: string;
             parameters?: any;

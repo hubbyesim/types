@@ -642,6 +642,7 @@ var visualIdentitySchema = z.object({
   mid_banner: visualIdentityBannersSchema.optional()
 });
 var partnerContactSchema = z.object({
+  name: z.string().nullable().optional(),
   email: z.string().nullable(),
   office_phone: z.string().nullable().optional()
 });
@@ -713,7 +714,8 @@ var platformSettingsSchema = z.object({
   }).nullable().optional(),
   emit_events: emitEventSchema.nullable().optional(),
   schedules: z.array(scheduleSchema).optional(),
-  review_settings: reviewSettingsSchema.nullable().optional()
+  review_settings: reviewSettingsSchema.nullable().optional(),
+  type: z.enum(["agent"]).optional().nullable().default(null)
 });
 var packagePriceSchemaSpec = markAsSchemaSpec({
   destination: z.string(),
