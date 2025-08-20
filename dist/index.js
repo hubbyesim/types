@@ -692,11 +692,6 @@ var freeEsimSchema = z.object({
   booking_id_verification_pattern: z.string().nullable().optional(),
   allowance: z.number()
 });
-var reviewSettingsSchema = z.object({
-  enabled: z.boolean().optional(),
-  question: z.string().optional(),
-  size: z.string().regex(/^(\d+GB|500MB)$/, "Reward data must be a number followed by 'GB' or exactly '500MB' (e.g., '1GB', '3GB', '500MB')").optional()
-});
 var platformSettingsSchema = z.object({
   package_strategy: z.object({
     name: z.string(),
@@ -714,7 +709,6 @@ var platformSettingsSchema = z.object({
   }).nullable().optional(),
   emit_events: emitEventSchema.nullable().optional(),
   schedules: z.array(scheduleSchema).optional(),
-  review_settings: reviewSettingsSchema.nullable().optional(),
   type: z.enum(["agent"]).optional().nullable().default(null)
 });
 var packagePriceSchemaSpec = markAsSchemaSpec({
@@ -818,12 +812,6 @@ var platformSettingsSchemaSpec = markAsSchemaSpec({
       _type: "object",
       of: scheduleSchema.shape
     },
-    optional: true
-  },
-  review_settings: {
-    _type: "object",
-    of: reviewSettingsSchema.shape,
-    nullable: true,
     optional: true
   }
 });

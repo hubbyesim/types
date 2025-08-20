@@ -1471,19 +1471,6 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }>, "many">>;
-        review_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-            enabled: z.ZodOptional<z.ZodBoolean>;
-            question: z.ZodOptional<z.ZodString>;
-            size: z.ZodOptional<z.ZodString>;
-        }, "strip", z.ZodTypeAny, {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
-        }, {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
-        }>>>;
         type: z.ZodDefault<z.ZodNullable<z.ZodOptional<z.ZodEnum<["agent"]>>>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         type: "agent" | null;
@@ -1539,11 +1526,6 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
-        } | null | undefined;
     }, {
         type?: "agent" | null | undefined;
         package_strategy?: {
@@ -1598,11 +1580,6 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
-        } | null | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
         slug: z.ZodString;
@@ -1822,11 +1799,6 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
-        } | null | undefined;
     };
     tags: {
         name: string;
@@ -2000,11 +1972,6 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
-        } | null | undefined;
     };
     tags: {
         name: string;
@@ -2993,19 +2960,6 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }>, "many">>;
-        review_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-            enabled: z.ZodOptional<z.ZodBoolean>;
-            question: z.ZodOptional<z.ZodString>;
-            size: z.ZodOptional<z.ZodString>;
-        }, "strip", z.ZodTypeAny, {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
-        }, {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
-        }>>>;
         type: z.ZodDefault<z.ZodNullable<z.ZodOptional<z.ZodEnum<["agent"]>>>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         type: "agent" | null;
@@ -3061,11 +3015,6 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
-        } | null | undefined;
     }, {
         type?: "agent" | null | undefined;
         package_strategy?: {
@@ -3120,11 +3069,6 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
-        } | null | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
         slug: z.ZodString;
@@ -3344,11 +3288,6 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
-        } | null | undefined;
     };
     tags: {
         name: string;
@@ -3522,11 +3461,6 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
-        } | null | undefined;
     };
     tags: {
         name: string;
@@ -3727,19 +3661,6 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
         } | null | undefined;
     }>, "many">>;
-    review_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-        enabled: z.ZodOptional<z.ZodBoolean>;
-        question: z.ZodOptional<z.ZodString>;
-        size: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        size?: string | undefined;
-        enabled?: boolean | undefined;
-        question?: string | undefined;
-    }, {
-        size?: string | undefined;
-        enabled?: boolean | undefined;
-        question?: string | undefined;
-    }>>>;
     type: z.ZodDefault<z.ZodNullable<z.ZodOptional<z.ZodEnum<["agent"]>>>>;
 }, "strip", z.ZodTypeAny, {
     type: "agent" | null;
@@ -3795,11 +3716,6 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
         } | null | undefined;
     }[] | undefined;
-    review_settings?: {
-        size?: string | undefined;
-        enabled?: boolean | undefined;
-        question?: string | undefined;
-    } | null | undefined;
 }, {
     type?: "agent" | null | undefined;
     package_strategy?: {
@@ -3854,11 +3770,6 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
         } | null | undefined;
     }[] | undefined;
-    review_settings?: {
-        size?: string | undefined;
-        enabled?: boolean | undefined;
-        question?: string | undefined;
-    } | null | undefined;
 }>;
 declare const HVisualIdentitySchema: z.ZodObject<{
     primary_color: z.ZodString;

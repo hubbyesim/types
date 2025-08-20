@@ -667,11 +667,6 @@ var freeEsimSchema = zod.z.object({
   booking_id_verification_pattern: zod.z.string().nullable().optional(),
   allowance: zod.z.number()
 });
-var reviewSettingsSchema = zod.z.object({
-  enabled: zod.z.boolean().optional(),
-  question: zod.z.string().optional(),
-  size: zod.z.string().regex(/^(\d+GB|500MB)$/, "Reward data must be a number followed by 'GB' or exactly '500MB' (e.g., '1GB', '3GB', '500MB')").optional()
-});
 var platformSettingsSchema = zod.z.object({
   package_strategy: zod.z.object({
     name: zod.z.string(),
@@ -689,7 +684,6 @@ var platformSettingsSchema = zod.z.object({
   }).nullable().optional(),
   emit_events: emitEventSchema.nullable().optional(),
   schedules: zod.z.array(scheduleSchema).optional(),
-  review_settings: reviewSettingsSchema.nullable().optional(),
   type: zod.z.enum(["agent"]).optional().nullable().default(null)
 });
 markAsSchemaSpec({
@@ -793,12 +787,6 @@ markAsSchemaSpec({
       _type: "object",
       of: scheduleSchema.shape
     },
-    optional: true
-  },
-  review_settings: {
-    _type: "object",
-    of: reviewSettingsSchema.shape,
-    nullable: true,
     optional: true
   }
 });
