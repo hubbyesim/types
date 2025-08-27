@@ -193,7 +193,11 @@ export const platformSettingsSchema = z.object({
     }).nullable().optional(),
     emit_events: emitEventSchema.nullable().optional(),
     schedules: z.array(scheduleSchema).optional(),
-    type: z.enum(['agent']).optional().nullable().default(null)
+    visual_identity_options: z.object({
+        hubby_branding: z.boolean().optional().default(true),
+        source_partner_branding: z.boolean().optional().default(false),
+        own_branding: z.boolean().optional().default(false)
+    }).nullable().optional()
 });
 
 // ===== Exportable schema specs =====

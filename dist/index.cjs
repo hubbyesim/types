@@ -711,7 +711,11 @@ var platformSettingsSchema = zod.z.object({
   }).nullable().optional(),
   emit_events: emitEventSchema.nullable().optional(),
   schedules: zod.z.array(scheduleSchema).optional(),
-  type: zod.z.enum(["agent"]).optional().nullable().default(null)
+  visual_identity_options: zod.z.object({
+    hubby_branding: zod.z.boolean().optional().default(true),
+    source_partner_branding: zod.z.boolean().optional().default(false),
+    own_branding: zod.z.boolean().optional().default(false)
+  }).nullable().optional()
 });
 var packagePriceSchemaSpec = markAsSchemaSpec({
   destination: zod.z.string(),

@@ -563,7 +563,19 @@ declare const partnerSchemaSpec: {
                     comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
                 } | null | undefined;
             }>, "many">>;
-            type: z.ZodDefault<z.ZodNullable<z.ZodOptional<z.ZodEnum<["agent"]>>>>;
+            visual_identity_options: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+                hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+                source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+                own_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            }, "strip", z.ZodTypeAny, {
+                hubby_branding: boolean;
+                source_partner_branding: boolean;
+                own_branding: boolean;
+            }, {
+                hubby_branding?: boolean | undefined;
+                source_partner_branding?: boolean | undefined;
+                own_branding?: boolean | undefined;
+            }>>>;
         };
         nullable: boolean;
     };
@@ -2102,9 +2114,20 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }>, "many">>;
-        type: z.ZodDefault<z.ZodNullable<z.ZodOptional<z.ZodEnum<["agent"]>>>>;
+        visual_identity_options: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            own_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        }, "strip", z.ZodTypeAny, {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        }, {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        }>>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
-        type: "agent" | null;
         package_strategy?: {
             name: string;
             parameters?: any;
@@ -2157,8 +2180,12 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        visual_identity_options?: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        } | null | undefined;
     }, {
-        type?: "agent" | null | undefined;
         package_strategy?: {
             name: string;
             parameters?: any;
@@ -2211,6 +2238,11 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        visual_identity_options?: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        } | null | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
         slug: z.ZodString;
@@ -2377,7 +2409,6 @@ declare const HPartnerSchema: z.ZodObject<{
         } | undefined;
     };
     platform_settings: {
-        type: "agent" | null;
         package_strategy?: {
             name: string;
             parameters?: any;
@@ -2430,6 +2461,11 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        visual_identity_options?: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        } | null | undefined;
     };
     tags: {
         name: string;
@@ -2550,7 +2586,6 @@ declare const HPartnerSchema: z.ZodObject<{
         } | undefined;
     };
     platform_settings: {
-        type?: "agent" | null | undefined;
         package_strategy?: {
             name: string;
             parameters?: any;
@@ -2603,6 +2638,11 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        visual_identity_options?: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        } | null | undefined;
     };
     tags: {
         name: string;
@@ -3591,9 +3631,20 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }>, "many">>;
-        type: z.ZodDefault<z.ZodNullable<z.ZodOptional<z.ZodEnum<["agent"]>>>>;
+        visual_identity_options: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            own_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        }, "strip", z.ZodTypeAny, {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        }, {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        }>>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
-        type: "agent" | null;
         package_strategy?: {
             name: string;
             parameters?: any;
@@ -3646,8 +3697,12 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        visual_identity_options?: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        } | null | undefined;
     }, {
-        type?: "agent" | null | undefined;
         package_strategy?: {
             name: string;
             parameters?: any;
@@ -3700,6 +3755,11 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        visual_identity_options?: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        } | null | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
         slug: z.ZodString;
@@ -3866,7 +3926,6 @@ declare const HPartnerAppSchema: z.ZodObject<{
         } | undefined;
     };
     platform_settings: {
-        type: "agent" | null;
         package_strategy?: {
             name: string;
             parameters?: any;
@@ -3919,6 +3978,11 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        visual_identity_options?: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        } | null | undefined;
     };
     tags: {
         name: string;
@@ -4039,7 +4103,6 @@ declare const HPartnerAppSchema: z.ZodObject<{
         } | undefined;
     };
     platform_settings: {
-        type?: "agent" | null | undefined;
         package_strategy?: {
             name: string;
             parameters?: any;
@@ -4092,6 +4155,11 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        visual_identity_options?: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        } | null | undefined;
     };
     tags: {
         name: string;
@@ -4292,9 +4360,20 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
         } | null | undefined;
     }>, "many">>;
-    type: z.ZodDefault<z.ZodNullable<z.ZodOptional<z.ZodEnum<["agent"]>>>>;
+    visual_identity_options: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        own_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+    }, "strip", z.ZodTypeAny, {
+        hubby_branding: boolean;
+        source_partner_branding: boolean;
+        own_branding: boolean;
+    }, {
+        hubby_branding?: boolean | undefined;
+        source_partner_branding?: boolean | undefined;
+        own_branding?: boolean | undefined;
+    }>>>;
 }, "strip", z.ZodTypeAny, {
-    type: "agent" | null;
     package_strategy?: {
         name: string;
         parameters?: any;
@@ -4347,8 +4426,12 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
         } | null | undefined;
     }[] | undefined;
+    visual_identity_options?: {
+        hubby_branding: boolean;
+        source_partner_branding: boolean;
+        own_branding: boolean;
+    } | null | undefined;
 }, {
-    type?: "agent" | null | undefined;
     package_strategy?: {
         name: string;
         parameters?: any;
@@ -4401,6 +4484,11 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
         } | null | undefined;
     }[] | undefined;
+    visual_identity_options?: {
+        hubby_branding?: boolean | undefined;
+        source_partner_branding?: boolean | undefined;
+        own_branding?: boolean | undefined;
+    } | null | undefined;
 }>;
 declare const HVisualIdentitySchema: z.ZodObject<{
     primary_color: z.ZodString;
@@ -6006,9 +6094,20 @@ declare const partnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }>, "many">>;
-        type: z.ZodDefault<z.ZodNullable<z.ZodOptional<z.ZodEnum<["agent"]>>>>;
+        visual_identity_options: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            own_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        }, "strip", z.ZodTypeAny, {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        }, {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        }>>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
-        type: "agent" | null;
         package_strategy?: {
             name: string;
             parameters?: any;
@@ -6061,8 +6160,12 @@ declare const partnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        visual_identity_options?: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        } | null | undefined;
     }, {
-        type?: "agent" | null | undefined;
         package_strategy?: {
             name: string;
             parameters?: any;
@@ -6115,6 +6218,11 @@ declare const partnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        visual_identity_options?: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        } | null | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
         slug: z.ZodString;
@@ -6281,7 +6389,6 @@ declare const partnerAppSchema: z.ZodObject<{
         } | undefined;
     };
     platform_settings: {
-        type: "agent" | null;
         package_strategy?: {
             name: string;
             parameters?: any;
@@ -6334,6 +6441,11 @@ declare const partnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        visual_identity_options?: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        } | null | undefined;
     };
     tags: {
         name: string;
@@ -6454,7 +6566,6 @@ declare const partnerAppSchema: z.ZodObject<{
         } | undefined;
     };
     platform_settings: {
-        type?: "agent" | null | undefined;
         package_strategy?: {
             name: string;
             parameters?: any;
@@ -6507,6 +6618,11 @@ declare const partnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        visual_identity_options?: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        } | null | undefined;
     };
     tags: {
         name: string;
