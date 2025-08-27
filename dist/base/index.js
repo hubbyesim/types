@@ -558,7 +558,8 @@ var registrationSchema = z.object({
 var bankingDetailsSchema = z.object({
   account_holder: z.string().nullable().optional(),
   bank_name: z.string().nullable().optional(),
-  iban: z.string().nullable().optional()
+  iban: z.string().nullable().optional(),
+  currency: z.string().nullable().optional()
 });
 var packagePriceSchema = z.object({
   destination: z.string(),
@@ -614,6 +615,7 @@ var visualIdentitySchema = z.object({
   mid_banner: visualIdentityBannersSchema.optional()
 });
 var partnerContactSchema = z.object({
+  name: z.string().nullable().optional(),
   email: z.string().nullable(),
   office_phone: z.string().nullable().optional()
 });
@@ -663,11 +665,6 @@ var freeEsimSchema = z.object({
   booking_id_verification_pattern: z.string().nullable().optional(),
   allowance: z.number()
 });
-var reviewSettingsSchema = z.object({
-  enabled: z.boolean().optional(),
-  question: z.string().optional(),
-  size: z.string().regex(/^(\d+GB|500MB)$/, "Reward data must be a number followed by 'GB' or exactly '500MB' (e.g., '1GB', '3GB', '500MB')").optional()
-});
 var platformSettingsSchema = z.object({
   package_strategy: z.object({
     name: z.string(),
@@ -685,7 +682,11 @@ var platformSettingsSchema = z.object({
   }).nullable().optional(),
   emit_events: emitEventSchema.nullable().optional(),
   schedules: z.array(scheduleSchema).optional(),
-  review_settings: reviewSettingsSchema.nullable().optional()
+  visual_identity_options: z.object({
+    hubby_branding: z.boolean().optional().default(true),
+    source_partner_branding: z.boolean().optional().default(false),
+    own_branding: z.boolean().optional().default(false)
+  }).nullable().optional()
 });
 markAsSchemaSpec({
   destination: z.string(),
@@ -788,12 +789,6 @@ markAsSchemaSpec({
       _type: "object",
       of: scheduleSchema.shape
     },
-    optional: true
-  },
-  review_settings: {
-    _type: "object",
-    of: reviewSettingsSchema.shape,
-    nullable: true,
     optional: true
   }
 });

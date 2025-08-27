@@ -882,13 +882,16 @@ declare const HPartnerSchema: z.ZodObject<{
     is_active: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     contact: z.ZodObject<{
+        name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         email: z.ZodNullable<z.ZodString>;
         office_phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     }, {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     }>;
     address: z.ZodObject<{
@@ -927,11 +930,14 @@ declare const HPartnerSchema: z.ZodObject<{
         account_holder: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         bank_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         iban: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        currency: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     }, {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
@@ -1465,18 +1471,18 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }>, "many">>;
-        review_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-            enabled: z.ZodOptional<z.ZodBoolean>;
-            question: z.ZodOptional<z.ZodString>;
-            size: z.ZodOptional<z.ZodString>;
+        visual_identity_options: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            own_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
         }, "strip", z.ZodTypeAny, {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
         }, {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
         }>>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy?: {
@@ -1531,10 +1537,10 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+        visual_identity_options?: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
         } | null | undefined;
     }, {
         package_strategy?: {
@@ -1589,10 +1595,10 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+        visual_identity_options?: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
         } | null | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
@@ -1677,6 +1683,7 @@ declare const HPartnerSchema: z.ZodObject<{
     users: string[];
     contact: {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     };
     address: {
@@ -1692,6 +1699,7 @@ declare const HPartnerSchema: z.ZodObject<{
         tax_number?: string | null | undefined;
     };
     banking_details: {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
@@ -1810,10 +1818,10 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+        visual_identity_options?: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
         } | null | undefined;
     };
     tags: {
@@ -1852,6 +1860,7 @@ declare const HPartnerSchema: z.ZodObject<{
     users: string[];
     contact: {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     };
     address: {
@@ -1867,6 +1876,7 @@ declare const HPartnerSchema: z.ZodObject<{
         tax_number?: string | null | undefined;
     };
     banking_details: {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
@@ -1985,10 +1995,10 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+        visual_identity_options?: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
         } | null | undefined;
     };
     tags: {
@@ -2389,13 +2399,16 @@ declare const HPartnerAppSchema: z.ZodObject<{
     is_active: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     contact: z.ZodObject<{
+        name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         email: z.ZodNullable<z.ZodString>;
         office_phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     }, {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     }>;
     address: z.ZodObject<{
@@ -2434,11 +2447,14 @@ declare const HPartnerAppSchema: z.ZodObject<{
         account_holder: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         bank_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         iban: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        currency: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     }, {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
@@ -2972,18 +2988,18 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }>, "many">>;
-        review_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-            enabled: z.ZodOptional<z.ZodBoolean>;
-            question: z.ZodOptional<z.ZodString>;
-            size: z.ZodOptional<z.ZodString>;
+        visual_identity_options: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            own_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
         }, "strip", z.ZodTypeAny, {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
         }, {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
         }>>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy?: {
@@ -3038,10 +3054,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+        visual_identity_options?: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
         } | null | undefined;
     }, {
         package_strategy?: {
@@ -3096,10 +3112,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+        visual_identity_options?: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
         } | null | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
@@ -3184,6 +3200,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     users: string[];
     contact: {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     };
     address: {
@@ -3199,6 +3216,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         tax_number?: string | null | undefined;
     };
     banking_details: {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
@@ -3317,10 +3335,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+        visual_identity_options?: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
         } | null | undefined;
     };
     tags: {
@@ -3359,6 +3377,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     users: string[];
     contact: {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     };
     address: {
@@ -3374,6 +3393,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         tax_number?: string | null | undefined;
     };
     banking_details: {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
@@ -3492,10 +3512,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+        visual_identity_options?: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
         } | null | undefined;
     };
     tags: {
@@ -3697,18 +3717,18 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
         } | null | undefined;
     }>, "many">>;
-    review_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-        enabled: z.ZodOptional<z.ZodBoolean>;
-        question: z.ZodOptional<z.ZodString>;
-        size: z.ZodOptional<z.ZodString>;
+    visual_identity_options: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        own_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
     }, "strip", z.ZodTypeAny, {
-        size?: string | undefined;
-        enabled?: boolean | undefined;
-        question?: string | undefined;
+        hubby_branding: boolean;
+        source_partner_branding: boolean;
+        own_branding: boolean;
     }, {
-        size?: string | undefined;
-        enabled?: boolean | undefined;
-        question?: string | undefined;
+        hubby_branding?: boolean | undefined;
+        source_partner_branding?: boolean | undefined;
+        own_branding?: boolean | undefined;
     }>>>;
 }, "strip", z.ZodTypeAny, {
     package_strategy?: {
@@ -3763,10 +3783,10 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
         } | null | undefined;
     }[] | undefined;
-    review_settings?: {
-        size?: string | undefined;
-        enabled?: boolean | undefined;
-        question?: string | undefined;
+    visual_identity_options?: {
+        hubby_branding: boolean;
+        source_partner_branding: boolean;
+        own_branding: boolean;
     } | null | undefined;
 }, {
     package_strategy?: {
@@ -3821,10 +3841,10 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
         } | null | undefined;
     }[] | undefined;
-    review_settings?: {
-        size?: string | undefined;
-        enabled?: boolean | undefined;
-        question?: string | undefined;
+    visual_identity_options?: {
+        hubby_branding?: boolean | undefined;
+        source_partner_branding?: boolean | undefined;
+        own_branding?: boolean | undefined;
     } | null | undefined;
 }>;
 declare const HVisualIdentitySchema: z.ZodObject<{
@@ -4333,11 +4353,14 @@ declare const HBankingDetailsSchema: z.ZodObject<{
     account_holder: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     bank_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     iban: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    currency: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
+    currency?: string | null | undefined;
     account_holder?: string | null | undefined;
     bank_name?: string | null | undefined;
     iban?: string | null | undefined;
 }, {
+    currency?: string | null | undefined;
     account_holder?: string | null | undefined;
     bank_name?: string | null | undefined;
     iban?: string | null | undefined;
@@ -4413,13 +4436,16 @@ declare const HScheduleFilterSchema: z.ZodObject<{
     comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
 }>;
 declare const HPartnerContactSchema: z.ZodObject<{
+    name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     email: z.ZodNullable<z.ZodString>;
     office_phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     email: string | null;
+    name?: string | null | undefined;
     office_phone?: string | null | undefined;
 }, {
     email: string | null;
+    name?: string | null | undefined;
     office_phone?: string | null | undefined;
 }>;
 declare const HPartnerDataSchema: z.ZodObject<{

@@ -41,7 +41,8 @@ export const registrationSchema = z.object({
 export const bankingDetailsSchema = z.object({
     account_holder: z.string().nullable().optional(),
     bank_name: z.string().nullable().optional(),
-    iban: z.string().nullable().optional()
+    iban: z.string().nullable().optional(),
+    currency: z.string().nullable().optional()
 });
 
 // Package price schema
@@ -112,6 +113,7 @@ export const visualIdentitySchema = z.object({
 
 // Partner contact schema
 export const partnerContactSchema = z.object({
+    name: z.string().nullable().optional(),
     email: z.string().nullable(),
     office_phone: z.string().nullable().optional()
 });
@@ -173,15 +175,6 @@ export const freeEsimSchema = z.object({
     allowance: z.number()
 });
 
-// Review settings schema
-export const reviewSettingsSchema = z.object({
-    enabled: z.boolean().optional(),
-    question: z.string().optional(),
-    size: z.string()
-        .regex(/^(\d+GB|500MB)$/, "Reward data must be a number followed by 'GB' or exactly '500MB' (e.g., '1GB', '3GB', '500MB')")
-        .optional()
-});
-
 // Platform settings schema
 export const platformSettingsSchema = z.object({
     package_strategy: z.object({
@@ -200,7 +193,11 @@ export const platformSettingsSchema = z.object({
     }).nullable().optional(),
     emit_events: emitEventSchema.nullable().optional(),
     schedules: z.array(scheduleSchema).optional(),
-    review_settings: reviewSettingsSchema.nullable().optional()
+    visual_identity_options: z.object({
+        hubby_branding: z.boolean().optional().default(true),
+        source_partner_branding: z.boolean().optional().default(false),
+        own_branding: z.boolean().optional().default(false)
+    }).nullable().optional()
 });
 
 // ===== Exportable schema specs =====
@@ -311,12 +308,6 @@ export const platformSettingsSchemaSpec = markAsSchemaSpec({
             _type: 'object' as const,
             of: scheduleSchema.shape
         },
-        optional: true
-    },
-    review_settings: {
-        _type: 'object' as const,
-        of: reviewSettingsSchema.shape,
-        nullable: true,
         optional: true
     }
 });
