@@ -501,7 +501,7 @@ var packageSchemaSpec = markAsSchemaSpec({
   partner_price: zod.z.number(),
   days: zod.z.number(),
   name: zod.z.string(),
-  type: zod.z.enum(["data-limited", "time-limited", "starter"]).nullable(),
+  type: zod.z.enum(["data-limited", "time-limited", "starter", "unlimited"]).nullable(),
   throttling: zod.z.number().optional(),
   provider_parameters: zod.z.object({
     imsi: zod.z.number()
