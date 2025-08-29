@@ -691,8 +691,7 @@ var freeEsimSchema = z.object({
   booking_id_verification: z.boolean().default(false),
   booking_id_verification_pattern: z.string().nullable().optional(),
   allowance: z.number(),
-  total_allowance: z.number(),
-  total_used: z.number()
+  total_allowance: z.number()
 });
 var platformSettingsSchema = z.object({
   package_strategy: z.object({

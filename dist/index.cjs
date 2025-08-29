@@ -693,8 +693,7 @@ var freeEsimSchema = zod.z.object({
   booking_id_verification: zod.z.boolean().default(false),
   booking_id_verification_pattern: zod.z.string().nullable().optional(),
   allowance: zod.z.number(),
-  total_allowance: zod.z.number(),
-  total_used: zod.z.number()
+  total_allowance: zod.z.number()
 });
 var platformSettingsSchema = zod.z.object({
   package_strategy: zod.z.object({

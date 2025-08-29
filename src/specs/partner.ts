@@ -174,7 +174,6 @@ export const freeEsimSchema = z.object({
     booking_id_verification_pattern: z.string().nullable().optional(),
     allowance: z.number(),
     total_allowance: z.number(),
-    total_used: z.number(),
 });
 
 // Platform settings schema
