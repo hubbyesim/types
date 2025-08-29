@@ -172,7 +172,8 @@ export const freeEsimSchema = z.object({
     }),
     booking_id_verification: z.boolean().default(false),
     booking_id_verification_pattern: z.string().nullable().optional(),
-    allowance: z.number()
+    allowance: z.number(),
+    total_allowance: z.number()
 });
 
 // Platform settings schema
