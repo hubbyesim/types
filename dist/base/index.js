@@ -658,8 +658,9 @@ var freeEsimSchema = z.object({
   enabled: z.boolean(),
   package_specification: z.object({
     size: z.string(),
-    type: z.string(),
-    destination: z.string()
+    package_type: z.string(),
+    destination: z.string(),
+    package_duration: z.number()
   }),
   booking_id_verification: z.boolean().default(false),
   booking_id_verification_pattern: z.string().nullable().optional(),
