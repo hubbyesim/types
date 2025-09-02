@@ -662,7 +662,8 @@ var freeEsimSchema = zod.z.object({
     size: zod.z.string(),
     package_type: zod.z.string(),
     destination: zod.z.string(),
-    package_duration: zod.z.number()
+    package_duration: zod.z.number(),
+    type: zod.z.string().nullable().optional()
   }),
   booking_id_verification: zod.z.boolean().default(false),
   booking_id_verification_pattern: zod.z.string().nullable().optional(),

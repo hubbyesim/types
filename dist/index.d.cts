@@ -410,16 +410,19 @@ declare const partnerSchemaSpec: {
                     package_type: z.ZodString;
                     destination: z.ZodString;
                     package_duration: z.ZodNumber;
+                    type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
                 }, "strip", z.ZodTypeAny, {
                     destination: string;
                     size: string;
                     package_duration: number;
                     package_type: string;
+                    type?: string | null | undefined;
                 }, {
                     destination: string;
                     size: string;
                     package_duration: number;
                     package_type: string;
+                    type?: string | null | undefined;
                 }>;
                 booking_id_verification: z.ZodDefault<z.ZodBoolean>;
                 booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -431,6 +434,7 @@ declare const partnerSchemaSpec: {
                     size: string;
                     package_duration: number;
                     package_type: string;
+                    type?: string | null | undefined;
                 };
                 enabled: boolean;
                 booking_id_verification: boolean;
@@ -443,6 +447,7 @@ declare const partnerSchemaSpec: {
                     size: string;
                     package_duration: number;
                     package_type: string;
+                    type?: string | null | undefined;
                 };
                 enabled: boolean;
                 allowance: number;
@@ -1969,16 +1974,19 @@ declare const HPartnerSchema: z.ZodObject<{
                 package_type: z.ZodString;
                 destination: z.ZodString;
                 package_duration: z.ZodNumber;
+                type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             }, "strip", z.ZodTypeAny, {
                 destination: string;
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             }, {
                 destination: string;
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             }>;
             booking_id_verification: z.ZodDefault<z.ZodBoolean>;
             booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -1990,6 +1998,7 @@ declare const HPartnerSchema: z.ZodObject<{
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             booking_id_verification: boolean;
@@ -2002,6 +2011,7 @@ declare const HPartnerSchema: z.ZodObject<{
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             allowance: number;
@@ -2156,6 +2166,7 @@ declare const HPartnerSchema: z.ZodObject<{
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             booking_id_verification: boolean;
@@ -2216,6 +2227,7 @@ declare const HPartnerSchema: z.ZodObject<{
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             allowance: number;
@@ -2441,6 +2453,7 @@ declare const HPartnerSchema: z.ZodObject<{
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             booking_id_verification: boolean;
@@ -2620,6 +2633,7 @@ declare const HPartnerSchema: z.ZodObject<{
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             allowance: number;
@@ -3502,16 +3516,19 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 package_type: z.ZodString;
                 destination: z.ZodString;
                 package_duration: z.ZodNumber;
+                type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             }, "strip", z.ZodTypeAny, {
                 destination: string;
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             }, {
                 destination: string;
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             }>;
             booking_id_verification: z.ZodDefault<z.ZodBoolean>;
             booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -3523,6 +3540,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             booking_id_verification: boolean;
@@ -3535,6 +3553,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             allowance: number;
@@ -3689,6 +3708,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             booking_id_verification: boolean;
@@ -3749,6 +3769,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             allowance: number;
@@ -3974,6 +3995,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             booking_id_verification: boolean;
@@ -4153,6 +4175,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             allowance: number;
@@ -4247,16 +4270,19 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             package_type: z.ZodString;
             destination: z.ZodString;
             package_duration: z.ZodNumber;
+            type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         }, "strip", z.ZodTypeAny, {
             destination: string;
             size: string;
             package_duration: number;
             package_type: string;
+            type?: string | null | undefined;
         }, {
             destination: string;
             size: string;
             package_duration: number;
             package_type: string;
+            type?: string | null | undefined;
         }>;
         booking_id_verification: z.ZodDefault<z.ZodBoolean>;
         booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -4268,6 +4294,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             size: string;
             package_duration: number;
             package_type: string;
+            type?: string | null | undefined;
         };
         enabled: boolean;
         booking_id_verification: boolean;
@@ -4280,6 +4307,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             size: string;
             package_duration: number;
             package_type: string;
+            type?: string | null | undefined;
         };
         enabled: boolean;
         allowance: number;
@@ -4434,6 +4462,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             size: string;
             package_duration: number;
             package_type: string;
+            type?: string | null | undefined;
         };
         enabled: boolean;
         booking_id_verification: boolean;
@@ -4494,6 +4523,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             size: string;
             package_duration: number;
             package_type: string;
+            type?: string | null | undefined;
         };
         enabled: boolean;
         allowance: number;
@@ -4772,16 +4802,19 @@ declare const HFreeEsimSchema: z.ZodObject<{
         package_type: z.ZodString;
         destination: z.ZodString;
         package_duration: z.ZodNumber;
+        type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, "strip", z.ZodTypeAny, {
         destination: string;
         size: string;
         package_duration: number;
         package_type: string;
+        type?: string | null | undefined;
     }, {
         destination: string;
         size: string;
         package_duration: number;
         package_type: string;
+        type?: string | null | undefined;
     }>;
     booking_id_verification: z.ZodDefault<z.ZodBoolean>;
     booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -4793,6 +4826,7 @@ declare const HFreeEsimSchema: z.ZodObject<{
         size: string;
         package_duration: number;
         package_type: string;
+        type?: string | null | undefined;
     };
     enabled: boolean;
     booking_id_verification: boolean;
@@ -4805,6 +4839,7 @@ declare const HFreeEsimSchema: z.ZodObject<{
         size: string;
         package_duration: number;
         package_type: string;
+        type?: string | null | undefined;
     };
     enabled: boolean;
     allowance: number;
@@ -6001,16 +6036,19 @@ declare const partnerAppSchema: z.ZodObject<{
                 package_type: z.ZodString;
                 destination: z.ZodString;
                 package_duration: z.ZodNumber;
+                type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             }, "strip", z.ZodTypeAny, {
                 destination: string;
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             }, {
                 destination: string;
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             }>;
             booking_id_verification: z.ZodDefault<z.ZodBoolean>;
             booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -6022,6 +6060,7 @@ declare const partnerAppSchema: z.ZodObject<{
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             booking_id_verification: boolean;
@@ -6034,6 +6073,7 @@ declare const partnerAppSchema: z.ZodObject<{
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             allowance: number;
@@ -6188,6 +6228,7 @@ declare const partnerAppSchema: z.ZodObject<{
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             booking_id_verification: boolean;
@@ -6248,6 +6289,7 @@ declare const partnerAppSchema: z.ZodObject<{
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             allowance: number;
@@ -6473,6 +6515,7 @@ declare const partnerAppSchema: z.ZodObject<{
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             booking_id_verification: boolean;
@@ -6652,6 +6695,7 @@ declare const partnerAppSchema: z.ZodObject<{
                 size: string;
                 package_duration: number;
                 package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             allowance: number;
