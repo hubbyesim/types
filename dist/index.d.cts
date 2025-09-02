@@ -407,16 +407,19 @@ declare const partnerSchemaSpec: {
                 enabled: z.ZodBoolean;
                 package_specification: z.ZodObject<{
                     size: z.ZodString;
-                    type: z.ZodString;
+                    package_type: z.ZodString;
                     destination: z.ZodString;
+                    package_duration: z.ZodNumber;
                 }, "strip", z.ZodTypeAny, {
-                    type: string;
                     destination: string;
                     size: string;
+                    package_duration: number;
+                    package_type: string;
                 }, {
-                    type: string;
                     destination: string;
                     size: string;
+                    package_duration: number;
+                    package_type: string;
                 }>;
                 booking_id_verification: z.ZodDefault<z.ZodBoolean>;
                 booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -424,9 +427,10 @@ declare const partnerSchemaSpec: {
                 total_allowance: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
                 package_specification: {
-                    type: string;
                     destination: string;
                     size: string;
+                    package_duration: number;
+                    package_type: string;
                 };
                 enabled: boolean;
                 booking_id_verification: boolean;
@@ -435,9 +439,10 @@ declare const partnerSchemaSpec: {
                 booking_id_verification_pattern?: string | null | undefined;
             }, {
                 package_specification: {
-                    type: string;
                     destination: string;
                     size: string;
+                    package_duration: number;
+                    package_type: string;
                 };
                 enabled: boolean;
                 allowance: number;
@@ -1961,16 +1966,19 @@ declare const HPartnerSchema: z.ZodObject<{
             enabled: z.ZodBoolean;
             package_specification: z.ZodObject<{
                 size: z.ZodString;
-                type: z.ZodString;
+                package_type: z.ZodString;
                 destination: z.ZodString;
+                package_duration: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             }, {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             }>;
             booking_id_verification: z.ZodDefault<z.ZodBoolean>;
             booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -1978,9 +1986,10 @@ declare const HPartnerSchema: z.ZodObject<{
             total_allowance: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             };
             enabled: boolean;
             booking_id_verification: boolean;
@@ -1989,9 +1998,10 @@ declare const HPartnerSchema: z.ZodObject<{
             booking_id_verification_pattern?: string | null | undefined;
         }, {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             };
             enabled: boolean;
             allowance: number;
@@ -2142,9 +2152,10 @@ declare const HPartnerSchema: z.ZodObject<{
         } | null | undefined;
         free_esim?: {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             };
             enabled: boolean;
             booking_id_verification: boolean;
@@ -2201,9 +2212,10 @@ declare const HPartnerSchema: z.ZodObject<{
         } | null | undefined;
         free_esim?: {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             };
             enabled: boolean;
             allowance: number;
@@ -2425,9 +2437,10 @@ declare const HPartnerSchema: z.ZodObject<{
         } | null | undefined;
         free_esim?: {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             };
             enabled: boolean;
             booking_id_verification: boolean;
@@ -2603,9 +2616,10 @@ declare const HPartnerSchema: z.ZodObject<{
         } | null | undefined;
         free_esim?: {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             };
             enabled: boolean;
             allowance: number;
@@ -3485,16 +3499,19 @@ declare const HPartnerAppSchema: z.ZodObject<{
             enabled: z.ZodBoolean;
             package_specification: z.ZodObject<{
                 size: z.ZodString;
-                type: z.ZodString;
+                package_type: z.ZodString;
                 destination: z.ZodString;
+                package_duration: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             }, {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             }>;
             booking_id_verification: z.ZodDefault<z.ZodBoolean>;
             booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -3502,9 +3519,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
             total_allowance: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             };
             enabled: boolean;
             booking_id_verification: boolean;
@@ -3513,9 +3531,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
             booking_id_verification_pattern?: string | null | undefined;
         }, {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             };
             enabled: boolean;
             allowance: number;
@@ -3666,9 +3685,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
         } | null | undefined;
         free_esim?: {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             };
             enabled: boolean;
             booking_id_verification: boolean;
@@ -3725,9 +3745,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
         } | null | undefined;
         free_esim?: {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             };
             enabled: boolean;
             allowance: number;
@@ -3949,9 +3970,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
         } | null | undefined;
         free_esim?: {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             };
             enabled: boolean;
             booking_id_verification: boolean;
@@ -4127,9 +4149,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
         } | null | undefined;
         free_esim?: {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             };
             enabled: boolean;
             allowance: number;
@@ -4221,16 +4244,19 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         enabled: z.ZodBoolean;
         package_specification: z.ZodObject<{
             size: z.ZodString;
-            type: z.ZodString;
+            package_type: z.ZodString;
             destination: z.ZodString;
+            package_duration: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
-            type: string;
             destination: string;
             size: string;
+            package_duration: number;
+            package_type: string;
         }, {
-            type: string;
             destination: string;
             size: string;
+            package_duration: number;
+            package_type: string;
         }>;
         booking_id_verification: z.ZodDefault<z.ZodBoolean>;
         booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -4238,9 +4264,10 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         total_allowance: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
         package_specification: {
-            type: string;
             destination: string;
             size: string;
+            package_duration: number;
+            package_type: string;
         };
         enabled: boolean;
         booking_id_verification: boolean;
@@ -4249,9 +4276,10 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         booking_id_verification_pattern?: string | null | undefined;
     }, {
         package_specification: {
-            type: string;
             destination: string;
             size: string;
+            package_duration: number;
+            package_type: string;
         };
         enabled: boolean;
         allowance: number;
@@ -4402,9 +4430,10 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
     } | null | undefined;
     free_esim?: {
         package_specification: {
-            type: string;
             destination: string;
             size: string;
+            package_duration: number;
+            package_type: string;
         };
         enabled: boolean;
         booking_id_verification: boolean;
@@ -4461,9 +4490,10 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
     } | null | undefined;
     free_esim?: {
         package_specification: {
-            type: string;
             destination: string;
             size: string;
+            package_duration: number;
+            package_type: string;
         };
         enabled: boolean;
         allowance: number;
@@ -4739,16 +4769,19 @@ declare const HFreeEsimSchema: z.ZodObject<{
     enabled: z.ZodBoolean;
     package_specification: z.ZodObject<{
         size: z.ZodString;
-        type: z.ZodString;
+        package_type: z.ZodString;
         destination: z.ZodString;
+        package_duration: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
-        type: string;
         destination: string;
         size: string;
+        package_duration: number;
+        package_type: string;
     }, {
-        type: string;
         destination: string;
         size: string;
+        package_duration: number;
+        package_type: string;
     }>;
     booking_id_verification: z.ZodDefault<z.ZodBoolean>;
     booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -4756,9 +4789,10 @@ declare const HFreeEsimSchema: z.ZodObject<{
     total_allowance: z.ZodNumber;
 }, "strip", z.ZodTypeAny, {
     package_specification: {
-        type: string;
         destination: string;
         size: string;
+        package_duration: number;
+        package_type: string;
     };
     enabled: boolean;
     booking_id_verification: boolean;
@@ -4767,9 +4801,10 @@ declare const HFreeEsimSchema: z.ZodObject<{
     booking_id_verification_pattern?: string | null | undefined;
 }, {
     package_specification: {
-        type: string;
         destination: string;
         size: string;
+        package_duration: number;
+        package_type: string;
     };
     enabled: boolean;
     allowance: number;
@@ -5963,16 +5998,19 @@ declare const partnerAppSchema: z.ZodObject<{
             enabled: z.ZodBoolean;
             package_specification: z.ZodObject<{
                 size: z.ZodString;
-                type: z.ZodString;
+                package_type: z.ZodString;
                 destination: z.ZodString;
+                package_duration: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             }, {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             }>;
             booking_id_verification: z.ZodDefault<z.ZodBoolean>;
             booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -5980,9 +6018,10 @@ declare const partnerAppSchema: z.ZodObject<{
             total_allowance: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             };
             enabled: boolean;
             booking_id_verification: boolean;
@@ -5991,9 +6030,10 @@ declare const partnerAppSchema: z.ZodObject<{
             booking_id_verification_pattern?: string | null | undefined;
         }, {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             };
             enabled: boolean;
             allowance: number;
@@ -6144,9 +6184,10 @@ declare const partnerAppSchema: z.ZodObject<{
         } | null | undefined;
         free_esim?: {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             };
             enabled: boolean;
             booking_id_verification: boolean;
@@ -6203,9 +6244,10 @@ declare const partnerAppSchema: z.ZodObject<{
         } | null | undefined;
         free_esim?: {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             };
             enabled: boolean;
             allowance: number;
@@ -6427,9 +6469,10 @@ declare const partnerAppSchema: z.ZodObject<{
         } | null | undefined;
         free_esim?: {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             };
             enabled: boolean;
             booking_id_verification: boolean;
@@ -6605,9 +6648,10 @@ declare const partnerAppSchema: z.ZodObject<{
         } | null | undefined;
         free_esim?: {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
             };
             enabled: boolean;
             allowance: number;
