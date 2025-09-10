@@ -182,7 +182,7 @@ declare const HBookingSchema: z.ZodObject<{
     is_pseudonymized: z.ZodBoolean;
     import_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     package_specifications: z.ZodArray<z.ZodObject<{
-        destination: z.ZodOptional<z.ZodString>;
+        destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
         size: z.ZodOptional<z.ZodString>;
         package_id: z.ZodOptional<z.ZodString>;
         iata_code: z.ZodOptional<z.ZodString>;
@@ -190,7 +190,7 @@ declare const HBookingSchema: z.ZodObject<{
         package_type: z.ZodOptional<z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>>;
         traffic_policy: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        destination?: string | undefined;
+        destination?: string | string[] | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
         iata_code?: string | undefined;
@@ -198,7 +198,7 @@ declare const HBookingSchema: z.ZodObject<{
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         traffic_policy?: string | undefined;
     }, {
-        destination?: string | undefined;
+        destination?: string | string[] | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
         iata_code?: string | undefined;
@@ -236,7 +236,7 @@ declare const HBookingSchema: z.ZodObject<{
     is_processed_for_esim_restoration: boolean;
     is_pseudonymized: boolean;
     package_specifications: {
-        destination?: string | undefined;
+        destination?: string | string[] | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
         iata_code?: string | undefined;
@@ -283,7 +283,7 @@ declare const HBookingSchema: z.ZodObject<{
     is_processed_for_esim_restoration: boolean;
     is_pseudonymized: boolean;
     package_specifications: {
-        destination?: string | undefined;
+        destination?: string | string[] | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
         iata_code?: string | undefined;
@@ -514,11 +514,11 @@ declare const HPaymentSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    date: Date;
     iccid: string;
     user: string;
     amount: number;
     customer: string;
-    date: Date;
     package: string;
     topup: boolean;
 }, {
@@ -528,11 +528,11 @@ declare const HPaymentSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    date: Date;
     iccid: string;
     user: string;
     amount: number;
     customer: string;
-    date: Date;
     package: string;
     topup: boolean;
 }>;
@@ -767,7 +767,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
     usage: z.ZodArray<z.ZodString, "many">;
     uuid_usage: z.ZodArray<z.ZodString, "many">;
     package_specification: z.ZodOptional<z.ZodObject<{
-        destination: z.ZodOptional<z.ZodString>;
+        destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
         size: z.ZodOptional<z.ZodString>;
         package_id: z.ZodOptional<z.ZodString>;
         iata_code: z.ZodOptional<z.ZodString>;
@@ -775,7 +775,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
         package_type: z.ZodOptional<z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>>;
         traffic_policy: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        destination?: string | undefined;
+        destination?: string | string[] | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
         iata_code?: string | undefined;
@@ -783,7 +783,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         traffic_policy?: string | undefined;
     }, {
-        destination?: string | undefined;
+        destination?: string | string[] | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
         iata_code?: string | undefined;
@@ -826,7 +826,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
     countries?: string[] | undefined;
     discount?: number | undefined;
     package_specification?: {
-        destination?: string | undefined;
+        destination?: string | string[] | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
         iata_code?: string | undefined;
@@ -860,7 +860,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
     countries?: string[] | undefined;
     discount?: number | undefined;
     package_specification?: {
-        destination?: string | undefined;
+        destination?: string | string[] | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
         iata_code?: string | undefined;
@@ -4461,7 +4461,7 @@ declare const HPartnerPackageSpecificationSchema: z.ZodObject<{
     size?: string | null | undefined;
 }>;
 declare const HPromoPackageSpecificationSchema: z.ZodObject<{
-    destination: z.ZodOptional<z.ZodString>;
+    destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
     size: z.ZodOptional<z.ZodString>;
     package_id: z.ZodOptional<z.ZodString>;
     iata_code: z.ZodOptional<z.ZodString>;
@@ -4469,7 +4469,7 @@ declare const HPromoPackageSpecificationSchema: z.ZodObject<{
     package_type: z.ZodOptional<z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>>;
     traffic_policy: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    destination?: string | undefined;
+    destination?: string | string[] | undefined;
     size?: string | undefined;
     package_id?: string | undefined;
     iata_code?: string | undefined;
@@ -4477,7 +4477,7 @@ declare const HPromoPackageSpecificationSchema: z.ZodObject<{
     package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
     traffic_policy?: string | undefined;
 }, {
-    destination?: string | undefined;
+    destination?: string | string[] | undefined;
     size?: string | undefined;
     package_id?: string | undefined;
     iata_code?: string | undefined;

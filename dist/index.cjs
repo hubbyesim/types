@@ -280,7 +280,7 @@ var SUPPORTED_LOCALES = [
 ];
 var supportedLocalesSchema = zod.z.enum(SUPPORTED_LOCALES);
 var packageSpecificationSchema = zod.z.object({
-  destination: zod.z.string().optional(),
+  destination: zod.z.string().optional().or(zod.z.array(zod.z.string())),
   size: zod.z.string().optional(),
   package_id: zod.z.string().optional(),
   iata_code: zod.z.string().optional(),
