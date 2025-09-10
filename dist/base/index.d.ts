@@ -882,13 +882,16 @@ declare const HPartnerSchema: z.ZodObject<{
     is_active: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     contact: z.ZodObject<{
+        name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         email: z.ZodNullable<z.ZodString>;
         office_phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     }, {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     }>;
     address: z.ZodObject<{
@@ -927,11 +930,14 @@ declare const HPartnerSchema: z.ZodObject<{
         account_holder: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         bank_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         iban: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        currency: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     }, {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
@@ -1309,38 +1315,51 @@ declare const HPartnerSchema: z.ZodObject<{
             enabled: z.ZodBoolean;
             package_specification: z.ZodObject<{
                 size: z.ZodString;
-                type: z.ZodString;
+                package_type: z.ZodString;
                 destination: z.ZodString;
+                package_duration: z.ZodNumber;
+                type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             }, "strip", z.ZodTypeAny, {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
+                type?: string | null | undefined;
             }, {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
+                type?: string | null | undefined;
             }>;
             booking_id_verification: z.ZodDefault<z.ZodBoolean>;
             booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             allowance: z.ZodNumber;
+            total_allowance: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             booking_id_verification: boolean;
             allowance: number;
+            total_allowance: number;
             booking_id_verification_pattern?: string | null | undefined;
         }, {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             allowance: number;
+            total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
         }>>>;
@@ -1465,18 +1484,18 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }>, "many">>;
-        review_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-            enabled: z.ZodOptional<z.ZodBoolean>;
-            question: z.ZodOptional<z.ZodString>;
-            size: z.ZodOptional<z.ZodString>;
+        visual_identity_options: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            own_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
         }, "strip", z.ZodTypeAny, {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
         }, {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
         }>>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy?: {
@@ -1487,13 +1506,16 @@ declare const HPartnerSchema: z.ZodObject<{
         } | null | undefined;
         free_esim?: {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             booking_id_verification: boolean;
             allowance: number;
+            total_allowance: number;
             booking_id_verification_pattern?: string | null | undefined;
         } | null | undefined;
         booking_defaults?: {
@@ -1531,10 +1553,10 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+        visual_identity_options?: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
         } | null | undefined;
     }, {
         package_strategy?: {
@@ -1545,12 +1567,15 @@ declare const HPartnerSchema: z.ZodObject<{
         } | null | undefined;
         free_esim?: {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             allowance: number;
+            total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
         } | null | undefined;
@@ -1589,10 +1614,10 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+        visual_identity_options?: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
         } | null | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
@@ -1677,6 +1702,7 @@ declare const HPartnerSchema: z.ZodObject<{
     users: string[];
     contact: {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     };
     address: {
@@ -1692,6 +1718,7 @@ declare const HPartnerSchema: z.ZodObject<{
         tax_number?: string | null | undefined;
     };
     banking_details: {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
@@ -1766,13 +1793,16 @@ declare const HPartnerSchema: z.ZodObject<{
         } | null | undefined;
         free_esim?: {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             booking_id_verification: boolean;
             allowance: number;
+            total_allowance: number;
             booking_id_verification_pattern?: string | null | undefined;
         } | null | undefined;
         booking_defaults?: {
@@ -1810,10 +1840,10 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+        visual_identity_options?: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
         } | null | undefined;
     };
     tags: {
@@ -1852,6 +1882,7 @@ declare const HPartnerSchema: z.ZodObject<{
     users: string[];
     contact: {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     };
     address: {
@@ -1867,6 +1898,7 @@ declare const HPartnerSchema: z.ZodObject<{
         tax_number?: string | null | undefined;
     };
     banking_details: {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
@@ -1941,12 +1973,15 @@ declare const HPartnerSchema: z.ZodObject<{
         } | null | undefined;
         free_esim?: {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             allowance: number;
+            total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
         } | null | undefined;
@@ -1985,10 +2020,10 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+        visual_identity_options?: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
         } | null | undefined;
     };
     tags: {
@@ -2389,13 +2424,16 @@ declare const HPartnerAppSchema: z.ZodObject<{
     is_active: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     contact: z.ZodObject<{
+        name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         email: z.ZodNullable<z.ZodString>;
         office_phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     }, {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     }>;
     address: z.ZodObject<{
@@ -2434,11 +2472,14 @@ declare const HPartnerAppSchema: z.ZodObject<{
         account_holder: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         bank_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         iban: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        currency: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     }, {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
@@ -2816,38 +2857,51 @@ declare const HPartnerAppSchema: z.ZodObject<{
             enabled: z.ZodBoolean;
             package_specification: z.ZodObject<{
                 size: z.ZodString;
-                type: z.ZodString;
+                package_type: z.ZodString;
                 destination: z.ZodString;
+                package_duration: z.ZodNumber;
+                type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             }, "strip", z.ZodTypeAny, {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
+                type?: string | null | undefined;
             }, {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
+                type?: string | null | undefined;
             }>;
             booking_id_verification: z.ZodDefault<z.ZodBoolean>;
             booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             allowance: z.ZodNumber;
+            total_allowance: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             booking_id_verification: boolean;
             allowance: number;
+            total_allowance: number;
             booking_id_verification_pattern?: string | null | undefined;
         }, {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             allowance: number;
+            total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
         }>>>;
@@ -2972,18 +3026,18 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }>, "many">>;
-        review_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-            enabled: z.ZodOptional<z.ZodBoolean>;
-            question: z.ZodOptional<z.ZodString>;
-            size: z.ZodOptional<z.ZodString>;
+        visual_identity_options: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            own_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
         }, "strip", z.ZodTypeAny, {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
         }, {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
         }>>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy?: {
@@ -2994,13 +3048,16 @@ declare const HPartnerAppSchema: z.ZodObject<{
         } | null | undefined;
         free_esim?: {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             booking_id_verification: boolean;
             allowance: number;
+            total_allowance: number;
             booking_id_verification_pattern?: string | null | undefined;
         } | null | undefined;
         booking_defaults?: {
@@ -3038,10 +3095,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+        visual_identity_options?: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
         } | null | undefined;
     }, {
         package_strategy?: {
@@ -3052,12 +3109,15 @@ declare const HPartnerAppSchema: z.ZodObject<{
         } | null | undefined;
         free_esim?: {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             allowance: number;
+            total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
         } | null | undefined;
@@ -3096,10 +3156,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+        visual_identity_options?: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
         } | null | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
@@ -3184,6 +3244,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     users: string[];
     contact: {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     };
     address: {
@@ -3199,6 +3260,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         tax_number?: string | null | undefined;
     };
     banking_details: {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
@@ -3273,13 +3335,16 @@ declare const HPartnerAppSchema: z.ZodObject<{
         } | null | undefined;
         free_esim?: {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             booking_id_verification: boolean;
             allowance: number;
+            total_allowance: number;
             booking_id_verification_pattern?: string | null | undefined;
         } | null | undefined;
         booking_defaults?: {
@@ -3317,10 +3382,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+        visual_identity_options?: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
         } | null | undefined;
     };
     tags: {
@@ -3359,6 +3424,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     users: string[];
     contact: {
         email: string | null;
+        name?: string | null | undefined;
         office_phone?: string | null | undefined;
     };
     address: {
@@ -3374,6 +3440,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         tax_number?: string | null | undefined;
     };
     banking_details: {
+        currency?: string | null | undefined;
         account_holder?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
@@ -3448,12 +3515,15 @@ declare const HPartnerAppSchema: z.ZodObject<{
         } | null | undefined;
         free_esim?: {
             package_specification: {
-                type: string;
                 destination: string;
                 size: string;
+                package_duration: number;
+                package_type: string;
+                type?: string | null | undefined;
             };
             enabled: boolean;
             allowance: number;
+            total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
         } | null | undefined;
@@ -3492,10 +3562,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
-        review_settings?: {
-            size?: string | undefined;
-            enabled?: boolean | undefined;
-            question?: string | undefined;
+        visual_identity_options?: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
         } | null | undefined;
     };
     tags: {
@@ -3541,38 +3611,51 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         enabled: z.ZodBoolean;
         package_specification: z.ZodObject<{
             size: z.ZodString;
-            type: z.ZodString;
+            package_type: z.ZodString;
             destination: z.ZodString;
+            package_duration: z.ZodNumber;
+            type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         }, "strip", z.ZodTypeAny, {
-            type: string;
             destination: string;
             size: string;
+            package_duration: number;
+            package_type: string;
+            type?: string | null | undefined;
         }, {
-            type: string;
             destination: string;
             size: string;
+            package_duration: number;
+            package_type: string;
+            type?: string | null | undefined;
         }>;
         booking_id_verification: z.ZodDefault<z.ZodBoolean>;
         booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         allowance: z.ZodNumber;
+        total_allowance: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
         package_specification: {
-            type: string;
             destination: string;
             size: string;
+            package_duration: number;
+            package_type: string;
+            type?: string | null | undefined;
         };
         enabled: boolean;
         booking_id_verification: boolean;
         allowance: number;
+        total_allowance: number;
         booking_id_verification_pattern?: string | null | undefined;
     }, {
         package_specification: {
-            type: string;
             destination: string;
             size: string;
+            package_duration: number;
+            package_type: string;
+            type?: string | null | undefined;
         };
         enabled: boolean;
         allowance: number;
+        total_allowance: number;
         booking_id_verification?: boolean | undefined;
         booking_id_verification_pattern?: string | null | undefined;
     }>>>;
@@ -3697,18 +3780,18 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
         } | null | undefined;
     }>, "many">>;
-    review_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-        enabled: z.ZodOptional<z.ZodBoolean>;
-        question: z.ZodOptional<z.ZodString>;
-        size: z.ZodOptional<z.ZodString>;
+    visual_identity_options: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        own_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
     }, "strip", z.ZodTypeAny, {
-        size?: string | undefined;
-        enabled?: boolean | undefined;
-        question?: string | undefined;
+        hubby_branding: boolean;
+        source_partner_branding: boolean;
+        own_branding: boolean;
     }, {
-        size?: string | undefined;
-        enabled?: boolean | undefined;
-        question?: string | undefined;
+        hubby_branding?: boolean | undefined;
+        source_partner_branding?: boolean | undefined;
+        own_branding?: boolean | undefined;
     }>>>;
 }, "strip", z.ZodTypeAny, {
     package_strategy?: {
@@ -3719,13 +3802,16 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
     } | null | undefined;
     free_esim?: {
         package_specification: {
-            type: string;
             destination: string;
             size: string;
+            package_duration: number;
+            package_type: string;
+            type?: string | null | undefined;
         };
         enabled: boolean;
         booking_id_verification: boolean;
         allowance: number;
+        total_allowance: number;
         booking_id_verification_pattern?: string | null | undefined;
     } | null | undefined;
     booking_defaults?: {
@@ -3763,10 +3849,10 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
         } | null | undefined;
     }[] | undefined;
-    review_settings?: {
-        size?: string | undefined;
-        enabled?: boolean | undefined;
-        question?: string | undefined;
+    visual_identity_options?: {
+        hubby_branding: boolean;
+        source_partner_branding: boolean;
+        own_branding: boolean;
     } | null | undefined;
 }, {
     package_strategy?: {
@@ -3777,12 +3863,15 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
     } | null | undefined;
     free_esim?: {
         package_specification: {
-            type: string;
             destination: string;
             size: string;
+            package_duration: number;
+            package_type: string;
+            type?: string | null | undefined;
         };
         enabled: boolean;
         allowance: number;
+        total_allowance: number;
         booking_id_verification?: boolean | undefined;
         booking_id_verification_pattern?: string | null | undefined;
     } | null | undefined;
@@ -3821,10 +3910,10 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
         } | null | undefined;
     }[] | undefined;
-    review_settings?: {
-        size?: string | undefined;
-        enabled?: boolean | undefined;
-        question?: string | undefined;
+    visual_identity_options?: {
+        hubby_branding?: boolean | undefined;
+        source_partner_branding?: boolean | undefined;
+        own_branding?: boolean | undefined;
     } | null | undefined;
 }>;
 declare const HVisualIdentitySchema: z.ZodObject<{
@@ -4054,38 +4143,51 @@ declare const HFreeEsimSchema: z.ZodObject<{
     enabled: z.ZodBoolean;
     package_specification: z.ZodObject<{
         size: z.ZodString;
-        type: z.ZodString;
+        package_type: z.ZodString;
         destination: z.ZodString;
+        package_duration: z.ZodNumber;
+        type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, "strip", z.ZodTypeAny, {
-        type: string;
         destination: string;
         size: string;
+        package_duration: number;
+        package_type: string;
+        type?: string | null | undefined;
     }, {
-        type: string;
         destination: string;
         size: string;
+        package_duration: number;
+        package_type: string;
+        type?: string | null | undefined;
     }>;
     booking_id_verification: z.ZodDefault<z.ZodBoolean>;
     booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     allowance: z.ZodNumber;
+    total_allowance: z.ZodNumber;
 }, "strip", z.ZodTypeAny, {
     package_specification: {
-        type: string;
         destination: string;
         size: string;
+        package_duration: number;
+        package_type: string;
+        type?: string | null | undefined;
     };
     enabled: boolean;
     booking_id_verification: boolean;
     allowance: number;
+    total_allowance: number;
     booking_id_verification_pattern?: string | null | undefined;
 }, {
     package_specification: {
-        type: string;
         destination: string;
         size: string;
+        package_duration: number;
+        package_type: string;
+        type?: string | null | undefined;
     };
     enabled: boolean;
     allowance: number;
+    total_allowance: number;
     booking_id_verification?: boolean | undefined;
     booking_id_verification_pattern?: string | null | undefined;
 }>;
@@ -4333,11 +4435,14 @@ declare const HBankingDetailsSchema: z.ZodObject<{
     account_holder: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     bank_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     iban: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    currency: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
+    currency?: string | null | undefined;
     account_holder?: string | null | undefined;
     bank_name?: string | null | undefined;
     iban?: string | null | undefined;
 }, {
+    currency?: string | null | undefined;
     account_holder?: string | null | undefined;
     bank_name?: string | null | undefined;
     iban?: string | null | undefined;
@@ -4413,13 +4518,16 @@ declare const HScheduleFilterSchema: z.ZodObject<{
     comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
 }>;
 declare const HPartnerContactSchema: z.ZodObject<{
+    name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     email: z.ZodNullable<z.ZodString>;
     office_phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     email: string | null;
+    name?: string | null | undefined;
     office_phone?: string | null | undefined;
 }, {
     email: string | null;
+    name?: string | null | undefined;
     office_phone?: string | null | undefined;
 }>;
 declare const HPartnerDataSchema: z.ZodObject<{
