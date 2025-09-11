@@ -576,6 +576,16 @@ declare const partnerSchemaSpec: {
                     comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
                 } | null | undefined;
             }>, "many">>;
+            brevo: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+                list_ids: z.ZodArray<z.ZodNumber, "many">;
+                campaign_mode: z.ZodBoolean;
+            }, "strip", z.ZodTypeAny, {
+                list_ids: number[];
+                campaign_mode: boolean;
+            }, {
+                list_ids: number[];
+                campaign_mode: boolean;
+            }>>>;
             visual_identity_options: z.ZodOptional<z.ZodNullable<z.ZodObject<{
                 hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
                 source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
@@ -868,6 +878,13 @@ declare const HBookingSchema: z.ZodObject<{
     promo_codes: z.ZodArray<z.ZodString, "many">;
     users: z.ZodArray<z.ZodString, "many">;
     esims: z.ZodArray<z.ZodString, "many">;
+    hubby_foreign_identifiers: z.ZodNullable<z.ZodObject<{
+        messaging_contact_id: z.ZodNullable<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        messaging_contact_id: string | null;
+    }, {
+        messaging_contact_id: string | null;
+    }>>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     email: string | null;
     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
@@ -905,6 +922,9 @@ declare const HBookingSchema: z.ZodObject<{
     promo_codes: string[];
     users: string[];
     esims: string[];
+    hubby_foreign_identifiers: {
+        messaging_contact_id: string | null;
+    } | null;
     id?: string | undefined;
     gender?: "M" | "F" | "O" | undefined;
     external_id?: string | null | undefined;
@@ -952,6 +972,9 @@ declare const HBookingSchema: z.ZodObject<{
     promo_codes: string[];
     users: string[];
     esims: string[];
+    hubby_foreign_identifiers: {
+        messaging_contact_id: string | null;
+    } | null;
     id?: string | undefined;
     gender?: "M" | "F" | "O" | undefined;
     external_id?: string | null | undefined;
@@ -2140,6 +2163,16 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }>, "many">>;
+        brevo: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            list_ids: z.ZodArray<z.ZodNumber, "many">;
+            campaign_mode: z.ZodBoolean;
+        }, "strip", z.ZodTypeAny, {
+            list_ids: number[];
+            campaign_mode: boolean;
+        }, {
+            list_ids: number[];
+            campaign_mode: boolean;
+        }>>>;
         visual_identity_options: z.ZodOptional<z.ZodNullable<z.ZodObject<{
             hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
             source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
@@ -2209,6 +2242,10 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        brevo?: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        } | null | undefined;
         visual_identity_options?: {
             hubby_branding: boolean;
             source_partner_branding: boolean;
@@ -2270,6 +2307,10 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        brevo?: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        } | null | undefined;
         visual_identity_options?: {
             hubby_branding?: boolean | undefined;
             source_partner_branding?: boolean | undefined;
@@ -2496,6 +2537,10 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        brevo?: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        } | null | undefined;
         visual_identity_options?: {
             hubby_branding: boolean;
             source_partner_branding: boolean;
@@ -2676,6 +2721,10 @@ declare const HPartnerSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        brevo?: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        } | null | undefined;
         visual_identity_options?: {
             hubby_branding?: boolean | undefined;
             source_partner_branding?: boolean | undefined;
@@ -3682,6 +3731,16 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }>, "many">>;
+        brevo: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            list_ids: z.ZodArray<z.ZodNumber, "many">;
+            campaign_mode: z.ZodBoolean;
+        }, "strip", z.ZodTypeAny, {
+            list_ids: number[];
+            campaign_mode: boolean;
+        }, {
+            list_ids: number[];
+            campaign_mode: boolean;
+        }>>>;
         visual_identity_options: z.ZodOptional<z.ZodNullable<z.ZodObject<{
             hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
             source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
@@ -3751,6 +3810,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        brevo?: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        } | null | undefined;
         visual_identity_options?: {
             hubby_branding: boolean;
             source_partner_branding: boolean;
@@ -3812,6 +3875,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        brevo?: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        } | null | undefined;
         visual_identity_options?: {
             hubby_branding?: boolean | undefined;
             source_partner_branding?: boolean | undefined;
@@ -4038,6 +4105,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        brevo?: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        } | null | undefined;
         visual_identity_options?: {
             hubby_branding: boolean;
             source_partner_branding: boolean;
@@ -4218,6 +4289,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        brevo?: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        } | null | undefined;
         visual_identity_options?: {
             hubby_branding?: boolean | undefined;
             source_partner_branding?: boolean | undefined;
@@ -4436,6 +4511,16 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
         } | null | undefined;
     }>, "many">>;
+    brevo: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        list_ids: z.ZodArray<z.ZodNumber, "many">;
+        campaign_mode: z.ZodBoolean;
+    }, "strip", z.ZodTypeAny, {
+        list_ids: number[];
+        campaign_mode: boolean;
+    }, {
+        list_ids: number[];
+        campaign_mode: boolean;
+    }>>>;
     visual_identity_options: z.ZodOptional<z.ZodNullable<z.ZodObject<{
         hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
         source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
@@ -4505,6 +4590,10 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
         } | null | undefined;
     }[] | undefined;
+    brevo?: {
+        list_ids: number[];
+        campaign_mode: boolean;
+    } | null | undefined;
     visual_identity_options?: {
         hubby_branding: boolean;
         source_partner_branding: boolean;
@@ -4566,6 +4655,10 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
         } | null | undefined;
     }[] | undefined;
+    brevo?: {
+        list_ids: number[];
+        campaign_mode: boolean;
+    } | null | undefined;
     visual_identity_options?: {
         hubby_branding?: boolean | undefined;
         source_partner_branding?: boolean | undefined;
@@ -6202,6 +6295,16 @@ declare const partnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }>, "many">>;
+        brevo: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            list_ids: z.ZodArray<z.ZodNumber, "many">;
+            campaign_mode: z.ZodBoolean;
+        }, "strip", z.ZodTypeAny, {
+            list_ids: number[];
+            campaign_mode: boolean;
+        }, {
+            list_ids: number[];
+            campaign_mode: boolean;
+        }>>>;
         visual_identity_options: z.ZodOptional<z.ZodNullable<z.ZodObject<{
             hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
             source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
@@ -6271,6 +6374,10 @@ declare const partnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        brevo?: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        } | null | undefined;
         visual_identity_options?: {
             hubby_branding: boolean;
             source_partner_branding: boolean;
@@ -6332,6 +6439,10 @@ declare const partnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        brevo?: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        } | null | undefined;
         visual_identity_options?: {
             hubby_branding?: boolean | undefined;
             source_partner_branding?: boolean | undefined;
@@ -6558,6 +6669,10 @@ declare const partnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        brevo?: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        } | null | undefined;
         visual_identity_options?: {
             hubby_branding: boolean;
             source_partner_branding: boolean;
@@ -6738,6 +6853,10 @@ declare const partnerAppSchema: z.ZodObject<{
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
         }[] | undefined;
+        brevo?: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        } | null | undefined;
         visual_identity_options?: {
             hubby_branding?: boolean | undefined;
             source_partner_branding?: boolean | undefined;

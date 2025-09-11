@@ -396,7 +396,10 @@ var bookingSchemaSpec = markAsSchemaSpec({
     _type: "array",
     of: { _type: "docRef", collection: ESIM_COLLECTION },
     nullable: true
-  }
+  },
+  hubby_foreign_identifiers: zod.z.object({
+    messaging_contact_id: zod.z.string().nullable()
+  }).nullable()
 });
 var countrySchemaSpec = markAsSchemaSpec({
   ...hubbyModelSpec,
@@ -714,6 +717,10 @@ var platformSettingsSchema = zod.z.object({
   }).nullable().optional(),
   emit_events: emitEventSchema.nullable().optional(),
   schedules: zod.z.array(scheduleSchema).optional(),
+  brevo: zod.z.object({
+    list_ids: zod.z.array(zod.z.number()),
+    campaign_mode: zod.z.boolean()
+  }).nullable().optional(),
   visual_identity_options: zod.z.object({
     hubby_branding: zod.z.boolean().optional().default(true),
     source_partner_branding: zod.z.boolean().optional().default(false),
