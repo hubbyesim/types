@@ -397,7 +397,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
   },
   hubby_foreign_identifiers: z.object({
     messaging_contact_id: z.string().nullable()
-  }).nullable()
+  }).nullable().optional()
 });
 var countrySchemaSpec = markAsSchemaSpec({
   ...hubbyModelSpec,
