@@ -1185,6 +1185,7 @@ declare const HPaymentSchema: z.ZodObject<{
     package: z.ZodString;
     promo: z.ZodString;
     topup: z.ZodBoolean;
+    source: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     user: z.ZodString;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
@@ -1200,6 +1201,7 @@ declare const HPaymentSchema: z.ZodObject<{
     customer: string;
     package: string;
     topup: boolean;
+    source?: string | null | undefined;
 }, {
     id: string;
     promo: string;
@@ -1214,6 +1216,7 @@ declare const HPaymentSchema: z.ZodObject<{
     customer: string;
     package: string;
     topup: boolean;
+    source?: string | null | undefined;
 }>;
 declare const HMessageSchema: z.ZodObject<{
     id: z.ZodString;
