@@ -196,6 +196,10 @@ export const platformSettingsSchema = z.object({
     }).nullable().optional(),
     emit_events: emitEventSchema.nullable().optional(),
     schedules: z.array(scheduleSchema).optional(),
+    brevo: z.object({
+        list_ids: z.array(z.number()),
+        campaign_mode: z.boolean()
+    }).nullable().optional(),
     visual_identity_options: z.object({
         hubby_branding: z.boolean().optional().default(true),
         source_partner_branding: z.boolean().optional().default(false),

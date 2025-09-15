@@ -109,6 +109,9 @@ export const bookingSchemaSpec = markAsSchemaSpec({
         _type: 'array' as const,
         of: { _type: 'docRef' as const, collection: ESIM_COLLECTION },
         nullable: true
-    }
+    },
+    hubby_foreign_identifiers: z.object({
+        messaging_contact_id: z.string().nullable()
+    }).nullable().optional()
 });
 
