@@ -478,16 +478,44 @@ var paymentSchemaSpec = markAsSchemaSpec({
   updated_at: timestampRequired,
   created_by: zod.z.string().nullable(),
   updated_by: zod.z.string().nullable(),
-  // Payment specific fields
+  // Core payment fields (universal across ALL payment types)
   amount: zod.z.number(),
   customer: zod.z.string(),
   date: timestampRequired,
-  iccid: zod.z.string(),
-  package: zod.z.string(),
-  promo: zod.z.string(),
+  source: zod.z.enum(["app", "webapp", "platform"]),
+  invoice: zod.z.string().optional(),
+  fee: zod.z.number().optional(),
   topup: zod.z.boolean(),
+  // Common resolved package specification (same format for all sources)
+  package_specifications: zod.z.array(zod.z.object({
+    package_type: zod.z.string().optional(),
+    package_size: zod.z.string().optional(),
+    package_duration: zod.z.number().optional(),
+    destination: zod.z.string().optional(),
+    iso3: zod.z.string().optional()
+  })).optional(),
   // Reference fields
-  user: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true }
+  user: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  // Source-specific payment properties
+  app_payment_properties: zod.z.object({
+    package: zod.z.string().optional(),
+    // package_id for app payments
+    promo: zod.z.string().optional(),
+    iccid: zod.z.string().optional(),
+    global: zod.z.string().optional(),
+    balance_used: zod.z.number().optional(),
+    booking_id: zod.z.string().nullable().optional(),
+    discount_amount: zod.z.string().optional()
+  }).optional(),
+  webapp_platform_payment_properties: zod.z.object({
+    promo_codes: zod.z.array(zod.z.string()).optional(),
+    booking_id: zod.z.string().optional(),
+    partner: zod.z.string().optional(),
+    purchaseType: zod.z.string().optional(),
+    affiliateId: zod.z.string().nullable().optional(),
+    partner_name: zod.z.string().optional(),
+    locale: zod.z.string().optional()
+  }).optional()
 });
 var analyticsSpec = markAsSchemaSpec({
   ...hubbyModelSpec,

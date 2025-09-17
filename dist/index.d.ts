@@ -1181,39 +1181,158 @@ declare const HPaymentSchema: z.ZodObject<{
     amount: z.ZodNumber;
     customer: z.ZodString;
     date: z.ZodEffects<z.ZodDate, Date, Date>;
-    iccid: z.ZodString;
-    package: z.ZodString;
-    promo: z.ZodString;
+    source: z.ZodEnum<["app", "webapp", "platform"]>;
+    invoice: z.ZodOptional<z.ZodString>;
+    fee: z.ZodOptional<z.ZodNumber>;
     topup: z.ZodBoolean;
+    package_specifications: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        package_type: z.ZodOptional<z.ZodString>;
+        package_size: z.ZodOptional<z.ZodString>;
+        package_duration: z.ZodOptional<z.ZodNumber>;
+        destination: z.ZodOptional<z.ZodString>;
+        iso3: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        package_size?: string | undefined;
+        destination?: string | undefined;
+        package_duration?: number | undefined;
+        package_type?: string | undefined;
+        iso3?: string | undefined;
+    }, {
+        package_size?: string | undefined;
+        destination?: string | undefined;
+        package_duration?: number | undefined;
+        package_type?: string | undefined;
+        iso3?: string | undefined;
+    }>, "many">>;
     user: z.ZodString;
+    app_payment_properties: z.ZodOptional<z.ZodObject<{
+        package: z.ZodOptional<z.ZodString>;
+        promo: z.ZodOptional<z.ZodString>;
+        iccid: z.ZodOptional<z.ZodString>;
+        global: z.ZodOptional<z.ZodString>;
+        balance_used: z.ZodOptional<z.ZodNumber>;
+        booking_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        discount_amount: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        promo?: string | undefined;
+        booking_id?: string | null | undefined;
+        iccid?: string | undefined;
+        package?: string | undefined;
+        global?: string | undefined;
+        balance_used?: number | undefined;
+        discount_amount?: string | undefined;
+    }, {
+        promo?: string | undefined;
+        booking_id?: string | null | undefined;
+        iccid?: string | undefined;
+        package?: string | undefined;
+        global?: string | undefined;
+        balance_used?: number | undefined;
+        discount_amount?: string | undefined;
+    }>>;
+    webapp_platform_payment_properties: z.ZodOptional<z.ZodObject<{
+        promo_codes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        booking_id: z.ZodOptional<z.ZodString>;
+        partner: z.ZodOptional<z.ZodString>;
+        purchaseType: z.ZodOptional<z.ZodString>;
+        affiliateId: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        partner_name: z.ZodOptional<z.ZodString>;
+        locale: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        locale?: string | undefined;
+        partner?: string | undefined;
+        booking_id?: string | undefined;
+        promo_codes?: string[] | undefined;
+        purchaseType?: string | undefined;
+        affiliateId?: string | null | undefined;
+        partner_name?: string | undefined;
+    }, {
+        locale?: string | undefined;
+        partner?: string | undefined;
+        booking_id?: string | undefined;
+        promo_codes?: string[] | undefined;
+        purchaseType?: string | undefined;
+        affiliateId?: string | null | undefined;
+        partner_name?: string | undefined;
+    }>>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
-    promo: string;
+    source: "platform" | "app" | "webapp";
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
     date: Date;
-    iccid: string;
     user: string;
     amount: number;
     customer: string;
-    package: string;
     topup: boolean;
+    package_specifications?: {
+        package_size?: string | undefined;
+        destination?: string | undefined;
+        package_duration?: number | undefined;
+        package_type?: string | undefined;
+        iso3?: string | undefined;
+    }[] | undefined;
+    invoice?: string | undefined;
+    fee?: number | undefined;
+    app_payment_properties?: {
+        promo?: string | undefined;
+        booking_id?: string | null | undefined;
+        iccid?: string | undefined;
+        package?: string | undefined;
+        global?: string | undefined;
+        balance_used?: number | undefined;
+        discount_amount?: string | undefined;
+    } | undefined;
+    webapp_platform_payment_properties?: {
+        locale?: string | undefined;
+        partner?: string | undefined;
+        booking_id?: string | undefined;
+        promo_codes?: string[] | undefined;
+        purchaseType?: string | undefined;
+        affiliateId?: string | null | undefined;
+        partner_name?: string | undefined;
+    } | undefined;
 }, {
     id: string;
-    promo: string;
+    source: "platform" | "app" | "webapp";
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
     date: Date;
-    iccid: string;
     user: string;
     amount: number;
     customer: string;
-    package: string;
     topup: boolean;
+    package_specifications?: {
+        package_size?: string | undefined;
+        destination?: string | undefined;
+        package_duration?: number | undefined;
+        package_type?: string | undefined;
+        iso3?: string | undefined;
+    }[] | undefined;
+    invoice?: string | undefined;
+    fee?: number | undefined;
+    app_payment_properties?: {
+        promo?: string | undefined;
+        booking_id?: string | null | undefined;
+        iccid?: string | undefined;
+        package?: string | undefined;
+        global?: string | undefined;
+        balance_used?: number | undefined;
+        discount_amount?: string | undefined;
+    } | undefined;
+    webapp_platform_payment_properties?: {
+        locale?: string | undefined;
+        partner?: string | undefined;
+        booking_id?: string | undefined;
+        promo_codes?: string[] | undefined;
+        purchaseType?: string | undefined;
+        affiliateId?: string | null | undefined;
+        partner_name?: string | undefined;
+    } | undefined;
 }>;
 declare const HMessageSchema: z.ZodObject<{
     id: z.ZodString;
