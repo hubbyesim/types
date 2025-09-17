@@ -470,7 +470,7 @@ var paymentSchemaSpec = markAsSchemaSpec({
   fee: zod.z.number().optional(),
   topup: zod.z.boolean(),
   // Common resolved package specification (same format for all sources)
-  package_specification: zod.z.array(zod.z.object({
+  package_specifications: zod.z.array(zod.z.object({
     package_type: zod.z.string().optional(),
     package_size: zod.z.string().optional(),
     package_duration: zod.z.number().optional(),

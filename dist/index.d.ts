@@ -1185,7 +1185,7 @@ declare const HPaymentSchema: z.ZodObject<{
     invoice: z.ZodOptional<z.ZodString>;
     fee: z.ZodOptional<z.ZodNumber>;
     topup: z.ZodBoolean;
-    package_specification: z.ZodOptional<z.ZodArray<z.ZodObject<{
+    package_specifications: z.ZodOptional<z.ZodArray<z.ZodObject<{
         package_type: z.ZodOptional<z.ZodString>;
         package_size: z.ZodOptional<z.ZodString>;
         package_duration: z.ZodOptional<z.ZodNumber>;
@@ -1267,15 +1267,15 @@ declare const HPaymentSchema: z.ZodObject<{
     amount: number;
     customer: string;
     topup: boolean;
-    invoice?: string | undefined;
-    fee?: number | undefined;
-    package_specification?: {
+    package_specifications?: {
         package_size?: string | undefined;
         destination?: string | undefined;
         package_duration?: number | undefined;
         package_type?: string | undefined;
         iso3?: string | undefined;
     }[] | undefined;
+    invoice?: string | undefined;
+    fee?: number | undefined;
     app_payment_properties?: {
         promo?: string | undefined;
         booking_id?: string | null | undefined;
@@ -1306,15 +1306,15 @@ declare const HPaymentSchema: z.ZodObject<{
     amount: number;
     customer: string;
     topup: boolean;
-    invoice?: string | undefined;
-    fee?: number | undefined;
-    package_specification?: {
+    package_specifications?: {
         package_size?: string | undefined;
         destination?: string | undefined;
         package_duration?: number | undefined;
         package_type?: string | undefined;
         iso3?: string | undefined;
     }[] | undefined;
+    invoice?: string | undefined;
+    fee?: number | undefined;
     app_payment_properties?: {
         promo?: string | undefined;
         booking_id?: string | null | undefined;
@@ -1622,6 +1622,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
     valid_to: Date;
     package_size?: string | undefined;
     countries?: string[] | undefined;
+    discount?: number | undefined;
     package_specification?: {
         destination?: string | string[] | undefined;
         size?: string | undefined;
@@ -1631,7 +1632,6 @@ declare const HPromoCodeSchema: z.ZodObject<{
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         traffic_policy?: string | undefined;
     } | undefined;
-    discount?: number | undefined;
     max_bytes?: number | undefined;
     starter_data?: number | undefined;
 }, {
@@ -1656,6 +1656,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
     valid_to: Date;
     package_size?: string | undefined;
     countries?: string[] | undefined;
+    discount?: number | undefined;
     package_specification?: {
         destination?: string | string[] | undefined;
         size?: string | undefined;
@@ -1665,7 +1666,6 @@ declare const HPromoCodeSchema: z.ZodObject<{
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         traffic_policy?: string | undefined;
     } | undefined;
-    discount?: number | undefined;
     max_bytes?: number | undefined;
     starter_data?: number | undefined;
 }>;
