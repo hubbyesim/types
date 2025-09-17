@@ -38,11 +38,14 @@ describe('Payment schema roundtrip', () => {
             amount: 49.99,
             customer: 'customer123',
             date: now,
-            iccid: 'iccid123456',
-            package: 'package-eu',
-            promo: 'SUMMER50',
+            source: 'app' as const,
             topup: false,
-            user: 'user456'
+            user: 'user456',
+            app_payment_properties: {
+                package: 'package-eu',
+                promo: 'SUMMER50',
+                iccid: 'iccid123456'
+            }
         };
 
         const parsedForServer = ClientSchema.parse(input);
@@ -66,11 +69,12 @@ describe('Payment schema roundtrip', () => {
         expect(parsedClient.id).toBe(input.id);
         expect(parsedClient.amount).toBe(input.amount);
         expect(parsedClient.customer).toBe(input.customer);
-        expect(parsedClient.iccid).toBe(input.iccid);
-        expect(parsedClient.package).toBe(input.package);
-        expect(parsedClient.promo).toBe(input.promo);
+        expect(parsedClient.source).toBe(input.source);
         expect(parsedClient.topup).toBe(input.topup);
         expect(parsedClient.user).toBe(input.user);
+        expect(parsedClient.app_payment_properties?.package).toBe(input.app_payment_properties.package);
+        expect(parsedClient.app_payment_properties?.promo).toBe(input.app_payment_properties.promo);
+        expect(parsedClient.app_payment_properties?.iccid).toBe(input.app_payment_properties.iccid);
 
         // Check date conversions
         expect(parsedClient.created_at.toISOString()).toBe(input.created_at.toISOString());
@@ -89,11 +93,13 @@ describe('Payment schema roundtrip', () => {
             amount: 29.99,
             customer: 'customer456',
             date: now,
-            iccid: 'iccid789012',
-            package: 'package-global',
-            promo: 'WINTER20',
+            source: 'webapp' as const,
             topup: true,
-            user: null
+            user: null,
+            webapp_platform_payment_properties: {
+                promo_codes: ['WINTER20'],
+                booking_id: 'booking-global-123'
+            }
         };
 
         const result = roundtrip(input);
@@ -101,11 +107,11 @@ describe('Payment schema roundtrip', () => {
         expect(result.id).toBe(input.id);
         expect(result.amount).toBe(input.amount);
         expect(result.customer).toBe(input.customer);
-        expect(result.iccid).toBe(input.iccid);
-        expect(result.package).toBe(input.package);
-        expect(result.promo).toBe(input.promo);
+        expect(result.source).toBe(input.source);
         expect(result.topup).toBe(input.topup);
         expect(result.user).toBeNull();
+        expect(result.webapp_platform_payment_properties?.promo_codes).toEqual(input.webapp_platform_payment_properties.promo_codes);
+        expect(result.webapp_platform_payment_properties?.booking_id).toBe(input.webapp_platform_payment_properties.booking_id);
     });
 
     it('should reject invalid payment data', () => {
