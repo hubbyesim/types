@@ -42,7 +42,7 @@ import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 
 
 import { convertFirestoreToJS, convertJSToFirestore } from './utils/firestoreTransformUtils';
-import { HPartner, HPriceList, HPromoCode } from './index.client';
+import { HPackage, HPartner, HPriceList, HPromoCode } from './index.client';
 import { buildClientSchema } from './builders/client';
 
 export { partnerSchemaSpec, analyticsSpec, packageSchemaSpec };
@@ -181,6 +181,7 @@ export const promoCodeFromFirestore = (promoCode: PromoCode): HPromoCode => {
 export const promoCodeToFirestore = (promoCode: HPromoCode): PromoCode => {
     return convertJSToFirestore(promoCode, promoCodeSchemaSpec);
 }
+
 
 export const partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 // Export the type and constant

@@ -1058,8 +1058,14 @@ function createConvertJSToFirestore(db) {
 function isDuckTimestamp(obj) {
   return obj && typeof obj === "object" && typeof obj.toDate === "function" && Object.prototype.toString.call(obj.toDate()) === "[object Date]";
 }
+function isRawFirestoreTimestamp(obj) {
+  return obj && typeof obj === "object" && typeof obj._seconds === "number" && typeof obj._nanoseconds === "number";
+}
 function isDuckDocumentRef(obj) {
   return obj && typeof obj === "object" && typeof obj.id === "string" && typeof obj.path === "string";
+}
+function isRawFirestoreDocumentRef(obj) {
+  return obj && typeof obj === "object" && obj._path && typeof obj._path === "object" && Array.isArray(obj._path.segments) && obj._path.segments.length > 0;
 }
 function createConvertFirestoreToJS() {
   return function convertFirestoreToJS2(input, spec, path = []) {
@@ -1067,8 +1073,17 @@ function createConvertFirestoreToJS() {
     if (input instanceof firestore.Timestamp || isDuckTimestamp(input)) {
       return input.toDate();
     }
+    if (isRawFirestoreTimestamp(input)) {
+      const seconds = input._seconds || 0;
+      const nanoseconds = input._nanoseconds || 0;
+      const milliseconds = seconds * 1e3 + Math.floor(nanoseconds / 1e6);
+      return new Date(milliseconds);
+    }
     if (input instanceof firestore.DocumentReference || isDuckDocumentRef(input)) {
       return input.id;
+    }
+    if (isRawFirestoreDocumentRef(input)) {
+      return input._path.segments[input._path.segments.length - 1];
     }
     if (input === null || input === void 0)
       return input;
@@ -1080,9 +1095,24 @@ function createConvertFirestoreToJS() {
     if ("_type" in spec) {
       switch (spec._type) {
         case "timestamp":
-          return input instanceof firestore.Timestamp || isDuckTimestamp(input) ? input.toDate() : input;
+          if (input instanceof firestore.Timestamp || isDuckTimestamp(input)) {
+            return input.toDate();
+          }
+          if (isRawFirestoreTimestamp(input)) {
+            const seconds = input._seconds || 0;
+            const nanoseconds = input._nanoseconds || 0;
+            const milliseconds = seconds * 1e3 + Math.floor(nanoseconds / 1e6);
+            return new Date(milliseconds);
+          }
+          return input;
         case "docRef":
-          return input instanceof firestore.DocumentReference || isDuckDocumentRef(input) ? input.id : input;
+          if (input instanceof firestore.DocumentReference || isDuckDocumentRef(input)) {
+            return input.id;
+          }
+          if (isRawFirestoreDocumentRef(input)) {
+            return input._path.segments[input._path.segments.length - 1];
+          }
+          return input;
         case "array":
           return Array.isArray(input) ? input.map((item, i) => convertFirestoreToJS2(item, spec.of, [...path, `[${i}]`])) : input;
         case "record":
