@@ -217,4 +217,129 @@ describe('Model Converter Document References', () => {
         expect(typeof firestoreData.parent.get).not.toBe('function');
         expect(typeof firestoreData.parent.set).not.toBe('function');
     });
+
+    it('should convert raw Firestore objects to JavaScript values', () => {
+        // Create model converters with the Firestore instance
+        const partnerConverters = createModelConverters<any, any>(db, partnerSchemaSpec);
+
+        // Create sample data with raw Firestore objects (as they come from direct Firestore reads)
+        const rawFirestoreData = {
+            id: 'test-partner-123',
+            created_at: { _seconds: 1757317328, _nanoseconds: 980000000 }, // Raw Firestore timestamp
+            updated_at: { _seconds: 1757317328, _nanoseconds: 980000000 }, // Raw Firestore timestamp
+            created_by: 'user1',
+            updated_by: null,
+            name: 'Test Partner',
+            type: 'travel-agency',
+            is_active: true,
+            contact: { email: 'test@example.com', office_phone: null },
+            address: { country: 'Netherlands' },
+            registration: {},
+            banking_details: {
+                account_holder: 'Test Partner',
+                bank_name: 'Test Bank',
+                iban: 'NL00TEST0123456789'
+            },
+            parent: { // Raw Firestore DocumentReference object
+                _firestore: { projectId: 'test-project' },
+                _path: { segments: ['companies', 'hubby', 'partners', 'parent-partner-456'] },
+                _converter: {}
+            },
+            users: [
+                { // Raw Firestore DocumentReference object
+                    _firestore: { projectId: 'test-project' },
+                    _path: { segments: ['users', 'user-1'] },
+                    _converter: {}
+                },
+                { // Raw Firestore DocumentReference object
+                    _firestore: { projectId: 'test-project' },
+                    _path: { segments: ['users', 'user-2'] },
+                    _converter: {}
+                }
+            ],
+            financial_properties: {
+                administration_fee: 25.0,
+                income_per_gb: 5.0,
+                commission_fee: 10.0,
+                payment_method: 'invoice',
+                requires_card: false,
+                next_invoice: { _seconds: 1757317328, _nanoseconds: 980000000 }, // Raw Firestore timestamp
+                last_invoice: { _seconds: 1757317328, _nanoseconds: 980000000 }, // Raw Firestore timestamp
+                pricing_strategies: {
+                    partner: {
+                        strategy: 'split',
+                        modification_percentage: 10,
+                        default_price_list: { // Raw Firestore DocumentReference object
+                            _firestore: { projectId: 'test-project' },
+                            _path: { segments: ['price_lists', 'price-list-1'] },
+                            _converter: {}
+                        },
+                        custom_prices: [
+                            {
+                                destination: 'France',
+                                label: '5GB Package',
+                                type: 'data-limited',
+                                price: 19.99,
+                                package: { // Raw Firestore DocumentReference object
+                                    _firestore: { projectId: 'test-project' },
+                                    _path: { segments: ['packages', 'package-1'] },
+                                    _converter: {}
+                                }
+                            }
+                        ]
+                    },
+                    user: {
+                        modification_percentage: 5,
+                        default_price_list: { // Raw Firestore DocumentReference object
+                            _firestore: { projectId: 'test-project' },
+                            _path: { segments: ['price_lists', 'price-list-2'] },
+                            _converter: {}
+                        },
+                        custom_prices: []
+                    }
+                }
+            },
+            visual_identity: {
+                primary_color: '#FF5733',
+                secondary_color: '#33FF57',
+                logo: 'https://example.com/logo.png'
+            },
+            platform_settings: {
+                package_strategy: {
+                    name: 'default',
+                    parameters: {}
+                },
+                booking_defaults: {
+                    locale: 'en-US'
+                }
+            }
+        };
+
+        // Convert the raw Firestore data to JavaScript format
+        const jsData = partnerConverters.fromFirestore(rawFirestoreData);
+
+        // Check that raw Firestore timestamps are converted to Date objects
+        expect(jsData.created_at).toBeInstanceOf(Date);
+        expect(jsData.updated_at).toBeInstanceOf(Date);
+        expect(jsData.financial_properties.next_invoice).toBeInstanceOf(Date);
+        expect(jsData.financial_properties.last_invoice).toBeInstanceOf(Date);
+
+        // Check that raw Firestore DocumentReferences are converted to string IDs
+        expect(jsData.parent).toBe('parent-partner-456');
+        expect(Array.isArray(jsData.users)).toBe(true);
+        expect(jsData.users.length).toBe(2);
+        expect(jsData.users[0]).toBe('user-1');
+        expect(jsData.users[1]).toBe('user-2');
+
+        // Check nested document references
+        expect(jsData.financial_properties.pricing_strategies.partner.default_price_list).toBe('price-list-1');
+        expect(jsData.financial_properties.pricing_strategies.partner.custom_prices[0].package).toBe('package-1');
+        expect(jsData.financial_properties.pricing_strategies.user.default_price_list).toBe('price-list-2');
+
+        // Verify the converted dates are correct
+        // Convert _seconds and _nanoseconds to milliseconds
+        const expectedDate = new Date(1757317328 * 1000 + Math.floor(980000000 / 1000000));
+        expect(jsData.created_at.getTime()).toBe(expectedDate.getTime());
+        expect(jsData.updated_at.getTime()).toBe(expectedDate.getTime());
+    });
 }); 

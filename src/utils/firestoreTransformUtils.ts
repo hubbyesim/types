@@ -107,12 +107,32 @@ function isDuckTimestamp(obj: any): obj is { toDate: () => Date } {
     );
 }
 
+function isRawFirestoreTimestamp(obj: any): obj is { _seconds: number; _nanoseconds: number } {
+    return (
+        obj &&
+        typeof obj === 'object' &&
+        typeof obj._seconds === 'number' &&
+        typeof obj._nanoseconds === 'number'
+    );
+}
+
 function isDuckDocumentRef(obj: any): obj is { id: string } {
     return (
         obj &&
         typeof obj === 'object' &&
         typeof obj.id === 'string' &&
         typeof obj.path === 'string'
+    );
+}
+
+function isRawFirestoreDocumentRef(obj: any): obj is { _path: { segments: string[] } } {
+    return (
+        obj &&
+        typeof obj === 'object' &&
+        obj._path &&
+        typeof obj._path === 'object' &&
+        Array.isArray(obj._path.segments) &&
+        obj._path.segments.length > 0
     );
 }
 
@@ -125,9 +145,23 @@ export function createConvertFirestoreToJS() {
             return input.toDate();
         }
 
+        // ✅ Convert raw Firestore timestamp objects
+        if (isRawFirestoreTimestamp(input)) {
+            const seconds = input._seconds || 0;
+            const nanoseconds = input._nanoseconds || 0;
+            const milliseconds = seconds * 1000 + Math.floor(nanoseconds / 1000000);
+            return new Date(milliseconds);
+        }
+
         // ✅ Convert Firestore-native or duck-typed DocumentReference
         if (input instanceof DocumentReference || isDuckDocumentRef(input)) {
             return input.id;
+        }
+
+        // ✅ Convert raw Firestore DocumentReference objects
+        if (isRawFirestoreDocumentRef(input)) {
+            // Extract document ID from the path segments (last segment)
+            return input._path.segments[input._path.segments.length - 1];
         }
 
         if (input === null || input === undefined) return input;
@@ -141,10 +175,25 @@ export function createConvertFirestoreToJS() {
         if ('_type' in spec) {
             switch (spec._type) {
                 case 'timestamp':
-                    return (input instanceof Timestamp || isDuckTimestamp(input)) ? input.toDate() : input;
+                    if (input instanceof Timestamp || isDuckTimestamp(input)) {
+                        return input.toDate();
+                    }
+                    if (isRawFirestoreTimestamp(input)) {
+                        const seconds = input._seconds || 0;
+                        const nanoseconds = input._nanoseconds || 0;
+                        const milliseconds = seconds * 1000 + Math.floor(nanoseconds / 1000000);
+                        return new Date(milliseconds);
+                    }
+                    return input;
 
                 case 'docRef':
-                    return (input instanceof DocumentReference || isDuckDocumentRef(input)) ? input.id : input;
+                    if (input instanceof DocumentReference || isDuckDocumentRef(input)) {
+                        return input.id;
+                    }
+                    if (isRawFirestoreDocumentRef(input)) {
+                        return input._path.segments[input._path.segments.length - 1];
+                    }
+                    return input;
 
                 case 'array':
                     return Array.isArray(input)

@@ -1314,29 +1314,53 @@ var CommunicationChannelSchema = communicationChannelSchema;
 var BookingStatusSchema = bookingStatusSchema;
 var CommunicationOptionsSchema = communicationOptionsSchema;
 var VisualIdentityBannersSchema = visualIdentityBannersSchema;
-var partnerFromFirestore = (partner) => {
+var createPartnerFromFirestore = () => (partner) => {
   return convertFirestoreToJS(partner, partnerSchemaSpec);
 };
-var partnerToFirestore = (partner) => {
+var createPartnerToFirestore = () => (partner) => {
   return convertJSToFirestore(partner, partnerSchemaSpec);
 };
-var userToFirestore = (user) => {
+var createUserToFirestore = () => (user) => {
   return convertJSToFirestore(user, userSchemaSpec);
 };
-var userFromFirestore = (user) => {
+var createUserFromFirestore = () => (user) => {
   return convertFirestoreToJS(user, userSchemaSpec);
 };
-var priceListFromFirestore = (priceList) => {
+var createPriceListFromFirestore = () => (priceList) => {
   return convertFirestoreToJS(priceList, priceListSchemaSpec);
 };
-var priceListToFirestore = (priceList) => {
+var createPriceListToFirestore = () => (priceList) => {
   return convertJSToFirestore(priceList, priceListSchemaSpec);
 };
-var promoCodeFromFirestore = (promoCode) => {
+var createPromoCodeFromFirestore = () => (promoCode) => {
   return convertFirestoreToJS(promoCode, promoCodeSchemaSpec);
 };
-var promoCodeToFirestore = (promoCode) => {
+var createPromoCodeToFirestore = () => (promoCode) => {
   return convertJSToFirestore(promoCode, promoCodeSchemaSpec);
+};
+var createBookingFromFirestore = () => (booking) => {
+  return convertFirestoreToJS(booking, bookingSchemaSpec);
+};
+var createCountryFromFirestore = () => (country) => {
+  return convertFirestoreToJS(country, countrySchemaSpec);
+};
+var createCurrencyFromFirestore = () => (currency) => {
+  return convertFirestoreToJS(currency, currencySchemaSpec);
+};
+var createESIMFromFirestore = () => (esim) => {
+  return convertFirestoreToJS(esim, esimSchemaSpec);
+};
+var createPaymentFromFirestore = () => (payment) => {
+  return convertFirestoreToJS(payment, paymentSchemaSpec);
+};
+var createMessageFromFirestore = () => (message) => {
+  return convertFirestoreToJS(message, messageSchemaSpec);
+};
+var createPackageFromFirestore = () => (pkg) => {
+  return convertFirestoreToJS(pkg, packageSchemaSpec);
+};
+var createApiLogFromFirestore = () => (apiLog) => {
+  return convertFirestoreToJS(apiLog, apiLogSchemaSpec);
 };
 var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
@@ -1434,20 +1458,28 @@ exports.VisualIdentityBannerSchema = VisualIdentityBannerSchema;
 exports.VisualIdentityBannersSchema = VisualIdentityBannersSchema;
 exports.VisualIdentitySchema = VisualIdentitySchema;
 exports.analyticsSpec = analyticsSpec;
+exports.createApiLogFromFirestore = createApiLogFromFirestore;
+exports.createBookingFromFirestore = createBookingFromFirestore;
 exports.createConvertFirestoreToJS = createConvertFirestoreToJS;
 exports.createConvertJSToFirestore = createConvertJSToFirestore;
+exports.createCountryFromFirestore = createCountryFromFirestore;
+exports.createCurrencyFromFirestore = createCurrencyFromFirestore;
+exports.createESIMFromFirestore = createESIMFromFirestore;
 exports.createFirebaseService = createFirebaseService;
+exports.createMessageFromFirestore = createMessageFromFirestore;
 exports.createModelConverters = createModelConverters;
+exports.createPackageFromFirestore = createPackageFromFirestore;
+exports.createPartnerFromFirestore = createPartnerFromFirestore;
+exports.createPartnerToFirestore = createPartnerToFirestore;
+exports.createPaymentFromFirestore = createPaymentFromFirestore;
+exports.createPriceListFromFirestore = createPriceListFromFirestore;
+exports.createPriceListToFirestore = createPriceListToFirestore;
+exports.createPromoCodeFromFirestore = createPromoCodeFromFirestore;
+exports.createPromoCodeToFirestore = createPromoCodeToFirestore;
+exports.createUserFromFirestore = createUserFromFirestore;
+exports.createUserToFirestore = createUserToFirestore;
 exports.packageSchemaSpec = packageSchemaSpec;
 exports.partnerAppSchema = partnerAppSchema;
-exports.partnerFromFirestore = partnerFromFirestore;
 exports.partnerSchemaSpec = partnerSchemaSpec;
-exports.partnerToFirestore = partnerToFirestore;
-exports.priceListFromFirestore = priceListFromFirestore;
-exports.priceListToFirestore = priceListToFirestore;
-exports.promoCodeFromFirestore = promoCodeFromFirestore;
-exports.promoCodeToFirestore = promoCodeToFirestore;
-exports.userFromFirestore = userFromFirestore;
-exports.userToFirestore = userToFirestore;
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.cjs.map
