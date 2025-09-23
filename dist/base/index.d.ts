@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+/** ZOD SCHEMAS */
 declare const HUserSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     name: z.ZodNullable<z.ZodString>;

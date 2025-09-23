@@ -45,6 +45,8 @@ import { z } from 'zod';
 import { roleSchemaSpec } from './specs/role';
 import { permissionSchemaSpec } from './specs/permission';
 
+
+/** ZOD SCHEMAS */
 export const HUserSchema = buildClientSchema(userSchemaSpec);
 export const HBookingSchema = buildClientSchema(bookingSchemaSpec);
 export const HCountrySchema = buildClientSchema(countrySchemaSpec);
