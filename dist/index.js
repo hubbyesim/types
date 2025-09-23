@@ -1056,8 +1056,14 @@ function createConvertJSToFirestore(db) {
 function isDuckTimestamp(obj) {
   return obj && typeof obj === "object" && typeof obj.toDate === "function" && Object.prototype.toString.call(obj.toDate()) === "[object Date]";
 }
+function isRawFirestoreTimestamp(obj) {
+  return obj && typeof obj === "object" && typeof obj._seconds === "number" && typeof obj._nanoseconds === "number";
+}
 function isDuckDocumentRef(obj) {
   return obj && typeof obj === "object" && typeof obj.id === "string" && typeof obj.path === "string";
+}
+function isRawFirestoreDocumentRef(obj) {
+  return obj && typeof obj === "object" && obj._path && typeof obj._path === "object" && Array.isArray(obj._path.segments) && obj._path.segments.length > 0;
 }
 function createConvertFirestoreToJS() {
   return function convertFirestoreToJS2(input, spec, path = []) {
@@ -1065,8 +1071,17 @@ function createConvertFirestoreToJS() {
     if (input instanceof Timestamp || isDuckTimestamp(input)) {
       return input.toDate();
     }
+    if (isRawFirestoreTimestamp(input)) {
+      const seconds = input._seconds || 0;
+      const nanoseconds = input._nanoseconds || 0;
+      const milliseconds = seconds * 1e3 + Math.floor(nanoseconds / 1e6);
+      return new Date(milliseconds);
+    }
     if (input instanceof DocumentReference || isDuckDocumentRef(input)) {
       return input.id;
+    }
+    if (isRawFirestoreDocumentRef(input)) {
+      return input._path.segments[input._path.segments.length - 1];
     }
     if (input === null || input === void 0)
       return input;
@@ -1078,9 +1093,24 @@ function createConvertFirestoreToJS() {
     if ("_type" in spec) {
       switch (spec._type) {
         case "timestamp":
-          return input instanceof Timestamp || isDuckTimestamp(input) ? input.toDate() : input;
+          if (input instanceof Timestamp || isDuckTimestamp(input)) {
+            return input.toDate();
+          }
+          if (isRawFirestoreTimestamp(input)) {
+            const seconds = input._seconds || 0;
+            const nanoseconds = input._nanoseconds || 0;
+            const milliseconds = seconds * 1e3 + Math.floor(nanoseconds / 1e6);
+            return new Date(milliseconds);
+          }
+          return input;
         case "docRef":
-          return input instanceof DocumentReference || isDuckDocumentRef(input) ? input.id : input;
+          if (input instanceof DocumentReference || isDuckDocumentRef(input)) {
+            return input.id;
+          }
+          if (isRawFirestoreDocumentRef(input)) {
+            return input._path.segments[input._path.segments.length - 1];
+          }
+          return input;
         case "array":
           return Array.isArray(input) ? input.map((item, i) => convertFirestoreToJS2(item, spec.of, [...path, `[${i}]`])) : input;
         case "record":
@@ -1312,57 +1342,33 @@ var CommunicationChannelSchema = communicationChannelSchema;
 var BookingStatusSchema = bookingStatusSchema;
 var CommunicationOptionsSchema = communicationOptionsSchema;
 var VisualIdentityBannersSchema = visualIdentityBannersSchema;
-var createPartnerFromFirestore = () => (partner) => {
+var partnerFromFirestore = (partner) => {
   return convertFirestoreToJS(partner, partnerSchemaSpec);
 };
-var createPartnerToFirestore = () => (partner) => {
+var partnerToFirestore = (partner) => {
   return convertJSToFirestore(partner, partnerSchemaSpec);
 };
-var createUserToFirestore = () => (user) => {
+var userToFirestore = (user) => {
   return convertJSToFirestore(user, userSchemaSpec);
 };
-var createUserFromFirestore = () => (user) => {
+var userFromFirestore = (user) => {
   return convertFirestoreToJS(user, userSchemaSpec);
 };
-var createPriceListFromFirestore = () => (priceList) => {
+var priceListFromFirestore = (priceList) => {
   return convertFirestoreToJS(priceList, priceListSchemaSpec);
 };
-var createPriceListToFirestore = () => (priceList) => {
+var priceListToFirestore = (priceList) => {
   return convertJSToFirestore(priceList, priceListSchemaSpec);
 };
-var createPromoCodeFromFirestore = () => (promoCode) => {
+var promoCodeFromFirestore = (promoCode) => {
   return convertFirestoreToJS(promoCode, promoCodeSchemaSpec);
 };
-var createPromoCodeToFirestore = () => (promoCode) => {
+var promoCodeToFirestore = (promoCode) => {
   return convertJSToFirestore(promoCode, promoCodeSchemaSpec);
-};
-var createBookingFromFirestore = () => (booking) => {
-  return convertFirestoreToJS(booking, bookingSchemaSpec);
-};
-var createCountryFromFirestore = () => (country) => {
-  return convertFirestoreToJS(country, countrySchemaSpec);
-};
-var createCurrencyFromFirestore = () => (currency) => {
-  return convertFirestoreToJS(currency, currencySchemaSpec);
-};
-var createESIMFromFirestore = () => (esim) => {
-  return convertFirestoreToJS(esim, esimSchemaSpec);
-};
-var createPaymentFromFirestore = () => (payment) => {
-  return convertFirestoreToJS(payment, paymentSchemaSpec);
-};
-var createMessageFromFirestore = () => (message) => {
-  return convertFirestoreToJS(message, messageSchemaSpec);
-};
-var createPackageFromFirestore = () => (pkg) => {
-  return convertFirestoreToJS(pkg, packageSchemaSpec);
-};
-var createApiLogFromFirestore = () => (apiLog) => {
-  return convertFirestoreToJS(apiLog, apiLogSchemaSpec);
 };
 var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
-export { API_LOG_COLLECTION, AddressSchema, AnalyticsSchema, ApiLogSchema, BOOKING_COLLECTION, BankingDetailsSchema, BondioPackageSchema, BookingSchema, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannelSchema, CommunicationOptionsSchema, CountrySchema, CurrencySchema, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBondioPackageSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HRoleSchema, HScheduleFilterSchema, HTagSchema, HTelnaPackageSchema, HTrafficPolicySchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema, MESSAGE_COLLECTION, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, PackagePriceSchema, PackageSchema, PartnerContactSchema, PartnerDataSchema, PartnerPackageSpecificationSchema, PartnerSchema, PaymentSchema, PlatformSettingsSchema, PriceListSchema, PromoCodeSchema, PromoPackageSpecificationSchema, ROLE_COLLECTION, RegistrationSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES, ScheduleFilterSchema, ScheduleSchema, TRAFFIC_POLICY_COLLECTION, TagSchema, TelnaPackageSchema, TrafficPolicySchema, USER_COLLECTION, UserFirestoreSchema, UserSchema, VisualIdentityBannerSchema, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, createApiLogFromFirestore, createBookingFromFirestore, createConvertFirestoreToJS, createConvertJSToFirestore, createCountryFromFirestore, createCurrencyFromFirestore, createESIMFromFirestore, createFirebaseService, createMessageFromFirestore, createModelConverters, createPackageFromFirestore, createPartnerFromFirestore, createPartnerToFirestore, createPaymentFromFirestore, createPriceListFromFirestore, createPriceListToFirestore, createPromoCodeFromFirestore, createPromoCodeToFirestore, createUserFromFirestore, createUserToFirestore, packageSchemaSpec, partnerAppSchema, partnerSchemaSpec };
+export { API_LOG_COLLECTION, AddressSchema, AnalyticsSchema, ApiLogSchema, BOOKING_COLLECTION, BankingDetailsSchema, BondioPackageSchema, BookingSchema, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannelSchema, CommunicationOptionsSchema, CountrySchema, CurrencySchema, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBondioPackageSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HRoleSchema, HScheduleFilterSchema, HTagSchema, HTelnaPackageSchema, HTrafficPolicySchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema, MESSAGE_COLLECTION, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, PackagePriceSchema, PackageSchema, PartnerContactSchema, PartnerDataSchema, PartnerPackageSpecificationSchema, PartnerSchema, PaymentSchema, PlatformSettingsSchema, PriceListSchema, PromoCodeSchema, PromoPackageSpecificationSchema, ROLE_COLLECTION, RegistrationSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES, ScheduleFilterSchema, ScheduleSchema, TRAFFIC_POLICY_COLLECTION, TagSchema, TelnaPackageSchema, TrafficPolicySchema, USER_COLLECTION, UserFirestoreSchema, UserSchema, VisualIdentityBannerSchema, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, packageSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, priceListFromFirestore, priceListToFirestore, promoCodeFromFirestore, promoCodeToFirestore, userFromFirestore, userToFirestore };
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.js.map

@@ -42,7 +42,7 @@ import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 
 
 import { convertFirestoreToJS, convertJSToFirestore } from './utils/firestoreTransformUtils';
-import { HPackage, HPackage, HPartner, HPriceList, HPromoCode } from './index.client';
+import { HPackage, HPartner, HPriceList, HPromoCode } from './index.client';
 import { buildClientSchema } from './builders/client';
 
 export { partnerSchemaSpec, analyticsSpec, packageSchemaSpec };

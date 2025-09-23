@@ -1058,8 +1058,14 @@ function createConvertJSToFirestore(db) {
 function isDuckTimestamp(obj) {
   return obj && typeof obj === "object" && typeof obj.toDate === "function" && Object.prototype.toString.call(obj.toDate()) === "[object Date]";
 }
+function isRawFirestoreTimestamp(obj) {
+  return obj && typeof obj === "object" && typeof obj._seconds === "number" && typeof obj._nanoseconds === "number";
+}
 function isDuckDocumentRef(obj) {
   return obj && typeof obj === "object" && typeof obj.id === "string" && typeof obj.path === "string";
+}
+function isRawFirestoreDocumentRef(obj) {
+  return obj && typeof obj === "object" && obj._path && typeof obj._path === "object" && Array.isArray(obj._path.segments) && obj._path.segments.length > 0;
 }
 function createConvertFirestoreToJS() {
   return function convertFirestoreToJS2(input, spec, path = []) {
@@ -1067,8 +1073,17 @@ function createConvertFirestoreToJS() {
     if (input instanceof firestore.Timestamp || isDuckTimestamp(input)) {
       return input.toDate();
     }
+    if (isRawFirestoreTimestamp(input)) {
+      const seconds = input._seconds || 0;
+      const nanoseconds = input._nanoseconds || 0;
+      const milliseconds = seconds * 1e3 + Math.floor(nanoseconds / 1e6);
+      return new Date(milliseconds);
+    }
     if (input instanceof firestore.DocumentReference || isDuckDocumentRef(input)) {
       return input.id;
+    }
+    if (isRawFirestoreDocumentRef(input)) {
+      return input._path.segments[input._path.segments.length - 1];
     }
     if (input === null || input === void 0)
       return input;
@@ -1080,9 +1095,24 @@ function createConvertFirestoreToJS() {
     if ("_type" in spec) {
       switch (spec._type) {
         case "timestamp":
-          return input instanceof firestore.Timestamp || isDuckTimestamp(input) ? input.toDate() : input;
+          if (input instanceof firestore.Timestamp || isDuckTimestamp(input)) {
+            return input.toDate();
+          }
+          if (isRawFirestoreTimestamp(input)) {
+            const seconds = input._seconds || 0;
+            const nanoseconds = input._nanoseconds || 0;
+            const milliseconds = seconds * 1e3 + Math.floor(nanoseconds / 1e6);
+            return new Date(milliseconds);
+          }
+          return input;
         case "docRef":
-          return input instanceof firestore.DocumentReference || isDuckDocumentRef(input) ? input.id : input;
+          if (input instanceof firestore.DocumentReference || isDuckDocumentRef(input)) {
+            return input.id;
+          }
+          if (isRawFirestoreDocumentRef(input)) {
+            return input._path.segments[input._path.segments.length - 1];
+          }
+          return input;
         case "array":
           return Array.isArray(input) ? input.map((item, i) => convertFirestoreToJS2(item, spec.of, [...path, `[${i}]`])) : input;
         case "record":
@@ -1314,53 +1344,29 @@ var CommunicationChannelSchema = communicationChannelSchema;
 var BookingStatusSchema = bookingStatusSchema;
 var CommunicationOptionsSchema = communicationOptionsSchema;
 var VisualIdentityBannersSchema = visualIdentityBannersSchema;
-var createPartnerFromFirestore = () => (partner) => {
+var partnerFromFirestore = (partner) => {
   return convertFirestoreToJS(partner, partnerSchemaSpec);
 };
-var createPartnerToFirestore = () => (partner) => {
+var partnerToFirestore = (partner) => {
   return convertJSToFirestore(partner, partnerSchemaSpec);
 };
-var createUserToFirestore = () => (user) => {
+var userToFirestore = (user) => {
   return convertJSToFirestore(user, userSchemaSpec);
 };
-var createUserFromFirestore = () => (user) => {
+var userFromFirestore = (user) => {
   return convertFirestoreToJS(user, userSchemaSpec);
 };
-var createPriceListFromFirestore = () => (priceList) => {
+var priceListFromFirestore = (priceList) => {
   return convertFirestoreToJS(priceList, priceListSchemaSpec);
 };
-var createPriceListToFirestore = () => (priceList) => {
+var priceListToFirestore = (priceList) => {
   return convertJSToFirestore(priceList, priceListSchemaSpec);
 };
-var createPromoCodeFromFirestore = () => (promoCode) => {
+var promoCodeFromFirestore = (promoCode) => {
   return convertFirestoreToJS(promoCode, promoCodeSchemaSpec);
 };
-var createPromoCodeToFirestore = () => (promoCode) => {
+var promoCodeToFirestore = (promoCode) => {
   return convertJSToFirestore(promoCode, promoCodeSchemaSpec);
-};
-var createBookingFromFirestore = () => (booking) => {
-  return convertFirestoreToJS(booking, bookingSchemaSpec);
-};
-var createCountryFromFirestore = () => (country) => {
-  return convertFirestoreToJS(country, countrySchemaSpec);
-};
-var createCurrencyFromFirestore = () => (currency) => {
-  return convertFirestoreToJS(currency, currencySchemaSpec);
-};
-var createESIMFromFirestore = () => (esim) => {
-  return convertFirestoreToJS(esim, esimSchemaSpec);
-};
-var createPaymentFromFirestore = () => (payment) => {
-  return convertFirestoreToJS(payment, paymentSchemaSpec);
-};
-var createMessageFromFirestore = () => (message) => {
-  return convertFirestoreToJS(message, messageSchemaSpec);
-};
-var createPackageFromFirestore = () => (pkg) => {
-  return convertFirestoreToJS(pkg, packageSchemaSpec);
-};
-var createApiLogFromFirestore = () => (apiLog) => {
-  return convertFirestoreToJS(apiLog, apiLogSchemaSpec);
 };
 var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
@@ -1458,28 +1464,20 @@ exports.VisualIdentityBannerSchema = VisualIdentityBannerSchema;
 exports.VisualIdentityBannersSchema = VisualIdentityBannersSchema;
 exports.VisualIdentitySchema = VisualIdentitySchema;
 exports.analyticsSpec = analyticsSpec;
-exports.createApiLogFromFirestore = createApiLogFromFirestore;
-exports.createBookingFromFirestore = createBookingFromFirestore;
 exports.createConvertFirestoreToJS = createConvertFirestoreToJS;
 exports.createConvertJSToFirestore = createConvertJSToFirestore;
-exports.createCountryFromFirestore = createCountryFromFirestore;
-exports.createCurrencyFromFirestore = createCurrencyFromFirestore;
-exports.createESIMFromFirestore = createESIMFromFirestore;
 exports.createFirebaseService = createFirebaseService;
-exports.createMessageFromFirestore = createMessageFromFirestore;
 exports.createModelConverters = createModelConverters;
-exports.createPackageFromFirestore = createPackageFromFirestore;
-exports.createPartnerFromFirestore = createPartnerFromFirestore;
-exports.createPartnerToFirestore = createPartnerToFirestore;
-exports.createPaymentFromFirestore = createPaymentFromFirestore;
-exports.createPriceListFromFirestore = createPriceListFromFirestore;
-exports.createPriceListToFirestore = createPriceListToFirestore;
-exports.createPromoCodeFromFirestore = createPromoCodeFromFirestore;
-exports.createPromoCodeToFirestore = createPromoCodeToFirestore;
-exports.createUserFromFirestore = createUserFromFirestore;
-exports.createUserToFirestore = createUserToFirestore;
 exports.packageSchemaSpec = packageSchemaSpec;
 exports.partnerAppSchema = partnerAppSchema;
+exports.partnerFromFirestore = partnerFromFirestore;
 exports.partnerSchemaSpec = partnerSchemaSpec;
+exports.partnerToFirestore = partnerToFirestore;
+exports.priceListFromFirestore = priceListFromFirestore;
+exports.priceListToFirestore = priceListToFirestore;
+exports.promoCodeFromFirestore = promoCodeFromFirestore;
+exports.promoCodeToFirestore = promoCodeToFirestore;
+exports.userFromFirestore = userFromFirestore;
+exports.userToFirestore = userToFirestore;
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.cjs.map
