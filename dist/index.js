@@ -263,6 +263,7 @@ var SUPPORTED_LOCALES = [
   "nl-NL",
   "de-DE",
   "fr-FR",
+  "fr-CA",
   "it-IT",
   "es-ES",
   "cs-CZ",
