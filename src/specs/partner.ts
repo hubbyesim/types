@@ -115,7 +115,8 @@ export const visualIdentitySchema = z.object({
 export const partnerContactSchema = z.object({
     name: z.string().nullable().optional(),
     email: z.string().nullable(),
-    office_phone: z.string().nullable().optional()
+    office_phone: z.string().nullable().optional(),
+    office_email: z.string().nullable().optional()
 });
 
 // Partner data schema

@@ -1018,14 +1018,17 @@ declare const HPartnerSchema: z.ZodObject<{
         name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         email: z.ZodNullable<z.ZodString>;
         office_phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        office_email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         email: string | null;
         name?: string | null | undefined;
         office_phone?: string | null | undefined;
+        office_email?: string | null | undefined;
     }, {
         email: string | null;
         name?: string | null | undefined;
         office_phone?: string | null | undefined;
+        office_email?: string | null | undefined;
     }>;
     address: z.ZodObject<{
         street: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -1855,6 +1858,7 @@ declare const HPartnerSchema: z.ZodObject<{
         email: string | null;
         name?: string | null | undefined;
         office_phone?: string | null | undefined;
+        office_email?: string | null | undefined;
     };
     address: {
         country?: string | null | undefined;
@@ -2039,6 +2043,7 @@ declare const HPartnerSchema: z.ZodObject<{
         email: string | null;
         name?: string | null | undefined;
         office_phone?: string | null | undefined;
+        office_email?: string | null | undefined;
     };
     address: {
         country?: string | null | undefined;
@@ -2586,14 +2591,17 @@ declare const HPartnerAppSchema: z.ZodObject<{
         name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         email: z.ZodNullable<z.ZodString>;
         office_phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        office_email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         email: string | null;
         name?: string | null | undefined;
         office_phone?: string | null | undefined;
+        office_email?: string | null | undefined;
     }, {
         email: string | null;
         name?: string | null | undefined;
         office_phone?: string | null | undefined;
+        office_email?: string | null | undefined;
     }>;
     address: z.ZodObject<{
         street: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -3423,6 +3431,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         email: string | null;
         name?: string | null | undefined;
         office_phone?: string | null | undefined;
+        office_email?: string | null | undefined;
     };
     address: {
         country?: string | null | undefined;
@@ -3607,6 +3616,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         email: string | null;
         name?: string | null | undefined;
         office_phone?: string | null | undefined;
+        office_email?: string | null | undefined;
     };
     address: {
         country?: string | null | undefined;
@@ -4724,14 +4734,17 @@ declare const HPartnerContactSchema: z.ZodObject<{
     name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     email: z.ZodNullable<z.ZodString>;
     office_phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    office_email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     email: string | null;
     name?: string | null | undefined;
     office_phone?: string | null | undefined;
+    office_email?: string | null | undefined;
 }, {
     email: string | null;
     name?: string | null | undefined;
     office_phone?: string | null | undefined;
+    office_email?: string | null | undefined;
 }>;
 declare const HPartnerDataSchema: z.ZodObject<{
     source: z.ZodString;

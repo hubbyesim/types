@@ -651,7 +651,8 @@ var visualIdentitySchema = zod.z.object({
 var partnerContactSchema = zod.z.object({
   name: zod.z.string().nullable().optional(),
   email: zod.z.string().nullable(),
-  office_phone: zod.z.string().nullable().optional()
+  office_phone: zod.z.string().nullable().optional(),
+  office_email: zod.z.string().nullable().optional()
 });
 var partnerDataSchema = zod.z.object({
   source: zod.z.string(),
