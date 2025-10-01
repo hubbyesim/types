@@ -59,7 +59,7 @@ export const commonPackageSchema = markAsSchemaSpec({
     is_active: z.boolean(),
     priority: z.number(),
     packageType: z.string(),
-    partner: { _type: 'docRef' as const, collection: PARTNER_COLLECTION, nullable: true },
+    partner: { _type: 'docRef' as const, collection: PARTNER_COLLECTION, nullable: true, optional: true },
 });
 
 export const telnaPackageSchema = markAsSchemaSpec({

@@ -561,7 +561,7 @@ var commonPackageSchema = markAsSchemaSpec({
   is_active: zod.z.boolean(),
   priority: zod.z.number(),
   packageType: zod.z.string(),
-  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true }
+  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true, optional: true }
 });
 var telnaPackageSchema = markAsSchemaSpec({
   traffic_policy: { _type: "docRef", collection: TRAFFIC_POLICY_COLLECTION, nullable: true },
