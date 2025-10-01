@@ -600,7 +600,9 @@ var telnaPackageSchema = markAsSchemaSpec({
 });
 var bondioPackageSchema = markAsSchemaSpec({
   ...commonPackageSchema,
-  label: zod.z.enum(["lambda", "tau"])
+  label: zod.z.enum(["lambda", "tau"]),
+  periodDays: zod.z.number(),
+  periodIterations: zod.z.number()
 });
 var addressSchema = zod.z.object({
   street: zod.z.string().nullable().optional(),
