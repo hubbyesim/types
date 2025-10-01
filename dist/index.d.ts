@@ -5844,6 +5844,7 @@ declare const HBondioPackageSchema: z.ZodObject<{
     label: z.ZodEnum<["lambda", "tau"]>;
     periodDays: z.ZodNumber;
     periodIterations: z.ZodNumber;
+    throttling: z.ZodNullable<z.ZodOptional<z.ZodNumber>>;
     size: z.ZodString;
     iso: z.ZodString;
     days: z.ZodNumber;
@@ -5866,6 +5867,7 @@ declare const HBondioPackageSchema: z.ZodObject<{
     packageType: string;
     periodDays: number;
     periodIterations: number;
+    throttling?: number | null | undefined;
 }, {
     partner: string;
     is_active: boolean;
@@ -5879,6 +5881,7 @@ declare const HBondioPackageSchema: z.ZodObject<{
     packageType: string;
     periodDays: number;
     periodIterations: number;
+    throttling?: number | null | undefined;
 }>;
 declare const HAddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodNullable<z.ZodString>>;

@@ -571,7 +571,8 @@ var bondioPackageSchema = markAsSchemaSpec({
   ...commonPackageSchema,
   label: zod.z.enum(["lambda", "tau"]),
   periodDays: zod.z.number(),
-  periodIterations: zod.z.number()
+  periodIterations: zod.z.number(),
+  throttling: zod.z.number().optional().nullable()
 });
 var addressSchema = zod.z.object({
   street: zod.z.string().nullable().optional(),

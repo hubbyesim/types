@@ -600,7 +600,8 @@ var bondioPackageSchema = markAsSchemaSpec({
   ...commonPackageSchema,
   label: z.enum(["lambda", "tau"]),
   periodDays: z.number(),
-  periodIterations: z.number()
+  periodIterations: z.number(),
+  throttling: z.number().optional().nullable()
 });
 var addressSchema = z.object({
   street: z.string().nullable().optional(),

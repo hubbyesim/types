@@ -72,4 +72,6 @@ export const bondioPackageSchema = markAsSchemaSpec({
     label: z.enum(['lambda', 'tau']),
     periodDays: z.number(),
     periodIterations: z.number(),
+    throttling: z.number().optional().nullable(),
+    
 });
