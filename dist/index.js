@@ -385,6 +385,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
   package_specifications: z.array(packageSpecificationSchema).min(1),
   departure_date: timestampRequired,
   return_date: timestampNullable,
+  price: z.number().optional(),
   partner: { _type: "docRef", collection: PARTNER_COLLECTION },
   promo_codes: {
     _type: "array",

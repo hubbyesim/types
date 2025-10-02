@@ -95,6 +95,7 @@ export const bookingSchemaSpec = markAsSchemaSpec({
     package_specifications: z.array(packageSpecificationSchema).min(1),
     departure_date: timestampRequired,
     return_date: timestampNullable,
+    price: z.number().optional(),
     partner: { _type: 'docRef' as const, collection: PARTNER_COLLECTION },
     promo_codes: {
         _type: 'array' as const,
