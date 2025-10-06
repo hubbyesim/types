@@ -115,6 +115,7 @@ declare const bookingSchemaSpec: {
     email: z.ZodNullable<z.ZodString>;
     phone: z.ZodNullable<z.ZodString>;
     booking_id: z.ZodNullable<z.ZodString>;
+    booking_label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     flight_number: z.ZodOptional<z.ZodString>;
     gender: z.ZodOptional<z.ZodEnum<["M", "F", "O"]>>;
     package_size: z.ZodOptional<z.ZodString>;
@@ -176,6 +177,7 @@ declare const bookingSchemaSpec: {
         nullable: boolean;
         optional: boolean;
     };
+    price: z.ZodOptional<z.ZodNumber>;
     partner: {
         _type: "docRef";
         collection: string;
@@ -1415,6 +1417,7 @@ declare const HBookingSchema: z.ZodObject<{
     email: z.ZodNullable<z.ZodString>;
     phone: z.ZodNullable<z.ZodString>;
     booking_id: z.ZodNullable<z.ZodString>;
+    booking_label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     flight_number: z.ZodOptional<z.ZodString>;
     gender: z.ZodOptional<z.ZodEnum<["M", "F", "O"]>>;
     package_size: z.ZodOptional<z.ZodString>;
@@ -1471,6 +1474,7 @@ declare const HBookingSchema: z.ZodObject<{
     }>, "many">;
     departure_date: z.ZodEffects<z.ZodDate, Date, Date>;
     return_date: z.ZodEffects<z.ZodDate, Date, Date>;
+    price: z.ZodOptional<z.ZodNumber>;
     partner: z.ZodString;
     promo_codes: z.ZodArray<z.ZodString, "many">;
     users: z.ZodArray<z.ZodString, "many">;
@@ -1525,10 +1529,12 @@ declare const HBookingSchema: z.ZodObject<{
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
+    booking_label?: string | null | undefined;
     flight_number?: string | undefined;
     package_size?: string | undefined;
     sent_messages?: Record<string, any> | undefined;
     import_id?: string | null | undefined;
+    price?: number | undefined;
     hubby_foreign_identifiers?: {
         messaging_contact_id: string | null;
     } | null | undefined;
@@ -1575,10 +1581,12 @@ declare const HBookingSchema: z.ZodObject<{
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
+    booking_label?: string | null | undefined;
     flight_number?: string | undefined;
     package_size?: string | undefined;
     sent_messages?: Record<string, any> | undefined;
     import_id?: string | null | undefined;
+    price?: number | undefined;
     hubby_foreign_identifiers?: {
         messaging_contact_id: string | null;
     } | null | undefined;
@@ -2059,6 +2067,7 @@ declare const HPackageSchema: z.ZodObject<{
     created_by: string;
     updated_by: string;
     traffic_policy: string;
+    price: number;
     provider: string;
     coverage_label: string | null;
     partner_price: number;
@@ -2068,7 +2077,6 @@ declare const HPackageSchema: z.ZodObject<{
     hidden: boolean;
     is_hidden: boolean;
     priority: number;
-    price: number;
     days: number;
     provider_parameters: {
         imsi: number;
@@ -2108,6 +2116,7 @@ declare const HPackageSchema: z.ZodObject<{
     created_by: string;
     updated_by: string;
     traffic_policy: string;
+    price: number;
     provider: string;
     coverage_label: string | null;
     partner_price: number;
@@ -2117,7 +2126,6 @@ declare const HPackageSchema: z.ZodObject<{
     hidden: boolean;
     is_hidden: boolean;
     priority: number;
-    price: number;
     days: number;
     provider_parameters: {
         imsi: number;
@@ -2364,15 +2372,15 @@ declare const HPartnerSchema: z.ZodObject<{
                 }, z.UnknownKeysParam, z.ZodTypeAny, {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }, {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }>, "many">;
             }, z.UnknownKeysParam, z.ZodTypeAny, {
                 strategy: "split" | "bundle";
@@ -2381,9 +2389,9 @@ declare const HPartnerSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             }, {
                 strategy: "split" | "bundle";
@@ -2392,9 +2400,9 @@ declare const HPartnerSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             }>;
             user: z.ZodObject<{
@@ -2409,15 +2417,15 @@ declare const HPartnerSchema: z.ZodObject<{
                 }, z.UnknownKeysParam, z.ZodTypeAny, {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }, {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }>, "many">;
             }, z.UnknownKeysParam, z.ZodTypeAny, {
                 modification_percentage: number;
@@ -2425,9 +2433,9 @@ declare const HPartnerSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             }, {
                 modification_percentage: number;
@@ -2435,9 +2443,9 @@ declare const HPartnerSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             }>;
         }, z.UnknownKeysParam, z.ZodTypeAny, {
@@ -2448,9 +2456,9 @@ declare const HPartnerSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
             user: {
@@ -2459,9 +2467,9 @@ declare const HPartnerSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
         }, {
@@ -2472,9 +2480,9 @@ declare const HPartnerSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
             user: {
@@ -2483,9 +2491,9 @@ declare const HPartnerSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
         }>;
@@ -2504,9 +2512,9 @@ declare const HPartnerSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
             user: {
@@ -2515,9 +2523,9 @@ declare const HPartnerSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
         };
@@ -2537,9 +2545,9 @@ declare const HPartnerSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
             user: {
@@ -2548,9 +2556,9 @@ declare const HPartnerSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
         };
@@ -3156,9 +3164,9 @@ declare const HPartnerSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
             user: {
@@ -3167,9 +3175,9 @@ declare const HPartnerSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
         };
@@ -3341,9 +3349,9 @@ declare const HPartnerSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
             user: {
@@ -3352,9 +3360,9 @@ declare const HPartnerSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
         };
@@ -3493,15 +3501,15 @@ declare const HPriceListSchema: z.ZodObject<{
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         type: "data-limited" | "time-limited";
         destination: string;
+        price: number;
         package: string;
         label: string;
-        price: number;
     }, {
         type: "data-limited" | "time-limited";
         destination: string;
+        price: number;
         package: string;
         label: string;
-        price: number;
     }>, "many">;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
@@ -3516,9 +3524,9 @@ declare const HPriceListSchema: z.ZodObject<{
     package_prices: {
         type: "data-limited" | "time-limited";
         destination: string;
+        price: number;
         package: string;
         label: string;
-        price: number;
     }[];
 }, {
     id: string;
@@ -3533,9 +3541,9 @@ declare const HPriceListSchema: z.ZodObject<{
     package_prices: {
         type: "data-limited" | "time-limited";
         destination: string;
+        price: number;
         package: string;
         label: string;
-        price: number;
     }[];
 }>;
 declare const HFinancialPropertiesSchema: z.ZodObject<{
@@ -3560,15 +3568,15 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
             }, z.UnknownKeysParam, z.ZodTypeAny, {
                 type: "data-limited" | "time-limited";
                 destination: string;
+                price: number;
                 package: string;
                 label: string;
-                price: number;
             }, {
                 type: "data-limited" | "time-limited";
                 destination: string;
+                price: number;
                 package: string;
                 label: string;
-                price: number;
             }>, "many">;
         }, z.UnknownKeysParam, z.ZodTypeAny, {
             strategy: "split" | "bundle";
@@ -3577,9 +3585,9 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
             custom_prices: {
                 type: "data-limited" | "time-limited";
                 destination: string;
+                price: number;
                 package: string;
                 label: string;
-                price: number;
             }[];
         }, {
             strategy: "split" | "bundle";
@@ -3588,9 +3596,9 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
             custom_prices: {
                 type: "data-limited" | "time-limited";
                 destination: string;
+                price: number;
                 package: string;
                 label: string;
-                price: number;
             }[];
         }>;
         user: z.ZodObject<{
@@ -3605,15 +3613,15 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
             }, z.UnknownKeysParam, z.ZodTypeAny, {
                 type: "data-limited" | "time-limited";
                 destination: string;
+                price: number;
                 package: string;
                 label: string;
-                price: number;
             }, {
                 type: "data-limited" | "time-limited";
                 destination: string;
+                price: number;
                 package: string;
                 label: string;
-                price: number;
             }>, "many">;
         }, z.UnknownKeysParam, z.ZodTypeAny, {
             modification_percentage: number;
@@ -3621,9 +3629,9 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
             custom_prices: {
                 type: "data-limited" | "time-limited";
                 destination: string;
+                price: number;
                 package: string;
                 label: string;
-                price: number;
             }[];
         }, {
             modification_percentage: number;
@@ -3631,9 +3639,9 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
             custom_prices: {
                 type: "data-limited" | "time-limited";
                 destination: string;
+                price: number;
                 package: string;
                 label: string;
-                price: number;
             }[];
         }>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
@@ -3644,9 +3652,9 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
             custom_prices: {
                 type: "data-limited" | "time-limited";
                 destination: string;
+                price: number;
                 package: string;
                 label: string;
-                price: number;
             }[];
         };
         user: {
@@ -3655,9 +3663,9 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
             custom_prices: {
                 type: "data-limited" | "time-limited";
                 destination: string;
+                price: number;
                 package: string;
                 label: string;
-                price: number;
             }[];
         };
     }, {
@@ -3668,9 +3676,9 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
             custom_prices: {
                 type: "data-limited" | "time-limited";
                 destination: string;
+                price: number;
                 package: string;
                 label: string;
-                price: number;
             }[];
         };
         user: {
@@ -3679,9 +3687,9 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
             custom_prices: {
                 type: "data-limited" | "time-limited";
                 destination: string;
+                price: number;
                 package: string;
                 label: string;
-                price: number;
             }[];
         };
     }>;
@@ -3700,9 +3708,9 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
             custom_prices: {
                 type: "data-limited" | "time-limited";
                 destination: string;
+                price: number;
                 package: string;
                 label: string;
-                price: number;
             }[];
         };
         user: {
@@ -3711,9 +3719,9 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
             custom_prices: {
                 type: "data-limited" | "time-limited";
                 destination: string;
+                price: number;
                 package: string;
                 label: string;
-                price: number;
             }[];
         };
     };
@@ -3733,9 +3741,9 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
             custom_prices: {
                 type: "data-limited" | "time-limited";
                 destination: string;
+                price: number;
                 package: string;
                 label: string;
-                price: number;
             }[];
         };
         user: {
@@ -3744,9 +3752,9 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
             custom_prices: {
                 type: "data-limited" | "time-limited";
                 destination: string;
+                price: number;
                 package: string;
                 label: string;
-                price: number;
             }[];
         };
     };
@@ -3804,21 +3812,21 @@ declare const HPackagePriceSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     type: "data-limited" | "time-limited";
     destination: string;
+    price: number;
     package: {
         _type: "docRef";
         collection: "/companies/hubby/packages";
     };
     label: string;
-    price: number;
 }, {
     type: "data-limited" | "time-limited";
     destination: string;
+    price: number;
     package: {
         _type: "docRef";
         collection: "/companies/hubby/packages";
     };
     label: string;
-    price: number;
 }>;
 declare const HubbyModelSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -3937,15 +3945,15 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 }, z.UnknownKeysParam, z.ZodTypeAny, {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }, {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }>, "many">;
             }, z.UnknownKeysParam, z.ZodTypeAny, {
                 strategy: "split" | "bundle";
@@ -3954,9 +3962,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             }, {
                 strategy: "split" | "bundle";
@@ -3965,9 +3973,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             }>;
             user: z.ZodObject<{
@@ -3982,15 +3990,15 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 }, z.UnknownKeysParam, z.ZodTypeAny, {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }, {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }>, "many">;
             }, z.UnknownKeysParam, z.ZodTypeAny, {
                 modification_percentage: number;
@@ -3998,9 +4006,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             }, {
                 modification_percentage: number;
@@ -4008,9 +4016,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             }>;
         }, z.UnknownKeysParam, z.ZodTypeAny, {
@@ -4021,9 +4029,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
             user: {
@@ -4032,9 +4040,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
         }, {
@@ -4045,9 +4053,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
             user: {
@@ -4056,9 +4064,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
         }>;
@@ -4077,9 +4085,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
             user: {
@@ -4088,9 +4096,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
         };
@@ -4110,9 +4118,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
             user: {
@@ -4121,9 +4129,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
         };
@@ -4729,9 +4737,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
             user: {
@@ -4740,9 +4748,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
         };
@@ -4914,9 +4922,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
             user: {
@@ -4925,9 +4933,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
         };
@@ -5561,21 +5569,21 @@ declare const HPricingStrategySchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         type: "data-limited" | "time-limited";
         destination: string;
+        price: number;
         package: {
             _type: "docRef";
             collection: "/companies/hubby/packages";
         };
         label: string;
-        price: number;
     }, {
         type: "data-limited" | "time-limited";
         destination: string;
+        price: number;
         package: {
             _type: "docRef";
             collection: "/companies/hubby/packages";
         };
         label: string;
-        price: number;
     }>, "many">;
 }, "strip", z.ZodTypeAny, {
     strategy: "split" | "bundle";
@@ -5588,12 +5596,12 @@ declare const HPricingStrategySchema: z.ZodObject<{
     custom_prices: {
         type: "data-limited" | "time-limited";
         destination: string;
+        price: number;
         package: {
             _type: "docRef";
             collection: "/companies/hubby/packages";
         };
         label: string;
-        price: number;
     }[];
 }, {
     strategy: "split" | "bundle";
@@ -5606,12 +5614,12 @@ declare const HPricingStrategySchema: z.ZodObject<{
     custom_prices: {
         type: "data-limited" | "time-limited";
         destination: string;
+        price: number;
         package: {
             _type: "docRef";
             collection: "/companies/hubby/packages";
         };
         label: string;
-        price: number;
     }[];
 }>;
 declare const HFreeEsimSchema: z.ZodObject<{
@@ -5822,9 +5830,9 @@ declare const HTelnaPackageSchema: z.ZodObject<{
     is_active: boolean;
     size: string;
     traffic_policy: string;
+    price: number;
     is_hidden: boolean;
     priority: number;
-    price: number;
     days: number;
     iso: string;
     packageType: string;
@@ -5833,9 +5841,9 @@ declare const HTelnaPackageSchema: z.ZodObject<{
     is_active: boolean;
     size: string;
     traffic_policy: string;
+    price: number;
     is_hidden: boolean;
     priority: number;
-    price: number;
     days: number;
     iso: string;
     packageType: string;
@@ -5858,10 +5866,10 @@ declare const HBondioPackageSchema: z.ZodObject<{
     partner: string;
     is_active: boolean;
     size: string;
+    price: number;
     label: "lambda" | "tau";
     is_hidden: boolean;
     priority: number;
-    price: number;
     days: number;
     iso: string;
     packageType: string;
@@ -5872,10 +5880,10 @@ declare const HBondioPackageSchema: z.ZodObject<{
     partner: string;
     is_active: boolean;
     size: string;
+    price: number;
     label: "lambda" | "tau";
     is_hidden: boolean;
     priority: number;
-    price: number;
     days: number;
     iso: string;
     packageType: string;
@@ -6539,15 +6547,15 @@ declare const partnerAppSchema: z.ZodObject<{
                 }, z.UnknownKeysParam, z.ZodTypeAny, {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }, {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }>, "many">;
             }, z.UnknownKeysParam, z.ZodTypeAny, {
                 strategy: "split" | "bundle";
@@ -6556,9 +6564,9 @@ declare const partnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             }, {
                 strategy: "split" | "bundle";
@@ -6567,9 +6575,9 @@ declare const partnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             }>;
             user: z.ZodObject<{
@@ -6584,15 +6592,15 @@ declare const partnerAppSchema: z.ZodObject<{
                 }, z.UnknownKeysParam, z.ZodTypeAny, {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }, {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }>, "many">;
             }, z.UnknownKeysParam, z.ZodTypeAny, {
                 modification_percentage: number;
@@ -6600,9 +6608,9 @@ declare const partnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             }, {
                 modification_percentage: number;
@@ -6610,9 +6618,9 @@ declare const partnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             }>;
         }, z.UnknownKeysParam, z.ZodTypeAny, {
@@ -6623,9 +6631,9 @@ declare const partnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
             user: {
@@ -6634,9 +6642,9 @@ declare const partnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
         }, {
@@ -6647,9 +6655,9 @@ declare const partnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
             user: {
@@ -6658,9 +6666,9 @@ declare const partnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
         }>;
@@ -6679,9 +6687,9 @@ declare const partnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
             user: {
@@ -6690,9 +6698,9 @@ declare const partnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
         };
@@ -6712,9 +6720,9 @@ declare const partnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
             user: {
@@ -6723,9 +6731,9 @@ declare const partnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
         };
@@ -7331,9 +7339,9 @@ declare const partnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
             user: {
@@ -7342,9 +7350,9 @@ declare const partnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
         };
@@ -7516,9 +7524,9 @@ declare const partnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
             user: {
@@ -7527,9 +7535,9 @@ declare const partnerAppSchema: z.ZodObject<{
                 custom_prices: {
                     type: "data-limited" | "time-limited";
                     destination: string;
+                    price: number;
                     package: string;
                     label: string;
-                    price: number;
                 }[];
             };
         };

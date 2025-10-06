@@ -335,6 +335,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
   email: z.string().email().nullable(),
   phone: z.string().nullable(),
   booking_id: z.string().nullable(),
+  booking_label: z.string().nullable().optional(),
   flight_number: z.string().optional(),
   gender: z.enum(["M", "F", "O"]).optional(),
   package_size: z.string().optional(),
@@ -364,6 +365,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
   package_specifications: z.array(packageSpecificationSchema).min(1),
   departure_date: timestampRequired,
   return_date: timestampNullable,
+  price: z.number().optional(),
   partner: { _type: "docRef", collection: PARTNER_COLLECTION },
   promo_codes: {
     _type: "array",
