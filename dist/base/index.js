@@ -335,6 +335,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
   email: z.string().email().nullable(),
   phone: z.string().nullable(),
   booking_id: z.string().nullable(),
+  booking_label: z.string().nullable().optional(),
   flight_number: z.string().optional(),
   gender: z.enum(["M", "F", "O"]).optional(),
   package_size: z.string().optional(),

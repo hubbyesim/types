@@ -115,6 +115,7 @@ declare const bookingSchemaSpec: {
     email: z.ZodNullable<z.ZodString>;
     phone: z.ZodNullable<z.ZodString>;
     booking_id: z.ZodNullable<z.ZodString>;
+    booking_label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     flight_number: z.ZodOptional<z.ZodString>;
     gender: z.ZodOptional<z.ZodEnum<["M", "F", "O"]>>;
     package_size: z.ZodOptional<z.ZodString>;
@@ -1416,6 +1417,7 @@ declare const HBookingSchema: z.ZodObject<{
     email: z.ZodNullable<z.ZodString>;
     phone: z.ZodNullable<z.ZodString>;
     booking_id: z.ZodNullable<z.ZodString>;
+    booking_label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     flight_number: z.ZodOptional<z.ZodString>;
     gender: z.ZodOptional<z.ZodEnum<["M", "F", "O"]>>;
     package_size: z.ZodOptional<z.ZodString>;
@@ -1527,6 +1529,7 @@ declare const HBookingSchema: z.ZodObject<{
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
+    booking_label?: string | null | undefined;
     flight_number?: string | undefined;
     package_size?: string | undefined;
     sent_messages?: Record<string, any> | undefined;
@@ -1578,6 +1581,7 @@ declare const HBookingSchema: z.ZodObject<{
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
+    booking_label?: string | null | undefined;
     flight_number?: string | undefined;
     package_size?: string | undefined;
     sent_messages?: Record<string, any> | undefined;

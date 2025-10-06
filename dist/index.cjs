@@ -358,6 +358,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
   email: zod.z.string().email().nullable(),
   phone: zod.z.string().nullable(),
   booking_id: zod.z.string().nullable(),
+  booking_label: zod.z.string().nullable().optional(),
   flight_number: zod.z.string().optional(),
   gender: zod.z.enum(["M", "F", "O"]).optional(),
   package_size: zod.z.string().optional(),
