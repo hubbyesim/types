@@ -177,7 +177,7 @@ declare const bookingSchemaSpec: {
         nullable: boolean;
         optional: boolean;
     };
-    price: z.ZodOptional<z.ZodNumber>;
+    price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     partner: {
         _type: "docRef";
         collection: string;
@@ -1474,7 +1474,7 @@ declare const HBookingSchema: z.ZodObject<{
     }>, "many">;
     departure_date: z.ZodEffects<z.ZodDate, Date, Date>;
     return_date: z.ZodEffects<z.ZodDate, Date, Date>;
-    price: z.ZodOptional<z.ZodNumber>;
+    price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     partner: z.ZodString;
     promo_codes: z.ZodArray<z.ZodString, "many">;
     users: z.ZodArray<z.ZodString, "many">;
@@ -1534,7 +1534,7 @@ declare const HBookingSchema: z.ZodObject<{
     package_size?: string | undefined;
     sent_messages?: Record<string, any> | undefined;
     import_id?: string | null | undefined;
-    price?: number | undefined;
+    price?: number | null | undefined;
     hubby_foreign_identifiers?: {
         messaging_contact_id: string | null;
     } | null | undefined;
@@ -1586,7 +1586,7 @@ declare const HBookingSchema: z.ZodObject<{
     package_size?: string | undefined;
     sent_messages?: Record<string, any> | undefined;
     import_id?: string | null | undefined;
-    price?: number | undefined;
+    price?: number | null | undefined;
     hubby_foreign_identifiers?: {
         messaging_contact_id: string | null;
     } | null | undefined;

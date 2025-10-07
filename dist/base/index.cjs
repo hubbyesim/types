@@ -367,7 +367,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
   package_specifications: zod.z.array(packageSpecificationSchema).min(1),
   departure_date: timestampRequired,
   return_date: timestampNullable,
-  price: zod.z.number().optional(),
+  price: zod.z.number().nullable().optional(),
   partner: { _type: "docRef", collection: PARTNER_COLLECTION },
   promo_codes: {
     _type: "array",
