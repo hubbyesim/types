@@ -652,6 +652,7 @@ var pricingStrategySchema = z.object({
   custom_prices: z.array(packagePriceSchema)
 });
 var visualIdentityBannerSchema = z.object({
+  action: z.string(),
   image_url: z.string(),
   alt: z.string(),
   click_url: z.string(),

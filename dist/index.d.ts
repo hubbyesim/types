@@ -842,6 +842,7 @@ declare const partnerSchemaSpec: {
             top_banner: z.ZodOptional<z.ZodObject<{
                 strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
                 banners: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
+                    action: z.ZodString;
                     image_url: z.ZodString;
                     alt: z.ZodString;
                     click_url: z.ZodString;
@@ -849,12 +850,14 @@ declare const partnerSchemaSpec: {
                     properties: z.ZodRecord<z.ZodString, z.ZodString>;
                 }, "strip", z.ZodTypeAny, {
                     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                    action: string;
                     image_url: string;
                     alt: string;
                     click_url: string;
                     properties: Record<string, string>;
                 }, {
                     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                    action: string;
                     image_url: string;
                     alt: string;
                     click_url: string;
@@ -864,6 +867,7 @@ declare const partnerSchemaSpec: {
                 strategy: "destination" | "fixed" | "rotating" | "time_of_day";
                 banners?: {
                     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                    action: string;
                     image_url: string;
                     alt: string;
                     click_url: string;
@@ -873,6 +877,7 @@ declare const partnerSchemaSpec: {
                 strategy: "destination" | "fixed" | "rotating" | "time_of_day";
                 banners?: {
                     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                    action: string;
                     image_url: string;
                     alt: string;
                     click_url: string;
@@ -882,6 +887,7 @@ declare const partnerSchemaSpec: {
             mid_banner: z.ZodOptional<z.ZodObject<{
                 strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
                 banners: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
+                    action: z.ZodString;
                     image_url: z.ZodString;
                     alt: z.ZodString;
                     click_url: z.ZodString;
@@ -889,12 +895,14 @@ declare const partnerSchemaSpec: {
                     properties: z.ZodRecord<z.ZodString, z.ZodString>;
                 }, "strip", z.ZodTypeAny, {
                     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                    action: string;
                     image_url: string;
                     alt: string;
                     click_url: string;
                     properties: Record<string, string>;
                 }, {
                     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                    action: string;
                     image_url: string;
                     alt: string;
                     click_url: string;
@@ -904,6 +912,7 @@ declare const partnerSchemaSpec: {
                 strategy: "destination" | "fixed" | "rotating" | "time_of_day";
                 banners?: {
                     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                    action: string;
                     image_url: string;
                     alt: string;
                     click_url: string;
@@ -913,6 +922,7 @@ declare const partnerSchemaSpec: {
                 strategy: "destination" | "fixed" | "rotating" | "time_of_day";
                 banners?: {
                     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                    action: string;
                     image_url: string;
                     alt: string;
                     click_url: string;
@@ -2572,6 +2582,7 @@ declare const HPartnerSchema: z.ZodObject<{
         top_banner: z.ZodOptional<z.ZodObject<{
             strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
             banners: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
+                action: z.ZodString;
                 image_url: z.ZodString;
                 alt: z.ZodString;
                 click_url: z.ZodString;
@@ -2579,12 +2590,14 @@ declare const HPartnerSchema: z.ZodObject<{
                 properties: z.ZodRecord<z.ZodString, z.ZodString>;
             }, "strip", z.ZodTypeAny, {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
                 properties: Record<string, string>;
             }, {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -2594,6 +2607,7 @@ declare const HPartnerSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -2603,6 +2617,7 @@ declare const HPartnerSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -2612,6 +2627,7 @@ declare const HPartnerSchema: z.ZodObject<{
         mid_banner: z.ZodOptional<z.ZodObject<{
             strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
             banners: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
+                action: z.ZodString;
                 image_url: z.ZodString;
                 alt: z.ZodString;
                 click_url: z.ZodString;
@@ -2619,12 +2635,14 @@ declare const HPartnerSchema: z.ZodObject<{
                 properties: z.ZodRecord<z.ZodString, z.ZodString>;
             }, "strip", z.ZodTypeAny, {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
                 properties: Record<string, string>;
             }, {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -2634,6 +2652,7 @@ declare const HPartnerSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -2643,6 +2662,7 @@ declare const HPartnerSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -2658,6 +2678,7 @@ declare const HPartnerSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -2668,6 +2689,7 @@ declare const HPartnerSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -2683,6 +2705,7 @@ declare const HPartnerSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -2693,6 +2716,7 @@ declare const HPartnerSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -3192,6 +3216,7 @@ declare const HPartnerSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -3202,6 +3227,7 @@ declare const HPartnerSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -3377,6 +3403,7 @@ declare const HPartnerSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -3387,6 +3414,7 @@ declare const HPartnerSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -4145,6 +4173,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         top_banner: z.ZodOptional<z.ZodObject<{
             strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
             banners: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
+                action: z.ZodString;
                 image_url: z.ZodString;
                 alt: z.ZodString;
                 click_url: z.ZodString;
@@ -4152,12 +4181,14 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 properties: z.ZodRecord<z.ZodString, z.ZodString>;
             }, "strip", z.ZodTypeAny, {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
                 properties: Record<string, string>;
             }, {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -4167,6 +4198,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -4176,6 +4208,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -4185,6 +4218,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         mid_banner: z.ZodOptional<z.ZodObject<{
             strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
             banners: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
+                action: z.ZodString;
                 image_url: z.ZodString;
                 alt: z.ZodString;
                 click_url: z.ZodString;
@@ -4192,12 +4226,14 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 properties: z.ZodRecord<z.ZodString, z.ZodString>;
             }, "strip", z.ZodTypeAny, {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
                 properties: Record<string, string>;
             }, {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -4207,6 +4243,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -4216,6 +4253,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -4231,6 +4269,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -4241,6 +4280,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -4256,6 +4296,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -4266,6 +4307,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -4765,6 +4807,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -4775,6 +4818,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -4950,6 +4994,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -4960,6 +5005,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -5407,6 +5453,7 @@ declare const HVisualIdentitySchema: z.ZodObject<{
     top_banner: z.ZodOptional<z.ZodObject<{
         strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
         banners: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
+            action: z.ZodString;
             image_url: z.ZodString;
             alt: z.ZodString;
             click_url: z.ZodString;
@@ -5414,12 +5461,14 @@ declare const HVisualIdentitySchema: z.ZodObject<{
             properties: z.ZodRecord<z.ZodString, z.ZodString>;
         }, "strip", z.ZodTypeAny, {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+            action: string;
             image_url: string;
             alt: string;
             click_url: string;
             properties: Record<string, string>;
         }, {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+            action: string;
             image_url: string;
             alt: string;
             click_url: string;
@@ -5429,6 +5478,7 @@ declare const HVisualIdentitySchema: z.ZodObject<{
         strategy: "destination" | "fixed" | "rotating" | "time_of_day";
         banners?: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+            action: string;
             image_url: string;
             alt: string;
             click_url: string;
@@ -5438,6 +5488,7 @@ declare const HVisualIdentitySchema: z.ZodObject<{
         strategy: "destination" | "fixed" | "rotating" | "time_of_day";
         banners?: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+            action: string;
             image_url: string;
             alt: string;
             click_url: string;
@@ -5447,6 +5498,7 @@ declare const HVisualIdentitySchema: z.ZodObject<{
     mid_banner: z.ZodOptional<z.ZodObject<{
         strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
         banners: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
+            action: z.ZodString;
             image_url: z.ZodString;
             alt: z.ZodString;
             click_url: z.ZodString;
@@ -5454,12 +5506,14 @@ declare const HVisualIdentitySchema: z.ZodObject<{
             properties: z.ZodRecord<z.ZodString, z.ZodString>;
         }, "strip", z.ZodTypeAny, {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+            action: string;
             image_url: string;
             alt: string;
             click_url: string;
             properties: Record<string, string>;
         }, {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+            action: string;
             image_url: string;
             alt: string;
             click_url: string;
@@ -5469,6 +5523,7 @@ declare const HVisualIdentitySchema: z.ZodObject<{
         strategy: "destination" | "fixed" | "rotating" | "time_of_day";
         banners?: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+            action: string;
             image_url: string;
             alt: string;
             click_url: string;
@@ -5478,6 +5533,7 @@ declare const HVisualIdentitySchema: z.ZodObject<{
         strategy: "destination" | "fixed" | "rotating" | "time_of_day";
         banners?: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+            action: string;
             image_url: string;
             alt: string;
             click_url: string;
@@ -5493,6 +5549,7 @@ declare const HVisualIdentitySchema: z.ZodObject<{
         strategy: "destination" | "fixed" | "rotating" | "time_of_day";
         banners?: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+            action: string;
             image_url: string;
             alt: string;
             click_url: string;
@@ -5503,6 +5560,7 @@ declare const HVisualIdentitySchema: z.ZodObject<{
         strategy: "destination" | "fixed" | "rotating" | "time_of_day";
         banners?: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+            action: string;
             image_url: string;
             alt: string;
             click_url: string;
@@ -5518,6 +5576,7 @@ declare const HVisualIdentitySchema: z.ZodObject<{
         strategy: "destination" | "fixed" | "rotating" | "time_of_day";
         banners?: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+            action: string;
             image_url: string;
             alt: string;
             click_url: string;
@@ -5528,6 +5587,7 @@ declare const HVisualIdentitySchema: z.ZodObject<{
         strategy: "destination" | "fixed" | "rotating" | "time_of_day";
         banners?: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+            action: string;
             image_url: string;
             alt: string;
             click_url: string;
@@ -5978,6 +6038,7 @@ declare const HPromoPackageSpecificationSchema: z.ZodObject<{
     traffic_policy?: string | undefined;
 }>;
 declare const HVisualIdentityBannerSchema: z.ZodObject<{
+    action: z.ZodString;
     image_url: z.ZodString;
     alt: z.ZodString;
     click_url: z.ZodString;
@@ -5985,12 +6046,14 @@ declare const HVisualIdentityBannerSchema: z.ZodObject<{
     properties: z.ZodRecord<z.ZodString, z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+    action: string;
     image_url: string;
     alt: string;
     click_url: string;
     properties: Record<string, string>;
 }, {
     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+    action: string;
     image_url: string;
     alt: string;
     click_url: string;
@@ -6273,6 +6336,7 @@ declare const PromoPackageSpecificationSchema: z.ZodObject<{
     traffic_policy?: string | undefined;
 }>;
 declare const VisualIdentityBannerSchema: z.ZodObject<{
+    action: z.ZodString;
     image_url: z.ZodString;
     alt: z.ZodString;
     click_url: z.ZodString;
@@ -6280,12 +6344,14 @@ declare const VisualIdentityBannerSchema: z.ZodObject<{
     properties: z.ZodRecord<z.ZodString, z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+    action: string;
     image_url: string;
     alt: string;
     click_url: string;
     properties: Record<string, string>;
 }, {
     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+    action: string;
     image_url: string;
     alt: string;
     click_url: string;
@@ -6345,6 +6411,7 @@ declare const CommunicationOptionsSchema: z.ZodObject<{
 declare const VisualIdentityBannersSchema: z.ZodObject<{
     strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
     banners: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
+        action: z.ZodString;
         image_url: z.ZodString;
         alt: z.ZodString;
         click_url: z.ZodString;
@@ -6352,12 +6419,14 @@ declare const VisualIdentityBannersSchema: z.ZodObject<{
         properties: z.ZodRecord<z.ZodString, z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+        action: string;
         image_url: string;
         alt: string;
         click_url: string;
         properties: Record<string, string>;
     }, {
         locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+        action: string;
         image_url: string;
         alt: string;
         click_url: string;
@@ -6367,6 +6436,7 @@ declare const VisualIdentityBannersSchema: z.ZodObject<{
     strategy: "destination" | "fixed" | "rotating" | "time_of_day";
     banners?: {
         locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+        action: string;
         image_url: string;
         alt: string;
         click_url: string;
@@ -6376,6 +6446,7 @@ declare const VisualIdentityBannersSchema: z.ZodObject<{
     strategy: "destination" | "fixed" | "rotating" | "time_of_day";
     banners?: {
         locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+        action: string;
         image_url: string;
         alt: string;
         click_url: string;
@@ -6747,6 +6818,7 @@ declare const partnerAppSchema: z.ZodObject<{
         top_banner: z.ZodOptional<z.ZodObject<{
             strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
             banners: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
+                action: z.ZodString;
                 image_url: z.ZodString;
                 alt: z.ZodString;
                 click_url: z.ZodString;
@@ -6754,12 +6826,14 @@ declare const partnerAppSchema: z.ZodObject<{
                 properties: z.ZodRecord<z.ZodString, z.ZodString>;
             }, "strip", z.ZodTypeAny, {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
                 properties: Record<string, string>;
             }, {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -6769,6 +6843,7 @@ declare const partnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -6778,6 +6853,7 @@ declare const partnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -6787,6 +6863,7 @@ declare const partnerAppSchema: z.ZodObject<{
         mid_banner: z.ZodOptional<z.ZodObject<{
             strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
             banners: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
+                action: z.ZodString;
                 image_url: z.ZodString;
                 alt: z.ZodString;
                 click_url: z.ZodString;
@@ -6794,12 +6871,14 @@ declare const partnerAppSchema: z.ZodObject<{
                 properties: z.ZodRecord<z.ZodString, z.ZodString>;
             }, "strip", z.ZodTypeAny, {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
                 properties: Record<string, string>;
             }, {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -6809,6 +6888,7 @@ declare const partnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -6818,6 +6898,7 @@ declare const partnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -6833,6 +6914,7 @@ declare const partnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -6843,6 +6925,7 @@ declare const partnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -6858,6 +6941,7 @@ declare const partnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -6868,6 +6952,7 @@ declare const partnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -7367,6 +7452,7 @@ declare const partnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -7377,6 +7463,7 @@ declare const partnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -7552,6 +7639,7 @@ declare const partnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
@@ -7562,6 +7650,7 @@ declare const partnerAppSchema: z.ZodObject<{
             strategy: "destination" | "fixed" | "rotating" | "time_of_day";
             banners?: {
                 locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+                action: string;
                 image_url: string;
                 alt: string;
                 click_url: string;
