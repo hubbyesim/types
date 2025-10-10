@@ -949,6 +949,13 @@ var partnerSchemaSpec = markAsSchemaSpec({
     optional: true
   }
 });
+var priceListItemSchemaSpec = z.object({
+  destination: z.string(),
+  label: z.string(),
+  type: z.enum(["data-limited", "time-limited", "starter", "unlimited"]),
+  price: z.number(),
+  package: z.string()
+});
 var priceListSchemaSpec = markAsSchemaSpec({
   // Base model fields
   id: z.string(),
@@ -961,19 +968,8 @@ var priceListSchemaSpec = markAsSchemaSpec({
   description: z.string().nullable(),
   type: z.enum(["partner", "consumer"]),
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
-  package_prices: {
-    _type: "array",
-    of: {
-      _type: "object",
-      of: {
-        destination: z.string(),
-        label: z.string(),
-        type: z.enum(["data-limited", "time-limited"]),
-        price: z.number(),
-        package: { _type: "docRef", collection: PACKAGE_COLLECTION }
-      }
-    }
-  }
+  price_list: z.array(priceListItemSchemaSpec),
+  package_prices: z.array(priceListItemSchemaSpec)
 });
 var payloadSpec = {
   _type: "record",
