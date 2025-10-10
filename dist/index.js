@@ -478,11 +478,7 @@ var esimSchemaSpec = markAsSchemaSpec({
   last_updated: timestampNullable
 });
 var paymentSchemaSpec = markAsSchemaSpec({
-  id: z.string(),
-  created_at: timestampRequired,
-  updated_at: timestampRequired,
-  created_by: z.string().nullable(),
-  updated_by: z.string().nullable(),
+  ...hubbyModelSpec,
   // Core payment fields (universal across ALL payment types)
   amount: z.number(),
   customer: z.string(),
@@ -501,6 +497,7 @@ var paymentSchemaSpec = markAsSchemaSpec({
   })).optional(),
   // Reference fields
   user: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true, optional: true },
   // Source-specific payment properties
   app_payment_properties: z.object({
     package: z.string().optional(),
