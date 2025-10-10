@@ -75,7 +75,7 @@ export const pricingStrategySchema = z.object({
 
 // Visual identity banner schema
 export const visualIdentityBannerSchema = z.object({
-    action: z.string(),
+    action: z.string().nullable().optional(),
     image_url: z.string(),
     alt: z.string(),
     click_url: z.string(),
