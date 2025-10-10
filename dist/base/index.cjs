@@ -623,7 +623,7 @@ var pricingStrategySchema = zod.z.object({
   custom_prices: zod.z.array(packagePriceSchema)
 });
 var visualIdentityBannerSchema = zod.z.object({
-  action: zod.z.string(),
+  action: zod.z.string().nullable().optional(),
   image_url: zod.z.string(),
   alt: zod.z.string(),
   click_url: zod.z.string(),
