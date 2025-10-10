@@ -115,6 +115,7 @@ describe("Partner Schema", () => {
                     strategy: "fixed",
                     banners: [
                         {
+                            action: "internal",
                             image_url: "https://example.com/banner1.png",
                             alt: "Summer Sale",
                             click_url: "https://example.com/sale",
