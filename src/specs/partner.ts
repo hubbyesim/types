@@ -413,6 +413,14 @@ export const partnerSchemaSpec = markAsSchemaSpec({
     }
 });
 
+export const priceListItemSchemaSpec = z.object({
+    destination: z.string(),
+    label: z.string(),
+    type: z.enum(['data-limited', 'time-limited', 'starter', 'unlimited']),
+    price: z.number(),
+    package: z.string(),
+});
+
 // ===== Price list schema =====
 export const priceListSchemaSpec = markAsSchemaSpec({
     // Base model fields
@@ -427,17 +435,6 @@ export const priceListSchemaSpec = markAsSchemaSpec({
     description: z.string().nullable(),
     type: z.enum(['partner', 'consumer']),
     partner: { _type: 'docRef' as const, collection: PARTNER_COLLECTION, nullable: true },
-    package_prices: {
-        _type: 'array' as const,
-        of: {
-            _type: 'object' as const,
-            of: {
-                destination: z.string(),
-                label: z.string(),
-                type: z.enum(['data-limited', 'time-limited']),
-                price: z.number(),
-                package: { _type: 'docRef' as const, collection: PACKAGE_COLLECTION }
-            }
-        }
-    }
+    price_list: z.array(priceListItemSchemaSpec),
+    package_prices: z.array(priceListItemSchemaSpec),
 });

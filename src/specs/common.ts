@@ -19,6 +19,9 @@ export const ROLE_COLLECTION = 'roles';
 export const PERMISSION_COLLECTION = 'permissions';
 export const TRAFFIC_POLICY_COLLECTION = 'traffic_policies';
 
+
+export const packageTypes = ['data-limited', 'time-limited', 'starter', 'unlimited'];
+
 // Timestamp specs
 export const timestampNullableOptional = { _type: 'timestamp' as const, nullable: true, optional: true };
 export const timestampNullable = { _type: 'timestamp' as const, nullable: true, optional: false };

@@ -46,20 +46,20 @@ import { convertFirestoreToJS, convertJSToFirestore } from './utils/firestoreTra
 import { HPackage, HPartner, HPriceList, HPromoCode } from './index.client';
 import { buildClientSchema } from './builders/client';
 
-export { 
-  partnerSchemaSpec, 
-  analyticsSpec, 
-  packageSchemaSpec,
-  userSchemaSpec,
-  bookingSchemaSpec,
-  countrySchemaSpec,
-  currencySchemaSpec,
-  esimSchemaSpec,
-  paymentSchemaSpec,
-  messageSchemaSpec,
-  promoCodeSchemaSpec,
-  priceListSchemaSpec,
-  apiLogSchemaSpec
+export {
+    partnerSchemaSpec,
+    analyticsSpec,
+    packageSchemaSpec,
+    userSchemaSpec,
+    bookingSchemaSpec,
+    countrySchemaSpec,
+    currencySchemaSpec,
+    esimSchemaSpec,
+    paymentSchemaSpec,
+    messageSchemaSpec,
+    promoCodeSchemaSpec,
+    priceListSchemaSpec,
+    apiLogSchemaSpec
 };
 
 
