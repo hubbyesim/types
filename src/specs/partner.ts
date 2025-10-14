@@ -421,6 +421,15 @@ export const priceListItemSchemaSpec = z.object({
     package: z.string(),
 });
 
+// Price list item with docRef support for use in priceListSchemaSpec
+const priceListItemWithDocRefSpec = {
+    destination: z.string(),
+    label: z.string(),
+    type: z.enum(['data-limited', 'time-limited', 'starter', 'unlimited']),
+    price: z.number(),
+    package: { _type: 'docRef' as const, collection: PACKAGE_COLLECTION }
+};
+
 // ===== Price list schema =====
 export const priceListSchemaSpec = markAsSchemaSpec({
     // Base model fields
@@ -435,6 +444,13 @@ export const priceListSchemaSpec = markAsSchemaSpec({
     description: z.string().nullable(),
     type: z.enum(['partner', 'consumer']),
     partner: { _type: 'docRef' as const, collection: PARTNER_COLLECTION, nullable: true },
-    price_list: z.array(priceListItemSchemaSpec),
-    package_prices: z.array(priceListItemSchemaSpec),
+    price_list: {
+        _type: 'array' as const,
+        of: priceListItemWithDocRefSpec,
+        optional: true
+    },
+    package_prices: {
+        _type: 'array' as const,
+        of: priceListItemWithDocRefSpec
+    },
 });
