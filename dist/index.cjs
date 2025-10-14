@@ -950,13 +950,20 @@ var partnerSchemaSpec = markAsSchemaSpec({
     optional: true
   }
 });
-var priceListItemSchemaSpec = zod.z.object({
+zod.z.object({
   destination: zod.z.string(),
   label: zod.z.string(),
   type: zod.z.enum(["data-limited", "time-limited", "starter", "unlimited"]),
   price: zod.z.number(),
   package: zod.z.string()
 });
+var priceListItemWithDocRefSpec = {
+  destination: zod.z.string(),
+  label: zod.z.string(),
+  type: zod.z.enum(["data-limited", "time-limited", "starter", "unlimited"]),
+  price: zod.z.number(),
+  package: { _type: "docRef", collection: PACKAGE_COLLECTION }
+};
 var priceListSchemaSpec = markAsSchemaSpec({
   // Base model fields
   id: zod.z.string(),
@@ -969,8 +976,15 @@ var priceListSchemaSpec = markAsSchemaSpec({
   description: zod.z.string().nullable(),
   type: zod.z.enum(["partner", "consumer"]),
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
-  price_list: zod.z.array(priceListItemSchemaSpec),
-  package_prices: zod.z.array(priceListItemSchemaSpec)
+  price_list: {
+    _type: "array",
+    of: priceListItemWithDocRefSpec,
+    optional: true
+  },
+  package_prices: {
+    _type: "array",
+    of: priceListItemWithDocRefSpec
+  }
 });
 var payloadSpec = {
   _type: "record",

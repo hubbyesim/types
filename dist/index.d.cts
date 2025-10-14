@@ -1249,44 +1249,33 @@ declare const priceListSchemaSpec: {
         collection: string;
         nullable: boolean;
     };
-    price_list: z.ZodArray<z.ZodObject<{
-        destination: z.ZodString;
-        label: z.ZodString;
-        type: z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>;
-        price: z.ZodNumber;
-        package: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        type: "data-limited" | "time-limited" | "starter" | "unlimited";
-        destination: string;
-        price: number;
-        package: string;
-        label: string;
-    }, {
-        type: "data-limited" | "time-limited" | "starter" | "unlimited";
-        destination: string;
-        price: number;
-        package: string;
-        label: string;
-    }>, "many">;
-    package_prices: z.ZodArray<z.ZodObject<{
-        destination: z.ZodString;
-        label: z.ZodString;
-        type: z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>;
-        price: z.ZodNumber;
-        package: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        type: "data-limited" | "time-limited" | "starter" | "unlimited";
-        destination: string;
-        price: number;
-        package: string;
-        label: string;
-    }, {
-        type: "data-limited" | "time-limited" | "starter" | "unlimited";
-        destination: string;
-        price: number;
-        package: string;
-        label: string;
-    }>, "many">;
+    price_list: {
+        _type: "array";
+        of: {
+            destination: z.ZodString;
+            label: z.ZodString;
+            type: z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>;
+            price: z.ZodNumber;
+            package: {
+                _type: "docRef";
+                collection: string;
+            };
+        };
+        optional: boolean;
+    };
+    package_prices: {
+        _type: "array";
+        of: {
+            destination: z.ZodString;
+            label: z.ZodString;
+            type: z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>;
+            price: z.ZodNumber;
+            package: {
+                _type: "docRef";
+                collection: string;
+            };
+        };
+    };
 };
 
 declare const SUPPORTED_LOCALES$1: readonly ["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK"];
@@ -3691,7 +3680,7 @@ declare const HPriceListSchema: z.ZodObject<{
         type: z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>;
         price: z.ZodNumber;
         package: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
+    }, z.UnknownKeysParam, z.ZodTypeAny, {
         type: "data-limited" | "time-limited" | "starter" | "unlimited";
         destination: string;
         price: number;
@@ -3710,7 +3699,7 @@ declare const HPriceListSchema: z.ZodObject<{
         type: z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>;
         price: z.ZodNumber;
         package: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
+    }, z.UnknownKeysParam, z.ZodTypeAny, {
         type: "data-limited" | "time-limited" | "starter" | "unlimited";
         destination: string;
         price: number;

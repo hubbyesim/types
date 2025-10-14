@@ -2255,7 +2255,7 @@ declare const HPriceListSchema: z.ZodObject<{
         type: z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>;
         price: z.ZodNumber;
         package: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
+    }, z.UnknownKeysParam, z.ZodTypeAny, {
         type: "data-limited" | "time-limited" | "starter" | "unlimited";
         destination: string;
         price: number;
@@ -2274,7 +2274,7 @@ declare const HPriceListSchema: z.ZodObject<{
         type: z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>;
         price: z.ZodNumber;
         package: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
+    }, z.UnknownKeysParam, z.ZodTypeAny, {
         type: "data-limited" | "time-limited" | "starter" | "unlimited";
         destination: string;
         price: number;
