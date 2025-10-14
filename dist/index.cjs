@@ -739,6 +739,20 @@ var freeEsimSchema = zod.z.object({
   allowance: zod.z.number(),
   total_allowance: zod.z.number()
 });
+var agentSignupSettingsSchema = zod.z.object({
+  skip_password_email: zod.z.boolean().default(true),
+  slack_channel: zod.z.string().nullable().optional(),
+  welcome_email_template: zod.z.number().nullable().optional(),
+  password_reset_template: zod.z.number().nullable().optional(),
+  partner_type: zod.z.enum(["wholesale", "reseller", "platform", "agent"]).nullable().optional(),
+  enable_complimentary_booking: zod.z.boolean().default(true),
+  complimentary_booking_partner_id: zod.z.string().nullable().optional(),
+  visual_identity_options: zod.z.object({
+    hubby_branding: zod.z.boolean().default(true),
+    source_partner_branding: zod.z.boolean().default(false),
+    own_branding: zod.z.boolean().default(false)
+  }).default({})
+});
 var platformSettingsSchema = zod.z.object({
   package_strategy: zod.z.object({
     name: zod.z.string(),
@@ -764,7 +778,8 @@ var platformSettingsSchema = zod.z.object({
     hubby_branding: zod.z.boolean().optional().default(true),
     source_partner_branding: zod.z.boolean().optional().default(false),
     own_branding: zod.z.boolean().optional().default(false)
-  }).nullable().optional()
+  }).nullable().optional(),
+  agent_signup_settings: agentSignupSettingsSchema.nullable().optional()
 });
 var packagePriceSchemaSpec = markAsSchemaSpec({
   destination: zod.z.string(),
@@ -867,6 +882,12 @@ var platformSettingsSchemaSpec = markAsSchemaSpec({
       _type: "object",
       of: scheduleSchema.shape
     },
+    optional: true
+  },
+  agent_signup_settings: {
+    _type: "object",
+    of: agentSignupSettingsSchema.shape,
+    nullable: true,
     optional: true
   }
 });

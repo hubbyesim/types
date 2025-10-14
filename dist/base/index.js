@@ -704,6 +704,20 @@ var freeEsimSchema = z.object({
   allowance: z.number(),
   total_allowance: z.number()
 });
+var agentSignupSettingsSchema = z.object({
+  skip_password_email: z.boolean().default(true),
+  slack_channel: z.string().nullable().optional(),
+  welcome_email_template: z.number().nullable().optional(),
+  password_reset_template: z.number().nullable().optional(),
+  partner_type: z.enum(["wholesale", "reseller", "platform", "agent"]).nullable().optional(),
+  enable_complimentary_booking: z.boolean().default(true),
+  complimentary_booking_partner_id: z.string().nullable().optional(),
+  visual_identity_options: z.object({
+    hubby_branding: z.boolean().default(true),
+    source_partner_branding: z.boolean().default(false),
+    own_branding: z.boolean().default(false)
+  }).default({})
+});
 var platformSettingsSchema = z.object({
   package_strategy: z.object({
     name: z.string(),
@@ -729,7 +743,8 @@ var platformSettingsSchema = z.object({
     hubby_branding: z.boolean().optional().default(true),
     source_partner_branding: z.boolean().optional().default(false),
     own_branding: z.boolean().optional().default(false)
-  }).nullable().optional()
+  }).nullable().optional(),
+  agent_signup_settings: agentSignupSettingsSchema.nullable().optional()
 });
 markAsSchemaSpec({
   destination: z.string(),
@@ -832,6 +847,12 @@ markAsSchemaSpec({
       _type: "object",
       of: scheduleSchema.shape
     },
+    optional: true
+  },
+  agent_signup_settings: {
+    _type: "object",
+    of: agentSignupSettingsSchema.shape,
+    nullable: true,
     optional: true
   }
 });
