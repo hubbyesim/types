@@ -332,19 +332,6 @@ declare const esimSchemaSpec: {
 };
 
 declare const paymentSchemaSpec: {
-    id: z.ZodString;
-    created_at: {
-        _type: "timestamp";
-        nullable: boolean;
-        optional: boolean;
-    };
-    updated_at: {
-        _type: "timestamp";
-        nullable: boolean;
-        optional: boolean;
-    };
-    created_by: z.ZodNullable<z.ZodString>;
-    updated_by: z.ZodNullable<z.ZodString>;
     amount: z.ZodNumber;
     customer: z.ZodString;
     date: {
@@ -376,6 +363,12 @@ declare const paymentSchemaSpec: {
         iso3?: string | undefined;
     }>, "many">>;
     user: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+        optional: boolean;
+    };
+    partner: {
         _type: "docRef";
         collection: string;
         nullable: boolean;
@@ -431,6 +424,29 @@ declare const paymentSchemaSpec: {
         affiliateId?: string | null | undefined;
         partner_name?: string | undefined;
     }>>;
+    id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    created_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    updated_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    created_by: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+        optional: boolean;
+    };
+    updated_by: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+        optional: boolean;
+    };
 };
 
 declare const analyticsSpec: {
@@ -1934,11 +1950,6 @@ declare const HESIMSchema: z.ZodObject<{
     coverage_label?: string | null | undefined;
 }>;
 declare const HPaymentSchema: z.ZodObject<{
-    id: z.ZodString;
-    created_at: z.ZodEffects<z.ZodDate, Date, Date>;
-    updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
-    created_by: z.ZodNullable<z.ZodString>;
-    updated_by: z.ZodNullable<z.ZodString>;
     amount: z.ZodNumber;
     customer: z.ZodString;
     date: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -1966,6 +1977,7 @@ declare const HPaymentSchema: z.ZodObject<{
         iso3?: string | undefined;
     }>, "many">>;
     user: z.ZodString;
+    partner: z.ZodString;
     app_payment_properties: z.ZodOptional<z.ZodObject<{
         package: z.ZodOptional<z.ZodString>;
         promo: z.ZodOptional<z.ZodString>;
@@ -2016,18 +2028,24 @@ declare const HPaymentSchema: z.ZodObject<{
         affiliateId?: string | null | undefined;
         partner_name?: string | undefined;
     }>>;
+    id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    created_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    created_by: z.ZodString;
+    updated_by: z.ZodString;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
-    id: string;
     source: "platform" | "app" | "webapp";
+    partner: string;
     created_at: Date;
     updated_at: Date;
-    created_by: string | null;
-    updated_by: string | null;
+    created_by: string;
+    updated_by: string;
     date: Date;
     user: string;
     amount: number;
     customer: string;
     topup: boolean;
+    id?: string | null | undefined;
     package_specifications?: {
         package_size?: string | undefined;
         destination?: string | undefined;
@@ -2056,17 +2074,18 @@ declare const HPaymentSchema: z.ZodObject<{
         partner_name?: string | undefined;
     } | undefined;
 }, {
-    id: string;
     source: "platform" | "app" | "webapp";
+    partner: string;
     created_at: Date;
     updated_at: Date;
-    created_by: string | null;
-    updated_by: string | null;
+    created_by: string;
+    updated_by: string;
     date: Date;
     user: string;
     amount: number;
     customer: string;
     topup: boolean;
+    id?: string | null | undefined;
     package_specifications?: {
         package_size?: string | undefined;
         destination?: string | undefined;

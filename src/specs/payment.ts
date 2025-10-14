@@ -2,16 +2,14 @@ import { z } from 'zod';
 import { markAsSchemaSpec } from '../common';
 import {
     USER_COLLECTION,
-    timestampRequired
+    timestampRequired,
+    hubbyModelSpec,
+    PARTNER_COLLECTION
 } from './common';
 
 // Define the payment schema spec
 export const paymentSchemaSpec = markAsSchemaSpec({
-    id: z.string(),
-    created_at: timestampRequired,
-    updated_at: timestampRequired,
-    created_by: z.string().nullable(),
-    updated_by: z.string().nullable(),
+    ...hubbyModelSpec,
 
     // Core payment fields (universal across ALL payment types)
     amount: z.number(),
@@ -21,18 +19,19 @@ export const paymentSchemaSpec = markAsSchemaSpec({
     invoice: z.string().optional(),
     fee: z.number().optional(),
     topup: z.boolean(),
-    
+
     // Common resolved package specification (same format for all sources)
     package_specifications: z.array(z.object({
         package_type: z.string().optional(),
-        package_size: z.string().optional(), 
+        package_size: z.string().optional(),
         package_duration: z.number().optional(),
         destination: z.string().optional(),
         iso3: z.string().optional(),
     })).optional(),
-    
+
     // Reference fields
     user: { _type: 'docRef' as const, collection: USER_COLLECTION, nullable: true, optional: true },
+    partner: { _type: 'docRef' as const, collection: PARTNER_COLLECTION, nullable: true, optional: true },
 
     // Source-specific payment properties
     app_payment_properties: z.object({
