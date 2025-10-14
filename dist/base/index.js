@@ -993,6 +993,48 @@ var permissionSchemaSpec = markAsSchemaSpec({
   created_at: timestampRequired,
   updated_at: timestampNullableOptional
 });
+var REVIEW_COLLECTION = "/companies/hubby/reviews";
+var rewardPackageTypeSchema = z.enum(["data-limited", "starter"]);
+var baseRewardSchema = z.object({
+  package_size: z.string(),
+  package_type: rewardPackageTypeSchema
+});
+var rewardMultipliersSchema = z.object({
+  quality_based: z.number().optional(),
+  completion_based: z.number().optional()
+}).optional();
+var rewardStrategySchema = z.object({
+  base_reward: baseRewardSchema,
+  multipliers: rewardMultipliersSchema
+});
+var reviewSchemaSpec = markAsSchemaSpec({
+  id: z.string().optional(),
+  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
+  questions: z.record(z.any()),
+  reward_strategy: rewardStrategySchema,
+  created_at: timestampRequired,
+  updated_at: timestampNullable,
+  created_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  updated_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true }
+});
+var reviewSubmissionSchemaSpec = markAsSchemaSpec({
+  id: z.string().optional(),
+  country: { _type: "docRef", collection: COUNTRY_COLLECTION, nullable: true },
+  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
+  review: { _type: "docRef", collection: REVIEW_COLLECTION, nullable: true },
+  user: { _type: "docRef", collection: USER_COLLECTION, nullable: true },
+  questions: z.record(z.any()),
+  iccid: z.string(),
+  isAndroid: z.boolean(),
+  country_id: z.string(),
+  partner_id: z.string(),
+  review_id: z.string(),
+  created_at: timestampRequired,
+  updated_at: timestampNullable,
+  created_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  updated_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  analysis: z.record(z.any()).nullable().optional()
+});
 
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
@@ -1022,6 +1064,8 @@ var HTagSchema = buildClientSchema(tagModelSpec);
 var HTrafficPolicySchema = buildClientSchema(trafficPolicySpec);
 var HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
 var HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
+var HReviewSchema = buildClientSchema(reviewSchemaSpec);
+var HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1034,8 +1078,12 @@ var HPartnerDataSchema = partnerDataSchema;
 var HCommunicationChannelSchema = communicationChannelSchema;
 var HBookingStatusSchema = bookingStatusSchema;
 var HCommunicationOptionsSchema = communicationOptionsSchema;
+var HRewardStrategySchema = rewardStrategySchema;
+var HBaseRewardSchema = baseRewardSchema;
+var HRewardMultipliersSchema = rewardMultipliersSchema;
+var HRewardPackageTypeSchema = rewardPackageTypeSchema;
 var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
-export { HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBondioPackageSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HRoleSchema, HScheduleFilterSchema, HTagSchema, HTelnaPackageSchema, HTrafficPolicySchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES };
+export { HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBaseRewardSchema, HBondioPackageSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HReviewSchema, HReviewSubmissionSchema, HRewardMultipliersSchema, HRewardPackageTypeSchema, HRewardStrategySchema, HRoleSchema, HScheduleFilterSchema, HTagSchema, HTelnaPackageSchema, HTrafficPolicySchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES };
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.js.map
