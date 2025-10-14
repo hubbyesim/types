@@ -185,6 +185,8 @@ var API_LOG_COLLECTION = "api_logs";
 var ROLE_COLLECTION = "roles";
 var PERMISSION_COLLECTION = "permissions";
 var TRAFFIC_POLICY_COLLECTION = "traffic_policies";
+var REVIEW_COLLECTION = "/companies/hubby/reviews";
+var REVIEW_SUBMISSION_COLLECTION = "/companies/hubby/review_submissions";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: false };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
@@ -987,6 +989,48 @@ var apiLogSchemaSpec = markAsSchemaSpec({
   timestamp: timestampRequired,
   status_code: zod.z.number()
 });
+var REVIEW_COLLECTION2 = "/companies/hubby/reviews";
+var rewardPackageTypeSchema = zod.z.enum(["data-limited", "starter"]);
+var baseRewardSchema = zod.z.object({
+  package_size: zod.z.string(),
+  package_type: rewardPackageTypeSchema
+});
+var rewardMultipliersSchema = zod.z.object({
+  quality_based: zod.z.number().optional(),
+  completion_based: zod.z.number().optional()
+}).optional();
+var rewardStrategySchema = zod.z.object({
+  base_reward: baseRewardSchema,
+  multipliers: rewardMultipliersSchema
+});
+var reviewSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string().optional(),
+  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
+  questions: zod.z.record(zod.z.any()),
+  reward_strategy: rewardStrategySchema,
+  created_at: timestampRequired,
+  updated_at: timestampNullable,
+  created_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  updated_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true }
+});
+var reviewSubmissionSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string().optional(),
+  country: { _type: "docRef", collection: COUNTRY_COLLECTION, nullable: true },
+  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
+  review: { _type: "docRef", collection: REVIEW_COLLECTION2, nullable: true },
+  user: { _type: "docRef", collection: USER_COLLECTION, nullable: true },
+  questions: zod.z.record(zod.z.any()),
+  iccid: zod.z.string(),
+  isAndroid: zod.z.boolean(),
+  country_id: zod.z.string(),
+  partner_id: zod.z.string(),
+  review_id: zod.z.string(),
+  created_at: timestampRequired,
+  updated_at: timestampNullable,
+  created_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  updated_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  analysis: zod.z.record(zod.z.any()).nullable().optional()
+});
 function createConvertJSToFirestore(db) {
   return function convertJSToFirestore2(input, spec) {
     if (input === void 0 || input === null)
@@ -1332,6 +1376,8 @@ var TagSchema = buildServerSchema(tagModelSpec);
 var TelnaPackageSchema = buildServerSchema(telnaPackageSchema);
 var BondioPackageSchema = buildServerSchema(bondioPackageSchema);
 var TrafficPolicySchema = buildServerSchema(trafficPolicySpec);
+var ReviewSchema = buildServerSchema(reviewSchemaSpec);
+var ReviewSubmissionSchema = buildServerSchema(reviewSubmissionSchemaSpec);
 var AddressSchema = addressSchema;
 var RegistrationSchema = registrationSchema;
 var BankingDetailsSchema = bankingDetailsSchema;
@@ -1345,6 +1391,10 @@ var CommunicationChannelSchema = communicationChannelSchema;
 var BookingStatusSchema = bookingStatusSchema;
 var CommunicationOptionsSchema = communicationOptionsSchema;
 var VisualIdentityBannersSchema = visualIdentityBannersSchema;
+var RewardStrategySchema = rewardStrategySchema;
+var BaseRewardSchema = baseRewardSchema;
+var RewardMultipliersSchema = rewardMultipliersSchema;
+var RewardPackageTypeSchema = rewardPackageTypeSchema;
 var partnerFromFirestore = (partner) => {
   return convertFirestoreToJS(partner, partnerSchemaSpec);
 };
@@ -1378,6 +1428,7 @@ exports.AnalyticsSchema = AnalyticsSchema;
 exports.ApiLogSchema = ApiLogSchema;
 exports.BOOKING_COLLECTION = BOOKING_COLLECTION;
 exports.BankingDetailsSchema = BankingDetailsSchema;
+exports.BaseRewardSchema = BaseRewardSchema;
 exports.BondioPackageSchema = BondioPackageSchema;
 exports.BookingSchema = BookingSchema;
 exports.BookingStatusSchema = BookingStatusSchema;
@@ -1449,8 +1500,15 @@ exports.PlatformSettingsSchema = PlatformSettingsSchema;
 exports.PriceListSchema = PriceListSchema;
 exports.PromoCodeSchema = PromoCodeSchema;
 exports.PromoPackageSpecificationSchema = PromoPackageSpecificationSchema;
+exports.REVIEW_COLLECTION = REVIEW_COLLECTION;
+exports.REVIEW_SUBMISSION_COLLECTION = REVIEW_SUBMISSION_COLLECTION;
 exports.ROLE_COLLECTION = ROLE_COLLECTION;
 exports.RegistrationSchema = RegistrationSchema;
+exports.ReviewSchema = ReviewSchema;
+exports.ReviewSubmissionSchema = ReviewSubmissionSchema;
+exports.RewardMultipliersSchema = RewardMultipliersSchema;
+exports.RewardPackageTypeSchema = RewardPackageTypeSchema;
+exports.RewardStrategySchema = RewardStrategySchema;
 exports.SUPPORTED_LOCALES = SUPPORTED_LOCALES2;
 exports.ScheduleFilterSchema = ScheduleFilterSchema;
 exports.ScheduleSchema = ScheduleSchema;
@@ -1487,6 +1545,8 @@ exports.priceListToFirestore = priceListToFirestore;
 exports.promoCodeFromFirestore = promoCodeFromFirestore;
 exports.promoCodeSchemaSpec = promoCodeSchemaSpec;
 exports.promoCodeToFirestore = promoCodeToFirestore;
+exports.reviewSchemaSpec = reviewSchemaSpec;
+exports.reviewSubmissionSchemaSpec = reviewSubmissionSchemaSpec;
 exports.userFromFirestore = userFromFirestore;
 exports.userSchemaSpec = userSchemaSpec;
 exports.userToFirestore = userToFirestore;
