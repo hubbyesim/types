@@ -44,6 +44,14 @@ import { apiLogSchemaSpec } from './specs/apiLogs';
 import { z } from 'zod';
 import { roleSchemaSpec } from './specs/role';
 import { permissionSchemaSpec } from './specs/permission';
+import { 
+  reviewSchemaSpec, 
+  reviewSubmissionSchemaSpec,
+  rewardStrategySchema,
+  baseRewardSchema,
+  rewardMultipliersSchema,
+  rewardPackageTypeSchema
+} from './specs/review';
 
 
 /** ZOD SCHEMAS */
@@ -74,6 +82,8 @@ export const HTagSchema = buildClientSchema(tagModelSpec);
 export const HTrafficPolicySchema = buildClientSchema(trafficPolicySpec);
 export const HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
 export const HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
+export const HReviewSchema = buildClientSchema(reviewSchemaSpec);
+export const HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
 // Additional lower-level schemas
 export const HAddressSchema = addressSchema;
 export const HRegistrationSchema = registrationSchema;
@@ -87,6 +97,10 @@ export const HPartnerDataSchema = partnerDataSchema;
 export const HCommunicationChannelSchema = communicationChannelSchema;
 export const HBookingStatusSchema = bookingStatusSchema;
 export const HCommunicationOptionsSchema = communicationOptionsSchema;
+export const HRewardStrategySchema = rewardStrategySchema;
+export const HBaseRewardSchema = baseRewardSchema;
+export const HRewardMultipliersSchema = rewardMultipliersSchema;
+export const HRewardPackageTypeSchema = rewardPackageTypeSchema;
 
 export type HAnalytics = z.infer<typeof HAnalyticsSchema>;
 export type HUser = z.infer<typeof HUserSchema>;
@@ -105,6 +119,8 @@ export type HTag = z.infer<typeof HTagSchema>;
 export type HTrafficPolicy = z.infer<typeof HTrafficPolicySchema>;
 export type HBondioPackage = z.infer<typeof HBondioPackageSchema>;
 export type HTelnaPackage = z.infer<typeof HTelnaPackageSchema>;
+export type HReview = z.infer<typeof HReviewSchema>;
+export type HReviewSubmission = z.infer<typeof HReviewSubmissionSchema>;
 // Additional lower-level types
 export type HAddress = z.infer<typeof HAddressSchema>;
 export type HRegistration = z.infer<typeof HRegistrationSchema>;
@@ -119,6 +135,10 @@ export type HPartnerData = z.infer<typeof HPartnerDataSchema>;
 export type HCommunicationChannel = z.infer<typeof HCommunicationChannelSchema>;
 export type HBookingStatus = z.infer<typeof HBookingStatusSchema>;
 export type HCommunicationOptions = z.infer<typeof HCommunicationOptionsSchema>;
+export type HRewardStrategy = z.infer<typeof HRewardStrategySchema>;
+export type HBaseReward = z.infer<typeof HBaseRewardSchema>;
+export type HRewardMultipliers = z.infer<typeof HRewardMultipliersSchema>;
+export type HRewardPackageType = z.infer<typeof HRewardPackageTypeSchema>;
 export type HHubbyModel = z.infer<typeof HubbyModelSchema>;
 
 export type HubbyModelApp = HHubbyModel;

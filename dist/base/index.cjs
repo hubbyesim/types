@@ -995,6 +995,48 @@ var permissionSchemaSpec = markAsSchemaSpec({
   created_at: timestampRequired,
   updated_at: timestampNullableOptional
 });
+var REVIEW_COLLECTION = "/companies/hubby/reviews";
+var rewardPackageTypeSchema = zod.z.enum(["data-limited", "starter"]);
+var baseRewardSchema = zod.z.object({
+  package_size: zod.z.string(),
+  package_type: rewardPackageTypeSchema
+});
+var rewardMultipliersSchema = zod.z.object({
+  quality_based: zod.z.number().optional(),
+  completion_based: zod.z.number().optional()
+}).optional();
+var rewardStrategySchema = zod.z.object({
+  base_reward: baseRewardSchema,
+  multipliers: rewardMultipliersSchema
+});
+var reviewSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string().optional(),
+  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
+  questions: zod.z.record(zod.z.any()),
+  reward_strategy: rewardStrategySchema,
+  created_at: timestampRequired,
+  updated_at: timestampNullable,
+  created_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  updated_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true }
+});
+var reviewSubmissionSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string().optional(),
+  country: { _type: "docRef", collection: COUNTRY_COLLECTION, nullable: true },
+  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
+  review: { _type: "docRef", collection: REVIEW_COLLECTION, nullable: true },
+  user: { _type: "docRef", collection: USER_COLLECTION, nullable: true },
+  questions: zod.z.record(zod.z.any()),
+  iccid: zod.z.string(),
+  isAndroid: zod.z.boolean(),
+  country_id: zod.z.string(),
+  partner_id: zod.z.string(),
+  review_id: zod.z.string(),
+  created_at: timestampRequired,
+  updated_at: timestampNullable,
+  created_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  updated_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  analysis: zod.z.record(zod.z.any()).nullable().optional()
+});
 
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
@@ -1024,6 +1066,8 @@ var HTagSchema = buildClientSchema(tagModelSpec);
 var HTrafficPolicySchema = buildClientSchema(trafficPolicySpec);
 var HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
 var HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
+var HReviewSchema = buildClientSchema(reviewSchemaSpec);
+var HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1036,12 +1080,17 @@ var HPartnerDataSchema = partnerDataSchema;
 var HCommunicationChannelSchema = communicationChannelSchema;
 var HBookingStatusSchema = bookingStatusSchema;
 var HCommunicationOptionsSchema = communicationOptionsSchema;
+var HRewardStrategySchema = rewardStrategySchema;
+var HBaseRewardSchema = baseRewardSchema;
+var HRewardMultipliersSchema = rewardMultipliersSchema;
+var HRewardPackageTypeSchema = rewardPackageTypeSchema;
 var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
 exports.HAddressSchema = HAddressSchema;
 exports.HAnalyticsSchema = HAnalyticsSchema;
 exports.HApiLogSchema = HApiLogSchema;
 exports.HBankingDetailsSchema = HBankingDetailsSchema;
+exports.HBaseRewardSchema = HBaseRewardSchema;
 exports.HBondioPackageSchema = HBondioPackageSchema;
 exports.HBookingSchema = HBookingSchema;
 exports.HBookingStatusSchema = HBookingStatusSchema;
@@ -1068,6 +1117,11 @@ exports.HPricingStrategySchema = HPricingStrategySchema;
 exports.HPromoCodeSchema = HPromoCodeSchema;
 exports.HPromoPackageSpecificationSchema = HPromoPackageSpecificationSchema;
 exports.HRegistrationSchema = HRegistrationSchema;
+exports.HReviewSchema = HReviewSchema;
+exports.HReviewSubmissionSchema = HReviewSubmissionSchema;
+exports.HRewardMultipliersSchema = HRewardMultipliersSchema;
+exports.HRewardPackageTypeSchema = HRewardPackageTypeSchema;
+exports.HRewardStrategySchema = HRewardStrategySchema;
 exports.HRoleSchema = HRoleSchema;
 exports.HScheduleFilterSchema = HScheduleFilterSchema;
 exports.HTagSchema = HTagSchema;
