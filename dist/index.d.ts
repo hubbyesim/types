@@ -1296,6 +1296,130 @@ declare const apiLogSchemaSpec: {
     status_code: z.ZodNumber;
 };
 
+declare const reviewSchemaSpec: {
+    id: z.ZodOptional<z.ZodString>;
+    partner: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+    };
+    questions: z.ZodRecord<z.ZodString, z.ZodAny>;
+    reward_strategy: z.ZodObject<{
+        base_reward: z.ZodObject<{
+            package_size: z.ZodString;
+            package_type: z.ZodEnum<["data-limited", "starter"]>;
+        }, "strip", z.ZodTypeAny, {
+            package_size: string;
+            package_type: "data-limited" | "starter";
+        }, {
+            package_size: string;
+            package_type: "data-limited" | "starter";
+        }>;
+        multipliers: z.ZodOptional<z.ZodObject<{
+            quality_based: z.ZodOptional<z.ZodNumber>;
+            completion_based: z.ZodOptional<z.ZodNumber>;
+        }, "strip", z.ZodTypeAny, {
+            quality_based?: number | undefined;
+            completion_based?: number | undefined;
+        }, {
+            quality_based?: number | undefined;
+            completion_based?: number | undefined;
+        }>>;
+    }, "strip", z.ZodTypeAny, {
+        base_reward: {
+            package_size: string;
+            package_type: "data-limited" | "starter";
+        };
+        multipliers?: {
+            quality_based?: number | undefined;
+            completion_based?: number | undefined;
+        } | undefined;
+    }, {
+        base_reward: {
+            package_size: string;
+            package_type: "data-limited" | "starter";
+        };
+        multipliers?: {
+            quality_based?: number | undefined;
+            completion_based?: number | undefined;
+        } | undefined;
+    }>;
+    created_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    updated_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    created_by: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+        optional: boolean;
+    };
+    updated_by: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+        optional: boolean;
+    };
+};
+declare const reviewSubmissionSchemaSpec: {
+    id: z.ZodOptional<z.ZodString>;
+    country: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+    };
+    partner: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+    };
+    review: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+    };
+    user: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+    };
+    questions: z.ZodRecord<z.ZodString, z.ZodAny>;
+    iccid: z.ZodString;
+    isAndroid: z.ZodBoolean;
+    country_id: z.ZodString;
+    partner_id: z.ZodString;
+    review_id: z.ZodString;
+    created_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    updated_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    created_by: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+        optional: boolean;
+    };
+    updated_by: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+        optional: boolean;
+    };
+    analysis: z.ZodOptional<z.ZodNullable<z.ZodRecord<z.ZodString, z.ZodAny>>>;
+};
+
 /** ZOD SCHEMAS */
 declare const HUserSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -6280,6 +6404,8 @@ declare const API_LOG_COLLECTION = "api_logs";
 declare const ROLE_COLLECTION = "roles";
 declare const PERMISSION_COLLECTION = "permissions";
 declare const TRAFFIC_POLICY_COLLECTION = "traffic_policies";
+declare const REVIEW_COLLECTION = "/companies/hubby/reviews";
+declare const REVIEW_SUBMISSION_COLLECTION = "/companies/hubby/review_submissions";
 
 /** ZOD SCHEMAS */
 declare const UserSchema: z.ZodTypeAny;
@@ -6304,6 +6430,8 @@ declare const TagSchema: z.ZodTypeAny;
 declare const TelnaPackageSchema: z.ZodTypeAny;
 declare const BondioPackageSchema: z.ZodTypeAny;
 declare const TrafficPolicySchema: z.ZodTypeAny;
+declare const ReviewSchema: z.ZodTypeAny;
+declare const ReviewSubmissionSchema: z.ZodTypeAny;
 declare const AddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     city: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -6508,6 +6636,67 @@ declare const VisualIdentityBannersSchema: z.ZodObject<{
         action?: string | null | undefined;
     }[] | null | undefined;
 }>;
+declare const RewardStrategySchema: z.ZodObject<{
+    base_reward: z.ZodObject<{
+        package_size: z.ZodString;
+        package_type: z.ZodEnum<["data-limited", "starter"]>;
+    }, "strip", z.ZodTypeAny, {
+        package_size: string;
+        package_type: "data-limited" | "starter";
+    }, {
+        package_size: string;
+        package_type: "data-limited" | "starter";
+    }>;
+    multipliers: z.ZodOptional<z.ZodObject<{
+        quality_based: z.ZodOptional<z.ZodNumber>;
+        completion_based: z.ZodOptional<z.ZodNumber>;
+    }, "strip", z.ZodTypeAny, {
+        quality_based?: number | undefined;
+        completion_based?: number | undefined;
+    }, {
+        quality_based?: number | undefined;
+        completion_based?: number | undefined;
+    }>>;
+}, "strip", z.ZodTypeAny, {
+    base_reward: {
+        package_size: string;
+        package_type: "data-limited" | "starter";
+    };
+    multipliers?: {
+        quality_based?: number | undefined;
+        completion_based?: number | undefined;
+    } | undefined;
+}, {
+    base_reward: {
+        package_size: string;
+        package_type: "data-limited" | "starter";
+    };
+    multipliers?: {
+        quality_based?: number | undefined;
+        completion_based?: number | undefined;
+    } | undefined;
+}>;
+declare const BaseRewardSchema: z.ZodObject<{
+    package_size: z.ZodString;
+    package_type: z.ZodEnum<["data-limited", "starter"]>;
+}, "strip", z.ZodTypeAny, {
+    package_size: string;
+    package_type: "data-limited" | "starter";
+}, {
+    package_size: string;
+    package_type: "data-limited" | "starter";
+}>;
+declare const RewardMultipliersSchema: z.ZodOptional<z.ZodObject<{
+    quality_based: z.ZodOptional<z.ZodNumber>;
+    completion_based: z.ZodOptional<z.ZodNumber>;
+}, "strip", z.ZodTypeAny, {
+    quality_based?: number | undefined;
+    completion_based?: number | undefined;
+}, {
+    quality_based?: number | undefined;
+    completion_based?: number | undefined;
+}>>;
+declare const RewardPackageTypeSchema: z.ZodEnum<["data-limited", "starter"]>;
 type User = z.infer<typeof UserSchema>;
 type UserFirestore = z.infer<typeof UserFirestoreSchema>;
 type Booking = z.infer<typeof BookingSchema>;
@@ -6526,6 +6715,8 @@ type Schedule = z.infer<typeof ScheduleSchema>;
 type TelnaPackage = z.infer<typeof TelnaPackageSchema>;
 type BondioPackage = z.infer<typeof BondioPackageSchema>;
 type TrafficPolicy = z.infer<typeof TrafficPolicySchema>;
+type Review = z.infer<typeof ReviewSchema>;
+type ReviewSubmission = z.infer<typeof ReviewSubmissionSchema>;
 type Address = z.infer<typeof AddressSchema>;
 type Registration = z.infer<typeof RegistrationSchema>;
 type BankingDetails = z.infer<typeof BankingDetailsSchema>;
@@ -6543,6 +6734,10 @@ type BookingStatus = z.infer<typeof BookingStatusSchema>;
 type CommunicationOptions = z.infer<typeof CommunicationOptionsSchema>;
 type PackagePrice = z.infer<typeof PackagePriceSchema>;
 type PlatformSettings = z.infer<typeof PlatformSettingsSchema>;
+type RewardStrategy = z.infer<typeof RewardStrategySchema>;
+type BaseReward = z.infer<typeof BaseRewardSchema>;
+type RewardMultipliers = z.infer<typeof RewardMultipliersSchema>;
+type RewardPackageType = z.infer<typeof RewardPackageTypeSchema>;
 type BookingApiRequest = Booking;
 type BookingApiResponse = Booking;
 type PartnerApiRequest = Partner;
@@ -7804,4 +7999,4 @@ declare const partnerAppSchema: z.ZodObject<{
 type SupportedLocales = typeof SUPPORTED_LOCALES$1[number];
 declare const SUPPORTED_LOCALES: readonly ["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK"];
 
-export { API_LOG_COLLECTION, Address, AddressSchema, Analytics, AnalyticsSchema, ApiLog, ApiLogApiRequest, ApiLogApiResponse, ApiLogSchema, BOOKING_COLLECTION, BankingDetails, BankingDetailsSchema, BondioPackage, BondioPackageSchema, Booking, BookingApiRequest, BookingApiResponse, BookingSchema, BookingStatus, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannel, CommunicationChannelSchema, CommunicationOptions, CommunicationOptionsSchema, Country, CountrySchema, Currency, CurrencySchema, ESIM, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBondioPackage, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModel, HubbyModelApp, HubbyModelFirestore, HubbyModelSchema, MESSAGE_COLLECTION, Message, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, Package, PackagePrice, PackagePriceSchema, PackageSchema, PackageSpecification, Partner, PartnerApiRequest, PartnerApiResponse, PartnerContact, PartnerContactSchema, PartnerData, PartnerDataSchema, PartnerPackageSpecification, PartnerPackageSpecificationSchema, PartnerSchema, Payment, PaymentSchema, PlatformSettings, PlatformSettingsSchema, PriceList, PriceListApiRequest, PriceListApiResponse, PriceListSchema, PromoCode, PromoCodeSchema, PromoPackageSpecificationSchema, ROLE_COLLECTION, Registration, RegistrationSchema, SUPPORTED_LOCALES, Schedule, ScheduleFilter, ScheduleFilterSchema, ScheduleSchema, SupportedLocales, TRAFFIC_POLICY_COLLECTION, Tag, TagSchema, TelnaPackage, TelnaPackageSchema, TrafficPolicy, TrafficPolicySchema, USER_COLLECTION, User, UserFirestore, UserFirestoreSchema, UserSchema, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerSchema, VisualIdentityBannerStrategy, VisualIdentityBanners, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, apiLogSchemaSpec, bookingSchemaSpec, countrySchemaSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, currencySchemaSpec, esimSchemaSpec, messageSchemaSpec, packageSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, paymentSchemaSpec, priceListFromFirestore, priceListSchemaSpec, priceListToFirestore, promoCodeFromFirestore, promoCodeSchemaSpec, promoCodeToFirestore, userFromFirestore, userSchemaSpec, userToFirestore };
+export { API_LOG_COLLECTION, Address, AddressSchema, Analytics, AnalyticsSchema, ApiLog, ApiLogApiRequest, ApiLogApiResponse, ApiLogSchema, BOOKING_COLLECTION, BankingDetails, BankingDetailsSchema, BaseReward, BaseRewardSchema, BondioPackage, BondioPackageSchema, Booking, BookingApiRequest, BookingApiResponse, BookingSchema, BookingStatus, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannel, CommunicationChannelSchema, CommunicationOptions, CommunicationOptionsSchema, Country, CountrySchema, Currency, CurrencySchema, ESIM, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBondioPackage, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModel, HubbyModelApp, HubbyModelFirestore, HubbyModelSchema, MESSAGE_COLLECTION, Message, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, Package, PackagePrice, PackagePriceSchema, PackageSchema, PackageSpecification, Partner, PartnerApiRequest, PartnerApiResponse, PartnerContact, PartnerContactSchema, PartnerData, PartnerDataSchema, PartnerPackageSpecification, PartnerPackageSpecificationSchema, PartnerSchema, Payment, PaymentSchema, PlatformSettings, PlatformSettingsSchema, PriceList, PriceListApiRequest, PriceListApiResponse, PriceListSchema, PromoCode, PromoCodeSchema, PromoPackageSpecificationSchema, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, ROLE_COLLECTION, Registration, RegistrationSchema, Review, ReviewSchema, ReviewSubmission, ReviewSubmissionSchema, RewardMultipliers, RewardMultipliersSchema, RewardPackageType, RewardPackageTypeSchema, RewardStrategy, RewardStrategySchema, SUPPORTED_LOCALES, Schedule, ScheduleFilter, ScheduleFilterSchema, ScheduleSchema, SupportedLocales, TRAFFIC_POLICY_COLLECTION, Tag, TagSchema, TelnaPackage, TelnaPackageSchema, TrafficPolicy, TrafficPolicySchema, USER_COLLECTION, User, UserFirestore, UserFirestoreSchema, UserSchema, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerSchema, VisualIdentityBannerStrategy, VisualIdentityBanners, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, apiLogSchemaSpec, bookingSchemaSpec, countrySchemaSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, currencySchemaSpec, esimSchemaSpec, messageSchemaSpec, packageSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, paymentSchemaSpec, priceListFromFirestore, priceListSchemaSpec, priceListToFirestore, promoCodeFromFirestore, promoCodeSchemaSpec, promoCodeToFirestore, reviewSchemaSpec, reviewSubmissionSchemaSpec, userFromFirestore, userSchemaSpec, userToFirestore };

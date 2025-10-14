@@ -18,6 +18,8 @@ export const API_LOG_COLLECTION = 'api_logs'
 export const ROLE_COLLECTION = 'roles';
 export const PERMISSION_COLLECTION = 'permissions';
 export const TRAFFIC_POLICY_COLLECTION = 'traffic_policies';
+export const REVIEW_COLLECTION = '/companies/hubby/reviews';
+export const REVIEW_SUBMISSION_COLLECTION = '/companies/hubby/review_submissions';
 
 
 export const packageTypes = ['data-limited', 'time-limited', 'starter', 'unlimited'];

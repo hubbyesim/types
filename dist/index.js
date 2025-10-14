@@ -183,6 +183,8 @@ var API_LOG_COLLECTION = "api_logs";
 var ROLE_COLLECTION = "roles";
 var PERMISSION_COLLECTION = "permissions";
 var TRAFFIC_POLICY_COLLECTION = "traffic_policies";
+var REVIEW_COLLECTION = "/companies/hubby/reviews";
+var REVIEW_SUBMISSION_COLLECTION = "/companies/hubby/review_submissions";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: false };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
@@ -988,6 +990,48 @@ var apiLogSchemaSpec = markAsSchemaSpec({
   timestamp: timestampRequired,
   status_code: z.number()
 });
+var REVIEW_COLLECTION2 = "/companies/hubby/reviews";
+var rewardPackageTypeSchema = z.enum(["data-limited", "starter"]);
+var baseRewardSchema = z.object({
+  package_size: z.string(),
+  package_type: rewardPackageTypeSchema
+});
+var rewardMultipliersSchema = z.object({
+  quality_based: z.number().optional(),
+  completion_based: z.number().optional()
+}).optional();
+var rewardStrategySchema = z.object({
+  base_reward: baseRewardSchema,
+  multipliers: rewardMultipliersSchema
+});
+var reviewSchemaSpec = markAsSchemaSpec({
+  id: z.string().optional(),
+  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
+  questions: z.record(z.any()),
+  reward_strategy: rewardStrategySchema,
+  created_at: timestampRequired,
+  updated_at: timestampNullable,
+  created_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  updated_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true }
+});
+var reviewSubmissionSchemaSpec = markAsSchemaSpec({
+  id: z.string().optional(),
+  country: { _type: "docRef", collection: COUNTRY_COLLECTION, nullable: true },
+  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
+  review: { _type: "docRef", collection: REVIEW_COLLECTION2, nullable: true },
+  user: { _type: "docRef", collection: USER_COLLECTION, nullable: true },
+  questions: z.record(z.any()),
+  iccid: z.string(),
+  isAndroid: z.boolean(),
+  country_id: z.string(),
+  partner_id: z.string(),
+  review_id: z.string(),
+  created_at: timestampRequired,
+  updated_at: timestampNullable,
+  created_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  updated_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  analysis: z.record(z.any()).nullable().optional()
+});
 function createConvertJSToFirestore(db) {
   return function convertJSToFirestore2(input, spec) {
     if (input === void 0 || input === null)
@@ -1333,6 +1377,8 @@ var TagSchema = buildServerSchema(tagModelSpec);
 var TelnaPackageSchema = buildServerSchema(telnaPackageSchema);
 var BondioPackageSchema = buildServerSchema(bondioPackageSchema);
 var TrafficPolicySchema = buildServerSchema(trafficPolicySpec);
+var ReviewSchema = buildServerSchema(reviewSchemaSpec);
+var ReviewSubmissionSchema = buildServerSchema(reviewSubmissionSchemaSpec);
 var AddressSchema = addressSchema;
 var RegistrationSchema = registrationSchema;
 var BankingDetailsSchema = bankingDetailsSchema;
@@ -1346,6 +1392,10 @@ var CommunicationChannelSchema = communicationChannelSchema;
 var BookingStatusSchema = bookingStatusSchema;
 var CommunicationOptionsSchema = communicationOptionsSchema;
 var VisualIdentityBannersSchema = visualIdentityBannersSchema;
+var RewardStrategySchema = rewardStrategySchema;
+var BaseRewardSchema = baseRewardSchema;
+var RewardMultipliersSchema = rewardMultipliersSchema;
+var RewardPackageTypeSchema = rewardPackageTypeSchema;
 var partnerFromFirestore = (partner) => {
   return convertFirestoreToJS(partner, partnerSchemaSpec);
 };
@@ -1373,6 +1423,6 @@ var promoCodeToFirestore = (promoCode) => {
 var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
-export { API_LOG_COLLECTION, AddressSchema, AnalyticsSchema, ApiLogSchema, BOOKING_COLLECTION, BankingDetailsSchema, BondioPackageSchema, BookingSchema, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannelSchema, CommunicationOptionsSchema, CountrySchema, CurrencySchema, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBondioPackageSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HRoleSchema, HScheduleFilterSchema, HTagSchema, HTelnaPackageSchema, HTrafficPolicySchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema, MESSAGE_COLLECTION, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, PackagePriceSchema, PackageSchema, PartnerContactSchema, PartnerDataSchema, PartnerPackageSpecificationSchema, PartnerSchema, PaymentSchema, PlatformSettingsSchema, PriceListSchema, PromoCodeSchema, PromoPackageSpecificationSchema, ROLE_COLLECTION, RegistrationSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES, ScheduleFilterSchema, ScheduleSchema, TRAFFIC_POLICY_COLLECTION, TagSchema, TelnaPackageSchema, TrafficPolicySchema, USER_COLLECTION, UserFirestoreSchema, UserSchema, VisualIdentityBannerSchema, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, apiLogSchemaSpec, bookingSchemaSpec, countrySchemaSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, currencySchemaSpec, esimSchemaSpec, messageSchemaSpec, packageSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, paymentSchemaSpec, priceListFromFirestore, priceListSchemaSpec, priceListToFirestore, promoCodeFromFirestore, promoCodeSchemaSpec, promoCodeToFirestore, userFromFirestore, userSchemaSpec, userToFirestore };
+export { API_LOG_COLLECTION, AddressSchema, AnalyticsSchema, ApiLogSchema, BOOKING_COLLECTION, BankingDetailsSchema, BaseRewardSchema, BondioPackageSchema, BookingSchema, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannelSchema, CommunicationOptionsSchema, CountrySchema, CurrencySchema, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBondioPackageSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HRoleSchema, HScheduleFilterSchema, HTagSchema, HTelnaPackageSchema, HTrafficPolicySchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema, MESSAGE_COLLECTION, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, PackagePriceSchema, PackageSchema, PartnerContactSchema, PartnerDataSchema, PartnerPackageSpecificationSchema, PartnerSchema, PaymentSchema, PlatformSettingsSchema, PriceListSchema, PromoCodeSchema, PromoPackageSpecificationSchema, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, ROLE_COLLECTION, RegistrationSchema, ReviewSchema, ReviewSubmissionSchema, RewardMultipliersSchema, RewardPackageTypeSchema, RewardStrategySchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES, ScheduleFilterSchema, ScheduleSchema, TRAFFIC_POLICY_COLLECTION, TagSchema, TelnaPackageSchema, TrafficPolicySchema, USER_COLLECTION, UserFirestoreSchema, UserSchema, VisualIdentityBannerSchema, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, apiLogSchemaSpec, bookingSchemaSpec, countrySchemaSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, currencySchemaSpec, esimSchemaSpec, messageSchemaSpec, packageSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, paymentSchemaSpec, priceListFromFirestore, priceListSchemaSpec, priceListToFirestore, promoCodeFromFirestore, promoCodeSchemaSpec, promoCodeToFirestore, reviewSchemaSpec, reviewSubmissionSchemaSpec, userFromFirestore, userSchemaSpec, userToFirestore };
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.js.map

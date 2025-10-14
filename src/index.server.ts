@@ -38,6 +38,14 @@ import {
 import { hubbyModelSpec, tagModelSpec } from './specs/common';
 import { SUPPORTED_LOCALES as LOCALES } from './constants';
 import { apiLogSchemaSpec } from './specs/apiLogs';
+import { 
+    reviewSchemaSpec, 
+    reviewSubmissionSchemaSpec,
+    rewardStrategySchema,
+    baseRewardSchema,
+    rewardMultipliersSchema,
+    rewardPackageTypeSchema
+} from './specs/review';
 import { z } from 'zod';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 
@@ -59,7 +67,9 @@ export {
     messageSchemaSpec,
     promoCodeSchemaSpec,
     priceListSchemaSpec,
-    apiLogSchemaSpec
+    apiLogSchemaSpec,
+    reviewSchemaSpec,
+    reviewSubmissionSchemaSpec
 };
 
 
@@ -86,6 +96,8 @@ export const TagSchema = buildServerSchema(tagModelSpec);
 export const TelnaPackageSchema = buildServerSchema(telnaPackageSchema);
 export const BondioPackageSchema = buildServerSchema(bondioPackageSchema);
 export const TrafficPolicySchema = buildServerSchema(trafficPolicySpec);
+export const ReviewSchema = buildServerSchema(reviewSchemaSpec);
+export const ReviewSubmissionSchema = buildServerSchema(reviewSubmissionSchemaSpec);
 
 // Additional lower-level schemas
 export const AddressSchema = addressSchema;
@@ -101,6 +113,10 @@ export const CommunicationChannelSchema = communicationChannelSchema;
 export const BookingStatusSchema = bookingStatusSchema;
 export const CommunicationOptionsSchema = communicationOptionsSchema;
 export const VisualIdentityBannersSchema = visualIdentityBannersSchema;
+export const RewardStrategySchema = rewardStrategySchema;
+export const BaseRewardSchema = baseRewardSchema;
+export const RewardMultipliersSchema = rewardMultipliersSchema;
+export const RewardPackageTypeSchema = rewardPackageTypeSchema;
 
 export type User = z.infer<typeof UserSchema>;
 export type UserFirestore = z.infer<typeof UserFirestoreSchema>;
@@ -120,6 +136,8 @@ export type Schedule = z.infer<typeof ScheduleSchema>;
 export type TelnaPackage = z.infer<typeof TelnaPackageSchema>;
 export type BondioPackage = z.infer<typeof BondioPackageSchema>;
 export type TrafficPolicy = z.infer<typeof TrafficPolicySchema>;
+export type Review = z.infer<typeof ReviewSchema>;
+export type ReviewSubmission = z.infer<typeof ReviewSubmissionSchema>;
 
 // Additional lower-level types
 export type Address = z.infer<typeof AddressSchema>;
@@ -139,6 +157,10 @@ export type BookingStatus = z.infer<typeof BookingStatusSchema>;
 export type CommunicationOptions = z.infer<typeof CommunicationOptionsSchema>;
 export type PackagePrice = z.infer<typeof PackagePriceSchema>;
 export type PlatformSettings = z.infer<typeof PlatformSettingsSchema>;
+export type RewardStrategy = z.infer<typeof RewardStrategySchema>;
+export type BaseReward = z.infer<typeof BaseRewardSchema>;
+export type RewardMultipliers = z.infer<typeof RewardMultipliersSchema>;
+export type RewardPackageType = z.infer<typeof RewardPackageTypeSchema>;
 export type BookingApiRequest = Booking;
 export type BookingApiResponse = Booking;
 export type PartnerApiRequest = Partner;
@@ -210,4 +232,4 @@ export { createModelConverters } from './utils/modelConverterFactory';
 export { createConvertJSToFirestore, createConvertFirestoreToJS } from './utils/firestoreTransformUtils';
 export { FirebaseService, createFirebaseService } from './services/firebase';
 
-export { USER_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, BOOKING_COLLECTION, ROLE_COLLECTION, PERMISSION_COLLECTION, TRAFFIC_POLICY_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, COUNTRY_COLLECTION, ESIM_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, MESSAGE_COLLECTION, CURRENCY_COLLECTION, API_LOG_COLLECTION } from './specs/common';
+export { USER_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, BOOKING_COLLECTION, ROLE_COLLECTION, PERMISSION_COLLECTION, TRAFFIC_POLICY_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, COUNTRY_COLLECTION, ESIM_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, MESSAGE_COLLECTION, CURRENCY_COLLECTION, API_LOG_COLLECTION, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION } from './specs/common';
