@@ -1020,6 +1020,7 @@ var rewardStrategySchema = zod.z.object({
 var reviewSchemaSpec = markAsSchemaSpec({
   id: zod.z.string().optional(),
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
+  partner_id: zod.z.string().nullable().optional(),
   questions: zod.z.record(zod.z.any()),
   reward_strategy: rewardStrategySchema,
   created_at: timestampRequired,

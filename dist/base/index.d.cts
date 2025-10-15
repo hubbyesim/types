@@ -4716,6 +4716,7 @@ declare const HBondioPackageSchema: z.ZodObject<{
 declare const HReviewSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
     partner: z.ZodString;
+    partner_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     questions: z.ZodRecord<z.ZodString, z.ZodAny>;
     reward_strategy: z.ZodObject<{
         base_reward: z.ZodObject<{
@@ -4779,6 +4780,7 @@ declare const HReviewSchema: z.ZodObject<{
         } | undefined;
     };
     id?: string | undefined;
+    partner_id?: string | null | undefined;
 }, {
     partner: string;
     created_at: Date;
@@ -4797,6 +4799,7 @@ declare const HReviewSchema: z.ZodObject<{
         } | undefined;
     };
     id?: string | undefined;
+    partner_id?: string | null | undefined;
 }>;
 declare const HReviewSubmissionSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
