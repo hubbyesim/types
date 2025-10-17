@@ -1164,7 +1164,6 @@ declare const partnerSchemaSpec: {
                 own_branding?: boolean | undefined;
             }>>>;
             agent_signup_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-                skip_password_email: z.ZodDefault<z.ZodBoolean>;
                 slack_channel: z.ZodOptional<z.ZodNullable<z.ZodString>>;
                 welcome_email_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
                 password_reset_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
@@ -1190,7 +1189,6 @@ declare const partnerSchemaSpec: {
                     source_partner_branding: boolean;
                     own_branding: boolean;
                 };
-                skip_password_email: boolean;
                 enable_complimentary_booking: boolean;
                 slack_channel?: string | null | undefined;
                 welcome_email_template?: number | null | undefined;
@@ -1203,7 +1201,6 @@ declare const partnerSchemaSpec: {
                     source_partner_branding?: boolean | undefined;
                     own_branding?: boolean | undefined;
                 } | undefined;
-                skip_password_email?: boolean | undefined;
                 slack_channel?: string | null | undefined;
                 welcome_email_template?: number | null | undefined;
                 password_reset_template?: number | null | undefined;
@@ -3140,7 +3137,6 @@ declare const HPartnerSchema: z.ZodObject<{
             own_branding?: boolean | undefined;
         }>>>;
         agent_signup_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-            skip_password_email: z.ZodDefault<z.ZodBoolean>;
             slack_channel: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             welcome_email_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
             password_reset_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
@@ -3166,7 +3162,6 @@ declare const HPartnerSchema: z.ZodObject<{
                 source_partner_branding: boolean;
                 own_branding: boolean;
             };
-            skip_password_email: boolean;
             enable_complimentary_booking: boolean;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
@@ -3179,7 +3174,6 @@ declare const HPartnerSchema: z.ZodObject<{
                 source_partner_branding?: boolean | undefined;
                 own_branding?: boolean | undefined;
             } | undefined;
-            skip_password_email?: boolean | undefined;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
@@ -3258,7 +3252,6 @@ declare const HPartnerSchema: z.ZodObject<{
                 source_partner_branding: boolean;
                 own_branding: boolean;
             };
-            skip_password_email: boolean;
             enable_complimentary_booking: boolean;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
@@ -3337,7 +3330,6 @@ declare const HPartnerSchema: z.ZodObject<{
                 source_partner_branding?: boolean | undefined;
                 own_branding?: boolean | undefined;
             } | undefined;
-            skip_password_email?: boolean | undefined;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
@@ -3584,7 +3576,6 @@ declare const HPartnerSchema: z.ZodObject<{
                 source_partner_branding: boolean;
                 own_branding: boolean;
             };
-            skip_password_email: boolean;
             enable_complimentary_booking: boolean;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
@@ -3785,7 +3776,6 @@ declare const HPartnerSchema: z.ZodObject<{
                 source_partner_branding?: boolean | undefined;
                 own_branding?: boolean | undefined;
             } | undefined;
-            skip_password_email?: boolean | undefined;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
@@ -4868,7 +4858,6 @@ declare const HPartnerAppSchema: z.ZodObject<{
             own_branding?: boolean | undefined;
         }>>>;
         agent_signup_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-            skip_password_email: z.ZodDefault<z.ZodBoolean>;
             slack_channel: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             welcome_email_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
             password_reset_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
@@ -4894,7 +4883,6 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 source_partner_branding: boolean;
                 own_branding: boolean;
             };
-            skip_password_email: boolean;
             enable_complimentary_booking: boolean;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
@@ -4907,7 +4895,6 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 source_partner_branding?: boolean | undefined;
                 own_branding?: boolean | undefined;
             } | undefined;
-            skip_password_email?: boolean | undefined;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
@@ -4986,7 +4973,6 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 source_partner_branding: boolean;
                 own_branding: boolean;
             };
-            skip_password_email: boolean;
             enable_complimentary_booking: boolean;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
@@ -5065,7 +5051,6 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 source_partner_branding?: boolean | undefined;
                 own_branding?: boolean | undefined;
             } | undefined;
-            skip_password_email?: boolean | undefined;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
@@ -5312,7 +5297,6 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 source_partner_branding: boolean;
                 own_branding: boolean;
             };
-            skip_password_email: boolean;
             enable_complimentary_booking: boolean;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
@@ -5513,7 +5497,6 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 source_partner_branding?: boolean | undefined;
                 own_branding?: boolean | undefined;
             } | undefined;
-            skip_password_email?: boolean | undefined;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
@@ -5758,7 +5741,6 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         own_branding?: boolean | undefined;
     }>>>;
     agent_signup_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-        skip_password_email: z.ZodDefault<z.ZodBoolean>;
         slack_channel: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         welcome_email_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
         password_reset_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
@@ -5784,7 +5766,6 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             source_partner_branding: boolean;
             own_branding: boolean;
         };
-        skip_password_email: boolean;
         enable_complimentary_booking: boolean;
         slack_channel?: string | null | undefined;
         welcome_email_template?: number | null | undefined;
@@ -5797,7 +5778,6 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             source_partner_branding?: boolean | undefined;
             own_branding?: boolean | undefined;
         } | undefined;
-        skip_password_email?: boolean | undefined;
         slack_channel?: string | null | undefined;
         welcome_email_template?: number | null | undefined;
         password_reset_template?: number | null | undefined;
@@ -5876,7 +5856,6 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             source_partner_branding: boolean;
             own_branding: boolean;
         };
-        skip_password_email: boolean;
         enable_complimentary_booking: boolean;
         slack_channel?: string | null | undefined;
         welcome_email_template?: number | null | undefined;
@@ -5955,7 +5934,6 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             source_partner_branding?: boolean | undefined;
             own_branding?: boolean | undefined;
         } | undefined;
-        skip_password_email?: boolean | undefined;
         slack_channel?: string | null | undefined;
         welcome_email_template?: number | null | undefined;
         password_reset_template?: number | null | undefined;
@@ -7968,7 +7946,6 @@ declare const partnerAppSchema: z.ZodObject<{
             own_branding?: boolean | undefined;
         }>>>;
         agent_signup_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-            skip_password_email: z.ZodDefault<z.ZodBoolean>;
             slack_channel: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             welcome_email_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
             password_reset_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
@@ -7994,7 +7971,6 @@ declare const partnerAppSchema: z.ZodObject<{
                 source_partner_branding: boolean;
                 own_branding: boolean;
             };
-            skip_password_email: boolean;
             enable_complimentary_booking: boolean;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
@@ -8007,7 +7983,6 @@ declare const partnerAppSchema: z.ZodObject<{
                 source_partner_branding?: boolean | undefined;
                 own_branding?: boolean | undefined;
             } | undefined;
-            skip_password_email?: boolean | undefined;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
@@ -8086,7 +8061,6 @@ declare const partnerAppSchema: z.ZodObject<{
                 source_partner_branding: boolean;
                 own_branding: boolean;
             };
-            skip_password_email: boolean;
             enable_complimentary_booking: boolean;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
@@ -8165,7 +8139,6 @@ declare const partnerAppSchema: z.ZodObject<{
                 source_partner_branding?: boolean | undefined;
                 own_branding?: boolean | undefined;
             } | undefined;
-            skip_password_email?: boolean | undefined;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
@@ -8412,7 +8385,6 @@ declare const partnerAppSchema: z.ZodObject<{
                 source_partner_branding: boolean;
                 own_branding: boolean;
             };
-            skip_password_email: boolean;
             enable_complimentary_booking: boolean;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
@@ -8613,7 +8585,6 @@ declare const partnerAppSchema: z.ZodObject<{
                 source_partner_branding?: boolean | undefined;
                 own_branding?: boolean | undefined;
             } | undefined;
-            skip_password_email?: boolean | undefined;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;

@@ -740,7 +740,6 @@ var freeEsimSchema = zod.z.object({
   total_allowance: zod.z.number()
 });
 var agentSignupSettingsSchema = zod.z.object({
-  skip_password_email: zod.z.boolean().default(true),
   slack_channel: zod.z.string().nullable().optional(),
   welcome_email_template: zod.z.number().nullable().optional(),
   password_reset_template: zod.z.number().nullable().optional(),

@@ -738,7 +738,6 @@ var freeEsimSchema = z.object({
   total_allowance: z.number()
 });
 var agentSignupSettingsSchema = z.object({
-  skip_password_email: z.boolean().default(true),
   slack_channel: z.string().nullable().optional(),
   welcome_email_template: z.number().nullable().optional(),
   password_reset_template: z.number().nullable().optional(),
