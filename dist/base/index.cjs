@@ -441,6 +441,12 @@ var esimSchemaSpec = markAsSchemaSpec({
   data_left: zod.z.number(),
   data_used: zod.z.boolean(),
   status: zod.z.string().nullable(),
+  status_history: zod.z.array(zod.z.object({
+    telna_esim_status: zod.z.number(),
+    source: zod.z.string(),
+    status: zod.z.string(),
+    timestamp: zod.z.date()
+  })),
   name: zod.z.string(),
   android_auto: zod.z.boolean(),
   partner_price: zod.z.number().nullable(),
