@@ -440,6 +440,22 @@ declare const HESIMSchema: z.ZodObject<{
     data_left: z.ZodNumber;
     data_used: z.ZodBoolean;
     status: z.ZodNullable<z.ZodString>;
+    status_history: z.ZodArray<z.ZodObject<{
+        telna_esim_status: z.ZodNumber;
+        source: z.ZodString;
+        status: z.ZodString;
+        timestamp: z.ZodDate;
+    }, "strip", z.ZodTypeAny, {
+        timestamp: Date;
+        source: string;
+        status: string;
+        telna_esim_status: number;
+    }, {
+        timestamp: Date;
+        source: string;
+        status: string;
+        telna_esim_status: number;
+    }>, "many">;
     name: z.ZodString;
     android_auto: z.ZodBoolean;
     partner_price: z.ZodNullable<z.ZodNumber>;
@@ -473,6 +489,12 @@ declare const HESIMSchema: z.ZodObject<{
     total_data: number;
     data_left: number;
     data_used: boolean;
+    status_history: {
+        timestamp: Date;
+        source: string;
+        status: string;
+        telna_esim_status: number;
+    }[];
     android_auto: boolean;
     partner_price: number | null;
     payment: string | null;
@@ -502,6 +524,12 @@ declare const HESIMSchema: z.ZodObject<{
     total_data: number;
     data_left: number;
     data_used: boolean;
+    status_history: {
+        timestamp: Date;
+        source: string;
+        status: string;
+        telna_esim_status: number;
+    }[];
     android_auto: boolean;
     partner_price: number | null;
     payment: string | null;

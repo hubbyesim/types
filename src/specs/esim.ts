@@ -27,6 +27,12 @@ export const esimSchemaSpec = markAsSchemaSpec({
     data_left: z.number(),
     data_used: z.boolean(),
     status: z.string().nullable(),
+    status_history: z.array(z.object({
+        telna_esim_status: z.number(),
+        source: z.string(),
+        status: z.string(),
+        timestamp: z.date()
+    })),
     name: z.string(),
     android_auto: z.boolean(),
     partner_price: z.number().nullable(),
