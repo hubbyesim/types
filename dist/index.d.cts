@@ -1163,6 +1163,51 @@ declare const partnerSchemaSpec: {
                 source_partner_branding?: boolean | undefined;
                 own_branding?: boolean | undefined;
             }>>>;
+            agent_signup_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+                slack_channel: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+                welcome_email_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+                password_reset_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+                partner_type: z.ZodOptional<z.ZodNullable<z.ZodEnum<["wholesale", "reseller", "platform", "agent"]>>>;
+                enable_complimentary_booking: z.ZodDefault<z.ZodBoolean>;
+                complimentary_booking_partner_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+                visual_identity_options: z.ZodDefault<z.ZodObject<{
+                    hubby_branding: z.ZodDefault<z.ZodBoolean>;
+                    source_partner_branding: z.ZodDefault<z.ZodBoolean>;
+                    own_branding: z.ZodDefault<z.ZodBoolean>;
+                }, "strip", z.ZodTypeAny, {
+                    hubby_branding: boolean;
+                    source_partner_branding: boolean;
+                    own_branding: boolean;
+                }, {
+                    hubby_branding?: boolean | undefined;
+                    source_partner_branding?: boolean | undefined;
+                    own_branding?: boolean | undefined;
+                }>>;
+            }, "strip", z.ZodTypeAny, {
+                visual_identity_options: {
+                    hubby_branding: boolean;
+                    source_partner_branding: boolean;
+                    own_branding: boolean;
+                };
+                enable_complimentary_booking: boolean;
+                slack_channel?: string | null | undefined;
+                welcome_email_template?: number | null | undefined;
+                password_reset_template?: number | null | undefined;
+                partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+                complimentary_booking_partner_id?: string | null | undefined;
+            }, {
+                visual_identity_options?: {
+                    hubby_branding?: boolean | undefined;
+                    source_partner_branding?: boolean | undefined;
+                    own_branding?: boolean | undefined;
+                } | undefined;
+                slack_channel?: string | null | undefined;
+                welcome_email_template?: number | null | undefined;
+                password_reset_template?: number | null | undefined;
+                partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+                enable_complimentary_booking?: boolean | undefined;
+                complimentary_booking_partner_id?: string | null | undefined;
+            }>>>;
         };
         nullable: boolean;
     };
@@ -3092,6 +3137,51 @@ declare const HPartnerSchema: z.ZodObject<{
             source_partner_branding?: boolean | undefined;
             own_branding?: boolean | undefined;
         }>>>;
+        agent_signup_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            slack_channel: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            welcome_email_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+            password_reset_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+            partner_type: z.ZodOptional<z.ZodNullable<z.ZodEnum<["wholesale", "reseller", "platform", "agent"]>>>;
+            enable_complimentary_booking: z.ZodDefault<z.ZodBoolean>;
+            complimentary_booking_partner_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            visual_identity_options: z.ZodDefault<z.ZodObject<{
+                hubby_branding: z.ZodDefault<z.ZodBoolean>;
+                source_partner_branding: z.ZodDefault<z.ZodBoolean>;
+                own_branding: z.ZodDefault<z.ZodBoolean>;
+            }, "strip", z.ZodTypeAny, {
+                hubby_branding: boolean;
+                source_partner_branding: boolean;
+                own_branding: boolean;
+            }, {
+                hubby_branding?: boolean | undefined;
+                source_partner_branding?: boolean | undefined;
+                own_branding?: boolean | undefined;
+            }>>;
+        }, "strip", z.ZodTypeAny, {
+            visual_identity_options: {
+                hubby_branding: boolean;
+                source_partner_branding: boolean;
+                own_branding: boolean;
+            };
+            enable_complimentary_booking: boolean;
+            slack_channel?: string | null | undefined;
+            welcome_email_template?: number | null | undefined;
+            password_reset_template?: number | null | undefined;
+            partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+            complimentary_booking_partner_id?: string | null | undefined;
+        }, {
+            visual_identity_options?: {
+                hubby_branding?: boolean | undefined;
+                source_partner_branding?: boolean | undefined;
+                own_branding?: boolean | undefined;
+            } | undefined;
+            slack_channel?: string | null | undefined;
+            welcome_email_template?: number | null | undefined;
+            password_reset_template?: number | null | undefined;
+            partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+            enable_complimentary_booking?: boolean | undefined;
+            complimentary_booking_partner_id?: string | null | undefined;
+        }>>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy?: {
             name: string;
@@ -3157,6 +3247,19 @@ declare const HPartnerSchema: z.ZodObject<{
             source_partner_branding: boolean;
             own_branding: boolean;
         } | null | undefined;
+        agent_signup_settings?: {
+            visual_identity_options: {
+                hubby_branding: boolean;
+                source_partner_branding: boolean;
+                own_branding: boolean;
+            };
+            enable_complimentary_booking: boolean;
+            slack_channel?: string | null | undefined;
+            welcome_email_template?: number | null | undefined;
+            password_reset_template?: number | null | undefined;
+            partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+            complimentary_booking_partner_id?: string | null | undefined;
+        } | null | undefined;
     }, {
         package_strategy?: {
             name: string;
@@ -3221,6 +3324,19 @@ declare const HPartnerSchema: z.ZodObject<{
             hubby_branding?: boolean | undefined;
             source_partner_branding?: boolean | undefined;
             own_branding?: boolean | undefined;
+        } | null | undefined;
+        agent_signup_settings?: {
+            visual_identity_options?: {
+                hubby_branding?: boolean | undefined;
+                source_partner_branding?: boolean | undefined;
+                own_branding?: boolean | undefined;
+            } | undefined;
+            slack_channel?: string | null | undefined;
+            welcome_email_template?: number | null | undefined;
+            password_reset_template?: number | null | undefined;
+            partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+            enable_complimentary_booking?: boolean | undefined;
+            complimentary_booking_partner_id?: string | null | undefined;
         } | null | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
@@ -3455,6 +3571,19 @@ declare const HPartnerSchema: z.ZodObject<{
             source_partner_branding: boolean;
             own_branding: boolean;
         } | null | undefined;
+        agent_signup_settings?: {
+            visual_identity_options: {
+                hubby_branding: boolean;
+                source_partner_branding: boolean;
+                own_branding: boolean;
+            };
+            enable_complimentary_booking: boolean;
+            slack_channel?: string | null | undefined;
+            welcome_email_template?: number | null | undefined;
+            password_reset_template?: number | null | undefined;
+            partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+            complimentary_booking_partner_id?: string | null | undefined;
+        } | null | undefined;
     };
     tags: {
         name: string;
@@ -3641,6 +3770,19 @@ declare const HPartnerSchema: z.ZodObject<{
             hubby_branding?: boolean | undefined;
             source_partner_branding?: boolean | undefined;
             own_branding?: boolean | undefined;
+        } | null | undefined;
+        agent_signup_settings?: {
+            visual_identity_options?: {
+                hubby_branding?: boolean | undefined;
+                source_partner_branding?: boolean | undefined;
+                own_branding?: boolean | undefined;
+            } | undefined;
+            slack_channel?: string | null | undefined;
+            welcome_email_template?: number | null | undefined;
+            password_reset_template?: number | null | undefined;
+            partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+            enable_complimentary_booking?: boolean | undefined;
+            complimentary_booking_partner_id?: string | null | undefined;
         } | null | undefined;
     };
     tags: {
@@ -4716,6 +4858,51 @@ declare const HPartnerAppSchema: z.ZodObject<{
             source_partner_branding?: boolean | undefined;
             own_branding?: boolean | undefined;
         }>>>;
+        agent_signup_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            slack_channel: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            welcome_email_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+            password_reset_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+            partner_type: z.ZodOptional<z.ZodNullable<z.ZodEnum<["wholesale", "reseller", "platform", "agent"]>>>;
+            enable_complimentary_booking: z.ZodDefault<z.ZodBoolean>;
+            complimentary_booking_partner_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            visual_identity_options: z.ZodDefault<z.ZodObject<{
+                hubby_branding: z.ZodDefault<z.ZodBoolean>;
+                source_partner_branding: z.ZodDefault<z.ZodBoolean>;
+                own_branding: z.ZodDefault<z.ZodBoolean>;
+            }, "strip", z.ZodTypeAny, {
+                hubby_branding: boolean;
+                source_partner_branding: boolean;
+                own_branding: boolean;
+            }, {
+                hubby_branding?: boolean | undefined;
+                source_partner_branding?: boolean | undefined;
+                own_branding?: boolean | undefined;
+            }>>;
+        }, "strip", z.ZodTypeAny, {
+            visual_identity_options: {
+                hubby_branding: boolean;
+                source_partner_branding: boolean;
+                own_branding: boolean;
+            };
+            enable_complimentary_booking: boolean;
+            slack_channel?: string | null | undefined;
+            welcome_email_template?: number | null | undefined;
+            password_reset_template?: number | null | undefined;
+            partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+            complimentary_booking_partner_id?: string | null | undefined;
+        }, {
+            visual_identity_options?: {
+                hubby_branding?: boolean | undefined;
+                source_partner_branding?: boolean | undefined;
+                own_branding?: boolean | undefined;
+            } | undefined;
+            slack_channel?: string | null | undefined;
+            welcome_email_template?: number | null | undefined;
+            password_reset_template?: number | null | undefined;
+            partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+            enable_complimentary_booking?: boolean | undefined;
+            complimentary_booking_partner_id?: string | null | undefined;
+        }>>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy?: {
             name: string;
@@ -4781,6 +4968,19 @@ declare const HPartnerAppSchema: z.ZodObject<{
             source_partner_branding: boolean;
             own_branding: boolean;
         } | null | undefined;
+        agent_signup_settings?: {
+            visual_identity_options: {
+                hubby_branding: boolean;
+                source_partner_branding: boolean;
+                own_branding: boolean;
+            };
+            enable_complimentary_booking: boolean;
+            slack_channel?: string | null | undefined;
+            welcome_email_template?: number | null | undefined;
+            password_reset_template?: number | null | undefined;
+            partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+            complimentary_booking_partner_id?: string | null | undefined;
+        } | null | undefined;
     }, {
         package_strategy?: {
             name: string;
@@ -4845,6 +5045,19 @@ declare const HPartnerAppSchema: z.ZodObject<{
             hubby_branding?: boolean | undefined;
             source_partner_branding?: boolean | undefined;
             own_branding?: boolean | undefined;
+        } | null | undefined;
+        agent_signup_settings?: {
+            visual_identity_options?: {
+                hubby_branding?: boolean | undefined;
+                source_partner_branding?: boolean | undefined;
+                own_branding?: boolean | undefined;
+            } | undefined;
+            slack_channel?: string | null | undefined;
+            welcome_email_template?: number | null | undefined;
+            password_reset_template?: number | null | undefined;
+            partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+            enable_complimentary_booking?: boolean | undefined;
+            complimentary_booking_partner_id?: string | null | undefined;
         } | null | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
@@ -5079,6 +5292,19 @@ declare const HPartnerAppSchema: z.ZodObject<{
             source_partner_branding: boolean;
             own_branding: boolean;
         } | null | undefined;
+        agent_signup_settings?: {
+            visual_identity_options: {
+                hubby_branding: boolean;
+                source_partner_branding: boolean;
+                own_branding: boolean;
+            };
+            enable_complimentary_booking: boolean;
+            slack_channel?: string | null | undefined;
+            welcome_email_template?: number | null | undefined;
+            password_reset_template?: number | null | undefined;
+            partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+            complimentary_booking_partner_id?: string | null | undefined;
+        } | null | undefined;
     };
     tags: {
         name: string;
@@ -5265,6 +5491,19 @@ declare const HPartnerAppSchema: z.ZodObject<{
             hubby_branding?: boolean | undefined;
             source_partner_branding?: boolean | undefined;
             own_branding?: boolean | undefined;
+        } | null | undefined;
+        agent_signup_settings?: {
+            visual_identity_options?: {
+                hubby_branding?: boolean | undefined;
+                source_partner_branding?: boolean | undefined;
+                own_branding?: boolean | undefined;
+            } | undefined;
+            slack_channel?: string | null | undefined;
+            welcome_email_template?: number | null | undefined;
+            password_reset_template?: number | null | undefined;
+            partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+            enable_complimentary_booking?: boolean | undefined;
+            complimentary_booking_partner_id?: string | null | undefined;
         } | null | undefined;
     };
     tags: {
@@ -5502,6 +5741,51 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         source_partner_branding?: boolean | undefined;
         own_branding?: boolean | undefined;
     }>>>;
+    agent_signup_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        slack_channel: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        welcome_email_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        password_reset_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        partner_type: z.ZodOptional<z.ZodNullable<z.ZodEnum<["wholesale", "reseller", "platform", "agent"]>>>;
+        enable_complimentary_booking: z.ZodDefault<z.ZodBoolean>;
+        complimentary_booking_partner_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        visual_identity_options: z.ZodDefault<z.ZodObject<{
+            hubby_branding: z.ZodDefault<z.ZodBoolean>;
+            source_partner_branding: z.ZodDefault<z.ZodBoolean>;
+            own_branding: z.ZodDefault<z.ZodBoolean>;
+        }, "strip", z.ZodTypeAny, {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        }, {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        }>>;
+    }, "strip", z.ZodTypeAny, {
+        visual_identity_options: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        };
+        enable_complimentary_booking: boolean;
+        slack_channel?: string | null | undefined;
+        welcome_email_template?: number | null | undefined;
+        password_reset_template?: number | null | undefined;
+        partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+        complimentary_booking_partner_id?: string | null | undefined;
+    }, {
+        visual_identity_options?: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        } | undefined;
+        slack_channel?: string | null | undefined;
+        welcome_email_template?: number | null | undefined;
+        password_reset_template?: number | null | undefined;
+        partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+        enable_complimentary_booking?: boolean | undefined;
+        complimentary_booking_partner_id?: string | null | undefined;
+    }>>>;
 }, "strip", z.ZodTypeAny, {
     package_strategy?: {
         name: string;
@@ -5567,6 +5851,19 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         source_partner_branding: boolean;
         own_branding: boolean;
     } | null | undefined;
+    agent_signup_settings?: {
+        visual_identity_options: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        };
+        enable_complimentary_booking: boolean;
+        slack_channel?: string | null | undefined;
+        welcome_email_template?: number | null | undefined;
+        password_reset_template?: number | null | undefined;
+        partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+        complimentary_booking_partner_id?: string | null | undefined;
+    } | null | undefined;
 }, {
     package_strategy?: {
         name: string;
@@ -5631,6 +5928,19 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         hubby_branding?: boolean | undefined;
         source_partner_branding?: boolean | undefined;
         own_branding?: boolean | undefined;
+    } | null | undefined;
+    agent_signup_settings?: {
+        visual_identity_options?: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        } | undefined;
+        slack_channel?: string | null | undefined;
+        welcome_email_template?: number | null | undefined;
+        password_reset_template?: number | null | undefined;
+        partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+        enable_complimentary_booking?: boolean | undefined;
+        complimentary_booking_partner_id?: string | null | undefined;
     } | null | undefined;
 }>;
 declare const HVisualIdentitySchema: z.ZodObject<{
@@ -7639,6 +7949,51 @@ declare const partnerAppSchema: z.ZodObject<{
             source_partner_branding?: boolean | undefined;
             own_branding?: boolean | undefined;
         }>>>;
+        agent_signup_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            slack_channel: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            welcome_email_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+            password_reset_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+            partner_type: z.ZodOptional<z.ZodNullable<z.ZodEnum<["wholesale", "reseller", "platform", "agent"]>>>;
+            enable_complimentary_booking: z.ZodDefault<z.ZodBoolean>;
+            complimentary_booking_partner_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            visual_identity_options: z.ZodDefault<z.ZodObject<{
+                hubby_branding: z.ZodDefault<z.ZodBoolean>;
+                source_partner_branding: z.ZodDefault<z.ZodBoolean>;
+                own_branding: z.ZodDefault<z.ZodBoolean>;
+            }, "strip", z.ZodTypeAny, {
+                hubby_branding: boolean;
+                source_partner_branding: boolean;
+                own_branding: boolean;
+            }, {
+                hubby_branding?: boolean | undefined;
+                source_partner_branding?: boolean | undefined;
+                own_branding?: boolean | undefined;
+            }>>;
+        }, "strip", z.ZodTypeAny, {
+            visual_identity_options: {
+                hubby_branding: boolean;
+                source_partner_branding: boolean;
+                own_branding: boolean;
+            };
+            enable_complimentary_booking: boolean;
+            slack_channel?: string | null | undefined;
+            welcome_email_template?: number | null | undefined;
+            password_reset_template?: number | null | undefined;
+            partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+            complimentary_booking_partner_id?: string | null | undefined;
+        }, {
+            visual_identity_options?: {
+                hubby_branding?: boolean | undefined;
+                source_partner_branding?: boolean | undefined;
+                own_branding?: boolean | undefined;
+            } | undefined;
+            slack_channel?: string | null | undefined;
+            welcome_email_template?: number | null | undefined;
+            password_reset_template?: number | null | undefined;
+            partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+            enable_complimentary_booking?: boolean | undefined;
+            complimentary_booking_partner_id?: string | null | undefined;
+        }>>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy?: {
             name: string;
@@ -7704,6 +8059,19 @@ declare const partnerAppSchema: z.ZodObject<{
             source_partner_branding: boolean;
             own_branding: boolean;
         } | null | undefined;
+        agent_signup_settings?: {
+            visual_identity_options: {
+                hubby_branding: boolean;
+                source_partner_branding: boolean;
+                own_branding: boolean;
+            };
+            enable_complimentary_booking: boolean;
+            slack_channel?: string | null | undefined;
+            welcome_email_template?: number | null | undefined;
+            password_reset_template?: number | null | undefined;
+            partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+            complimentary_booking_partner_id?: string | null | undefined;
+        } | null | undefined;
     }, {
         package_strategy?: {
             name: string;
@@ -7768,6 +8136,19 @@ declare const partnerAppSchema: z.ZodObject<{
             hubby_branding?: boolean | undefined;
             source_partner_branding?: boolean | undefined;
             own_branding?: boolean | undefined;
+        } | null | undefined;
+        agent_signup_settings?: {
+            visual_identity_options?: {
+                hubby_branding?: boolean | undefined;
+                source_partner_branding?: boolean | undefined;
+                own_branding?: boolean | undefined;
+            } | undefined;
+            slack_channel?: string | null | undefined;
+            welcome_email_template?: number | null | undefined;
+            password_reset_template?: number | null | undefined;
+            partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+            enable_complimentary_booking?: boolean | undefined;
+            complimentary_booking_partner_id?: string | null | undefined;
         } | null | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
@@ -8002,6 +8383,19 @@ declare const partnerAppSchema: z.ZodObject<{
             source_partner_branding: boolean;
             own_branding: boolean;
         } | null | undefined;
+        agent_signup_settings?: {
+            visual_identity_options: {
+                hubby_branding: boolean;
+                source_partner_branding: boolean;
+                own_branding: boolean;
+            };
+            enable_complimentary_booking: boolean;
+            slack_channel?: string | null | undefined;
+            welcome_email_template?: number | null | undefined;
+            password_reset_template?: number | null | undefined;
+            partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+            complimentary_booking_partner_id?: string | null | undefined;
+        } | null | undefined;
     };
     tags: {
         name: string;
@@ -8188,6 +8582,19 @@ declare const partnerAppSchema: z.ZodObject<{
             hubby_branding?: boolean | undefined;
             source_partner_branding?: boolean | undefined;
             own_branding?: boolean | undefined;
+        } | null | undefined;
+        agent_signup_settings?: {
+            visual_identity_options?: {
+                hubby_branding?: boolean | undefined;
+                source_partner_branding?: boolean | undefined;
+                own_branding?: boolean | undefined;
+            } | undefined;
+            slack_channel?: string | null | undefined;
+            welcome_email_template?: number | null | undefined;
+            password_reset_template?: number | null | undefined;
+            partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
+            enable_complimentary_booking?: boolean | undefined;
+            complimentary_booking_partner_id?: string | null | undefined;
         } | null | undefined;
     };
     tags: {
