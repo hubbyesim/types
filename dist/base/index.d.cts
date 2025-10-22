@@ -550,6 +550,8 @@ declare const HPaymentSchema: z.ZodObject<{
         balance_used: z.ZodOptional<z.ZodNumber>;
         booking_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         discount_amount: z.ZodOptional<z.ZodString>;
+        is_special_offer: z.ZodOptional<z.ZodBoolean>;
+        special_offer_discount: z.ZodOptional<z.ZodNumber>;
     }, "strip", z.ZodTypeAny, {
         promo?: string | undefined;
         booking_id?: string | null | undefined;
@@ -558,6 +560,8 @@ declare const HPaymentSchema: z.ZodObject<{
         global?: string | undefined;
         balance_used?: number | undefined;
         discount_amount?: string | undefined;
+        is_special_offer?: boolean | undefined;
+        special_offer_discount?: number | undefined;
     }, {
         promo?: string | undefined;
         booking_id?: string | null | undefined;
@@ -566,6 +570,8 @@ declare const HPaymentSchema: z.ZodObject<{
         global?: string | undefined;
         balance_used?: number | undefined;
         discount_amount?: string | undefined;
+        is_special_offer?: boolean | undefined;
+        special_offer_discount?: number | undefined;
     }>>;
     webapp_platform_payment_properties: z.ZodOptional<z.ZodObject<{
         promo_codes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -627,6 +633,8 @@ declare const HPaymentSchema: z.ZodObject<{
         global?: string | undefined;
         balance_used?: number | undefined;
         discount_amount?: string | undefined;
+        is_special_offer?: boolean | undefined;
+        special_offer_discount?: number | undefined;
     } | undefined;
     webapp_platform_payment_properties?: {
         locale?: string | undefined;
@@ -667,6 +675,8 @@ declare const HPaymentSchema: z.ZodObject<{
         global?: string | undefined;
         balance_used?: number | undefined;
         discount_amount?: string | undefined;
+        is_special_offer?: boolean | undefined;
+        special_offer_discount?: number | undefined;
     } | undefined;
     webapp_platform_payment_properties?: {
         locale?: string | undefined;
