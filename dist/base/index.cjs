@@ -280,8 +280,10 @@ var promoCodeSchemaSpec = markAsSchemaSpec({
   created_by: zod.z.string().nullable(),
   updated_by: zod.z.string().nullable(),
   // PromoCode specific fields
+  uuid: zod.z.string().uuid(),
   external_id: zod.z.string(),
   code: zod.z.string(),
+  claimed_at: timestampNullableOptional,
   allowance_user: zod.z.number(),
   allowance_total: zod.z.number(),
   type: zod.z.enum(["discount", "booking", "booking_without_destination"]).nullable().or(zod.z.string()),

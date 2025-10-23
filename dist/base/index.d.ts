@@ -911,8 +911,10 @@ declare const HPromoCodeSchema: z.ZodObject<{
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodNullable<z.ZodString>;
     updated_by: z.ZodNullable<z.ZodString>;
+    uuid: z.ZodString;
     external_id: z.ZodString;
     code: z.ZodString;
+    claimed_at: z.ZodEffects<z.ZodDate, Date, Date>;
     allowance_user: z.ZodNumber;
     allowance_total: z.ZodNumber;
     type: z.ZodUnion<[z.ZodNullable<z.ZodEnum<["discount", "booking", "booking_without_destination"]>>, z.ZodString]>;
@@ -967,6 +969,8 @@ declare const HPromoCodeSchema: z.ZodObject<{
     country: string;
     package: string;
     redeemed_at: Date;
+    uuid: string;
+    claimed_at: Date;
     allowance_user: number;
     allowance_total: number;
     booking: string;
@@ -1001,6 +1005,8 @@ declare const HPromoCodeSchema: z.ZodObject<{
     country: string;
     package: string;
     redeemed_at: Date;
+    uuid: string;
+    claimed_at: Date;
     allowance_user: number;
     allowance_total: number;
     booking: string;
