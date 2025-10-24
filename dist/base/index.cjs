@@ -1002,6 +1002,21 @@ var apiLogSchemaSpec = markAsSchemaSpec({
   timestamp: timestampRequired,
   status_code: zod.z.number()
 });
+var userTouchpointsSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string().nullable().optional(),
+  booking: { _type: "docRef", collection: BOOKING_COLLECTION, nullable: true, optional: true },
+  promo_code: { _type: "docRef", collection: PROMO_CODE_COLLECTION, nullable: true, optional: true },
+  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true, optional: true },
+  promo_code_redeemed_at: timestampNullableOptional,
+  esim_assigned_at: timestampNullableOptional,
+  esim_install_initiated_at: timestampNullableOptional,
+  esim_install_completed_at: timestampNullableOptional,
+  esim_first_package_activated_at: timestampNullableOptional,
+  created_at: timestampRequired,
+  updated_at: timestampRequired,
+  created_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  updated_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true }
+});
 var roleSchemaSpec = markAsSchemaSpec({
   id: zod.z.string().nullable().optional(),
   name: zod.z.string(),
@@ -1091,6 +1106,7 @@ var HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
 var HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
 var HReviewSchema = buildClientSchema(reviewSchemaSpec);
 var HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
+var HUserTouchpointsSchema = buildClientSchema(userTouchpointsSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1151,6 +1167,7 @@ exports.HTagSchema = HTagSchema;
 exports.HTelnaPackageSchema = HTelnaPackageSchema;
 exports.HTrafficPolicySchema = HTrafficPolicySchema;
 exports.HUserSchema = HUserSchema;
+exports.HUserTouchpointsSchema = HUserTouchpointsSchema;
 exports.HVisualIdentityBannerSchema = HVisualIdentityBannerSchema;
 exports.HVisualIdentitySchema = HVisualIdentitySchema;
 exports.HubbyModelSchema = HubbyModelSchema;

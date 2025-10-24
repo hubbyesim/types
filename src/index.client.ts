@@ -41,6 +41,7 @@ import {
 } from './specs/partner';
 import { analyticsSpec } from './specs/analytics';
 import { apiLogSchemaSpec } from './specs/apiLogs';
+import { userTouchpointsSchemaSpec } from './specs/userTouchpoints';
 import { z } from 'zod';
 import { roleSchemaSpec } from './specs/role';
 import { permissionSchemaSpec } from './specs/permission';
@@ -84,6 +85,7 @@ export const HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
 export const HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
 export const HReviewSchema = buildClientSchema(reviewSchemaSpec);
 export const HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
+export const HUserTouchpointsSchema = buildClientSchema(userTouchpointsSchemaSpec);
 // Additional lower-level schemas
 export const HAddressSchema = addressSchema;
 export const HRegistrationSchema = registrationSchema;

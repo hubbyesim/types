@@ -38,6 +38,7 @@ import {
 import { hubbyModelSpec, tagModelSpec } from './specs/common';
 import { SUPPORTED_LOCALES as LOCALES } from './constants';
 import { apiLogSchemaSpec } from './specs/apiLogs';
+import { userTouchpointsSchemaSpec } from './specs/userTouchpoints';
 import { 
     reviewSchemaSpec, 
     reviewSubmissionSchemaSpec,
@@ -98,6 +99,7 @@ export const BondioPackageSchema = buildServerSchema(bondioPackageSchema);
 export const TrafficPolicySchema = buildServerSchema(trafficPolicySpec);
 export const ReviewSchema = buildServerSchema(reviewSchemaSpec);
 export const ReviewSubmissionSchema = buildServerSchema(reviewSubmissionSchemaSpec);
+export const UserTouchpointsSchema = buildServerSchema(userTouchpointsSchemaSpec);
 
 // Additional lower-level schemas
 export const AddressSchema = addressSchema;
@@ -232,4 +234,4 @@ export { createModelConverters } from './utils/modelConverterFactory';
 export { createConvertJSToFirestore, createConvertFirestoreToJS } from './utils/firestoreTransformUtils';
 export { FirebaseService, createFirebaseService } from './services/firebase';
 
-export { USER_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, BOOKING_COLLECTION, ROLE_COLLECTION, PERMISSION_COLLECTION, TRAFFIC_POLICY_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, COUNTRY_COLLECTION, ESIM_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, MESSAGE_COLLECTION, CURRENCY_COLLECTION, API_LOG_COLLECTION, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION } from './specs/common';
+export { USER_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, BOOKING_COLLECTION, ROLE_COLLECTION, PERMISSION_COLLECTION, TRAFFIC_POLICY_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, COUNTRY_COLLECTION, ESIM_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, MESSAGE_COLLECTION, CURRENCY_COLLECTION, API_LOG_COLLECTION, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, USER_TOUCHPOINTS_COLLECTION } from './specs/common';
