@@ -337,7 +337,6 @@ var bookingSchemaSpec = markAsSchemaSpec({
   email: zod.z.string().email().nullable(),
   phone: zod.z.string().nullable(),
   booking_id: zod.z.string().nullable(),
-  booking_label: zod.z.string().nullable().optional(),
   flight_number: zod.z.string().optional(),
   gender: zod.z.enum(["M", "F", "O"]).optional(),
   package_size: zod.z.string().optional(),
@@ -467,6 +466,12 @@ var paymentSchemaSpec = markAsSchemaSpec({
   source: zod.z.enum(["app", "webapp", "platform"]),
   invoice: zod.z.string().optional(),
   fee: zod.z.number().optional(),
+  status: zod.z.enum(["pending", "processing", "completed", "failed"]).optional(),
+  // 'pending' | 'processing' | 'completed' | 'failed'
+  payment_intent_id: zod.z.string().nullable().optional(),
+  // Stripe PaymentIntent ID
+  error_message: zod.z.string().nullable().optional(),
+  // Error message
   topup: zod.z.boolean(),
   // Common resolved package specification (same format for all sources)
   package_specifications: zod.z.array(zod.z.object({

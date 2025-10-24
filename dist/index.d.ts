@@ -115,7 +115,6 @@ declare const bookingSchemaSpec: {
     email: z.ZodNullable<z.ZodString>;
     phone: z.ZodNullable<z.ZodString>;
     booking_id: z.ZodNullable<z.ZodString>;
-    booking_label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     flight_number: z.ZodOptional<z.ZodString>;
     gender: z.ZodOptional<z.ZodEnum<["M", "F", "O"]>>;
     package_size: z.ZodOptional<z.ZodString>;
@@ -342,6 +341,9 @@ declare const paymentSchemaSpec: {
     source: z.ZodEnum<["app", "webapp", "platform"]>;
     invoice: z.ZodOptional<z.ZodString>;
     fee: z.ZodOptional<z.ZodNumber>;
+    status: z.ZodOptional<z.ZodEnum<["pending", "processing", "completed", "failed"]>>;
+    payment_intent_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    error_message: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     topup: z.ZodBoolean;
     package_specifications: z.ZodOptional<z.ZodArray<z.ZodObject<{
         package_type: z.ZodOptional<z.ZodString>;
@@ -1630,7 +1632,6 @@ declare const HBookingSchema: z.ZodObject<{
     email: z.ZodNullable<z.ZodString>;
     phone: z.ZodNullable<z.ZodString>;
     booking_id: z.ZodNullable<z.ZodString>;
-    booking_label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     flight_number: z.ZodOptional<z.ZodString>;
     gender: z.ZodOptional<z.ZodEnum<["M", "F", "O"]>>;
     package_size: z.ZodOptional<z.ZodString>;
@@ -1742,7 +1743,6 @@ declare const HBookingSchema: z.ZodObject<{
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
-    booking_label?: string | null | undefined;
     flight_number?: string | undefined;
     package_size?: string | undefined;
     sent_messages?: Record<string, any> | undefined;
@@ -1794,7 +1794,6 @@ declare const HBookingSchema: z.ZodObject<{
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
-    booking_label?: string | null | undefined;
     flight_number?: string | undefined;
     package_size?: string | undefined;
     sent_messages?: Record<string, any> | undefined;
@@ -1997,6 +1996,9 @@ declare const HPaymentSchema: z.ZodObject<{
     source: z.ZodEnum<["app", "webapp", "platform"]>;
     invoice: z.ZodOptional<z.ZodString>;
     fee: z.ZodOptional<z.ZodNumber>;
+    status: z.ZodOptional<z.ZodEnum<["pending", "processing", "completed", "failed"]>>;
+    payment_intent_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    error_message: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     topup: z.ZodBoolean;
     package_specifications: z.ZodOptional<z.ZodArray<z.ZodObject<{
         package_type: z.ZodOptional<z.ZodString>;
@@ -2093,6 +2095,7 @@ declare const HPaymentSchema: z.ZodObject<{
     customer: string;
     topup: boolean;
     id?: string | null | undefined;
+    status?: "pending" | "processing" | "completed" | "failed" | undefined;
     package_specifications?: {
         package_size?: string | undefined;
         destination?: string | undefined;
@@ -2102,6 +2105,8 @@ declare const HPaymentSchema: z.ZodObject<{
     }[] | undefined;
     invoice?: string | undefined;
     fee?: number | undefined;
+    payment_intent_id?: string | null | undefined;
+    error_message?: string | null | undefined;
     app_payment_properties?: {
         promo?: string | undefined;
         booking_id?: string | null | undefined;
@@ -2135,6 +2140,7 @@ declare const HPaymentSchema: z.ZodObject<{
     customer: string;
     topup: boolean;
     id?: string | null | undefined;
+    status?: "pending" | "processing" | "completed" | "failed" | undefined;
     package_specifications?: {
         package_size?: string | undefined;
         destination?: string | undefined;
@@ -2144,6 +2150,8 @@ declare const HPaymentSchema: z.ZodObject<{
     }[] | undefined;
     invoice?: string | undefined;
     fee?: number | undefined;
+    payment_intent_id?: string | null | undefined;
+    error_message?: string | null | undefined;
     app_payment_properties?: {
         promo?: string | undefined;
         booking_id?: string | null | undefined;
@@ -2174,14 +2182,14 @@ declare const HMessageSchema: z.ZodObject<{
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
-    status: "pending" | "sent" | "failed" | "delivered";
+    status: "pending" | "failed" | "sent" | "delivered";
     created_at: Date;
     updated_at: Date;
     key: string;
     method: "email" | "push" | "sms";
 }, {
     id: string;
-    status: "pending" | "sent" | "failed" | "delivered";
+    status: "pending" | "failed" | "sent" | "delivered";
     created_at: Date;
     updated_at: Date;
     key: string;
