@@ -1028,6 +1028,8 @@ var apiLogSchemaSpec = markAsSchemaSpec({
 });
 var userTouchpointsSchemaSpec = markAsSchemaSpec({
   id: zod.z.string().nullable().optional(),
+  unique_device_identifier: zod.z.string().nullable().optional(),
+  user: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
   booking: { _type: "docRef", collection: BOOKING_COLLECTION, nullable: true, optional: true },
   promo_code: { _type: "docRef", collection: PROMO_CODE_COLLECTION, nullable: true, optional: true },
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true, optional: true },

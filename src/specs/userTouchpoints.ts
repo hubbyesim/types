@@ -12,6 +12,8 @@ import { markAsSchemaSpec } from '../common';
 
 export const userTouchpointsSchemaSpec = markAsSchemaSpec({
     id: z.string().nullable().optional(),
+    unique_device_identifier: z.string().nullable().optional(),
+    user: { _type: 'docRef' as const, collection: USER_COLLECTION, nullable: true, optional: true },
     booking: { _type: 'docRef' as const, collection: BOOKING_COLLECTION, nullable: true, optional: true },
     promo_code: { _type: 'docRef' as const, collection: PROMO_CODE_COLLECTION, nullable: true, optional: true },
     partner: { _type: 'docRef' as const, collection: PARTNER_COLLECTION, nullable: true, optional: true },

@@ -6607,6 +6607,8 @@ declare const HReviewSubmissionSchema: z.ZodObject<{
 }>;
 declare const HUserTouchpointsSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    unique_device_identifier: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    user: z.ZodString;
     booking: z.ZodString;
     promo_code: z.ZodString;
     partner: z.ZodString;
@@ -6625,6 +6627,7 @@ declare const HUserTouchpointsSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    user: string;
     booking: string;
     promo_code: string;
     promo_code_redeemed_at: Date;
@@ -6633,12 +6636,14 @@ declare const HUserTouchpointsSchema: z.ZodObject<{
     esim_install_completed_at: Date;
     esim_first_package_activated_at: Date;
     id?: string | null | undefined;
+    unique_device_identifier?: string | null | undefined;
 }, {
     partner: string;
     created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    user: string;
     booking: string;
     promo_code: string;
     promo_code_redeemed_at: Date;
@@ -6647,6 +6652,7 @@ declare const HUserTouchpointsSchema: z.ZodObject<{
     esim_install_completed_at: Date;
     esim_first_package_activated_at: Date;
     id?: string | null | undefined;
+    unique_device_identifier?: string | null | undefined;
 }>;
 declare const HAddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodNullable<z.ZodString>>;
