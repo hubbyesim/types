@@ -335,7 +335,6 @@ var bookingSchemaSpec = markAsSchemaSpec({
   email: z.string().email().nullable(),
   phone: z.string().nullable(),
   booking_id: z.string().nullable(),
-  booking_label: z.string().nullable().optional(),
   flight_number: z.string().optional(),
   gender: z.enum(["M", "F", "O"]).optional(),
   package_size: z.string().optional(),
@@ -465,6 +464,12 @@ var paymentSchemaSpec = markAsSchemaSpec({
   source: z.enum(["app", "webapp", "platform"]),
   invoice: z.string().optional(),
   fee: z.number().optional(),
+  status: z.enum(["pending", "processing", "completed", "failed"]).optional(),
+  // 'pending' | 'processing' | 'completed' | 'failed'
+  payment_intent_id: z.string().nullable().optional(),
+  // Stripe PaymentIntent ID
+  error_message: z.string().nullable().optional(),
+  // Error message
   topup: z.boolean(),
   // Common resolved package specification (same format for all sources)
   package_specifications: z.array(z.object({
