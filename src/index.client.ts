@@ -41,6 +41,7 @@ import {
 } from './specs/partner';
 import { analyticsSpec } from './specs/analytics';
 import { apiLogSchemaSpec } from './specs/apiLogs';
+import { userTouchpointsSchemaSpec } from './specs/userTouchpoints';
 import { z } from 'zod';
 import { roleSchemaSpec } from './specs/role';
 import { permissionSchemaSpec } from './specs/permission';
@@ -84,6 +85,7 @@ export const HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
 export const HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
 export const HReviewSchema = buildClientSchema(reviewSchemaSpec);
 export const HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
+export const HUserTouchpointsSchema = buildClientSchema(userTouchpointsSchemaSpec);
 // Additional lower-level schemas
 export const HAddressSchema = addressSchema;
 export const HRegistrationSchema = registrationSchema;
@@ -121,6 +123,7 @@ export type HBondioPackage = z.infer<typeof HBondioPackageSchema>;
 export type HTelnaPackage = z.infer<typeof HTelnaPackageSchema>;
 export type HReview = z.infer<typeof HReviewSchema>;
 export type HReviewSubmission = z.infer<typeof HReviewSubmissionSchema>;
+export type HUserTouchpoints = z.infer<typeof HUserTouchpointsSchema>;
 // Additional lower-level types
 export type HAddress = z.infer<typeof HAddressSchema>;
 export type HRegistration = z.infer<typeof HRegistrationSchema>;
