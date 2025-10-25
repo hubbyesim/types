@@ -70,7 +70,8 @@ export {
     priceListSchemaSpec,
     apiLogSchemaSpec,
     reviewSchemaSpec,
-    reviewSubmissionSchemaSpec
+    reviewSubmissionSchemaSpec,
+    userTouchpointsSchemaSpec
 };
 
 

@@ -1629,6 +1629,7 @@ exports.userFromFirestore = userFromFirestore;
 exports.userSchemaSpec = userSchemaSpec;
 exports.userToFirestore = userToFirestore;
 exports.userTouchpointsFromFirestore = userTouchpointsFromFirestore;
+exports.userTouchpointsSchemaSpec = userTouchpointsSchemaSpec;
 exports.userTouchpointsToFirestore = userTouchpointsToFirestore;
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.cjs.map
