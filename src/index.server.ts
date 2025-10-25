@@ -140,6 +140,7 @@ export type BondioPackage = z.infer<typeof BondioPackageSchema>;
 export type TrafficPolicy = z.infer<typeof TrafficPolicySchema>;
 export type Review = z.infer<typeof ReviewSchema>;
 export type ReviewSubmission = z.infer<typeof ReviewSubmissionSchema>;
+export type UserTouchpoints = z.infer<typeof UserTouchpointsSchema>;
 
 // Additional lower-level types
 export type Address = z.infer<typeof AddressSchema>;

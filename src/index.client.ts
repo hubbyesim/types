@@ -123,6 +123,7 @@ export type HBondioPackage = z.infer<typeof HBondioPackageSchema>;
 export type HTelnaPackage = z.infer<typeof HTelnaPackageSchema>;
 export type HReview = z.infer<typeof HReviewSchema>;
 export type HReviewSubmission = z.infer<typeof HReviewSubmissionSchema>;
+export type HUserTouchpoints = z.infer<typeof HUserTouchpointsSchema>;
 // Additional lower-level types
 export type HAddress = z.infer<typeof HAddressSchema>;
 export type HRegistration = z.infer<typeof HRegistrationSchema>;
