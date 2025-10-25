@@ -52,7 +52,7 @@ import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 
 
 import { convertFirestoreToJS, convertJSToFirestore } from './utils/firestoreTransformUtils';
-import { HPackage, HPartner, HPriceList, HPromoCode } from './index.client';
+import { HPackage, HPartner, HPriceList, HPromoCode, HUserTouchpoints } from './index.client';
 import { buildClientSchema } from './builders/client';
 
 export {
@@ -222,6 +222,14 @@ export const promoCodeFromFirestore = (promoCode: PromoCode): HPromoCode => {
 
 export const promoCodeToFirestore = (promoCode: HPromoCode): PromoCode => {
     return convertJSToFirestore(promoCode, promoCodeSchemaSpec);
+}
+
+export const userTouchpointsFromFirestore = (userTouchpoints: UserTouchpoints): HUserTouchpoints => {
+    return convertFirestoreToJS(userTouchpoints, userTouchpointsSchemaSpec);
+}
+
+export const userTouchpointsToFirestore = (userTouchpoints: HUserTouchpoints): UserTouchpoints => {
+    return convertJSToFirestore(userTouchpoints, userTouchpointsSchemaSpec);
 }
 
 

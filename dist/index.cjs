@@ -1482,6 +1482,12 @@ var promoCodeFromFirestore = (promoCode) => {
 var promoCodeToFirestore = (promoCode) => {
   return convertJSToFirestore(promoCode, promoCodeSchemaSpec);
 };
+var userTouchpointsFromFirestore = (userTouchpoints) => {
+  return convertFirestoreToJS(userTouchpoints, userTouchpointsSchemaSpec);
+};
+var userTouchpointsToFirestore = (userTouchpoints) => {
+  return convertJSToFirestore(userTouchpoints, userTouchpointsSchemaSpec);
+};
 var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
@@ -1622,5 +1628,7 @@ exports.reviewSubmissionSchemaSpec = reviewSubmissionSchemaSpec;
 exports.userFromFirestore = userFromFirestore;
 exports.userSchemaSpec = userSchemaSpec;
 exports.userToFirestore = userToFirestore;
+exports.userTouchpointsFromFirestore = userTouchpointsFromFirestore;
+exports.userTouchpointsToFirestore = userTouchpointsToFirestore;
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.cjs.map
