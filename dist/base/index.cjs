@@ -281,8 +281,10 @@ var promoCodeSchemaSpec = markAsSchemaSpec({
   created_by: zod.z.string().nullable(),
   updated_by: zod.z.string().nullable(),
   // PromoCode specific fields
+  uuid: zod.z.string().uuid(),
   external_id: zod.z.string(),
   code: zod.z.string(),
+  claimed_at: timestampNullableOptional,
   allowance_user: zod.z.number(),
   allowance_total: zod.z.number(),
   type: zod.z.enum(["discount", "booking", "booking_without_destination"]).nullable().or(zod.z.string()),
@@ -469,6 +471,12 @@ var paymentSchemaSpec = markAsSchemaSpec({
   invoice: zod.z.string().optional(),
   fee: zod.z.number().optional(),
   topup: zod.z.boolean(),
+  status: zod.z.enum(["pending", "processing", "completed", "failed"]).optional(),
+  // 'pending' | 'processing' | 'completed' | 'failed'
+  payment_intent_id: zod.z.string().nullable().optional(),
+  // Stripe PaymentIntent ID
+  error_message: zod.z.string().nullable().optional(),
+  // Error message
   // Common resolved package specification (same format for all sources)
   package_specifications: zod.z.array(zod.z.object({
     package_type: zod.z.string().optional(),

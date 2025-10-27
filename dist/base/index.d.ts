@@ -524,6 +524,9 @@ declare const HPaymentSchema: z.ZodObject<{
     invoice: z.ZodOptional<z.ZodString>;
     fee: z.ZodOptional<z.ZodNumber>;
     topup: z.ZodBoolean;
+    status: z.ZodOptional<z.ZodEnum<["pending", "processing", "completed", "failed"]>>;
+    payment_intent_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    error_message: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     package_specifications: z.ZodOptional<z.ZodArray<z.ZodObject<{
         package_type: z.ZodOptional<z.ZodString>;
         package_size: z.ZodOptional<z.ZodString>;
@@ -619,6 +622,7 @@ declare const HPaymentSchema: z.ZodObject<{
     customer: string;
     topup: boolean;
     id?: string | null | undefined;
+    status?: "pending" | "processing" | "completed" | "failed" | undefined;
     package_specifications?: {
         package_size?: string | undefined;
         destination?: string | undefined;
@@ -628,6 +632,8 @@ declare const HPaymentSchema: z.ZodObject<{
     }[] | undefined;
     invoice?: string | undefined;
     fee?: number | undefined;
+    payment_intent_id?: string | null | undefined;
+    error_message?: string | null | undefined;
     app_payment_properties?: {
         promo?: string | undefined;
         booking_id?: string | null | undefined;
@@ -661,6 +667,7 @@ declare const HPaymentSchema: z.ZodObject<{
     customer: string;
     topup: boolean;
     id?: string | null | undefined;
+    status?: "pending" | "processing" | "completed" | "failed" | undefined;
     package_specifications?: {
         package_size?: string | undefined;
         destination?: string | undefined;
@@ -670,6 +677,8 @@ declare const HPaymentSchema: z.ZodObject<{
     }[] | undefined;
     invoice?: string | undefined;
     fee?: number | undefined;
+    payment_intent_id?: string | null | undefined;
+    error_message?: string | null | undefined;
     app_payment_properties?: {
         promo?: string | undefined;
         booking_id?: string | null | undefined;
@@ -701,14 +710,14 @@ declare const HMessageSchema: z.ZodObject<{
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
     created_at: Date;
-    status: "pending" | "sent" | "failed" | "delivered";
+    status: "pending" | "failed" | "sent" | "delivered";
     updated_at: Date;
     key: string;
     method: "email" | "push" | "sms";
 }, {
     id: string;
     created_at: Date;
-    status: "pending" | "sent" | "failed" | "delivered";
+    status: "pending" | "failed" | "sent" | "delivered";
     updated_at: Date;
     key: string;
     method: "email" | "push" | "sms";
@@ -914,8 +923,10 @@ declare const HPromoCodeSchema: z.ZodObject<{
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodNullable<z.ZodString>;
     updated_by: z.ZodNullable<z.ZodString>;
+    uuid: z.ZodString;
     external_id: z.ZodString;
     code: z.ZodString;
+    claimed_at: z.ZodEffects<z.ZodDate, Date, Date>;
     allowance_user: z.ZodNumber;
     allowance_total: z.ZodNumber;
     type: z.ZodUnion<[z.ZodNullable<z.ZodEnum<["discount", "booking", "booking_without_destination"]>>, z.ZodString]>;
@@ -970,6 +981,8 @@ declare const HPromoCodeSchema: z.ZodObject<{
     country: string;
     package: string;
     redeemed_at: Date;
+    uuid: string;
+    claimed_at: Date;
     allowance_user: number;
     allowance_total: number;
     booking: string;
@@ -1004,6 +1017,8 @@ declare const HPromoCodeSchema: z.ZodObject<{
     country: string;
     package: string;
     redeemed_at: Date;
+    uuid: string;
+    claimed_at: Date;
     allowance_user: number;
     allowance_total: number;
     booking: string;
