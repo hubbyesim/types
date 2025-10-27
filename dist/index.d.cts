@@ -95,6 +95,7 @@ declare const userSchemaSpec: {
         nullable: boolean;
         optional: boolean;
     };
+    push_to_start_token: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 };
 
 declare const bookingSchemaSpec: {
@@ -1559,6 +1560,7 @@ declare const HUserSchema: z.ZodObject<{
     review_requested: z.ZodEffects<z.ZodDate, Date, Date>;
     last_seen: z.ZodEffects<z.ZodDate, Date, Date>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    push_to_start_token: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     name: string | null;
     email: string | null;
@@ -1598,6 +1600,7 @@ declare const HUserSchema: z.ZodObject<{
     receipt_email?: string | null | undefined;
     source?: "direct" | "promo" | "platform" | null | undefined;
     balance?: number | null | undefined;
+    push_to_start_token?: string | null | undefined;
 }, {
     name: string | null;
     email: string | null;
@@ -1637,6 +1640,7 @@ declare const HUserSchema: z.ZodObject<{
     receipt_email?: string | null | undefined;
     source?: "direct" | "promo" | "platform" | null | undefined;
     balance?: number | null | undefined;
+    push_to_start_token?: string | null | undefined;
 }>;
 declare const HBookingSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
