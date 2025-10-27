@@ -31,8 +31,10 @@ export const promoCodeSchemaSpec = markAsSchemaSpec({
     updated_by: z.string().nullable(),
 
     // PromoCode specific fields
+    uuid: z.string().uuid(),
     external_id: z.string(),
     code: z.string(),
+    claimed_at: timestampNullableOptional,
     allowance_user: z.number(),
     allowance_total: z.number(),
     type: z.enum(['discount', 'booking', 'booking_without_destination']).nullable().or(z.string()),

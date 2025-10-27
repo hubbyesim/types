@@ -257,7 +257,9 @@ var userSchemaSpec = markAsSchemaSpec({
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, optional: true, nullable: true },
   profileRef: { _type: "docRef", collection: PROFILE_COLLECTION, optional: true, nullable: true },
   review_requested: timestampNullableOptional,
-  last_seen: timestampNullableOptional
+  last_seen: timestampNullableOptional,
+  created_at: timestampNullableOptional,
+  push_to_start_token: zod.z.string().nullable().optional()
 });
 var SUPPORTED_LOCALES = [
   "en-US",
@@ -303,8 +305,10 @@ var promoCodeSchemaSpec = markAsSchemaSpec({
   created_by: zod.z.string().nullable(),
   updated_by: zod.z.string().nullable(),
   // PromoCode specific fields
+  uuid: zod.z.string().uuid(),
   external_id: zod.z.string(),
   code: zod.z.string(),
+  claimed_at: timestampNullableOptional,
   allowance_user: zod.z.number(),
   allowance_total: zod.z.number(),
   type: zod.z.enum(["discount", "booking", "booking_without_destination"]).nullable().or(zod.z.string()),
@@ -497,6 +501,12 @@ var paymentSchemaSpec = markAsSchemaSpec({
   invoice: zod.z.string().optional(),
   fee: zod.z.number().optional(),
   topup: zod.z.boolean(),
+  status: zod.z.enum(["pending", "processing", "completed", "failed"]).optional(),
+  // 'pending' | 'processing' | 'completed' | 'failed'
+  payment_intent_id: zod.z.string().nullable().optional(),
+  // Stripe PaymentIntent ID
+  error_message: zod.z.string().nullable().optional(),
+  // Error message
   // Common resolved package specification (same format for all sources)
   package_specifications: zod.z.array(zod.z.object({
     package_type: zod.z.string().optional(),
@@ -517,7 +527,9 @@ var paymentSchemaSpec = markAsSchemaSpec({
     global: zod.z.string().optional(),
     balance_used: zod.z.number().optional(),
     booking_id: zod.z.string().nullable().optional(),
-    discount_amount: zod.z.string().optional()
+    discount_amount: zod.z.string().optional(),
+    is_special_offer: zod.z.boolean().optional(),
+    special_offer_discount: zod.z.number().optional()
   }).optional(),
   webapp_platform_payment_properties: zod.z.object({
     promo_codes: zod.z.array(zod.z.string()).optional(),
@@ -745,6 +757,19 @@ var freeEsimSchema = zod.z.object({
   allowance: zod.z.number(),
   total_allowance: zod.z.number()
 });
+var agentSignupSettingsSchema = zod.z.object({
+  slack_channel: zod.z.string().nullable().optional(),
+  welcome_email_template: zod.z.number().nullable().optional(),
+  password_reset_template: zod.z.number().nullable().optional(),
+  partner_type: zod.z.enum(["wholesale", "reseller", "platform", "agent"]).nullable().optional(),
+  enable_complimentary_booking: zod.z.boolean().default(true),
+  complimentary_booking_partner_id: zod.z.string().nullable().optional(),
+  visual_identity_options: zod.z.object({
+    hubby_branding: zod.z.boolean().default(true),
+    source_partner_branding: zod.z.boolean().default(false),
+    own_branding: zod.z.boolean().default(false)
+  }).default({})
+});
 var platformSettingsSchema = zod.z.object({
   package_strategy: zod.z.object({
     name: zod.z.string(),
@@ -770,7 +795,8 @@ var platformSettingsSchema = zod.z.object({
     hubby_branding: zod.z.boolean().optional().default(true),
     source_partner_branding: zod.z.boolean().optional().default(false),
     own_branding: zod.z.boolean().optional().default(false)
-  }).nullable().optional()
+  }).nullable().optional(),
+  agent_signup_settings: agentSignupSettingsSchema.nullable().optional()
 });
 var packagePriceSchemaSpec = markAsSchemaSpec({
   destination: zod.z.string(),
@@ -874,6 +900,12 @@ var platformSettingsSchemaSpec = markAsSchemaSpec({
       of: scheduleSchema.shape
     },
     optional: true
+  },
+  agent_signup_settings: {
+    _type: "object",
+    of: agentSignupSettingsSchema.shape,
+    nullable: true,
+    optional: true
   }
 });
 var webhookSettingsSchema = zod.z.object({
@@ -938,6 +970,13 @@ var partnerSchemaSpec = markAsSchemaSpec({
   tags: {
     _type: "array",
     of: tagModelSpec,
+    nullable: true,
+    optional: true
+  },
+  // Tag slugs
+  tag_slugs: {
+    _type: "array",
+    of: zod.z.string(),
     nullable: true,
     optional: true
   },

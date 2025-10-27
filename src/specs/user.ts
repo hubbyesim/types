@@ -56,5 +56,7 @@ export const userSchemaSpec = markAsSchemaSpec({
     partner: { _type: 'docRef' as const, collection: PARTNER_COLLECTION, optional: true, nullable: true },
     profileRef: { _type: 'docRef' as const, collection: PROFILE_COLLECTION, optional: true, nullable: true },
     review_requested: timestampNullableOptional,
-    last_seen: timestampNullableOptional
+    last_seen: timestampNullableOptional,
+    created_at: timestampNullableOptional,
+    push_to_start_token: z.string().nullable().optional(),
 });

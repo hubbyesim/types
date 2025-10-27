@@ -180,6 +180,21 @@ export const freeEsimSchema = z.object({
     total_allowance: z.number(),
 });
 
+// Agent signup settings schema
+export const agentSignupSettingsSchema = z.object({
+    slack_channel: z.string().nullable().optional(),
+    welcome_email_template: z.number().nullable().optional(),
+    password_reset_template: z.number().nullable().optional(),
+    partner_type: z.enum(['wholesale', 'reseller', 'platform', 'agent']).nullable().optional(),
+    enable_complimentary_booking: z.boolean().default(true),
+    complimentary_booking_partner_id: z.string().nullable().optional(),
+    visual_identity_options: z.object({
+        hubby_branding: z.boolean().default(true),
+        source_partner_branding: z.boolean().default(false),
+        own_branding: z.boolean().default(false)
+    }).default({})
+});
+
 // Platform settings schema
 export const platformSettingsSchema = z.object({
     package_strategy: z.object({
@@ -206,7 +221,8 @@ export const platformSettingsSchema = z.object({
         hubby_branding: z.boolean().optional().default(true),
         source_partner_branding: z.boolean().optional().default(false),
         own_branding: z.boolean().optional().default(false)
-    }).nullable().optional()
+    }).nullable().optional(),
+    agent_signup_settings: agentSignupSettingsSchema.nullable().optional()
 });
 
 // ===== Exportable schema specs =====
@@ -318,6 +334,12 @@ export const platformSettingsSchemaSpec = markAsSchemaSpec({
             of: scheduleSchema.shape
         },
         optional: true
+    },
+    agent_signup_settings: {
+        _type: 'object' as const,
+        of: agentSignupSettingsSchema.shape,
+        nullable: true,
+        optional: true
     }
 });
 
@@ -392,6 +414,14 @@ export const partnerSchemaSpec = markAsSchemaSpec({
     tags: {
         _type: 'array' as const,
         of: tagModelSpec,
+        nullable: true,
+        optional: true
+    },
+
+    // Tag slugs
+    tag_slugs: {
+        _type: 'array' as const,
+        of: z.string(),
         nullable: true,
         optional: true
     },

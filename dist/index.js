@@ -255,7 +255,9 @@ var userSchemaSpec = markAsSchemaSpec({
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, optional: true, nullable: true },
   profileRef: { _type: "docRef", collection: PROFILE_COLLECTION, optional: true, nullable: true },
   review_requested: timestampNullableOptional,
-  last_seen: timestampNullableOptional
+  last_seen: timestampNullableOptional,
+  created_at: timestampNullableOptional,
+  push_to_start_token: z.string().nullable().optional()
 });
 var SUPPORTED_LOCALES = [
   "en-US",
@@ -301,8 +303,10 @@ var promoCodeSchemaSpec = markAsSchemaSpec({
   created_by: z.string().nullable(),
   updated_by: z.string().nullable(),
   // PromoCode specific fields
+  uuid: z.string().uuid(),
   external_id: z.string(),
   code: z.string(),
+  claimed_at: timestampNullableOptional,
   allowance_user: z.number(),
   allowance_total: z.number(),
   type: z.enum(["discount", "booking", "booking_without_destination"]).nullable().or(z.string()),
@@ -495,6 +499,12 @@ var paymentSchemaSpec = markAsSchemaSpec({
   invoice: z.string().optional(),
   fee: z.number().optional(),
   topup: z.boolean(),
+  status: z.enum(["pending", "processing", "completed", "failed"]).optional(),
+  // 'pending' | 'processing' | 'completed' | 'failed'
+  payment_intent_id: z.string().nullable().optional(),
+  // Stripe PaymentIntent ID
+  error_message: z.string().nullable().optional(),
+  // Error message
   // Common resolved package specification (same format for all sources)
   package_specifications: z.array(z.object({
     package_type: z.string().optional(),
@@ -515,7 +525,9 @@ var paymentSchemaSpec = markAsSchemaSpec({
     global: z.string().optional(),
     balance_used: z.number().optional(),
     booking_id: z.string().nullable().optional(),
-    discount_amount: z.string().optional()
+    discount_amount: z.string().optional(),
+    is_special_offer: z.boolean().optional(),
+    special_offer_discount: z.number().optional()
   }).optional(),
   webapp_platform_payment_properties: z.object({
     promo_codes: z.array(z.string()).optional(),
@@ -743,6 +755,19 @@ var freeEsimSchema = z.object({
   allowance: z.number(),
   total_allowance: z.number()
 });
+var agentSignupSettingsSchema = z.object({
+  slack_channel: z.string().nullable().optional(),
+  welcome_email_template: z.number().nullable().optional(),
+  password_reset_template: z.number().nullable().optional(),
+  partner_type: z.enum(["wholesale", "reseller", "platform", "agent"]).nullable().optional(),
+  enable_complimentary_booking: z.boolean().default(true),
+  complimentary_booking_partner_id: z.string().nullable().optional(),
+  visual_identity_options: z.object({
+    hubby_branding: z.boolean().default(true),
+    source_partner_branding: z.boolean().default(false),
+    own_branding: z.boolean().default(false)
+  }).default({})
+});
 var platformSettingsSchema = z.object({
   package_strategy: z.object({
     name: z.string(),
@@ -768,7 +793,8 @@ var platformSettingsSchema = z.object({
     hubby_branding: z.boolean().optional().default(true),
     source_partner_branding: z.boolean().optional().default(false),
     own_branding: z.boolean().optional().default(false)
-  }).nullable().optional()
+  }).nullable().optional(),
+  agent_signup_settings: agentSignupSettingsSchema.nullable().optional()
 });
 var packagePriceSchemaSpec = markAsSchemaSpec({
   destination: z.string(),
@@ -872,6 +898,12 @@ var platformSettingsSchemaSpec = markAsSchemaSpec({
       of: scheduleSchema.shape
     },
     optional: true
+  },
+  agent_signup_settings: {
+    _type: "object",
+    of: agentSignupSettingsSchema.shape,
+    nullable: true,
+    optional: true
   }
 });
 var webhookSettingsSchema = z.object({
@@ -936,6 +968,13 @@ var partnerSchemaSpec = markAsSchemaSpec({
   tags: {
     _type: "array",
     of: tagModelSpec,
+    nullable: true,
+    optional: true
+  },
+  // Tag slugs
+  tag_slugs: {
+    _type: "array",
+    of: z.string(),
     nullable: true,
     optional: true
   },
