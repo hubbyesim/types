@@ -665,7 +665,7 @@ declare const promoCodeSchemaSpec: {
     };
     created_by: z.ZodNullable<z.ZodString>;
     updated_by: z.ZodNullable<z.ZodString>;
-    uuid: z.ZodString;
+    uuid: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     external_id: z.ZodString;
     code: z.ZodString;
     claimed_at: {
@@ -2495,7 +2495,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodNullable<z.ZodString>;
     updated_by: z.ZodNullable<z.ZodString>;
-    uuid: z.ZodString;
+    uuid: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     external_id: z.ZodString;
     code: z.ZodString;
     claimed_at: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -2550,7 +2550,6 @@ declare const HPromoCodeSchema: z.ZodObject<{
     code: string;
     type: string | null;
     external_id: string;
-    uuid: string;
     country: string;
     package: string;
     redeemed_at: Date;
@@ -2564,6 +2563,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
     valid_to: Date;
     package_size?: string | undefined;
     countries?: string[] | undefined;
+    uuid?: string | null | undefined;
     discount?: number | undefined;
     package_specification?: {
         destination?: string | string[] | undefined;
@@ -2586,7 +2586,6 @@ declare const HPromoCodeSchema: z.ZodObject<{
     code: string;
     type: string | null;
     external_id: string;
-    uuid: string;
     country: string;
     package: string;
     redeemed_at: Date;
@@ -2600,6 +2599,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
     valid_to: Date;
     package_size?: string | undefined;
     countries?: string[] | undefined;
+    uuid?: string | null | undefined;
     discount?: number | undefined;
     package_specification?: {
         destination?: string | string[] | undefined;

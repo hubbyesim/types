@@ -311,7 +311,7 @@ var promoCodeSchemaSpec = markAsSchemaSpec({
   created_by: zod.z.string().nullable(),
   updated_by: zod.z.string().nullable(),
   // PromoCode specific fields
-  uuid: zod.z.string().uuid(),
+  uuid: zod.z.string().uuid().nullable().optional(),
   external_id: zod.z.string(),
   code: zod.z.string(),
   claimed_at: timestampNullableOptional,
