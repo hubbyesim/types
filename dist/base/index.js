@@ -233,7 +233,8 @@ var userSchemaSpec = markAsSchemaSpec({
   profileRef: { _type: "docRef", collection: PROFILE_COLLECTION, optional: true, nullable: true },
   review_requested: timestampNullableOptional,
   last_seen: timestampNullableOptional,
-  created_at: timestampNullableOptional
+  created_at: timestampNullableOptional,
+  push_to_start_token: z.string().nullable().optional()
 });
 var SUPPORTED_LOCALES = [
   "en-US",

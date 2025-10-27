@@ -58,4 +58,5 @@ export const userSchemaSpec = markAsSchemaSpec({
     review_requested: timestampNullableOptional,
     last_seen: timestampNullableOptional,
     created_at: timestampNullableOptional,
+    push_to_start_token: z.string().nullable().optional(),
 });
