@@ -778,6 +778,7 @@ declare const partnerSchemaSpec: {
         administration_fee: z.ZodNullable<z.ZodNumber>;
         income_per_gb: z.ZodNullable<z.ZodNumber>;
         commission_fee: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        commission_percentage: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
         payment_method: z.ZodEnum<["invoice", "direct"]>;
         requires_card: z.ZodNullable<z.ZodBoolean>;
         next_invoice: {
@@ -2580,6 +2581,7 @@ declare const HPartnerSchema: z.ZodObject<{
         administration_fee: z.ZodNullable<z.ZodNumber>;
         income_per_gb: z.ZodNullable<z.ZodNumber>;
         commission_fee: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        commission_percentage: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
         payment_method: z.ZodEnum<["invoice", "direct"]>;
         requires_card: z.ZodNullable<z.ZodBoolean>;
         next_invoice: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -2756,6 +2758,7 @@ declare const HPartnerSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     }, {
         administration_fee: number | null;
         income_per_gb: number | null;
@@ -2789,6 +2792,7 @@ declare const HPartnerSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     }>;
     visual_identity: z.ZodObject<{
         primary_color: z.ZodString;
@@ -3493,6 +3497,7 @@ declare const HPartnerSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     };
     visual_identity: {
         primary_color: string;
@@ -3693,6 +3698,7 @@ declare const HPartnerSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     };
     visual_identity: {
         primary_color: string;
@@ -3924,6 +3930,7 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
     administration_fee: z.ZodNullable<z.ZodNumber>;
     income_per_gb: z.ZodNullable<z.ZodNumber>;
     commission_fee: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    commission_percentage: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     payment_method: z.ZodEnum<["invoice", "direct"]>;
     requires_card: z.ZodNullable<z.ZodBoolean>;
     next_invoice: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -4100,6 +4107,7 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
         };
     };
     commission_fee?: number | null | undefined;
+    commission_percentage?: number | null | undefined;
 }, {
     administration_fee: number | null;
     income_per_gb: number | null;
@@ -4133,6 +4141,7 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
         };
     };
     commission_fee?: number | null | undefined;
+    commission_percentage?: number | null | undefined;
 }>;
 declare const HApiLogSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
@@ -4301,6 +4310,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         administration_fee: z.ZodNullable<z.ZodNumber>;
         income_per_gb: z.ZodNullable<z.ZodNumber>;
         commission_fee: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        commission_percentage: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
         payment_method: z.ZodEnum<["invoice", "direct"]>;
         requires_card: z.ZodNullable<z.ZodBoolean>;
         next_invoice: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -4477,6 +4487,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     }, {
         administration_fee: number | null;
         income_per_gb: number | null;
@@ -4510,6 +4521,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     }>;
     visual_identity: z.ZodObject<{
         primary_color: z.ZodString;
@@ -5214,6 +5226,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     };
     visual_identity: {
         primary_color: string;
@@ -5414,6 +5427,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     };
     visual_identity: {
         primary_color: string;
@@ -7392,6 +7406,7 @@ declare const partnerAppSchema: z.ZodObject<{
         administration_fee: z.ZodNullable<z.ZodNumber>;
         income_per_gb: z.ZodNullable<z.ZodNumber>;
         commission_fee: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        commission_percentage: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
         payment_method: z.ZodEnum<["invoice", "direct"]>;
         requires_card: z.ZodNullable<z.ZodBoolean>;
         next_invoice: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -7568,6 +7583,7 @@ declare const partnerAppSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     }, {
         administration_fee: number | null;
         income_per_gb: number | null;
@@ -7601,6 +7617,7 @@ declare const partnerAppSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     }>;
     visual_identity: z.ZodObject<{
         primary_color: z.ZodString;
@@ -8305,6 +8322,7 @@ declare const partnerAppSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     };
     visual_identity: {
         primary_color: string;
@@ -8505,6 +8523,7 @@ declare const partnerAppSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     };
     visual_identity: {
         primary_color: string;
