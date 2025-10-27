@@ -236,6 +236,9 @@ var userSchemaSpec = markAsSchemaSpec({
   gender: z.string().nullable().optional(),
   company: z.string().nullable().optional(),
   coordinates: z.string().nullable().optional(),
+  platform: z.enum(["ios", "android"]).nullable().optional(),
+  platform_version: z.string().nullable().optional(),
+  device_type: z.string().nullable().optional(),
   parameters: z.any().nullable().optional(),
   locale: z.string().nullable().optional(),
   phone_model: z.string().nullable().optional(),
@@ -245,6 +248,7 @@ var userSchemaSpec = markAsSchemaSpec({
   has_card_saved: z.boolean().nullable().optional(),
   admin: z.boolean().nullable().optional(),
   api_keys: apiKeysObjectSpec,
+  profileRef: z.string().nullable().optional(),
   currency: z.string().nullable().optional(),
   receipt_email: z.string().nullable().optional(),
   source: z.enum(["direct", "promo", "platform"]).nullable().optional(),
@@ -253,10 +257,12 @@ var userSchemaSpec = markAsSchemaSpec({
   balance: z.number().nullable().optional(),
   createdAt: { _type: "timestamp" },
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, optional: true, nullable: true },
-  profileRef: { _type: "docRef", collection: PROFILE_COLLECTION, optional: true, nullable: true },
   review_requested: timestampNullableOptional,
   last_seen: timestampNullableOptional,
   created_at: timestampNullableOptional,
+  updated_at: timestampNullableOptional,
+  created_by: z.string().nullable().optional(),
+  updated_by: z.string().nullable().optional(),
   push_to_start_token: z.string().nullable().optional()
 });
 var SUPPORTED_LOCALES = [
@@ -303,7 +309,7 @@ var promoCodeSchemaSpec = markAsSchemaSpec({
   created_by: z.string().nullable(),
   updated_by: z.string().nullable(),
   // PromoCode specific fields
-  uuid: z.string().uuid(),
+  uuid: z.string().uuid().nullable().optional(),
   external_id: z.string(),
   code: z.string(),
   claimed_at: timestampNullableOptional,
@@ -464,8 +470,15 @@ var esimSchemaSpec = markAsSchemaSpec({
   coverage_label: z.string().nullable().optional(),
   total_data: z.number(),
   data_left: z.number(),
+  uuid: z.string().uuid().nullable().optional(),
   data_used: z.boolean(),
   status: z.string().nullable(),
+  status_history: z.array(z.object({
+    telna_esim_status: z.number(),
+    source: z.string(),
+    status: z.string(),
+    timestamp: z.date()
+  })).nullable().optional(),
   name: z.string(),
   android_auto: z.boolean(),
   partner_price: z.number().nullable(),
