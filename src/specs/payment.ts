@@ -19,7 +19,9 @@ export const paymentSchemaSpec = markAsSchemaSpec({
     invoice: z.string().optional(),
     fee: z.number().optional(),
     topup: z.boolean(),
-
+    status: z.enum(['pending', 'processing', 'completed', 'failed']).optional(), // 'pending' | 'processing' | 'completed' | 'failed'
+    payment_intent_id: z.string().nullable().optional(), // Stripe PaymentIntent ID
+    error_message: z.string().nullable().optional(), // Error message
     // Common resolved package specification (same format for all sources)
     package_specifications: z.array(z.object({
         package_type: z.string().optional(),
