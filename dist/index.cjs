@@ -957,6 +957,13 @@ var partnerSchemaSpec = markAsSchemaSpec({
     nullable: true,
     optional: true
   },
+  // Tag slugs
+  tag_slugs: {
+    _type: "array",
+    of: zod.z.string(),
+    nullable: true,
+    optional: true
+  },
   // Metadata
   data: {
     _type: "object",

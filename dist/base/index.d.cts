@@ -1909,6 +1909,7 @@ declare const HPartnerSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }>, "many">;
+    tag_slugs: z.ZodArray<z.ZodString, "many">;
     data: z.ZodObject<{
         source: z.ZodString;
         manual: z.ZodBoolean;
@@ -2135,6 +2136,7 @@ declare const HPartnerSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
+    tag_slugs: string[];
     webhook_settings: {
         enabled: boolean;
         events: {
@@ -2335,6 +2337,7 @@ declare const HPartnerSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
+    tag_slugs: string[];
     webhook_settings: {
         enabled?: boolean | undefined;
         url?: string | null | undefined;
@@ -3630,6 +3633,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }>, "many">;
+    tag_slugs: z.ZodArray<z.ZodString, "many">;
     data: z.ZodObject<{
         source: z.ZodString;
         manual: z.ZodBoolean;
@@ -3856,6 +3860,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
+    tag_slugs: string[];
     webhook_settings: {
         enabled: boolean;
         events: {
@@ -4056,6 +4061,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
+    tag_slugs: string[];
     webhook_settings: {
         enabled?: boolean | undefined;
         url?: string | null | undefined;

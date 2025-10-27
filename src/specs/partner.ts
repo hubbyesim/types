@@ -189,9 +189,9 @@ export const agentSignupSettingsSchema = z.object({
     enable_complimentary_booking: z.boolean().default(true),
     complimentary_booking_partner_id: z.string().nullable().optional(),
     visual_identity_options: z.object({
-      hubby_branding: z.boolean().default(true),
-      source_partner_branding: z.boolean().default(false),
-      own_branding: z.boolean().default(false)
+        hubby_branding: z.boolean().default(true),
+        source_partner_branding: z.boolean().default(false),
+        own_branding: z.boolean().default(false)
     }).default({})
 });
 
@@ -414,6 +414,14 @@ export const partnerSchemaSpec = markAsSchemaSpec({
     tags: {
         _type: 'array' as const,
         of: tagModelSpec,
+        nullable: true,
+        optional: true
+    },
+
+    // Tag slugs
+    tag_slugs: {
+        _type: 'array' as const,
+        of: z.string(),
         nullable: true,
         optional: true
     },
