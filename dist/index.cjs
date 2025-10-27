@@ -257,7 +257,8 @@ var userSchemaSpec = markAsSchemaSpec({
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, optional: true, nullable: true },
   profileRef: { _type: "docRef", collection: PROFILE_COLLECTION, optional: true, nullable: true },
   review_requested: timestampNullableOptional,
-  last_seen: timestampNullableOptional
+  last_seen: timestampNullableOptional,
+  created_at: timestampNullableOptional
 });
 var SUPPORTED_LOCALES = [
   "en-US",

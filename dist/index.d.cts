@@ -90,6 +90,11 @@ declare const userSchemaSpec: {
         nullable: boolean;
         optional: boolean;
     };
+    created_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
 };
 
 declare const bookingSchemaSpec: {
@@ -1544,6 +1549,7 @@ declare const HUserSchema: z.ZodObject<{
     profileRef: z.ZodString;
     review_requested: z.ZodEffects<z.ZodDate, Date, Date>;
     last_seen: z.ZodEffects<z.ZodDate, Date, Date>;
+    created_at: z.ZodEffects<z.ZodDate, Date, Date>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     name: string | null;
     email: string | null;
@@ -1562,6 +1568,7 @@ declare const HUserSchema: z.ZodObject<{
     profileRef: string;
     review_requested: Date;
     last_seen: Date;
+    created_at: Date;
     id?: string | null | undefined;
     stripe_id?: string | null | undefined;
     referral?: string | null | undefined;
@@ -1600,6 +1607,7 @@ declare const HUserSchema: z.ZodObject<{
     profileRef: string;
     review_requested: Date;
     last_seen: Date;
+    created_at: Date;
     id?: string | null | undefined;
     stripe_id?: string | null | undefined;
     referral?: string | null | undefined;
@@ -1709,8 +1717,8 @@ declare const HBookingSchema: z.ZodObject<{
     email: string | null;
     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
     partner: string;
-    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
     created_at: Date;
+    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
@@ -1761,8 +1769,8 @@ declare const HBookingSchema: z.ZodObject<{
     email: string | null;
     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
     partner: string;
-    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
     created_at: Date;
+    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
@@ -1889,8 +1897,8 @@ declare const HCurrencySchema: z.ZodObject<{
     symbol: string;
     id: string;
     name: string;
-    code: string;
     created_at: Date;
+    code: string;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
@@ -1900,8 +1908,8 @@ declare const HCurrencySchema: z.ZodObject<{
     symbol: string;
     id: string;
     name: string;
-    code: string;
     created_at: Date;
+    code: string;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
@@ -1942,9 +1950,9 @@ declare const HESIMSchema: z.ZodObject<{
     name: string;
     promo: string | null;
     partner: string;
+    created_at: Date;
     type: "promo" | "balance" | "code" | "api" | "external" | "payment";
     status: string | null;
-    created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
@@ -1971,9 +1979,9 @@ declare const HESIMSchema: z.ZodObject<{
     name: string;
     promo: string | null;
     partner: string;
+    created_at: Date;
     type: "promo" | "balance" | "code" | "api" | "external" | "payment";
     status: string | null;
-    created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
@@ -2180,15 +2188,15 @@ declare const HMessageSchema: z.ZodObject<{
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
-    status: "pending" | "sent" | "failed" | "delivered";
     created_at: Date;
+    status: "pending" | "sent" | "failed" | "delivered";
     updated_at: Date;
     key: string;
     method: "email" | "push" | "sms";
 }, {
     id: string;
-    status: "pending" | "sent" | "failed" | "delivered";
     created_at: Date;
+    status: "pending" | "sent" | "failed" | "delivered";
     updated_at: Date;
     key: string;
     method: "email" | "push" | "sms";
@@ -2291,10 +2299,10 @@ declare const HPackageSchema: z.ZodObject<{
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     name: string;
     partner: string;
+    created_at: Date;
     type: "data-limited" | "time-limited" | "starter" | "unlimited" | null;
     is_active: boolean;
     external_id: string;
-    created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
@@ -2340,10 +2348,10 @@ declare const HPackageSchema: z.ZodObject<{
 }, {
     name: string;
     partner: string;
+    created_at: Date;
     type: "data-limited" | "time-limited" | "starter" | "unlimited" | null;
     is_active: boolean;
     external_id: string;
-    created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
@@ -2440,10 +2448,10 @@ declare const HPromoCodeSchema: z.ZodObject<{
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
     partner: string;
+    created_at: Date;
     code: string;
     type: string | null;
     external_id: string;
-    created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
@@ -2474,10 +2482,10 @@ declare const HPromoCodeSchema: z.ZodObject<{
 }, {
     id: string;
     partner: string;
+    created_at: Date;
     code: string;
     type: string | null;
     external_id: string;
-    created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
@@ -3432,8 +3440,8 @@ declare const HPartnerSchema: z.ZodObject<{
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
     name: string;
-    type: string | null;
     created_at: Date;
+    type: string | null;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
@@ -3633,8 +3641,8 @@ declare const HPartnerSchema: z.ZodObject<{
 }, {
     id: string;
     name: string;
-    type: string | null;
     created_at: Date;
+    type: string | null;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
@@ -3884,8 +3892,8 @@ declare const HPriceListSchema: z.ZodObject<{
     id: string;
     name: string;
     partner: string;
-    type: "partner" | "consumer";
     created_at: Date;
+    type: "partner" | "consumer";
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
@@ -3908,8 +3916,8 @@ declare const HPriceListSchema: z.ZodObject<{
     id: string;
     name: string;
     partner: string;
-    type: "partner" | "consumer";
     created_at: Date;
+    type: "partner" | "consumer";
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
@@ -5156,8 +5164,8 @@ declare const HPartnerAppSchema: z.ZodObject<{
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
     name: string;
-    type: string | null;
     created_at: Date;
+    type: string | null;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
@@ -5357,8 +5365,8 @@ declare const HPartnerAppSchema: z.ZodObject<{
 }, {
     id: string;
     name: string;
-    type: string | null;
     created_at: Date;
+    type: string | null;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
@@ -6381,8 +6389,8 @@ declare const HTrafficPolicySchema: z.ZodObject<{
     updated_by: z.ZodString;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     name: string;
-    external_id: string;
     created_at: Date;
+    external_id: string;
     updated_at: Date;
     created_by: string;
     updated_by: string;
@@ -6391,8 +6399,8 @@ declare const HTrafficPolicySchema: z.ZodObject<{
     id?: string | null | undefined;
 }, {
     name: string;
-    external_id: string;
     created_at: Date;
+    external_id: string;
     updated_at: Date;
     created_by: string;
     updated_by: string;
@@ -8250,8 +8258,8 @@ declare const partnerAppSchema: z.ZodObject<{
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
     name: string;
-    type: string | null;
     created_at: Date;
+    type: string | null;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
@@ -8451,8 +8459,8 @@ declare const partnerAppSchema: z.ZodObject<{
 }, {
     id: string;
     name: string;
-    type: string | null;
     created_at: Date;
+    type: string | null;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
