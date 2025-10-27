@@ -25,6 +25,7 @@ export const esimSchemaSpec = markAsSchemaSpec({
     coverage_label: z.string().nullable().optional(),
     total_data: z.number(),
     data_left: z.number(),
+    uuid: z.string().uuid().nullable().optional(),
     data_used: z.boolean(),
     status: z.string().nullable(),
     status_history: z.array(z.object({

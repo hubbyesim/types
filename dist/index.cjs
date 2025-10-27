@@ -238,6 +238,9 @@ var userSchemaSpec = markAsSchemaSpec({
   gender: zod.z.string().nullable().optional(),
   company: zod.z.string().nullable().optional(),
   coordinates: zod.z.string().nullable().optional(),
+  platform: zod.z.enum(["ios", "android"]).nullable().optional(),
+  platform_version: zod.z.string().nullable().optional(),
+  device_type: zod.z.string().nullable().optional(),
   parameters: zod.z.any().nullable().optional(),
   locale: zod.z.string().nullable().optional(),
   phone_model: zod.z.string().nullable().optional(),
@@ -247,6 +250,7 @@ var userSchemaSpec = markAsSchemaSpec({
   has_card_saved: zod.z.boolean().nullable().optional(),
   admin: zod.z.boolean().nullable().optional(),
   api_keys: apiKeysObjectSpec,
+  profileRef: zod.z.string().nullable().optional(),
   currency: zod.z.string().nullable().optional(),
   receipt_email: zod.z.string().nullable().optional(),
   source: zod.z.enum(["direct", "promo", "platform"]).nullable().optional(),
@@ -255,10 +259,12 @@ var userSchemaSpec = markAsSchemaSpec({
   balance: zod.z.number().nullable().optional(),
   createdAt: { _type: "timestamp" },
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, optional: true, nullable: true },
-  profileRef: { _type: "docRef", collection: PROFILE_COLLECTION, optional: true, nullable: true },
   review_requested: timestampNullableOptional,
   last_seen: timestampNullableOptional,
   created_at: timestampNullableOptional,
+  updated_at: timestampNullableOptional,
+  created_by: zod.z.string().nullable().optional(),
+  updated_by: zod.z.string().nullable().optional(),
   push_to_start_token: zod.z.string().nullable().optional()
 });
 var SUPPORTED_LOCALES = [
@@ -466,6 +472,7 @@ var esimSchemaSpec = markAsSchemaSpec({
   coverage_label: zod.z.string().nullable().optional(),
   total_data: zod.z.number(),
   data_left: zod.z.number(),
+  uuid: zod.z.string().uuid().nullable().optional(),
   data_used: zod.z.boolean(),
   status: zod.z.string().nullable(),
   status_history: zod.z.array(zod.z.object({
