@@ -32,7 +32,7 @@ export const esimSchemaSpec = markAsSchemaSpec({
         source: z.string(),
         status: z.string(),
         timestamp: z.date()
-    })),
+    })).nullable().optional(),
     name: z.string(),
     android_auto: z.boolean(),
     partner_price: z.number().nullable(),

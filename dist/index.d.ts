@@ -299,7 +299,7 @@ declare const esimSchemaSpec: {
     data_left: z.ZodNumber;
     data_used: z.ZodBoolean;
     status: z.ZodNullable<z.ZodString>;
-    status_history: z.ZodArray<z.ZodObject<{
+    status_history: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
         telna_esim_status: z.ZodNumber;
         source: z.ZodString;
         status: z.ZodString;
@@ -314,7 +314,7 @@ declare const esimSchemaSpec: {
         source: string;
         status: string;
         telna_esim_status: number;
-    }>, "many">;
+    }>, "many">>>;
     name: z.ZodString;
     android_auto: z.ZodBoolean;
     partner_price: z.ZodNullable<z.ZodNumber>;
@@ -1882,7 +1882,7 @@ declare const HESIMSchema: z.ZodObject<{
     data_left: z.ZodNumber;
     data_used: z.ZodBoolean;
     status: z.ZodNullable<z.ZodString>;
-    status_history: z.ZodArray<z.ZodObject<{
+    status_history: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
         telna_esim_status: z.ZodNumber;
         source: z.ZodString;
         status: z.ZodString;
@@ -1897,7 +1897,7 @@ declare const HESIMSchema: z.ZodObject<{
         source: string;
         status: string;
         telna_esim_status: number;
-    }>, "many">;
+    }>, "many">>>;
     name: z.ZodString;
     android_auto: z.ZodBoolean;
     partner_price: z.ZodNullable<z.ZodNumber>;
@@ -1931,12 +1931,6 @@ declare const HESIMSchema: z.ZodObject<{
     total_data: number;
     data_left: number;
     data_used: boolean;
-    status_history: {
-        timestamp: Date;
-        source: string;
-        status: string;
-        telna_esim_status: number;
-    }[];
     android_auto: boolean;
     partner_price: number | null;
     payment: string | null;
@@ -1947,6 +1941,12 @@ declare const HESIMSchema: z.ZodObject<{
     time_assigned: Date;
     last_updated: Date;
     coverage_label?: string | null | undefined;
+    status_history?: {
+        timestamp: Date;
+        source: string;
+        status: string;
+        telna_esim_status: number;
+    }[] | null | undefined;
 }, {
     id: string;
     name: string;
@@ -1966,12 +1966,6 @@ declare const HESIMSchema: z.ZodObject<{
     total_data: number;
     data_left: number;
     data_used: boolean;
-    status_history: {
-        timestamp: Date;
-        source: string;
-        status: string;
-        telna_esim_status: number;
-    }[];
     android_auto: boolean;
     partner_price: number | null;
     payment: string | null;
@@ -1982,6 +1976,12 @@ declare const HESIMSchema: z.ZodObject<{
     time_assigned: Date;
     last_updated: Date;
     coverage_label?: string | null | undefined;
+    status_history?: {
+        timestamp: Date;
+        source: string;
+        status: string;
+        telna_esim_status: number;
+    }[] | null | undefined;
 }>;
 declare const HPaymentSchema: z.ZodObject<{
     amount: z.ZodNumber;
