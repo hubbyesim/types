@@ -15,6 +15,7 @@ declare const userSchemaSpec: {
     platform: z.ZodOptional<z.ZodNullable<z.ZodEnum<["ios", "android"]>>>;
     platform_version: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     device_type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    app_version: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     parameters: z.ZodOptional<z.ZodNullable<z.ZodAny>>;
     locale: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phone_model: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -1535,6 +1536,7 @@ declare const HUserSchema: z.ZodObject<{
     platform: z.ZodOptional<z.ZodNullable<z.ZodEnum<["ios", "android"]>>>;
     platform_version: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     device_type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    app_version: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     parameters: z.ZodOptional<z.ZodNullable<z.ZodAny>>;
     locale: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phone_model: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -1620,6 +1622,7 @@ declare const HUserSchema: z.ZodObject<{
     platform?: "ios" | "android" | null | undefined;
     platform_version?: string | null | undefined;
     device_type?: string | null | undefined;
+    app_version?: string | null | undefined;
     parameters?: any;
     locale?: string | null | undefined;
     phone_model?: string | null | undefined;
@@ -1666,6 +1669,7 @@ declare const HUserSchema: z.ZodObject<{
     platform?: "ios" | "android" | null | undefined;
     platform_version?: string | null | undefined;
     device_type?: string | null | undefined;
+    app_version?: string | null | undefined;
     parameters?: any;
     locale?: string | null | undefined;
     phone_model?: string | null | undefined;

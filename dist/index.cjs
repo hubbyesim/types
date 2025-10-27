@@ -241,6 +241,7 @@ var userSchemaSpec = markAsSchemaSpec({
   platform: zod.z.enum(["ios", "android"]).nullable().optional(),
   platform_version: zod.z.string().nullable().optional(),
   device_type: zod.z.string().nullable().optional(),
+  app_version: zod.z.string().nullable().optional(),
   parameters: zod.z.any().nullable().optional(),
   locale: zod.z.string().nullable().optional(),
   phone_model: zod.z.string().nullable().optional(),
