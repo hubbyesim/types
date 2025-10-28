@@ -236,6 +236,7 @@ declare const HBookingSchema: z.ZodObject<{
     return_date: z.ZodEffects<z.ZodDate, Date, Date>;
     price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     partner: z.ZodString;
+    partner_commission_percentage: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     promo_codes: z.ZodArray<z.ZodString, "many">;
     users: z.ZodArray<z.ZodString, "many">;
     esims: z.ZodArray<z.ZodString, "many">;
@@ -295,6 +296,7 @@ declare const HBookingSchema: z.ZodObject<{
     sent_messages?: Record<string, any> | undefined;
     import_id?: string | null | undefined;
     price?: number | null | undefined;
+    partner_commission_percentage?: number | null | undefined;
     hubby_foreign_identifiers?: {
         messaging_contact_id: string | null;
     } | null | undefined;
@@ -347,6 +349,7 @@ declare const HBookingSchema: z.ZodObject<{
     sent_messages?: Record<string, any> | undefined;
     import_id?: string | null | undefined;
     price?: number | null | undefined;
+    partner_commission_percentage?: number | null | undefined;
     hubby_foreign_identifiers?: {
         messaging_contact_id: string | null;
     } | null | undefined;

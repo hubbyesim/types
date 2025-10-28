@@ -98,6 +98,7 @@ export const bookingSchemaSpec = markAsSchemaSpec({
     return_date: timestampNullable,
     price: z.number().nullable().optional(),
     partner: { _type: 'docRef' as const, collection: PARTNER_COLLECTION },
+    partner_commission_percentage: z.number().nullable().optional(),
     promo_codes: {
         _type: 'array' as const,
         of: { _type: 'docRef' as const, collection: PROMO_CODE_COLLECTION }

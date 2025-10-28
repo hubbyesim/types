@@ -376,6 +376,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
   return_date: timestampNullable,
   price: z.number().nullable().optional(),
   partner: { _type: "docRef", collection: PARTNER_COLLECTION },
+  partner_commission_percentage: z.number().nullable().optional(),
   promo_codes: {
     _type: "array",
     of: { _type: "docRef", collection: PROMO_CODE_COLLECTION }
