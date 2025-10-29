@@ -316,14 +316,14 @@ declare const esimSchemaSpec: {
         telna_esim_status: z.ZodNumber;
         source: z.ZodString;
         status: z.ZodString;
-        timestamp: z.ZodDate;
+        timestamp: z.ZodType<string>;
     }, "strip", z.ZodTypeAny, {
-        timestamp: Date;
+        timestamp: string;
         source: string;
         status: string;
         telna_esim_status: number;
     }, {
-        timestamp: Date;
+        timestamp: string;
         source: string;
         status: string;
         telna_esim_status: number;
@@ -1993,14 +1993,14 @@ declare const HESIMSchema: z.ZodObject<{
         telna_esim_status: z.ZodNumber;
         source: z.ZodString;
         status: z.ZodString;
-        timestamp: z.ZodDate;
+        timestamp: z.ZodType<string>;
     }, "strip", z.ZodTypeAny, {
-        timestamp: Date;
+        timestamp: string;
         source: string;
         status: string;
         telna_esim_status: number;
     }, {
-        timestamp: Date;
+        timestamp: string;
         source: string;
         status: string;
         telna_esim_status: number;
@@ -2050,7 +2050,7 @@ declare const HESIMSchema: z.ZodObject<{
     coverage_label?: string | null | undefined;
     uuid?: string | null | undefined;
     status_history?: {
-        timestamp: Date;
+        timestamp: string;
         source: string;
         status: string;
         telna_esim_status: number;
@@ -2086,7 +2086,7 @@ declare const HESIMSchema: z.ZodObject<{
     coverage_label?: string | null | undefined;
     uuid?: string | null | undefined;
     status_history?: {
-        timestamp: Date;
+        timestamp: string;
         source: string;
         status: string;
         telna_esim_status: number;
