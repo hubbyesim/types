@@ -40,6 +40,7 @@ export const userSchemaSpec = markAsSchemaSpec({
     platform: z.enum(['ios', 'android']).nullable().optional(),
     platform_version: z.string().nullable().optional(),
     device_type: z.string().nullable().optional(),
+    app_version: z.string().nullable().optional(),
     parameters: z.any().nullable().optional(),
     locale: z.string().nullable().optional(),
     phone_model: z.string().nullable().optional(),

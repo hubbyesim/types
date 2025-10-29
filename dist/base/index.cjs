@@ -217,6 +217,7 @@ var userSchemaSpec = markAsSchemaSpec({
   platform: zod.z.enum(["ios", "android"]).nullable().optional(),
   platform_version: zod.z.string().nullable().optional(),
   device_type: zod.z.string().nullable().optional(),
+  app_version: zod.z.string().nullable().optional(),
   parameters: zod.z.any().nullable().optional(),
   locale: zod.z.string().nullable().optional(),
   phone_model: zod.z.string().nullable().optional(),
@@ -434,6 +435,13 @@ var currencySchemaSpec = markAsSchemaSpec({
   // Whether this is the default currency
   is_default: zod.z.boolean().describe("Whether this is the default currency")
 });
+var statusHistorySchema = zod.z.object({
+  telna_esim_status: zod.z.number(),
+  source: zod.z.string(),
+  status: zod.z.string(),
+  timestamp: timestampRequired
+});
+var esimStatusHistorySchema = markAsSchemaSpec(zod.z.array(statusHistorySchema).nullable().optional());
 var esimSchemaSpec = markAsSchemaSpec({
   id: zod.z.string(),
   created_at: timestampRequired,
@@ -451,12 +459,7 @@ var esimSchemaSpec = markAsSchemaSpec({
   uuid: zod.z.string().uuid().nullable().optional(),
   data_used: zod.z.boolean(),
   status: zod.z.string().nullable(),
-  status_history: zod.z.array(zod.z.object({
-    telna_esim_status: zod.z.number(),
-    source: zod.z.string(),
-    status: zod.z.string(),
-    timestamp: zod.z.date()
-  })).nullable().optional(),
+  status_history: esimStatusHistorySchema,
   name: zod.z.string(),
   android_auto: zod.z.boolean(),
   partner_price: zod.z.number().nullable(),
