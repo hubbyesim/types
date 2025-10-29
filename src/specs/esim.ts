@@ -14,8 +14,8 @@ export const statusHistorySchema = z.object({
     telna_esim_status: z.number(),
     source: z.string(),
     status: z.string(),
-    timestamp: timestampRequired as unknown as z.ZodType<string>,
-});
+    timestamp: timestampRequired as unknown as z.ZodType<Date>,
+})
 
 export const esimStatusHistorySchema = markAsSchemaSpec(z.array(statusHistorySchema).nullable().optional());
 
