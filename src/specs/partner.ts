@@ -27,12 +27,6 @@ export const companyDetailsSchema = z.object({
     tax_id: z.string().nullable().optional()
 });
 
-export const billingInfoSchema = z.object({
-    billing_email: z.string().nullable().optional(),
-    bank_name: z.string().nullable().optional(),
-    iban: z.string().nullable().optional()
-});
-
 // Emit event schema
 export const emitEventSchema = z.object({
     topup: z.boolean().optional().default(false),
@@ -52,6 +46,7 @@ export const registrationSchema = z.object({
 // Banking details schema
 export const bankingDetailsSchema = z.object({
     account_holder: z.string().nullable().optional(),
+    billing_email: z.string().nullable().optional(),
     bank_name: z.string().nullable().optional(),
     iban: z.string().nullable().optional(),
     currency: z.string().nullable().optional()
@@ -394,11 +389,6 @@ export const partnerSchemaSpec = markAsSchemaSpec({
     company_details: {
         _type: 'object' as const,
         of: companyDetailsSchema.shape,
-        nullable: true
-    },
-    billing_info: {
-        _type: 'object' as const,
-        of: billingInfoSchema.shape,
         nullable: true
     },
     registration: {
