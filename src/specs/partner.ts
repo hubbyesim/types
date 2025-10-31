@@ -21,6 +21,12 @@ export const addressSchema = z.object({
     country: z.string().nullable().optional()
 });
 
+export const companyDetailsSchema = z.object({
+    business_name: z.string().nullable().optional(),
+    company_registration_number: z.string().nullable().optional(),
+    tax_id: z.string().nullable().optional()
+});
+
 // Emit event schema
 export const emitEventSchema = z.object({
     topup: z.boolean().optional().default(false),
@@ -40,6 +46,7 @@ export const registrationSchema = z.object({
 // Banking details schema
 export const bankingDetailsSchema = z.object({
     account_holder: z.string().nullable().optional(),
+    billing_email: z.string().nullable().optional(),
     bank_name: z.string().nullable().optional(),
     iban: z.string().nullable().optional(),
     currency: z.string().nullable().optional()
@@ -378,6 +385,11 @@ export const partnerSchemaSpec = markAsSchemaSpec({
     address: {
         _type: 'object' as const,
         of: addressSchema.shape,
+        nullable: true
+    },
+    company_details: {
+        _type: 'object' as const,
+        of: companyDetailsSchema.shape,
         nullable: true
     },
     registration: {

@@ -641,6 +641,11 @@ var addressSchema = z.object({
   postal_code: z.string().nullable().optional(),
   country: z.string().nullable().optional()
 });
+var companyDetailsSchema = z.object({
+  business_name: z.string().nullable().optional(),
+  company_registration_number: z.string().nullable().optional(),
+  tax_id: z.string().nullable().optional()
+});
 var emitEventSchema = z.object({
   topup: z.boolean().optional().default(false),
   redemption: z.boolean().optional().default(false),
@@ -655,6 +660,7 @@ var registrationSchema = z.object({
 });
 var bankingDetailsSchema = z.object({
   account_holder: z.string().nullable().optional(),
+  billing_email: z.string().nullable().optional(),
   bank_name: z.string().nullable().optional(),
   iban: z.string().nullable().optional(),
   currency: z.string().nullable().optional()
@@ -949,6 +955,11 @@ var partnerSchemaSpec = markAsSchemaSpec({
   address: {
     _type: "object",
     of: addressSchema.shape,
+    nullable: true
+  },
+  company_details: {
+    _type: "object",
+    of: companyDetailsSchema.shape,
     nullable: true
   },
   registration: {

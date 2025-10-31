@@ -789,6 +789,15 @@ declare const partnerSchemaSpec: {
         };
         nullable: boolean;
     };
+    company_details: {
+        _type: "object";
+        of: {
+            business_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            company_registration_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            tax_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        };
+        nullable: boolean;
+    };
     registration: {
         _type: "object";
         of: {
@@ -803,6 +812,7 @@ declare const partnerSchemaSpec: {
         _type: "object";
         of: {
             account_holder: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            billing_email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             bank_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             iban: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             currency: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -2684,6 +2694,19 @@ declare const HPartnerSchema: z.ZodObject<{
         city?: string | null | undefined;
         postal_code?: string | null | undefined;
     }>;
+    company_details: z.ZodObject<{
+        business_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        company_registration_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        tax_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, z.UnknownKeysParam, z.ZodTypeAny, {
+        business_name?: string | null | undefined;
+        company_registration_number?: string | null | undefined;
+        tax_id?: string | null | undefined;
+    }, {
+        business_name?: string | null | undefined;
+        company_registration_number?: string | null | undefined;
+        tax_id?: string | null | undefined;
+    }>;
     registration: z.ZodObject<{
         chamber_of_commerce_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         vat_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -2702,17 +2725,20 @@ declare const HPartnerSchema: z.ZodObject<{
     }>;
     banking_details: z.ZodObject<{
         account_holder: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        billing_email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         bank_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         iban: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         currency: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     }, {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     }>;
@@ -3593,6 +3619,11 @@ declare const HPartnerSchema: z.ZodObject<{
         city?: string | null | undefined;
         postal_code?: string | null | undefined;
     };
+    company_details: {
+        business_name?: string | null | undefined;
+        company_registration_number?: string | null | undefined;
+        tax_id?: string | null | undefined;
+    };
     registration: {
         chamber_of_commerce_number?: string | null | undefined;
         vat_number?: string | null | undefined;
@@ -3602,6 +3633,7 @@ declare const HPartnerSchema: z.ZodObject<{
     banking_details: {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     };
@@ -3795,6 +3827,11 @@ declare const HPartnerSchema: z.ZodObject<{
         city?: string | null | undefined;
         postal_code?: string | null | undefined;
     };
+    company_details: {
+        business_name?: string | null | undefined;
+        company_registration_number?: string | null | undefined;
+        tax_id?: string | null | undefined;
+    };
     registration: {
         chamber_of_commerce_number?: string | null | undefined;
         vat_number?: string | null | undefined;
@@ -3804,6 +3841,7 @@ declare const HPartnerSchema: z.ZodObject<{
     banking_details: {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     };
@@ -4416,6 +4454,19 @@ declare const HPartnerAppSchema: z.ZodObject<{
         city?: string | null | undefined;
         postal_code?: string | null | undefined;
     }>;
+    company_details: z.ZodObject<{
+        business_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        company_registration_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        tax_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, z.UnknownKeysParam, z.ZodTypeAny, {
+        business_name?: string | null | undefined;
+        company_registration_number?: string | null | undefined;
+        tax_id?: string | null | undefined;
+    }, {
+        business_name?: string | null | undefined;
+        company_registration_number?: string | null | undefined;
+        tax_id?: string | null | undefined;
+    }>;
     registration: z.ZodObject<{
         chamber_of_commerce_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         vat_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -4434,17 +4485,20 @@ declare const HPartnerAppSchema: z.ZodObject<{
     }>;
     banking_details: z.ZodObject<{
         account_holder: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        billing_email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         bank_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         iban: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         currency: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     }, {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     }>;
@@ -5325,6 +5379,11 @@ declare const HPartnerAppSchema: z.ZodObject<{
         city?: string | null | undefined;
         postal_code?: string | null | undefined;
     };
+    company_details: {
+        business_name?: string | null | undefined;
+        company_registration_number?: string | null | undefined;
+        tax_id?: string | null | undefined;
+    };
     registration: {
         chamber_of_commerce_number?: string | null | undefined;
         vat_number?: string | null | undefined;
@@ -5334,6 +5393,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     banking_details: {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     };
@@ -5527,6 +5587,11 @@ declare const HPartnerAppSchema: z.ZodObject<{
         city?: string | null | undefined;
         postal_code?: string | null | undefined;
     };
+    company_details: {
+        business_name?: string | null | undefined;
+        company_registration_number?: string | null | undefined;
+        tax_id?: string | null | undefined;
+    };
     registration: {
         chamber_of_commerce_number?: string | null | undefined;
         vat_number?: string | null | undefined;
@@ -5536,6 +5601,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     banking_details: {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     };
@@ -6800,17 +6866,20 @@ declare const HRegistrationSchema: z.ZodObject<{
 }>;
 declare const HBankingDetailsSchema: z.ZodObject<{
     account_holder: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    billing_email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     bank_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     iban: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     currency: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     currency?: string | null | undefined;
     account_holder?: string | null | undefined;
+    billing_email?: string | null | undefined;
     bank_name?: string | null | undefined;
     iban?: string | null | undefined;
 }, {
     currency?: string | null | undefined;
     account_holder?: string | null | undefined;
+    billing_email?: string | null | undefined;
     bank_name?: string | null | undefined;
     iban?: string | null | undefined;
 }>;
@@ -7169,17 +7238,20 @@ declare const RegistrationSchema: z.ZodObject<{
 }>;
 declare const BankingDetailsSchema: z.ZodObject<{
     account_holder: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    billing_email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     bank_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     iban: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     currency: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     currency?: string | null | undefined;
     account_holder?: string | null | undefined;
+    billing_email?: string | null | undefined;
     bank_name?: string | null | undefined;
     iban?: string | null | undefined;
 }, {
     currency?: string | null | undefined;
     account_holder?: string | null | undefined;
+    billing_email?: string | null | undefined;
     bank_name?: string | null | undefined;
     iban?: string | null | undefined;
 }>;
@@ -7515,6 +7587,19 @@ declare const partnerAppSchema: z.ZodObject<{
         city?: string | null | undefined;
         postal_code?: string | null | undefined;
     }>;
+    company_details: z.ZodObject<{
+        business_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        company_registration_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        tax_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, z.UnknownKeysParam, z.ZodTypeAny, {
+        business_name?: string | null | undefined;
+        company_registration_number?: string | null | undefined;
+        tax_id?: string | null | undefined;
+    }, {
+        business_name?: string | null | undefined;
+        company_registration_number?: string | null | undefined;
+        tax_id?: string | null | undefined;
+    }>;
     registration: z.ZodObject<{
         chamber_of_commerce_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         vat_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -7533,17 +7618,20 @@ declare const partnerAppSchema: z.ZodObject<{
     }>;
     banking_details: z.ZodObject<{
         account_holder: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        billing_email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         bank_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         iban: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         currency: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     }, {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     }>;
@@ -8424,6 +8512,11 @@ declare const partnerAppSchema: z.ZodObject<{
         city?: string | null | undefined;
         postal_code?: string | null | undefined;
     };
+    company_details: {
+        business_name?: string | null | undefined;
+        company_registration_number?: string | null | undefined;
+        tax_id?: string | null | undefined;
+    };
     registration: {
         chamber_of_commerce_number?: string | null | undefined;
         vat_number?: string | null | undefined;
@@ -8433,6 +8526,7 @@ declare const partnerAppSchema: z.ZodObject<{
     banking_details: {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     };
@@ -8626,6 +8720,11 @@ declare const partnerAppSchema: z.ZodObject<{
         city?: string | null | undefined;
         postal_code?: string | null | undefined;
     };
+    company_details: {
+        business_name?: string | null | undefined;
+        company_registration_number?: string | null | undefined;
+        tax_id?: string | null | undefined;
+    };
     registration: {
         chamber_of_commerce_number?: string | null | undefined;
         vat_number?: string | null | undefined;
@@ -8635,6 +8734,7 @@ declare const partnerAppSchema: z.ZodObject<{
     banking_details: {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     };
