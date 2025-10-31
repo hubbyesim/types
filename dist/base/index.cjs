@@ -332,6 +332,11 @@ var communicationOptionsSchema = zod.z.object({
   should_send_message: zod.z.boolean(),
   channels: zod.z.array(communicationChannelSchema)
 });
+var financialInsightsSchema = zod.z.object({
+  partner_commission_percentage: zod.z.number().nullable().optional(),
+  total_commission_amount: zod.z.number().nullable().optional(),
+  price: zod.z.number().nullable().optional()
+}).nullable().optional();
 var bookingSchemaSpec = markAsSchemaSpec({
   id: zod.z.string().optional(),
   external_id: zod.z.string().nullable().optional(),
@@ -347,10 +352,8 @@ var bookingSchemaSpec = markAsSchemaSpec({
   email: zod.z.string().email().nullable(),
   phone: zod.z.string().nullable(),
   booking_id: zod.z.string().nullable(),
-  booking_label: zod.z.string().nullable().optional(),
   flight_number: zod.z.string().optional(),
   gender: zod.z.enum(["M", "F", "O"]).optional(),
-  package_size: zod.z.string().optional(),
   sent_messages: zod.z.record(zod.z.any()).optional(),
   locale: supportedLocalesSchema,
   status: bookingStatusSchema,
@@ -377,8 +380,8 @@ var bookingSchemaSpec = markAsSchemaSpec({
   package_specifications: zod.z.array(packageSpecificationSchema).min(1),
   departure_date: timestampRequired,
   return_date: timestampNullable,
-  price: zod.z.number().nullable().optional(),
   partner: { _type: "docRef", collection: PARTNER_COLLECTION },
+  financial_insights: financialInsightsSchema,
   promo_codes: {
     _type: "array",
     of: { _type: "docRef", collection: PROMO_CODE_COLLECTION }
@@ -791,6 +794,7 @@ var financialPropertiesSchemaSpec = markAsSchemaSpec({
   administration_fee: zod.z.number().nullable(),
   income_per_gb: zod.z.number().nullable(),
   commission_fee: zod.z.number().nullable().optional(),
+  commission_percentage: zod.z.number().nullable().optional(),
   payment_method: zod.z.enum(["invoice", "direct"]),
   requires_card: zod.z.boolean().nullable(),
   next_invoice: timestampNullableOptional,
