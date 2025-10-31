@@ -353,6 +353,11 @@ var communicationOptionsSchema = z.object({
   should_send_message: z.boolean(),
   channels: z.array(communicationChannelSchema)
 });
+var financialInsightsSchema = z.object({
+  partner_commission_percentage: z.number().nullable().optional(),
+  total_commission_amount: z.number().nullable().optional(),
+  price: z.number().nullable().optional()
+}).nullable().optional();
 var bookingSchemaSpec = markAsSchemaSpec({
   id: z.string().optional(),
   external_id: z.string().nullable().optional(),
@@ -368,10 +373,8 @@ var bookingSchemaSpec = markAsSchemaSpec({
   email: z.string().email().nullable(),
   phone: z.string().nullable(),
   booking_id: z.string().nullable(),
-  booking_label: z.string().nullable().optional(),
   flight_number: z.string().optional(),
   gender: z.enum(["M", "F", "O"]).optional(),
-  package_size: z.string().optional(),
   sent_messages: z.record(z.any()).optional(),
   locale: supportedLocalesSchema,
   status: bookingStatusSchema,
@@ -398,9 +401,8 @@ var bookingSchemaSpec = markAsSchemaSpec({
   package_specifications: z.array(packageSpecificationSchema).min(1),
   departure_date: timestampRequired,
   return_date: timestampNullable,
-  price: z.number().nullable().optional(),
   partner: { _type: "docRef", collection: PARTNER_COLLECTION },
-  partner_commission_percentage: z.number().nullable().optional(),
+  financial_insights: financialInsightsSchema,
   promo_codes: {
     _type: "array",
     of: { _type: "docRef", collection: PROMO_CODE_COLLECTION }

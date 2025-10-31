@@ -126,10 +126,8 @@ declare const bookingSchemaSpec: {
     email: z.ZodNullable<z.ZodString>;
     phone: z.ZodNullable<z.ZodString>;
     booking_id: z.ZodNullable<z.ZodString>;
-    booking_label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     flight_number: z.ZodOptional<z.ZodString>;
     gender: z.ZodOptional<z.ZodEnum<["M", "F", "O"]>>;
-    package_size: z.ZodOptional<z.ZodString>;
     sent_messages: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
     locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK"]>;
     status: z.ZodEnum<["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED", "UNPAID", "EXPIRED"]>;
@@ -188,12 +186,23 @@ declare const bookingSchemaSpec: {
         nullable: boolean;
         optional: boolean;
     };
-    price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     partner: {
         _type: "docRef";
         collection: string;
     };
-    partner_commission_percentage: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    financial_insights: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        partner_commission_percentage: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        total_commission_amount: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    }, "strip", z.ZodTypeAny, {
+        partner_commission_percentage?: number | null | undefined;
+        total_commission_amount?: number | null | undefined;
+        price?: number | null | undefined;
+    }, {
+        partner_commission_percentage?: number | null | undefined;
+        total_commission_amount?: number | null | undefined;
+        price?: number | null | undefined;
+    }>>>;
     promo_codes: {
         _type: "array";
         of: {
@@ -382,16 +391,16 @@ declare const paymentSchemaSpec: {
         destination: z.ZodOptional<z.ZodString>;
         iso3: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        package_size?: string | undefined;
         destination?: string | undefined;
         package_duration?: number | undefined;
         package_type?: string | undefined;
+        package_size?: string | undefined;
         iso3?: string | undefined;
     }, {
-        package_size?: string | undefined;
         destination?: string | undefined;
         package_duration?: number | undefined;
         package_type?: string | undefined;
+        package_size?: string | undefined;
         iso3?: string | undefined;
     }>, "many">>;
     user: {
@@ -1411,11 +1420,11 @@ declare const reviewSchemaSpec: {
             package_size: z.ZodString;
             package_type: z.ZodEnum<["data-limited", "starter"]>;
         }, "strip", z.ZodTypeAny, {
-            package_size: string;
             package_type: "data-limited" | "starter";
+            package_size: string;
         }, {
-            package_size: string;
             package_type: "data-limited" | "starter";
+            package_size: string;
         }>;
         multipliers: z.ZodOptional<z.ZodObject<{
             quality_based: z.ZodOptional<z.ZodNumber>;
@@ -1429,8 +1438,8 @@ declare const reviewSchemaSpec: {
         }>>;
     }, "strip", z.ZodTypeAny, {
         base_reward: {
-            package_size: string;
             package_type: "data-limited" | "starter";
+            package_size: string;
         };
         multipliers?: {
             quality_based?: number | undefined;
@@ -1438,8 +1447,8 @@ declare const reviewSchemaSpec: {
         } | undefined;
     }, {
         base_reward: {
-            package_size: string;
             package_type: "data-limited" | "starter";
+            package_size: string;
         };
         multipliers?: {
             quality_based?: number | undefined;
@@ -1699,10 +1708,8 @@ declare const HBookingSchema: z.ZodObject<{
     email: z.ZodNullable<z.ZodString>;
     phone: z.ZodNullable<z.ZodString>;
     booking_id: z.ZodNullable<z.ZodString>;
-    booking_label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     flight_number: z.ZodOptional<z.ZodString>;
     gender: z.ZodOptional<z.ZodEnum<["M", "F", "O"]>>;
-    package_size: z.ZodOptional<z.ZodString>;
     sent_messages: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
     locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK"]>;
     status: z.ZodEnum<["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED", "UNPAID", "EXPIRED"]>;
@@ -1756,9 +1763,20 @@ declare const HBookingSchema: z.ZodObject<{
     }>, "many">;
     departure_date: z.ZodEffects<z.ZodDate, Date, Date>;
     return_date: z.ZodEffects<z.ZodDate, Date, Date>;
-    price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     partner: z.ZodString;
-    partner_commission_percentage: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    financial_insights: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        partner_commission_percentage: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        total_commission_amount: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    }, "strip", z.ZodTypeAny, {
+        partner_commission_percentage?: number | null | undefined;
+        total_commission_amount?: number | null | undefined;
+        price?: number | null | undefined;
+    }, {
+        partner_commission_percentage?: number | null | undefined;
+        total_commission_amount?: number | null | undefined;
+        price?: number | null | undefined;
+    }>>>;
     promo_codes: z.ZodArray<z.ZodString, "many">;
     users: z.ZodArray<z.ZodString, "many">;
     esims: z.ZodArray<z.ZodString, "many">;
@@ -1812,13 +1830,14 @@ declare const HBookingSchema: z.ZodObject<{
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
-    booking_label?: string | null | undefined;
     flight_number?: string | undefined;
-    package_size?: string | undefined;
     sent_messages?: Record<string, any> | undefined;
     import_id?: string | null | undefined;
-    price?: number | null | undefined;
-    partner_commission_percentage?: number | null | undefined;
+    financial_insights?: {
+        partner_commission_percentage?: number | null | undefined;
+        total_commission_amount?: number | null | undefined;
+        price?: number | null | undefined;
+    } | null | undefined;
     hubby_foreign_identifiers?: {
         messaging_contact_id: string | null;
     } | null | undefined;
@@ -1865,13 +1884,14 @@ declare const HBookingSchema: z.ZodObject<{
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
-    booking_label?: string | null | undefined;
     flight_number?: string | undefined;
-    package_size?: string | undefined;
     sent_messages?: Record<string, any> | undefined;
     import_id?: string | null | undefined;
-    price?: number | null | undefined;
-    partner_commission_percentage?: number | null | undefined;
+    financial_insights?: {
+        partner_commission_percentage?: number | null | undefined;
+        total_commission_amount?: number | null | undefined;
+        price?: number | null | undefined;
+    } | null | undefined;
     hubby_foreign_identifiers?: {
         messaging_contact_id: string | null;
     } | null | undefined;
@@ -2111,16 +2131,16 @@ declare const HPaymentSchema: z.ZodObject<{
         destination: z.ZodOptional<z.ZodString>;
         iso3: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        package_size?: string | undefined;
         destination?: string | undefined;
         package_duration?: number | undefined;
         package_type?: string | undefined;
+        package_size?: string | undefined;
         iso3?: string | undefined;
     }, {
-        package_size?: string | undefined;
         destination?: string | undefined;
         package_duration?: number | undefined;
         package_type?: string | undefined;
+        package_size?: string | undefined;
         iso3?: string | undefined;
     }>, "many">>;
     user: z.ZodString;
@@ -2201,10 +2221,10 @@ declare const HPaymentSchema: z.ZodObject<{
     id?: string | null | undefined;
     status?: "pending" | "processing" | "completed" | "failed" | undefined;
     package_specifications?: {
-        package_size?: string | undefined;
         destination?: string | undefined;
         package_duration?: number | undefined;
         package_type?: string | undefined;
+        package_size?: string | undefined;
         iso3?: string | undefined;
     }[] | undefined;
     invoice?: string | undefined;
@@ -2246,10 +2266,10 @@ declare const HPaymentSchema: z.ZodObject<{
     id?: string | null | undefined;
     status?: "pending" | "processing" | "completed" | "failed" | undefined;
     package_specifications?: {
-        package_size?: string | undefined;
         destination?: string | undefined;
         package_duration?: number | undefined;
         package_type?: string | undefined;
+        package_size?: string | undefined;
         iso3?: string | undefined;
     }[] | undefined;
     invoice?: string | undefined;
@@ -2566,9 +2586,9 @@ declare const HPromoCodeSchema: z.ZodObject<{
     uuid_usage: string[];
     valid_from: Date;
     valid_to: Date;
-    package_size?: string | undefined;
     countries?: string[] | undefined;
     uuid?: string | null | undefined;
+    package_size?: string | undefined;
     discount?: number | undefined;
     package_specification?: {
         destination?: string | string[] | undefined;
@@ -2602,9 +2622,9 @@ declare const HPromoCodeSchema: z.ZodObject<{
     uuid_usage: string[];
     valid_from: Date;
     valid_to: Date;
-    package_size?: string | undefined;
     countries?: string[] | undefined;
     uuid?: string | null | undefined;
+    package_size?: string | undefined;
     discount?: number | undefined;
     package_specification?: {
         destination?: string | string[] | undefined;
@@ -6612,11 +6632,11 @@ declare const HReviewSchema: z.ZodObject<{
             package_size: z.ZodString;
             package_type: z.ZodEnum<["data-limited", "starter"]>;
         }, "strip", z.ZodTypeAny, {
-            package_size: string;
             package_type: "data-limited" | "starter";
+            package_size: string;
         }, {
-            package_size: string;
             package_type: "data-limited" | "starter";
+            package_size: string;
         }>;
         multipliers: z.ZodOptional<z.ZodObject<{
             quality_based: z.ZodOptional<z.ZodNumber>;
@@ -6630,8 +6650,8 @@ declare const HReviewSchema: z.ZodObject<{
         }>>;
     }, "strip", z.ZodTypeAny, {
         base_reward: {
-            package_size: string;
             package_type: "data-limited" | "starter";
+            package_size: string;
         };
         multipliers?: {
             quality_based?: number | undefined;
@@ -6639,8 +6659,8 @@ declare const HReviewSchema: z.ZodObject<{
         } | undefined;
     }, {
         base_reward: {
-            package_size: string;
             package_type: "data-limited" | "starter";
+            package_size: string;
         };
         multipliers?: {
             quality_based?: number | undefined;
@@ -6660,8 +6680,8 @@ declare const HReviewSchema: z.ZodObject<{
     questions: Record<string, any>;
     reward_strategy: {
         base_reward: {
-            package_size: string;
             package_type: "data-limited" | "starter";
+            package_size: string;
         };
         multipliers?: {
             quality_based?: number | undefined;
@@ -6679,8 +6699,8 @@ declare const HReviewSchema: z.ZodObject<{
     questions: Record<string, any>;
     reward_strategy: {
         base_reward: {
-            package_size: string;
             package_type: "data-limited" | "starter";
+            package_size: string;
         };
         multipliers?: {
             quality_based?: number | undefined;
@@ -6906,11 +6926,11 @@ declare const HRewardStrategySchema: z.ZodObject<{
         package_size: z.ZodString;
         package_type: z.ZodEnum<["data-limited", "starter"]>;
     }, "strip", z.ZodTypeAny, {
-        package_size: string;
         package_type: "data-limited" | "starter";
+        package_size: string;
     }, {
-        package_size: string;
         package_type: "data-limited" | "starter";
+        package_size: string;
     }>;
     multipliers: z.ZodOptional<z.ZodObject<{
         quality_based: z.ZodOptional<z.ZodNumber>;
@@ -6924,8 +6944,8 @@ declare const HRewardStrategySchema: z.ZodObject<{
     }>>;
 }, "strip", z.ZodTypeAny, {
     base_reward: {
-        package_size: string;
         package_type: "data-limited" | "starter";
+        package_size: string;
     };
     multipliers?: {
         quality_based?: number | undefined;
@@ -6933,8 +6953,8 @@ declare const HRewardStrategySchema: z.ZodObject<{
     } | undefined;
 }, {
     base_reward: {
-        package_size: string;
         package_type: "data-limited" | "starter";
+        package_size: string;
     };
     multipliers?: {
         quality_based?: number | undefined;
@@ -6945,11 +6965,11 @@ declare const HBaseRewardSchema: z.ZodObject<{
     package_size: z.ZodString;
     package_type: z.ZodEnum<["data-limited", "starter"]>;
 }, "strip", z.ZodTypeAny, {
-    package_size: string;
     package_type: "data-limited" | "starter";
+    package_size: string;
 }, {
-    package_size: string;
     package_type: "data-limited" | "starter";
+    package_size: string;
 }>;
 declare const HRewardMultipliersSchema: z.ZodOptional<z.ZodObject<{
     quality_based: z.ZodOptional<z.ZodNumber>;
@@ -7320,11 +7340,11 @@ declare const RewardStrategySchema: z.ZodObject<{
         package_size: z.ZodString;
         package_type: z.ZodEnum<["data-limited", "starter"]>;
     }, "strip", z.ZodTypeAny, {
-        package_size: string;
         package_type: "data-limited" | "starter";
+        package_size: string;
     }, {
-        package_size: string;
         package_type: "data-limited" | "starter";
+        package_size: string;
     }>;
     multipliers: z.ZodOptional<z.ZodObject<{
         quality_based: z.ZodOptional<z.ZodNumber>;
@@ -7338,8 +7358,8 @@ declare const RewardStrategySchema: z.ZodObject<{
     }>>;
 }, "strip", z.ZodTypeAny, {
     base_reward: {
-        package_size: string;
         package_type: "data-limited" | "starter";
+        package_size: string;
     };
     multipliers?: {
         quality_based?: number | undefined;
@@ -7347,8 +7367,8 @@ declare const RewardStrategySchema: z.ZodObject<{
     } | undefined;
 }, {
     base_reward: {
-        package_size: string;
         package_type: "data-limited" | "starter";
+        package_size: string;
     };
     multipliers?: {
         quality_based?: number | undefined;
@@ -7359,11 +7379,11 @@ declare const BaseRewardSchema: z.ZodObject<{
     package_size: z.ZodString;
     package_type: z.ZodEnum<["data-limited", "starter"]>;
 }, "strip", z.ZodTypeAny, {
-    package_size: string;
     package_type: "data-limited" | "starter";
+    package_size: string;
 }, {
-    package_size: string;
     package_type: "data-limited" | "starter";
+    package_size: string;
 }>;
 declare const RewardMultipliersSchema: z.ZodOptional<z.ZodObject<{
     quality_based: z.ZodOptional<z.ZodNumber>;
