@@ -230,6 +230,8 @@ export const promoCodeToFirestore = (promoCode: HPromoCode): PromoCode => {
 
 
 export const partnerAppSchema = buildClientSchema(partnerSchemaSpec);
+export const destinationAppSchema = buildClientSchema(destinationSchemaSpec);
+export const destinationBundleAppSchema = buildClientSchema(destinationBundleSchemaSpec);
 // Export the type and constant
 export type SupportedLocales = typeof LOCALES[number];
 export const SUPPORTED_LOCALES = LOCALES;

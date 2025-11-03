@@ -5291,7 +5291,7 @@ declare const HReviewSubmissionSchema: z.ZodObject<{
     analysis?: Record<string, any> | null | undefined;
 }>;
 declare const HDestinationSchema: z.ZodObject<{
-    id: z.ZodString;
+    id: z.ZodOptional<z.ZodString>;
     type: z.ZodString;
     iso3s: z.ZodArray<z.ZodString, "many">;
     name: z.ZodString;
@@ -5303,7 +5303,6 @@ declare const HDestinationSchema: z.ZodObject<{
     created_by: z.ZodNullable<z.ZodString>;
     updated_by: z.ZodNullable<z.ZodString>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
-    id: string;
     name: string;
     created_at: Date;
     updated_at: Date;
@@ -5314,8 +5313,8 @@ declare const HDestinationSchema: z.ZodObject<{
     iso3s: string[];
     active: boolean;
     sort_order: number;
+    id?: string | undefined;
 }, {
-    id: string;
     name: string;
     created_at: Date;
     updated_at: Date;
@@ -5326,6 +5325,7 @@ declare const HDestinationSchema: z.ZodObject<{
     iso3s: string[];
     active: boolean;
     sort_order: number;
+    id?: string | undefined;
 }>;
 declare const HDestinationBundleSchema: z.ZodObject<{
     id: z.ZodString;

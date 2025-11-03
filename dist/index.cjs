@@ -1119,7 +1119,7 @@ var reviewSubmissionSchemaSpec = markAsSchemaSpec({
   analysis: zod.z.record(zod.z.any()).nullable().optional()
 });
 var destinationSchemaSpec = markAsSchemaSpec({
-  id: zod.z.string(),
+  id: zod.z.string().optional(),
   type: zod.z.string(),
   // "country" or region names like "Europe", "Asia", "Middle East"
   iso3s: zod.z.array(zod.z.string()),
@@ -1560,6 +1560,8 @@ var promoCodeToFirestore = (promoCode) => {
   return convertJSToFirestore(promoCode, promoCodeSchemaSpec);
 };
 var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
+var destinationAppSchema = buildClientSchema(destinationSchemaSpec);
+var destinationBundleAppSchema = buildClientSchema(destinationBundleSchemaSpec);
 var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
 exports.API_LOG_COLLECTION = API_LOG_COLLECTION;
@@ -1683,6 +1685,8 @@ exports.createConvertJSToFirestore = createConvertJSToFirestore;
 exports.createFirebaseService = createFirebaseService;
 exports.createModelConverters = createModelConverters;
 exports.currencySchemaSpec = currencySchemaSpec;
+exports.destinationAppSchema = destinationAppSchema;
+exports.destinationBundleAppSchema = destinationBundleAppSchema;
 exports.destinationBundleSchemaSpec = destinationBundleSchemaSpec;
 exports.destinationSchemaSpec = destinationSchemaSpec;
 exports.esimSchemaSpec = esimSchemaSpec;

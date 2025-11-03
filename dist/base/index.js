@@ -1106,7 +1106,7 @@ var reviewSubmissionSchemaSpec = markAsSchemaSpec({
   analysis: z.record(z.any()).nullable().optional()
 });
 var destinationSchemaSpec = markAsSchemaSpec({
-  id: z.string(),
+  id: z.string().optional(),
   type: z.string(),
   // "country" or region names like "Europe", "Asia", "Middle East"
   iso3s: z.array(z.string()),
