@@ -7,7 +7,7 @@ import {
 
 // Destination schema spec
 export const destinationSchemaSpec = markAsSchemaSpec({
-    id: z.string().optional(),
+    id: z.string(),
     type: z.string(), // "country" or region names like "Europe", "Asia", "Middle East"
     iso3s: z.array(z.string()),
     name: z.string(),
