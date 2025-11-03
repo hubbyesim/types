@@ -187,6 +187,8 @@ var PERMISSION_COLLECTION = "permissions";
 var TRAFFIC_POLICY_COLLECTION = "traffic_policies";
 var REVIEW_COLLECTION = "/companies/hubby/reviews";
 var REVIEW_SUBMISSION_COLLECTION = "/companies/hubby/review_submissions";
+var DESTINATION_COLLECTION = "destinations";
+var DESTINATION_OFFER_COLLECTION = "offers";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: false };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
@@ -1116,6 +1118,47 @@ var reviewSubmissionSchemaSpec = markAsSchemaSpec({
   updated_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
   analysis: zod.z.record(zod.z.any()).nullable().optional()
 });
+var destinationSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string(),
+  type: zod.z.string(),
+  // "country" or region names like "Europe", "Asia", "Middle East"
+  iso3s: zod.z.array(zod.z.string()),
+  name: zod.z.string(),
+  slug: zod.z.string(),
+  active: zod.z.boolean(),
+  sort_order: zod.z.number(),
+  created_at: timestampRequired,
+  updated_at: timestampRequired,
+  created_by: zod.z.string().nullable(),
+  updated_by: zod.z.string().nullable()
+});
+var destinationBundleSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string(),
+  type: zod.z.enum(["unlimited", "data-limited", "starter"]),
+  duration_days: zod.z.number(),
+  size_gb: zod.z.number(),
+  package: { _type: "docRef", collection: PACKAGE_COLLECTION },
+  currency: zod.z.string(),
+  b2c_price: zod.z.number(),
+  b2b_price: zod.z.number(),
+  partner_b2c_price: {
+    _type: "record",
+    of: zod.z.number(),
+    nullable: true,
+    optional: true
+  },
+  partner_b2b_price: {
+    _type: "record",
+    of: zod.z.number(),
+    nullable: true,
+    optional: true
+  },
+  active: zod.z.boolean(),
+  created_at: timestampRequired,
+  updated_at: timestampRequired,
+  created_by: zod.z.string().nullable(),
+  updated_by: zod.z.string().nullable()
+});
 function createConvertJSToFirestore(db) {
   return function convertJSToFirestore2(input, spec) {
     if (input === void 0 || input === null)
@@ -1407,6 +1450,8 @@ var HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
 var HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
 var HReviewSchema = buildClientSchema(reviewSchemaSpec);
 var HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
+var HDestinationSchema = buildClientSchema(destinationSchemaSpec);
+var HDestinationBundleSchema = buildClientSchema(destinationBundleSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1469,6 +1514,8 @@ var BondioPackageSchema = buildServerSchema(bondioPackageSchema);
 var TrafficPolicySchema = buildServerSchema(trafficPolicySpec);
 var ReviewSchema = buildServerSchema(reviewSchemaSpec);
 var ReviewSubmissionSchema = buildServerSchema(reviewSubmissionSchemaSpec);
+var DestinationSchema = buildServerSchema(destinationSchemaSpec);
+var DestinationBundleSchema = buildServerSchema(destinationBundleSchemaSpec);
 var AddressSchema = addressSchema;
 var RegistrationSchema = registrationSchema;
 var BankingDetailsSchema = bankingDetailsSchema;
@@ -1529,6 +1576,10 @@ exports.CommunicationChannelSchema = CommunicationChannelSchema;
 exports.CommunicationOptionsSchema = CommunicationOptionsSchema;
 exports.CountrySchema = CountrySchema;
 exports.CurrencySchema = CurrencySchema;
+exports.DESTINATION_COLLECTION = DESTINATION_COLLECTION;
+exports.DESTINATION_OFFER_COLLECTION = DESTINATION_OFFER_COLLECTION;
+exports.DestinationBundleSchema = DestinationBundleSchema;
+exports.DestinationSchema = DestinationSchema;
 exports.ESIMSchema = ESIMSchema;
 exports.ESIM_COLLECTION = ESIM_COLLECTION;
 exports.FirebaseService = FirebaseService;
@@ -1544,6 +1595,8 @@ exports.HCommunicationChannelSchema = HCommunicationChannelSchema;
 exports.HCommunicationOptionsSchema = HCommunicationOptionsSchema;
 exports.HCountrySchema = HCountrySchema;
 exports.HCurrencySchema = HCurrencySchema;
+exports.HDestinationBundleSchema = HDestinationBundleSchema;
+exports.HDestinationSchema = HDestinationSchema;
 exports.HESIMSchema = HESIMSchema;
 exports.HFinancialPropertiesSchema = HFinancialPropertiesSchema;
 exports.HFreeEsimSchema = HFreeEsimSchema;
@@ -1628,6 +1681,8 @@ exports.createConvertJSToFirestore = createConvertJSToFirestore;
 exports.createFirebaseService = createFirebaseService;
 exports.createModelConverters = createModelConverters;
 exports.currencySchemaSpec = currencySchemaSpec;
+exports.destinationBundleSchemaSpec = destinationBundleSchemaSpec;
+exports.destinationSchemaSpec = destinationSchemaSpec;
 exports.esimSchemaSpec = esimSchemaSpec;
 exports.messageSchemaSpec = messageSchemaSpec;
 exports.packageSchemaSpec = packageSchemaSpec;

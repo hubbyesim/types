@@ -1107,6 +1107,47 @@ var reviewSubmissionSchemaSpec = markAsSchemaSpec({
   updated_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
   analysis: zod.z.record(zod.z.any()).nullable().optional()
 });
+var destinationSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string(),
+  type: zod.z.string(),
+  // "country" or region names like "Europe", "Asia", "Middle East"
+  iso3s: zod.z.array(zod.z.string()),
+  name: zod.z.string(),
+  slug: zod.z.string(),
+  active: zod.z.boolean(),
+  sort_order: zod.z.number(),
+  created_at: timestampRequired,
+  updated_at: timestampRequired,
+  created_by: zod.z.string().nullable(),
+  updated_by: zod.z.string().nullable()
+});
+var destinationBundleSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string(),
+  type: zod.z.enum(["unlimited", "data-limited", "starter"]),
+  duration_days: zod.z.number(),
+  size_gb: zod.z.number(),
+  package: { _type: "docRef", collection: PACKAGE_COLLECTION },
+  currency: zod.z.string(),
+  b2c_price: zod.z.number(),
+  b2b_price: zod.z.number(),
+  partner_b2c_price: {
+    _type: "record",
+    of: zod.z.number(),
+    nullable: true,
+    optional: true
+  },
+  partner_b2b_price: {
+    _type: "record",
+    of: zod.z.number(),
+    nullable: true,
+    optional: true
+  },
+  active: zod.z.boolean(),
+  created_at: timestampRequired,
+  updated_at: timestampRequired,
+  created_by: zod.z.string().nullable(),
+  updated_by: zod.z.string().nullable()
+});
 
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
@@ -1138,6 +1179,8 @@ var HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
 var HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
 var HReviewSchema = buildClientSchema(reviewSchemaSpec);
 var HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
+var HDestinationSchema = buildClientSchema(destinationSchemaSpec);
+var HDestinationBundleSchema = buildClientSchema(destinationBundleSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1168,6 +1211,8 @@ exports.HCommunicationChannelSchema = HCommunicationChannelSchema;
 exports.HCommunicationOptionsSchema = HCommunicationOptionsSchema;
 exports.HCountrySchema = HCountrySchema;
 exports.HCurrencySchema = HCurrencySchema;
+exports.HDestinationBundleSchema = HDestinationBundleSchema;
+exports.HDestinationSchema = HDestinationSchema;
 exports.HESIMSchema = HESIMSchema;
 exports.HFinancialPropertiesSchema = HFinancialPropertiesSchema;
 exports.HFreeEsimSchema = HFreeEsimSchema;

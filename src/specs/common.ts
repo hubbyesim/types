@@ -20,6 +20,8 @@ export const PERMISSION_COLLECTION = 'permissions';
 export const TRAFFIC_POLICY_COLLECTION = 'traffic_policies';
 export const REVIEW_COLLECTION = '/companies/hubby/reviews';
 export const REVIEW_SUBMISSION_COLLECTION = '/companies/hubby/review_submissions';
+export const DESTINATION_COLLECTION = 'destinations';
+export const DESTINATION_OFFER_COLLECTION = 'offers';
 
 
 export const packageTypes = ['data-limited', 'time-limited', 'starter', 'unlimited'];
