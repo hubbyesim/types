@@ -5338,7 +5338,9 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     b2b_price: z.ZodNumber;
     partner_b2c_price: z.ZodRecord<z.ZodString, z.ZodNumber>;
     partner_b2b_price: z.ZodRecord<z.ZodString, z.ZodNumber>;
-    active: z.ZodBoolean;
+    is_active: z.ZodDefault<z.ZodBoolean>;
+    is_visible: z.ZodDefault<z.ZodBoolean>;
+    priority: z.ZodDefault<z.ZodNumber>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodNullable<z.ZodString>;
@@ -5351,14 +5353,16 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     type: "data-limited" | "starter" | "unlimited";
+    is_active: boolean;
     package: string;
-    active: boolean;
+    priority: number;
     duration_days: number;
     size_gb: number;
     b2c_price: number;
     b2b_price: number;
     partner_b2c_price: Record<string, number>;
     partner_b2b_price: Record<string, number>;
+    is_visible: boolean;
 }, {
     id: string;
     currency: string;
@@ -5368,13 +5372,15 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     updated_by: string | null;
     type: "data-limited" | "starter" | "unlimited";
     package: string;
-    active: boolean;
     duration_days: number;
     size_gb: number;
     b2c_price: number;
     b2b_price: number;
     partner_b2c_price: Record<string, number>;
     partner_b2b_price: Record<string, number>;
+    is_active?: boolean | undefined;
+    priority?: number | undefined;
+    is_visible?: boolean | undefined;
 }>;
 declare const HAddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodNullable<z.ZodString>>;

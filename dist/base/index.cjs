@@ -1142,7 +1142,9 @@ var destinationBundleSchemaSpec = markAsSchemaSpec({
     nullable: true,
     optional: true
   },
-  active: zod.z.boolean(),
+  is_active: zod.z.boolean().default(true),
+  is_visible: zod.z.boolean().default(true),
+  priority: zod.z.number().default(10),
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: zod.z.string().nullable(),
