@@ -1152,19 +1152,6 @@ declare const HPartnerSchema: z.ZodObject<{
         city?: string | null | undefined;
         postal_code?: string | null | undefined;
     }>;
-    company_details: z.ZodObject<{
-        business_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        company_registration_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        tax_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    }, z.UnknownKeysParam, z.ZodTypeAny, {
-        business_name?: string | null | undefined;
-        company_registration_number?: string | null | undefined;
-        tax_id?: string | null | undefined;
-    }, {
-        business_name?: string | null | undefined;
-        company_registration_number?: string | null | undefined;
-        tax_id?: string | null | undefined;
-    }>;
     registration: z.ZodObject<{
         chamber_of_commerce_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         vat_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -2077,11 +2064,6 @@ declare const HPartnerSchema: z.ZodObject<{
         city?: string | null | undefined;
         postal_code?: string | null | undefined;
     };
-    company_details: {
-        business_name?: string | null | undefined;
-        company_registration_number?: string | null | undefined;
-        tax_id?: string | null | undefined;
-    };
     registration: {
         chamber_of_commerce_number?: string | null | undefined;
         vat_number?: string | null | undefined;
@@ -2284,11 +2266,6 @@ declare const HPartnerSchema: z.ZodObject<{
         street?: string | null | undefined;
         city?: string | null | undefined;
         postal_code?: string | null | undefined;
-    };
-    company_details: {
-        business_name?: string | null | undefined;
-        company_registration_number?: string | null | undefined;
-        tax_id?: string | null | undefined;
     };
     registration: {
         chamber_of_commerce_number?: string | null | undefined;
@@ -2912,19 +2889,6 @@ declare const HPartnerAppSchema: z.ZodObject<{
         city?: string | null | undefined;
         postal_code?: string | null | undefined;
     }>;
-    company_details: z.ZodObject<{
-        business_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        company_registration_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        tax_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    }, z.UnknownKeysParam, z.ZodTypeAny, {
-        business_name?: string | null | undefined;
-        company_registration_number?: string | null | undefined;
-        tax_id?: string | null | undefined;
-    }, {
-        business_name?: string | null | undefined;
-        company_registration_number?: string | null | undefined;
-        tax_id?: string | null | undefined;
-    }>;
     registration: z.ZodObject<{
         chamber_of_commerce_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         vat_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -3837,11 +3801,6 @@ declare const HPartnerAppSchema: z.ZodObject<{
         city?: string | null | undefined;
         postal_code?: string | null | undefined;
     };
-    company_details: {
-        business_name?: string | null | undefined;
-        company_registration_number?: string | null | undefined;
-        tax_id?: string | null | undefined;
-    };
     registration: {
         chamber_of_commerce_number?: string | null | undefined;
         vat_number?: string | null | undefined;
@@ -4044,11 +4003,6 @@ declare const HPartnerAppSchema: z.ZodObject<{
         street?: string | null | undefined;
         city?: string | null | undefined;
         postal_code?: string | null | undefined;
-    };
-    company_details: {
-        business_name?: string | null | undefined;
-        company_registration_number?: string | null | undefined;
-        tax_id?: string | null | undefined;
     };
     registration: {
         chamber_of_commerce_number?: string | null | undefined;

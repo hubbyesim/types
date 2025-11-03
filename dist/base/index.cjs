@@ -609,11 +609,6 @@ var addressSchema = zod.z.object({
   postal_code: zod.z.string().nullable().optional(),
   country: zod.z.string().nullable().optional()
 });
-var companyDetailsSchema = zod.z.object({
-  business_name: zod.z.string().nullable().optional(),
-  company_registration_number: zod.z.string().nullable().optional(),
-  tax_id: zod.z.string().nullable().optional()
-});
 var emitEventSchema = zod.z.object({
   topup: zod.z.boolean().optional().default(false),
   redemption: zod.z.boolean().optional().default(false),
@@ -923,11 +918,6 @@ var partnerSchemaSpec = markAsSchemaSpec({
   address: {
     _type: "object",
     of: addressSchema.shape,
-    nullable: true
-  },
-  company_details: {
-    _type: "object",
-    of: companyDetailsSchema.shape,
     nullable: true
   },
   registration: {
