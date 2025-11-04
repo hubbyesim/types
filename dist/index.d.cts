@@ -12,6 +12,10 @@ declare const userSchemaSpec: {
     gender: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     company: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     coordinates: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    platform: z.ZodOptional<z.ZodNullable<z.ZodEnum<["ios", "android"]>>>;
+    platform_version: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    device_type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    app_version: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     parameters: z.ZodOptional<z.ZodNullable<z.ZodAny>>;
     locale: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phone_model: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -46,6 +50,7 @@ declare const userSchemaSpec: {
         nullable: boolean;
         optional: boolean;
     };
+    profileRef: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     currency: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     receipt_email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     source: z.ZodOptional<z.ZodNullable<z.ZodEnum<["direct", "promo", "platform"]>>>;
@@ -74,12 +79,6 @@ declare const userSchemaSpec: {
         optional: boolean;
         nullable: boolean;
     };
-    profileRef: {
-        _type: "docRef";
-        collection: string;
-        optional: boolean;
-        nullable: boolean;
-    };
     review_requested: {
         _type: "timestamp";
         nullable: boolean;
@@ -90,6 +89,19 @@ declare const userSchemaSpec: {
         nullable: boolean;
         optional: boolean;
     };
+    created_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    updated_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    created_by: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updated_by: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    push_to_start_token: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 };
 
 declare const bookingSchemaSpec: {
@@ -115,10 +127,8 @@ declare const bookingSchemaSpec: {
     email: z.ZodNullable<z.ZodString>;
     phone: z.ZodNullable<z.ZodString>;
     booking_id: z.ZodNullable<z.ZodString>;
-    booking_label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     flight_number: z.ZodOptional<z.ZodString>;
     gender: z.ZodOptional<z.ZodEnum<["M", "F", "O"]>>;
-    package_size: z.ZodOptional<z.ZodString>;
     sent_messages: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
     locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK"]>;
     status: z.ZodEnum<["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED", "UNPAID", "EXPIRED"]>;
@@ -177,11 +187,23 @@ declare const bookingSchemaSpec: {
         nullable: boolean;
         optional: boolean;
     };
-    price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     partner: {
         _type: "docRef";
         collection: string;
     };
+    financial_insights: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        partner_commission_percentage: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        total_commission_amount: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    }, "strip", z.ZodTypeAny, {
+        partner_commission_percentage?: number | null | undefined;
+        total_commission_amount?: number | null | undefined;
+        price?: number | null | undefined;
+    }, {
+        partner_commission_percentage?: number | null | undefined;
+        total_commission_amount?: number | null | undefined;
+        price?: number | null | undefined;
+    }>>>;
     promo_codes: {
         _type: "array";
         of: {
@@ -297,8 +319,25 @@ declare const esimSchemaSpec: {
     coverage_label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     total_data: z.ZodNumber;
     data_left: z.ZodNumber;
+    uuid: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     data_used: z.ZodBoolean;
     status: z.ZodNullable<z.ZodString>;
+    status_history: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
+        telna_esim_status: z.ZodNumber;
+        source: z.ZodString;
+        status: z.ZodString;
+        timestamp: z.ZodType<Date>;
+    }, "strip", z.ZodTypeAny, {
+        timestamp: Date;
+        source: string;
+        status: string;
+        telna_esim_status: number;
+    }, {
+        timestamp: Date;
+        source: string;
+        status: string;
+        telna_esim_status: number;
+    }>, "many">>>;
     name: z.ZodString;
     android_auto: z.ZodBoolean;
     partner_price: z.ZodNullable<z.ZodNumber>;
@@ -343,6 +382,9 @@ declare const paymentSchemaSpec: {
     invoice: z.ZodOptional<z.ZodString>;
     fee: z.ZodOptional<z.ZodNumber>;
     topup: z.ZodBoolean;
+    status: z.ZodOptional<z.ZodEnum<["pending", "processing", "completed", "failed"]>>;
+    payment_intent_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    error_message: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     package_specifications: z.ZodOptional<z.ZodArray<z.ZodObject<{
         package_type: z.ZodOptional<z.ZodString>;
         package_size: z.ZodOptional<z.ZodString>;
@@ -350,16 +392,16 @@ declare const paymentSchemaSpec: {
         destination: z.ZodOptional<z.ZodString>;
         iso3: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        package_size?: string | undefined;
         destination?: string | undefined;
         package_duration?: number | undefined;
         package_type?: string | undefined;
+        package_size?: string | undefined;
         iso3?: string | undefined;
     }, {
-        package_size?: string | undefined;
         destination?: string | undefined;
         package_duration?: number | undefined;
         package_type?: string | undefined;
+        package_size?: string | undefined;
         iso3?: string | undefined;
     }>, "many">>;
     user: {
@@ -634,8 +676,14 @@ declare const promoCodeSchemaSpec: {
     };
     created_by: z.ZodNullable<z.ZodString>;
     updated_by: z.ZodNullable<z.ZodString>;
+    uuid: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     external_id: z.ZodString;
     code: z.ZodString;
+    claimed_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
     allowance_user: z.ZodNumber;
     allowance_total: z.ZodNumber;
     type: z.ZodUnion<[z.ZodNullable<z.ZodEnum<["discount", "booking", "booking_without_destination"]>>, z.ZodString]>;
@@ -755,6 +803,7 @@ declare const partnerSchemaSpec: {
         _type: "object";
         of: {
             account_holder: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            billing_email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             bank_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             iban: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             currency: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -778,6 +827,7 @@ declare const partnerSchemaSpec: {
         administration_fee: z.ZodNullable<z.ZodNumber>;
         income_per_gb: z.ZodNullable<z.ZodNumber>;
         commission_fee: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        commission_percentage: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
         payment_method: z.ZodEnum<["invoice", "direct"]>;
         requires_card: z.ZodNullable<z.ZodBoolean>;
         next_invoice: {
@@ -1251,6 +1301,12 @@ declare const partnerSchemaSpec: {
         nullable: boolean;
         optional: boolean;
     };
+    tag_slugs: {
+        _type: "array";
+        of: z.ZodString;
+        nullable: boolean;
+        optional: boolean;
+    };
     data: {
         _type: "object";
         of: {
@@ -1442,11 +1498,11 @@ declare const reviewSchemaSpec: {
             package_size: z.ZodString;
             package_type: z.ZodEnum<["data-limited", "starter"]>;
         }, "strip", z.ZodTypeAny, {
-            package_size: string;
             package_type: "data-limited" | "starter";
+            package_size: string;
         }, {
-            package_size: string;
             package_type: "data-limited" | "starter";
+            package_size: string;
         }>;
         multipliers: z.ZodOptional<z.ZodObject<{
             quality_based: z.ZodOptional<z.ZodNumber>;
@@ -1460,8 +1516,8 @@ declare const reviewSchemaSpec: {
         }>>;
     }, "strip", z.ZodTypeAny, {
         base_reward: {
-            package_size: string;
             package_type: "data-limited" | "starter";
+            package_size: string;
         };
         multipliers?: {
             quality_based?: number | undefined;
@@ -1469,8 +1525,8 @@ declare const reviewSchemaSpec: {
         } | undefined;
     }, {
         base_reward: {
-            package_size: string;
             package_type: "data-limited" | "starter";
+            package_size: string;
         };
         multipliers?: {
             quality_based?: number | undefined;
@@ -1565,6 +1621,10 @@ declare const HUserSchema: z.ZodObject<{
     gender: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     company: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     coordinates: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    platform: z.ZodOptional<z.ZodNullable<z.ZodEnum<["ios", "android"]>>>;
+    platform_version: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    device_type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    app_version: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     parameters: z.ZodOptional<z.ZodNullable<z.ZodAny>>;
     locale: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phone_model: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -1603,6 +1663,7 @@ declare const HUserSchema: z.ZodObject<{
         }>;
         allowed_keys: string[];
     }>;
+    profileRef: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     currency: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     receipt_email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     source: z.ZodOptional<z.ZodNullable<z.ZodEnum<["direct", "promo", "platform"]>>>;
@@ -1611,9 +1672,13 @@ declare const HUserSchema: z.ZodObject<{
     balance: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     createdAt: z.ZodEffects<z.ZodDate, Date, Date>;
     partner: z.ZodString;
-    profileRef: z.ZodString;
     review_requested: z.ZodEffects<z.ZodDate, Date, Date>;
     last_seen: z.ZodEffects<z.ZodDate, Date, Date>;
+    created_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    created_by: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updated_by: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    push_to_start_token: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     name: string | null;
     email: string | null;
@@ -1629,9 +1694,10 @@ declare const HUserSchema: z.ZodObject<{
     permissions: string[];
     createdAt: Date;
     partner: string;
-    profileRef: string;
     review_requested: Date;
     last_seen: Date;
+    created_at: Date;
+    updated_at: Date;
     id?: string | null | undefined;
     stripe_id?: string | null | undefined;
     referral?: string | null | undefined;
@@ -1640,18 +1706,26 @@ declare const HUserSchema: z.ZodObject<{
     gender?: string | null | undefined;
     company?: string | null | undefined;
     coordinates?: string | null | undefined;
+    ios?: boolean | null | undefined;
+    platform?: "ios" | "android" | null | undefined;
+    platform_version?: string | null | undefined;
+    device_type?: string | null | undefined;
+    app_version?: string | null | undefined;
     parameters?: any;
     locale?: string | null | undefined;
     phone_model?: string | null | undefined;
     phone_os?: string | null | undefined;
     phone_os_version?: string | null | undefined;
-    ios?: boolean | null | undefined;
     has_card_saved?: boolean | null | undefined;
     admin?: boolean | null | undefined;
+    profileRef?: string | null | undefined;
     currency?: string | null | undefined;
     receipt_email?: string | null | undefined;
-    source?: "direct" | "promo" | "platform" | null | undefined;
+    source?: "platform" | "direct" | "promo" | null | undefined;
     balance?: number | null | undefined;
+    created_by?: string | null | undefined;
+    updated_by?: string | null | undefined;
+    push_to_start_token?: string | null | undefined;
 }, {
     name: string | null;
     email: string | null;
@@ -1667,9 +1741,10 @@ declare const HUserSchema: z.ZodObject<{
     permissions: string[];
     createdAt: Date;
     partner: string;
-    profileRef: string;
     review_requested: Date;
     last_seen: Date;
+    created_at: Date;
+    updated_at: Date;
     id?: string | null | undefined;
     stripe_id?: string | null | undefined;
     referral?: string | null | undefined;
@@ -1678,18 +1753,26 @@ declare const HUserSchema: z.ZodObject<{
     gender?: string | null | undefined;
     company?: string | null | undefined;
     coordinates?: string | null | undefined;
+    ios?: boolean | null | undefined;
+    platform?: "ios" | "android" | null | undefined;
+    platform_version?: string | null | undefined;
+    device_type?: string | null | undefined;
+    app_version?: string | null | undefined;
     parameters?: any;
     locale?: string | null | undefined;
     phone_model?: string | null | undefined;
     phone_os?: string | null | undefined;
     phone_os_version?: string | null | undefined;
-    ios?: boolean | null | undefined;
     has_card_saved?: boolean | null | undefined;
     admin?: boolean | null | undefined;
+    profileRef?: string | null | undefined;
     currency?: string | null | undefined;
     receipt_email?: string | null | undefined;
-    source?: "direct" | "promo" | "platform" | null | undefined;
+    source?: "platform" | "direct" | "promo" | null | undefined;
     balance?: number | null | undefined;
+    created_by?: string | null | undefined;
+    updated_by?: string | null | undefined;
+    push_to_start_token?: string | null | undefined;
 }>;
 declare const HBookingSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
@@ -1706,10 +1789,8 @@ declare const HBookingSchema: z.ZodObject<{
     email: z.ZodNullable<z.ZodString>;
     phone: z.ZodNullable<z.ZodString>;
     booking_id: z.ZodNullable<z.ZodString>;
-    booking_label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     flight_number: z.ZodOptional<z.ZodString>;
     gender: z.ZodOptional<z.ZodEnum<["M", "F", "O"]>>;
-    package_size: z.ZodOptional<z.ZodString>;
     sent_messages: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
     locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK"]>;
     status: z.ZodEnum<["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED", "UNPAID", "EXPIRED"]>;
@@ -1763,8 +1844,20 @@ declare const HBookingSchema: z.ZodObject<{
     }>, "many">;
     departure_date: z.ZodEffects<z.ZodDate, Date, Date>;
     return_date: z.ZodEffects<z.ZodDate, Date, Date>;
-    price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     partner: z.ZodString;
+    financial_insights: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        partner_commission_percentage: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        total_commission_amount: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    }, "strip", z.ZodTypeAny, {
+        partner_commission_percentage?: number | null | undefined;
+        total_commission_amount?: number | null | undefined;
+        price?: number | null | undefined;
+    }, {
+        partner_commission_percentage?: number | null | undefined;
+        total_commission_amount?: number | null | undefined;
+        price?: number | null | undefined;
+    }>>>;
     promo_codes: z.ZodArray<z.ZodString, "many">;
     users: z.ZodArray<z.ZodString, "many">;
     esims: z.ZodArray<z.ZodString, "many">;
@@ -1779,11 +1872,11 @@ declare const HBookingSchema: z.ZodObject<{
     email: string | null;
     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
     partner: string;
-    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
     title: string | null;
     pax: number;
     phone: string | null;
@@ -1818,12 +1911,14 @@ declare const HBookingSchema: z.ZodObject<{
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
-    booking_label?: string | null | undefined;
     flight_number?: string | undefined;
-    package_size?: string | undefined;
     sent_messages?: Record<string, any> | undefined;
     import_id?: string | null | undefined;
-    price?: number | null | undefined;
+    financial_insights?: {
+        partner_commission_percentage?: number | null | undefined;
+        total_commission_amount?: number | null | undefined;
+        price?: number | null | undefined;
+    } | null | undefined;
     hubby_foreign_identifiers?: {
         messaging_contact_id: string | null;
     } | null | undefined;
@@ -1831,11 +1926,11 @@ declare const HBookingSchema: z.ZodObject<{
     email: string | null;
     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
     partner: string;
-    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
     title: string | null;
     pax: number;
     phone: string | null;
@@ -1870,12 +1965,14 @@ declare const HBookingSchema: z.ZodObject<{
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
-    booking_label?: string | null | undefined;
     flight_number?: string | undefined;
-    package_size?: string | undefined;
     sent_messages?: Record<string, any> | undefined;
     import_id?: string | null | undefined;
-    price?: number | null | undefined;
+    financial_insights?: {
+        partner_commission_percentage?: number | null | undefined;
+        total_commission_amount?: number | null | undefined;
+        price?: number | null | undefined;
+    } | null | undefined;
     hubby_foreign_identifiers?: {
         messaging_contact_id: string | null;
     } | null | undefined;
@@ -1959,22 +2056,22 @@ declare const HCurrencySchema: z.ZodObject<{
     symbol: string;
     id: string;
     name: string;
-    code: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    code: string;
     rate: number;
     is_default: boolean;
 }, {
     symbol: string;
     id: string;
     name: string;
-    code: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    code: string;
     rate: number;
     is_default: boolean;
 }>;
@@ -1991,8 +2088,25 @@ declare const HESIMSchema: z.ZodObject<{
     coverage_label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     total_data: z.ZodNumber;
     data_left: z.ZodNumber;
+    uuid: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     data_used: z.ZodBoolean;
     status: z.ZodNullable<z.ZodString>;
+    status_history: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
+        telna_esim_status: z.ZodNumber;
+        source: z.ZodString;
+        status: z.ZodString;
+        timestamp: z.ZodType<Date>;
+    }, "strip", z.ZodTypeAny, {
+        timestamp: Date;
+        source: string;
+        status: string;
+        telna_esim_status: number;
+    }, {
+        timestamp: Date;
+        source: string;
+        status: string;
+        telna_esim_status: number;
+    }>, "many">>>;
     name: z.ZodString;
     android_auto: z.ZodBoolean;
     partner_price: z.ZodNullable<z.ZodNumber>;
@@ -2012,12 +2126,12 @@ declare const HESIMSchema: z.ZodObject<{
     name: string;
     promo: string | null;
     partner: string;
-    type: "promo" | "balance" | "code" | "api" | "external" | "payment";
-    status: string | null;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    type: "promo" | "balance" | "code" | "api" | "external" | "payment";
+    status: string | null;
     apn: string | null;
     imsi: number;
     qr: string;
@@ -2036,17 +2150,24 @@ declare const HESIMSchema: z.ZodObject<{
     time_assigned: Date;
     last_updated: Date;
     coverage_label?: string | null | undefined;
+    uuid?: string | null | undefined;
+    status_history?: {
+        timestamp: Date;
+        source: string;
+        status: string;
+        telna_esim_status: number;
+    }[] | null | undefined;
 }, {
     id: string;
     name: string;
     promo: string | null;
     partner: string;
-    type: "promo" | "balance" | "code" | "api" | "external" | "payment";
-    status: string | null;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    type: "promo" | "balance" | "code" | "api" | "external" | "payment";
+    status: string | null;
     apn: string | null;
     imsi: number;
     qr: string;
@@ -2065,6 +2186,13 @@ declare const HESIMSchema: z.ZodObject<{
     time_assigned: Date;
     last_updated: Date;
     coverage_label?: string | null | undefined;
+    uuid?: string | null | undefined;
+    status_history?: {
+        timestamp: Date;
+        source: string;
+        status: string;
+        telna_esim_status: number;
+    }[] | null | undefined;
 }>;
 declare const HPaymentSchema: z.ZodObject<{
     amount: z.ZodNumber;
@@ -2074,6 +2202,9 @@ declare const HPaymentSchema: z.ZodObject<{
     invoice: z.ZodOptional<z.ZodString>;
     fee: z.ZodOptional<z.ZodNumber>;
     topup: z.ZodBoolean;
+    status: z.ZodOptional<z.ZodEnum<["pending", "processing", "completed", "failed"]>>;
+    payment_intent_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    error_message: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     package_specifications: z.ZodOptional<z.ZodArray<z.ZodObject<{
         package_type: z.ZodOptional<z.ZodString>;
         package_size: z.ZodOptional<z.ZodString>;
@@ -2081,16 +2212,16 @@ declare const HPaymentSchema: z.ZodObject<{
         destination: z.ZodOptional<z.ZodString>;
         iso3: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        package_size?: string | undefined;
         destination?: string | undefined;
         package_duration?: number | undefined;
         package_type?: string | undefined;
+        package_size?: string | undefined;
         iso3?: string | undefined;
     }, {
-        package_size?: string | undefined;
         destination?: string | undefined;
         package_duration?: number | undefined;
         package_type?: string | undefined;
+        package_size?: string | undefined;
         iso3?: string | undefined;
     }>, "many">>;
     user: z.ZodString;
@@ -2169,15 +2300,18 @@ declare const HPaymentSchema: z.ZodObject<{
     customer: string;
     topup: boolean;
     id?: string | null | undefined;
+    status?: "pending" | "processing" | "completed" | "failed" | undefined;
     package_specifications?: {
-        package_size?: string | undefined;
         destination?: string | undefined;
         package_duration?: number | undefined;
         package_type?: string | undefined;
+        package_size?: string | undefined;
         iso3?: string | undefined;
     }[] | undefined;
     invoice?: string | undefined;
     fee?: number | undefined;
+    payment_intent_id?: string | null | undefined;
+    error_message?: string | null | undefined;
     app_payment_properties?: {
         promo?: string | undefined;
         booking_id?: string | null | undefined;
@@ -2211,15 +2345,18 @@ declare const HPaymentSchema: z.ZodObject<{
     customer: string;
     topup: boolean;
     id?: string | null | undefined;
+    status?: "pending" | "processing" | "completed" | "failed" | undefined;
     package_specifications?: {
-        package_size?: string | undefined;
         destination?: string | undefined;
         package_duration?: number | undefined;
         package_type?: string | undefined;
+        package_size?: string | undefined;
         iso3?: string | undefined;
     }[] | undefined;
     invoice?: string | undefined;
     fee?: number | undefined;
+    payment_intent_id?: string | null | undefined;
+    error_message?: string | null | undefined;
     app_payment_properties?: {
         promo?: string | undefined;
         booking_id?: string | null | undefined;
@@ -2250,16 +2387,16 @@ declare const HMessageSchema: z.ZodObject<{
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
-    status: "pending" | "sent" | "failed" | "delivered";
     created_at: Date;
     updated_at: Date;
+    status: "pending" | "failed" | "sent" | "delivered";
     key: string;
     method: "email" | "push" | "sms";
 }, {
     id: string;
-    status: "pending" | "sent" | "failed" | "delivered";
     created_at: Date;
     updated_at: Date;
+    status: "pending" | "failed" | "sent" | "delivered";
     key: string;
     method: "email" | "push" | "sms";
 }>;
@@ -2361,13 +2498,13 @@ declare const HPackageSchema: z.ZodObject<{
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     name: string;
     partner: string;
-    type: "data-limited" | "time-limited" | "starter" | "unlimited" | null;
-    is_active: boolean;
-    external_id: string;
     created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    type: "data-limited" | "time-limited" | "starter" | "unlimited" | null;
+    is_active: boolean;
+    external_id: string;
     traffic_policy: string;
     price: number;
     provider: string;
@@ -2410,13 +2547,13 @@ declare const HPackageSchema: z.ZodObject<{
 }, {
     name: string;
     partner: string;
-    type: "data-limited" | "time-limited" | "starter" | "unlimited" | null;
-    is_active: boolean;
-    external_id: string;
     created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    type: "data-limited" | "time-limited" | "starter" | "unlimited" | null;
+    is_active: boolean;
+    external_id: string;
     traffic_policy: string;
     price: number;
     provider: string;
@@ -2464,8 +2601,10 @@ declare const HPromoCodeSchema: z.ZodObject<{
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodNullable<z.ZodString>;
     updated_by: z.ZodNullable<z.ZodString>;
+    uuid: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     external_id: z.ZodString;
     code: z.ZodString;
+    claimed_at: z.ZodEffects<z.ZodDate, Date, Date>;
     allowance_user: z.ZodNumber;
     allowance_total: z.ZodNumber;
     type: z.ZodUnion<[z.ZodNullable<z.ZodEnum<["discount", "booking", "booking_without_destination"]>>, z.ZodString]>;
@@ -2510,16 +2649,17 @@ declare const HPromoCodeSchema: z.ZodObject<{
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
     partner: string;
-    code: string;
-    type: string | null;
-    external_id: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    code: string;
+    type: string | null;
+    external_id: string;
     country: string;
     package: string;
     redeemed_at: Date;
+    claimed_at: Date;
     allowance_user: number;
     allowance_total: number;
     booking: string;
@@ -2527,8 +2667,9 @@ declare const HPromoCodeSchema: z.ZodObject<{
     uuid_usage: string[];
     valid_from: Date;
     valid_to: Date;
-    package_size?: string | undefined;
     countries?: string[] | undefined;
+    uuid?: string | null | undefined;
+    package_size?: string | undefined;
     discount?: number | undefined;
     package_specification?: {
         destination?: string | string[] | undefined;
@@ -2544,16 +2685,17 @@ declare const HPromoCodeSchema: z.ZodObject<{
 }, {
     id: string;
     partner: string;
-    code: string;
-    type: string | null;
-    external_id: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    code: string;
+    type: string | null;
+    external_id: string;
     country: string;
     package: string;
     redeemed_at: Date;
+    claimed_at: Date;
     allowance_user: number;
     allowance_total: number;
     booking: string;
@@ -2561,8 +2703,9 @@ declare const HPromoCodeSchema: z.ZodObject<{
     uuid_usage: string[];
     valid_from: Date;
     valid_to: Date;
-    package_size?: string | undefined;
     countries?: string[] | undefined;
+    uuid?: string | null | undefined;
+    package_size?: string | undefined;
     discount?: number | undefined;
     package_specification?: {
         destination?: string | string[] | undefined;
@@ -2636,17 +2779,20 @@ declare const HPartnerSchema: z.ZodObject<{
     }>;
     banking_details: z.ZodObject<{
         account_holder: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        billing_email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         bank_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         iban: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         currency: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     }, {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     }>;
@@ -2656,6 +2802,7 @@ declare const HPartnerSchema: z.ZodObject<{
         administration_fee: z.ZodNullable<z.ZodNumber>;
         income_per_gb: z.ZodNullable<z.ZodNumber>;
         commission_fee: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        commission_percentage: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
         payment_method: z.ZodEnum<["invoice", "direct"]>;
         requires_card: z.ZodNullable<z.ZodBoolean>;
         next_invoice: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -2832,6 +2979,7 @@ declare const HPartnerSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     }, {
         administration_fee: number | null;
         income_per_gb: number | null;
@@ -2865,6 +3013,7 @@ declare const HPartnerSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     }>;
     visual_identity: z.ZodObject<{
         primary_color: z.ZodString;
@@ -3462,6 +3611,7 @@ declare const HPartnerSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }>, "many">;
+    tag_slugs: z.ZodArray<z.ZodString, "many">;
     data: z.ZodObject<{
         source: z.ZodString;
         manual: z.ZodBoolean;
@@ -3501,11 +3651,11 @@ declare const HPartnerSchema: z.ZodObject<{
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
     name: string;
-    type: string | null;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    type: string | null;
     data: {
         source: string;
         manual: boolean;
@@ -3532,6 +3682,7 @@ declare const HPartnerSchema: z.ZodObject<{
     banking_details: {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     };
@@ -3569,6 +3720,7 @@ declare const HPartnerSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     };
     visual_identity: {
         primary_color: string;
@@ -3688,6 +3840,7 @@ declare const HPartnerSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
+    tag_slugs: string[];
     webhook_settings: {
         enabled: boolean;
         events: {
@@ -3701,11 +3854,11 @@ declare const HPartnerSchema: z.ZodObject<{
 }, {
     id: string;
     name: string;
-    type: string | null;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    type: string | null;
     data: {
         source: string;
         manual: boolean;
@@ -3732,6 +3885,7 @@ declare const HPartnerSchema: z.ZodObject<{
     banking_details: {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     };
@@ -3769,6 +3923,7 @@ declare const HPartnerSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     };
     visual_identity: {
         primary_color: string;
@@ -3888,6 +4043,7 @@ declare const HPartnerSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
+    tag_slugs: string[];
     webhook_settings: {
         enabled?: boolean | undefined;
         url?: string | null | undefined;
@@ -3951,11 +4107,11 @@ declare const HPriceListSchema: z.ZodObject<{
     id: string;
     name: string;
     partner: string;
-    type: "partner" | "consumer";
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    type: "partner" | "consumer";
     description: string | null;
     price_list: {
         type: "data-limited" | "time-limited" | "starter" | "unlimited";
@@ -3975,11 +4131,11 @@ declare const HPriceListSchema: z.ZodObject<{
     id: string;
     name: string;
     partner: string;
-    type: "partner" | "consumer";
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    type: "partner" | "consumer";
     description: string | null;
     price_list: {
         type: "data-limited" | "time-limited" | "starter" | "unlimited";
@@ -4000,6 +4156,7 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
     administration_fee: z.ZodNullable<z.ZodNumber>;
     income_per_gb: z.ZodNullable<z.ZodNumber>;
     commission_fee: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    commission_percentage: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     payment_method: z.ZodEnum<["invoice", "direct"]>;
     requires_card: z.ZodNullable<z.ZodBoolean>;
     next_invoice: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -4176,6 +4333,7 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
         };
     };
     commission_fee?: number | null | undefined;
+    commission_percentage?: number | null | undefined;
 }, {
     administration_fee: number | null;
     income_per_gb: number | null;
@@ -4209,6 +4367,7 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
         };
     };
     commission_fee?: number | null | undefined;
+    commission_percentage?: number | null | undefined;
 }>;
 declare const HApiLogSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
@@ -4357,17 +4516,20 @@ declare const HPartnerAppSchema: z.ZodObject<{
     }>;
     banking_details: z.ZodObject<{
         account_holder: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        billing_email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         bank_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         iban: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         currency: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     }, {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     }>;
@@ -4377,6 +4539,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         administration_fee: z.ZodNullable<z.ZodNumber>;
         income_per_gb: z.ZodNullable<z.ZodNumber>;
         commission_fee: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        commission_percentage: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
         payment_method: z.ZodEnum<["invoice", "direct"]>;
         requires_card: z.ZodNullable<z.ZodBoolean>;
         next_invoice: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -4553,6 +4716,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     }, {
         administration_fee: number | null;
         income_per_gb: number | null;
@@ -4586,6 +4750,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     }>;
     visual_identity: z.ZodObject<{
         primary_color: z.ZodString;
@@ -5183,6 +5348,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }>, "many">;
+    tag_slugs: z.ZodArray<z.ZodString, "many">;
     data: z.ZodObject<{
         source: z.ZodString;
         manual: z.ZodBoolean;
@@ -5222,11 +5388,11 @@ declare const HPartnerAppSchema: z.ZodObject<{
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
     name: string;
-    type: string | null;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    type: string | null;
     data: {
         source: string;
         manual: boolean;
@@ -5253,6 +5419,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     banking_details: {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     };
@@ -5290,6 +5457,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     };
     visual_identity: {
         primary_color: string;
@@ -5409,6 +5577,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
+    tag_slugs: string[];
     webhook_settings: {
         enabled: boolean;
         events: {
@@ -5422,11 +5591,11 @@ declare const HPartnerAppSchema: z.ZodObject<{
 }, {
     id: string;
     name: string;
-    type: string | null;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    type: string | null;
     data: {
         source: string;
         manual: boolean;
@@ -5453,6 +5622,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     banking_details: {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     };
@@ -5490,6 +5660,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     };
     visual_identity: {
         primary_color: string;
@@ -5609,6 +5780,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
+    tag_slugs: string[];
     webhook_settings: {
         enabled?: boolean | undefined;
         url?: string | null | undefined;
@@ -6445,21 +6617,21 @@ declare const HTrafficPolicySchema: z.ZodObject<{
     updated_by: z.ZodString;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     name: string;
-    external_id: string;
     created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    external_id: string;
     provider: string;
     description: string;
     id?: string | null | undefined;
 }, {
     name: string;
-    external_id: string;
     created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    external_id: string;
     provider: string;
     description: string;
     id?: string | null | undefined;
@@ -6551,11 +6723,11 @@ declare const HReviewSchema: z.ZodObject<{
             package_size: z.ZodString;
             package_type: z.ZodEnum<["data-limited", "starter"]>;
         }, "strip", z.ZodTypeAny, {
-            package_size: string;
             package_type: "data-limited" | "starter";
+            package_size: string;
         }, {
-            package_size: string;
             package_type: "data-limited" | "starter";
+            package_size: string;
         }>;
         multipliers: z.ZodOptional<z.ZodObject<{
             quality_based: z.ZodOptional<z.ZodNumber>;
@@ -6569,8 +6741,8 @@ declare const HReviewSchema: z.ZodObject<{
         }>>;
     }, "strip", z.ZodTypeAny, {
         base_reward: {
-            package_size: string;
             package_type: "data-limited" | "starter";
+            package_size: string;
         };
         multipliers?: {
             quality_based?: number | undefined;
@@ -6578,8 +6750,8 @@ declare const HReviewSchema: z.ZodObject<{
         } | undefined;
     }, {
         base_reward: {
-            package_size: string;
             package_type: "data-limited" | "starter";
+            package_size: string;
         };
         multipliers?: {
             quality_based?: number | undefined;
@@ -6599,8 +6771,8 @@ declare const HReviewSchema: z.ZodObject<{
     questions: Record<string, any>;
     reward_strategy: {
         base_reward: {
-            package_size: string;
             package_type: "data-limited" | "starter";
+            package_size: string;
         };
         multipliers?: {
             quality_based?: number | undefined;
@@ -6618,8 +6790,8 @@ declare const HReviewSchema: z.ZodObject<{
     questions: Record<string, any>;
     reward_strategy: {
         base_reward: {
-            package_size: string;
             package_type: "data-limited" | "starter";
+            package_size: string;
         };
         multipliers?: {
             quality_based?: number | undefined;
@@ -6764,17 +6936,20 @@ declare const HRegistrationSchema: z.ZodObject<{
 }>;
 declare const HBankingDetailsSchema: z.ZodObject<{
     account_holder: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    billing_email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     bank_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     iban: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     currency: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     currency?: string | null | undefined;
     account_holder?: string | null | undefined;
+    billing_email?: string | null | undefined;
     bank_name?: string | null | undefined;
     iban?: string | null | undefined;
 }, {
     currency?: string | null | undefined;
     account_holder?: string | null | undefined;
+    billing_email?: string | null | undefined;
     bank_name?: string | null | undefined;
     iban?: string | null | undefined;
 }>;
@@ -6894,11 +7069,11 @@ declare const HRewardStrategySchema: z.ZodObject<{
         package_size: z.ZodString;
         package_type: z.ZodEnum<["data-limited", "starter"]>;
     }, "strip", z.ZodTypeAny, {
-        package_size: string;
         package_type: "data-limited" | "starter";
+        package_size: string;
     }, {
-        package_size: string;
         package_type: "data-limited" | "starter";
+        package_size: string;
     }>;
     multipliers: z.ZodOptional<z.ZodObject<{
         quality_based: z.ZodOptional<z.ZodNumber>;
@@ -6912,8 +7087,8 @@ declare const HRewardStrategySchema: z.ZodObject<{
     }>>;
 }, "strip", z.ZodTypeAny, {
     base_reward: {
-        package_size: string;
         package_type: "data-limited" | "starter";
+        package_size: string;
     };
     multipliers?: {
         quality_based?: number | undefined;
@@ -6921,8 +7096,8 @@ declare const HRewardStrategySchema: z.ZodObject<{
     } | undefined;
 }, {
     base_reward: {
-        package_size: string;
         package_type: "data-limited" | "starter";
+        package_size: string;
     };
     multipliers?: {
         quality_based?: number | undefined;
@@ -6933,11 +7108,11 @@ declare const HBaseRewardSchema: z.ZodObject<{
     package_size: z.ZodString;
     package_type: z.ZodEnum<["data-limited", "starter"]>;
 }, "strip", z.ZodTypeAny, {
-    package_size: string;
     package_type: "data-limited" | "starter";
+    package_size: string;
 }, {
-    package_size: string;
     package_type: "data-limited" | "starter";
+    package_size: string;
 }>;
 declare const HRewardMultipliersSchema: z.ZodOptional<z.ZodObject<{
     quality_based: z.ZodOptional<z.ZodNumber>;
@@ -7136,17 +7311,20 @@ declare const RegistrationSchema: z.ZodObject<{
 }>;
 declare const BankingDetailsSchema: z.ZodObject<{
     account_holder: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    billing_email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     bank_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     iban: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     currency: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     currency?: string | null | undefined;
     account_holder?: string | null | undefined;
+    billing_email?: string | null | undefined;
     bank_name?: string | null | undefined;
     iban?: string | null | undefined;
 }, {
     currency?: string | null | undefined;
     account_holder?: string | null | undefined;
+    billing_email?: string | null | undefined;
     bank_name?: string | null | undefined;
     iban?: string | null | undefined;
 }>;
@@ -7311,11 +7489,11 @@ declare const RewardStrategySchema: z.ZodObject<{
         package_size: z.ZodString;
         package_type: z.ZodEnum<["data-limited", "starter"]>;
     }, "strip", z.ZodTypeAny, {
-        package_size: string;
         package_type: "data-limited" | "starter";
+        package_size: string;
     }, {
-        package_size: string;
         package_type: "data-limited" | "starter";
+        package_size: string;
     }>;
     multipliers: z.ZodOptional<z.ZodObject<{
         quality_based: z.ZodOptional<z.ZodNumber>;
@@ -7329,8 +7507,8 @@ declare const RewardStrategySchema: z.ZodObject<{
     }>>;
 }, "strip", z.ZodTypeAny, {
     base_reward: {
-        package_size: string;
         package_type: "data-limited" | "starter";
+        package_size: string;
     };
     multipliers?: {
         quality_based?: number | undefined;
@@ -7338,8 +7516,8 @@ declare const RewardStrategySchema: z.ZodObject<{
     } | undefined;
 }, {
     base_reward: {
-        package_size: string;
         package_type: "data-limited" | "starter";
+        package_size: string;
     };
     multipliers?: {
         quality_based?: number | undefined;
@@ -7350,11 +7528,11 @@ declare const BaseRewardSchema: z.ZodObject<{
     package_size: z.ZodString;
     package_type: z.ZodEnum<["data-limited", "starter"]>;
 }, "strip", z.ZodTypeAny, {
-    package_size: string;
     package_type: "data-limited" | "starter";
+    package_size: string;
 }, {
-    package_size: string;
     package_type: "data-limited" | "starter";
+    package_size: string;
 }>;
 declare const RewardMultipliersSchema: z.ZodOptional<z.ZodObject<{
     quality_based: z.ZodOptional<z.ZodNumber>;
@@ -7503,17 +7681,20 @@ declare const partnerAppSchema: z.ZodObject<{
     }>;
     banking_details: z.ZodObject<{
         account_holder: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        billing_email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         bank_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         iban: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         currency: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     }, {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     }>;
@@ -7523,6 +7704,7 @@ declare const partnerAppSchema: z.ZodObject<{
         administration_fee: z.ZodNullable<z.ZodNumber>;
         income_per_gb: z.ZodNullable<z.ZodNumber>;
         commission_fee: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        commission_percentage: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
         payment_method: z.ZodEnum<["invoice", "direct"]>;
         requires_card: z.ZodNullable<z.ZodBoolean>;
         next_invoice: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -7699,6 +7881,7 @@ declare const partnerAppSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     }, {
         administration_fee: number | null;
         income_per_gb: number | null;
@@ -7732,6 +7915,7 @@ declare const partnerAppSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     }>;
     visual_identity: z.ZodObject<{
         primary_color: z.ZodString;
@@ -8329,6 +8513,7 @@ declare const partnerAppSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }>, "many">;
+    tag_slugs: z.ZodArray<z.ZodString, "many">;
     data: z.ZodObject<{
         source: z.ZodString;
         manual: z.ZodBoolean;
@@ -8368,11 +8553,11 @@ declare const partnerAppSchema: z.ZodObject<{
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
     name: string;
-    type: string | null;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    type: string | null;
     data: {
         source: string;
         manual: boolean;
@@ -8399,6 +8584,7 @@ declare const partnerAppSchema: z.ZodObject<{
     banking_details: {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     };
@@ -8436,6 +8622,7 @@ declare const partnerAppSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     };
     visual_identity: {
         primary_color: string;
@@ -8555,6 +8742,7 @@ declare const partnerAppSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
+    tag_slugs: string[];
     webhook_settings: {
         enabled: boolean;
         events: {
@@ -8568,11 +8756,11 @@ declare const partnerAppSchema: z.ZodObject<{
 }, {
     id: string;
     name: string;
-    type: string | null;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    type: string | null;
     data: {
         source: string;
         manual: boolean;
@@ -8599,6 +8787,7 @@ declare const partnerAppSchema: z.ZodObject<{
     banking_details: {
         currency?: string | null | undefined;
         account_holder?: string | null | undefined;
+        billing_email?: string | null | undefined;
         bank_name?: string | null | undefined;
         iban?: string | null | undefined;
     };
@@ -8636,6 +8825,7 @@ declare const partnerAppSchema: z.ZodObject<{
             };
         };
         commission_fee?: number | null | undefined;
+        commission_percentage?: number | null | undefined;
     };
     visual_identity: {
         primary_color: string;
@@ -8755,6 +8945,7 @@ declare const partnerAppSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
+    tag_slugs: string[];
     webhook_settings: {
         enabled?: boolean | undefined;
         url?: string | null | undefined;

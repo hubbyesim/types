@@ -154,7 +154,6 @@ function buildClientSchema(spec, path = []) {
 }
 var PARTNER_COLLECTION = "/companies/hubby/partners";
 var USER_COLLECTION = "users";
-var PROFILE_COLLECTION = "/companies/hubby/profiles";
 var PACKAGE_COLLECTION = "/companies/hubby/packages";
 var PROMO_CODE_COLLECTION = "/companies/hubby/promo_codes";
 var COUNTRY_COLLECTION = "countries";
@@ -215,6 +214,10 @@ var userSchemaSpec = markAsSchemaSpec({
   gender: zod.z.string().nullable().optional(),
   company: zod.z.string().nullable().optional(),
   coordinates: zod.z.string().nullable().optional(),
+  platform: zod.z.enum(["ios", "android"]).nullable().optional(),
+  platform_version: zod.z.string().nullable().optional(),
+  device_type: zod.z.string().nullable().optional(),
+  app_version: zod.z.string().nullable().optional(),
   parameters: zod.z.any().nullable().optional(),
   locale: zod.z.string().nullable().optional(),
   phone_model: zod.z.string().nullable().optional(),
@@ -224,6 +227,7 @@ var userSchemaSpec = markAsSchemaSpec({
   has_card_saved: zod.z.boolean().nullable().optional(),
   admin: zod.z.boolean().nullable().optional(),
   api_keys: apiKeysObjectSpec,
+  profileRef: zod.z.string().nullable().optional(),
   currency: zod.z.string().nullable().optional(),
   receipt_email: zod.z.string().nullable().optional(),
   source: zod.z.enum(["direct", "promo", "platform"]).nullable().optional(),
@@ -232,9 +236,13 @@ var userSchemaSpec = markAsSchemaSpec({
   balance: zod.z.number().nullable().optional(),
   createdAt: { _type: "timestamp" },
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, optional: true, nullable: true },
-  profileRef: { _type: "docRef", collection: PROFILE_COLLECTION, optional: true, nullable: true },
   review_requested: timestampNullableOptional,
-  last_seen: timestampNullableOptional
+  last_seen: timestampNullableOptional,
+  created_at: timestampNullableOptional,
+  updated_at: timestampNullableOptional,
+  created_by: zod.z.string().nullable().optional(),
+  updated_by: zod.z.string().nullable().optional(),
+  push_to_start_token: zod.z.string().nullable().optional()
 });
 var SUPPORTED_LOCALES = [
   "en-US",
@@ -280,8 +288,10 @@ var promoCodeSchemaSpec = markAsSchemaSpec({
   created_by: zod.z.string().nullable(),
   updated_by: zod.z.string().nullable(),
   // PromoCode specific fields
+  uuid: zod.z.string().uuid().nullable().optional(),
   external_id: zod.z.string(),
   code: zod.z.string(),
+  claimed_at: timestampNullableOptional,
   allowance_user: zod.z.number(),
   allowance_total: zod.z.number(),
   type: zod.z.enum(["discount", "booking", "booking_without_destination"]).nullable().or(zod.z.string()),
@@ -322,6 +332,11 @@ var communicationOptionsSchema = zod.z.object({
   should_send_message: zod.z.boolean(),
   channels: zod.z.array(communicationChannelSchema)
 });
+var financialInsightsSchema = zod.z.object({
+  partner_commission_percentage: zod.z.number().nullable().optional(),
+  total_commission_amount: zod.z.number().nullable().optional(),
+  price: zod.z.number().nullable().optional()
+}).nullable().optional();
 var bookingSchemaSpec = markAsSchemaSpec({
   id: zod.z.string().optional(),
   external_id: zod.z.string().nullable().optional(),
@@ -337,10 +352,8 @@ var bookingSchemaSpec = markAsSchemaSpec({
   email: zod.z.string().email().nullable(),
   phone: zod.z.string().nullable(),
   booking_id: zod.z.string().nullable(),
-  booking_label: zod.z.string().nullable().optional(),
   flight_number: zod.z.string().optional(),
   gender: zod.z.enum(["M", "F", "O"]).optional(),
-  package_size: zod.z.string().optional(),
   sent_messages: zod.z.record(zod.z.any()).optional(),
   locale: supportedLocalesSchema,
   status: bookingStatusSchema,
@@ -367,8 +380,8 @@ var bookingSchemaSpec = markAsSchemaSpec({
   package_specifications: zod.z.array(packageSpecificationSchema).min(1),
   departure_date: timestampRequired,
   return_date: timestampNullable,
-  price: zod.z.number().nullable().optional(),
   partner: { _type: "docRef", collection: PARTNER_COLLECTION },
+  financial_insights: financialInsightsSchema,
   promo_codes: {
     _type: "array",
     of: { _type: "docRef", collection: PROMO_CODE_COLLECTION }
@@ -425,6 +438,13 @@ var currencySchemaSpec = markAsSchemaSpec({
   // Whether this is the default currency
   is_default: zod.z.boolean().describe("Whether this is the default currency")
 });
+var statusHistorySchema = zod.z.object({
+  telna_esim_status: zod.z.number(),
+  source: zod.z.string(),
+  status: zod.z.string(),
+  timestamp: timestampRequired
+});
+var esimStatusHistorySchema = markAsSchemaSpec(zod.z.array(statusHistorySchema).nullable().optional());
 var esimSchemaSpec = markAsSchemaSpec({
   id: zod.z.string(),
   created_at: timestampRequired,
@@ -439,8 +459,10 @@ var esimSchemaSpec = markAsSchemaSpec({
   coverage_label: zod.z.string().nullable().optional(),
   total_data: zod.z.number(),
   data_left: zod.z.number(),
+  uuid: zod.z.string().uuid().nullable().optional(),
   data_used: zod.z.boolean(),
   status: zod.z.string().nullable(),
+  status_history: esimStatusHistorySchema,
   name: zod.z.string(),
   android_auto: zod.z.boolean(),
   partner_price: zod.z.number().nullable(),
@@ -468,6 +490,12 @@ var paymentSchemaSpec = markAsSchemaSpec({
   invoice: zod.z.string().optional(),
   fee: zod.z.number().optional(),
   topup: zod.z.boolean(),
+  status: zod.z.enum(["pending", "processing", "completed", "failed"]).optional(),
+  // 'pending' | 'processing' | 'completed' | 'failed'
+  payment_intent_id: zod.z.string().nullable().optional(),
+  // Stripe PaymentIntent ID
+  error_message: zod.z.string().nullable().optional(),
+  // Error message
   // Common resolved package specification (same format for all sources)
   package_specifications: zod.z.array(zod.z.object({
     package_type: zod.z.string().optional(),
@@ -595,6 +623,7 @@ var registrationSchema = zod.z.object({
 });
 var bankingDetailsSchema = zod.z.object({
   account_holder: zod.z.string().nullable().optional(),
+  billing_email: zod.z.string().nullable().optional(),
   bank_name: zod.z.string().nullable().optional(),
   iban: zod.z.string().nullable().optional(),
   currency: zod.z.string().nullable().optional()
@@ -760,6 +789,7 @@ var financialPropertiesSchemaSpec = markAsSchemaSpec({
   administration_fee: zod.z.number().nullable(),
   income_per_gb: zod.z.number().nullable(),
   commission_fee: zod.z.number().nullable().optional(),
+  commission_percentage: zod.z.number().nullable().optional(),
   payment_method: zod.z.enum(["invoice", "direct"]),
   requires_card: zod.z.boolean().nullable(),
   next_invoice: timestampNullableOptional,
@@ -921,6 +951,13 @@ var partnerSchemaSpec = markAsSchemaSpec({
   tags: {
     _type: "array",
     of: tagModelSpec,
+    nullable: true,
+    optional: true
+  },
+  // Tag slugs
+  tag_slugs: {
+    _type: "array",
+    of: zod.z.string(),
     nullable: true,
     optional: true
   },

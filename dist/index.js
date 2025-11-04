@@ -237,6 +237,10 @@ var userSchemaSpec = markAsSchemaSpec({
   gender: z.string().nullable().optional(),
   company: z.string().nullable().optional(),
   coordinates: z.string().nullable().optional(),
+  platform: z.enum(["ios", "android"]).nullable().optional(),
+  platform_version: z.string().nullable().optional(),
+  device_type: z.string().nullable().optional(),
+  app_version: z.string().nullable().optional(),
   parameters: z.any().nullable().optional(),
   locale: z.string().nullable().optional(),
   phone_model: z.string().nullable().optional(),
@@ -246,6 +250,7 @@ var userSchemaSpec = markAsSchemaSpec({
   has_card_saved: z.boolean().nullable().optional(),
   admin: z.boolean().nullable().optional(),
   api_keys: apiKeysObjectSpec,
+  profileRef: z.string().nullable().optional(),
   currency: z.string().nullable().optional(),
   receipt_email: z.string().nullable().optional(),
   source: z.enum(["direct", "promo", "platform"]).nullable().optional(),
@@ -254,9 +259,13 @@ var userSchemaSpec = markAsSchemaSpec({
   balance: z.number().nullable().optional(),
   createdAt: { _type: "timestamp" },
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, optional: true, nullable: true },
-  profileRef: { _type: "docRef", collection: PROFILE_COLLECTION, optional: true, nullable: true },
   review_requested: timestampNullableOptional,
-  last_seen: timestampNullableOptional
+  last_seen: timestampNullableOptional,
+  created_at: timestampNullableOptional,
+  updated_at: timestampNullableOptional,
+  created_by: z.string().nullable().optional(),
+  updated_by: z.string().nullable().optional(),
+  push_to_start_token: z.string().nullable().optional()
 });
 var SUPPORTED_LOCALES = [
   "en-US",
@@ -302,8 +311,10 @@ var promoCodeSchemaSpec = markAsSchemaSpec({
   created_by: z.string().nullable(),
   updated_by: z.string().nullable(),
   // PromoCode specific fields
+  uuid: z.string().uuid().nullable().optional(),
   external_id: z.string(),
   code: z.string(),
+  claimed_at: timestampNullableOptional,
   allowance_user: z.number(),
   allowance_total: z.number(),
   type: z.enum(["discount", "booking", "booking_without_destination"]).nullable().or(z.string()),
@@ -344,6 +355,11 @@ var communicationOptionsSchema = z.object({
   should_send_message: z.boolean(),
   channels: z.array(communicationChannelSchema)
 });
+var financialInsightsSchema = z.object({
+  partner_commission_percentage: z.number().nullable().optional(),
+  total_commission_amount: z.number().nullable().optional(),
+  price: z.number().nullable().optional()
+}).nullable().optional();
 var bookingSchemaSpec = markAsSchemaSpec({
   id: z.string().optional(),
   external_id: z.string().nullable().optional(),
@@ -359,10 +375,8 @@ var bookingSchemaSpec = markAsSchemaSpec({
   email: z.string().email().nullable(),
   phone: z.string().nullable(),
   booking_id: z.string().nullable(),
-  booking_label: z.string().nullable().optional(),
   flight_number: z.string().optional(),
   gender: z.enum(["M", "F", "O"]).optional(),
-  package_size: z.string().optional(),
   sent_messages: z.record(z.any()).optional(),
   locale: supportedLocalesSchema,
   status: bookingStatusSchema,
@@ -389,8 +403,8 @@ var bookingSchemaSpec = markAsSchemaSpec({
   package_specifications: z.array(packageSpecificationSchema).min(1),
   departure_date: timestampRequired,
   return_date: timestampNullable,
-  price: z.number().nullable().optional(),
   partner: { _type: "docRef", collection: PARTNER_COLLECTION },
+  financial_insights: financialInsightsSchema,
   promo_codes: {
     _type: "array",
     of: { _type: "docRef", collection: PROMO_CODE_COLLECTION }
@@ -447,6 +461,13 @@ var currencySchemaSpec = markAsSchemaSpec({
   // Whether this is the default currency
   is_default: z.boolean().describe("Whether this is the default currency")
 });
+var statusHistorySchema = z.object({
+  telna_esim_status: z.number(),
+  source: z.string(),
+  status: z.string(),
+  timestamp: timestampRequired
+});
+var esimStatusHistorySchema = markAsSchemaSpec(z.array(statusHistorySchema).nullable().optional());
 var esimSchemaSpec = markAsSchemaSpec({
   id: z.string(),
   created_at: timestampRequired,
@@ -461,8 +482,10 @@ var esimSchemaSpec = markAsSchemaSpec({
   coverage_label: z.string().nullable().optional(),
   total_data: z.number(),
   data_left: z.number(),
+  uuid: z.string().uuid().nullable().optional(),
   data_used: z.boolean(),
   status: z.string().nullable(),
+  status_history: esimStatusHistorySchema,
   name: z.string(),
   android_auto: z.boolean(),
   partner_price: z.number().nullable(),
@@ -490,6 +513,12 @@ var paymentSchemaSpec = markAsSchemaSpec({
   invoice: z.string().optional(),
   fee: z.number().optional(),
   topup: z.boolean(),
+  status: z.enum(["pending", "processing", "completed", "failed"]).optional(),
+  // 'pending' | 'processing' | 'completed' | 'failed'
+  payment_intent_id: z.string().nullable().optional(),
+  // Stripe PaymentIntent ID
+  error_message: z.string().nullable().optional(),
+  // Error message
   // Common resolved package specification (same format for all sources)
   package_specifications: z.array(z.object({
     package_type: z.string().optional(),
@@ -627,6 +656,7 @@ var registrationSchema = z.object({
 });
 var bankingDetailsSchema = z.object({
   account_holder: z.string().nullable().optional(),
+  billing_email: z.string().nullable().optional(),
   bank_name: z.string().nullable().optional(),
   iban: z.string().nullable().optional(),
   currency: z.string().nullable().optional()
@@ -792,6 +822,7 @@ var financialPropertiesSchemaSpec = markAsSchemaSpec({
   administration_fee: z.number().nullable(),
   income_per_gb: z.number().nullable(),
   commission_fee: z.number().nullable().optional(),
+  commission_percentage: z.number().nullable().optional(),
   payment_method: z.enum(["invoice", "direct"]),
   requires_card: z.boolean().nullable(),
   next_invoice: timestampNullableOptional,
@@ -953,6 +984,13 @@ var partnerSchemaSpec = markAsSchemaSpec({
   tags: {
     _type: "array",
     of: tagModelSpec,
+    nullable: true,
+    optional: true
+  },
+  // Tag slugs
+  tag_slugs: {
+    _type: "array",
+    of: z.string(),
     nullable: true,
     optional: true
   },

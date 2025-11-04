@@ -9,6 +9,16 @@ import {
     timestampRequired
 } from './common';
 
+
+export const statusHistorySchema = z.object({
+    telna_esim_status: z.number(),
+    source: z.string(),
+    status: z.string(),
+    timestamp: timestampRequired as unknown as z.ZodType<Date>,
+})
+
+export const esimStatusHistorySchema = markAsSchemaSpec(z.array(statusHistorySchema).nullable().optional());
+
 // Define the eSIM schema spec
 export const esimSchemaSpec = markAsSchemaSpec({
     id: z.string(),
@@ -25,8 +35,10 @@ export const esimSchemaSpec = markAsSchemaSpec({
     coverage_label: z.string().nullable().optional(),
     total_data: z.number(),
     data_left: z.number(),
+    uuid: z.string().uuid().nullable().optional(),
     data_used: z.boolean(),
     status: z.string().nullable(),
+    status_history: esimStatusHistorySchema,
     name: z.string(),
     android_auto: z.boolean(),
     partner_price: z.number().nullable(),
