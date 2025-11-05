@@ -1172,10 +1172,10 @@ var bondioCoverageCountrySchema = zod.z.object({
   operators: zod.z.array(bondioCoverageOperatorSchema)
 });
 var bondioCoverageSchema = zod.z.object({
-  id: zod.z.string(),
-  name: zod.z.string(),
-  label: zod.z.string(),
-  countries: zod.z.array(bondioCoverageCountrySchema)
+  id: zod.z.string().nullable().optional(),
+  name: zod.z.string().nullable().optional(),
+  label: zod.z.string().nullable().optional(),
+  countries: zod.z.array(bondioCoverageCountrySchema).nullable().optional()
 });
 markAsSchemaSpec({
   id: zod.z.string(),
@@ -1231,6 +1231,7 @@ var telnaPackageTemplateSchemaSpec = markAsSchemaSpec({
   },
   status: zod.z.string().nullable().optional(),
   deactivated_date: zod.z.number().nullable().optional(),
+  inventory: zod.z.number().nullable().optional(),
   apn: zod.z.string().nullable().optional(),
   created_at: timestampRequired,
   updated_at: timestampRequired,

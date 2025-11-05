@@ -1629,6 +1629,7 @@ declare const telnaPackageTemplateSchemaSpec: {
     };
     status: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     deactivated_date: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    inventory: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     apn: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     created_at: {
         _type: "timestamp";
@@ -1659,10 +1660,10 @@ declare const bondioPackageTemplateSchemaSpec: {
     coverage: {
         _type: "object";
         of: {
-            id: z.ZodString;
-            name: z.ZodString;
-            label: z.ZodString;
-            countries: z.ZodArray<z.ZodObject<{
+            id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            countries: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
                 name: z.ZodString;
                 iso2: z.ZodString;
                 iso3: z.ZodString;
@@ -1692,7 +1693,7 @@ declare const bondioPackageTemplateSchemaSpec: {
                     name: string;
                     supported_rats: string[];
                 }[];
-            }>, "many">;
+            }>, "many">>>;
         };
     };
     created_at: {
@@ -7119,6 +7120,7 @@ declare const HTelnaPackageTemplateSchema: z.ZodObject<{
     }>;
     status: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     deactivated_date: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    inventory: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     apn: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -7151,6 +7153,7 @@ declare const HTelnaPackageTemplateSchema: z.ZodObject<{
     latest_available_date?: number | null | undefined;
     notes?: string | null | undefined;
     deactivated_date?: number | null | undefined;
+    inventory?: number | null | undefined;
 }, {
     created_at: Date;
     updated_at: Date;
@@ -7178,6 +7181,7 @@ declare const HTelnaPackageTemplateSchema: z.ZodObject<{
     latest_available_date?: number | null | undefined;
     notes?: string | null | undefined;
     deactivated_date?: number | null | undefined;
+    inventory?: number | null | undefined;
 }>;
 declare const HBondioPackageTemplateSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -7193,10 +7197,10 @@ declare const HBondioPackageTemplateSchema: z.ZodObject<{
     archived_at: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     coverage: z.ZodObject<{
-        id: z.ZodString;
-        name: z.ZodString;
-        label: z.ZodString;
-        countries: z.ZodArray<z.ZodObject<{
+        id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        countries: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
             name: z.ZodString;
             iso2: z.ZodString;
             iso3: z.ZodString;
@@ -7226,11 +7230,11 @@ declare const HBondioPackageTemplateSchema: z.ZodObject<{
                 name: string;
                 supported_rats: string[];
             }[];
-        }>, "many">;
+        }>, "many">>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
-        id: string;
-        name: string;
-        countries: {
+        id?: string | null | undefined;
+        name?: string | null | undefined;
+        countries?: {
             name: string;
             iso3: string;
             iso2: string;
@@ -7238,12 +7242,12 @@ declare const HBondioPackageTemplateSchema: z.ZodObject<{
                 name: string;
                 supported_rats: string[];
             }[];
-        }[];
-        label: string;
+        }[] | null | undefined;
+        label?: string | null | undefined;
     }, {
-        id: string;
-        name: string;
-        countries: {
+        id?: string | null | undefined;
+        name?: string | null | undefined;
+        countries?: {
             name: string;
             iso3: string;
             iso2: string;
@@ -7251,8 +7255,8 @@ declare const HBondioPackageTemplateSchema: z.ZodObject<{
                 name: string;
                 supported_rats: string[];
             }[];
-        }[];
-        label: string;
+        }[] | null | undefined;
+        label?: string | null | undefined;
     }>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -7262,9 +7266,9 @@ declare const HBondioPackageTemplateSchema: z.ZodObject<{
     created_at: Date;
     updated_at: Date;
     coverage: {
-        id: string;
-        name: string;
-        countries: {
+        id?: string | null | undefined;
+        name?: string | null | undefined;
+        countries?: {
             name: string;
             iso3: string;
             iso2: string;
@@ -7272,8 +7276,8 @@ declare const HBondioPackageTemplateSchema: z.ZodObject<{
                 name: string;
                 supported_rats: string[];
             }[];
-        }[];
-        label: string;
+        }[] | null | undefined;
+        label?: string | null | undefined;
     };
     id?: string | null | undefined;
     name?: string | null | undefined;
@@ -7293,9 +7297,9 @@ declare const HBondioPackageTemplateSchema: z.ZodObject<{
     created_at: Date;
     updated_at: Date;
     coverage: {
-        id: string;
-        name: string;
-        countries: {
+        id?: string | null | undefined;
+        name?: string | null | undefined;
+        countries?: {
             name: string;
             iso3: string;
             iso2: string;
@@ -7303,8 +7307,8 @@ declare const HBondioPackageTemplateSchema: z.ZodObject<{
                 name: string;
                 supported_rats: string[];
             }[];
-        }[];
-        label: string;
+        }[] | null | undefined;
+        label?: string | null | undefined;
     };
     id?: string | null | undefined;
     name?: string | null | undefined;
@@ -9527,6 +9531,7 @@ declare const telnaPackageTemplateAppSchema: z.ZodObject<{
     }>;
     status: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     deactivated_date: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    inventory: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     apn: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -9559,6 +9564,7 @@ declare const telnaPackageTemplateAppSchema: z.ZodObject<{
     latest_available_date?: number | null | undefined;
     notes?: string | null | undefined;
     deactivated_date?: number | null | undefined;
+    inventory?: number | null | undefined;
 }, {
     created_at: Date;
     updated_at: Date;
@@ -9586,6 +9592,7 @@ declare const telnaPackageTemplateAppSchema: z.ZodObject<{
     latest_available_date?: number | null | undefined;
     notes?: string | null | undefined;
     deactivated_date?: number | null | undefined;
+    inventory?: number | null | undefined;
 }>;
 declare const bondioPackageTemplateAppSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -9601,10 +9608,10 @@ declare const bondioPackageTemplateAppSchema: z.ZodObject<{
     archived_at: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     coverage: z.ZodObject<{
-        id: z.ZodString;
-        name: z.ZodString;
-        label: z.ZodString;
-        countries: z.ZodArray<z.ZodObject<{
+        id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        countries: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
             name: z.ZodString;
             iso2: z.ZodString;
             iso3: z.ZodString;
@@ -9634,11 +9641,11 @@ declare const bondioPackageTemplateAppSchema: z.ZodObject<{
                 name: string;
                 supported_rats: string[];
             }[];
-        }>, "many">;
+        }>, "many">>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
-        id: string;
-        name: string;
-        countries: {
+        id?: string | null | undefined;
+        name?: string | null | undefined;
+        countries?: {
             name: string;
             iso3: string;
             iso2: string;
@@ -9646,12 +9653,12 @@ declare const bondioPackageTemplateAppSchema: z.ZodObject<{
                 name: string;
                 supported_rats: string[];
             }[];
-        }[];
-        label: string;
+        }[] | null | undefined;
+        label?: string | null | undefined;
     }, {
-        id: string;
-        name: string;
-        countries: {
+        id?: string | null | undefined;
+        name?: string | null | undefined;
+        countries?: {
             name: string;
             iso3: string;
             iso2: string;
@@ -9659,8 +9666,8 @@ declare const bondioPackageTemplateAppSchema: z.ZodObject<{
                 name: string;
                 supported_rats: string[];
             }[];
-        }[];
-        label: string;
+        }[] | null | undefined;
+        label?: string | null | undefined;
     }>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -9670,9 +9677,9 @@ declare const bondioPackageTemplateAppSchema: z.ZodObject<{
     created_at: Date;
     updated_at: Date;
     coverage: {
-        id: string;
-        name: string;
-        countries: {
+        id?: string | null | undefined;
+        name?: string | null | undefined;
+        countries?: {
             name: string;
             iso3: string;
             iso2: string;
@@ -9680,8 +9687,8 @@ declare const bondioPackageTemplateAppSchema: z.ZodObject<{
                 name: string;
                 supported_rats: string[];
             }[];
-        }[];
-        label: string;
+        }[] | null | undefined;
+        label?: string | null | undefined;
     };
     id?: string | null | undefined;
     name?: string | null | undefined;
@@ -9701,9 +9708,9 @@ declare const bondioPackageTemplateAppSchema: z.ZodObject<{
     created_at: Date;
     updated_at: Date;
     coverage: {
-        id: string;
-        name: string;
-        countries: {
+        id?: string | null | undefined;
+        name?: string | null | undefined;
+        countries?: {
             name: string;
             iso3: string;
             iso2: string;
@@ -9711,8 +9718,8 @@ declare const bondioPackageTemplateAppSchema: z.ZodObject<{
                 name: string;
                 supported_rats: string[];
             }[];
-        }[];
-        label: string;
+        }[] | null | undefined;
+        label?: string | null | undefined;
     };
     id?: string | null | undefined;
     name?: string | null | undefined;
