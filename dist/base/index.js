@@ -1148,6 +1148,100 @@ var destinationBundleSchemaSpec = markAsSchemaSpec({
   created_by: z.string().nullable(),
   updated_by: z.string().nullable()
 });
+var bondioCoverageOperatorSchema = z.object({
+  name: z.string(),
+  supported_rats: z.array(z.string())
+});
+var bondioCoverageCountrySchema = z.object({
+  name: z.string(),
+  iso2: z.string(),
+  iso3: z.string(),
+  operators: z.array(bondioCoverageOperatorSchema)
+});
+var bondioCoverageSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  label: z.string(),
+  countries: z.array(bondioCoverageCountrySchema)
+});
+markAsSchemaSpec({
+  id: z.string(),
+  name: z.string(),
+  label: z.string(),
+  countries: {
+    _type: "array",
+    of: {
+      _type: "object",
+      of: {
+        name: z.string(),
+        iso2: z.string(),
+        iso3: z.string(),
+        operators: {
+          _type: "array",
+          of: {
+            _type: "object",
+            of: {
+              name: z.string(),
+              supported_rats: {
+                _type: "array",
+                of: z.string()
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+});
+var telnaPackageTemplateSchemaSpec = markAsSchemaSpec({
+  id: z.number(),
+  name: z.string(),
+  traffic_policy: z.number(),
+  supported_countries: z.array(z.string()),
+  voice_usage_allowance: z.number(),
+  data_usage_allowance: z.number(),
+  sms_usage_allowance: z.number(),
+  activation_time_allowance: z.number(),
+  activation_type: z.string(),
+  earliest_activation_date: z.number(),
+  earliest_available_date: z.number(),
+  latest_available_date: z.number(),
+  notes: z.string(),
+  time_allowance: {
+    _type: "object",
+    of: {
+      duration: z.number(),
+      unit: z.string()
+    }
+  },
+  status: z.string(),
+  deactivated_date: z.number().nullable().optional(),
+  apn: z.string(),
+  created_at: timestampRequired,
+  updated_at: timestampRequired,
+  created_by: z.string().nullable(),
+  updated_by: z.string().nullable()
+});
+var bondioPackageTemplateSchemaSpec = markAsSchemaSpec({
+  id: z.string(),
+  name: z.string(),
+  voice_minutes: z.number(),
+  data_mega_bytes: z.number(),
+  sms_messages: z.number(),
+  period_days: z.number(),
+  period_iterations: z.number(),
+  throttled_speed_kbps: z.number(),
+  archived_at: z.number().nullable(),
+  label: z.string(),
+  coverage: {
+    _type: "object",
+    of: bondioCoverageSchema.shape
+  },
+  created_at: timestampRequired,
+  updated_at: timestampRequired,
+  created_by: z.string().nullable(),
+  updated_by: z.string().nullable()
+});
 
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
@@ -1181,6 +1275,8 @@ var HReviewSchema = buildClientSchema(reviewSchemaSpec);
 var HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
 var HDestinationSchema = buildClientSchema(destinationSchemaSpec);
 var HDestinationBundleSchema = buildClientSchema(destinationBundleSchemaSpec);
+var HTelnaPackageTemplateSchema = buildClientSchema(telnaPackageTemplateSchemaSpec);
+var HBondioPackageTemplateSchema = buildClientSchema(bondioPackageTemplateSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1199,6 +1295,6 @@ var HRewardMultipliersSchema = rewardMultipliersSchema;
 var HRewardPackageTypeSchema = rewardPackageTypeSchema;
 var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
-export { HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBaseRewardSchema, HBondioPackageSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HDestinationBundleSchema, HDestinationSchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HReviewSchema, HReviewSubmissionSchema, HRewardMultipliersSchema, HRewardPackageTypeSchema, HRewardStrategySchema, HRoleSchema, HScheduleFilterSchema, HTagSchema, HTelnaPackageSchema, HTrafficPolicySchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES };
+export { HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBaseRewardSchema, HBondioPackageSchema, HBondioPackageTemplateSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HDestinationBundleSchema, HDestinationSchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HReviewSchema, HReviewSubmissionSchema, HRewardMultipliersSchema, HRewardPackageTypeSchema, HRewardStrategySchema, HRoleSchema, HScheduleFilterSchema, HTagSchema, HTelnaPackageSchema, HTelnaPackageTemplateSchema, HTrafficPolicySchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES };
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.js.map

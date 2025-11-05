@@ -1161,6 +1161,100 @@ var destinationBundleSchemaSpec = markAsSchemaSpec({
   created_by: zod.z.string().nullable(),
   updated_by: zod.z.string().nullable()
 });
+var bondioCoverageOperatorSchema = zod.z.object({
+  name: zod.z.string(),
+  supported_rats: zod.z.array(zod.z.string())
+});
+var bondioCoverageCountrySchema = zod.z.object({
+  name: zod.z.string(),
+  iso2: zod.z.string(),
+  iso3: zod.z.string(),
+  operators: zod.z.array(bondioCoverageOperatorSchema)
+});
+var bondioCoverageSchema = zod.z.object({
+  id: zod.z.string(),
+  name: zod.z.string(),
+  label: zod.z.string(),
+  countries: zod.z.array(bondioCoverageCountrySchema)
+});
+markAsSchemaSpec({
+  id: zod.z.string(),
+  name: zod.z.string(),
+  label: zod.z.string(),
+  countries: {
+    _type: "array",
+    of: {
+      _type: "object",
+      of: {
+        name: zod.z.string(),
+        iso2: zod.z.string(),
+        iso3: zod.z.string(),
+        operators: {
+          _type: "array",
+          of: {
+            _type: "object",
+            of: {
+              name: zod.z.string(),
+              supported_rats: {
+                _type: "array",
+                of: zod.z.string()
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+});
+var telnaPackageTemplateSchemaSpec = markAsSchemaSpec({
+  id: zod.z.number(),
+  name: zod.z.string(),
+  traffic_policy: zod.z.number(),
+  supported_countries: zod.z.array(zod.z.string()),
+  voice_usage_allowance: zod.z.number(),
+  data_usage_allowance: zod.z.number(),
+  sms_usage_allowance: zod.z.number(),
+  activation_time_allowance: zod.z.number(),
+  activation_type: zod.z.string(),
+  earliest_activation_date: zod.z.number(),
+  earliest_available_date: zod.z.number(),
+  latest_available_date: zod.z.number(),
+  notes: zod.z.string(),
+  time_allowance: {
+    _type: "object",
+    of: {
+      duration: zod.z.number(),
+      unit: zod.z.string()
+    }
+  },
+  status: zod.z.string(),
+  deactivated_date: zod.z.number().nullable().optional(),
+  apn: zod.z.string(),
+  created_at: timestampRequired,
+  updated_at: timestampRequired,
+  created_by: zod.z.string().nullable(),
+  updated_by: zod.z.string().nullable()
+});
+var bondioPackageTemplateSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string(),
+  name: zod.z.string(),
+  voice_minutes: zod.z.number(),
+  data_mega_bytes: zod.z.number(),
+  sms_messages: zod.z.number(),
+  period_days: zod.z.number(),
+  period_iterations: zod.z.number(),
+  throttled_speed_kbps: zod.z.number(),
+  archived_at: zod.z.number().nullable(),
+  label: zod.z.string(),
+  coverage: {
+    _type: "object",
+    of: bondioCoverageSchema.shape
+  },
+  created_at: timestampRequired,
+  updated_at: timestampRequired,
+  created_by: zod.z.string().nullable(),
+  updated_by: zod.z.string().nullable()
+});
 function createConvertJSToFirestore(db) {
   return function convertJSToFirestore2(input, spec) {
     if (input === void 0 || input === null)
@@ -1454,6 +1548,8 @@ var HReviewSchema = buildClientSchema(reviewSchemaSpec);
 var HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
 var HDestinationSchema = buildClientSchema(destinationSchemaSpec);
 var HDestinationBundleSchema = buildClientSchema(destinationBundleSchemaSpec);
+var HTelnaPackageTemplateSchema = buildClientSchema(telnaPackageTemplateSchemaSpec);
+var HBondioPackageTemplateSchema = buildClientSchema(bondioPackageTemplateSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1518,6 +1614,8 @@ var ReviewSchema = buildServerSchema(reviewSchemaSpec);
 var ReviewSubmissionSchema = buildServerSchema(reviewSubmissionSchemaSpec);
 var DestinationSchema = buildServerSchema(destinationSchemaSpec);
 var DestinationBundleSchema = buildServerSchema(destinationBundleSchemaSpec);
+var TelnaPackageTemplateSchema = buildServerSchema(telnaPackageTemplateSchemaSpec);
+var BondioPackageTemplateSchema = buildServerSchema(bondioPackageTemplateSchemaSpec);
 var AddressSchema = addressSchema;
 var RegistrationSchema = registrationSchema;
 var BankingDetailsSchema = bankingDetailsSchema;
@@ -1562,6 +1660,8 @@ var promoCodeToFirestore = (promoCode) => {
 var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 var destinationAppSchema = buildClientSchema(destinationSchemaSpec);
 var destinationBundleAppSchema = buildClientSchema(destinationBundleSchemaSpec);
+var telnaPackageTemplateAppSchema = buildClientSchema(telnaPackageTemplateSchemaSpec);
+var bondioPackageTemplateAppSchema = buildClientSchema(bondioPackageTemplateSchemaSpec);
 var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
 exports.API_LOG_COLLECTION = API_LOG_COLLECTION;
@@ -1572,6 +1672,7 @@ exports.BOOKING_COLLECTION = BOOKING_COLLECTION;
 exports.BankingDetailsSchema = BankingDetailsSchema;
 exports.BaseRewardSchema = BaseRewardSchema;
 exports.BondioPackageSchema = BondioPackageSchema;
+exports.BondioPackageTemplateSchema = BondioPackageTemplateSchema;
 exports.BookingSchema = BookingSchema;
 exports.BookingStatusSchema = BookingStatusSchema;
 exports.COUNTRY_COLLECTION = COUNTRY_COLLECTION;
@@ -1593,6 +1694,7 @@ exports.HApiLogSchema = HApiLogSchema;
 exports.HBankingDetailsSchema = HBankingDetailsSchema;
 exports.HBaseRewardSchema = HBaseRewardSchema;
 exports.HBondioPackageSchema = HBondioPackageSchema;
+exports.HBondioPackageTemplateSchema = HBondioPackageTemplateSchema;
 exports.HBookingSchema = HBookingSchema;
 exports.HBookingStatusSchema = HBookingStatusSchema;
 exports.HCommunicationChannelSchema = HCommunicationChannelSchema;
@@ -1629,6 +1731,7 @@ exports.HRoleSchema = HRoleSchema;
 exports.HScheduleFilterSchema = HScheduleFilterSchema;
 exports.HTagSchema = HTagSchema;
 exports.HTelnaPackageSchema = HTelnaPackageSchema;
+exports.HTelnaPackageTemplateSchema = HTelnaPackageTemplateSchema;
 exports.HTrafficPolicySchema = HTrafficPolicySchema;
 exports.HUserSchema = HUserSchema;
 exports.HVisualIdentityBannerSchema = HVisualIdentityBannerSchema;
@@ -1669,6 +1772,7 @@ exports.ScheduleSchema = ScheduleSchema;
 exports.TRAFFIC_POLICY_COLLECTION = TRAFFIC_POLICY_COLLECTION;
 exports.TagSchema = TagSchema;
 exports.TelnaPackageSchema = TelnaPackageSchema;
+exports.TelnaPackageTemplateSchema = TelnaPackageTemplateSchema;
 exports.TrafficPolicySchema = TrafficPolicySchema;
 exports.USER_COLLECTION = USER_COLLECTION;
 exports.UserFirestoreSchema = UserFirestoreSchema;
@@ -1678,6 +1782,8 @@ exports.VisualIdentityBannersSchema = VisualIdentityBannersSchema;
 exports.VisualIdentitySchema = VisualIdentitySchema;
 exports.analyticsSpec = analyticsSpec;
 exports.apiLogSchemaSpec = apiLogSchemaSpec;
+exports.bondioPackageTemplateAppSchema = bondioPackageTemplateAppSchema;
+exports.bondioPackageTemplateSchemaSpec = bondioPackageTemplateSchemaSpec;
 exports.bookingSchemaSpec = bookingSchemaSpec;
 exports.countrySchemaSpec = countrySchemaSpec;
 exports.createConvertFirestoreToJS = createConvertFirestoreToJS;
@@ -1705,6 +1811,8 @@ exports.promoCodeSchemaSpec = promoCodeSchemaSpec;
 exports.promoCodeToFirestore = promoCodeToFirestore;
 exports.reviewSchemaSpec = reviewSchemaSpec;
 exports.reviewSubmissionSchemaSpec = reviewSubmissionSchemaSpec;
+exports.telnaPackageTemplateAppSchema = telnaPackageTemplateAppSchema;
+exports.telnaPackageTemplateSchemaSpec = telnaPackageTemplateSchemaSpec;
 exports.userFromFirestore = userFromFirestore;
 exports.userSchemaSpec = userSchemaSpec;
 exports.userToFirestore = userToFirestore;

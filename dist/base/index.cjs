@@ -1150,6 +1150,100 @@ var destinationBundleSchemaSpec = markAsSchemaSpec({
   created_by: zod.z.string().nullable(),
   updated_by: zod.z.string().nullable()
 });
+var bondioCoverageOperatorSchema = zod.z.object({
+  name: zod.z.string(),
+  supported_rats: zod.z.array(zod.z.string())
+});
+var bondioCoverageCountrySchema = zod.z.object({
+  name: zod.z.string(),
+  iso2: zod.z.string(),
+  iso3: zod.z.string(),
+  operators: zod.z.array(bondioCoverageOperatorSchema)
+});
+var bondioCoverageSchema = zod.z.object({
+  id: zod.z.string(),
+  name: zod.z.string(),
+  label: zod.z.string(),
+  countries: zod.z.array(bondioCoverageCountrySchema)
+});
+markAsSchemaSpec({
+  id: zod.z.string(),
+  name: zod.z.string(),
+  label: zod.z.string(),
+  countries: {
+    _type: "array",
+    of: {
+      _type: "object",
+      of: {
+        name: zod.z.string(),
+        iso2: zod.z.string(),
+        iso3: zod.z.string(),
+        operators: {
+          _type: "array",
+          of: {
+            _type: "object",
+            of: {
+              name: zod.z.string(),
+              supported_rats: {
+                _type: "array",
+                of: zod.z.string()
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+});
+var telnaPackageTemplateSchemaSpec = markAsSchemaSpec({
+  id: zod.z.number(),
+  name: zod.z.string(),
+  traffic_policy: zod.z.number(),
+  supported_countries: zod.z.array(zod.z.string()),
+  voice_usage_allowance: zod.z.number(),
+  data_usage_allowance: zod.z.number(),
+  sms_usage_allowance: zod.z.number(),
+  activation_time_allowance: zod.z.number(),
+  activation_type: zod.z.string(),
+  earliest_activation_date: zod.z.number(),
+  earliest_available_date: zod.z.number(),
+  latest_available_date: zod.z.number(),
+  notes: zod.z.string(),
+  time_allowance: {
+    _type: "object",
+    of: {
+      duration: zod.z.number(),
+      unit: zod.z.string()
+    }
+  },
+  status: zod.z.string(),
+  deactivated_date: zod.z.number().nullable().optional(),
+  apn: zod.z.string(),
+  created_at: timestampRequired,
+  updated_at: timestampRequired,
+  created_by: zod.z.string().nullable(),
+  updated_by: zod.z.string().nullable()
+});
+var bondioPackageTemplateSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string(),
+  name: zod.z.string(),
+  voice_minutes: zod.z.number(),
+  data_mega_bytes: zod.z.number(),
+  sms_messages: zod.z.number(),
+  period_days: zod.z.number(),
+  period_iterations: zod.z.number(),
+  throttled_speed_kbps: zod.z.number(),
+  archived_at: zod.z.number().nullable(),
+  label: zod.z.string(),
+  coverage: {
+    _type: "object",
+    of: bondioCoverageSchema.shape
+  },
+  created_at: timestampRequired,
+  updated_at: timestampRequired,
+  created_by: zod.z.string().nullable(),
+  updated_by: zod.z.string().nullable()
+});
 
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
@@ -1183,6 +1277,8 @@ var HReviewSchema = buildClientSchema(reviewSchemaSpec);
 var HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
 var HDestinationSchema = buildClientSchema(destinationSchemaSpec);
 var HDestinationBundleSchema = buildClientSchema(destinationBundleSchemaSpec);
+var HTelnaPackageTemplateSchema = buildClientSchema(telnaPackageTemplateSchemaSpec);
+var HBondioPackageTemplateSchema = buildClientSchema(bondioPackageTemplateSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1207,6 +1303,7 @@ exports.HApiLogSchema = HApiLogSchema;
 exports.HBankingDetailsSchema = HBankingDetailsSchema;
 exports.HBaseRewardSchema = HBaseRewardSchema;
 exports.HBondioPackageSchema = HBondioPackageSchema;
+exports.HBondioPackageTemplateSchema = HBondioPackageTemplateSchema;
 exports.HBookingSchema = HBookingSchema;
 exports.HBookingStatusSchema = HBookingStatusSchema;
 exports.HCommunicationChannelSchema = HCommunicationChannelSchema;
@@ -1243,6 +1340,7 @@ exports.HRoleSchema = HRoleSchema;
 exports.HScheduleFilterSchema = HScheduleFilterSchema;
 exports.HTagSchema = HTagSchema;
 exports.HTelnaPackageSchema = HTelnaPackageSchema;
+exports.HTelnaPackageTemplateSchema = HTelnaPackageTemplateSchema;
 exports.HTrafficPolicySchema = HTrafficPolicySchema;
 exports.HUserSchema = HUserSchema;
 exports.HVisualIdentityBannerSchema = HVisualIdentityBannerSchema;

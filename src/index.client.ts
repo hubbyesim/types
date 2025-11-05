@@ -53,6 +53,7 @@ import {
   rewardPackageTypeSchema
 } from './specs/review';
 import { destinationSchemaSpec, destinationBundleSchemaSpec } from './specs/destination';
+import { telnaPackageTemplateSchemaSpec, bondioPackageTemplateSchemaSpec } from './specs/package_template';
 
 
 /** ZOD SCHEMAS */
@@ -87,6 +88,8 @@ export const HReviewSchema = buildClientSchema(reviewSchemaSpec);
 export const HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
 export const HDestinationSchema = buildClientSchema(destinationSchemaSpec);
 export const HDestinationBundleSchema = buildClientSchema(destinationBundleSchemaSpec);
+export const HTelnaPackageTemplateSchema = buildClientSchema(telnaPackageTemplateSchemaSpec);
+export const HBondioPackageTemplateSchema = buildClientSchema(bondioPackageTemplateSchemaSpec);
 // Additional lower-level schemas
 export const HAddressSchema = addressSchema;
 export const HRegistrationSchema = registrationSchema;
@@ -126,6 +129,8 @@ export type HReview = z.infer<typeof HReviewSchema>;
 export type HReviewSubmission = z.infer<typeof HReviewSubmissionSchema>;
 export type HDestination = z.infer<typeof HDestinationSchema>;
 export type HDestinationBundle = z.infer<typeof HDestinationBundleSchema>;
+export type HTelnaPackageTemplate = z.infer<typeof HTelnaPackageTemplateSchema>;
+export type HBondioPackageTemplate = z.infer<typeof HBondioPackageTemplateSchema>;
 // Additional lower-level types
 export type HAddress = z.infer<typeof HAddressSchema>;
 export type HRegistration = z.infer<typeof HRegistrationSchema>;

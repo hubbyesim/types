@@ -1604,6 +1604,107 @@ declare const destinationBundleSchemaSpec: {
     updated_by: z.ZodNullable<z.ZodString>;
 };
 
+declare const telnaPackageTemplateSchemaSpec: {
+    id: z.ZodNumber;
+    name: z.ZodString;
+    traffic_policy: z.ZodNumber;
+    supported_countries: z.ZodArray<z.ZodString, "many">;
+    voice_usage_allowance: z.ZodNumber;
+    data_usage_allowance: z.ZodNumber;
+    sms_usage_allowance: z.ZodNumber;
+    activation_time_allowance: z.ZodNumber;
+    activation_type: z.ZodString;
+    earliest_activation_date: z.ZodNumber;
+    earliest_available_date: z.ZodNumber;
+    latest_available_date: z.ZodNumber;
+    notes: z.ZodString;
+    time_allowance: {
+        _type: "object";
+        of: {
+            duration: z.ZodNumber;
+            unit: z.ZodString;
+        };
+    };
+    status: z.ZodString;
+    deactivated_date: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    apn: z.ZodString;
+    created_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    updated_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    created_by: z.ZodNullable<z.ZodString>;
+    updated_by: z.ZodNullable<z.ZodString>;
+};
+declare const bondioPackageTemplateSchemaSpec: {
+    id: z.ZodString;
+    name: z.ZodString;
+    voice_minutes: z.ZodNumber;
+    data_mega_bytes: z.ZodNumber;
+    sms_messages: z.ZodNumber;
+    period_days: z.ZodNumber;
+    period_iterations: z.ZodNumber;
+    throttled_speed_kbps: z.ZodNumber;
+    archived_at: z.ZodNullable<z.ZodNumber>;
+    label: z.ZodString;
+    coverage: {
+        _type: "object";
+        of: {
+            id: z.ZodString;
+            name: z.ZodString;
+            label: z.ZodString;
+            countries: z.ZodArray<z.ZodObject<{
+                name: z.ZodString;
+                iso2: z.ZodString;
+                iso3: z.ZodString;
+                operators: z.ZodArray<z.ZodObject<{
+                    name: z.ZodString;
+                    supported_rats: z.ZodArray<z.ZodString, "many">;
+                }, "strip", z.ZodTypeAny, {
+                    name: string;
+                    supported_rats: string[];
+                }, {
+                    name: string;
+                    supported_rats: string[];
+                }>, "many">;
+            }, "strip", z.ZodTypeAny, {
+                name: string;
+                iso3: string;
+                iso2: string;
+                operators: {
+                    name: string;
+                    supported_rats: string[];
+                }[];
+            }, {
+                name: string;
+                iso3: string;
+                iso2: string;
+                operators: {
+                    name: string;
+                    supported_rats: string[];
+                }[];
+            }>, "many">;
+        };
+    };
+    created_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    updated_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    created_by: z.ZodNullable<z.ZodString>;
+    updated_by: z.ZodNullable<z.ZodString>;
+};
+
 /** ZOD SCHEMAS */
 declare const HUserSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -6986,6 +7087,224 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     priority?: number | undefined;
     is_visible?: boolean | undefined;
 }>;
+declare const HTelnaPackageTemplateSchema: z.ZodObject<{
+    id: z.ZodNumber;
+    name: z.ZodString;
+    traffic_policy: z.ZodNumber;
+    supported_countries: z.ZodArray<z.ZodString, "many">;
+    voice_usage_allowance: z.ZodNumber;
+    data_usage_allowance: z.ZodNumber;
+    sms_usage_allowance: z.ZodNumber;
+    activation_time_allowance: z.ZodNumber;
+    activation_type: z.ZodString;
+    earliest_activation_date: z.ZodNumber;
+    earliest_available_date: z.ZodNumber;
+    latest_available_date: z.ZodNumber;
+    notes: z.ZodString;
+    time_allowance: z.ZodObject<{
+        duration: z.ZodNumber;
+        unit: z.ZodString;
+    }, z.UnknownKeysParam, z.ZodTypeAny, {
+        duration: number;
+        unit: string;
+    }, {
+        duration: number;
+        unit: string;
+    }>;
+    status: z.ZodString;
+    deactivated_date: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    apn: z.ZodString;
+    created_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    created_by: z.ZodNullable<z.ZodString>;
+    updated_by: z.ZodNullable<z.ZodString>;
+}, z.UnknownKeysParam, z.ZodTypeAny, {
+    id: number;
+    name: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    updated_by: string | null;
+    status: string;
+    traffic_policy: number;
+    apn: string;
+    supported_countries: string[];
+    voice_usage_allowance: number;
+    data_usage_allowance: number;
+    sms_usage_allowance: number;
+    activation_time_allowance: number;
+    activation_type: string;
+    earliest_activation_date: number;
+    earliest_available_date: number;
+    latest_available_date: number;
+    notes: string;
+    time_allowance: {
+        duration: number;
+        unit: string;
+    };
+    deactivated_date?: number | null | undefined;
+}, {
+    id: number;
+    name: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    updated_by: string | null;
+    status: string;
+    traffic_policy: number;
+    apn: string;
+    supported_countries: string[];
+    voice_usage_allowance: number;
+    data_usage_allowance: number;
+    sms_usage_allowance: number;
+    activation_time_allowance: number;
+    activation_type: string;
+    earliest_activation_date: number;
+    earliest_available_date: number;
+    latest_available_date: number;
+    notes: string;
+    time_allowance: {
+        duration: number;
+        unit: string;
+    };
+    deactivated_date?: number | null | undefined;
+}>;
+declare const HBondioPackageTemplateSchema: z.ZodObject<{
+    id: z.ZodString;
+    name: z.ZodString;
+    voice_minutes: z.ZodNumber;
+    data_mega_bytes: z.ZodNumber;
+    sms_messages: z.ZodNumber;
+    period_days: z.ZodNumber;
+    period_iterations: z.ZodNumber;
+    throttled_speed_kbps: z.ZodNumber;
+    archived_at: z.ZodNullable<z.ZodNumber>;
+    label: z.ZodString;
+    coverage: z.ZodObject<{
+        id: z.ZodString;
+        name: z.ZodString;
+        label: z.ZodString;
+        countries: z.ZodArray<z.ZodObject<{
+            name: z.ZodString;
+            iso2: z.ZodString;
+            iso3: z.ZodString;
+            operators: z.ZodArray<z.ZodObject<{
+                name: z.ZodString;
+                supported_rats: z.ZodArray<z.ZodString, "many">;
+            }, "strip", z.ZodTypeAny, {
+                name: string;
+                supported_rats: string[];
+            }, {
+                name: string;
+                supported_rats: string[];
+            }>, "many">;
+        }, "strip", z.ZodTypeAny, {
+            name: string;
+            iso3: string;
+            iso2: string;
+            operators: {
+                name: string;
+                supported_rats: string[];
+            }[];
+        }, {
+            name: string;
+            iso3: string;
+            iso2: string;
+            operators: {
+                name: string;
+                supported_rats: string[];
+            }[];
+        }>, "many">;
+    }, z.UnknownKeysParam, z.ZodTypeAny, {
+        id: string;
+        name: string;
+        countries: {
+            name: string;
+            iso3: string;
+            iso2: string;
+            operators: {
+                name: string;
+                supported_rats: string[];
+            }[];
+        }[];
+        label: string;
+    }, {
+        id: string;
+        name: string;
+        countries: {
+            name: string;
+            iso3: string;
+            iso2: string;
+            operators: {
+                name: string;
+                supported_rats: string[];
+            }[];
+        }[];
+        label: string;
+    }>;
+    created_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    created_by: z.ZodNullable<z.ZodString>;
+    updated_by: z.ZodNullable<z.ZodString>;
+}, z.UnknownKeysParam, z.ZodTypeAny, {
+    id: string;
+    name: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    updated_by: string | null;
+    label: string;
+    voice_minutes: number;
+    data_mega_bytes: number;
+    sms_messages: number;
+    period_days: number;
+    period_iterations: number;
+    throttled_speed_kbps: number;
+    archived_at: number | null;
+    coverage: {
+        id: string;
+        name: string;
+        countries: {
+            name: string;
+            iso3: string;
+            iso2: string;
+            operators: {
+                name: string;
+                supported_rats: string[];
+            }[];
+        }[];
+        label: string;
+    };
+}, {
+    id: string;
+    name: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    updated_by: string | null;
+    label: string;
+    voice_minutes: number;
+    data_mega_bytes: number;
+    sms_messages: number;
+    period_days: number;
+    period_iterations: number;
+    throttled_speed_kbps: number;
+    archived_at: number | null;
+    coverage: {
+        id: string;
+        name: string;
+        countries: {
+            name: string;
+            iso3: string;
+            iso2: string;
+            operators: {
+                name: string;
+                supported_rats: string[];
+            }[];
+        }[];
+        label: string;
+    };
+}>;
 declare const HAddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     city: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -7230,6 +7549,8 @@ type HReview = z.infer<typeof HReviewSchema>;
 type HReviewSubmission = z.infer<typeof HReviewSubmissionSchema>;
 type HDestination = z.infer<typeof HDestinationSchema>;
 type HDestinationBundle = z.infer<typeof HDestinationBundleSchema>;
+type HTelnaPackageTemplate = z.infer<typeof HTelnaPackageTemplateSchema>;
+type HBondioPackageTemplate = z.infer<typeof HBondioPackageTemplateSchema>;
 type HAddress = z.infer<typeof HAddressSchema>;
 type HRegistration = z.infer<typeof HRegistrationSchema>;
 type HBankingDetails = z.infer<typeof HBankingDetailsSchema>;
@@ -7364,6 +7685,8 @@ declare const ReviewSchema: z.ZodTypeAny;
 declare const ReviewSubmissionSchema: z.ZodTypeAny;
 declare const DestinationSchema: z.ZodTypeAny;
 declare const DestinationBundleSchema: z.ZodTypeAny;
+declare const TelnaPackageTemplateSchema: z.ZodTypeAny;
+declare const BondioPackageTemplateSchema: z.ZodTypeAny;
 declare const AddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     city: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -7654,6 +7977,8 @@ type Review = z.infer<typeof ReviewSchema>;
 type ReviewSubmission = z.infer<typeof ReviewSubmissionSchema>;
 type Destination = z.infer<typeof DestinationSchema>;
 type DestinationBundle = z.infer<typeof DestinationBundleSchema>;
+type TelnaPackageTemplate = z.infer<typeof TelnaPackageTemplateSchema>;
+type BondioPackageTemplate = z.infer<typeof BondioPackageTemplateSchema>;
 type Address = z.infer<typeof AddressSchema>;
 type Registration = z.infer<typeof RegistrationSchema>;
 type BankingDetails = z.infer<typeof BankingDetailsSchema>;
@@ -9158,7 +9483,225 @@ declare const destinationBundleAppSchema: z.ZodObject<{
     priority?: number | undefined;
     is_visible?: boolean | undefined;
 }>;
+declare const telnaPackageTemplateAppSchema: z.ZodObject<{
+    id: z.ZodNumber;
+    name: z.ZodString;
+    traffic_policy: z.ZodNumber;
+    supported_countries: z.ZodArray<z.ZodString, "many">;
+    voice_usage_allowance: z.ZodNumber;
+    data_usage_allowance: z.ZodNumber;
+    sms_usage_allowance: z.ZodNumber;
+    activation_time_allowance: z.ZodNumber;
+    activation_type: z.ZodString;
+    earliest_activation_date: z.ZodNumber;
+    earliest_available_date: z.ZodNumber;
+    latest_available_date: z.ZodNumber;
+    notes: z.ZodString;
+    time_allowance: z.ZodObject<{
+        duration: z.ZodNumber;
+        unit: z.ZodString;
+    }, z.UnknownKeysParam, z.ZodTypeAny, {
+        duration: number;
+        unit: string;
+    }, {
+        duration: number;
+        unit: string;
+    }>;
+    status: z.ZodString;
+    deactivated_date: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    apn: z.ZodString;
+    created_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    created_by: z.ZodNullable<z.ZodString>;
+    updated_by: z.ZodNullable<z.ZodString>;
+}, z.UnknownKeysParam, z.ZodTypeAny, {
+    id: number;
+    name: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    updated_by: string | null;
+    status: string;
+    traffic_policy: number;
+    apn: string;
+    supported_countries: string[];
+    voice_usage_allowance: number;
+    data_usage_allowance: number;
+    sms_usage_allowance: number;
+    activation_time_allowance: number;
+    activation_type: string;
+    earliest_activation_date: number;
+    earliest_available_date: number;
+    latest_available_date: number;
+    notes: string;
+    time_allowance: {
+        duration: number;
+        unit: string;
+    };
+    deactivated_date?: number | null | undefined;
+}, {
+    id: number;
+    name: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    updated_by: string | null;
+    status: string;
+    traffic_policy: number;
+    apn: string;
+    supported_countries: string[];
+    voice_usage_allowance: number;
+    data_usage_allowance: number;
+    sms_usage_allowance: number;
+    activation_time_allowance: number;
+    activation_type: string;
+    earliest_activation_date: number;
+    earliest_available_date: number;
+    latest_available_date: number;
+    notes: string;
+    time_allowance: {
+        duration: number;
+        unit: string;
+    };
+    deactivated_date?: number | null | undefined;
+}>;
+declare const bondioPackageTemplateAppSchema: z.ZodObject<{
+    id: z.ZodString;
+    name: z.ZodString;
+    voice_minutes: z.ZodNumber;
+    data_mega_bytes: z.ZodNumber;
+    sms_messages: z.ZodNumber;
+    period_days: z.ZodNumber;
+    period_iterations: z.ZodNumber;
+    throttled_speed_kbps: z.ZodNumber;
+    archived_at: z.ZodNullable<z.ZodNumber>;
+    label: z.ZodString;
+    coverage: z.ZodObject<{
+        id: z.ZodString;
+        name: z.ZodString;
+        label: z.ZodString;
+        countries: z.ZodArray<z.ZodObject<{
+            name: z.ZodString;
+            iso2: z.ZodString;
+            iso3: z.ZodString;
+            operators: z.ZodArray<z.ZodObject<{
+                name: z.ZodString;
+                supported_rats: z.ZodArray<z.ZodString, "many">;
+            }, "strip", z.ZodTypeAny, {
+                name: string;
+                supported_rats: string[];
+            }, {
+                name: string;
+                supported_rats: string[];
+            }>, "many">;
+        }, "strip", z.ZodTypeAny, {
+            name: string;
+            iso3: string;
+            iso2: string;
+            operators: {
+                name: string;
+                supported_rats: string[];
+            }[];
+        }, {
+            name: string;
+            iso3: string;
+            iso2: string;
+            operators: {
+                name: string;
+                supported_rats: string[];
+            }[];
+        }>, "many">;
+    }, z.UnknownKeysParam, z.ZodTypeAny, {
+        id: string;
+        name: string;
+        countries: {
+            name: string;
+            iso3: string;
+            iso2: string;
+            operators: {
+                name: string;
+                supported_rats: string[];
+            }[];
+        }[];
+        label: string;
+    }, {
+        id: string;
+        name: string;
+        countries: {
+            name: string;
+            iso3: string;
+            iso2: string;
+            operators: {
+                name: string;
+                supported_rats: string[];
+            }[];
+        }[];
+        label: string;
+    }>;
+    created_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    created_by: z.ZodNullable<z.ZodString>;
+    updated_by: z.ZodNullable<z.ZodString>;
+}, z.UnknownKeysParam, z.ZodTypeAny, {
+    id: string;
+    name: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    updated_by: string | null;
+    label: string;
+    voice_minutes: number;
+    data_mega_bytes: number;
+    sms_messages: number;
+    period_days: number;
+    period_iterations: number;
+    throttled_speed_kbps: number;
+    archived_at: number | null;
+    coverage: {
+        id: string;
+        name: string;
+        countries: {
+            name: string;
+            iso3: string;
+            iso2: string;
+            operators: {
+                name: string;
+                supported_rats: string[];
+            }[];
+        }[];
+        label: string;
+    };
+}, {
+    id: string;
+    name: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    updated_by: string | null;
+    label: string;
+    voice_minutes: number;
+    data_mega_bytes: number;
+    sms_messages: number;
+    period_days: number;
+    period_iterations: number;
+    throttled_speed_kbps: number;
+    archived_at: number | null;
+    coverage: {
+        id: string;
+        name: string;
+        countries: {
+            name: string;
+            iso3: string;
+            iso2: string;
+            operators: {
+                name: string;
+                supported_rats: string[];
+            }[];
+        }[];
+        label: string;
+    };
+}>;
 type SupportedLocales = typeof SUPPORTED_LOCALES$1[number];
 declare const SUPPORTED_LOCALES: readonly ["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK"];
 
-export { API_LOG_COLLECTION, Address, AddressSchema, Analytics, AnalyticsSchema, ApiLog, ApiLogApiRequest, ApiLogApiResponse, ApiLogSchema, BOOKING_COLLECTION, BankingDetails, BankingDetailsSchema, BaseReward, BaseRewardSchema, BondioPackage, BondioPackageSchema, Booking, BookingApiRequest, BookingApiResponse, BookingSchema, BookingStatus, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannel, CommunicationChannelSchema, CommunicationOptions, CommunicationOptionsSchema, Country, CountrySchema, Currency, CurrencySchema, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, Destination, DestinationBundle, DestinationBundleSchema, DestinationSchema, ESIM, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBaseReward, HBaseRewardSchema, HBondioPackage, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HDestination, HDestinationBundle, HDestinationBundleSchema, HDestinationSchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HReview, HReviewSchema, HReviewSubmission, HReviewSubmissionSchema, HRewardMultipliers, HRewardMultipliersSchema, HRewardPackageType, HRewardPackageTypeSchema, HRewardStrategy, HRewardStrategySchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModel, HubbyModelApp, HubbyModelFirestore, HubbyModelSchema, MESSAGE_COLLECTION, Message, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, Package, PackagePrice, PackagePriceSchema, PackageSchema, PackageSpecification, Partner, PartnerApiRequest, PartnerApiResponse, PartnerContact, PartnerContactSchema, PartnerData, PartnerDataSchema, PartnerPackageSpecification, PartnerPackageSpecificationSchema, PartnerSchema, Payment, PaymentSchema, PlatformSettings, PlatformSettingsSchema, PriceList, PriceListApiRequest, PriceListApiResponse, PriceListSchema, PromoCode, PromoCodeSchema, PromoPackageSpecificationSchema, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, ROLE_COLLECTION, Registration, RegistrationSchema, Review, ReviewSchema, ReviewSubmission, ReviewSubmissionSchema, RewardMultipliers, RewardMultipliersSchema, RewardPackageType, RewardPackageTypeSchema, RewardStrategy, RewardStrategySchema, SUPPORTED_LOCALES, Schedule, ScheduleFilter, ScheduleFilterSchema, ScheduleSchema, SupportedLocales, TRAFFIC_POLICY_COLLECTION, Tag, TagSchema, TelnaPackage, TelnaPackageSchema, TrafficPolicy, TrafficPolicySchema, USER_COLLECTION, User, UserFirestore, UserFirestoreSchema, UserSchema, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerSchema, VisualIdentityBannerStrategy, VisualIdentityBanners, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, apiLogSchemaSpec, bookingSchemaSpec, countrySchemaSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, currencySchemaSpec, destinationAppSchema, destinationBundleAppSchema, destinationBundleSchemaSpec, destinationSchemaSpec, esimSchemaSpec, messageSchemaSpec, packageSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, paymentSchemaSpec, priceListFromFirestore, priceListSchemaSpec, priceListToFirestore, promoCodeFromFirestore, promoCodeSchemaSpec, promoCodeToFirestore, reviewSchemaSpec, reviewSubmissionSchemaSpec, userFromFirestore, userSchemaSpec, userToFirestore };
+export { API_LOG_COLLECTION, Address, AddressSchema, Analytics, AnalyticsSchema, ApiLog, ApiLogApiRequest, ApiLogApiResponse, ApiLogSchema, BOOKING_COLLECTION, BankingDetails, BankingDetailsSchema, BaseReward, BaseRewardSchema, BondioPackage, BondioPackageSchema, BondioPackageTemplate, BondioPackageTemplateSchema, Booking, BookingApiRequest, BookingApiResponse, BookingSchema, BookingStatus, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannel, CommunicationChannelSchema, CommunicationOptions, CommunicationOptionsSchema, Country, CountrySchema, Currency, CurrencySchema, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, Destination, DestinationBundle, DestinationBundleSchema, DestinationSchema, ESIM, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBaseReward, HBaseRewardSchema, HBondioPackage, HBondioPackageSchema, HBondioPackageTemplate, HBondioPackageTemplateSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HDestination, HDestinationBundle, HDestinationBundleSchema, HDestinationSchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HReview, HReviewSchema, HReviewSubmission, HReviewSubmissionSchema, HRewardMultipliers, HRewardMultipliersSchema, HRewardPackageType, HRewardPackageTypeSchema, HRewardStrategy, HRewardStrategySchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTelnaPackageTemplate, HTelnaPackageTemplateSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModel, HubbyModelApp, HubbyModelFirestore, HubbyModelSchema, MESSAGE_COLLECTION, Message, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, Package, PackagePrice, PackagePriceSchema, PackageSchema, PackageSpecification, Partner, PartnerApiRequest, PartnerApiResponse, PartnerContact, PartnerContactSchema, PartnerData, PartnerDataSchema, PartnerPackageSpecification, PartnerPackageSpecificationSchema, PartnerSchema, Payment, PaymentSchema, PlatformSettings, PlatformSettingsSchema, PriceList, PriceListApiRequest, PriceListApiResponse, PriceListSchema, PromoCode, PromoCodeSchema, PromoPackageSpecificationSchema, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, ROLE_COLLECTION, Registration, RegistrationSchema, Review, ReviewSchema, ReviewSubmission, ReviewSubmissionSchema, RewardMultipliers, RewardMultipliersSchema, RewardPackageType, RewardPackageTypeSchema, RewardStrategy, RewardStrategySchema, SUPPORTED_LOCALES, Schedule, ScheduleFilter, ScheduleFilterSchema, ScheduleSchema, SupportedLocales, TRAFFIC_POLICY_COLLECTION, Tag, TagSchema, TelnaPackage, TelnaPackageSchema, TelnaPackageTemplate, TelnaPackageTemplateSchema, TrafficPolicy, TrafficPolicySchema, USER_COLLECTION, User, UserFirestore, UserFirestoreSchema, UserSchema, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerSchema, VisualIdentityBannerStrategy, VisualIdentityBanners, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, apiLogSchemaSpec, bondioPackageTemplateAppSchema, bondioPackageTemplateSchemaSpec, bookingSchemaSpec, countrySchemaSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, currencySchemaSpec, destinationAppSchema, destinationBundleAppSchema, destinationBundleSchemaSpec, destinationSchemaSpec, esimSchemaSpec, messageSchemaSpec, packageSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, paymentSchemaSpec, priceListFromFirestore, priceListSchemaSpec, priceListToFirestore, promoCodeFromFirestore, promoCodeSchemaSpec, promoCodeToFirestore, reviewSchemaSpec, reviewSubmissionSchemaSpec, telnaPackageTemplateAppSchema, telnaPackageTemplateSchemaSpec, userFromFirestore, userSchemaSpec, userToFirestore };
