@@ -1606,6 +1606,7 @@ declare const destinationBundleSchemaSpec: {
 
 declare const telnaPackageTemplateSchemaSpec: {
     id: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     purchase_price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     traffic_policy: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
@@ -1644,6 +1645,7 @@ declare const telnaPackageTemplateSchemaSpec: {
 };
 declare const bondioPackageTemplateSchemaSpec: {
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     purchase_price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     voice_minutes: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
@@ -7091,6 +7093,7 @@ declare const HDestinationBundleSchema: z.ZodObject<{
 }>;
 declare const HTelnaPackageTemplateSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     purchase_price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     traffic_policy: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
@@ -7133,6 +7136,7 @@ declare const HTelnaPackageTemplateSchema: z.ZodObject<{
     created_by?: string | null | undefined;
     updated_by?: string | null | undefined;
     status?: string | null | undefined;
+    external_id?: string | null | undefined;
     traffic_policy?: number | null | undefined;
     apn?: string | null | undefined;
     purchase_price?: number | null | undefined;
@@ -7159,6 +7163,7 @@ declare const HTelnaPackageTemplateSchema: z.ZodObject<{
     created_by?: string | null | undefined;
     updated_by?: string | null | undefined;
     status?: string | null | undefined;
+    external_id?: string | null | undefined;
     traffic_policy?: number | null | undefined;
     apn?: string | null | undefined;
     purchase_price?: number | null | undefined;
@@ -7176,6 +7181,7 @@ declare const HTelnaPackageTemplateSchema: z.ZodObject<{
 }>;
 declare const HBondioPackageTemplateSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     purchase_price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     voice_minutes: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
@@ -7273,6 +7279,7 @@ declare const HBondioPackageTemplateSchema: z.ZodObject<{
     name?: string | null | undefined;
     created_by?: string | null | undefined;
     updated_by?: string | null | undefined;
+    external_id?: string | null | undefined;
     label?: string | null | undefined;
     purchase_price?: number | null | undefined;
     voice_minutes?: number | null | undefined;
@@ -7303,6 +7310,7 @@ declare const HBondioPackageTemplateSchema: z.ZodObject<{
     name?: string | null | undefined;
     created_by?: string | null | undefined;
     updated_by?: string | null | undefined;
+    external_id?: string | null | undefined;
     label?: string | null | undefined;
     purchase_price?: number | null | undefined;
     voice_minutes?: number | null | undefined;
@@ -9493,6 +9501,7 @@ declare const destinationBundleAppSchema: z.ZodObject<{
 }>;
 declare const telnaPackageTemplateAppSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     purchase_price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     traffic_policy: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
@@ -9535,6 +9544,7 @@ declare const telnaPackageTemplateAppSchema: z.ZodObject<{
     created_by?: string | null | undefined;
     updated_by?: string | null | undefined;
     status?: string | null | undefined;
+    external_id?: string | null | undefined;
     traffic_policy?: number | null | undefined;
     apn?: string | null | undefined;
     purchase_price?: number | null | undefined;
@@ -9561,6 +9571,7 @@ declare const telnaPackageTemplateAppSchema: z.ZodObject<{
     created_by?: string | null | undefined;
     updated_by?: string | null | undefined;
     status?: string | null | undefined;
+    external_id?: string | null | undefined;
     traffic_policy?: number | null | undefined;
     apn?: string | null | undefined;
     purchase_price?: number | null | undefined;
@@ -9578,6 +9589,7 @@ declare const telnaPackageTemplateAppSchema: z.ZodObject<{
 }>;
 declare const bondioPackageTemplateAppSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     purchase_price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     voice_minutes: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
@@ -9675,6 +9687,7 @@ declare const bondioPackageTemplateAppSchema: z.ZodObject<{
     name?: string | null | undefined;
     created_by?: string | null | undefined;
     updated_by?: string | null | undefined;
+    external_id?: string | null | undefined;
     label?: string | null | undefined;
     purchase_price?: number | null | undefined;
     voice_minutes?: number | null | undefined;
@@ -9705,6 +9718,7 @@ declare const bondioPackageTemplateAppSchema: z.ZodObject<{
     name?: string | null | undefined;
     created_by?: string | null | undefined;
     updated_by?: string | null | undefined;
+    external_id?: string | null | undefined;
     label?: string | null | undefined;
     purchase_price?: number | null | undefined;
     voice_minutes?: number | null | undefined;

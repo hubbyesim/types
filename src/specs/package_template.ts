@@ -58,6 +58,7 @@ export const bondioCoverageSchemaSpec = markAsSchemaSpec({
 // Telna Package Template Schema Spec
 export const telnaPackageTemplateSchemaSpec = markAsSchemaSpec({
     id: z.number().nullable().optional(),
+    external_id: z.string().nullable().optional(),
     name: z.string().nullable().optional(),
     purchase_price: z.number().nullable().optional(),
     traffic_policy: z.number().nullable().optional(),
@@ -90,6 +91,7 @@ export const telnaPackageTemplateSchemaSpec = markAsSchemaSpec({
 // Bondio Package Template Schema Spec
 export const bondioPackageTemplateSchemaSpec = markAsSchemaSpec({
     id: z.string().nullable().optional(),
+    external_id: z.string().nullable().optional(),
     name: z.string().nullable().optional(),
     purchase_price: z.number().nullable().optional(),
     voice_minutes: z.number().nullable().optional(),

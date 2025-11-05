@@ -1208,6 +1208,7 @@ markAsSchemaSpec({
 });
 var telnaPackageTemplateSchemaSpec = markAsSchemaSpec({
   id: zod.z.number().nullable().optional(),
+  external_id: zod.z.string().nullable().optional(),
   name: zod.z.string().nullable().optional(),
   purchase_price: zod.z.number().nullable().optional(),
   traffic_policy: zod.z.number().nullable().optional(),
@@ -1238,6 +1239,7 @@ var telnaPackageTemplateSchemaSpec = markAsSchemaSpec({
 });
 var bondioPackageTemplateSchemaSpec = markAsSchemaSpec({
   id: zod.z.string().nullable().optional(),
+  external_id: zod.z.string().nullable().optional(),
   name: zod.z.string().nullable().optional(),
   purchase_price: zod.z.number().nullable().optional(),
   voice_minutes: zod.z.number().nullable().optional(),
