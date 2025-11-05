@@ -1205,19 +1205,20 @@ markAsSchemaSpec({
   }
 });
 var telnaPackageTemplateSchemaSpec = markAsSchemaSpec({
-  id: z.number(),
-  name: z.string(),
-  traffic_policy: z.number(),
-  supported_countries: z.array(z.string()),
-  voice_usage_allowance: z.number(),
-  data_usage_allowance: z.number(),
-  sms_usage_allowance: z.number(),
-  activation_time_allowance: z.number(),
-  activation_type: z.string(),
-  earliest_activation_date: z.number(),
-  earliest_available_date: z.number(),
-  latest_available_date: z.number(),
-  notes: z.string(),
+  id: z.number().nullable().optional(),
+  name: z.string().nullable().optional(),
+  purchase_price: z.number().nullable().optional(),
+  traffic_policy: z.number().nullable().optional(),
+  supported_countries: z.array(z.string()).nullable().optional(),
+  voice_usage_allowance: z.number().nullable().optional(),
+  data_usage_allowance: z.number().nullable().optional(),
+  sms_usage_allowance: z.number().nullable().optional(),
+  activation_time_allowance: z.number().nullable().optional(),
+  activation_type: z.string().nullable().optional(),
+  earliest_activation_date: z.number().nullable().optional(),
+  earliest_available_date: z.number().nullable().optional(),
+  latest_available_date: z.number().nullable().optional(),
+  notes: z.string().nullable().optional(),
   time_allowance: {
     _type: "object",
     of: {
@@ -1225,33 +1226,34 @@ var telnaPackageTemplateSchemaSpec = markAsSchemaSpec({
       unit: z.string()
     }
   },
-  status: z.string(),
+  status: z.string().nullable().optional(),
   deactivated_date: z.number().nullable().optional(),
-  apn: z.string(),
+  apn: z.string().nullable().optional(),
   created_at: timestampRequired,
   updated_at: timestampRequired,
-  created_by: z.string().nullable(),
-  updated_by: z.string().nullable()
+  created_by: z.string().nullable().optional(),
+  updated_by: z.string().nullable().optional()
 });
 var bondioPackageTemplateSchemaSpec = markAsSchemaSpec({
-  id: z.string(),
-  name: z.string(),
-  voice_minutes: z.number(),
-  data_mega_bytes: z.number(),
-  sms_messages: z.number(),
-  period_days: z.number(),
-  period_iterations: z.number(),
-  throttled_speed_kbps: z.number(),
-  archived_at: z.number().nullable(),
-  label: z.string(),
+  id: z.string().nullable().optional(),
+  name: z.string().nullable().optional(),
+  purchase_price: z.number().nullable().optional(),
+  voice_minutes: z.number().nullable().optional(),
+  data_mega_bytes: z.number().nullable().optional(),
+  sms_messages: z.number().nullable().optional(),
+  period_days: z.number().nullable().optional(),
+  period_iterations: z.number().nullable().optional(),
+  throttled_speed_kbps: z.number().nullable().optional(),
+  archived_at: z.number().nullable().optional(),
+  label: z.string().nullable().optional(),
   coverage: {
     _type: "object",
     of: bondioCoverageSchema.shape
   },
   created_at: timestampRequired,
   updated_at: timestampRequired,
-  created_by: z.string().nullable(),
-  updated_by: z.string().nullable()
+  created_by: z.string().nullable().optional(),
+  updated_by: z.string().nullable().optional()
 });
 function createConvertJSToFirestore(db) {
   return function convertJSToFirestore2(input, spec) {

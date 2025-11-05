@@ -1196,19 +1196,20 @@ markAsSchemaSpec({
   }
 });
 var telnaPackageTemplateSchemaSpec = markAsSchemaSpec({
-  id: zod.z.number(),
-  name: zod.z.string(),
-  traffic_policy: zod.z.number(),
-  supported_countries: zod.z.array(zod.z.string()),
-  voice_usage_allowance: zod.z.number(),
-  data_usage_allowance: zod.z.number(),
-  sms_usage_allowance: zod.z.number(),
-  activation_time_allowance: zod.z.number(),
-  activation_type: zod.z.string(),
-  earliest_activation_date: zod.z.number(),
-  earliest_available_date: zod.z.number(),
-  latest_available_date: zod.z.number(),
-  notes: zod.z.string(),
+  id: zod.z.number().nullable().optional(),
+  name: zod.z.string().nullable().optional(),
+  purchase_price: zod.z.number().nullable().optional(),
+  traffic_policy: zod.z.number().nullable().optional(),
+  supported_countries: zod.z.array(zod.z.string()).nullable().optional(),
+  voice_usage_allowance: zod.z.number().nullable().optional(),
+  data_usage_allowance: zod.z.number().nullable().optional(),
+  sms_usage_allowance: zod.z.number().nullable().optional(),
+  activation_time_allowance: zod.z.number().nullable().optional(),
+  activation_type: zod.z.string().nullable().optional(),
+  earliest_activation_date: zod.z.number().nullable().optional(),
+  earliest_available_date: zod.z.number().nullable().optional(),
+  latest_available_date: zod.z.number().nullable().optional(),
+  notes: zod.z.string().nullable().optional(),
   time_allowance: {
     _type: "object",
     of: {
@@ -1216,33 +1217,34 @@ var telnaPackageTemplateSchemaSpec = markAsSchemaSpec({
       unit: zod.z.string()
     }
   },
-  status: zod.z.string(),
+  status: zod.z.string().nullable().optional(),
   deactivated_date: zod.z.number().nullable().optional(),
-  apn: zod.z.string(),
+  apn: zod.z.string().nullable().optional(),
   created_at: timestampRequired,
   updated_at: timestampRequired,
-  created_by: zod.z.string().nullable(),
-  updated_by: zod.z.string().nullable()
+  created_by: zod.z.string().nullable().optional(),
+  updated_by: zod.z.string().nullable().optional()
 });
 var bondioPackageTemplateSchemaSpec = markAsSchemaSpec({
-  id: zod.z.string(),
-  name: zod.z.string(),
-  voice_minutes: zod.z.number(),
-  data_mega_bytes: zod.z.number(),
-  sms_messages: zod.z.number(),
-  period_days: zod.z.number(),
-  period_iterations: zod.z.number(),
-  throttled_speed_kbps: zod.z.number(),
-  archived_at: zod.z.number().nullable(),
-  label: zod.z.string(),
+  id: zod.z.string().nullable().optional(),
+  name: zod.z.string().nullable().optional(),
+  purchase_price: zod.z.number().nullable().optional(),
+  voice_minutes: zod.z.number().nullable().optional(),
+  data_mega_bytes: zod.z.number().nullable().optional(),
+  sms_messages: zod.z.number().nullable().optional(),
+  period_days: zod.z.number().nullable().optional(),
+  period_iterations: zod.z.number().nullable().optional(),
+  throttled_speed_kbps: zod.z.number().nullable().optional(),
+  archived_at: zod.z.number().nullable().optional(),
+  label: zod.z.string().nullable().optional(),
   coverage: {
     _type: "object",
     of: bondioCoverageSchema.shape
   },
   created_at: timestampRequired,
   updated_at: timestampRequired,
-  created_by: zod.z.string().nullable(),
-  updated_by: zod.z.string().nullable()
+  created_by: zod.z.string().nullable().optional(),
+  updated_by: zod.z.string().nullable().optional()
 });
 
 // src/index.client.ts
