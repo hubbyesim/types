@@ -6,6 +6,7 @@ export const PARTNER_COLLECTION = '/companies/hubby/partners';
 export const USER_COLLECTION = 'users';
 export const PROFILE_COLLECTION = '/companies/hubby/profiles';
 export const PACKAGE_COLLECTION = '/companies/hubby/packages';
+export const PACKAGE_TEMPLATE_COLLECTION = '/companies/hubby/package_templates';
 export const PROMO_CODE_COLLECTION = '/companies/hubby/promo_codes';
 export const COUNTRY_COLLECTION = 'countries';
 export const ESIM_COLLECTION = 'esims';

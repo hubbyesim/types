@@ -155,6 +155,7 @@ function buildClientSchema(spec, path = []) {
 var PARTNER_COLLECTION = "/companies/hubby/partners";
 var USER_COLLECTION = "users";
 var PACKAGE_COLLECTION = "/companies/hubby/packages";
+var PACKAGE_TEMPLATE_COLLECTION = "/companies/hubby/package_templates";
 var PROMO_CODE_COLLECTION = "/companies/hubby/promo_codes";
 var COUNTRY_COLLECTION = "countries";
 var ESIM_COLLECTION = "esims";
@@ -1124,9 +1125,16 @@ var destinationSchemaSpec = markAsSchemaSpec({
 var destinationBundleSchemaSpec = markAsSchemaSpec({
   id: zod.z.string(),
   type: zod.z.enum(["unlimited", "data-limited", "starter"]),
-  duration_days: zod.z.number(),
-  size_gb: zod.z.number(),
-  package: { _type: "docRef", collection: PACKAGE_COLLECTION },
+  provider: zod.z.enum(["telna", "bondio"]),
+  duration_in_days: zod.z.number(),
+  duration_in_seconds: zod.z.number(),
+  size_in_bytes: zod.z.number(),
+  size_in_megabytes: zod.z.number(),
+  size_in_gigabytes: zod.z.number(),
+  package_template: { _type: "docRef", collection: PACKAGE_TEMPLATE_COLLECTION },
+  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
+  //All unlimited packages will have a throttling policy, but this only refers to telna bundles
+  throttling_policy: { _type: "docRef", collection: TRAFFIC_POLICY_COLLECTION, nullable: true },
   currency: zod.z.string(),
   b2c_price: zod.z.number(),
   b2b_price: zod.z.number(),
@@ -1144,110 +1152,34 @@ var destinationBundleSchemaSpec = markAsSchemaSpec({
   },
   is_active: zod.z.boolean().default(true),
   is_visible: zod.z.boolean().default(true),
+  //All bundles that will have a partner will probably be invisible
   priority: zod.z.number().default(10),
+  created_at: timestampRequired,
+  updated_at: timestampRequired,
+  deleted_at: timestampNullable,
+  created_by: zod.z.string().nullable(),
+  updated_by: zod.z.string().nullable(),
+  deleted_by: zod.z.string().nullable()
+});
+var packageTemplateSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string(),
+  provider: zod.z.string(),
+  // e.g., "telna", "bondio"
+  type: zod.z.string(),
+  purchase_price: zod.z.number(),
+  external_id: zod.z.string(),
+  supported_countries: zod.z.array(zod.z.string()),
+  // iso3 codes
+  provider_specific_data: {
+    _type: "record",
+    of: zod.z.any(),
+    nullable: true,
+    optional: true
+  },
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: zod.z.string().nullable(),
   updated_by: zod.z.string().nullable()
-});
-var bondioCoverageOperatorSchema = zod.z.object({
-  name: zod.z.string(),
-  supported_rats: zod.z.array(zod.z.string())
-});
-var bondioCoverageCountrySchema = zod.z.object({
-  name: zod.z.string(),
-  iso2: zod.z.string(),
-  iso3: zod.z.string(),
-  operators: zod.z.array(bondioCoverageOperatorSchema)
-});
-var bondioCoverageSchema = zod.z.object({
-  id: zod.z.string().nullable().optional(),
-  name: zod.z.string().nullable().optional(),
-  label: zod.z.string().nullable().optional(),
-  countries: zod.z.array(bondioCoverageCountrySchema).nullable().optional()
-});
-markAsSchemaSpec({
-  id: zod.z.string(),
-  name: zod.z.string(),
-  label: zod.z.string(),
-  countries: {
-    _type: "array",
-    of: {
-      _type: "object",
-      of: {
-        name: zod.z.string(),
-        iso2: zod.z.string(),
-        iso3: zod.z.string(),
-        operators: {
-          _type: "array",
-          of: {
-            _type: "object",
-            of: {
-              name: zod.z.string(),
-              supported_rats: {
-                _type: "array",
-                of: zod.z.string()
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-});
-var telnaPackageTemplateSchemaSpec = markAsSchemaSpec({
-  id: zod.z.number().nullable().optional(),
-  external_id: zod.z.string().nullable().optional(),
-  name: zod.z.string().nullable().optional(),
-  purchase_price: zod.z.number().nullable().optional(),
-  traffic_policy: zod.z.number().nullable().optional(),
-  supported_countries: zod.z.array(zod.z.string()).nullable().optional(),
-  voice_usage_allowance: zod.z.number().nullable().optional(),
-  data_usage_allowance: zod.z.number().nullable().optional(),
-  sms_usage_allowance: zod.z.number().nullable().optional(),
-  activation_time_allowance: zod.z.number().nullable().optional(),
-  activation_type: zod.z.string().nullable().optional(),
-  earliest_activation_date: zod.z.number().nullable().optional(),
-  earliest_available_date: zod.z.number().nullable().optional(),
-  latest_available_date: zod.z.number().nullable().optional(),
-  notes: zod.z.string().nullable().optional(),
-  time_allowance: {
-    _type: "object",
-    of: {
-      duration: zod.z.number(),
-      unit: zod.z.string()
-    }
-  },
-  status: zod.z.string().nullable().optional(),
-  deactivated_date: zod.z.number().nullable().optional(),
-  inventory: zod.z.number().nullable().optional(),
-  apn: zod.z.string().nullable().optional(),
-  created_at: timestampRequired,
-  updated_at: timestampRequired,
-  created_by: zod.z.string().nullable().optional(),
-  updated_by: zod.z.string().nullable().optional()
-});
-var bondioPackageTemplateSchemaSpec = markAsSchemaSpec({
-  id: zod.z.string().nullable().optional(),
-  external_id: zod.z.string().nullable().optional(),
-  name: zod.z.string().nullable().optional(),
-  purchase_price: zod.z.number().nullable().optional(),
-  voice_minutes: zod.z.number().nullable().optional(),
-  data_mega_bytes: zod.z.number().nullable().optional(),
-  sms_messages: zod.z.number().nullable().optional(),
-  period_days: zod.z.number().nullable().optional(),
-  period_iterations: zod.z.number().nullable().optional(),
-  throttled_speed_kbps: zod.z.number().nullable().optional(),
-  archived_at: zod.z.number().nullable().optional(),
-  label: zod.z.string().nullable().optional(),
-  coverage: {
-    _type: "object",
-    of: bondioCoverageSchema.shape
-  },
-  created_at: timestampRequired,
-  updated_at: timestampRequired,
-  created_by: zod.z.string().nullable().optional(),
-  updated_by: zod.z.string().nullable().optional()
 });
 
 // src/index.client.ts
@@ -1282,8 +1214,7 @@ var HReviewSchema = buildClientSchema(reviewSchemaSpec);
 var HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
 var HDestinationSchema = buildClientSchema(destinationSchemaSpec);
 var HDestinationBundleSchema = buildClientSchema(destinationBundleSchemaSpec);
-var HTelnaPackageTemplateSchema = buildClientSchema(telnaPackageTemplateSchemaSpec);
-var HBondioPackageTemplateSchema = buildClientSchema(bondioPackageTemplateSchemaSpec);
+var HPackageTemplateSchema = buildClientSchema(packageTemplateSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1308,7 +1239,6 @@ exports.HApiLogSchema = HApiLogSchema;
 exports.HBankingDetailsSchema = HBankingDetailsSchema;
 exports.HBaseRewardSchema = HBaseRewardSchema;
 exports.HBondioPackageSchema = HBondioPackageSchema;
-exports.HBondioPackageTemplateSchema = HBondioPackageTemplateSchema;
 exports.HBookingSchema = HBookingSchema;
 exports.HBookingStatusSchema = HBookingStatusSchema;
 exports.HCommunicationChannelSchema = HCommunicationChannelSchema;
@@ -1323,6 +1253,7 @@ exports.HFreeEsimSchema = HFreeEsimSchema;
 exports.HMessageSchema = HMessageSchema;
 exports.HPackagePriceSchema = HPackagePriceSchema;
 exports.HPackageSchema = HPackageSchema;
+exports.HPackageTemplateSchema = HPackageTemplateSchema;
 exports.HPartnerAppSchema = HPartnerAppSchema;
 exports.HPartnerContactSchema = HPartnerContactSchema;
 exports.HPartnerDataSchema = HPartnerDataSchema;
@@ -1345,7 +1276,6 @@ exports.HRoleSchema = HRoleSchema;
 exports.HScheduleFilterSchema = HScheduleFilterSchema;
 exports.HTagSchema = HTagSchema;
 exports.HTelnaPackageSchema = HTelnaPackageSchema;
-exports.HTelnaPackageTemplateSchema = HTelnaPackageTemplateSchema;
 exports.HTrafficPolicySchema = HTrafficPolicySchema;
 exports.HUserSchema = HUserSchema;
 exports.HVisualIdentityBannerSchema = HVisualIdentityBannerSchema;

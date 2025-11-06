@@ -1566,11 +1566,25 @@ declare const destinationSchemaSpec: {
 declare const destinationBundleSchemaSpec: {
     id: z.ZodString;
     type: z.ZodEnum<["unlimited", "data-limited", "starter"]>;
-    duration_days: z.ZodNumber;
-    size_gb: z.ZodNumber;
-    package: {
+    provider: z.ZodEnum<["telna", "bondio"]>;
+    duration_in_days: z.ZodNumber;
+    duration_in_seconds: z.ZodNumber;
+    size_in_bytes: z.ZodNumber;
+    size_in_megabytes: z.ZodNumber;
+    size_in_gigabytes: z.ZodNumber;
+    package_template: {
         _type: "docRef";
         collection: string;
+    };
+    partner: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+    };
+    throttling_policy: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
     };
     currency: z.ZodString;
     b2c_price: z.ZodNumber;
@@ -1600,101 +1614,28 @@ declare const destinationBundleSchemaSpec: {
         nullable: boolean;
         optional: boolean;
     };
+    deleted_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
     created_by: z.ZodNullable<z.ZodString>;
     updated_by: z.ZodNullable<z.ZodString>;
+    deleted_by: z.ZodNullable<z.ZodString>;
 };
 
-declare const telnaPackageTemplateSchemaSpec: {
-    id: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    purchase_price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    traffic_policy: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    supported_countries: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodString, "many">>>;
-    voice_usage_allowance: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    data_usage_allowance: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    sms_usage_allowance: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    activation_time_allowance: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    activation_type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    earliest_activation_date: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    earliest_available_date: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    latest_available_date: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    notes: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    time_allowance: {
-        _type: "object";
-        of: {
-            duration: z.ZodNumber;
-            unit: z.ZodString;
-        };
-    };
-    status: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    deactivated_date: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    inventory: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    apn: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    created_at: {
-        _type: "timestamp";
+declare const packageTemplateSchemaSpec: {
+    id: z.ZodString;
+    provider: z.ZodString;
+    type: z.ZodString;
+    purchase_price: z.ZodNumber;
+    external_id: z.ZodString;
+    supported_countries: z.ZodArray<z.ZodString, "many">;
+    provider_specific_data: {
+        _type: "record";
+        of: z.ZodAny;
         nullable: boolean;
         optional: boolean;
-    };
-    updated_at: {
-        _type: "timestamp";
-        nullable: boolean;
-        optional: boolean;
-    };
-    created_by: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    updated_by: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-};
-declare const bondioPackageTemplateSchemaSpec: {
-    id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    purchase_price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    voice_minutes: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    data_mega_bytes: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    sms_messages: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    period_days: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    period_iterations: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    throttled_speed_kbps: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    archived_at: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    coverage: {
-        _type: "object";
-        of: {
-            id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-            name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-            label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-            countries: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
-                name: z.ZodString;
-                iso2: z.ZodString;
-                iso3: z.ZodString;
-                operators: z.ZodArray<z.ZodObject<{
-                    name: z.ZodString;
-                    supported_rats: z.ZodArray<z.ZodString, "many">;
-                }, "strip", z.ZodTypeAny, {
-                    name: string;
-                    supported_rats: string[];
-                }, {
-                    name: string;
-                    supported_rats: string[];
-                }>, "many">;
-            }, "strip", z.ZodTypeAny, {
-                name: string;
-                iso3: string;
-                iso2: string;
-                operators: {
-                    name: string;
-                    supported_rats: string[];
-                }[];
-            }, {
-                name: string;
-                iso3: string;
-                iso2: string;
-                operators: {
-                    name: string;
-                    supported_rats: string[];
-                }[];
-            }>, "many">>>;
-        };
     };
     created_at: {
         _type: "timestamp";
@@ -1706,8 +1647,8 @@ declare const bondioPackageTemplateSchemaSpec: {
         nullable: boolean;
         optional: boolean;
     };
-    created_by: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    updated_by: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    created_by: z.ZodNullable<z.ZodString>;
+    updated_by: z.ZodNullable<z.ZodString>;
 };
 
 /** ZOD SCHEMAS */
@@ -7040,9 +6981,15 @@ declare const HDestinationSchema: z.ZodObject<{
 declare const HDestinationBundleSchema: z.ZodObject<{
     id: z.ZodString;
     type: z.ZodEnum<["unlimited", "data-limited", "starter"]>;
-    duration_days: z.ZodNumber;
-    size_gb: z.ZodNumber;
-    package: z.ZodString;
+    provider: z.ZodEnum<["telna", "bondio"]>;
+    duration_in_days: z.ZodNumber;
+    duration_in_seconds: z.ZodNumber;
+    size_in_bytes: z.ZodNumber;
+    size_in_megabytes: z.ZodNumber;
+    size_in_gigabytes: z.ZodNumber;
+    package_template: z.ZodString;
+    partner: z.ZodString;
+    throttling_policy: z.ZodString;
     currency: z.ZodString;
     b2c_price: z.ZodNumber;
     b2b_price: z.ZodNumber;
@@ -7053,277 +7000,99 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     priority: z.ZodDefault<z.ZodNumber>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    deleted_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodNullable<z.ZodString>;
     updated_by: z.ZodNullable<z.ZodString>;
+    deleted_by: z.ZodNullable<z.ZodString>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
     currency: string;
+    partner: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
     type: "data-limited" | "starter" | "unlimited";
     is_active: boolean;
-    package: string;
+    provider: "telna" | "bondio";
     priority: number;
-    duration_days: number;
-    size_gb: number;
+    duration_in_days: number;
+    duration_in_seconds: number;
+    size_in_bytes: number;
+    size_in_megabytes: number;
+    size_in_gigabytes: number;
+    package_template: string;
+    throttling_policy: string;
     b2c_price: number;
     b2b_price: number;
     partner_b2c_price: Record<string, number>;
     partner_b2b_price: Record<string, number>;
     is_visible: boolean;
+    deleted_at: Date;
+    deleted_by: string | null;
 }, {
     id: string;
     currency: string;
+    partner: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
     type: "data-limited" | "starter" | "unlimited";
-    package: string;
-    duration_days: number;
-    size_gb: number;
+    provider: "telna" | "bondio";
+    duration_in_days: number;
+    duration_in_seconds: number;
+    size_in_bytes: number;
+    size_in_megabytes: number;
+    size_in_gigabytes: number;
+    package_template: string;
+    throttling_policy: string;
     b2c_price: number;
     b2b_price: number;
     partner_b2c_price: Record<string, number>;
     partner_b2b_price: Record<string, number>;
+    deleted_at: Date;
+    deleted_by: string | null;
     is_active?: boolean | undefined;
     priority?: number | undefined;
     is_visible?: boolean | undefined;
 }>;
-declare const HTelnaPackageTemplateSchema: z.ZodObject<{
-    id: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    purchase_price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    traffic_policy: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    supported_countries: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodString, "many">>>;
-    voice_usage_allowance: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    data_usage_allowance: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    sms_usage_allowance: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    activation_time_allowance: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    activation_type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    earliest_activation_date: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    earliest_available_date: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    latest_available_date: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    notes: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    time_allowance: z.ZodObject<{
-        duration: z.ZodNumber;
-        unit: z.ZodString;
-    }, z.UnknownKeysParam, z.ZodTypeAny, {
-        duration: number;
-        unit: string;
-    }, {
-        duration: number;
-        unit: string;
-    }>;
-    status: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    deactivated_date: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    inventory: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    apn: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+declare const HPackageTemplateSchema: z.ZodObject<{
+    id: z.ZodString;
+    provider: z.ZodString;
+    type: z.ZodString;
+    purchase_price: z.ZodNumber;
+    external_id: z.ZodString;
+    supported_countries: z.ZodArray<z.ZodString, "many">;
+    provider_specific_data: z.ZodRecord<z.ZodString, z.ZodAny>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
-    created_by: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    updated_by: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    created_by: z.ZodNullable<z.ZodString>;
+    updated_by: z.ZodNullable<z.ZodString>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
+    id: string;
     created_at: Date;
     updated_at: Date;
-    time_allowance: {
-        duration: number;
-        unit: string;
-    };
-    id?: number | null | undefined;
-    name?: string | null | undefined;
-    created_by?: string | null | undefined;
-    updated_by?: string | null | undefined;
-    status?: string | null | undefined;
-    external_id?: string | null | undefined;
-    traffic_policy?: number | null | undefined;
-    apn?: string | null | undefined;
-    purchase_price?: number | null | undefined;
-    supported_countries?: string[] | null | undefined;
-    voice_usage_allowance?: number | null | undefined;
-    data_usage_allowance?: number | null | undefined;
-    sms_usage_allowance?: number | null | undefined;
-    activation_time_allowance?: number | null | undefined;
-    activation_type?: string | null | undefined;
-    earliest_activation_date?: number | null | undefined;
-    earliest_available_date?: number | null | undefined;
-    latest_available_date?: number | null | undefined;
-    notes?: string | null | undefined;
-    deactivated_date?: number | null | undefined;
-    inventory?: number | null | undefined;
+    created_by: string | null;
+    updated_by: string | null;
+    type: string;
+    external_id: string;
+    provider: string;
+    purchase_price: number;
+    supported_countries: string[];
+    provider_specific_data: Record<string, any>;
 }, {
+    id: string;
     created_at: Date;
     updated_at: Date;
-    time_allowance: {
-        duration: number;
-        unit: string;
-    };
-    id?: number | null | undefined;
-    name?: string | null | undefined;
-    created_by?: string | null | undefined;
-    updated_by?: string | null | undefined;
-    status?: string | null | undefined;
-    external_id?: string | null | undefined;
-    traffic_policy?: number | null | undefined;
-    apn?: string | null | undefined;
-    purchase_price?: number | null | undefined;
-    supported_countries?: string[] | null | undefined;
-    voice_usage_allowance?: number | null | undefined;
-    data_usage_allowance?: number | null | undefined;
-    sms_usage_allowance?: number | null | undefined;
-    activation_time_allowance?: number | null | undefined;
-    activation_type?: string | null | undefined;
-    earliest_activation_date?: number | null | undefined;
-    earliest_available_date?: number | null | undefined;
-    latest_available_date?: number | null | undefined;
-    notes?: string | null | undefined;
-    deactivated_date?: number | null | undefined;
-    inventory?: number | null | undefined;
-}>;
-declare const HBondioPackageTemplateSchema: z.ZodObject<{
-    id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    purchase_price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    voice_minutes: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    data_mega_bytes: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    sms_messages: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    period_days: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    period_iterations: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    throttled_speed_kbps: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    archived_at: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    coverage: z.ZodObject<{
-        id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        countries: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
-            name: z.ZodString;
-            iso2: z.ZodString;
-            iso3: z.ZodString;
-            operators: z.ZodArray<z.ZodObject<{
-                name: z.ZodString;
-                supported_rats: z.ZodArray<z.ZodString, "many">;
-            }, "strip", z.ZodTypeAny, {
-                name: string;
-                supported_rats: string[];
-            }, {
-                name: string;
-                supported_rats: string[];
-            }>, "many">;
-        }, "strip", z.ZodTypeAny, {
-            name: string;
-            iso3: string;
-            iso2: string;
-            operators: {
-                name: string;
-                supported_rats: string[];
-            }[];
-        }, {
-            name: string;
-            iso3: string;
-            iso2: string;
-            operators: {
-                name: string;
-                supported_rats: string[];
-            }[];
-        }>, "many">>>;
-    }, z.UnknownKeysParam, z.ZodTypeAny, {
-        id?: string | null | undefined;
-        name?: string | null | undefined;
-        countries?: {
-            name: string;
-            iso3: string;
-            iso2: string;
-            operators: {
-                name: string;
-                supported_rats: string[];
-            }[];
-        }[] | null | undefined;
-        label?: string | null | undefined;
-    }, {
-        id?: string | null | undefined;
-        name?: string | null | undefined;
-        countries?: {
-            name: string;
-            iso3: string;
-            iso2: string;
-            operators: {
-                name: string;
-                supported_rats: string[];
-            }[];
-        }[] | null | undefined;
-        label?: string | null | undefined;
-    }>;
-    created_at: z.ZodEffects<z.ZodDate, Date, Date>;
-    updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
-    created_by: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    updated_by: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-}, z.UnknownKeysParam, z.ZodTypeAny, {
-    created_at: Date;
-    updated_at: Date;
-    coverage: {
-        id?: string | null | undefined;
-        name?: string | null | undefined;
-        countries?: {
-            name: string;
-            iso3: string;
-            iso2: string;
-            operators: {
-                name: string;
-                supported_rats: string[];
-            }[];
-        }[] | null | undefined;
-        label?: string | null | undefined;
-    };
-    id?: string | null | undefined;
-    name?: string | null | undefined;
-    created_by?: string | null | undefined;
-    updated_by?: string | null | undefined;
-    external_id?: string | null | undefined;
-    label?: string | null | undefined;
-    purchase_price?: number | null | undefined;
-    voice_minutes?: number | null | undefined;
-    data_mega_bytes?: number | null | undefined;
-    sms_messages?: number | null | undefined;
-    period_days?: number | null | undefined;
-    period_iterations?: number | null | undefined;
-    throttled_speed_kbps?: number | null | undefined;
-    archived_at?: number | null | undefined;
-}, {
-    created_at: Date;
-    updated_at: Date;
-    coverage: {
-        id?: string | null | undefined;
-        name?: string | null | undefined;
-        countries?: {
-            name: string;
-            iso3: string;
-            iso2: string;
-            operators: {
-                name: string;
-                supported_rats: string[];
-            }[];
-        }[] | null | undefined;
-        label?: string | null | undefined;
-    };
-    id?: string | null | undefined;
-    name?: string | null | undefined;
-    created_by?: string | null | undefined;
-    updated_by?: string | null | undefined;
-    external_id?: string | null | undefined;
-    label?: string | null | undefined;
-    purchase_price?: number | null | undefined;
-    voice_minutes?: number | null | undefined;
-    data_mega_bytes?: number | null | undefined;
-    sms_messages?: number | null | undefined;
-    period_days?: number | null | undefined;
-    period_iterations?: number | null | undefined;
-    throttled_speed_kbps?: number | null | undefined;
-    archived_at?: number | null | undefined;
+    created_by: string | null;
+    updated_by: string | null;
+    type: string;
+    external_id: string;
+    provider: string;
+    purchase_price: number;
+    supported_countries: string[];
+    provider_specific_data: Record<string, any>;
 }>;
 declare const HAddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -7569,8 +7338,7 @@ type HReview = z.infer<typeof HReviewSchema>;
 type HReviewSubmission = z.infer<typeof HReviewSubmissionSchema>;
 type HDestination = z.infer<typeof HDestinationSchema>;
 type HDestinationBundle = z.infer<typeof HDestinationBundleSchema>;
-type HTelnaPackageTemplate = z.infer<typeof HTelnaPackageTemplateSchema>;
-type HBondioPackageTemplate = z.infer<typeof HBondioPackageTemplateSchema>;
+type HPackageTemplate = z.infer<typeof HPackageTemplateSchema>;
 type HAddress = z.infer<typeof HAddressSchema>;
 type HRegistration = z.infer<typeof HRegistrationSchema>;
 type HBankingDetails = z.infer<typeof HBankingDetailsSchema>;
@@ -7705,8 +7473,7 @@ declare const ReviewSchema: z.ZodTypeAny;
 declare const ReviewSubmissionSchema: z.ZodTypeAny;
 declare const DestinationSchema: z.ZodTypeAny;
 declare const DestinationBundleSchema: z.ZodTypeAny;
-declare const TelnaPackageTemplateSchema: z.ZodTypeAny;
-declare const BondioPackageTemplateSchema: z.ZodTypeAny;
+declare const PackageTemplateSchema: z.ZodTypeAny;
 declare const AddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     city: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -7997,8 +7764,7 @@ type Review = z.infer<typeof ReviewSchema>;
 type ReviewSubmission = z.infer<typeof ReviewSubmissionSchema>;
 type Destination = z.infer<typeof DestinationSchema>;
 type DestinationBundle = z.infer<typeof DestinationBundleSchema>;
-type TelnaPackageTemplate = z.infer<typeof TelnaPackageTemplateSchema>;
-type BondioPackageTemplate = z.infer<typeof BondioPackageTemplateSchema>;
+type PackageTemplate = z.infer<typeof PackageTemplateSchema>;
 type Address = z.infer<typeof AddressSchema>;
 type Registration = z.infer<typeof RegistrationSchema>;
 type BankingDetails = z.infer<typeof BankingDetailsSchema>;
@@ -9451,9 +9217,15 @@ declare const destinationAppSchema: z.ZodObject<{
 declare const destinationBundleAppSchema: z.ZodObject<{
     id: z.ZodString;
     type: z.ZodEnum<["unlimited", "data-limited", "starter"]>;
-    duration_days: z.ZodNumber;
-    size_gb: z.ZodNumber;
-    package: z.ZodString;
+    provider: z.ZodEnum<["telna", "bondio"]>;
+    duration_in_days: z.ZodNumber;
+    duration_in_seconds: z.ZodNumber;
+    size_in_bytes: z.ZodNumber;
+    size_in_megabytes: z.ZodNumber;
+    size_in_gigabytes: z.ZodNumber;
+    package_template: z.ZodString;
+    partner: z.ZodString;
+    throttling_policy: z.ZodString;
     currency: z.ZodString;
     b2c_price: z.ZodNumber;
     b2b_price: z.ZodNumber;
@@ -9464,279 +9236,101 @@ declare const destinationBundleAppSchema: z.ZodObject<{
     priority: z.ZodDefault<z.ZodNumber>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    deleted_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodNullable<z.ZodString>;
     updated_by: z.ZodNullable<z.ZodString>;
+    deleted_by: z.ZodNullable<z.ZodString>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
     currency: string;
+    partner: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
     type: "data-limited" | "starter" | "unlimited";
     is_active: boolean;
-    package: string;
+    provider: "telna" | "bondio";
     priority: number;
-    duration_days: number;
-    size_gb: number;
+    duration_in_days: number;
+    duration_in_seconds: number;
+    size_in_bytes: number;
+    size_in_megabytes: number;
+    size_in_gigabytes: number;
+    package_template: string;
+    throttling_policy: string;
     b2c_price: number;
     b2b_price: number;
     partner_b2c_price: Record<string, number>;
     partner_b2b_price: Record<string, number>;
     is_visible: boolean;
+    deleted_at: Date;
+    deleted_by: string | null;
 }, {
     id: string;
     currency: string;
+    partner: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
     type: "data-limited" | "starter" | "unlimited";
-    package: string;
-    duration_days: number;
-    size_gb: number;
+    provider: "telna" | "bondio";
+    duration_in_days: number;
+    duration_in_seconds: number;
+    size_in_bytes: number;
+    size_in_megabytes: number;
+    size_in_gigabytes: number;
+    package_template: string;
+    throttling_policy: string;
     b2c_price: number;
     b2b_price: number;
     partner_b2c_price: Record<string, number>;
     partner_b2b_price: Record<string, number>;
+    deleted_at: Date;
+    deleted_by: string | null;
     is_active?: boolean | undefined;
     priority?: number | undefined;
     is_visible?: boolean | undefined;
 }>;
-declare const telnaPackageTemplateAppSchema: z.ZodObject<{
-    id: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    purchase_price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    traffic_policy: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    supported_countries: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodString, "many">>>;
-    voice_usage_allowance: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    data_usage_allowance: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    sms_usage_allowance: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    activation_time_allowance: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    activation_type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    earliest_activation_date: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    earliest_available_date: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    latest_available_date: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    notes: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    time_allowance: z.ZodObject<{
-        duration: z.ZodNumber;
-        unit: z.ZodString;
-    }, z.UnknownKeysParam, z.ZodTypeAny, {
-        duration: number;
-        unit: string;
-    }, {
-        duration: number;
-        unit: string;
-    }>;
-    status: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    deactivated_date: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    inventory: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    apn: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+declare const packageTemplateAppSchema: z.ZodObject<{
+    id: z.ZodString;
+    provider: z.ZodString;
+    type: z.ZodString;
+    purchase_price: z.ZodNumber;
+    external_id: z.ZodString;
+    supported_countries: z.ZodArray<z.ZodString, "many">;
+    provider_specific_data: z.ZodRecord<z.ZodString, z.ZodAny>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
-    created_by: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    updated_by: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    created_by: z.ZodNullable<z.ZodString>;
+    updated_by: z.ZodNullable<z.ZodString>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
+    id: string;
     created_at: Date;
     updated_at: Date;
-    time_allowance: {
-        duration: number;
-        unit: string;
-    };
-    id?: number | null | undefined;
-    name?: string | null | undefined;
-    created_by?: string | null | undefined;
-    updated_by?: string | null | undefined;
-    status?: string | null | undefined;
-    external_id?: string | null | undefined;
-    traffic_policy?: number | null | undefined;
-    apn?: string | null | undefined;
-    purchase_price?: number | null | undefined;
-    supported_countries?: string[] | null | undefined;
-    voice_usage_allowance?: number | null | undefined;
-    data_usage_allowance?: number | null | undefined;
-    sms_usage_allowance?: number | null | undefined;
-    activation_time_allowance?: number | null | undefined;
-    activation_type?: string | null | undefined;
-    earliest_activation_date?: number | null | undefined;
-    earliest_available_date?: number | null | undefined;
-    latest_available_date?: number | null | undefined;
-    notes?: string | null | undefined;
-    deactivated_date?: number | null | undefined;
-    inventory?: number | null | undefined;
+    created_by: string | null;
+    updated_by: string | null;
+    type: string;
+    external_id: string;
+    provider: string;
+    purchase_price: number;
+    supported_countries: string[];
+    provider_specific_data: Record<string, any>;
 }, {
+    id: string;
     created_at: Date;
     updated_at: Date;
-    time_allowance: {
-        duration: number;
-        unit: string;
-    };
-    id?: number | null | undefined;
-    name?: string | null | undefined;
-    created_by?: string | null | undefined;
-    updated_by?: string | null | undefined;
-    status?: string | null | undefined;
-    external_id?: string | null | undefined;
-    traffic_policy?: number | null | undefined;
-    apn?: string | null | undefined;
-    purchase_price?: number | null | undefined;
-    supported_countries?: string[] | null | undefined;
-    voice_usage_allowance?: number | null | undefined;
-    data_usage_allowance?: number | null | undefined;
-    sms_usage_allowance?: number | null | undefined;
-    activation_time_allowance?: number | null | undefined;
-    activation_type?: string | null | undefined;
-    earliest_activation_date?: number | null | undefined;
-    earliest_available_date?: number | null | undefined;
-    latest_available_date?: number | null | undefined;
-    notes?: string | null | undefined;
-    deactivated_date?: number | null | undefined;
-    inventory?: number | null | undefined;
-}>;
-declare const bondioPackageTemplateAppSchema: z.ZodObject<{
-    id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    purchase_price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    voice_minutes: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    data_mega_bytes: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    sms_messages: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    period_days: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    period_iterations: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    throttled_speed_kbps: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    archived_at: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    coverage: z.ZodObject<{
-        id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        countries: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
-            name: z.ZodString;
-            iso2: z.ZodString;
-            iso3: z.ZodString;
-            operators: z.ZodArray<z.ZodObject<{
-                name: z.ZodString;
-                supported_rats: z.ZodArray<z.ZodString, "many">;
-            }, "strip", z.ZodTypeAny, {
-                name: string;
-                supported_rats: string[];
-            }, {
-                name: string;
-                supported_rats: string[];
-            }>, "many">;
-        }, "strip", z.ZodTypeAny, {
-            name: string;
-            iso3: string;
-            iso2: string;
-            operators: {
-                name: string;
-                supported_rats: string[];
-            }[];
-        }, {
-            name: string;
-            iso3: string;
-            iso2: string;
-            operators: {
-                name: string;
-                supported_rats: string[];
-            }[];
-        }>, "many">>>;
-    }, z.UnknownKeysParam, z.ZodTypeAny, {
-        id?: string | null | undefined;
-        name?: string | null | undefined;
-        countries?: {
-            name: string;
-            iso3: string;
-            iso2: string;
-            operators: {
-                name: string;
-                supported_rats: string[];
-            }[];
-        }[] | null | undefined;
-        label?: string | null | undefined;
-    }, {
-        id?: string | null | undefined;
-        name?: string | null | undefined;
-        countries?: {
-            name: string;
-            iso3: string;
-            iso2: string;
-            operators: {
-                name: string;
-                supported_rats: string[];
-            }[];
-        }[] | null | undefined;
-        label?: string | null | undefined;
-    }>;
-    created_at: z.ZodEffects<z.ZodDate, Date, Date>;
-    updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
-    created_by: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    updated_by: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-}, z.UnknownKeysParam, z.ZodTypeAny, {
-    created_at: Date;
-    updated_at: Date;
-    coverage: {
-        id?: string | null | undefined;
-        name?: string | null | undefined;
-        countries?: {
-            name: string;
-            iso3: string;
-            iso2: string;
-            operators: {
-                name: string;
-                supported_rats: string[];
-            }[];
-        }[] | null | undefined;
-        label?: string | null | undefined;
-    };
-    id?: string | null | undefined;
-    name?: string | null | undefined;
-    created_by?: string | null | undefined;
-    updated_by?: string | null | undefined;
-    external_id?: string | null | undefined;
-    label?: string | null | undefined;
-    purchase_price?: number | null | undefined;
-    voice_minutes?: number | null | undefined;
-    data_mega_bytes?: number | null | undefined;
-    sms_messages?: number | null | undefined;
-    period_days?: number | null | undefined;
-    period_iterations?: number | null | undefined;
-    throttled_speed_kbps?: number | null | undefined;
-    archived_at?: number | null | undefined;
-}, {
-    created_at: Date;
-    updated_at: Date;
-    coverage: {
-        id?: string | null | undefined;
-        name?: string | null | undefined;
-        countries?: {
-            name: string;
-            iso3: string;
-            iso2: string;
-            operators: {
-                name: string;
-                supported_rats: string[];
-            }[];
-        }[] | null | undefined;
-        label?: string | null | undefined;
-    };
-    id?: string | null | undefined;
-    name?: string | null | undefined;
-    created_by?: string | null | undefined;
-    updated_by?: string | null | undefined;
-    external_id?: string | null | undefined;
-    label?: string | null | undefined;
-    purchase_price?: number | null | undefined;
-    voice_minutes?: number | null | undefined;
-    data_mega_bytes?: number | null | undefined;
-    sms_messages?: number | null | undefined;
-    period_days?: number | null | undefined;
-    period_iterations?: number | null | undefined;
-    throttled_speed_kbps?: number | null | undefined;
-    archived_at?: number | null | undefined;
+    created_by: string | null;
+    updated_by: string | null;
+    type: string;
+    external_id: string;
+    provider: string;
+    purchase_price: number;
+    supported_countries: string[];
+    provider_specific_data: Record<string, any>;
 }>;
 type SupportedLocales = typeof SUPPORTED_LOCALES$1[number];
 declare const SUPPORTED_LOCALES: readonly ["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK"];
 
-export { API_LOG_COLLECTION, Address, AddressSchema, Analytics, AnalyticsSchema, ApiLog, ApiLogApiRequest, ApiLogApiResponse, ApiLogSchema, BOOKING_COLLECTION, BankingDetails, BankingDetailsSchema, BaseReward, BaseRewardSchema, BondioPackage, BondioPackageSchema, BondioPackageTemplate, BondioPackageTemplateSchema, Booking, BookingApiRequest, BookingApiResponse, BookingSchema, BookingStatus, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannel, CommunicationChannelSchema, CommunicationOptions, CommunicationOptionsSchema, Country, CountrySchema, Currency, CurrencySchema, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, Destination, DestinationBundle, DestinationBundleSchema, DestinationSchema, ESIM, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBaseReward, HBaseRewardSchema, HBondioPackage, HBondioPackageSchema, HBondioPackageTemplate, HBondioPackageTemplateSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HDestination, HDestinationBundle, HDestinationBundleSchema, HDestinationSchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HReview, HReviewSchema, HReviewSubmission, HReviewSubmissionSchema, HRewardMultipliers, HRewardMultipliersSchema, HRewardPackageType, HRewardPackageTypeSchema, HRewardStrategy, HRewardStrategySchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTelnaPackageTemplate, HTelnaPackageTemplateSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModel, HubbyModelApp, HubbyModelFirestore, HubbyModelSchema, MESSAGE_COLLECTION, Message, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, Package, PackagePrice, PackagePriceSchema, PackageSchema, PackageSpecification, Partner, PartnerApiRequest, PartnerApiResponse, PartnerContact, PartnerContactSchema, PartnerData, PartnerDataSchema, PartnerPackageSpecification, PartnerPackageSpecificationSchema, PartnerSchema, Payment, PaymentSchema, PlatformSettings, PlatformSettingsSchema, PriceList, PriceListApiRequest, PriceListApiResponse, PriceListSchema, PromoCode, PromoCodeSchema, PromoPackageSpecificationSchema, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, ROLE_COLLECTION, Registration, RegistrationSchema, Review, ReviewSchema, ReviewSubmission, ReviewSubmissionSchema, RewardMultipliers, RewardMultipliersSchema, RewardPackageType, RewardPackageTypeSchema, RewardStrategy, RewardStrategySchema, SUPPORTED_LOCALES, Schedule, ScheduleFilter, ScheduleFilterSchema, ScheduleSchema, SupportedLocales, TRAFFIC_POLICY_COLLECTION, Tag, TagSchema, TelnaPackage, TelnaPackageSchema, TelnaPackageTemplate, TelnaPackageTemplateSchema, TrafficPolicy, TrafficPolicySchema, USER_COLLECTION, User, UserFirestore, UserFirestoreSchema, UserSchema, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerSchema, VisualIdentityBannerStrategy, VisualIdentityBanners, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, apiLogSchemaSpec, bondioPackageTemplateAppSchema, bondioPackageTemplateSchemaSpec, bookingSchemaSpec, countrySchemaSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, currencySchemaSpec, destinationAppSchema, destinationBundleAppSchema, destinationBundleSchemaSpec, destinationSchemaSpec, esimSchemaSpec, messageSchemaSpec, packageSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, paymentSchemaSpec, priceListFromFirestore, priceListSchemaSpec, priceListToFirestore, promoCodeFromFirestore, promoCodeSchemaSpec, promoCodeToFirestore, reviewSchemaSpec, reviewSubmissionSchemaSpec, telnaPackageTemplateAppSchema, telnaPackageTemplateSchemaSpec, userFromFirestore, userSchemaSpec, userToFirestore };
+export { API_LOG_COLLECTION, Address, AddressSchema, Analytics, AnalyticsSchema, ApiLog, ApiLogApiRequest, ApiLogApiResponse, ApiLogSchema, BOOKING_COLLECTION, BankingDetails, BankingDetailsSchema, BaseReward, BaseRewardSchema, BondioPackage, BondioPackageSchema, Booking, BookingApiRequest, BookingApiResponse, BookingSchema, BookingStatus, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannel, CommunicationChannelSchema, CommunicationOptions, CommunicationOptionsSchema, Country, CountrySchema, Currency, CurrencySchema, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, Destination, DestinationBundle, DestinationBundleSchema, DestinationSchema, ESIM, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBaseReward, HBaseRewardSchema, HBondioPackage, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HDestination, HDestinationBundle, HDestinationBundleSchema, HDestinationSchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPackageTemplate, HPackageTemplateSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HReview, HReviewSchema, HReviewSubmission, HReviewSubmissionSchema, HRewardMultipliers, HRewardMultipliersSchema, HRewardPackageType, HRewardPackageTypeSchema, HRewardStrategy, HRewardStrategySchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModel, HubbyModelApp, HubbyModelFirestore, HubbyModelSchema, MESSAGE_COLLECTION, Message, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, Package, PackagePrice, PackagePriceSchema, PackageSchema, PackageSpecification, PackageTemplate, PackageTemplateSchema, Partner, PartnerApiRequest, PartnerApiResponse, PartnerContact, PartnerContactSchema, PartnerData, PartnerDataSchema, PartnerPackageSpecification, PartnerPackageSpecificationSchema, PartnerSchema, Payment, PaymentSchema, PlatformSettings, PlatformSettingsSchema, PriceList, PriceListApiRequest, PriceListApiResponse, PriceListSchema, PromoCode, PromoCodeSchema, PromoPackageSpecificationSchema, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, ROLE_COLLECTION, Registration, RegistrationSchema, Review, ReviewSchema, ReviewSubmission, ReviewSubmissionSchema, RewardMultipliers, RewardMultipliersSchema, RewardPackageType, RewardPackageTypeSchema, RewardStrategy, RewardStrategySchema, SUPPORTED_LOCALES, Schedule, ScheduleFilter, ScheduleFilterSchema, ScheduleSchema, SupportedLocales, TRAFFIC_POLICY_COLLECTION, Tag, TagSchema, TelnaPackage, TelnaPackageSchema, TrafficPolicy, TrafficPolicySchema, USER_COLLECTION, User, UserFirestore, UserFirestoreSchema, UserSchema, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerSchema, VisualIdentityBannerStrategy, VisualIdentityBanners, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, apiLogSchemaSpec, bookingSchemaSpec, countrySchemaSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, currencySchemaSpec, destinationAppSchema, destinationBundleAppSchema, destinationBundleSchemaSpec, destinationSchemaSpec, esimSchemaSpec, messageSchemaSpec, packageSchemaSpec, packageTemplateAppSchema, packageTemplateSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, paymentSchemaSpec, priceListFromFirestore, priceListSchemaSpec, priceListToFirestore, promoCodeFromFirestore, promoCodeSchemaSpec, promoCodeToFirestore, reviewSchemaSpec, reviewSubmissionSchemaSpec, userFromFirestore, userSchemaSpec, userToFirestore };

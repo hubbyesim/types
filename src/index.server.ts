@@ -47,7 +47,7 @@ import {
     rewardPackageTypeSchema
 } from './specs/review';
 import { destinationSchemaSpec, destinationBundleSchemaSpec } from './specs/destination';
-import { telnaPackageTemplateSchemaSpec, bondioPackageTemplateSchemaSpec } from './specs/package_template';
+import { packageTemplateSchemaSpec } from './specs/package_template';
 import { z } from 'zod';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 
@@ -74,8 +74,7 @@ export {
     reviewSubmissionSchemaSpec,
     destinationSchemaSpec,
     destinationBundleSchemaSpec,
-    telnaPackageTemplateSchemaSpec,
-    bondioPackageTemplateSchemaSpec
+    packageTemplateSchemaSpec
 };
 
 
@@ -106,8 +105,7 @@ export const ReviewSchema = buildServerSchema(reviewSchemaSpec);
 export const ReviewSubmissionSchema = buildServerSchema(reviewSubmissionSchemaSpec);
 export const DestinationSchema = buildServerSchema(destinationSchemaSpec);
 export const DestinationBundleSchema = buildServerSchema(destinationBundleSchemaSpec);
-export const TelnaPackageTemplateSchema = buildServerSchema(telnaPackageTemplateSchemaSpec);
-export const BondioPackageTemplateSchema = buildServerSchema(bondioPackageTemplateSchemaSpec);
+export const PackageTemplateSchema = buildServerSchema(packageTemplateSchemaSpec);
 
 // Additional lower-level schemas
 export const AddressSchema = addressSchema;
@@ -150,8 +148,7 @@ export type Review = z.infer<typeof ReviewSchema>;
 export type ReviewSubmission = z.infer<typeof ReviewSubmissionSchema>;
 export type Destination = z.infer<typeof DestinationSchema>;
 export type DestinationBundle = z.infer<typeof DestinationBundleSchema>;
-export type TelnaPackageTemplate = z.infer<typeof TelnaPackageTemplateSchema>;
-export type BondioPackageTemplate = z.infer<typeof BondioPackageTemplateSchema>;
+export type PackageTemplate = z.infer<typeof PackageTemplateSchema>;
 
 // Additional lower-level types
 export type Address = z.infer<typeof AddressSchema>;
@@ -239,8 +236,7 @@ export const promoCodeToFirestore = (promoCode: HPromoCode): PromoCode => {
 export const partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 export const destinationAppSchema = buildClientSchema(destinationSchemaSpec);
 export const destinationBundleAppSchema = buildClientSchema(destinationBundleSchemaSpec);
-export const telnaPackageTemplateAppSchema = buildClientSchema(telnaPackageTemplateSchemaSpec);
-export const bondioPackageTemplateAppSchema = buildClientSchema(bondioPackageTemplateSchemaSpec);
+export const packageTemplateAppSchema = buildClientSchema(packageTemplateSchemaSpec);
 // Export the type and constant
 export type SupportedLocales = typeof LOCALES[number];
 export const SUPPORTED_LOCALES = LOCALES;

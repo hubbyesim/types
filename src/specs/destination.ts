@@ -1,8 +1,11 @@
 import { z } from 'zod';
 import { markAsSchemaSpec } from '../common';
 import {
-    PACKAGE_COLLECTION,
-    timestampRequired
+    PACKAGE_TEMPLATE_COLLECTION,
+    PARTNER_COLLECTION,
+    timestampNullable,
+    timestampRequired,
+    TRAFFIC_POLICY_COLLECTION
 } from './common';
 
 // Destination schema spec
@@ -24,9 +27,20 @@ export const destinationSchemaSpec = markAsSchemaSpec({
 export const destinationBundleSchemaSpec = markAsSchemaSpec({
     id: z.string(),
     type: z.enum(['unlimited', 'data-limited', 'starter']),
-    duration_days: z.number(),
-    size_gb: z.number(),
-    package: { _type: 'docRef' as const, collection: PACKAGE_COLLECTION },
+
+    provider: z.enum(['telna', 'bondio']),
+
+    duration_in_days: z.number(),
+    duration_in_seconds: z.number(),
+    
+    size_in_bytes: z.number(),
+    size_in_megabytes: z.number(),
+    size_in_gigabytes: z.number(),
+
+    package_template: { _type: 'docRef' as const, collection: PACKAGE_TEMPLATE_COLLECTION },
+    partner: { _type: 'docRef' as const, collection: PARTNER_COLLECTION, nullable: true },
+    //All unlimited packages will have a throttling policy, but this only refers to telna bundles
+    throttling_policy: { _type: 'docRef' as const, collection: TRAFFIC_POLICY_COLLECTION, nullable: true },
     currency: z.string(),
     b2c_price: z.number(),
     b2b_price: z.number(),
@@ -43,11 +57,13 @@ export const destinationBundleSchemaSpec = markAsSchemaSpec({
         optional: true
     },
     is_active: z.boolean().default(true),
-    is_visible: z.boolean().default(true),
+    is_visible: z.boolean().default(true), //All bundles that will have a partner will probably be invisible
     priority: z.number().default(10),
     created_at: timestampRequired,
     updated_at: timestampRequired,
+    deleted_at: timestampNullable,
     created_by: z.string().nullable(),
-    updated_by: z.string().nullable()
+    updated_by: z.string().nullable(),
+    deleted_by: z.string().nullable()
 });
 
