@@ -5338,7 +5338,7 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     size_in_gigabytes: z.ZodNumber;
     package_template: z.ZodString;
     partner: z.ZodString;
-    throttling_policy: z.ZodString;
+    traffic_policy: z.ZodString;
     currency: z.ZodString;
     b2c_price: z.ZodNumber;
     b2b_price: z.ZodNumber;
@@ -5363,6 +5363,7 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     updated_by: string | null;
     type: "data-limited" | "starter" | "unlimited";
     is_active: boolean;
+    traffic_policy: string;
     provider: "telna" | "bondio";
     priority: number;
     duration_in_days: number;
@@ -5371,7 +5372,6 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     size_in_megabytes: number;
     size_in_gigabytes: number;
     package_template: string;
-    throttling_policy: string;
     b2c_price: number;
     b2b_price: number;
     partner_b2c_price: Record<string, number>;
@@ -5388,6 +5388,7 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     type: "data-limited" | "starter" | "unlimited";
+    traffic_policy: string;
     provider: "telna" | "bondio";
     duration_in_days: number;
     duration_in_seconds: number;
@@ -5395,7 +5396,6 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     size_in_megabytes: number;
     size_in_gigabytes: number;
     package_template: string;
-    throttling_policy: string;
     b2c_price: number;
     b2b_price: number;
     partner_b2c_price: Record<string, number>;

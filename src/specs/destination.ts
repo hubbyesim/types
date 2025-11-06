@@ -37,10 +37,10 @@ export const destinationBundleSchemaSpec = markAsSchemaSpec({
     size_in_megabytes: z.number(),
     size_in_gigabytes: z.number(),
 
-    package_template: { _type: 'docRef' as const, collection: PACKAGE_TEMPLATE_COLLECTION },
+    package_template: { _type: 'docRef' as const, collection: PACKAGE_TEMPLATE_COLLECTION, nullable: true },
     partner: { _type: 'docRef' as const, collection: PARTNER_COLLECTION, nullable: true },
-    //All unlimited packages will have a throttling policy, but this only refers to telna bundles
-    throttling_policy: { _type: 'docRef' as const, collection: TRAFFIC_POLICY_COLLECTION, nullable: true },
+    //All unlimited packages will have a traffic policy, but this only refers to telna bundles
+    traffic_policy: { _type: 'docRef' as const, collection: TRAFFIC_POLICY_COLLECTION, nullable: true },
     currency: z.string(),
     b2c_price: z.number(),
     b2b_price: z.number(),
