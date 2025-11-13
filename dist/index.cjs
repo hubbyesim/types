@@ -1135,6 +1135,7 @@ var destinationSchemaSpec = markAsSchemaSpec({
 });
 var destinationBundleSchemaSpec = markAsSchemaSpec({
   id: zod.z.string(),
+  parent_document_id: zod.z.string(),
   type: zod.z.enum(["unlimited", "data-limited", "starter"]),
   provider: zod.z.enum(["telna", "bondio"]),
   duration_in_days: zod.z.number(),

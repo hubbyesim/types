@@ -26,6 +26,7 @@ export const destinationSchemaSpec = markAsSchemaSpec({
 // Destination offer schema spec
 export const destinationBundleSchemaSpec = markAsSchemaSpec({
     id: z.string(),
+    parent_document_id: z.string(),
     type: z.enum(['unlimited', 'data-limited', 'starter']),
 
     provider: z.enum(['telna', 'bondio']),

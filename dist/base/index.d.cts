@@ -5329,6 +5329,7 @@ declare const HDestinationSchema: z.ZodObject<{
 }>;
 declare const HDestinationBundleSchema: z.ZodObject<{
     id: z.ZodString;
+    parent_document_id: z.ZodString;
     type: z.ZodEnum<["unlimited", "data-limited", "starter"]>;
     provider: z.ZodEnum<["telna", "bondio"]>;
     duration_in_days: z.ZodNumber;
@@ -5366,6 +5367,7 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     traffic_policy: string;
     provider: "telna" | "bondio";
     priority: number;
+    parent_document_id: string;
     duration_in_days: number;
     duration_in_seconds: number;
     size_in_bytes: number;
@@ -5390,6 +5392,7 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     type: "data-limited" | "starter" | "unlimited";
     traffic_policy: string;
     provider: "telna" | "bondio";
+    parent_document_id: string;
     duration_in_days: number;
     duration_in_seconds: number;
     size_in_bytes: number;
