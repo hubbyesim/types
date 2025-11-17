@@ -1125,6 +1125,7 @@ var reviewSubmissionSchemaSpec = markAsSchemaSpec({
   analysis: zod.z.record(zod.z.any()).nullable().optional()
 });
 var loginRequestSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string().nullable().optional(),
   email: zod.z.string().email(),
   status: zod.z.enum(["pending", "completed", "expired"]),
   created_at: timestampRequired,

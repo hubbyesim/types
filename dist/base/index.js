@@ -1113,6 +1113,7 @@ var reviewSubmissionSchemaSpec = markAsSchemaSpec({
   analysis: z.record(z.any()).nullable().optional()
 });
 var loginRequestSchemaSpec = markAsSchemaSpec({
+  id: z.string().nullable().optional(),
   email: z.string().email(),
   status: z.enum(["pending", "completed", "expired"]),
   created_at: timestampRequired,

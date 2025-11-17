@@ -4,6 +4,7 @@ import { timestampRequired } from './common';
 
 // Define the login request schema spec
 export const loginRequestSchemaSpec = markAsSchemaSpec({
+    id: z.string().nullable().optional(),
     email: z.string().email(),
     status: z.enum(['pending', 'completed', 'expired']),
     created_at: timestampRequired,

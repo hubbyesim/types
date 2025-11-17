@@ -5294,6 +5294,7 @@ declare const HUserTouchpointsSchema: z.ZodObject<{
     unique_device_identifier?: string | null | undefined;
 }>;
 declare const HLoginRequestSchema: z.ZodObject<{
+    id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     email: z.ZodString;
     status: z.ZodEnum<["pending", "completed", "expired"]>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -5303,11 +5304,13 @@ declare const HLoginRequestSchema: z.ZodObject<{
     created_at: Date;
     status: "pending" | "completed" | "expired";
     expires_at: Date;
+    id?: string | null | undefined;
 }, {
     email: string;
     created_at: Date;
     status: "pending" | "completed" | "expired";
     expires_at: Date;
+    id?: string | null | undefined;
 }>;
 declare const HAddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodNullable<z.ZodString>>;
