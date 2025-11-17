@@ -47,6 +47,7 @@ import {
     rewardMultipliersSchema,
     rewardPackageTypeSchema
 } from './specs/review';
+import { loginRequestSchemaSpec } from './specs/login_request';
 import { z } from 'zod';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 
@@ -71,7 +72,8 @@ export {
     apiLogSchemaSpec,
     reviewSchemaSpec,
     reviewSubmissionSchemaSpec,
-    userTouchpointsSchemaSpec
+    userTouchpointsSchemaSpec,
+    loginRequestSchemaSpec
 };
 
 
@@ -101,6 +103,7 @@ export const TrafficPolicySchema = buildServerSchema(trafficPolicySpec);
 export const ReviewSchema = buildServerSchema(reviewSchemaSpec);
 export const ReviewSubmissionSchema = buildServerSchema(reviewSubmissionSchemaSpec);
 export const UserTouchpointsSchema = buildServerSchema(userTouchpointsSchemaSpec);
+export const LoginRequestSchema = buildServerSchema(loginRequestSchemaSpec);
 
 // Additional lower-level schemas
 export const AddressSchema = addressSchema;
@@ -142,6 +145,7 @@ export type TrafficPolicy = z.infer<typeof TrafficPolicySchema>;
 export type Review = z.infer<typeof ReviewSchema>;
 export type ReviewSubmission = z.infer<typeof ReviewSubmissionSchema>;
 export type UserTouchpoints = z.infer<typeof UserTouchpointsSchema>;
+export type LoginRequest = z.infer<typeof LoginRequestSchema>;
 
 // Additional lower-level types
 export type Address = z.infer<typeof AddressSchema>;

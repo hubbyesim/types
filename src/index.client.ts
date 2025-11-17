@@ -53,6 +53,7 @@ import {
   rewardMultipliersSchema,
   rewardPackageTypeSchema
 } from './specs/review';
+import { loginRequestSchemaSpec } from './specs/login_request';
 
 
 /** ZOD SCHEMAS */
@@ -86,6 +87,7 @@ export const HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
 export const HReviewSchema = buildClientSchema(reviewSchemaSpec);
 export const HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
 export const HUserTouchpointsSchema = buildClientSchema(userTouchpointsSchemaSpec);
+export const HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 // Additional lower-level schemas
 export const HAddressSchema = addressSchema;
 export const HRegistrationSchema = registrationSchema;
@@ -124,6 +126,7 @@ export type HTelnaPackage = z.infer<typeof HTelnaPackageSchema>;
 export type HReview = z.infer<typeof HReviewSchema>;
 export type HReviewSubmission = z.infer<typeof HReviewSubmissionSchema>;
 export type HUserTouchpoints = z.infer<typeof HUserTouchpointsSchema>;
+export type HLoginRequest = z.infer<typeof HLoginRequestSchema>;
 // Additional lower-level types
 export type HAddress = z.infer<typeof HAddressSchema>;
 export type HRegistration = z.infer<typeof HRegistrationSchema>;
