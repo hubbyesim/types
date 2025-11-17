@@ -154,6 +154,7 @@ declare const bookingSchemaSpec: {
     import_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     package_specifications: z.ZodArray<z.ZodObject<{
         destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
+        iso3: z.ZodOptional<z.ZodString>;
         size: z.ZodOptional<z.ZodString>;
         package_id: z.ZodOptional<z.ZodString>;
         bundle_id: z.ZodOptional<z.ZodString>;
@@ -163,6 +164,7 @@ declare const bookingSchemaSpec: {
         traffic_policy: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         destination?: string | string[] | undefined;
+        iso3?: string | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
@@ -172,6 +174,7 @@ declare const bookingSchemaSpec: {
         traffic_policy?: string | undefined;
     }, {
         destination?: string | string[] | undefined;
+        iso3?: string | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
@@ -396,16 +399,16 @@ declare const paymentSchemaSpec: {
         iso3: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         destination?: string | undefined;
+        iso3?: string | undefined;
         package_duration?: number | undefined;
         package_type?: string | undefined;
         package_size?: string | undefined;
-        iso3?: string | undefined;
     }, {
         destination?: string | undefined;
+        iso3?: string | undefined;
         package_duration?: number | undefined;
         package_type?: string | undefined;
         package_size?: string | undefined;
-        iso3?: string | undefined;
     }>, "many">>;
     user: {
         _type: "docRef";
@@ -694,6 +697,7 @@ declare const promoCodeSchemaSpec: {
     uuid_usage: z.ZodArray<z.ZodString, "many">;
     package_specification: z.ZodOptional<z.ZodObject<{
         destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
+        iso3: z.ZodOptional<z.ZodString>;
         size: z.ZodOptional<z.ZodString>;
         package_id: z.ZodOptional<z.ZodString>;
         bundle_id: z.ZodOptional<z.ZodString>;
@@ -703,6 +707,7 @@ declare const promoCodeSchemaSpec: {
         traffic_policy: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         destination?: string | string[] | undefined;
+        iso3?: string | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
@@ -712,6 +717,7 @@ declare const promoCodeSchemaSpec: {
         traffic_policy?: string | undefined;
     }, {
         destination?: string | string[] | undefined;
+        iso3?: string | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
@@ -1869,6 +1875,7 @@ declare const HBookingSchema: z.ZodObject<{
     import_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     package_specifications: z.ZodArray<z.ZodObject<{
         destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
+        iso3: z.ZodOptional<z.ZodString>;
         size: z.ZodOptional<z.ZodString>;
         package_id: z.ZodOptional<z.ZodString>;
         bundle_id: z.ZodOptional<z.ZodString>;
@@ -1878,6 +1885,7 @@ declare const HBookingSchema: z.ZodObject<{
         traffic_policy: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         destination?: string | string[] | undefined;
+        iso3?: string | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
@@ -1887,6 +1895,7 @@ declare const HBookingSchema: z.ZodObject<{
         traffic_policy?: string | undefined;
     }, {
         destination?: string | string[] | undefined;
+        iso3?: string | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
@@ -1946,6 +1955,7 @@ declare const HBookingSchema: z.ZodObject<{
     is_pseudonymized: boolean;
     package_specifications: {
         destination?: string | string[] | undefined;
+        iso3?: string | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
@@ -2001,6 +2011,7 @@ declare const HBookingSchema: z.ZodObject<{
     is_pseudonymized: boolean;
     package_specifications: {
         destination?: string | string[] | undefined;
+        iso3?: string | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
@@ -2268,16 +2279,16 @@ declare const HPaymentSchema: z.ZodObject<{
         iso3: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         destination?: string | undefined;
+        iso3?: string | undefined;
         package_duration?: number | undefined;
         package_type?: string | undefined;
         package_size?: string | undefined;
-        iso3?: string | undefined;
     }, {
         destination?: string | undefined;
+        iso3?: string | undefined;
         package_duration?: number | undefined;
         package_type?: string | undefined;
         package_size?: string | undefined;
-        iso3?: string | undefined;
     }>, "many">>;
     user: z.ZodString;
     partner: z.ZodString;
@@ -2358,10 +2369,10 @@ declare const HPaymentSchema: z.ZodObject<{
     status?: "pending" | "processing" | "completed" | "failed" | undefined;
     package_specifications?: {
         destination?: string | undefined;
+        iso3?: string | undefined;
         package_duration?: number | undefined;
         package_type?: string | undefined;
         package_size?: string | undefined;
-        iso3?: string | undefined;
     }[] | undefined;
     invoice?: string | undefined;
     fee?: number | undefined;
@@ -2403,10 +2414,10 @@ declare const HPaymentSchema: z.ZodObject<{
     status?: "pending" | "processing" | "completed" | "failed" | undefined;
     package_specifications?: {
         destination?: string | undefined;
+        iso3?: string | undefined;
         package_duration?: number | undefined;
         package_type?: string | undefined;
         package_size?: string | undefined;
-        iso3?: string | undefined;
     }[] | undefined;
     invoice?: string | undefined;
     fee?: number | undefined;
@@ -2667,6 +2678,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
     uuid_usage: z.ZodArray<z.ZodString, "many">;
     package_specification: z.ZodOptional<z.ZodObject<{
         destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
+        iso3: z.ZodOptional<z.ZodString>;
         size: z.ZodOptional<z.ZodString>;
         package_id: z.ZodOptional<z.ZodString>;
         bundle_id: z.ZodOptional<z.ZodString>;
@@ -2676,6 +2688,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
         traffic_policy: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         destination?: string | string[] | undefined;
+        iso3?: string | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
@@ -2685,6 +2698,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
         traffic_policy?: string | undefined;
     }, {
         destination?: string | string[] | undefined;
+        iso3?: string | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
@@ -2731,6 +2745,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
     discount?: number | undefined;
     package_specification?: {
         destination?: string | string[] | undefined;
+        iso3?: string | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
@@ -2768,6 +2783,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
     discount?: number | undefined;
     package_specification?: {
         destination?: string | string[] | undefined;
+        iso3?: string | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
@@ -7181,6 +7197,7 @@ declare const HPartnerPackageSpecificationSchema: z.ZodObject<{
 }>;
 declare const HPromoPackageSpecificationSchema: z.ZodObject<{
     destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
+    iso3: z.ZodOptional<z.ZodString>;
     size: z.ZodOptional<z.ZodString>;
     package_id: z.ZodOptional<z.ZodString>;
     bundle_id: z.ZodOptional<z.ZodString>;
@@ -7190,6 +7207,7 @@ declare const HPromoPackageSpecificationSchema: z.ZodObject<{
     traffic_policy: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     destination?: string | string[] | undefined;
+    iso3?: string | undefined;
     size?: string | undefined;
     package_id?: string | undefined;
     bundle_id?: string | undefined;
@@ -7199,6 +7217,7 @@ declare const HPromoPackageSpecificationSchema: z.ZodObject<{
     traffic_policy?: string | undefined;
 }, {
     destination?: string | string[] | undefined;
+    iso3?: string | undefined;
     size?: string | undefined;
     package_id?: string | undefined;
     bundle_id?: string | undefined;
@@ -7564,6 +7583,7 @@ declare const PartnerPackageSpecificationSchema: z.ZodObject<{
 }>;
 declare const PromoPackageSpecificationSchema: z.ZodObject<{
     destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
+    iso3: z.ZodOptional<z.ZodString>;
     size: z.ZodOptional<z.ZodString>;
     package_id: z.ZodOptional<z.ZodString>;
     bundle_id: z.ZodOptional<z.ZodString>;
@@ -7573,6 +7593,7 @@ declare const PromoPackageSpecificationSchema: z.ZodObject<{
     traffic_policy: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     destination?: string | string[] | undefined;
+    iso3?: string | undefined;
     size?: string | undefined;
     package_id?: string | undefined;
     bundle_id?: string | undefined;
@@ -7582,6 +7603,7 @@ declare const PromoPackageSpecificationSchema: z.ZodObject<{
     traffic_policy?: string | undefined;
 }, {
     destination?: string | string[] | undefined;
+    iso3?: string | undefined;
     size?: string | undefined;
     package_id?: string | undefined;
     bundle_id?: string | undefined;
