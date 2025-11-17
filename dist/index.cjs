@@ -302,6 +302,7 @@ var packageSpecificationSchema = zod.z.object({
   destination: zod.z.string().optional().or(zod.z.array(zod.z.string())),
   size: zod.z.string().optional(),
   package_id: zod.z.string().optional(),
+  bundle_id: zod.z.string().optional(),
   iata_code: zod.z.string().optional(),
   package_duration: zod.z.number().optional(),
   package_type: zod.z.enum(["data-limited", "time-limited", "starter", "unlimited"]).optional(),

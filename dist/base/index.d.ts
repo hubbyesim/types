@@ -212,6 +212,7 @@ declare const HBookingSchema: z.ZodObject<{
         destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
         size: z.ZodOptional<z.ZodString>;
         package_id: z.ZodOptional<z.ZodString>;
+        bundle_id: z.ZodOptional<z.ZodString>;
         iata_code: z.ZodOptional<z.ZodString>;
         package_duration: z.ZodOptional<z.ZodNumber>;
         package_type: z.ZodOptional<z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>>;
@@ -220,6 +221,7 @@ declare const HBookingSchema: z.ZodObject<{
         destination?: string | string[] | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
+        bundle_id?: string | undefined;
         iata_code?: string | undefined;
         package_duration?: number | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
@@ -228,6 +230,7 @@ declare const HBookingSchema: z.ZodObject<{
         destination?: string | string[] | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
+        bundle_id?: string | undefined;
         iata_code?: string | undefined;
         package_duration?: number | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
@@ -286,6 +289,7 @@ declare const HBookingSchema: z.ZodObject<{
         destination?: string | string[] | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
+        bundle_id?: string | undefined;
         iata_code?: string | undefined;
         package_duration?: number | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
@@ -340,6 +344,7 @@ declare const HBookingSchema: z.ZodObject<{
         destination?: string | string[] | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
+        bundle_id?: string | undefined;
         iata_code?: string | undefined;
         package_duration?: number | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
@@ -1005,6 +1010,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
         destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
         size: z.ZodOptional<z.ZodString>;
         package_id: z.ZodOptional<z.ZodString>;
+        bundle_id: z.ZodOptional<z.ZodString>;
         iata_code: z.ZodOptional<z.ZodString>;
         package_duration: z.ZodOptional<z.ZodNumber>;
         package_type: z.ZodOptional<z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>>;
@@ -1013,6 +1019,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
         destination?: string | string[] | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
+        bundle_id?: string | undefined;
         iata_code?: string | undefined;
         package_duration?: number | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
@@ -1021,6 +1028,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
         destination?: string | string[] | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
+        bundle_id?: string | undefined;
         iata_code?: string | undefined;
         package_duration?: number | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
@@ -1066,6 +1074,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
         destination?: string | string[] | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
+        bundle_id?: string | undefined;
         iata_code?: string | undefined;
         package_duration?: number | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
@@ -1102,6 +1111,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
         destination?: string | string[] | undefined;
         size?: string | undefined;
         package_id?: string | undefined;
+        bundle_id?: string | undefined;
         iata_code?: string | undefined;
         package_duration?: number | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
@@ -5514,6 +5524,7 @@ declare const HPromoPackageSpecificationSchema: z.ZodObject<{
     destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
     size: z.ZodOptional<z.ZodString>;
     package_id: z.ZodOptional<z.ZodString>;
+    bundle_id: z.ZodOptional<z.ZodString>;
     iata_code: z.ZodOptional<z.ZodString>;
     package_duration: z.ZodOptional<z.ZodNumber>;
     package_type: z.ZodOptional<z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>>;
@@ -5522,6 +5533,7 @@ declare const HPromoPackageSpecificationSchema: z.ZodObject<{
     destination?: string | string[] | undefined;
     size?: string | undefined;
     package_id?: string | undefined;
+    bundle_id?: string | undefined;
     iata_code?: string | undefined;
     package_duration?: number | undefined;
     package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
@@ -5530,6 +5542,7 @@ declare const HPromoPackageSpecificationSchema: z.ZodObject<{
     destination?: string | string[] | undefined;
     size?: string | undefined;
     package_id?: string | undefined;
+    bundle_id?: string | undefined;
     iata_code?: string | undefined;
     package_duration?: number | undefined;
     package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
