@@ -1124,6 +1124,13 @@ var reviewSubmissionSchemaSpec = markAsSchemaSpec({
   updated_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
   analysis: zod.z.record(zod.z.any()).nullable().optional()
 });
+var loginRequestSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string().nullable().optional(),
+  email: zod.z.string().email(),
+  status: zod.z.enum(["pending", "completed", "expired"]),
+  created_at: timestampRequired,
+  expires_at: timestampRequired
+});
 function createConvertJSToFirestore(db) {
   return function convertJSToFirestore2(input, spec) {
     if (input === void 0 || input === null)
@@ -1416,6 +1423,7 @@ var HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
 var HReviewSchema = buildClientSchema(reviewSchemaSpec);
 var HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
 var HUserTouchpointsSchema = buildClientSchema(userTouchpointsSchemaSpec);
+var HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1479,6 +1487,7 @@ var TrafficPolicySchema = buildServerSchema(trafficPolicySpec);
 var ReviewSchema = buildServerSchema(reviewSchemaSpec);
 var ReviewSubmissionSchema = buildServerSchema(reviewSubmissionSchemaSpec);
 var UserTouchpointsSchema = buildServerSchema(userTouchpointsSchemaSpec);
+var LoginRequestSchema = buildServerSchema(loginRequestSchemaSpec);
 var AddressSchema = addressSchema;
 var RegistrationSchema = registrationSchema;
 var BankingDetailsSchema = bankingDetailsSchema;
@@ -1563,6 +1572,7 @@ exports.HCurrencySchema = HCurrencySchema;
 exports.HESIMSchema = HESIMSchema;
 exports.HFinancialPropertiesSchema = HFinancialPropertiesSchema;
 exports.HFreeEsimSchema = HFreeEsimSchema;
+exports.HLoginRequestSchema = HLoginRequestSchema;
 exports.HMessageSchema = HMessageSchema;
 exports.HPackagePriceSchema = HPackagePriceSchema;
 exports.HPackageSchema = HPackageSchema;
@@ -1594,6 +1604,7 @@ exports.HUserTouchpointsSchema = HUserTouchpointsSchema;
 exports.HVisualIdentityBannerSchema = HVisualIdentityBannerSchema;
 exports.HVisualIdentitySchema = HVisualIdentitySchema;
 exports.HubbyModelSchema = HubbyModelSchema;
+exports.LoginRequestSchema = LoginRequestSchema;
 exports.MESSAGE_COLLECTION = MESSAGE_COLLECTION;
 exports.MessageSchema = MessageSchema;
 exports.PACKAGE_COLLECTION = PACKAGE_COLLECTION;
@@ -1648,6 +1659,7 @@ exports.createFirebaseService = createFirebaseService;
 exports.createModelConverters = createModelConverters;
 exports.currencySchemaSpec = currencySchemaSpec;
 exports.esimSchemaSpec = esimSchemaSpec;
+exports.loginRequestSchemaSpec = loginRequestSchemaSpec;
 exports.messageSchemaSpec = messageSchemaSpec;
 exports.packageSchemaSpec = packageSchemaSpec;
 exports.partnerAppSchema = partnerAppSchema;

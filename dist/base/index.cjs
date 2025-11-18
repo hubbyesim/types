@@ -1114,6 +1114,13 @@ var reviewSubmissionSchemaSpec = markAsSchemaSpec({
   updated_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
   analysis: zod.z.record(zod.z.any()).nullable().optional()
 });
+var loginRequestSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string().nullable().optional(),
+  email: zod.z.string().email(),
+  status: zod.z.enum(["pending", "completed", "expired"]),
+  created_at: timestampRequired,
+  expires_at: timestampRequired
+});
 
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
@@ -1146,6 +1153,7 @@ var HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
 var HReviewSchema = buildClientSchema(reviewSchemaSpec);
 var HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
 var HUserTouchpointsSchema = buildClientSchema(userTouchpointsSchemaSpec);
+var HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1179,6 +1187,7 @@ exports.HCurrencySchema = HCurrencySchema;
 exports.HESIMSchema = HESIMSchema;
 exports.HFinancialPropertiesSchema = HFinancialPropertiesSchema;
 exports.HFreeEsimSchema = HFreeEsimSchema;
+exports.HLoginRequestSchema = HLoginRequestSchema;
 exports.HMessageSchema = HMessageSchema;
 exports.HPackagePriceSchema = HPackagePriceSchema;
 exports.HPackageSchema = HPackageSchema;
