@@ -5297,6 +5297,7 @@ declare const HLoginRequestSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     email: z.ZodString;
     status: z.ZodEnum<["pending", "completed", "expired"]>;
+    user: z.ZodString;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     expires_at: z.ZodEffects<z.ZodDate, Date, Date>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
@@ -5304,12 +5305,14 @@ declare const HLoginRequestSchema: z.ZodObject<{
     created_at: Date;
     status: "pending" | "completed" | "expired";
     expires_at: Date;
+    user: string;
     id?: string | null | undefined;
 }, {
     email: string;
     created_at: Date;
     status: "pending" | "completed" | "expired";
     expires_at: Date;
+    user: string;
     id?: string | null | undefined;
 }>;
 declare const HAddressSchema: z.ZodObject<{

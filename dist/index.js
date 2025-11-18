@@ -1126,6 +1126,7 @@ var loginRequestSchemaSpec = markAsSchemaSpec({
   id: z.string().nullable().optional(),
   email: z.string().email(),
   status: z.enum(["pending", "completed", "expired"]),
+  user: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
   created_at: timestampRequired,
   expires_at: timestampRequired
 });
