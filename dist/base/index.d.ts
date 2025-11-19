@@ -5316,7 +5316,7 @@ declare const HDestinationSchema: z.ZodObject<{
     iso3s: z.ZodArray<z.ZodString, "many">;
     name: z.ZodString;
     i18n_name: z.ZodRecord<z.ZodString, z.ZodString>;
-    active: z.ZodBoolean;
+    is_active: z.ZodBoolean;
     sort_order: z.ZodNumber;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -5330,9 +5330,9 @@ declare const HDestinationSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     type: string;
+    is_active: boolean;
     i18n_name: Record<string, string>;
     iso3s: string[];
-    active: boolean;
     sort_order: number;
 }, {
     id: string;
@@ -5342,9 +5342,9 @@ declare const HDestinationSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     type: string;
+    is_active: boolean;
     i18n_name: Record<string, string>;
     iso3s: string[];
-    active: boolean;
     sort_order: number;
 }>;
 declare const HDestinationBundleSchema: z.ZodObject<{

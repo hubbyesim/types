@@ -1128,7 +1128,7 @@ var destinationSchemaSpec = markAsSchemaSpec({
   iso3s: zod.z.array(zod.z.string()),
   name: zod.z.string(),
   i18n_name: zod.z.record(zod.z.string()),
-  active: zod.z.boolean(),
+  is_active: zod.z.boolean(),
   sort_order: zod.z.number(),
   created_at: timestampRequired,
   updated_at: timestampRequired,
