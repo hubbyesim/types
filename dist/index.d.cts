@@ -1601,7 +1601,6 @@ declare const destinationBundleSchemaSpec: {
         collection: string;
         nullable: boolean;
     };
-    currency: z.ZodString;
     b2c_price: z.ZodNumber;
     b2b_price: z.ZodNumber;
     partner_b2c_price: {
@@ -7027,7 +7026,6 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     package_template: z.ZodString;
     partner: z.ZodString;
     traffic_policy: z.ZodString;
-    currency: z.ZodString;
     b2c_price: z.ZodNumber;
     b2b_price: z.ZodNumber;
     partner_b2c_price: z.ZodRecord<z.ZodString, z.ZodNumber>;
@@ -7043,7 +7041,6 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     deleted_by: z.ZodNullable<z.ZodString>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
-    currency: string;
     partner: string;
     created_at: Date;
     updated_at: Date;
@@ -7071,7 +7068,6 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     label?: string | null | undefined;
 }, {
     id: string;
-    currency: string;
     partner: string;
     created_at: Date;
     updated_at: Date;
@@ -9281,7 +9277,6 @@ declare const destinationBundleAppSchema: z.ZodObject<{
     package_template: z.ZodString;
     partner: z.ZodString;
     traffic_policy: z.ZodString;
-    currency: z.ZodString;
     b2c_price: z.ZodNumber;
     b2b_price: z.ZodNumber;
     partner_b2c_price: z.ZodRecord<z.ZodString, z.ZodNumber>;
@@ -9297,7 +9292,6 @@ declare const destinationBundleAppSchema: z.ZodObject<{
     deleted_by: z.ZodNullable<z.ZodString>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
-    currency: string;
     partner: string;
     created_at: Date;
     updated_at: Date;
@@ -9325,7 +9319,6 @@ declare const destinationBundleAppSchema: z.ZodObject<{
     label?: string | null | undefined;
 }, {
     id: string;
-    currency: string;
     partner: string;
     created_at: Date;
     updated_at: Date;

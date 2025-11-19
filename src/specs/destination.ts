@@ -42,7 +42,6 @@ export const destinationBundleSchemaSpec = markAsSchemaSpec({
     partner: { _type: 'docRef' as const, collection: PARTNER_COLLECTION, nullable: true },
     //All unlimited packages will have a traffic policy, but this only refers to telna bundles
     traffic_policy: { _type: 'docRef' as const, collection: TRAFFIC_POLICY_COLLECTION, nullable: true },
-    currency: z.string(),
     b2c_price: z.number(),
     b2b_price: z.number(),
     partner_b2c_price: {
