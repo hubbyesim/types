@@ -1116,7 +1116,7 @@ var destinationSchemaSpec = markAsSchemaSpec({
   // "country" or region names like "Europe", "Asia", "Middle East"
   iso3s: zod.z.array(zod.z.string()),
   name: zod.z.string(),
-  slug: zod.z.string(),
+  i18n_name: zod.z.record(zod.z.string()),
   active: zod.z.boolean(),
   sort_order: zod.z.number(),
   created_at: timestampRequired,
@@ -1128,6 +1128,8 @@ var destinationBundleSchemaSpec = markAsSchemaSpec({
   id: zod.z.string(),
   parent_document_id: zod.z.string(),
   type: zod.z.enum(["unlimited", "data-limited", "starter"]),
+  label: zod.z.string().nullable().optional(),
+  //'5 Days' or '5GB'
   provider: zod.z.enum(["telna", "bondio"]),
   duration_in_days: zod.z.number(),
   duration_in_seconds: zod.z.number(),

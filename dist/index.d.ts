@@ -1559,7 +1559,7 @@ declare const destinationSchemaSpec: {
     type: z.ZodString;
     iso3s: z.ZodArray<z.ZodString, "many">;
     name: z.ZodString;
-    slug: z.ZodString;
+    i18n_name: z.ZodRecord<z.ZodString, z.ZodString>;
     active: z.ZodBoolean;
     sort_order: z.ZodNumber;
     created_at: {
@@ -1579,6 +1579,7 @@ declare const destinationBundleSchemaSpec: {
     id: z.ZodString;
     parent_document_id: z.ZodString;
     type: z.ZodEnum<["unlimited", "data-limited", "starter"]>;
+    label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     provider: z.ZodEnum<["telna", "bondio"]>;
     duration_in_days: z.ZodNumber;
     duration_in_seconds: z.ZodNumber;
@@ -6980,7 +6981,7 @@ declare const HDestinationSchema: z.ZodObject<{
     type: z.ZodString;
     iso3s: z.ZodArray<z.ZodString, "many">;
     name: z.ZodString;
-    slug: z.ZodString;
+    i18n_name: z.ZodRecord<z.ZodString, z.ZodString>;
     active: z.ZodBoolean;
     sort_order: z.ZodNumber;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -6995,7 +6996,7 @@ declare const HDestinationSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     type: string;
-    slug: string;
+    i18n_name: Record<string, string>;
     iso3s: string[];
     active: boolean;
     sort_order: number;
@@ -7007,7 +7008,7 @@ declare const HDestinationSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     type: string;
-    slug: string;
+    i18n_name: Record<string, string>;
     iso3s: string[];
     active: boolean;
     sort_order: number;
@@ -7016,6 +7017,7 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     id: z.ZodString;
     parent_document_id: z.ZodString;
     type: z.ZodEnum<["unlimited", "data-limited", "starter"]>;
+    label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     provider: z.ZodEnum<["telna", "bondio"]>;
     duration_in_days: z.ZodNumber;
     duration_in_seconds: z.ZodNumber;
@@ -7066,6 +7068,7 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     is_visible: boolean;
     deleted_at: Date;
     deleted_by: string | null;
+    label?: string | null | undefined;
 }, {
     id: string;
     currency: string;
@@ -7091,6 +7094,7 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     deleted_at: Date;
     deleted_by: string | null;
     is_active?: boolean | undefined;
+    label?: string | null | undefined;
     priority?: number | undefined;
     is_visible?: boolean | undefined;
 }>;
@@ -9231,7 +9235,7 @@ declare const destinationAppSchema: z.ZodObject<{
     type: z.ZodString;
     iso3s: z.ZodArray<z.ZodString, "many">;
     name: z.ZodString;
-    slug: z.ZodString;
+    i18n_name: z.ZodRecord<z.ZodString, z.ZodString>;
     active: z.ZodBoolean;
     sort_order: z.ZodNumber;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -9246,7 +9250,7 @@ declare const destinationAppSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     type: string;
-    slug: string;
+    i18n_name: Record<string, string>;
     iso3s: string[];
     active: boolean;
     sort_order: number;
@@ -9258,7 +9262,7 @@ declare const destinationAppSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     type: string;
-    slug: string;
+    i18n_name: Record<string, string>;
     iso3s: string[];
     active: boolean;
     sort_order: number;
@@ -9267,6 +9271,7 @@ declare const destinationBundleAppSchema: z.ZodObject<{
     id: z.ZodString;
     parent_document_id: z.ZodString;
     type: z.ZodEnum<["unlimited", "data-limited", "starter"]>;
+    label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     provider: z.ZodEnum<["telna", "bondio"]>;
     duration_in_days: z.ZodNumber;
     duration_in_seconds: z.ZodNumber;
@@ -9317,6 +9322,7 @@ declare const destinationBundleAppSchema: z.ZodObject<{
     is_visible: boolean;
     deleted_at: Date;
     deleted_by: string | null;
+    label?: string | null | undefined;
 }, {
     id: string;
     currency: string;
@@ -9342,6 +9348,7 @@ declare const destinationBundleAppSchema: z.ZodObject<{
     deleted_at: Date;
     deleted_by: string | null;
     is_active?: boolean | undefined;
+    label?: string | null | undefined;
     priority?: number | undefined;
     is_visible?: boolean | undefined;
 }>;
