@@ -906,7 +906,7 @@ var partnerSchemaSpec = markAsSchemaSpec({
   updated_by: zod.z.string().nullable(),
   // Partner specific fields
   name: zod.z.string().min(3),
-  type: zod.z.string().nullable(),
+  type: zod.z.enum(["wholesale", "reseller", "platform", "agent"]).nullable().optional(),
   is_active: zod.z.boolean().nullable().optional(),
   external_id: zod.z.string().nullable().optional(),
   // Complex nested objects

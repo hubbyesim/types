@@ -766,7 +766,7 @@ declare const partnerSchemaSpec: {
     created_by: z.ZodNullable<z.ZodString>;
     updated_by: z.ZodNullable<z.ZodString>;
     name: z.ZodString;
-    type: z.ZodNullable<z.ZodString>;
+    type: z.ZodOptional<z.ZodNullable<z.ZodEnum<["wholesale", "reseller", "platform", "agent"]>>>;
     is_active: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     contact: {
@@ -2748,7 +2748,7 @@ declare const HPartnerSchema: z.ZodObject<{
     created_by: z.ZodNullable<z.ZodString>;
     updated_by: z.ZodNullable<z.ZodString>;
     name: z.ZodString;
-    type: z.ZodNullable<z.ZodString>;
+    type: z.ZodOptional<z.ZodNullable<z.ZodEnum<["wholesale", "reseller", "platform", "agent"]>>>;
     is_active: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     contact: z.ZodObject<{
@@ -3677,7 +3677,6 @@ declare const HPartnerSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: string | null;
     data: {
         source: string;
         manual: boolean;
@@ -3871,6 +3870,7 @@ declare const HPartnerSchema: z.ZodObject<{
         url?: string | null | undefined;
         api_key?: string | null | undefined;
     };
+    type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
     is_active?: boolean | null | undefined;
     external_id?: string | null | undefined;
 }, {
@@ -3880,7 +3880,6 @@ declare const HPartnerSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: string | null;
     data: {
         source: string;
         manual: boolean;
@@ -4074,6 +4073,7 @@ declare const HPartnerSchema: z.ZodObject<{
             promocode_redemption?: boolean | undefined;
         } | undefined;
     };
+    type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
     is_active?: boolean | null | undefined;
     external_id?: string | null | undefined;
 }>;
@@ -4485,7 +4485,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     created_by: z.ZodNullable<z.ZodString>;
     updated_by: z.ZodNullable<z.ZodString>;
     name: z.ZodString;
-    type: z.ZodNullable<z.ZodString>;
+    type: z.ZodOptional<z.ZodNullable<z.ZodEnum<["wholesale", "reseller", "platform", "agent"]>>>;
     is_active: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     contact: z.ZodObject<{
@@ -5414,7 +5414,6 @@ declare const HPartnerAppSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: string | null;
     data: {
         source: string;
         manual: boolean;
@@ -5608,6 +5607,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         url?: string | null | undefined;
         api_key?: string | null | undefined;
     };
+    type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
     is_active?: boolean | null | undefined;
     external_id?: string | null | undefined;
 }, {
@@ -5617,7 +5617,6 @@ declare const HPartnerAppSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: string | null;
     data: {
         source: string;
         manual: boolean;
@@ -5811,6 +5810,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             promocode_redemption?: boolean | undefined;
         } | undefined;
     };
+    type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
     is_active?: boolean | null | undefined;
     external_id?: string | null | undefined;
 }>;
@@ -7675,7 +7675,7 @@ declare const partnerAppSchema: z.ZodObject<{
     created_by: z.ZodNullable<z.ZodString>;
     updated_by: z.ZodNullable<z.ZodString>;
     name: z.ZodString;
-    type: z.ZodNullable<z.ZodString>;
+    type: z.ZodOptional<z.ZodNullable<z.ZodEnum<["wholesale", "reseller", "platform", "agent"]>>>;
     is_active: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     contact: z.ZodObject<{
@@ -8604,7 +8604,6 @@ declare const partnerAppSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: string | null;
     data: {
         source: string;
         manual: boolean;
@@ -8798,6 +8797,7 @@ declare const partnerAppSchema: z.ZodObject<{
         url?: string | null | undefined;
         api_key?: string | null | undefined;
     };
+    type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
     is_active?: boolean | null | undefined;
     external_id?: string | null | undefined;
 }, {
@@ -8807,7 +8807,6 @@ declare const partnerAppSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: string | null;
     data: {
         source: string;
         manual: boolean;
@@ -9001,6 +9000,7 @@ declare const partnerAppSchema: z.ZodObject<{
             promocode_redemption?: boolean | undefined;
         } | undefined;
     };
+    type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
     is_active?: boolean | null | undefined;
     external_id?: string | null | undefined;
 }>;
