@@ -1264,6 +1264,16 @@ declare const partnerSchemaSpec: {
                 enable_complimentary_booking?: boolean | undefined;
                 complimentary_booking_partner_id?: string | null | undefined;
             }>>>;
+            upgrade_offer: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+                enabled: z.ZodBoolean;
+                discount_percentage: z.ZodNumber;
+            }, "strip", z.ZodTypeAny, {
+                enabled: boolean;
+                discount_percentage: number;
+            }, {
+                enabled: boolean;
+                discount_percentage: number;
+            }>>>;
         };
         nullable: boolean;
     };
@@ -3445,6 +3455,16 @@ declare const HPartnerSchema: z.ZodObject<{
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
         }>>>;
+        upgrade_offer: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            enabled: z.ZodBoolean;
+            discount_percentage: z.ZodNumber;
+        }, "strip", z.ZodTypeAny, {
+            enabled: boolean;
+            discount_percentage: number;
+        }, {
+            enabled: boolean;
+            discount_percentage: number;
+        }>>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy?: {
             name: string;
@@ -3523,6 +3543,10 @@ declare const HPartnerSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
         } | null | undefined;
+        upgrade_offer?: {
+            enabled: boolean;
+            discount_percentage: number;
+        } | null | undefined;
     }, {
         package_strategy?: {
             name: string;
@@ -3600,6 +3624,10 @@ declare const HPartnerSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
+        } | null | undefined;
+        upgrade_offer?: {
+            enabled: boolean;
+            discount_percentage: number;
         } | null | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
@@ -3849,6 +3877,10 @@ declare const HPartnerSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
         } | null | undefined;
+        upgrade_offer?: {
+            enabled: boolean;
+            discount_percentage: number;
+        } | null | undefined;
     };
     tags: {
         name: string;
@@ -4051,6 +4083,10 @@ declare const HPartnerSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
+        } | null | undefined;
+        upgrade_offer?: {
+            enabled: boolean;
+            discount_percentage: number;
         } | null | undefined;
     };
     tags: {
@@ -5182,6 +5218,16 @@ declare const HPartnerAppSchema: z.ZodObject<{
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
         }>>>;
+        upgrade_offer: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            enabled: z.ZodBoolean;
+            discount_percentage: z.ZodNumber;
+        }, "strip", z.ZodTypeAny, {
+            enabled: boolean;
+            discount_percentage: number;
+        }, {
+            enabled: boolean;
+            discount_percentage: number;
+        }>>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy?: {
             name: string;
@@ -5260,6 +5306,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
         } | null | undefined;
+        upgrade_offer?: {
+            enabled: boolean;
+            discount_percentage: number;
+        } | null | undefined;
     }, {
         package_strategy?: {
             name: string;
@@ -5337,6 +5387,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
+        } | null | undefined;
+        upgrade_offer?: {
+            enabled: boolean;
+            discount_percentage: number;
         } | null | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
@@ -5586,6 +5640,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
         } | null | undefined;
+        upgrade_offer?: {
+            enabled: boolean;
+            discount_percentage: number;
+        } | null | undefined;
     };
     tags: {
         name: string;
@@ -5788,6 +5846,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
+        } | null | undefined;
+        upgrade_offer?: {
+            enabled: boolean;
+            discount_percentage: number;
         } | null | undefined;
     };
     tags: {
@@ -6072,6 +6134,16 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         enable_complimentary_booking?: boolean | undefined;
         complimentary_booking_partner_id?: string | null | undefined;
     }>>>;
+    upgrade_offer: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        enabled: z.ZodBoolean;
+        discount_percentage: z.ZodNumber;
+    }, "strip", z.ZodTypeAny, {
+        enabled: boolean;
+        discount_percentage: number;
+    }, {
+        enabled: boolean;
+        discount_percentage: number;
+    }>>>;
 }, "strip", z.ZodTypeAny, {
     package_strategy?: {
         name: string;
@@ -6150,6 +6222,10 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
         complimentary_booking_partner_id?: string | null | undefined;
     } | null | undefined;
+    upgrade_offer?: {
+        enabled: boolean;
+        discount_percentage: number;
+    } | null | undefined;
 }, {
     package_strategy?: {
         name: string;
@@ -6227,6 +6303,10 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
         enable_complimentary_booking?: boolean | undefined;
         complimentary_booking_partner_id?: string | null | undefined;
+    } | null | undefined;
+    upgrade_offer?: {
+        enabled: boolean;
+        discount_percentage: number;
     } | null | undefined;
 }>;
 declare const HVisualIdentitySchema: z.ZodObject<{
@@ -8372,6 +8452,16 @@ declare const partnerAppSchema: z.ZodObject<{
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
         }>>>;
+        upgrade_offer: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            enabled: z.ZodBoolean;
+            discount_percentage: z.ZodNumber;
+        }, "strip", z.ZodTypeAny, {
+            enabled: boolean;
+            discount_percentage: number;
+        }, {
+            enabled: boolean;
+            discount_percentage: number;
+        }>>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy?: {
             name: string;
@@ -8450,6 +8540,10 @@ declare const partnerAppSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
         } | null | undefined;
+        upgrade_offer?: {
+            enabled: boolean;
+            discount_percentage: number;
+        } | null | undefined;
     }, {
         package_strategy?: {
             name: string;
@@ -8527,6 +8621,10 @@ declare const partnerAppSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
+        } | null | undefined;
+        upgrade_offer?: {
+            enabled: boolean;
+            discount_percentage: number;
         } | null | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
@@ -8776,6 +8874,10 @@ declare const partnerAppSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
         } | null | undefined;
+        upgrade_offer?: {
+            enabled: boolean;
+            discount_percentage: number;
+        } | null | undefined;
     };
     tags: {
         name: string;
@@ -8978,6 +9080,10 @@ declare const partnerAppSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
+        } | null | undefined;
+        upgrade_offer?: {
+            enabled: boolean;
+            discount_percentage: number;
         } | null | undefined;
     };
     tags: {

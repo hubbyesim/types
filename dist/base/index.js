@@ -774,7 +774,11 @@ var platformSettingsSchema = z.object({
     source_partner_branding: z.boolean().optional().default(false),
     own_branding: z.boolean().optional().default(false)
   }).nullable().optional(),
-  agent_signup_settings: agentSignupSettingsSchema.nullable().optional()
+  agent_signup_settings: agentSignupSettingsSchema.nullable().optional(),
+  upgrade_offer: z.object({
+    enabled: z.boolean(),
+    discount_percentage: z.number().min(0).max(100)
+  }).nullable().optional()
 });
 markAsSchemaSpec({
   destination: z.string(),

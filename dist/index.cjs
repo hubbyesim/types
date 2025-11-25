@@ -811,7 +811,11 @@ var platformSettingsSchema = zod.z.object({
     source_partner_branding: zod.z.boolean().optional().default(false),
     own_branding: zod.z.boolean().optional().default(false)
   }).nullable().optional(),
-  agent_signup_settings: agentSignupSettingsSchema.nullable().optional()
+  agent_signup_settings: agentSignupSettingsSchema.nullable().optional(),
+  upgrade_offer: zod.z.object({
+    enabled: zod.z.boolean(),
+    discount_percentage: zod.z.number().min(0).max(100)
+  }).nullable().optional()
 });
 var packagePriceSchemaSpec = markAsSchemaSpec({
   destination: zod.z.string(),
