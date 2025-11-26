@@ -69,20 +69,22 @@ export const bookingSchemaSpec = markAsSchemaSpec({
     last_name: z.string().nullable().optional(),
     full_name: z.string().nullable().optional(),
     pax: z.number(),
-    email: z.string().email().nullable(),
-    phone: z.string().nullable(),
+    email: z.string().email().nullable().optional(),
+    phone: z.string().nullable().optional(),
     booking_id: z.string().nullable(),
     flight_number: z.string().optional(),
     gender: z.enum(['M', 'F', 'O']).optional(),
     sent_messages: z.record(z.any()).optional(),
     locale: supportedLocalesSchema,
-    status: bookingStatusSchema,
+    status: bookingStatusSchema.optional().nullable(),
     data: {
         _type: 'object' as const,
         of: {
             source: z.string(),
             manual: z.boolean()
-        }
+        },
+        nullable: true,
+        optional: true
     },
     communication_options: {
         _type: 'object' as const,
@@ -94,8 +96,8 @@ export const bookingSchemaSpec = markAsSchemaSpec({
             }
         }
     },
-    is_processed_for_esim_restoration: z.boolean(),
-    is_pseudonymized: z.boolean(),
+    is_processed_for_esim_restoration: z.boolean().optional().nullable(),
+    is_pseudonymized: z.boolean().optional().nullable(),
     import_id: z.string().nullable().optional(),
     package_specifications: z.array(packageSpecificationSchema).min(1),
     departure_date: timestampRequired,
@@ -104,17 +106,21 @@ export const bookingSchemaSpec = markAsSchemaSpec({
     financial_insights: financialInsightsSchema,
     promo_codes: {
         _type: 'array' as const,
-        of: { _type: 'docRef' as const, collection: PROMO_CODE_COLLECTION }
+        of: { _type: 'docRef' as const, collection: PROMO_CODE_COLLECTION },
+        nullable: true,
+        optional: true
     },
     users: {
         _type: 'array' as const,
         of: { _type: 'docRef' as const, collection: USER_COLLECTION },
-        nullable: true
+        nullable: true,
+        optional: true
     },
     esims: {
         _type: 'array' as const,
         of: { _type: 'docRef' as const, collection: ESIM_COLLECTION },
-        nullable: true
+        nullable: true,
+        optional: true
     },
     hubby_foreign_identifiers: z.object({
         messaging_contact_id: z.string().nullable()

@@ -124,20 +124,22 @@ declare const bookingSchemaSpec: {
     last_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     full_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     pax: z.ZodNumber;
-    email: z.ZodNullable<z.ZodString>;
-    phone: z.ZodNullable<z.ZodString>;
+    email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     booking_id: z.ZodNullable<z.ZodString>;
     flight_number: z.ZodOptional<z.ZodString>;
     gender: z.ZodOptional<z.ZodEnum<["M", "F", "O"]>>;
     sent_messages: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
     locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK"]>;
-    status: z.ZodEnum<["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED", "UNPAID", "EXPIRED"]>;
+    status: z.ZodNullable<z.ZodOptional<z.ZodEnum<["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED", "UNPAID", "EXPIRED"]>>>;
     data: {
         _type: "object";
         of: {
             source: z.ZodString;
             manual: z.ZodBoolean;
         };
+        nullable: boolean;
+        optional: boolean;
     };
     communication_options: {
         _type: "object";
@@ -149,8 +151,8 @@ declare const bookingSchemaSpec: {
             };
         };
     };
-    is_processed_for_esim_restoration: z.ZodBoolean;
-    is_pseudonymized: z.ZodBoolean;
+    is_processed_for_esim_restoration: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
+    is_pseudonymized: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     import_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     package_specifications: z.ZodArray<z.ZodObject<{
         destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
@@ -216,6 +218,8 @@ declare const bookingSchemaSpec: {
             _type: "docRef";
             collection: string;
         };
+        nullable: boolean;
+        optional: boolean;
     };
     users: {
         _type: "array";
@@ -224,6 +228,7 @@ declare const bookingSchemaSpec: {
             collection: string;
         };
         nullable: boolean;
+        optional: boolean;
     };
     esims: {
         _type: "array";
@@ -232,6 +237,7 @@ declare const bookingSchemaSpec: {
             collection: string;
         };
         nullable: boolean;
+        optional: boolean;
     };
     hubby_foreign_identifiers: z.ZodOptional<z.ZodNullable<z.ZodObject<{
         messaging_contact_id: z.ZodNullable<z.ZodString>;
@@ -1842,14 +1848,14 @@ declare const HBookingSchema: z.ZodObject<{
     last_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     full_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     pax: z.ZodNumber;
-    email: z.ZodNullable<z.ZodString>;
-    phone: z.ZodNullable<z.ZodString>;
+    email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     booking_id: z.ZodNullable<z.ZodString>;
     flight_number: z.ZodOptional<z.ZodString>;
     gender: z.ZodOptional<z.ZodEnum<["M", "F", "O"]>>;
     sent_messages: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
     locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK"]>;
-    status: z.ZodEnum<["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED", "UNPAID", "EXPIRED"]>;
+    status: z.ZodNullable<z.ZodOptional<z.ZodEnum<["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED", "UNPAID", "EXPIRED"]>>>;
     data: z.ZodObject<{
         source: z.ZodString;
         manual: z.ZodBoolean;
@@ -1870,8 +1876,8 @@ declare const HBookingSchema: z.ZodObject<{
         should_send_message: boolean;
         channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
     }>;
-    is_processed_for_esim_restoration: z.ZodBoolean;
-    is_pseudonymized: z.ZodBoolean;
+    is_processed_for_esim_restoration: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
+    is_pseudonymized: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     import_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     package_specifications: z.ZodArray<z.ZodObject<{
         destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
@@ -1931,17 +1937,14 @@ declare const HBookingSchema: z.ZodObject<{
         messaging_contact_id: string | null;
     }>>>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
-    email: string | null;
     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
     partner: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
     title: string | null;
     pax: number;
-    phone: string | null;
     booking_id: string | null;
     data: {
         source: string;
@@ -1951,8 +1954,6 @@ declare const HBookingSchema: z.ZodObject<{
         should_send_message: boolean;
         channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
     };
-    is_processed_for_esim_restoration: boolean;
-    is_pseudonymized: boolean;
     package_specifications: {
         destination?: string | string[] | undefined;
         iso3?: string | undefined;
@@ -1970,13 +1971,18 @@ declare const HBookingSchema: z.ZodObject<{
     users: string[];
     esims: string[];
     id?: string | undefined;
+    email?: string | null | undefined;
     gender?: "M" | "F" | "O" | undefined;
+    status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED" | null | undefined;
     external_id?: string | null | undefined;
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
+    phone?: string | null | undefined;
     flight_number?: string | undefined;
     sent_messages?: Record<string, any> | undefined;
+    is_processed_for_esim_restoration?: boolean | null | undefined;
+    is_pseudonymized?: boolean | null | undefined;
     import_id?: string | null | undefined;
     financial_insights?: {
         partner_commission_percentage?: number | null | undefined;
@@ -1987,17 +1993,14 @@ declare const HBookingSchema: z.ZodObject<{
         messaging_contact_id: string | null;
     } | null | undefined;
 }, {
-    email: string | null;
     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
     partner: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
     title: string | null;
     pax: number;
-    phone: string | null;
     booking_id: string | null;
     data: {
         source: string;
@@ -2007,8 +2010,6 @@ declare const HBookingSchema: z.ZodObject<{
         should_send_message: boolean;
         channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
     };
-    is_processed_for_esim_restoration: boolean;
-    is_pseudonymized: boolean;
     package_specifications: {
         destination?: string | string[] | undefined;
         iso3?: string | undefined;
@@ -2026,13 +2027,18 @@ declare const HBookingSchema: z.ZodObject<{
     users: string[];
     esims: string[];
     id?: string | undefined;
+    email?: string | null | undefined;
     gender?: "M" | "F" | "O" | undefined;
+    status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED" | null | undefined;
     external_id?: string | null | undefined;
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
+    phone?: string | null | undefined;
     flight_number?: string | undefined;
     sent_messages?: Record<string, any> | undefined;
+    is_processed_for_esim_restoration?: boolean | null | undefined;
+    is_pseudonymized?: boolean | null | undefined;
     import_id?: string | null | undefined;
     financial_insights?: {
         partner_commission_percentage?: number | null | undefined;
@@ -7879,14 +7885,14 @@ declare const bookingAppSchema: z.ZodObject<{
     last_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     full_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     pax: z.ZodNumber;
-    email: z.ZodNullable<z.ZodString>;
-    phone: z.ZodNullable<z.ZodString>;
+    email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     booking_id: z.ZodNullable<z.ZodString>;
     flight_number: z.ZodOptional<z.ZodString>;
     gender: z.ZodOptional<z.ZodEnum<["M", "F", "O"]>>;
     sent_messages: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
     locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK"]>;
-    status: z.ZodEnum<["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED", "UNPAID", "EXPIRED"]>;
+    status: z.ZodNullable<z.ZodOptional<z.ZodEnum<["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED", "UNPAID", "EXPIRED"]>>>;
     data: z.ZodObject<{
         source: z.ZodString;
         manual: z.ZodBoolean;
@@ -7907,8 +7913,8 @@ declare const bookingAppSchema: z.ZodObject<{
         should_send_message: boolean;
         channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
     }>;
-    is_processed_for_esim_restoration: z.ZodBoolean;
-    is_pseudonymized: z.ZodBoolean;
+    is_processed_for_esim_restoration: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
+    is_pseudonymized: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     import_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     package_specifications: z.ZodArray<z.ZodObject<{
         destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
@@ -7968,17 +7974,14 @@ declare const bookingAppSchema: z.ZodObject<{
         messaging_contact_id: string | null;
     }>>>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
-    email: string | null;
     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
     partner: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
     title: string | null;
     pax: number;
-    phone: string | null;
     booking_id: string | null;
     data: {
         source: string;
@@ -7988,8 +7991,6 @@ declare const bookingAppSchema: z.ZodObject<{
         should_send_message: boolean;
         channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
     };
-    is_processed_for_esim_restoration: boolean;
-    is_pseudonymized: boolean;
     package_specifications: {
         destination?: string | string[] | undefined;
         iso3?: string | undefined;
@@ -8007,13 +8008,18 @@ declare const bookingAppSchema: z.ZodObject<{
     users: string[];
     esims: string[];
     id?: string | undefined;
+    email?: string | null | undefined;
     gender?: "M" | "F" | "O" | undefined;
+    status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED" | null | undefined;
     external_id?: string | null | undefined;
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
+    phone?: string | null | undefined;
     flight_number?: string | undefined;
     sent_messages?: Record<string, any> | undefined;
+    is_processed_for_esim_restoration?: boolean | null | undefined;
+    is_pseudonymized?: boolean | null | undefined;
     import_id?: string | null | undefined;
     financial_insights?: {
         partner_commission_percentage?: number | null | undefined;
@@ -8024,17 +8030,14 @@ declare const bookingAppSchema: z.ZodObject<{
         messaging_contact_id: string | null;
     } | null | undefined;
 }, {
-    email: string | null;
     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
     partner: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
     title: string | null;
     pax: number;
-    phone: string | null;
     booking_id: string | null;
     data: {
         source: string;
@@ -8044,8 +8047,6 @@ declare const bookingAppSchema: z.ZodObject<{
         should_send_message: boolean;
         channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
     };
-    is_processed_for_esim_restoration: boolean;
-    is_pseudonymized: boolean;
     package_specifications: {
         destination?: string | string[] | undefined;
         iso3?: string | undefined;
@@ -8063,13 +8064,18 @@ declare const bookingAppSchema: z.ZodObject<{
     users: string[];
     esims: string[];
     id?: string | undefined;
+    email?: string | null | undefined;
     gender?: "M" | "F" | "O" | undefined;
+    status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED" | null | undefined;
     external_id?: string | null | undefined;
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
+    phone?: string | null | undefined;
     flight_number?: string | undefined;
     sent_messages?: Record<string, any> | undefined;
+    is_processed_for_esim_restoration?: boolean | null | undefined;
+    is_pseudonymized?: boolean | null | undefined;
     import_id?: string | null | undefined;
     financial_insights?: {
         partner_commission_percentage?: number | null | undefined;

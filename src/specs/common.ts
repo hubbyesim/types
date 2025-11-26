@@ -29,7 +29,7 @@ export const packageTypes = ['data-limited', 'time-limited', 'starter', 'unlimit
 
 // Timestamp specs
 export const timestampNullableOptional = { _type: 'timestamp' as const, nullable: true, optional: true };
-export const timestampNullable = { _type: 'timestamp' as const, nullable: true, optional: false };
+export const timestampNullable = { _type: 'timestamp' as const, nullable: true, optional: true };
 export const timestampRequired = { _type: 'timestamp' as const, nullable: false, optional: false };
 
 export const hubbyModelSpec = {

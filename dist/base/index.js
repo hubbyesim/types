@@ -163,7 +163,7 @@ var ROLE_COLLECTION = "roles";
 var PERMISSION_COLLECTION = "permissions";
 var TRAFFIC_POLICY_COLLECTION = "traffic_policies";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
-var timestampNullable = { _type: "timestamp", nullable: true, optional: false };
+var timestampNullable = { _type: "timestamp", nullable: true, optional: true };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
 var hubbyModelSpec = {
   id: z.string().nullable().optional(),
@@ -350,20 +350,22 @@ var bookingSchemaSpec = markAsSchemaSpec({
   last_name: z.string().nullable().optional(),
   full_name: z.string().nullable().optional(),
   pax: z.number(),
-  email: z.string().email().nullable(),
-  phone: z.string().nullable(),
+  email: z.string().email().nullable().optional(),
+  phone: z.string().nullable().optional(),
   booking_id: z.string().nullable(),
   flight_number: z.string().optional(),
   gender: z.enum(["M", "F", "O"]).optional(),
   sent_messages: z.record(z.any()).optional(),
   locale: supportedLocalesSchema,
-  status: bookingStatusSchema,
+  status: bookingStatusSchema.optional().nullable(),
   data: {
     _type: "object",
     of: {
       source: z.string(),
       manual: z.boolean()
-    }
+    },
+    nullable: true,
+    optional: true
   },
   communication_options: {
     _type: "object",
@@ -375,8 +377,8 @@ var bookingSchemaSpec = markAsSchemaSpec({
       }
     }
   },
-  is_processed_for_esim_restoration: z.boolean(),
-  is_pseudonymized: z.boolean(),
+  is_processed_for_esim_restoration: z.boolean().optional().nullable(),
+  is_pseudonymized: z.boolean().optional().nullable(),
   import_id: z.string().nullable().optional(),
   package_specifications: z.array(packageSpecificationSchema).min(1),
   departure_date: timestampRequired,
@@ -385,17 +387,21 @@ var bookingSchemaSpec = markAsSchemaSpec({
   financial_insights: financialInsightsSchema,
   promo_codes: {
     _type: "array",
-    of: { _type: "docRef", collection: PROMO_CODE_COLLECTION }
+    of: { _type: "docRef", collection: PROMO_CODE_COLLECTION },
+    nullable: true,
+    optional: true
   },
   users: {
     _type: "array",
     of: { _type: "docRef", collection: USER_COLLECTION },
-    nullable: true
+    nullable: true,
+    optional: true
   },
   esims: {
     _type: "array",
     of: { _type: "docRef", collection: ESIM_COLLECTION },
-    nullable: true
+    nullable: true,
+    optional: true
   },
   hubby_foreign_identifiers: z.object({
     messaging_contact_id: z.string().nullable()
