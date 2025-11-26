@@ -238,6 +238,7 @@ export const partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 export const destinationAppSchema = buildClientSchema(destinationSchemaSpec);
 export const destinationBundleAppSchema = buildClientSchema(destinationBundleSchemaSpec);
 export const packageTemplateAppSchema = buildClientSchema(packageTemplateSchemaSpec);
+export const promoPackageSpecificationAppSchema = buildClientSchema(promoPackageSpecificationSchema);
 // Export the type and constant
 export type SupportedLocales = typeof LOCALES[number];
 export const SUPPORTED_LOCALES = LOCALES;

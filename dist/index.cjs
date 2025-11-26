@@ -1607,6 +1607,7 @@ var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 var destinationAppSchema = buildClientSchema(destinationSchemaSpec);
 var destinationBundleAppSchema = buildClientSchema(destinationBundleSchemaSpec);
 var packageTemplateAppSchema = buildClientSchema(packageTemplateSchemaSpec);
+var promoPackageSpecificationAppSchema = buildClientSchema(packageSpecificationSchema);
 var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
 exports.API_LOG_COLLECTION = API_LOG_COLLECTION;
@@ -1753,6 +1754,7 @@ exports.priceListToFirestore = priceListToFirestore;
 exports.promoCodeFromFirestore = promoCodeFromFirestore;
 exports.promoCodeSchemaSpec = promoCodeSchemaSpec;
 exports.promoCodeToFirestore = promoCodeToFirestore;
+exports.promoPackageSpecificationAppSchema = promoPackageSpecificationAppSchema;
 exports.reviewSchemaSpec = reviewSchemaSpec;
 exports.reviewSubmissionSchemaSpec = reviewSubmissionSchemaSpec;
 exports.userFromFirestore = userFromFirestore;
