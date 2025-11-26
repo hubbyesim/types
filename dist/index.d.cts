@@ -7867,6 +7867,219 @@ declare const priceListFromFirestore: (priceList: PriceList) => HPriceList;
 declare const priceListToFirestore: (priceList: HPriceList) => PriceList;
 declare const promoCodeFromFirestore: (promoCode: PromoCode) => HPromoCode;
 declare const promoCodeToFirestore: (promoCode: HPromoCode) => PromoCode;
+declare const bookingAppSchema: z.ZodObject<{
+    id: z.ZodOptional<z.ZodString>;
+    external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    created_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    created_by: z.ZodNullable<z.ZodString>;
+    updated_by: z.ZodNullable<z.ZodString>;
+    title: z.ZodNullable<z.ZodString>;
+    first_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    last_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    full_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    pax: z.ZodNumber;
+    email: z.ZodNullable<z.ZodString>;
+    phone: z.ZodNullable<z.ZodString>;
+    booking_id: z.ZodNullable<z.ZodString>;
+    flight_number: z.ZodOptional<z.ZodString>;
+    gender: z.ZodOptional<z.ZodEnum<["M", "F", "O"]>>;
+    sent_messages: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
+    locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK"]>;
+    status: z.ZodEnum<["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED", "UNPAID", "EXPIRED"]>;
+    data: z.ZodObject<{
+        source: z.ZodString;
+        manual: z.ZodBoolean;
+    }, z.UnknownKeysParam, z.ZodTypeAny, {
+        source: string;
+        manual: boolean;
+    }, {
+        source: string;
+        manual: boolean;
+    }>;
+    communication_options: z.ZodObject<{
+        should_send_message: z.ZodBoolean;
+        channels: z.ZodArray<z.ZodEnum<["EMAIL", "WHATSAPP", "PUSH_NOTIFICATION", "SMS"]>, "many">;
+    }, z.UnknownKeysParam, z.ZodTypeAny, {
+        should_send_message: boolean;
+        channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
+    }, {
+        should_send_message: boolean;
+        channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
+    }>;
+    is_processed_for_esim_restoration: z.ZodBoolean;
+    is_pseudonymized: z.ZodBoolean;
+    import_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    package_specifications: z.ZodArray<z.ZodObject<{
+        destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
+        iso3: z.ZodOptional<z.ZodString>;
+        size: z.ZodOptional<z.ZodString>;
+        package_id: z.ZodOptional<z.ZodString>;
+        bundle_id: z.ZodOptional<z.ZodString>;
+        iata_code: z.ZodOptional<z.ZodString>;
+        package_duration: z.ZodOptional<z.ZodNumber>;
+        package_type: z.ZodOptional<z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>>;
+        traffic_policy: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        destination?: string | string[] | undefined;
+        iso3?: string | undefined;
+        size?: string | undefined;
+        package_id?: string | undefined;
+        bundle_id?: string | undefined;
+        iata_code?: string | undefined;
+        package_duration?: number | undefined;
+        package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
+        traffic_policy?: string | undefined;
+    }, {
+        destination?: string | string[] | undefined;
+        iso3?: string | undefined;
+        size?: string | undefined;
+        package_id?: string | undefined;
+        bundle_id?: string | undefined;
+        iata_code?: string | undefined;
+        package_duration?: number | undefined;
+        package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
+        traffic_policy?: string | undefined;
+    }>, "many">;
+    departure_date: z.ZodEffects<z.ZodDate, Date, Date>;
+    return_date: z.ZodEffects<z.ZodDate, Date, Date>;
+    partner: z.ZodString;
+    financial_insights: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        partner_commission_percentage: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        total_commission_amount: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        price: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    }, "strip", z.ZodTypeAny, {
+        partner_commission_percentage?: number | null | undefined;
+        total_commission_amount?: number | null | undefined;
+        price?: number | null | undefined;
+    }, {
+        partner_commission_percentage?: number | null | undefined;
+        total_commission_amount?: number | null | undefined;
+        price?: number | null | undefined;
+    }>>>;
+    promo_codes: z.ZodArray<z.ZodString, "many">;
+    users: z.ZodArray<z.ZodString, "many">;
+    esims: z.ZodArray<z.ZodString, "many">;
+    hubby_foreign_identifiers: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        messaging_contact_id: z.ZodNullable<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        messaging_contact_id: string | null;
+    }, {
+        messaging_contact_id: string | null;
+    }>>>;
+}, z.UnknownKeysParam, z.ZodTypeAny, {
+    email: string | null;
+    locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+    partner: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    updated_by: string | null;
+    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
+    title: string | null;
+    pax: number;
+    phone: string | null;
+    booking_id: string | null;
+    data: {
+        source: string;
+        manual: boolean;
+    };
+    communication_options: {
+        should_send_message: boolean;
+        channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
+    };
+    is_processed_for_esim_restoration: boolean;
+    is_pseudonymized: boolean;
+    package_specifications: {
+        destination?: string | string[] | undefined;
+        iso3?: string | undefined;
+        size?: string | undefined;
+        package_id?: string | undefined;
+        bundle_id?: string | undefined;
+        iata_code?: string | undefined;
+        package_duration?: number | undefined;
+        package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
+        traffic_policy?: string | undefined;
+    }[];
+    departure_date: Date;
+    return_date: Date;
+    promo_codes: string[];
+    users: string[];
+    esims: string[];
+    id?: string | undefined;
+    gender?: "M" | "F" | "O" | undefined;
+    external_id?: string | null | undefined;
+    first_name?: string | null | undefined;
+    last_name?: string | null | undefined;
+    full_name?: string | null | undefined;
+    flight_number?: string | undefined;
+    sent_messages?: Record<string, any> | undefined;
+    import_id?: string | null | undefined;
+    financial_insights?: {
+        partner_commission_percentage?: number | null | undefined;
+        total_commission_amount?: number | null | undefined;
+        price?: number | null | undefined;
+    } | null | undefined;
+    hubby_foreign_identifiers?: {
+        messaging_contact_id: string | null;
+    } | null | undefined;
+}, {
+    email: string | null;
+    locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK";
+    partner: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    updated_by: string | null;
+    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED";
+    title: string | null;
+    pax: number;
+    phone: string | null;
+    booking_id: string | null;
+    data: {
+        source: string;
+        manual: boolean;
+    };
+    communication_options: {
+        should_send_message: boolean;
+        channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
+    };
+    is_processed_for_esim_restoration: boolean;
+    is_pseudonymized: boolean;
+    package_specifications: {
+        destination?: string | string[] | undefined;
+        iso3?: string | undefined;
+        size?: string | undefined;
+        package_id?: string | undefined;
+        bundle_id?: string | undefined;
+        iata_code?: string | undefined;
+        package_duration?: number | undefined;
+        package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
+        traffic_policy?: string | undefined;
+    }[];
+    departure_date: Date;
+    return_date: Date;
+    promo_codes: string[];
+    users: string[];
+    esims: string[];
+    id?: string | undefined;
+    gender?: "M" | "F" | "O" | undefined;
+    external_id?: string | null | undefined;
+    first_name?: string | null | undefined;
+    last_name?: string | null | undefined;
+    full_name?: string | null | undefined;
+    flight_number?: string | undefined;
+    sent_messages?: Record<string, any> | undefined;
+    import_id?: string | null | undefined;
+    financial_insights?: {
+        partner_commission_percentage?: number | null | undefined;
+        total_commission_amount?: number | null | undefined;
+        price?: number | null | undefined;
+    } | null | undefined;
+    hubby_foreign_identifiers?: {
+        messaging_contact_id: string | null;
+    } | null | undefined;
+}>;
 declare const partnerAppSchema: z.ZodObject<{
     id: z.ZodString;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -9385,4 +9598,4 @@ declare const packageTemplateAppSchema: z.ZodObject<{
 type SupportedLocales = typeof SUPPORTED_LOCALES$1[number];
 declare const SUPPORTED_LOCALES: readonly ["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK"];
 
-export { API_LOG_COLLECTION, Address, AddressSchema, Analytics, AnalyticsSchema, ApiLog, ApiLogApiRequest, ApiLogApiResponse, ApiLogSchema, BOOKING_COLLECTION, BankingDetails, BankingDetailsSchema, BaseReward, BaseRewardSchema, BondioPackage, BondioPackageSchema, Booking, BookingApiRequest, BookingApiResponse, BookingSchema, BookingStatus, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannel, CommunicationChannelSchema, CommunicationOptions, CommunicationOptionsSchema, Country, CountrySchema, Currency, CurrencySchema, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, Destination, DestinationBundle, DestinationBundleSchema, DestinationSchema, ESIM, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBaseReward, HBaseRewardSchema, HBondioPackage, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HDestination, HDestinationBundle, HDestinationBundleSchema, HDestinationSchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPackageTemplate, HPackageTemplateSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HReview, HReviewSchema, HReviewSubmission, HReviewSubmissionSchema, HRewardMultipliers, HRewardMultipliersSchema, HRewardPackageType, HRewardPackageTypeSchema, HRewardStrategy, HRewardStrategySchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModel, HubbyModelApp, HubbyModelFirestore, HubbyModelSchema, MESSAGE_COLLECTION, Message, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, Package, PackagePrice, PackagePriceSchema, PackageSchema, PackageSpecification, PackageTemplate, PackageTemplateSchema, Partner, PartnerApiRequest, PartnerApiResponse, PartnerContact, PartnerContactSchema, PartnerData, PartnerDataSchema, PartnerPackageSpecification, PartnerPackageSpecificationSchema, PartnerSchema, Payment, PaymentSchema, PlatformSettings, PlatformSettingsSchema, PriceList, PriceListApiRequest, PriceListApiResponse, PriceListSchema, PromoCode, PromoCodeSchema, PromoPackageSpecificationSchema, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, ROLE_COLLECTION, Registration, RegistrationSchema, Review, ReviewSchema, ReviewSubmission, ReviewSubmissionSchema, RewardMultipliers, RewardMultipliersSchema, RewardPackageType, RewardPackageTypeSchema, RewardStrategy, RewardStrategySchema, SUPPORTED_LOCALES, Schedule, ScheduleFilter, ScheduleFilterSchema, ScheduleSchema, SupportedLocales, TRAFFIC_POLICY_COLLECTION, Tag, TagSchema, TelnaPackage, TelnaPackageSchema, TrafficPolicy, TrafficPolicySchema, USER_COLLECTION, User, UserFirestore, UserFirestoreSchema, UserSchema, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerSchema, VisualIdentityBannerStrategy, VisualIdentityBanners, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, apiLogSchemaSpec, bookingSchemaSpec, countrySchemaSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, currencySchemaSpec, destinationAppSchema, destinationBundleAppSchema, destinationBundleSchemaSpec, destinationSchemaSpec, esimSchemaSpec, messageSchemaSpec, packageSchemaSpec, packageTemplateAppSchema, packageTemplateSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, paymentSchemaSpec, priceListFromFirestore, priceListSchemaSpec, priceListToFirestore, promoCodeFromFirestore, promoCodeSchemaSpec, promoCodeToFirestore, reviewSchemaSpec, reviewSubmissionSchemaSpec, userFromFirestore, userSchemaSpec, userToFirestore };
+export { API_LOG_COLLECTION, Address, AddressSchema, Analytics, AnalyticsSchema, ApiLog, ApiLogApiRequest, ApiLogApiResponse, ApiLogSchema, BOOKING_COLLECTION, BankingDetails, BankingDetailsSchema, BaseReward, BaseRewardSchema, BondioPackage, BondioPackageSchema, Booking, BookingApiRequest, BookingApiResponse, BookingSchema, BookingStatus, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannel, CommunicationChannelSchema, CommunicationOptions, CommunicationOptionsSchema, Country, CountrySchema, Currency, CurrencySchema, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, Destination, DestinationBundle, DestinationBundleSchema, DestinationSchema, ESIM, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBaseReward, HBaseRewardSchema, HBondioPackage, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HDestination, HDestinationBundle, HDestinationBundleSchema, HDestinationSchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPackageTemplate, HPackageTemplateSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HReview, HReviewSchema, HReviewSubmission, HReviewSubmissionSchema, HRewardMultipliers, HRewardMultipliersSchema, HRewardPackageType, HRewardPackageTypeSchema, HRewardStrategy, HRewardStrategySchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModel, HubbyModelApp, HubbyModelFirestore, HubbyModelSchema, MESSAGE_COLLECTION, Message, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, Package, PackagePrice, PackagePriceSchema, PackageSchema, PackageSpecification, PackageTemplate, PackageTemplateSchema, Partner, PartnerApiRequest, PartnerApiResponse, PartnerContact, PartnerContactSchema, PartnerData, PartnerDataSchema, PartnerPackageSpecification, PartnerPackageSpecificationSchema, PartnerSchema, Payment, PaymentSchema, PlatformSettings, PlatformSettingsSchema, PriceList, PriceListApiRequest, PriceListApiResponse, PriceListSchema, PromoCode, PromoCodeSchema, PromoPackageSpecificationSchema, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, ROLE_COLLECTION, Registration, RegistrationSchema, Review, ReviewSchema, ReviewSubmission, ReviewSubmissionSchema, RewardMultipliers, RewardMultipliersSchema, RewardPackageType, RewardPackageTypeSchema, RewardStrategy, RewardStrategySchema, SUPPORTED_LOCALES, Schedule, ScheduleFilter, ScheduleFilterSchema, ScheduleSchema, SupportedLocales, TRAFFIC_POLICY_COLLECTION, Tag, TagSchema, TelnaPackage, TelnaPackageSchema, TrafficPolicy, TrafficPolicySchema, USER_COLLECTION, User, UserFirestore, UserFirestoreSchema, UserSchema, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerSchema, VisualIdentityBannerStrategy, VisualIdentityBanners, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, apiLogSchemaSpec, bookingAppSchema, bookingSchemaSpec, countrySchemaSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, currencySchemaSpec, destinationAppSchema, destinationBundleAppSchema, destinationBundleSchemaSpec, destinationSchemaSpec, esimSchemaSpec, messageSchemaSpec, packageSchemaSpec, packageTemplateAppSchema, packageTemplateSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, paymentSchemaSpec, priceListFromFirestore, priceListSchemaSpec, priceListToFirestore, promoCodeFromFirestore, promoCodeSchemaSpec, promoCodeToFirestore, reviewSchemaSpec, reviewSubmissionSchemaSpec, userFromFirestore, userSchemaSpec, userToFirestore };

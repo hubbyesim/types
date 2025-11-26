@@ -233,6 +233,7 @@ export const promoCodeToFirestore = (promoCode: HPromoCode): PromoCode => {
 }
 
 
+export const bookingAppSchema = buildClientSchema(bookingSchemaSpec);
 export const partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 export const destinationAppSchema = buildClientSchema(destinationSchemaSpec);
 export const destinationBundleAppSchema = buildClientSchema(destinationBundleSchemaSpec);
