@@ -119,7 +119,7 @@ declare const bookingSchemaSpec: {
     };
     created_by: z.ZodNullable<z.ZodString>;
     updated_by: z.ZodNullable<z.ZodString>;
-    title: z.ZodNullable<z.ZodString>;
+    title: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     first_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     last_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     full_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -1843,7 +1843,7 @@ declare const HBookingSchema: z.ZodObject<{
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodNullable<z.ZodString>;
     updated_by: z.ZodNullable<z.ZodString>;
-    title: z.ZodNullable<z.ZodString>;
+    title: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     first_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     last_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     full_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -1943,7 +1943,6 @@ declare const HBookingSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    title: string | null;
     pax: number;
     booking_id: string | null;
     data: {
@@ -1975,6 +1974,7 @@ declare const HBookingSchema: z.ZodObject<{
     gender?: "M" | "F" | "O" | undefined;
     status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED" | null | undefined;
     external_id?: string | null | undefined;
+    title?: string | null | undefined;
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
@@ -1999,7 +1999,6 @@ declare const HBookingSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    title: string | null;
     pax: number;
     booking_id: string | null;
     data: {
@@ -2031,6 +2030,7 @@ declare const HBookingSchema: z.ZodObject<{
     gender?: "M" | "F" | "O" | undefined;
     status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED" | null | undefined;
     external_id?: string | null | undefined;
+    title?: string | null | undefined;
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
@@ -7880,7 +7880,7 @@ declare const bookingAppSchema: z.ZodObject<{
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodNullable<z.ZodString>;
     updated_by: z.ZodNullable<z.ZodString>;
-    title: z.ZodNullable<z.ZodString>;
+    title: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     first_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     last_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     full_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -7980,7 +7980,6 @@ declare const bookingAppSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    title: string | null;
     pax: number;
     booking_id: string | null;
     data: {
@@ -8012,6 +8011,7 @@ declare const bookingAppSchema: z.ZodObject<{
     gender?: "M" | "F" | "O" | undefined;
     status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED" | null | undefined;
     external_id?: string | null | undefined;
+    title?: string | null | undefined;
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
@@ -8036,7 +8036,6 @@ declare const bookingAppSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    title: string | null;
     pax: number;
     booking_id: string | null;
     data: {
@@ -8068,6 +8067,7 @@ declare const bookingAppSchema: z.ZodObject<{
     gender?: "M" | "F" | "O" | undefined;
     status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED" | null | undefined;
     external_id?: string | null | undefined;
+    title?: string | null | undefined;
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;

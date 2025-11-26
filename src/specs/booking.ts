@@ -64,7 +64,7 @@ export const bookingSchemaSpec = markAsSchemaSpec({
     updated_at: timestampRequired,
     created_by: z.string().nullable(),
     updated_by: z.string().nullable(),
-    title: z.string().nullable(),
+    title: z.string().nullable().optional(),
     first_name: z.string().nullable().optional(),
     last_name: z.string().nullable().optional(),
     full_name: z.string().nullable().optional(),

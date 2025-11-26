@@ -347,7 +347,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
   updated_at: timestampRequired,
   created_by: zod.z.string().nullable(),
   updated_by: zod.z.string().nullable(),
-  title: zod.z.string().nullable(),
+  title: zod.z.string().nullable().optional(),
   first_name: zod.z.string().nullable().optional(),
   last_name: zod.z.string().nullable().optional(),
   full_name: zod.z.string().nullable().optional(),
