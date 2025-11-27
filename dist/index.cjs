@@ -380,7 +380,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
   pax: zod.z.number(),
   email: zod.z.string().email().nullable().optional(),
   phone: zod.z.string().nullable().optional(),
-  booking_id: zod.z.string().nullable(),
+  booking_id: zod.z.string().nullable().optional(),
   flight_number: zod.z.string().optional(),
   gender: zod.z.enum(["M", "F", "O"]).optional(),
   sent_messages: zod.z.record(zod.z.any()).optional(),

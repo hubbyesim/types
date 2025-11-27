@@ -71,7 +71,7 @@ export const bookingSchemaSpec = markAsSchemaSpec({
     pax: z.number(),
     email: z.string().email().nullable().optional(),
     phone: z.string().nullable().optional(),
-    booking_id: z.string().nullable(),
+    booking_id: z.string().nullable().optional(),
     flight_number: z.string().optional(),
     gender: z.enum(['M', 'F', 'O']).optional(),
     sent_messages: z.record(z.any()).optional(),

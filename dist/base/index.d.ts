@@ -179,7 +179,7 @@ declare const HBookingSchema: z.ZodObject<{
     pax: z.ZodNumber;
     email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    booking_id: z.ZodNullable<z.ZodString>;
+    booking_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     flight_number: z.ZodOptional<z.ZodString>;
     gender: z.ZodOptional<z.ZodEnum<["M", "F", "O"]>>;
     sent_messages: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
@@ -273,7 +273,6 @@ declare const HBookingSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     pax: number;
-    booking_id: string | null;
     data: {
         source: string;
         manual: boolean;
@@ -308,6 +307,7 @@ declare const HBookingSchema: z.ZodObject<{
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
     phone?: string | null | undefined;
+    booking_id?: string | null | undefined;
     flight_number?: string | undefined;
     sent_messages?: Record<string, any> | undefined;
     is_processed_for_esim_restoration?: boolean | null | undefined;
@@ -329,7 +329,6 @@ declare const HBookingSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     pax: number;
-    booking_id: string | null;
     data: {
         source: string;
         manual: boolean;
@@ -364,6 +363,7 @@ declare const HBookingSchema: z.ZodObject<{
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
     phone?: string | null | undefined;
+    booking_id?: string | null | undefined;
     flight_number?: string | undefined;
     sent_messages?: Record<string, any> | undefined;
     is_processed_for_esim_restoration?: boolean | null | undefined;
