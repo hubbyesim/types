@@ -268,7 +268,8 @@ var SUPPORTED_LOCALES = [
   "sk-SK",
   "de-BE",
   "en-AU",
-  "da-DK"
+  "da-DK",
+  "ko-KR"
 ];
 var supportedLocalesSchema = zod.z.enum(SUPPORTED_LOCALES);
 var packageSpecificationSchema = zod.z.object({
