@@ -362,7 +362,8 @@ var bookingSchemaSpec = markAsSchemaSpec({
     _type: "object",
     of: {
       source: zod.z.string(),
-      manual: zod.z.boolean()
+      manual: zod.z.boolean(),
+      action: zod.z.string()
     }
   },
   communication_options: {
@@ -777,7 +778,11 @@ var platformSettingsSchema = zod.z.object({
     source_partner_branding: zod.z.boolean().optional().default(false),
     own_branding: zod.z.boolean().optional().default(false)
   }).nullable().optional(),
-  agent_signup_settings: agentSignupSettingsSchema.nullable().optional()
+  agent_signup_settings: agentSignupSettingsSchema.nullable().optional(),
+  upgrade_offer: zod.z.object({
+    enabled: zod.z.boolean(),
+    discount_percentage: zod.z.number().min(0).max(100)
+  }).nullable().optional()
 });
 markAsSchemaSpec({
   destination: zod.z.string(),
@@ -907,7 +912,7 @@ var partnerSchemaSpec = markAsSchemaSpec({
   updated_by: zod.z.string().nullable(),
   // Partner specific fields
   name: zod.z.string().min(3),
-  type: zod.z.string().nullable(),
+  type: zod.z.enum(["wholesale", "reseller", "platform", "agent"]).nullable().optional(),
   is_active: zod.z.boolean().nullable().optional(),
   external_id: zod.z.string().nullable().optional(),
   // Complex nested objects
