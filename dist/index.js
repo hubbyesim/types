@@ -384,7 +384,8 @@ var bookingSchemaSpec = markAsSchemaSpec({
     _type: "object",
     of: {
       source: z.string(),
-      manual: z.boolean()
+      manual: z.boolean(),
+      action: z.string()
     }
   },
   communication_options: {

@@ -137,6 +137,7 @@ declare const bookingSchemaSpec: {
         of: {
             source: z.ZodString;
             manual: z.ZodBoolean;
+            action: z.ZodString;
         };
     };
     communication_options: {
@@ -1829,12 +1830,15 @@ declare const HBookingSchema: z.ZodObject<{
     data: z.ZodObject<{
         source: z.ZodString;
         manual: z.ZodBoolean;
+        action: z.ZodString;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         source: string;
         manual: boolean;
+        action: string;
     }, {
         source: string;
         manual: boolean;
+        action: string;
     }>;
     communication_options: z.ZodObject<{
         should_send_message: z.ZodBoolean;
@@ -1916,6 +1920,7 @@ declare const HBookingSchema: z.ZodObject<{
     data: {
         source: string;
         manual: boolean;
+        action: string;
     };
     communication_options: {
         should_send_message: boolean;
@@ -1970,6 +1975,7 @@ declare const HBookingSchema: z.ZodObject<{
     data: {
         source: string;
         manual: boolean;
+        action: string;
     };
     communication_options: {
         should_send_message: boolean;
