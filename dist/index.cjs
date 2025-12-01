@@ -1077,6 +1077,7 @@ var userTouchpointsSchemaSpec = markAsSchemaSpec({
   esim_install_initiated_at: timestampNullableOptional,
   esim_install_completed_at: timestampNullableOptional,
   esim_first_package_activated_at: timestampNullableOptional,
+  esim_topped_up_at: timestampNullableOptional,
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },

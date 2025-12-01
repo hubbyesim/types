@@ -5256,6 +5256,7 @@ declare const HUserTouchpointsSchema: z.ZodObject<{
     esim_install_initiated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     esim_install_completed_at: z.ZodEffects<z.ZodDate, Date, Date>;
     esim_first_package_activated_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    esim_topped_up_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodString;
@@ -5274,6 +5275,7 @@ declare const HUserTouchpointsSchema: z.ZodObject<{
     esim_install_initiated_at: Date;
     esim_install_completed_at: Date;
     esim_first_package_activated_at: Date;
+    esim_topped_up_at: Date;
     id?: string | null | undefined;
     unique_device_identifier?: string | null | undefined;
 }, {
@@ -5290,6 +5292,7 @@ declare const HUserTouchpointsSchema: z.ZodObject<{
     esim_install_initiated_at: Date;
     esim_install_completed_at: Date;
     esim_first_package_activated_at: Date;
+    esim_topped_up_at: Date;
     id?: string | null | undefined;
     unique_device_identifier?: string | null | undefined;
 }>;
