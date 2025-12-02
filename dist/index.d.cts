@@ -137,7 +137,7 @@ declare const bookingSchemaSpec: {
         of: {
             source: z.ZodString;
             manual: z.ZodBoolean;
-            action: z.ZodString;
+            action: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         };
     };
     communication_options: {
@@ -1835,15 +1835,15 @@ declare const HBookingSchema: z.ZodObject<{
     data: z.ZodObject<{
         source: z.ZodString;
         manual: z.ZodBoolean;
-        action: z.ZodString;
+        action: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         source: string;
         manual: boolean;
-        action: string;
+        action?: string | null | undefined;
     }, {
         source: string;
         manual: boolean;
-        action: string;
+        action?: string | null | undefined;
     }>;
     communication_options: z.ZodObject<{
         should_send_message: z.ZodBoolean;
@@ -1925,7 +1925,7 @@ declare const HBookingSchema: z.ZodObject<{
     data: {
         source: string;
         manual: boolean;
-        action: string;
+        action?: string | null | undefined;
     };
     communication_options: {
         should_send_message: boolean;
@@ -1980,7 +1980,7 @@ declare const HBookingSchema: z.ZodObject<{
     data: {
         source: string;
         manual: boolean;
-        action: string;
+        action?: string | null | undefined;
     };
     communication_options: {
         should_send_message: boolean;

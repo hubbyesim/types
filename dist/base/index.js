@@ -361,7 +361,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
     of: {
       source: z.string(),
       manual: z.boolean(),
-      action: z.string()
+      action: z.string().nullable().optional()
     }
   },
   communication_options: {

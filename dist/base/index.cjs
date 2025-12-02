@@ -363,7 +363,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
     of: {
       source: zod.z.string(),
       manual: zod.z.boolean(),
-      action: zod.z.string()
+      action: zod.z.string().nullable().optional()
     }
   },
   communication_options: {
