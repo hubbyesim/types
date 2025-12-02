@@ -21,12 +21,6 @@ export const addressSchema = z.object({
     country: z.string().nullable().optional()
 });
 
-export const companyDetailsSchema = z.object({
-    business_name: z.string().nullable().optional(),
-    company_registration_number: z.string().nullable().optional(),
-    tax_id: z.string().nullable().optional()
-});
-
 // Emit event schema
 export const emitEventSchema = z.object({
     topup: z.boolean().optional().default(false),
@@ -229,7 +223,11 @@ export const platformSettingsSchema = z.object({
         source_partner_branding: z.boolean().optional().default(false),
         own_branding: z.boolean().optional().default(false)
     }).nullable().optional(),
-    agent_signup_settings: agentSignupSettingsSchema.nullable().optional()
+    agent_signup_settings: agentSignupSettingsSchema.nullable().optional(),
+    upgrade_offer: z.object({
+        enabled: z.boolean(),
+        discount_percentage: z.number().min(0).max(100),
+    }).nullable().optional()
 });
 
 // ===== Exportable schema specs =====
@@ -372,7 +370,7 @@ export const partnerSchemaSpec = markAsSchemaSpec({
 
     // Partner specific fields
     name: z.string().min(3),
-    type: z.string().nullable(),
+    type: z.enum(['wholesale', 'reseller', 'platform', 'agent']).nullable().optional(),
     is_active: z.boolean().nullable().optional(),
     external_id: z.string().nullable().optional(),
 
@@ -385,11 +383,6 @@ export const partnerSchemaSpec = markAsSchemaSpec({
     address: {
         _type: 'object' as const,
         of: addressSchema.shape,
-        nullable: true
-    },
-    company_details: {
-        _type: 'object' as const,
-        of: companyDetailsSchema.shape,
         nullable: true
     },
     registration: {

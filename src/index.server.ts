@@ -38,6 +38,7 @@ import {
 import { hubbyModelSpec, tagModelSpec } from './specs/common';
 import { SUPPORTED_LOCALES as LOCALES } from './constants';
 import { apiLogSchemaSpec } from './specs/apiLogs';
+import { userTouchpointsSchemaSpec } from './specs/userTouchpoints';
 import { 
     reviewSchemaSpec, 
     reviewSubmissionSchemaSpec,
@@ -48,12 +49,13 @@ import {
 } from './specs/review';
 import { destinationSchemaSpec, destinationBundleSchemaSpec } from './specs/destination';
 import { packageTemplateSchemaSpec } from './specs/package_template';
+import { loginRequestSchemaSpec } from './specs/login_request';
 import { z } from 'zod';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 
 
 import { convertFirestoreToJS, convertJSToFirestore } from './utils/firestoreTransformUtils';
-import { HPackage, HPartner, HPriceList, HPromoCode } from './index.client';
+import { HPackage, HPartner, HPriceList, HPromoCode, HUserTouchpoints } from './index.client';
 import { buildClientSchema } from './builders/client';
 
 export {
@@ -75,6 +77,8 @@ export {
     destinationSchemaSpec,
     destinationBundleSchemaSpec,
     packageTemplateSchemaSpec
+    userTouchpointsSchemaSpec,
+    loginRequestSchemaSpec
 };
 
 
@@ -106,6 +110,8 @@ export const ReviewSubmissionSchema = buildServerSchema(reviewSubmissionSchemaSp
 export const DestinationSchema = buildServerSchema(destinationSchemaSpec);
 export const DestinationBundleSchema = buildServerSchema(destinationBundleSchemaSpec);
 export const PackageTemplateSchema = buildServerSchema(packageTemplateSchemaSpec);
+export const UserTouchpointsSchema = buildServerSchema(userTouchpointsSchemaSpec);
+export const LoginRequestSchema = buildServerSchema(loginRequestSchemaSpec);
 
 // Additional lower-level schemas
 export const AddressSchema = addressSchema;
@@ -149,6 +155,8 @@ export type ReviewSubmission = z.infer<typeof ReviewSubmissionSchema>;
 export type Destination = z.infer<typeof DestinationSchema>;
 export type DestinationBundle = z.infer<typeof DestinationBundleSchema>;
 export type PackageTemplate = z.infer<typeof PackageTemplateSchema>;
+export type UserTouchpoints = z.infer<typeof UserTouchpointsSchema>;
+export type LoginRequest = z.infer<typeof LoginRequestSchema>;
 
 // Additional lower-level types
 export type Address = z.infer<typeof AddressSchema>;
@@ -232,6 +240,14 @@ export const promoCodeToFirestore = (promoCode: HPromoCode): PromoCode => {
     return convertJSToFirestore(promoCode, promoCodeSchemaSpec);
 }
 
+export const userTouchpointsFromFirestore = (userTouchpoints: UserTouchpoints): HUserTouchpoints => {
+    return convertFirestoreToJS(userTouchpoints, userTouchpointsSchemaSpec);
+}
+
+export const userTouchpointsToFirestore = (userTouchpoints: HUserTouchpoints): UserTouchpoints => {
+    return convertJSToFirestore(userTouchpoints, userTouchpointsSchemaSpec);
+}
+
 
 export const bookingAppSchema = buildClientSchema(bookingSchemaSpec);
 export const partnerAppSchema = buildClientSchema(partnerSchemaSpec);
@@ -248,4 +264,5 @@ export { createModelConverters } from './utils/modelConverterFactory';
 export { createConvertJSToFirestore, createConvertFirestoreToJS } from './utils/firestoreTransformUtils';
 export { FirebaseService, createFirebaseService } from './services/firebase';
 
-export { USER_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, BOOKING_COLLECTION, ROLE_COLLECTION, PERMISSION_COLLECTION, TRAFFIC_POLICY_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, COUNTRY_COLLECTION, ESIM_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, MESSAGE_COLLECTION, CURRENCY_COLLECTION, API_LOG_COLLECTION, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION } from './specs/common';
+export { USER_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, BOOKING_COLLECTION, ROLE_COLLECTION, PERMISSION_COLLECTION, TRAFFIC_POLICY_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, COUNTRY_COLLECTION, ESIM_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, MESSAGE_COLLECTION, CURRENCY_COLLECTION, API_LOG_COLLECTION, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, USER_TOUCHPOINTS_COLLECTION, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION  } from './specs/common';
+

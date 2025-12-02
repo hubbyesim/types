@@ -190,6 +190,7 @@ var REVIEW_COLLECTION = "/companies/hubby/reviews";
 var REVIEW_SUBMISSION_COLLECTION = "/companies/hubby/review_submissions";
 var DESTINATION_COLLECTION = "destinations";
 var DESTINATION_OFFER_COLLECTION = "offers";
+var USER_TOUCHPOINTS_COLLECTION = "user_touchpoints";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: true };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
@@ -295,7 +296,8 @@ var SUPPORTED_LOCALES = [
   "sk-SK",
   "de-BE",
   "en-AU",
-  "da-DK"
+  "da-DK",
+  "ko-KR"
 ];
 var supportedLocalesSchema = zod.z.enum(SUPPORTED_LOCALES);
 var packageSpecificationSchema = zod.z.object({
@@ -390,7 +392,8 @@ var bookingSchemaSpec = markAsSchemaSpec({
     _type: "object",
     of: {
       source: zod.z.string(),
-      manual: zod.z.boolean()
+      manual: zod.z.boolean(),
+      action: zod.z.string().nullable().optional()
     },
     nullable: true,
     optional: true
@@ -654,11 +657,6 @@ var addressSchema = zod.z.object({
   postal_code: zod.z.string().nullable().optional(),
   country: zod.z.string().nullable().optional()
 });
-var companyDetailsSchema = zod.z.object({
-  business_name: zod.z.string().nullable().optional(),
-  company_registration_number: zod.z.string().nullable().optional(),
-  tax_id: zod.z.string().nullable().optional()
-});
 var emitEventSchema = zod.z.object({
   topup: zod.z.boolean().optional().default(false),
   redemption: zod.z.boolean().optional().default(false),
@@ -826,7 +824,11 @@ var platformSettingsSchema = zod.z.object({
     source_partner_branding: zod.z.boolean().optional().default(false),
     own_branding: zod.z.boolean().optional().default(false)
   }).nullable().optional(),
-  agent_signup_settings: agentSignupSettingsSchema.nullable().optional()
+  agent_signup_settings: agentSignupSettingsSchema.nullable().optional(),
+  upgrade_offer: zod.z.object({
+    enabled: zod.z.boolean(),
+    discount_percentage: zod.z.number().min(0).max(100)
+  }).nullable().optional()
 });
 var packagePriceSchemaSpec = markAsSchemaSpec({
   destination: zod.z.string(),
@@ -956,7 +958,7 @@ var partnerSchemaSpec = markAsSchemaSpec({
   updated_by: zod.z.string().nullable(),
   // Partner specific fields
   name: zod.z.string().min(3),
-  type: zod.z.string().nullable(),
+  type: zod.z.enum(["wholesale", "reseller", "platform", "agent"]).nullable().optional(),
   is_active: zod.z.boolean().nullable().optional(),
   external_id: zod.z.string().nullable().optional(),
   // Complex nested objects
@@ -968,11 +970,6 @@ var partnerSchemaSpec = markAsSchemaSpec({
   address: {
     _type: "object",
     of: addressSchema.shape,
-    nullable: true
-  },
-  company_details: {
-    _type: "object",
-    of: companyDetailsSchema.shape,
     nullable: true
   },
   registration: {
@@ -1083,6 +1080,24 @@ var apiLogSchemaSpec = markAsSchemaSpec({
   payload: payloadSpec,
   timestamp: timestampRequired,
   status_code: zod.z.number()
+});
+var userTouchpointsSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string().nullable().optional(),
+  unique_device_identifier: zod.z.string().nullable().optional(),
+  user: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  booking: { _type: "docRef", collection: BOOKING_COLLECTION, nullable: true, optional: true },
+  promo_code: { _type: "docRef", collection: PROMO_CODE_COLLECTION, nullable: true, optional: true },
+  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true, optional: true },
+  promo_code_redeemed_at: timestampNullableOptional,
+  esim_assigned_at: timestampNullableOptional,
+  esim_install_initiated_at: timestampNullableOptional,
+  esim_install_completed_at: timestampNullableOptional,
+  esim_first_package_activated_at: timestampNullableOptional,
+  esim_topped_up_at: timestampNullableOptional,
+  created_at: timestampRequired,
+  updated_at: timestampRequired,
+  created_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  updated_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true }
 });
 var REVIEW_COLLECTION2 = "/companies/hubby/reviews";
 var rewardPackageTypeSchema = zod.z.enum(["data-limited", "starter"]);
@@ -1201,6 +1216,13 @@ var packageTemplateSchemaSpec = markAsSchemaSpec({
   updated_at: timestampRequired,
   created_by: zod.z.string().nullable(),
   updated_by: zod.z.string().nullable()
+var loginRequestSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string().nullable().optional(),
+  email: zod.z.string().email(),
+  status: zod.z.enum(["pending", "completed", "expired"]),
+  user: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  created_at: timestampRequired,
+  expires_at: timestampRequired
 });
 function createConvertJSToFirestore(db) {
   return function convertJSToFirestore2(input, spec) {
@@ -1496,6 +1518,8 @@ var HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
 var HDestinationSchema = buildClientSchema(destinationSchemaSpec);
 var HDestinationBundleSchema = buildClientSchema(destinationBundleSchemaSpec);
 var HPackageTemplateSchema = buildClientSchema(packageTemplateSchemaSpec);
+var HUserTouchpointsSchema = buildClientSchema(userTouchpointsSchemaSpec);
+var HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1561,6 +1585,8 @@ var ReviewSubmissionSchema = buildServerSchema(reviewSubmissionSchemaSpec);
 var DestinationSchema = buildServerSchema(destinationSchemaSpec);
 var DestinationBundleSchema = buildServerSchema(destinationBundleSchemaSpec);
 var PackageTemplateSchema = buildServerSchema(packageTemplateSchemaSpec);
+var UserTouchpointsSchema = buildServerSchema(userTouchpointsSchemaSpec);
+var LoginRequestSchema = buildServerSchema(loginRequestSchemaSpec);
 var AddressSchema = addressSchema;
 var RegistrationSchema = registrationSchema;
 var BankingDetailsSchema = bankingDetailsSchema;
@@ -1603,6 +1629,12 @@ var promoCodeToFirestore = (promoCode) => {
   return convertJSToFirestore(promoCode, promoCodeSchemaSpec);
 };
 var bookingAppSchema = buildClientSchema(bookingSchemaSpec);
+var userTouchpointsFromFirestore = (userTouchpoints) => {
+  return convertFirestoreToJS(userTouchpoints, userTouchpointsSchemaSpec);
+};
+var userTouchpointsToFirestore = (userTouchpoints) => {
+  return convertJSToFirestore(userTouchpoints, userTouchpointsSchemaSpec);
+};
 var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 var destinationAppSchema = buildClientSchema(destinationSchemaSpec);
 var destinationBundleAppSchema = buildClientSchema(destinationBundleSchemaSpec);
@@ -1650,6 +1682,7 @@ exports.HDestinationSchema = HDestinationSchema;
 exports.HESIMSchema = HESIMSchema;
 exports.HFinancialPropertiesSchema = HFinancialPropertiesSchema;
 exports.HFreeEsimSchema = HFreeEsimSchema;
+exports.HLoginRequestSchema = HLoginRequestSchema;
 exports.HMessageSchema = HMessageSchema;
 exports.HPackagePriceSchema = HPackagePriceSchema;
 exports.HPackageSchema = HPackageSchema;
@@ -1678,9 +1711,11 @@ exports.HTagSchema = HTagSchema;
 exports.HTelnaPackageSchema = HTelnaPackageSchema;
 exports.HTrafficPolicySchema = HTrafficPolicySchema;
 exports.HUserSchema = HUserSchema;
+exports.HUserTouchpointsSchema = HUserTouchpointsSchema;
 exports.HVisualIdentityBannerSchema = HVisualIdentityBannerSchema;
 exports.HVisualIdentitySchema = HVisualIdentitySchema;
 exports.HubbyModelSchema = HubbyModelSchema;
+exports.LoginRequestSchema = LoginRequestSchema;
 exports.MESSAGE_COLLECTION = MESSAGE_COLLECTION;
 exports.MessageSchema = MessageSchema;
 exports.PACKAGE_COLLECTION = PACKAGE_COLLECTION;
@@ -1719,8 +1754,10 @@ exports.TagSchema = TagSchema;
 exports.TelnaPackageSchema = TelnaPackageSchema;
 exports.TrafficPolicySchema = TrafficPolicySchema;
 exports.USER_COLLECTION = USER_COLLECTION;
+exports.USER_TOUCHPOINTS_COLLECTION = USER_TOUCHPOINTS_COLLECTION;
 exports.UserFirestoreSchema = UserFirestoreSchema;
 exports.UserSchema = UserSchema;
+exports.UserTouchpointsSchema = UserTouchpointsSchema;
 exports.VisualIdentityBannerSchema = VisualIdentityBannerSchema;
 exports.VisualIdentityBannersSchema = VisualIdentityBannersSchema;
 exports.VisualIdentitySchema = VisualIdentitySchema;
@@ -1739,6 +1776,7 @@ exports.destinationBundleAppSchema = destinationBundleAppSchema;
 exports.destinationBundleSchemaSpec = destinationBundleSchemaSpec;
 exports.destinationSchemaSpec = destinationSchemaSpec;
 exports.esimSchemaSpec = esimSchemaSpec;
+exports.loginRequestSchemaSpec = loginRequestSchemaSpec;
 exports.messageSchemaSpec = messageSchemaSpec;
 exports.packageSchemaSpec = packageSchemaSpec;
 exports.packageTemplateAppSchema = packageTemplateAppSchema;
@@ -1760,5 +1798,8 @@ exports.reviewSubmissionSchemaSpec = reviewSubmissionSchemaSpec;
 exports.userFromFirestore = userFromFirestore;
 exports.userSchemaSpec = userSchemaSpec;
 exports.userToFirestore = userToFirestore;
+exports.userTouchpointsFromFirestore = userTouchpointsFromFirestore;
+exports.userTouchpointsSchemaSpec = userTouchpointsSchemaSpec;
+exports.userTouchpointsToFirestore = userTouchpointsToFirestore;
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.cjs.map

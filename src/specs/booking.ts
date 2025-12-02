@@ -81,7 +81,8 @@ export const bookingSchemaSpec = markAsSchemaSpec({
         _type: 'object' as const,
         of: {
             source: z.string(),
-            manual: z.boolean()
+            manual: z.boolean(),
+            action: z.string().nullable().optional()
         },
         nullable: true,
         optional: true

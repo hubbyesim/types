@@ -267,7 +267,8 @@ var SUPPORTED_LOCALES = [
   "sk-SK",
   "de-BE",
   "en-AU",
-  "da-DK"
+  "da-DK",
+  "ko-KR"
 ];
 var supportedLocalesSchema = z.enum(SUPPORTED_LOCALES);
 var packageSpecificationSchema = z.object({
@@ -362,10 +363,11 @@ var bookingSchemaSpec = markAsSchemaSpec({
     _type: "object",
     of: {
       source: z.string(),
-      manual: z.boolean()
+      manual: z.boolean(),
+      action: z.string().nullable().optional()
     },
-    nullable: true,
-    optional: true
+     nullable: true,
+     optional: true
   },
   communication_options: {
     _type: "object",
@@ -616,11 +618,6 @@ var addressSchema = z.object({
   postal_code: z.string().nullable().optional(),
   country: z.string().nullable().optional()
 });
-var companyDetailsSchema = z.object({
-  business_name: z.string().nullable().optional(),
-  company_registration_number: z.string().nullable().optional(),
-  tax_id: z.string().nullable().optional()
-});
 var emitEventSchema = z.object({
   topup: z.boolean().optional().default(false),
   redemption: z.boolean().optional().default(false),
@@ -788,7 +785,11 @@ var platformSettingsSchema = z.object({
     source_partner_branding: z.boolean().optional().default(false),
     own_branding: z.boolean().optional().default(false)
   }).nullable().optional(),
-  agent_signup_settings: agentSignupSettingsSchema.nullable().optional()
+  agent_signup_settings: agentSignupSettingsSchema.nullable().optional(),
+  upgrade_offer: z.object({
+    enabled: z.boolean(),
+    discount_percentage: z.number().min(0).max(100)
+  }).nullable().optional()
 });
 markAsSchemaSpec({
   destination: z.string(),
@@ -918,7 +919,7 @@ var partnerSchemaSpec = markAsSchemaSpec({
   updated_by: z.string().nullable(),
   // Partner specific fields
   name: z.string().min(3),
-  type: z.string().nullable(),
+  type: z.enum(["wholesale", "reseller", "platform", "agent"]).nullable().optional(),
   is_active: z.boolean().nullable().optional(),
   external_id: z.string().nullable().optional(),
   // Complex nested objects
@@ -930,11 +931,6 @@ var partnerSchemaSpec = markAsSchemaSpec({
   address: {
     _type: "object",
     of: addressSchema.shape,
-    nullable: true
-  },
-  company_details: {
-    _type: "object",
-    of: companyDetailsSchema.shape,
     nullable: true
   },
   registration: {
@@ -1055,6 +1051,24 @@ var apiLogSchemaSpec = markAsSchemaSpec({
   payload: payloadSpec,
   timestamp: timestampRequired,
   status_code: z.number()
+});
+var userTouchpointsSchemaSpec = markAsSchemaSpec({
+  id: z.string().nullable().optional(),
+  unique_device_identifier: z.string().nullable().optional(),
+  user: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  booking: { _type: "docRef", collection: BOOKING_COLLECTION, nullable: true, optional: true },
+  promo_code: { _type: "docRef", collection: PROMO_CODE_COLLECTION, nullable: true, optional: true },
+  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true, optional: true },
+  promo_code_redeemed_at: timestampNullableOptional,
+  esim_assigned_at: timestampNullableOptional,
+  esim_install_initiated_at: timestampNullableOptional,
+  esim_install_completed_at: timestampNullableOptional,
+  esim_first_package_activated_at: timestampNullableOptional,
+  esim_topped_up_at: timestampNullableOptional,
+  created_at: timestampRequired,
+  updated_at: timestampRequired,
+  created_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  updated_by: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true }
 });
 var roleSchemaSpec = markAsSchemaSpec({
   id: z.string().nullable().optional(),
@@ -1188,6 +1202,13 @@ var packageTemplateSchemaSpec = markAsSchemaSpec({
   updated_at: timestampRequired,
   created_by: z.string().nullable(),
   updated_by: z.string().nullable()
+var loginRequestSchemaSpec = markAsSchemaSpec({
+  id: z.string().nullable().optional(),
+  email: z.string().email(),
+  status: z.enum(["pending", "completed", "expired"]),
+  user: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  created_at: timestampRequired,
+  expires_at: timestampRequired
 });
 
 // src/index.client.ts
@@ -1223,6 +1244,8 @@ var HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
 var HDestinationSchema = buildClientSchema(destinationSchemaSpec);
 var HDestinationBundleSchema = buildClientSchema(destinationBundleSchemaSpec);
 var HPackageTemplateSchema = buildClientSchema(packageTemplateSchemaSpec);
+var HUserTouchpointsSchema = buildClientSchema(userTouchpointsSchemaSpec);
+var HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1241,6 +1264,7 @@ var HRewardMultipliersSchema = rewardMultipliersSchema;
 var HRewardPackageTypeSchema = rewardPackageTypeSchema;
 var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
-export { HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBaseRewardSchema, HBondioPackageSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HDestinationBundleSchema, HDestinationSchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPackageTemplateSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HReviewSchema, HReviewSubmissionSchema, HRewardMultipliersSchema, HRewardPackageTypeSchema, HRewardStrategySchema, HRoleSchema, HScheduleFilterSchema, HTagSchema, HTelnaPackageSchema, HTrafficPolicySchema, HUserSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES };
+
+export { HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBaseRewardSchema, HBondioPackageSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HDestinationBundleSchema, HDestinationSchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HLoginRequestSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPackageTemplateSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HReviewSchema, HReviewSubmissionSchema, HRewardMultipliersSchema, HRewardPackageTypeSchema, HRewardStrategySchema, HRoleSchema, HScheduleFilterSchema, HTagSchema, HTelnaPackageSchema, HTrafficPolicySchema, HUserSchema, HUserTouchpointsSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES };
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.js.map

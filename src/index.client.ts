@@ -41,6 +41,7 @@ import {
 } from './specs/partner';
 import { analyticsSpec } from './specs/analytics';
 import { apiLogSchemaSpec } from './specs/apiLogs';
+import { userTouchpointsSchemaSpec } from './specs/userTouchpoints';
 import { z } from 'zod';
 import { roleSchemaSpec } from './specs/role';
 import { permissionSchemaSpec } from './specs/permission';
@@ -54,6 +55,7 @@ import {
 } from './specs/review';
 import { destinationSchemaSpec, destinationBundleSchemaSpec } from './specs/destination';
 import { packageTemplateSchemaSpec } from './specs/package_template';
+import { loginRequestSchemaSpec } from './specs/login_request';
 
 
 /** ZOD SCHEMAS */
@@ -89,6 +91,8 @@ export const HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaS
 export const HDestinationSchema = buildClientSchema(destinationSchemaSpec);
 export const HDestinationBundleSchema = buildClientSchema(destinationBundleSchemaSpec);
 export const HPackageTemplateSchema = buildClientSchema(packageTemplateSchemaSpec);
+export const HUserTouchpointsSchema = buildClientSchema(userTouchpointsSchemaSpec);
+export const HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 // Additional lower-level schemas
 export const HAddressSchema = addressSchema;
 export const HRegistrationSchema = registrationSchema;
@@ -129,6 +133,8 @@ export type HReviewSubmission = z.infer<typeof HReviewSubmissionSchema>;
 export type HDestination = z.infer<typeof HDestinationSchema>;
 export type HDestinationBundle = z.infer<typeof HDestinationBundleSchema>;
 export type HPackageTemplate = z.infer<typeof HPackageTemplateSchema>;
+export type HUserTouchpoints = z.infer<typeof HUserTouchpointsSchema>;
+export type HLoginRequest = z.infer<typeof HLoginRequestSchema>;
 // Additional lower-level types
 export type HAddress = z.infer<typeof HAddressSchema>;
 export type HRegistration = z.infer<typeof HRegistrationSchema>;
