@@ -269,7 +269,6 @@ declare const HBookingSchema: z.ZodObject<{
         messaging_contact_id: string | null;
     }>>>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
-    email: string | null;
     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
     partner: string;
     created_at: Date;
@@ -327,7 +326,6 @@ declare const HBookingSchema: z.ZodObject<{
         messaging_contact_id: string | null;
     } | null | undefined;
 }, {
-    email: string | null;
     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
     partner: string;
     created_at: Date;
@@ -5496,6 +5494,7 @@ declare const HPackageTemplateSchema: z.ZodObject<{
     purchase_price: number;
     supported_countries: string[];
     provider_specific_data: Record<string, any>;
+}>;
 declare const HUserTouchpointsSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     unique_device_identifier: z.ZodOptional<z.ZodNullable<z.ZodString>>;

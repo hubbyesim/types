@@ -76,7 +76,7 @@ export {
     reviewSubmissionSchemaSpec,
     destinationSchemaSpec,
     destinationBundleSchemaSpec,
-    packageTemplateSchemaSpec
+    packageTemplateSchemaSpec,
     userTouchpointsSchemaSpec,
     loginRequestSchemaSpec
 };

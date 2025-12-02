@@ -368,8 +368,8 @@ var bookingSchemaSpec = markAsSchemaSpec({
       manual: zod.z.boolean(),
       action: zod.z.string().nullable().optional()
     },
-     nullable: true,
-     optional: true
+    nullable: true,
+    optional: true
   },
   communication_options: {
     _type: "object",
@@ -1204,6 +1204,7 @@ var packageTemplateSchemaSpec = markAsSchemaSpec({
   updated_at: timestampRequired,
   created_by: zod.z.string().nullable(),
   updated_by: zod.z.string().nullable()
+});
 var loginRequestSchemaSpec = markAsSchemaSpec({
   id: zod.z.string().nullable().optional(),
   email: zod.z.string().email(),

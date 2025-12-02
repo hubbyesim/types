@@ -1214,6 +1214,7 @@ var packageTemplateSchemaSpec = markAsSchemaSpec({
   updated_at: timestampRequired,
   created_by: z.string().nullable(),
   updated_by: z.string().nullable()
+});
 var loginRequestSchemaSpec = markAsSchemaSpec({
   id: z.string().nullable().optional(),
   email: z.string().email(),
@@ -1626,13 +1627,13 @@ var promoCodeFromFirestore = (promoCode) => {
 var promoCodeToFirestore = (promoCode) => {
   return convertJSToFirestore(promoCode, promoCodeSchemaSpec);
 };
-var bookingAppSchema = buildClientSchema(bookingSchemaSpec);
 var userTouchpointsFromFirestore = (userTouchpoints) => {
   return convertFirestoreToJS(userTouchpoints, userTouchpointsSchemaSpec);
 };
 var userTouchpointsToFirestore = (userTouchpoints) => {
   return convertJSToFirestore(userTouchpoints, userTouchpointsSchemaSpec);
 };
+var bookingAppSchema = buildClientSchema(bookingSchemaSpec);
 var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 var destinationAppSchema = buildClientSchema(destinationSchemaSpec);
 var destinationBundleAppSchema = buildClientSchema(destinationBundleSchemaSpec);
