@@ -53,6 +53,8 @@ import {
   rewardMultipliersSchema,
   rewardPackageTypeSchema
 } from './specs/review';
+import { destinationSchemaSpec, destinationBundleSchemaSpec } from './specs/destination';
+import { packageTemplateSchemaSpec } from './specs/package_template';
 import { loginRequestSchemaSpec } from './specs/login_request';
 
 
@@ -86,6 +88,9 @@ export const HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
 export const HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
 export const HReviewSchema = buildClientSchema(reviewSchemaSpec);
 export const HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
+export const HDestinationSchema = buildClientSchema(destinationSchemaSpec);
+export const HDestinationBundleSchema = buildClientSchema(destinationBundleSchemaSpec);
+export const HPackageTemplateSchema = buildClientSchema(packageTemplateSchemaSpec);
 export const HUserTouchpointsSchema = buildClientSchema(userTouchpointsSchemaSpec);
 export const HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 // Additional lower-level schemas
@@ -125,6 +130,9 @@ export type HBondioPackage = z.infer<typeof HBondioPackageSchema>;
 export type HTelnaPackage = z.infer<typeof HTelnaPackageSchema>;
 export type HReview = z.infer<typeof HReviewSchema>;
 export type HReviewSubmission = z.infer<typeof HReviewSubmissionSchema>;
+export type HDestination = z.infer<typeof HDestinationSchema>;
+export type HDestinationBundle = z.infer<typeof HDestinationBundleSchema>;
+export type HPackageTemplate = z.infer<typeof HPackageTemplateSchema>;
 export type HUserTouchpoints = z.infer<typeof HUserTouchpointsSchema>;
 export type HLoginRequest = z.infer<typeof HLoginRequestSchema>;
 // Additional lower-level types

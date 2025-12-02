@@ -6,6 +6,7 @@ export const PARTNER_COLLECTION = '/companies/hubby/partners';
 export const USER_COLLECTION = 'users';
 export const PROFILE_COLLECTION = '/companies/hubby/profiles';
 export const PACKAGE_COLLECTION = '/companies/hubby/packages';
+export const PACKAGE_TEMPLATE_COLLECTION = '/companies/hubby/package_templates';
 export const PROMO_CODE_COLLECTION = '/companies/hubby/promo_codes';
 export const COUNTRY_COLLECTION = 'countries';
 export const ESIM_COLLECTION = 'esims';
@@ -20,6 +21,8 @@ export const PERMISSION_COLLECTION = 'permissions';
 export const TRAFFIC_POLICY_COLLECTION = 'traffic_policies';
 export const REVIEW_COLLECTION = '/companies/hubby/reviews';
 export const REVIEW_SUBMISSION_COLLECTION = '/companies/hubby/review_submissions';
+export const DESTINATION_COLLECTION = 'destinations';
+export const DESTINATION_OFFER_COLLECTION = 'offers';
 export const USER_TOUCHPOINTS_COLLECTION = 'user_touchpoints';
 
 
@@ -27,7 +30,7 @@ export const packageTypes = ['data-limited', 'time-limited', 'starter', 'unlimit
 
 // Timestamp specs
 export const timestampNullableOptional = { _type: 'timestamp' as const, nullable: true, optional: true };
-export const timestampNullable = { _type: 'timestamp' as const, nullable: true, optional: false };
+export const timestampNullable = { _type: 'timestamp' as const, nullable: true, optional: true };
 export const timestampRequired = { _type: 'timestamp' as const, nullable: false, optional: false };
 
 export const hubbyModelSpec = {

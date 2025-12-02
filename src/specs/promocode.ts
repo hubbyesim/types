@@ -13,8 +13,10 @@ import {
 // Define package specification schema for use in promo code
 export const packageSpecificationSchema = z.object({
     destination: z.string().optional().or(z.array(z.string())),
+    iso3: z.string().optional(),
     size: z.string().optional(),
     package_id: z.string().optional(),
+    bundle_id: z.string().optional(),
     iata_code: z.string().optional(),
     package_duration: z.number().optional(),
     package_type: z.enum(['data-limited', 'time-limited', 'starter', 'unlimited']).optional(),

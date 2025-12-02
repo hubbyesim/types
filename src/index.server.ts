@@ -47,6 +47,8 @@ import {
     rewardMultipliersSchema,
     rewardPackageTypeSchema
 } from './specs/review';
+import { destinationSchemaSpec, destinationBundleSchemaSpec } from './specs/destination';
+import { packageTemplateSchemaSpec } from './specs/package_template';
 import { loginRequestSchemaSpec } from './specs/login_request';
 import { z } from 'zod';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
@@ -72,6 +74,9 @@ export {
     apiLogSchemaSpec,
     reviewSchemaSpec,
     reviewSubmissionSchemaSpec,
+    destinationSchemaSpec,
+    destinationBundleSchemaSpec,
+    packageTemplateSchemaSpec
     userTouchpointsSchemaSpec,
     loginRequestSchemaSpec
 };
@@ -102,6 +107,9 @@ export const BondioPackageSchema = buildServerSchema(bondioPackageSchema);
 export const TrafficPolicySchema = buildServerSchema(trafficPolicySpec);
 export const ReviewSchema = buildServerSchema(reviewSchemaSpec);
 export const ReviewSubmissionSchema = buildServerSchema(reviewSubmissionSchemaSpec);
+export const DestinationSchema = buildServerSchema(destinationSchemaSpec);
+export const DestinationBundleSchema = buildServerSchema(destinationBundleSchemaSpec);
+export const PackageTemplateSchema = buildServerSchema(packageTemplateSchemaSpec);
 export const UserTouchpointsSchema = buildServerSchema(userTouchpointsSchemaSpec);
 export const LoginRequestSchema = buildServerSchema(loginRequestSchemaSpec);
 
@@ -144,6 +152,9 @@ export type BondioPackage = z.infer<typeof BondioPackageSchema>;
 export type TrafficPolicy = z.infer<typeof TrafficPolicySchema>;
 export type Review = z.infer<typeof ReviewSchema>;
 export type ReviewSubmission = z.infer<typeof ReviewSubmissionSchema>;
+export type Destination = z.infer<typeof DestinationSchema>;
+export type DestinationBundle = z.infer<typeof DestinationBundleSchema>;
+export type PackageTemplate = z.infer<typeof PackageTemplateSchema>;
 export type UserTouchpoints = z.infer<typeof UserTouchpointsSchema>;
 export type LoginRequest = z.infer<typeof LoginRequestSchema>;
 
@@ -238,7 +249,12 @@ export const userTouchpointsToFirestore = (userTouchpoints: HUserTouchpoints): U
 }
 
 
+export const bookingAppSchema = buildClientSchema(bookingSchemaSpec);
 export const partnerAppSchema = buildClientSchema(partnerSchemaSpec);
+export const destinationAppSchema = buildClientSchema(destinationSchemaSpec);
+export const destinationBundleAppSchema = buildClientSchema(destinationBundleSchemaSpec);
+export const packageTemplateAppSchema = buildClientSchema(packageTemplateSchemaSpec);
+export const promoPackageSpecificationAppSchema = buildClientSchema(promoPackageSpecificationSchema);
 // Export the type and constant
 export type SupportedLocales = typeof LOCALES[number];
 export const SUPPORTED_LOCALES = LOCALES;
@@ -248,4 +264,5 @@ export { createModelConverters } from './utils/modelConverterFactory';
 export { createConvertJSToFirestore, createConvertFirestoreToJS } from './utils/firestoreTransformUtils';
 export { FirebaseService, createFirebaseService } from './services/firebase';
 
-export { USER_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, BOOKING_COLLECTION, ROLE_COLLECTION, PERMISSION_COLLECTION, TRAFFIC_POLICY_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, COUNTRY_COLLECTION, ESIM_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, MESSAGE_COLLECTION, CURRENCY_COLLECTION, API_LOG_COLLECTION, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, USER_TOUCHPOINTS_COLLECTION } from './specs/common';
+export { USER_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, BOOKING_COLLECTION, ROLE_COLLECTION, PERMISSION_COLLECTION, TRAFFIC_POLICY_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, COUNTRY_COLLECTION, ESIM_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, MESSAGE_COLLECTION, CURRENCY_COLLECTION, API_LOG_COLLECTION, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, USER_TOUCHPOINTS_COLLECTION, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION  } from './specs/common';
+
