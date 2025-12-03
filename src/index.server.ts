@@ -57,7 +57,13 @@ import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 import { convertFirestoreToJS, convertJSToFirestore } from './utils/firestoreTransformUtils';
 import { HPackage, HPartner, HPriceList, HPromoCode, HUserTouchpoints } from './index.client';
 import { buildClientSchema } from './builders/client';
-
+import { 
+    liveActivitySchemaSpec,
+    liveActivityStatusSchema,
+    liveActivityEventSchema,
+    liveActivityReasonSchema,
+    lastUpdateSchema
+} from './specs/live_activity';
 export {
     partnerSchemaSpec,
     analyticsSpec,
@@ -78,11 +84,18 @@ export {
     destinationBundleSchemaSpec,
     packageTemplateSchemaSpec,
     userTouchpointsSchemaSpec,
-    loginRequestSchemaSpec
+    loginRequestSchemaSpec,
+    liveActivitySchemaSpec,
+    liveActivityStatusSchema,
+    liveActivityEventSchema,
+    liveActivityReasonSchema,
+    lastUpdateSchema
 };
 
 
 /** ZOD SCHEMAS */
+export const LiveActivitySchema = buildServerSchema(liveActivitySchemaSpec);
+
 export const UserSchema = buildServerSchema(userSchemaSpec);
 export const UserFirestoreSchema = buildServerSchema(userSchemaSpec);
 export const BookingSchema = buildServerSchema(bookingSchemaSpec);
@@ -157,6 +170,11 @@ export type DestinationBundle = z.infer<typeof DestinationBundleSchema>;
 export type PackageTemplate = z.infer<typeof PackageTemplateSchema>;
 export type UserTouchpoints = z.infer<typeof UserTouchpointsSchema>;
 export type LoginRequest = z.infer<typeof LoginRequestSchema>;
+export type LiveActivity = z.infer<typeof LiveActivitySchema>;
+export type LiveActivityStatus = z.infer<typeof liveActivityStatusSchema>;
+export type LiveActivityEvent = z.infer<typeof liveActivityEventSchema>;
+export type LiveActivityReason = z.infer<typeof liveActivityReasonSchema>;
+export type LastUpdate = z.infer<typeof lastUpdateSchema>;
 
 // Additional lower-level types
 export type Address = z.infer<typeof AddressSchema>;
