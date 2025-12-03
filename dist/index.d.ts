@@ -341,14 +341,14 @@ declare const esimSchemaSpec: {
         status: z.ZodString;
         timestamp: z.ZodType<Date>;
     }, "strip", z.ZodTypeAny, {
+        status: string;
         timestamp: Date;
         source: string;
-        status: string;
         telna_esim_status: number;
     }, {
+        status: string;
         timestamp: Date;
         source: string;
-        status: string;
         telna_esim_status: number;
     }>, "many">>>;
     name: z.ZodString;
@@ -1174,15 +1174,10 @@ declare const partnerSchemaSpec: {
                 }>>>;
             }, "strip", z.ZodTypeAny, {
                 key: string;
-                method: "email" | "push" | "sms" | "whatsapp";
+                method: "push" | "email" | "sms" | "whatsapp";
                 days: number;
                 hour: number;
                 moment: "departure_date" | "return_date" | "immediate";
-                email?: {
-                    brevo_template_id: number;
-                    subject?: Record<string, string> | undefined;
-                    preview_text?: Record<string, string> | undefined;
-                } | null | undefined;
                 push?: {
                     target: string;
                     title?: Record<string, string> | undefined;
@@ -1192,18 +1187,18 @@ declare const partnerSchemaSpec: {
                     value: string | number;
                     type: "gender" | "iso3" | "percentage" | "age";
                     comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+                } | null | undefined;
+                email?: {
+                    brevo_template_id: number;
+                    subject?: Record<string, string> | undefined;
+                    preview_text?: Record<string, string> | undefined;
                 } | null | undefined;
             }, {
                 key: string;
-                method: "email" | "push" | "sms" | "whatsapp";
+                method: "push" | "email" | "sms" | "whatsapp";
                 days: number;
                 hour: number;
                 moment: "departure_date" | "return_date" | "immediate";
-                email?: {
-                    brevo_template_id: number;
-                    subject?: Record<string, string> | undefined;
-                    preview_text?: Record<string, string> | undefined;
-                } | null | undefined;
                 push?: {
                     target: string;
                     title?: Record<string, string> | undefined;
@@ -1213,6 +1208,11 @@ declare const partnerSchemaSpec: {
                     value: string | number;
                     type: "gender" | "iso3" | "percentage" | "age";
                     comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+                } | null | undefined;
+                email?: {
+                    brevo_template_id: number;
+                    subject?: Record<string, string> | undefined;
+                    preview_text?: Record<string, string> | undefined;
                 } | null | undefined;
             }>, "many">>;
             brevo: z.ZodOptional<z.ZodNullable<z.ZodObject<{
@@ -1847,6 +1847,8 @@ declare const HUserSchema: z.ZodObject<{
     updated_by: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     push_to_start_token: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
+    created_at: Date;
+    updated_at: Date;
     name: string | null;
     email: string | null;
     api_keys: {
@@ -1863,9 +1865,10 @@ declare const HUserSchema: z.ZodObject<{
     partner: string;
     review_requested: Date;
     last_seen: Date;
-    created_at: Date;
-    updated_at: Date;
     id?: string | null | undefined;
+    push_to_start_token?: string | null | undefined;
+    created_by?: string | null | undefined;
+    updated_by?: string | null | undefined;
     stripe_id?: string | null | undefined;
     referral?: string | null | undefined;
     fcm?: string | undefined;
@@ -1890,10 +1893,9 @@ declare const HUserSchema: z.ZodObject<{
     receipt_email?: string | null | undefined;
     source?: "platform" | "direct" | "promo" | null | undefined;
     balance?: number | null | undefined;
-    created_by?: string | null | undefined;
-    updated_by?: string | null | undefined;
-    push_to_start_token?: string | null | undefined;
 }, {
+    created_at: Date;
+    updated_at: Date;
     name: string | null;
     email: string | null;
     api_keys: {
@@ -1910,9 +1912,10 @@ declare const HUserSchema: z.ZodObject<{
     partner: string;
     review_requested: Date;
     last_seen: Date;
-    created_at: Date;
-    updated_at: Date;
     id?: string | null | undefined;
+    push_to_start_token?: string | null | undefined;
+    created_by?: string | null | undefined;
+    updated_by?: string | null | undefined;
     stripe_id?: string | null | undefined;
     referral?: string | null | undefined;
     fcm?: string | undefined;
@@ -1937,9 +1940,6 @@ declare const HUserSchema: z.ZodObject<{
     receipt_email?: string | null | undefined;
     source?: "platform" | "direct" | "promo" | null | undefined;
     balance?: number | null | undefined;
-    created_by?: string | null | undefined;
-    updated_by?: string | null | undefined;
-    push_to_start_token?: string | null | undefined;
 }>;
 declare const HBookingSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
@@ -1966,12 +1966,12 @@ declare const HBookingSchema: z.ZodObject<{
         manual: z.ZodBoolean;
         action: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
-        source: string;
         manual: boolean;
+        source: string;
         action?: string | null | undefined;
     }, {
-        source: string;
         manual: boolean;
+        source: string;
         action?: string | null | undefined;
     }>;
     communication_options: z.ZodObject<{
@@ -2045,16 +2045,16 @@ declare const HBookingSchema: z.ZodObject<{
         messaging_contact_id: string | null;
     }>>>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
-    locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
-    partner: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+    partner: string;
     pax: number;
     data: {
-        source: string;
         manual: boolean;
+        source: string;
         action?: string | null | undefined;
     };
     communication_options: {
@@ -2078,11 +2078,11 @@ declare const HBookingSchema: z.ZodObject<{
     users: string[];
     esims: string[];
     id?: string | undefined;
+    title?: string | null | undefined;
+    status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED" | null | undefined;
     email?: string | null | undefined;
     gender?: "M" | "F" | "O" | undefined;
-    status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED" | null | undefined;
     external_id?: string | null | undefined;
-    title?: string | null | undefined;
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
@@ -2102,16 +2102,16 @@ declare const HBookingSchema: z.ZodObject<{
         messaging_contact_id: string | null;
     } | null | undefined;
 }, {
-    locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
-    partner: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+    partner: string;
     pax: number;
     data: {
-        source: string;
         manual: boolean;
+        source: string;
         action?: string | null | undefined;
     };
     communication_options: {
@@ -2135,11 +2135,11 @@ declare const HBookingSchema: z.ZodObject<{
     users: string[];
     esims: string[];
     id?: string | undefined;
+    title?: string | null | undefined;
+    status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED" | null | undefined;
     email?: string | null | undefined;
     gender?: "M" | "F" | "O" | undefined;
-    status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED" | null | undefined;
     external_id?: string | null | undefined;
-    title?: string | null | undefined;
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
@@ -2181,11 +2181,11 @@ declare const HCountrySchema: z.ZodObject<{
     created_by: z.ZodString;
     updated_by: z.ZodString;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
-    name: string | null;
     created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    name: string | null;
     bokun_id: number | null;
     LTE: boolean | null;
     apn: string | null;
@@ -2202,11 +2202,11 @@ declare const HCountrySchema: z.ZodObject<{
     tier: number | null;
     id?: string | null | undefined;
 }, {
-    name: string | null;
     created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    name: string | null;
     bokun_id: number | null;
     LTE: boolean | null;
     apn: string | null;
@@ -2237,23 +2237,23 @@ declare const HCurrencySchema: z.ZodObject<{
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     symbol: string;
     id: string;
-    name: string;
+    code: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    code: string;
+    name: string;
     rate: number;
     is_default: boolean;
 }, {
     symbol: string;
     id: string;
-    name: string;
+    code: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    code: string;
+    name: string;
     rate: number;
     is_default: boolean;
 }>;
@@ -2279,14 +2279,14 @@ declare const HESIMSchema: z.ZodObject<{
         status: z.ZodString;
         timestamp: z.ZodType<Date>;
     }, "strip", z.ZodTypeAny, {
+        status: string;
         timestamp: Date;
         source: string;
-        status: string;
         telna_esim_status: number;
     }, {
+        status: string;
         timestamp: Date;
         source: string;
-        status: string;
         telna_esim_status: number;
     }>, "many">>>;
     name: z.ZodString;
@@ -2305,15 +2305,15 @@ declare const HESIMSchema: z.ZodObject<{
     last_updated: z.ZodEffects<z.ZodDate, Date, Date>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
-    name: string;
-    promo: string | null;
-    partner: string;
+    status: string | null;
+    type: "code" | "promo" | "balance" | "api" | "external" | "payment";
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: "promo" | "balance" | "code" | "api" | "external" | "payment";
-    status: string | null;
+    name: string;
+    promo: string | null;
+    partner: string;
     apn: string | null;
     imsi: number;
     qr: string;
@@ -2334,22 +2334,22 @@ declare const HESIMSchema: z.ZodObject<{
     coverage_label?: string | null | undefined;
     uuid?: string | null | undefined;
     status_history?: {
+        status: string;
         timestamp: Date;
         source: string;
-        status: string;
         telna_esim_status: number;
     }[] | null | undefined;
 }, {
     id: string;
-    name: string;
-    promo: string | null;
-    partner: string;
+    status: string | null;
+    type: "code" | "promo" | "balance" | "api" | "external" | "payment";
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: "promo" | "balance" | "code" | "api" | "external" | "payment";
-    status: string | null;
+    name: string;
+    promo: string | null;
+    partner: string;
     apn: string | null;
     imsi: number;
     qr: string;
@@ -2370,9 +2370,9 @@ declare const HESIMSchema: z.ZodObject<{
     coverage_label?: string | null | undefined;
     uuid?: string | null | undefined;
     status_history?: {
+        status: string;
         timestamp: Date;
         source: string;
-        status: string;
         telna_esim_status: number;
     }[] | null | undefined;
 }>;
@@ -2470,19 +2470,19 @@ declare const HPaymentSchema: z.ZodObject<{
     created_by: z.ZodString;
     updated_by: z.ZodString;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
-    source: "platform" | "app" | "webapp";
-    partner: string;
     created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    source: "platform" | "app" | "webapp";
+    partner: string;
     date: Date;
     user: string;
     amount: number;
     customer: string;
     topup: boolean;
     id?: string | null | undefined;
-    status?: "pending" | "processing" | "completed" | "failed" | undefined;
+    status?: "failed" | "pending" | "processing" | "completed" | undefined;
     package_specifications?: {
         destination?: string | undefined;
         iso3?: string | undefined;
@@ -2515,19 +2515,19 @@ declare const HPaymentSchema: z.ZodObject<{
         partner_name?: string | undefined;
     } | undefined;
 }, {
-    source: "platform" | "app" | "webapp";
-    partner: string;
     created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    source: "platform" | "app" | "webapp";
+    partner: string;
     date: Date;
     user: string;
     amount: number;
     customer: string;
     topup: boolean;
     id?: string | null | undefined;
-    status?: "pending" | "processing" | "completed" | "failed" | undefined;
+    status?: "failed" | "pending" | "processing" | "completed" | undefined;
     package_specifications?: {
         destination?: string | undefined;
         iso3?: string | undefined;
@@ -2569,18 +2569,18 @@ declare const HMessageSchema: z.ZodObject<{
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
+    status: "failed" | "pending" | "sent" | "delivered";
     created_at: Date;
     updated_at: Date;
-    status: "pending" | "failed" | "sent" | "delivered";
     key: string;
-    method: "email" | "push" | "sms";
+    method: "push" | "email" | "sms";
 }, {
     id: string;
+    status: "failed" | "pending" | "sent" | "delivered";
     created_at: Date;
     updated_at: Date;
-    status: "pending" | "failed" | "sent" | "delivered";
     key: string;
-    method: "email" | "push" | "sms";
+    method: "push" | "email" | "sms";
 }>;
 declare const HPackageSchema: z.ZodObject<{
     external_id: z.ZodString;
@@ -2630,11 +2630,11 @@ declare const HPackageSchema: z.ZodObject<{
         created_by: z.ZodString;
         updated_by: z.ZodString;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
-        name: string | null;
         created_at: Date;
         updated_at: Date;
         created_by: string;
         updated_by: string;
+        name: string | null;
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
@@ -2651,11 +2651,11 @@ declare const HPackageSchema: z.ZodObject<{
         tier: number | null;
         id?: string | null | undefined;
     }, {
-        name: string | null;
         created_at: Date;
         updated_at: Date;
         created_by: string;
         updated_by: string;
+        name: string | null;
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
@@ -2678,13 +2678,13 @@ declare const HPackageSchema: z.ZodObject<{
     created_by: z.ZodString;
     updated_by: z.ZodString;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
-    name: string;
-    partner: string;
+    type: "data-limited" | "time-limited" | "starter" | "unlimited" | null;
     created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
-    type: "data-limited" | "time-limited" | "starter" | "unlimited" | null;
+    name: string;
+    partner: string;
     is_active: boolean;
     external_id: string;
     traffic_policy: string;
@@ -2703,11 +2703,11 @@ declare const HPackageSchema: z.ZodObject<{
         imsi: number;
     } | null;
     country_data: {
-        name: string | null;
         created_at: Date;
         updated_at: Date;
         created_by: string;
         updated_by: string;
+        name: string | null;
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
@@ -2727,13 +2727,13 @@ declare const HPackageSchema: z.ZodObject<{
     id?: string | null | undefined;
     throttling?: number | undefined;
 }, {
-    name: string;
-    partner: string;
+    type: "data-limited" | "time-limited" | "starter" | "unlimited" | null;
     created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
-    type: "data-limited" | "time-limited" | "starter" | "unlimited" | null;
+    name: string;
+    partner: string;
     is_active: boolean;
     external_id: string;
     traffic_policy: string;
@@ -2752,11 +2752,11 @@ declare const HPackageSchema: z.ZodObject<{
         imsi: number;
     } | null;
     country_data: {
-        name: string | null;
         created_at: Date;
         updated_at: Date;
         created_by: string;
         updated_by: string;
+        name: string | null;
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
@@ -2836,13 +2836,13 @@ declare const HPromoCodeSchema: z.ZodObject<{
     starter_data: z.ZodOptional<z.ZodNumber>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
-    partner: string;
+    code: string;
+    type: string | null;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    code: string;
-    type: string | null;
+    partner: string;
     external_id: string;
     country: string;
     package: string;
@@ -2874,13 +2874,13 @@ declare const HPromoCodeSchema: z.ZodObject<{
     starter_data?: number | undefined;
 }, {
     id: string;
-    partner: string;
+    code: string;
+    type: string | null;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    code: string;
-    type: string | null;
+    partner: string;
     external_id: string;
     country: string;
     package: string;
@@ -3506,15 +3506,10 @@ declare const HPartnerSchema: z.ZodObject<{
             }>>>;
         }, "strip", z.ZodTypeAny, {
             key: string;
-            method: "email" | "push" | "sms" | "whatsapp";
+            method: "push" | "email" | "sms" | "whatsapp";
             days: number;
             hour: number;
             moment: "departure_date" | "return_date" | "immediate";
-            email?: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null | undefined;
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -3524,18 +3519,18 @@ declare const HPartnerSchema: z.ZodObject<{
                 value: string | number;
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }, {
             key: string;
-            method: "email" | "push" | "sms" | "whatsapp";
+            method: "push" | "email" | "sms" | "whatsapp";
             days: number;
             hour: number;
             moment: "departure_date" | "return_date" | "immediate";
-            email?: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null | undefined;
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -3545,6 +3540,11 @@ declare const HPartnerSchema: z.ZodObject<{
                 value: string | number;
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }>, "many">>;
         brevo: z.ZodOptional<z.ZodNullable<z.ZodObject<{
@@ -3661,15 +3661,10 @@ declare const HPartnerSchema: z.ZodObject<{
         } | null | undefined;
         schedules?: {
             key: string;
-            method: "email" | "push" | "sms" | "whatsapp";
+            method: "push" | "email" | "sms" | "whatsapp";
             days: number;
             hour: number;
             moment: "departure_date" | "return_date" | "immediate";
-            email?: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null | undefined;
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -3679,6 +3674,11 @@ declare const HPartnerSchema: z.ZodObject<{
                 value: string | number;
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }[] | undefined;
         brevo?: {
@@ -3743,15 +3743,10 @@ declare const HPartnerSchema: z.ZodObject<{
         } | null | undefined;
         schedules?: {
             key: string;
-            method: "email" | "push" | "sms" | "whatsapp";
+            method: "push" | "email" | "sms" | "whatsapp";
             days: number;
             hour: number;
             moment: "departure_date" | "return_date" | "immediate";
-            email?: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null | undefined;
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -3761,6 +3756,11 @@ declare const HPartnerSchema: z.ZodObject<{
                 value: string | number;
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }[] | undefined;
         brevo?: {
@@ -3801,21 +3801,21 @@ declare const HPartnerSchema: z.ZodObject<{
         created_by: z.ZodString;
         updated_by: z.ZodString;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
-        name: string;
         created_at: Date;
         updated_at: Date;
         created_by: string;
         updated_by: string;
+        name: string;
         slug: string;
         id?: string | null | undefined;
         description?: string | null | undefined;
         color?: string | null | undefined;
     }, {
-        name: string;
         created_at: Date;
         updated_at: Date;
         created_by: string;
         updated_by: string;
+        name: string;
         slug: string;
         id?: string | null | undefined;
         description?: string | null | undefined;
@@ -3826,11 +3826,11 @@ declare const HPartnerSchema: z.ZodObject<{
         source: z.ZodString;
         manual: z.ZodBoolean;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
-        source: string;
         manual: boolean;
+        source: string;
     }, {
-        source: string;
         manual: boolean;
+        source: string;
     }>;
     webhook_settings: z.ZodObject<{
         url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -3860,14 +3860,14 @@ declare const HPartnerSchema: z.ZodObject<{
     }>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
-    name: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    name: string;
     data: {
-        source: string;
         manual: boolean;
+        source: string;
     };
     users: string[];
     contact: {
@@ -3995,15 +3995,10 @@ declare const HPartnerSchema: z.ZodObject<{
         } | null | undefined;
         schedules?: {
             key: string;
-            method: "email" | "push" | "sms" | "whatsapp";
+            method: "push" | "email" | "sms" | "whatsapp";
             days: number;
             hour: number;
             moment: "departure_date" | "return_date" | "immediate";
-            email?: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null | undefined;
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -4013,6 +4008,11 @@ declare const HPartnerSchema: z.ZodObject<{
                 value: string | number;
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }[] | undefined;
         brevo?: {
@@ -4043,11 +4043,11 @@ declare const HPartnerSchema: z.ZodObject<{
         } | null | undefined;
     };
     tags: {
-        name: string;
         created_at: Date;
         updated_at: Date;
         created_by: string;
         updated_by: string;
+        name: string;
         slug: string;
         id?: string | null | undefined;
         description?: string | null | undefined;
@@ -4067,14 +4067,14 @@ declare const HPartnerSchema: z.ZodObject<{
     external_id?: string | null | undefined;
 }, {
     id: string;
-    name: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    name: string;
     data: {
-        source: string;
         manual: boolean;
+        source: string;
     };
     users: string[];
     contact: {
@@ -4202,15 +4202,10 @@ declare const HPartnerSchema: z.ZodObject<{
         } | null | undefined;
         schedules?: {
             key: string;
-            method: "email" | "push" | "sms" | "whatsapp";
+            method: "push" | "email" | "sms" | "whatsapp";
             days: number;
             hour: number;
             moment: "departure_date" | "return_date" | "immediate";
-            email?: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null | undefined;
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -4220,6 +4215,11 @@ declare const HPartnerSchema: z.ZodObject<{
                 value: string | number;
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }[] | undefined;
         brevo?: {
@@ -4250,11 +4250,11 @@ declare const HPartnerSchema: z.ZodObject<{
         } | null | undefined;
     };
     tags: {
-        name: string;
         created_at: Date;
         updated_at: Date;
         created_by: string;
         updated_by: string;
+        name: string;
         slug: string;
         id?: string | null | undefined;
         description?: string | null | undefined;
@@ -4323,13 +4323,13 @@ declare const HPriceListSchema: z.ZodObject<{
     }>, "many">;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
-    name: string;
-    partner: string;
+    type: "partner" | "consumer";
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: "partner" | "consumer";
+    name: string;
+    partner: string;
     description: string | null;
     price_list: {
         type: "data-limited" | "time-limited" | "starter" | "unlimited";
@@ -4347,13 +4347,13 @@ declare const HPriceListSchema: z.ZodObject<{
     }[];
 }, {
     id: string;
-    name: string;
-    partner: string;
+    type: "partner" | "consumer";
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: "partner" | "consumer";
+    name: string;
+    partner: string;
     description: string | null;
     price_list: {
         type: "data-limited" | "time-limited" | "starter" | "unlimited";
@@ -5269,15 +5269,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
             }>>>;
         }, "strip", z.ZodTypeAny, {
             key: string;
-            method: "email" | "push" | "sms" | "whatsapp";
+            method: "push" | "email" | "sms" | "whatsapp";
             days: number;
             hour: number;
             moment: "departure_date" | "return_date" | "immediate";
-            email?: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null | undefined;
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -5287,18 +5282,18 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 value: string | number;
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }, {
             key: string;
-            method: "email" | "push" | "sms" | "whatsapp";
+            method: "push" | "email" | "sms" | "whatsapp";
             days: number;
             hour: number;
             moment: "departure_date" | "return_date" | "immediate";
-            email?: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null | undefined;
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -5308,6 +5303,11 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 value: string | number;
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }>, "many">>;
         brevo: z.ZodOptional<z.ZodNullable<z.ZodObject<{
@@ -5424,15 +5424,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
         } | null | undefined;
         schedules?: {
             key: string;
-            method: "email" | "push" | "sms" | "whatsapp";
+            method: "push" | "email" | "sms" | "whatsapp";
             days: number;
             hour: number;
             moment: "departure_date" | "return_date" | "immediate";
-            email?: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null | undefined;
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -5442,6 +5437,11 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 value: string | number;
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }[] | undefined;
         brevo?: {
@@ -5506,15 +5506,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
         } | null | undefined;
         schedules?: {
             key: string;
-            method: "email" | "push" | "sms" | "whatsapp";
+            method: "push" | "email" | "sms" | "whatsapp";
             days: number;
             hour: number;
             moment: "departure_date" | "return_date" | "immediate";
-            email?: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null | undefined;
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -5524,6 +5519,11 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 value: string | number;
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }[] | undefined;
         brevo?: {
@@ -5564,21 +5564,21 @@ declare const HPartnerAppSchema: z.ZodObject<{
         created_by: z.ZodString;
         updated_by: z.ZodString;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
-        name: string;
         created_at: Date;
         updated_at: Date;
         created_by: string;
         updated_by: string;
+        name: string;
         slug: string;
         id?: string | null | undefined;
         description?: string | null | undefined;
         color?: string | null | undefined;
     }, {
-        name: string;
         created_at: Date;
         updated_at: Date;
         created_by: string;
         updated_by: string;
+        name: string;
         slug: string;
         id?: string | null | undefined;
         description?: string | null | undefined;
@@ -5589,11 +5589,11 @@ declare const HPartnerAppSchema: z.ZodObject<{
         source: z.ZodString;
         manual: z.ZodBoolean;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
-        source: string;
         manual: boolean;
+        source: string;
     }, {
-        source: string;
         manual: boolean;
+        source: string;
     }>;
     webhook_settings: z.ZodObject<{
         url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -5623,14 +5623,14 @@ declare const HPartnerAppSchema: z.ZodObject<{
     }>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
-    name: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    name: string;
     data: {
-        source: string;
         manual: boolean;
+        source: string;
     };
     users: string[];
     contact: {
@@ -5758,15 +5758,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
         } | null | undefined;
         schedules?: {
             key: string;
-            method: "email" | "push" | "sms" | "whatsapp";
+            method: "push" | "email" | "sms" | "whatsapp";
             days: number;
             hour: number;
             moment: "departure_date" | "return_date" | "immediate";
-            email?: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null | undefined;
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -5776,6 +5771,11 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 value: string | number;
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }[] | undefined;
         brevo?: {
@@ -5806,11 +5806,11 @@ declare const HPartnerAppSchema: z.ZodObject<{
         } | null | undefined;
     };
     tags: {
-        name: string;
         created_at: Date;
         updated_at: Date;
         created_by: string;
         updated_by: string;
+        name: string;
         slug: string;
         id?: string | null | undefined;
         description?: string | null | undefined;
@@ -5830,14 +5830,14 @@ declare const HPartnerAppSchema: z.ZodObject<{
     external_id?: string | null | undefined;
 }, {
     id: string;
-    name: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    name: string;
     data: {
-        source: string;
         manual: boolean;
+        source: string;
     };
     users: string[];
     contact: {
@@ -5965,15 +5965,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
         } | null | undefined;
         schedules?: {
             key: string;
-            method: "email" | "push" | "sms" | "whatsapp";
+            method: "push" | "email" | "sms" | "whatsapp";
             days: number;
             hour: number;
             moment: "departure_date" | "return_date" | "immediate";
-            email?: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null | undefined;
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -5983,6 +5978,11 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 value: string | number;
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }[] | undefined;
         brevo?: {
@@ -6013,11 +6013,11 @@ declare const HPartnerAppSchema: z.ZodObject<{
         } | null | undefined;
     };
     tags: {
-        name: string;
         created_at: Date;
         updated_at: Date;
         created_by: string;
         updated_by: string;
+        name: string;
         slug: string;
         id?: string | null | undefined;
         description?: string | null | undefined;
@@ -6185,15 +6185,10 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         }>>>;
     }, "strip", z.ZodTypeAny, {
         key: string;
-        method: "email" | "push" | "sms" | "whatsapp";
+        method: "push" | "email" | "sms" | "whatsapp";
         days: number;
         hour: number;
         moment: "departure_date" | "return_date" | "immediate";
-        email?: {
-            brevo_template_id: number;
-            subject?: Record<string, string> | undefined;
-            preview_text?: Record<string, string> | undefined;
-        } | null | undefined;
         push?: {
             target: string;
             title?: Record<string, string> | undefined;
@@ -6203,18 +6198,18 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             value: string | number;
             type: "gender" | "iso3" | "percentage" | "age";
             comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+        } | null | undefined;
+        email?: {
+            brevo_template_id: number;
+            subject?: Record<string, string> | undefined;
+            preview_text?: Record<string, string> | undefined;
         } | null | undefined;
     }, {
         key: string;
-        method: "email" | "push" | "sms" | "whatsapp";
+        method: "push" | "email" | "sms" | "whatsapp";
         days: number;
         hour: number;
         moment: "departure_date" | "return_date" | "immediate";
-        email?: {
-            brevo_template_id: number;
-            subject?: Record<string, string> | undefined;
-            preview_text?: Record<string, string> | undefined;
-        } | null | undefined;
         push?: {
             target: string;
             title?: Record<string, string> | undefined;
@@ -6224,6 +6219,11 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             value: string | number;
             type: "gender" | "iso3" | "percentage" | "age";
             comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+        } | null | undefined;
+        email?: {
+            brevo_template_id: number;
+            subject?: Record<string, string> | undefined;
+            preview_text?: Record<string, string> | undefined;
         } | null | undefined;
     }>, "many">>;
     brevo: z.ZodOptional<z.ZodNullable<z.ZodObject<{
@@ -6340,15 +6340,10 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
     } | null | undefined;
     schedules?: {
         key: string;
-        method: "email" | "push" | "sms" | "whatsapp";
+        method: "push" | "email" | "sms" | "whatsapp";
         days: number;
         hour: number;
         moment: "departure_date" | "return_date" | "immediate";
-        email?: {
-            brevo_template_id: number;
-            subject?: Record<string, string> | undefined;
-            preview_text?: Record<string, string> | undefined;
-        } | null | undefined;
         push?: {
             target: string;
             title?: Record<string, string> | undefined;
@@ -6358,6 +6353,11 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             value: string | number;
             type: "gender" | "iso3" | "percentage" | "age";
             comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+        } | null | undefined;
+        email?: {
+            brevo_template_id: number;
+            subject?: Record<string, string> | undefined;
+            preview_text?: Record<string, string> | undefined;
         } | null | undefined;
     }[] | undefined;
     brevo?: {
@@ -6422,15 +6422,10 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
     } | null | undefined;
     schedules?: {
         key: string;
-        method: "email" | "push" | "sms" | "whatsapp";
+        method: "push" | "email" | "sms" | "whatsapp";
         days: number;
         hour: number;
         moment: "departure_date" | "return_date" | "immediate";
-        email?: {
-            brevo_template_id: number;
-            subject?: Record<string, string> | undefined;
-            preview_text?: Record<string, string> | undefined;
-        } | null | undefined;
         push?: {
             target: string;
             title?: Record<string, string> | undefined;
@@ -6440,6 +6435,11 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             value: string | number;
             type: "gender" | "iso3" | "percentage" | "age";
             comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+        } | null | undefined;
+        email?: {
+            brevo_template_id: number;
+            subject?: Record<string, string> | undefined;
+            preview_text?: Record<string, string> | undefined;
         } | null | undefined;
     }[] | undefined;
     brevo?: {
@@ -6771,26 +6771,26 @@ declare const HAnalyticsSchema: z.ZodObject<{
     created_by: z.ZodString;
     updated_by: z.ZodString;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
-    partner: string;
+    event: string;
     created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    partner: string;
     date: string;
     service: string;
-    event: string;
     parameter: string | null;
     sum: number;
     id?: string | null | undefined;
 }, {
-    partner: string;
+    event: string;
     created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    partner: string;
     date: string;
     service: string;
-    event: string;
     parameter: string | null;
     sum: number;
     id?: string | null | undefined;
@@ -6803,17 +6803,17 @@ declare const HRoleSchema: z.ZodObject<{
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
-    name: string;
-    permissions: string[];
     created_at: Date;
     updated_at: Date;
+    name: string;
+    permissions: string[];
     description: string;
     id?: string | null | undefined;
 }, {
-    name: string;
-    permissions: string[];
     created_at: Date;
     updated_at: Date;
+    name: string;
+    permissions: string[];
     description: string;
     id?: string | null | undefined;
 }>;
@@ -6824,15 +6824,15 @@ declare const HPermissionSchema: z.ZodObject<{
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
-    name: string;
     created_at: Date;
     updated_at: Date;
+    name: string;
     description: string;
     id?: string | null | undefined;
 }, {
-    name: string;
     created_at: Date;
     updated_at: Date;
+    name: string;
     description: string;
     id?: string | null | undefined;
 }>;
@@ -6847,21 +6847,21 @@ declare const HTagSchema: z.ZodObject<{
     created_by: z.ZodString;
     updated_by: z.ZodString;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
-    name: string;
     created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    name: string;
     slug: string;
     id?: string | null | undefined;
     description?: string | null | undefined;
     color?: string | null | undefined;
 }, {
-    name: string;
     created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    name: string;
     slug: string;
     id?: string | null | undefined;
     description?: string | null | undefined;
@@ -6878,21 +6878,21 @@ declare const HTrafficPolicySchema: z.ZodObject<{
     created_by: z.ZodString;
     updated_by: z.ZodString;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
-    name: string;
     created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    name: string;
     external_id: string;
     provider: string;
     description: string;
     id?: string | null | undefined;
 }, {
-    name: string;
     created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    name: string;
     external_id: string;
     provider: string;
     description: string;
@@ -7025,11 +7025,11 @@ declare const HReviewSchema: z.ZodObject<{
     created_by: z.ZodString;
     updated_by: z.ZodString;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
-    partner: string;
     created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    partner: string;
     questions: Record<string, any>;
     reward_strategy: {
         base_reward: {
@@ -7044,11 +7044,11 @@ declare const HReviewSchema: z.ZodObject<{
     id?: string | undefined;
     partner_id?: string | null | undefined;
 }, {
-    partner: string;
     created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    partner: string;
     questions: Record<string, any>;
     reward_strategy: {
         base_reward: {
@@ -7081,11 +7081,11 @@ declare const HReviewSubmissionSchema: z.ZodObject<{
     updated_by: z.ZodString;
     analysis: z.ZodOptional<z.ZodNullable<z.ZodRecord<z.ZodString, z.ZodAny>>>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
-    partner: string;
     created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    partner: string;
     iccid: string;
     user: string;
     country: string;
@@ -7098,11 +7098,11 @@ declare const HReviewSubmissionSchema: z.ZodObject<{
     id?: string | undefined;
     analysis?: Record<string, any> | null | undefined;
 }, {
-    partner: string;
     created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    partner: string;
     iccid: string;
     user: string;
     country: string;
@@ -7129,24 +7129,24 @@ declare const HDestinationSchema: z.ZodObject<{
     updated_by: z.ZodNullable<z.ZodString>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
-    name: string;
+    type: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: string;
+    name: string;
     is_active: boolean;
     i18n_name: Record<string, string>;
     iso3s: string[];
     sort_order: number;
 }, {
     id: string;
-    name: string;
+    type: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: string;
+    name: string;
     is_active: boolean;
     i18n_name: Record<string, string>;
     iso3s: string[];
@@ -7181,12 +7181,12 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     deleted_by: z.ZodNullable<z.ZodString>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
-    partner: string;
+    type: "data-limited" | "starter" | "unlimited";
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: "data-limited" | "starter" | "unlimited";
+    partner: string;
     is_active: boolean;
     traffic_policy: string;
     provider: "telna" | "bondio";
@@ -7208,12 +7208,12 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     label?: string | null | undefined;
 }, {
     id: string;
-    partner: string;
+    type: "data-limited" | "starter" | "unlimited";
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: "data-limited" | "starter" | "unlimited";
+    partner: string;
     traffic_policy: string;
     provider: "telna" | "bondio";
     parent_document_id: string;
@@ -7248,11 +7248,11 @@ declare const HPackageTemplateSchema: z.ZodObject<{
     updated_by: z.ZodNullable<z.ZodString>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
+    type: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: string;
     external_id: string;
     provider: string;
     purchase_price: number;
@@ -7260,11 +7260,11 @@ declare const HPackageTemplateSchema: z.ZodObject<{
     provider_specific_data: Record<string, any>;
 }, {
     id: string;
+    type: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: string;
     external_id: string;
     provider: string;
     purchase_price: number;
@@ -7289,11 +7289,11 @@ declare const HUserTouchpointsSchema: z.ZodObject<{
     created_by: z.ZodString;
     updated_by: z.ZodString;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
-    partner: string;
     created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    partner: string;
     user: string;
     booking: string;
     promo_code: string;
@@ -7306,11 +7306,11 @@ declare const HUserTouchpointsSchema: z.ZodObject<{
     id?: string | null | undefined;
     unique_device_identifier?: string | null | undefined;
 }, {
-    partner: string;
     created_at: Date;
     updated_at: Date;
     created_by: string;
     updated_by: string;
+    partner: string;
     user: string;
     booking: string;
     promo_code: string;
@@ -7331,16 +7331,16 @@ declare const HLoginRequestSchema: z.ZodObject<{
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     expires_at: z.ZodEffects<z.ZodDate, Date, Date>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
-    email: string;
+    status: "expired" | "pending" | "completed";
     created_at: Date;
-    status: "pending" | "completed" | "expired";
+    email: string;
     expires_at: Date;
     user: string;
     id?: string | null | undefined;
 }, {
-    email: string;
+    status: "expired" | "pending" | "completed";
     created_at: Date;
-    status: "pending" | "completed" | "expired";
+    email: string;
     expires_at: Date;
     user: string;
     id?: string | null | undefined;
@@ -7495,11 +7495,11 @@ declare const HPartnerDataSchema: z.ZodObject<{
     source: z.ZodString;
     manual: z.ZodBoolean;
 }, "strip", z.ZodTypeAny, {
-    source: string;
     manual: boolean;
+    source: string;
 }, {
-    source: string;
     manual: boolean;
+    source: string;
 }>;
 declare const HCommunicationChannelSchema: z.ZodEnum<["EMAIL", "WHATSAPP", "PUSH_NOTIFICATION", "SMS"]>;
 declare const HBookingStatusSchema: z.ZodEnum<["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED", "UNPAID", "EXPIRED"]>;
@@ -7620,6 +7620,90 @@ type HubbyModelApp = HHubbyModel;
 type HRole = z.infer<typeof HRoleSchema>;
 type HPermission = z.infer<typeof HPermissionSchema>;
 
+declare const liveActivityStatusSchema: z.ZodEnum<["created", "active", "ended", "dismissed", "failed"]>;
+declare const liveActivityEventSchema: z.ZodEnum<["start", "update", "end"]>;
+declare const liveActivityReasonSchema: z.ZodEnum<["expired", "data_exhausted", "no_packages", "manual"]>;
+declare const lastUpdateSchema: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+    event: z.ZodEnum<["start", "update", "end"]>;
+    totalDataGb: z.ZodOptional<z.ZodNumber>;
+    dataLeftGb: z.ZodOptional<z.ZodNumber>;
+    apnsId: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    statusCode: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    reason: z.ZodOptional<z.ZodEnum<["expired", "data_exhausted", "no_packages", "manual"]>>;
+}, "strip", z.ZodTypeAny, {
+    event: "start" | "update" | "end";
+    totalDataGb?: number | undefined;
+    dataLeftGb?: number | undefined;
+    apnsId?: string | null | undefined;
+    statusCode?: number | null | undefined;
+    reason?: "expired" | "data_exhausted" | "no_packages" | "manual" | undefined;
+}, {
+    event: "start" | "update" | "end";
+    totalDataGb?: number | undefined;
+    dataLeftGb?: number | undefined;
+    apnsId?: string | null | undefined;
+    statusCode?: number | null | undefined;
+    reason?: "expired" | "data_exhausted" | "no_packages" | "manual" | undefined;
+}>>>;
+declare const liveActivitySchemaSpec: {
+    id: z.ZodString;
+    esim_id: z.ZodString;
+    title: z.ZodString;
+    message: z.ZodString;
+    total_data_gb: z.ZodNullable<z.ZodString>;
+    data_left_gb: z.ZodNullable<z.ZodString>;
+    time_left: z.ZodNullable<z.ZodString>;
+    time_total: z.ZodNullable<z.ZodString>;
+    user_id: z.ZodString;
+    push_to_start_token: z.ZodString;
+    push_to_update_token: z.ZodNullable<z.ZodString>;
+    status: z.ZodEnum<["created", "active", "ended", "dismissed", "failed"]>;
+    last_update_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    last_update: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        event: z.ZodEnum<["start", "update", "end"]>;
+        totalDataGb: z.ZodOptional<z.ZodNumber>;
+        dataLeftGb: z.ZodOptional<z.ZodNumber>;
+        apnsId: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        statusCode: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        reason: z.ZodOptional<z.ZodEnum<["expired", "data_exhausted", "no_packages", "manual"]>>;
+    }, "strip", z.ZodTypeAny, {
+        event: "start" | "update" | "end";
+        totalDataGb?: number | undefined;
+        dataLeftGb?: number | undefined;
+        apnsId?: string | null | undefined;
+        statusCode?: number | null | undefined;
+        reason?: "expired" | "data_exhausted" | "no_packages" | "manual" | undefined;
+    }, {
+        event: "start" | "update" | "end";
+        totalDataGb?: number | undefined;
+        dataLeftGb?: number | undefined;
+        apnsId?: string | null | undefined;
+        statusCode?: number | null | undefined;
+        reason?: "expired" | "data_exhausted" | "no_packages" | "manual" | undefined;
+    }>>>;
+    ended_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    created_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    updated_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    created_by: z.ZodNullable<z.ZodString>;
+    updated_by: z.ZodNullable<z.ZodString>;
+};
+
 type TimestampField = {
     _type: 'timestamp';
     optional?: boolean;
@@ -7707,6 +7791,7 @@ declare const DESTINATION_OFFER_COLLECTION = "offers";
 declare const USER_TOUCHPOINTS_COLLECTION = "user_touchpoints";
 
 /** ZOD SCHEMAS */
+declare const LiveActivitySchema: z.ZodTypeAny;
 declare const UserSchema: z.ZodTypeAny;
 declare const UserFirestoreSchema: z.ZodTypeAny;
 declare const BookingSchema: z.ZodTypeAny;
@@ -7886,11 +7971,11 @@ declare const PartnerDataSchema: z.ZodObject<{
     source: z.ZodString;
     manual: z.ZodBoolean;
 }, "strip", z.ZodTypeAny, {
-    source: string;
     manual: boolean;
+    source: string;
 }, {
-    source: string;
     manual: boolean;
+    source: string;
 }>;
 declare const CommunicationChannelSchema: z.ZodEnum<["EMAIL", "WHATSAPP", "PUSH_NOTIFICATION", "SMS"]>;
 declare const BookingStatusSchema: z.ZodEnum<["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED", "UNPAID", "EXPIRED"]>;
@@ -8035,6 +8120,11 @@ type DestinationBundle = z.infer<typeof DestinationBundleSchema>;
 type PackageTemplate = z.infer<typeof PackageTemplateSchema>;
 type UserTouchpoints = z.infer<typeof UserTouchpointsSchema>;
 type LoginRequest = z.infer<typeof LoginRequestSchema>;
+type LiveActivity = z.infer<typeof LiveActivitySchema>;
+type LiveActivityStatus = z.infer<typeof liveActivityStatusSchema>;
+type LiveActivityEvent = z.infer<typeof liveActivityEventSchema>;
+type LiveActivityReason = z.infer<typeof liveActivityReasonSchema>;
+type LastUpdate = z.infer<typeof lastUpdateSchema>;
 type Address = z.infer<typeof AddressSchema>;
 type Registration = z.infer<typeof RegistrationSchema>;
 type BankingDetails = z.infer<typeof BankingDetailsSchema>;
@@ -8115,12 +8205,12 @@ declare const bookingAppSchema: z.ZodObject<{
         manual: z.ZodBoolean;
         action: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
-        source: string;
         manual: boolean;
+        source: string;
         action?: string | null | undefined;
     }, {
-        source: string;
         manual: boolean;
+        source: string;
         action?: string | null | undefined;
     }>;
     communication_options: z.ZodObject<{
@@ -8194,16 +8284,16 @@ declare const bookingAppSchema: z.ZodObject<{
         messaging_contact_id: string | null;
     }>>>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
-    locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
-    partner: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+    partner: string;
     pax: number;
     data: {
-        source: string;
         manual: boolean;
+        source: string;
         action?: string | null | undefined;
     };
     communication_options: {
@@ -8227,11 +8317,11 @@ declare const bookingAppSchema: z.ZodObject<{
     users: string[];
     esims: string[];
     id?: string | undefined;
+    title?: string | null | undefined;
+    status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED" | null | undefined;
     email?: string | null | undefined;
     gender?: "M" | "F" | "O" | undefined;
-    status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED" | null | undefined;
     external_id?: string | null | undefined;
-    title?: string | null | undefined;
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
@@ -8251,16 +8341,16 @@ declare const bookingAppSchema: z.ZodObject<{
         messaging_contact_id: string | null;
     } | null | undefined;
 }, {
-    locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
-    partner: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+    partner: string;
     pax: number;
     data: {
-        source: string;
         manual: boolean;
+        source: string;
         action?: string | null | undefined;
     };
     communication_options: {
@@ -8284,11 +8374,11 @@ declare const bookingAppSchema: z.ZodObject<{
     users: string[];
     esims: string[];
     id?: string | undefined;
+    title?: string | null | undefined;
+    status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED" | null | undefined;
     email?: string | null | undefined;
     gender?: "M" | "F" | "O" | undefined;
-    status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED" | null | undefined;
     external_id?: string | null | undefined;
-    title?: string | null | undefined;
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
@@ -8903,15 +8993,10 @@ declare const partnerAppSchema: z.ZodObject<{
             }>>>;
         }, "strip", z.ZodTypeAny, {
             key: string;
-            method: "email" | "push" | "sms" | "whatsapp";
+            method: "push" | "email" | "sms" | "whatsapp";
             days: number;
             hour: number;
             moment: "departure_date" | "return_date" | "immediate";
-            email?: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null | undefined;
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -8921,18 +9006,18 @@ declare const partnerAppSchema: z.ZodObject<{
                 value: string | number;
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }, {
             key: string;
-            method: "email" | "push" | "sms" | "whatsapp";
+            method: "push" | "email" | "sms" | "whatsapp";
             days: number;
             hour: number;
             moment: "departure_date" | "return_date" | "immediate";
-            email?: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null | undefined;
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -8942,6 +9027,11 @@ declare const partnerAppSchema: z.ZodObject<{
                 value: string | number;
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }>, "many">>;
         brevo: z.ZodOptional<z.ZodNullable<z.ZodObject<{
@@ -9058,15 +9148,10 @@ declare const partnerAppSchema: z.ZodObject<{
         } | null | undefined;
         schedules?: {
             key: string;
-            method: "email" | "push" | "sms" | "whatsapp";
+            method: "push" | "email" | "sms" | "whatsapp";
             days: number;
             hour: number;
             moment: "departure_date" | "return_date" | "immediate";
-            email?: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null | undefined;
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -9076,6 +9161,11 @@ declare const partnerAppSchema: z.ZodObject<{
                 value: string | number;
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }[] | undefined;
         brevo?: {
@@ -9140,15 +9230,10 @@ declare const partnerAppSchema: z.ZodObject<{
         } | null | undefined;
         schedules?: {
             key: string;
-            method: "email" | "push" | "sms" | "whatsapp";
+            method: "push" | "email" | "sms" | "whatsapp";
             days: number;
             hour: number;
             moment: "departure_date" | "return_date" | "immediate";
-            email?: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null | undefined;
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -9158,6 +9243,11 @@ declare const partnerAppSchema: z.ZodObject<{
                 value: string | number;
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }[] | undefined;
         brevo?: {
@@ -9198,21 +9288,21 @@ declare const partnerAppSchema: z.ZodObject<{
         created_by: z.ZodString;
         updated_by: z.ZodString;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
-        name: string;
         created_at: Date;
         updated_at: Date;
         created_by: string;
         updated_by: string;
+        name: string;
         slug: string;
         id?: string | null | undefined;
         description?: string | null | undefined;
         color?: string | null | undefined;
     }, {
-        name: string;
         created_at: Date;
         updated_at: Date;
         created_by: string;
         updated_by: string;
+        name: string;
         slug: string;
         id?: string | null | undefined;
         description?: string | null | undefined;
@@ -9223,11 +9313,11 @@ declare const partnerAppSchema: z.ZodObject<{
         source: z.ZodString;
         manual: z.ZodBoolean;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
-        source: string;
         manual: boolean;
+        source: string;
     }, {
-        source: string;
         manual: boolean;
+        source: string;
     }>;
     webhook_settings: z.ZodObject<{
         url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -9257,14 +9347,14 @@ declare const partnerAppSchema: z.ZodObject<{
     }>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
-    name: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    name: string;
     data: {
-        source: string;
         manual: boolean;
+        source: string;
     };
     users: string[];
     contact: {
@@ -9392,15 +9482,10 @@ declare const partnerAppSchema: z.ZodObject<{
         } | null | undefined;
         schedules?: {
             key: string;
-            method: "email" | "push" | "sms" | "whatsapp";
+            method: "push" | "email" | "sms" | "whatsapp";
             days: number;
             hour: number;
             moment: "departure_date" | "return_date" | "immediate";
-            email?: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null | undefined;
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -9410,6 +9495,11 @@ declare const partnerAppSchema: z.ZodObject<{
                 value: string | number;
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }[] | undefined;
         brevo?: {
@@ -9440,11 +9530,11 @@ declare const partnerAppSchema: z.ZodObject<{
         } | null | undefined;
     };
     tags: {
-        name: string;
         created_at: Date;
         updated_at: Date;
         created_by: string;
         updated_by: string;
+        name: string;
         slug: string;
         id?: string | null | undefined;
         description?: string | null | undefined;
@@ -9464,14 +9554,14 @@ declare const partnerAppSchema: z.ZodObject<{
     external_id?: string | null | undefined;
 }, {
     id: string;
-    name: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
+    name: string;
     data: {
-        source: string;
         manual: boolean;
+        source: string;
     };
     users: string[];
     contact: {
@@ -9599,15 +9689,10 @@ declare const partnerAppSchema: z.ZodObject<{
         } | null | undefined;
         schedules?: {
             key: string;
-            method: "email" | "push" | "sms" | "whatsapp";
+            method: "push" | "email" | "sms" | "whatsapp";
             days: number;
             hour: number;
             moment: "departure_date" | "return_date" | "immediate";
-            email?: {
-                brevo_template_id: number;
-                subject?: Record<string, string> | undefined;
-                preview_text?: Record<string, string> | undefined;
-            } | null | undefined;
             push?: {
                 target: string;
                 title?: Record<string, string> | undefined;
@@ -9617,6 +9702,11 @@ declare const partnerAppSchema: z.ZodObject<{
                 value: string | number;
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+            } | null | undefined;
+            email?: {
+                brevo_template_id: number;
+                subject?: Record<string, string> | undefined;
+                preview_text?: Record<string, string> | undefined;
             } | null | undefined;
         }[] | undefined;
         brevo?: {
@@ -9647,11 +9737,11 @@ declare const partnerAppSchema: z.ZodObject<{
         } | null | undefined;
     };
     tags: {
-        name: string;
         created_at: Date;
         updated_at: Date;
         created_by: string;
         updated_by: string;
+        name: string;
         slug: string;
         id?: string | null | undefined;
         description?: string | null | undefined;
@@ -9684,24 +9774,24 @@ declare const destinationAppSchema: z.ZodObject<{
     updated_by: z.ZodNullable<z.ZodString>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
-    name: string;
+    type: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: string;
+    name: string;
     is_active: boolean;
     i18n_name: Record<string, string>;
     iso3s: string[];
     sort_order: number;
 }, {
     id: string;
-    name: string;
+    type: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: string;
+    name: string;
     is_active: boolean;
     i18n_name: Record<string, string>;
     iso3s: string[];
@@ -9736,12 +9826,12 @@ declare const destinationBundleAppSchema: z.ZodObject<{
     deleted_by: z.ZodNullable<z.ZodString>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
-    partner: string;
+    type: "data-limited" | "starter" | "unlimited";
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: "data-limited" | "starter" | "unlimited";
+    partner: string;
     is_active: boolean;
     traffic_policy: string;
     provider: "telna" | "bondio";
@@ -9763,12 +9853,12 @@ declare const destinationBundleAppSchema: z.ZodObject<{
     label?: string | null | undefined;
 }, {
     id: string;
-    partner: string;
+    type: "data-limited" | "starter" | "unlimited";
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: "data-limited" | "starter" | "unlimited";
+    partner: string;
     traffic_policy: string;
     provider: "telna" | "bondio";
     parent_document_id: string;
@@ -9803,11 +9893,11 @@ declare const packageTemplateAppSchema: z.ZodObject<{
     updated_by: z.ZodNullable<z.ZodString>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
+    type: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: string;
     external_id: string;
     provider: string;
     purchase_price: number;
@@ -9815,11 +9905,11 @@ declare const packageTemplateAppSchema: z.ZodObject<{
     provider_specific_data: Record<string, any>;
 }, {
     id: string;
+    type: string;
     created_at: Date;
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: string;
     external_id: string;
     provider: string;
     purchase_price: number;
@@ -9860,4 +9950,4 @@ declare const promoPackageSpecificationAppSchema: z.ZodObject<{
 type SupportedLocales = typeof SUPPORTED_LOCALES$1[number];
 declare const SUPPORTED_LOCALES: readonly ["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR"];
 
-export { API_LOG_COLLECTION, Address, AddressSchema, Analytics, AnalyticsSchema, ApiLog, ApiLogApiRequest, ApiLogApiResponse, ApiLogSchema, BOOKING_COLLECTION, BankingDetails, BankingDetailsSchema, BaseReward, BaseRewardSchema, BondioPackage, BondioPackageSchema, Booking, BookingApiRequest, BookingApiResponse, BookingSchema, BookingStatus, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannel, CommunicationChannelSchema, CommunicationOptions, CommunicationOptionsSchema, Country, CountrySchema, Currency, CurrencySchema, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, Destination, DestinationBundle, DestinationBundleSchema, DestinationSchema, ESIM, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBaseReward, HBaseRewardSchema, HBondioPackage, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HDestination, HDestinationBundle, HDestinationBundleSchema, HDestinationSchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HLoginRequest, HLoginRequestSchema, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPackageTemplate, HPackageTemplateSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HReview, HReviewSchema, HReviewSubmission, HReviewSubmissionSchema, HRewardMultipliers, HRewardMultipliersSchema, HRewardPackageType, HRewardPackageTypeSchema, HRewardStrategy, HRewardStrategySchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HUserTouchpoints, HUserTouchpointsSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModel, HubbyModelApp, HubbyModelFirestore, HubbyModelSchema, LoginRequest, LoginRequestSchema, MESSAGE_COLLECTION, Message, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, Package, PackagePrice, PackagePriceSchema, PackageSchema, PackageSpecification, PackageTemplate, PackageTemplateSchema, Partner, PartnerApiRequest, PartnerApiResponse, PartnerContact, PartnerContactSchema, PartnerData, PartnerDataSchema, PartnerPackageSpecification, PartnerPackageSpecificationSchema, PartnerSchema, Payment, PaymentSchema, PlatformSettings, PlatformSettingsSchema, PriceList, PriceListApiRequest, PriceListApiResponse, PriceListSchema, PromoCode, PromoCodeSchema, PromoPackageSpecificationSchema, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, ROLE_COLLECTION, Registration, RegistrationSchema, Review, ReviewSchema, ReviewSubmission, ReviewSubmissionSchema, RewardMultipliers, RewardMultipliersSchema, RewardPackageType, RewardPackageTypeSchema, RewardStrategy, RewardStrategySchema, SUPPORTED_LOCALES, Schedule, ScheduleFilter, ScheduleFilterSchema, ScheduleSchema, SupportedLocales, TRAFFIC_POLICY_COLLECTION, Tag, TagSchema, TelnaPackage, TelnaPackageSchema, TrafficPolicy, TrafficPolicySchema, USER_COLLECTION, USER_TOUCHPOINTS_COLLECTION, User, UserFirestore, UserFirestoreSchema, UserSchema, UserTouchpoints, UserTouchpointsSchema, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerSchema, VisualIdentityBannerStrategy, VisualIdentityBanners, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, apiLogSchemaSpec, bookingAppSchema, bookingSchemaSpec, countrySchemaSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, currencySchemaSpec, destinationAppSchema, destinationBundleAppSchema, destinationBundleSchemaSpec, destinationSchemaSpec, esimSchemaSpec, loginRequestSchemaSpec, messageSchemaSpec, packageSchemaSpec, packageTemplateAppSchema, packageTemplateSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, paymentSchemaSpec, priceListFromFirestore, priceListSchemaSpec, priceListToFirestore, promoCodeFromFirestore, promoCodeSchemaSpec, promoCodeToFirestore, promoPackageSpecificationAppSchema, reviewSchemaSpec, reviewSubmissionSchemaSpec, userFromFirestore, userSchemaSpec, userToFirestore, userTouchpointsFromFirestore, userTouchpointsSchemaSpec, userTouchpointsToFirestore };
+export { API_LOG_COLLECTION, Address, AddressSchema, Analytics, AnalyticsSchema, ApiLog, ApiLogApiRequest, ApiLogApiResponse, ApiLogSchema, BOOKING_COLLECTION, BankingDetails, BankingDetailsSchema, BaseReward, BaseRewardSchema, BondioPackage, BondioPackageSchema, Booking, BookingApiRequest, BookingApiResponse, BookingSchema, BookingStatus, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannel, CommunicationChannelSchema, CommunicationOptions, CommunicationOptionsSchema, Country, CountrySchema, Currency, CurrencySchema, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, Destination, DestinationBundle, DestinationBundleSchema, DestinationSchema, ESIM, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBaseReward, HBaseRewardSchema, HBondioPackage, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HDestination, HDestinationBundle, HDestinationBundleSchema, HDestinationSchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HLoginRequest, HLoginRequestSchema, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPackageTemplate, HPackageTemplateSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HReview, HReviewSchema, HReviewSubmission, HReviewSubmissionSchema, HRewardMultipliers, HRewardMultipliersSchema, HRewardPackageType, HRewardPackageTypeSchema, HRewardStrategy, HRewardStrategySchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HUserTouchpoints, HUserTouchpointsSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModel, HubbyModelApp, HubbyModelFirestore, HubbyModelSchema, LastUpdate, LiveActivity, LiveActivityEvent, LiveActivityReason, LiveActivitySchema, LiveActivityStatus, LoginRequest, LoginRequestSchema, MESSAGE_COLLECTION, Message, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, Package, PackagePrice, PackagePriceSchema, PackageSchema, PackageSpecification, PackageTemplate, PackageTemplateSchema, Partner, PartnerApiRequest, PartnerApiResponse, PartnerContact, PartnerContactSchema, PartnerData, PartnerDataSchema, PartnerPackageSpecification, PartnerPackageSpecificationSchema, PartnerSchema, Payment, PaymentSchema, PlatformSettings, PlatformSettingsSchema, PriceList, PriceListApiRequest, PriceListApiResponse, PriceListSchema, PromoCode, PromoCodeSchema, PromoPackageSpecificationSchema, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, ROLE_COLLECTION, Registration, RegistrationSchema, Review, ReviewSchema, ReviewSubmission, ReviewSubmissionSchema, RewardMultipliers, RewardMultipliersSchema, RewardPackageType, RewardPackageTypeSchema, RewardStrategy, RewardStrategySchema, SUPPORTED_LOCALES, Schedule, ScheduleFilter, ScheduleFilterSchema, ScheduleSchema, SupportedLocales, TRAFFIC_POLICY_COLLECTION, Tag, TagSchema, TelnaPackage, TelnaPackageSchema, TrafficPolicy, TrafficPolicySchema, USER_COLLECTION, USER_TOUCHPOINTS_COLLECTION, User, UserFirestore, UserFirestoreSchema, UserSchema, UserTouchpoints, UserTouchpointsSchema, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerSchema, VisualIdentityBannerStrategy, VisualIdentityBanners, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, apiLogSchemaSpec, bookingAppSchema, bookingSchemaSpec, countrySchemaSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, currencySchemaSpec, destinationAppSchema, destinationBundleAppSchema, destinationBundleSchemaSpec, destinationSchemaSpec, esimSchemaSpec, lastUpdateSchema, liveActivityEventSchema, liveActivityReasonSchema, liveActivitySchemaSpec, liveActivityStatusSchema, loginRequestSchemaSpec, messageSchemaSpec, packageSchemaSpec, packageTemplateAppSchema, packageTemplateSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, paymentSchemaSpec, priceListFromFirestore, priceListSchemaSpec, priceListToFirestore, promoCodeFromFirestore, promoCodeSchemaSpec, promoCodeToFirestore, promoPackageSpecificationAppSchema, reviewSchemaSpec, reviewSubmissionSchemaSpec, userFromFirestore, userSchemaSpec, userToFirestore, userTouchpointsFromFirestore, userTouchpointsSchemaSpec, userTouchpointsToFirestore };

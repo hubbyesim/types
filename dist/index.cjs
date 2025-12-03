@@ -1470,6 +1470,38 @@ function buildClientSchema(spec, path = []) {
   }
   throw new Error(`Unknown or malformed spec at "${pathString}": ${JSON.stringify(spec)}`);
 }
+var liveActivityStatusSchema = zod.z.enum(["created", "active", "ended", "dismissed", "failed"]);
+var liveActivityEventSchema = zod.z.enum(["start", "update", "end"]);
+var liveActivityReasonSchema = zod.z.enum(["expired", "data_exhausted", "no_packages", "manual"]);
+var lastUpdateSchema = zod.z.object({
+  event: liveActivityEventSchema,
+  totalDataGb: zod.z.number().optional(),
+  dataLeftGb: zod.z.number().optional(),
+  apnsId: zod.z.string().nullable().optional(),
+  statusCode: zod.z.number().nullable().optional(),
+  reason: liveActivityReasonSchema.optional()
+}).nullable().optional();
+var liveActivitySchemaSpec = markAsSchemaSpec({
+  id: zod.z.string(),
+  esim_id: zod.z.string(),
+  title: zod.z.string(),
+  message: zod.z.string(),
+  total_data_gb: zod.z.string().nullable(),
+  data_left_gb: zod.z.string().nullable(),
+  time_left: zod.z.string().nullable(),
+  time_total: zod.z.string().nullable(),
+  user_id: zod.z.string(),
+  push_to_start_token: zod.z.string(),
+  push_to_update_token: zod.z.string().nullable(),
+  status: liveActivityStatusSchema,
+  last_update_at: timestampNullable,
+  last_update: lastUpdateSchema,
+  ended_at: timestampNullable,
+  created_at: timestampRequired,
+  updated_at: timestampNullable,
+  created_by: zod.z.string().nullable(),
+  updated_by: zod.z.string().nullable()
+});
 var roleSchemaSpec = markAsSchemaSpec({
   id: zod.z.string().nullable().optional(),
   name: zod.z.string(),
@@ -1559,6 +1591,7 @@ function createModelConverters(db, modelSchemaSpec) {
 }
 
 // src/index.server.ts
+var LiveActivitySchema = buildServerSchema(liveActivitySchemaSpec);
 var UserSchema = buildServerSchema(userSchemaSpec);
 var UserFirestoreSchema = buildServerSchema(userSchemaSpec);
 var BookingSchema = buildServerSchema(bookingSchemaSpec);
@@ -1716,6 +1749,7 @@ exports.HUserTouchpointsSchema = HUserTouchpointsSchema;
 exports.HVisualIdentityBannerSchema = HVisualIdentityBannerSchema;
 exports.HVisualIdentitySchema = HVisualIdentitySchema;
 exports.HubbyModelSchema = HubbyModelSchema;
+exports.LiveActivitySchema = LiveActivitySchema;
 exports.LoginRequestSchema = LoginRequestSchema;
 exports.MESSAGE_COLLECTION = MESSAGE_COLLECTION;
 exports.MessageSchema = MessageSchema;
@@ -1777,6 +1811,11 @@ exports.destinationBundleAppSchema = destinationBundleAppSchema;
 exports.destinationBundleSchemaSpec = destinationBundleSchemaSpec;
 exports.destinationSchemaSpec = destinationSchemaSpec;
 exports.esimSchemaSpec = esimSchemaSpec;
+exports.lastUpdateSchema = lastUpdateSchema;
+exports.liveActivityEventSchema = liveActivityEventSchema;
+exports.liveActivityReasonSchema = liveActivityReasonSchema;
+exports.liveActivitySchemaSpec = liveActivitySchemaSpec;
+exports.liveActivityStatusSchema = liveActivityStatusSchema;
 exports.loginRequestSchemaSpec = loginRequestSchemaSpec;
 exports.messageSchemaSpec = messageSchemaSpec;
 exports.packageSchemaSpec = packageSchemaSpec;
