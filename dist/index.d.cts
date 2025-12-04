@@ -123,7 +123,7 @@ declare const bookingSchemaSpec: {
     first_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     last_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     full_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    pax: z.ZodNumber;
+    pax: z.ZodNullable<z.ZodOptional<z.ZodNumber>>;
     email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     booking_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -1952,7 +1952,7 @@ declare const HBookingSchema: z.ZodObject<{
     first_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     last_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     full_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    pax: z.ZodNumber;
+    pax: z.ZodNullable<z.ZodOptional<z.ZodNumber>>;
     email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     booking_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -2051,7 +2051,6 @@ declare const HBookingSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    pax: number;
     data: {
         source: string;
         manual: boolean;
@@ -2086,6 +2085,7 @@ declare const HBookingSchema: z.ZodObject<{
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
+    pax?: number | null | undefined;
     phone?: string | null | undefined;
     booking_id?: string | null | undefined;
     flight_number?: string | undefined;
@@ -2108,7 +2108,6 @@ declare const HBookingSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    pax: number;
     data: {
         source: string;
         manual: boolean;
@@ -2143,6 +2142,7 @@ declare const HBookingSchema: z.ZodObject<{
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
+    pax?: number | null | undefined;
     phone?: string | null | undefined;
     booking_id?: string | null | undefined;
     flight_number?: string | undefined;
@@ -8101,7 +8101,7 @@ declare const bookingAppSchema: z.ZodObject<{
     first_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     last_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     full_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    pax: z.ZodNumber;
+    pax: z.ZodNullable<z.ZodOptional<z.ZodNumber>>;
     email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     booking_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -8200,7 +8200,6 @@ declare const bookingAppSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    pax: number;
     data: {
         source: string;
         manual: boolean;
@@ -8235,6 +8234,7 @@ declare const bookingAppSchema: z.ZodObject<{
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
+    pax?: number | null | undefined;
     phone?: string | null | undefined;
     booking_id?: string | null | undefined;
     flight_number?: string | undefined;
@@ -8257,7 +8257,6 @@ declare const bookingAppSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    pax: number;
     data: {
         source: string;
         manual: boolean;
@@ -8292,6 +8291,7 @@ declare const bookingAppSchema: z.ZodObject<{
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
+    pax?: number | null | undefined;
     phone?: string | null | undefined;
     booking_id?: string | null | undefined;
     flight_number?: string | undefined;

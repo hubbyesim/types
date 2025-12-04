@@ -379,7 +379,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
   first_name: zod.z.string().nullable().optional(),
   last_name: zod.z.string().nullable().optional(),
   full_name: zod.z.string().nullable().optional(),
-  pax: zod.z.number(),
+  pax: zod.z.number().optional().nullable(),
   email: zod.z.string().email().nullable().optional(),
   phone: zod.z.string().nullable().optional(),
   booking_id: zod.z.string().nullable().optional(),
