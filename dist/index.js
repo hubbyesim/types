@@ -499,6 +499,7 @@ var esimSchemaSpec = markAsSchemaSpec({
   data_used: z.boolean(),
   status: z.string().nullable(),
   status_history: esimStatusHistorySchema,
+  status_updated_at: timestampNullable,
   name: z.string(),
   android_auto: z.boolean(),
   partner_price: z.number().nullable(),

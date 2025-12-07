@@ -351,6 +351,11 @@ declare const esimSchemaSpec: {
         status: string;
         telna_esim_status: number;
     }>, "many">>>;
+    status_updated_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
     name: z.ZodString;
     android_auto: z.ZodBoolean;
     partner_price: z.ZodNullable<z.ZodNumber>;
@@ -2289,6 +2294,7 @@ declare const HESIMSchema: z.ZodObject<{
         status: string;
         telna_esim_status: number;
     }>, "many">>>;
+    status_updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     name: z.ZodString;
     android_auto: z.ZodBoolean;
     partner_price: z.ZodNullable<z.ZodNumber>;
@@ -2322,6 +2328,7 @@ declare const HESIMSchema: z.ZodObject<{
     total_data: number;
     data_left: number;
     data_used: boolean;
+    status_updated_at: Date;
     android_auto: boolean;
     partner_price: number | null;
     payment: string | null;
@@ -2358,6 +2365,7 @@ declare const HESIMSchema: z.ZodObject<{
     total_data: number;
     data_left: number;
     data_used: boolean;
+    status_updated_at: Date;
     android_auto: boolean;
     partner_price: number | null;
     payment: string | null;
