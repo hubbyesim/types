@@ -789,6 +789,10 @@ var platformSettingsSchema = z.object({
   upgrade_offer: z.object({
     enabled: z.boolean(),
     discount_percentage: z.number().min(0).max(100)
+  }).nullable().optional(),
+  account_manager: z.object({
+    _type: z.literal("docRef"),
+    collection: z.literal(USER_COLLECTION)
   }).nullable().optional()
 });
 markAsSchemaSpec({
@@ -898,6 +902,12 @@ markAsSchemaSpec({
   agent_signup_settings: {
     _type: "object",
     of: agentSignupSettingsSchema.shape,
+    nullable: true,
+    optional: true
+  },
+  account_manager: {
+    _type: "docRef",
+    collection: USER_COLLECTION,
     nullable: true,
     optional: true
   }

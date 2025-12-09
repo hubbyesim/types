@@ -828,6 +828,10 @@ var platformSettingsSchema = zod.z.object({
   upgrade_offer: zod.z.object({
     enabled: zod.z.boolean(),
     discount_percentage: zod.z.number().min(0).max(100)
+  }).nullable().optional(),
+  account_manager: zod.z.object({
+    _type: zod.z.literal("docRef"),
+    collection: zod.z.literal(USER_COLLECTION)
   }).nullable().optional()
 });
 var packagePriceSchemaSpec = markAsSchemaSpec({
@@ -937,6 +941,12 @@ var platformSettingsSchemaSpec = markAsSchemaSpec({
   agent_signup_settings: {
     _type: "object",
     of: agentSignupSettingsSchema.shape,
+    nullable: true,
+    optional: true
+  },
+  account_manager: {
+    _type: "docRef",
+    collection: USER_COLLECTION,
     nullable: true,
     optional: true
   }
