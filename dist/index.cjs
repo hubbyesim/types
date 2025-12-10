@@ -829,10 +829,7 @@ var platformSettingsSchema = zod.z.object({
     enabled: zod.z.boolean(),
     discount_percentage: zod.z.number().min(0).max(100)
   }).nullable().optional(),
-  account_manager: zod.z.object({
-    _type: zod.z.literal("docRef"),
-    collection: zod.z.literal(USER_COLLECTION)
-  }).nullable().optional()
+  account_manager: zod.z.string().nullable().optional()
 });
 var packagePriceSchemaSpec = markAsSchemaSpec({
   destination: zod.z.string(),
