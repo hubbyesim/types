@@ -1293,7 +1293,16 @@ declare const partnerSchemaSpec: {
                 enabled: boolean;
                 discount_percentage: number;
             }>>>;
-            account_manager: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            account_manager: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+                _type: z.ZodLiteral<"docRef">;
+                collection: z.ZodLiteral<"users">;
+            }, "strip", z.ZodTypeAny, {
+                _type: "docRef";
+                collection: "users";
+            }, {
+                _type: "docRef";
+                collection: "users";
+            }>>>;
         };
         nullable: boolean;
     };
@@ -3626,7 +3635,16 @@ declare const HPartnerSchema: z.ZodObject<{
             enabled: boolean;
             discount_percentage: number;
         }>>>;
-        account_manager: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        account_manager: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            _type: z.ZodLiteral<"docRef">;
+            collection: z.ZodLiteral<"users">;
+        }, "strip", z.ZodTypeAny, {
+            _type: "docRef";
+            collection: "users";
+        }, {
+            _type: "docRef";
+            collection: "users";
+        }>>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy?: {
             name: string;
@@ -3709,7 +3727,10 @@ declare const HPartnerSchema: z.ZodObject<{
             enabled: boolean;
             discount_percentage: number;
         } | null | undefined;
-        account_manager?: string | null | undefined;
+        account_manager?: {
+            _type: "docRef";
+            collection: "users";
+        } | null | undefined;
     }, {
         package_strategy?: {
             name: string;
@@ -3792,7 +3813,10 @@ declare const HPartnerSchema: z.ZodObject<{
             enabled: boolean;
             discount_percentage: number;
         } | null | undefined;
-        account_manager?: string | null | undefined;
+        account_manager?: {
+            _type: "docRef";
+            collection: "users";
+        } | null | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
         slug: z.ZodString;
@@ -4045,7 +4069,10 @@ declare const HPartnerSchema: z.ZodObject<{
             enabled: boolean;
             discount_percentage: number;
         } | null | undefined;
-        account_manager?: string | null | undefined;
+        account_manager?: {
+            _type: "docRef";
+            collection: "users";
+        } | null | undefined;
     };
     tags: {
         name: string;
@@ -4253,7 +4280,10 @@ declare const HPartnerSchema: z.ZodObject<{
             enabled: boolean;
             discount_percentage: number;
         } | null | undefined;
-        account_manager?: string | null | undefined;
+        account_manager?: {
+            _type: "docRef";
+            collection: "users";
+        } | null | undefined;
     };
     tags: {
         name: string;
@@ -5394,7 +5424,16 @@ declare const HPartnerAppSchema: z.ZodObject<{
             enabled: boolean;
             discount_percentage: number;
         }>>>;
-        account_manager: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        account_manager: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            _type: z.ZodLiteral<"docRef">;
+            collection: z.ZodLiteral<"users">;
+        }, "strip", z.ZodTypeAny, {
+            _type: "docRef";
+            collection: "users";
+        }, {
+            _type: "docRef";
+            collection: "users";
+        }>>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy?: {
             name: string;
@@ -5477,7 +5516,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
             enabled: boolean;
             discount_percentage: number;
         } | null | undefined;
-        account_manager?: string | null | undefined;
+        account_manager?: {
+            _type: "docRef";
+            collection: "users";
+        } | null | undefined;
     }, {
         package_strategy?: {
             name: string;
@@ -5560,7 +5602,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
             enabled: boolean;
             discount_percentage: number;
         } | null | undefined;
-        account_manager?: string | null | undefined;
+        account_manager?: {
+            _type: "docRef";
+            collection: "users";
+        } | null | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
         slug: z.ZodString;
@@ -5813,7 +5858,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
             enabled: boolean;
             discount_percentage: number;
         } | null | undefined;
-        account_manager?: string | null | undefined;
+        account_manager?: {
+            _type: "docRef";
+            collection: "users";
+        } | null | undefined;
     };
     tags: {
         name: string;
@@ -6021,7 +6069,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
             enabled: boolean;
             discount_percentage: number;
         } | null | undefined;
-        account_manager?: string | null | undefined;
+        account_manager?: {
+            _type: "docRef";
+            collection: "users";
+        } | null | undefined;
     };
     tags: {
         name: string;
@@ -6315,7 +6366,16 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         enabled: boolean;
         discount_percentage: number;
     }>>>;
-    account_manager: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    account_manager: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        _type: z.ZodLiteral<"docRef">;
+        collection: z.ZodLiteral<"users">;
+    }, "strip", z.ZodTypeAny, {
+        _type: "docRef";
+        collection: "users";
+    }, {
+        _type: "docRef";
+        collection: "users";
+    }>>>;
 }, "strip", z.ZodTypeAny, {
     package_strategy?: {
         name: string;
@@ -6398,7 +6458,10 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         enabled: boolean;
         discount_percentage: number;
     } | null | undefined;
-    account_manager?: string | null | undefined;
+    account_manager?: {
+        _type: "docRef";
+        collection: "users";
+    } | null | undefined;
 }, {
     package_strategy?: {
         name: string;
@@ -6481,7 +6544,10 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         enabled: boolean;
         discount_percentage: number;
     } | null | undefined;
-    account_manager?: string | null | undefined;
+    account_manager?: {
+        _type: "docRef";
+        collection: "users";
+    } | null | undefined;
 }>;
 declare const HVisualIdentitySchema: z.ZodObject<{
     primary_color: z.ZodString;
@@ -6642,12 +6708,12 @@ declare const HPricingStrategySchema: z.ZodObject<{
         nullable: z.ZodLiteral<true>;
     }, "strip", z.ZodTypeAny, {
         _type: "docRef";
-        nullable: true;
         collection: "price_lists";
+        nullable: true;
     }, {
         _type: "docRef";
-        nullable: true;
         collection: "price_lists";
+        nullable: true;
     }>;
     custom_prices: z.ZodArray<z.ZodObject<{
         destination: z.ZodString;
@@ -6688,8 +6754,8 @@ declare const HPricingStrategySchema: z.ZodObject<{
     modification_percentage: number;
     default_price_list: {
         _type: "docRef";
-        nullable: true;
         collection: "price_lists";
+        nullable: true;
     };
     custom_prices: {
         type: "data-limited" | "time-limited";
@@ -6706,8 +6772,8 @@ declare const HPricingStrategySchema: z.ZodObject<{
     modification_percentage: number;
     default_price_list: {
         _type: "docRef";
-        nullable: true;
         collection: "price_lists";
+        nullable: true;
     };
     custom_prices: {
         type: "data-limited" | "time-limited";
@@ -9036,7 +9102,16 @@ declare const partnerAppSchema: z.ZodObject<{
             enabled: boolean;
             discount_percentage: number;
         }>>>;
-        account_manager: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        account_manager: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            _type: z.ZodLiteral<"docRef">;
+            collection: z.ZodLiteral<"users">;
+        }, "strip", z.ZodTypeAny, {
+            _type: "docRef";
+            collection: "users";
+        }, {
+            _type: "docRef";
+            collection: "users";
+        }>>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy?: {
             name: string;
@@ -9119,7 +9194,10 @@ declare const partnerAppSchema: z.ZodObject<{
             enabled: boolean;
             discount_percentage: number;
         } | null | undefined;
-        account_manager?: string | null | undefined;
+        account_manager?: {
+            _type: "docRef";
+            collection: "users";
+        } | null | undefined;
     }, {
         package_strategy?: {
             name: string;
@@ -9202,7 +9280,10 @@ declare const partnerAppSchema: z.ZodObject<{
             enabled: boolean;
             discount_percentage: number;
         } | null | undefined;
-        account_manager?: string | null | undefined;
+        account_manager?: {
+            _type: "docRef";
+            collection: "users";
+        } | null | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
         slug: z.ZodString;
@@ -9455,7 +9536,10 @@ declare const partnerAppSchema: z.ZodObject<{
             enabled: boolean;
             discount_percentage: number;
         } | null | undefined;
-        account_manager?: string | null | undefined;
+        account_manager?: {
+            _type: "docRef";
+            collection: "users";
+        } | null | undefined;
     };
     tags: {
         name: string;
@@ -9663,7 +9747,10 @@ declare const partnerAppSchema: z.ZodObject<{
             enabled: boolean;
             discount_percentage: number;
         } | null | undefined;
-        account_manager?: string | null | undefined;
+        account_manager?: {
+            _type: "docRef";
+            collection: "users";
+        } | null | undefined;
     };
     tags: {
         name: string;

@@ -827,7 +827,10 @@ var platformSettingsSchema = z.object({
     enabled: z.boolean(),
     discount_percentage: z.number().min(0).max(100)
   }).nullable().optional(),
-  account_manager: z.string().nullable().optional()
+  account_manager: z.object({
+    _type: z.literal("docRef"),
+    collection: z.literal(USER_COLLECTION)
+  }).nullable().optional()
 });
 var packagePriceSchemaSpec = markAsSchemaSpec({
   destination: z.string(),
