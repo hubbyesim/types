@@ -24,6 +24,7 @@ export const REVIEW_SUBMISSION_COLLECTION = '/companies/hubby/review_submissions
 export const DESTINATION_COLLECTION = 'destinations';
 export const DESTINATION_OFFER_COLLECTION = 'offers';
 export const USER_TOUCHPOINTS_COLLECTION = 'user_touchpoints';
+export const TAG_COLLECTION = 'tags';
 
 
 export const packageTypes = ['data-limited', 'time-limited', 'starter', 'unlimited'];
@@ -47,4 +48,5 @@ export const tagModelSpec = {
     name: z.string(),
     description: z.string().nullable().optional(),
     color: z.string().nullable().optional(),
+    type: z.string().nullable().optional(), // can be 'partner', 'booking' etc...
 }

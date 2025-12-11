@@ -35,7 +35,7 @@ import {
     platformSettingsSchemaSpec
 } from './specs/partner';
 
-import { hubbyModelSpec, tagModelSpec } from './specs/common';
+import { hubbyModelSpec } from './specs/common';
 import { SUPPORTED_LOCALES as LOCALES } from './constants';
 import { apiLogSchemaSpec } from './specs/apiLogs';
 import { userTouchpointsSchemaSpec } from './specs/userTouchpoints';
@@ -50,6 +50,7 @@ import {
 import { destinationSchemaSpec, destinationBundleSchemaSpec } from './specs/destination';
 import { packageTemplateSchemaSpec } from './specs/package_template';
 import { loginRequestSchemaSpec } from './specs/login_request';
+import { tagSchemaSpec } from './specs/tag';
 import { z } from 'zod';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 
@@ -78,7 +79,8 @@ export {
     destinationBundleSchemaSpec,
     packageTemplateSchemaSpec,
     userTouchpointsSchemaSpec,
-    loginRequestSchemaSpec
+    loginRequestSchemaSpec,
+    tagSchemaSpec
 };
 
 
@@ -101,7 +103,7 @@ export const PackagePriceSchema = buildServerSchema(packagePriceSchemaSpec);
 export const PlatformSettingsSchema = buildServerSchema(platformSettingsSchemaSpec);
 export const ScheduleSchema = buildServerSchema(scheduleSchema);
 export const AnalyticsSchema = buildServerSchema(analyticsSpec);
-export const TagSchema = buildServerSchema(tagModelSpec);
+export const TagSchema = buildServerSchema(tagSchemaSpec);
 export const TelnaPackageSchema = buildServerSchema(telnaPackageSchema);
 export const BondioPackageSchema = buildServerSchema(bondioPackageSchema);
 export const TrafficPolicySchema = buildServerSchema(trafficPolicySpec);
@@ -264,5 +266,5 @@ export { createModelConverters } from './utils/modelConverterFactory';
 export { createConvertJSToFirestore, createConvertFirestoreToJS } from './utils/firestoreTransformUtils';
 export { FirebaseService, createFirebaseService } from './services/firebase';
 
-export { USER_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, BOOKING_COLLECTION, ROLE_COLLECTION, PERMISSION_COLLECTION, TRAFFIC_POLICY_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, COUNTRY_COLLECTION, ESIM_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, MESSAGE_COLLECTION, CURRENCY_COLLECTION, API_LOG_COLLECTION, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, USER_TOUCHPOINTS_COLLECTION, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION  } from './specs/common';
+export { USER_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, BOOKING_COLLECTION, ROLE_COLLECTION, PERMISSION_COLLECTION, TRAFFIC_POLICY_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, COUNTRY_COLLECTION, ESIM_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, MESSAGE_COLLECTION, CURRENCY_COLLECTION, API_LOG_COLLECTION, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, USER_TOUCHPOINTS_COLLECTION, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, TAG_COLLECTION  } from './specs/common';
 

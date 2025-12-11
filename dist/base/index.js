@@ -177,7 +177,9 @@ var tagModelSpec = {
   slug: z.string(),
   name: z.string(),
   description: z.string().nullable().optional(),
-  color: z.string().nullable().optional()
+  color: z.string().nullable().optional(),
+  type: z.string().nullable().optional()
+  // can be 'partner', 'booking' etc...
 };
 
 // src/specs/user.ts
@@ -1212,6 +1214,9 @@ var loginRequestSchemaSpec = markAsSchemaSpec({
   expires_at: timestampRequired
 });
 
+// src/specs/tag.ts
+var tagSchemaSpec = markAsSchemaSpec(tagModelSpec);
+
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
 var HBookingSchema = buildClientSchema(bookingSchemaSpec);
@@ -1236,7 +1241,7 @@ var HFreeEsimSchema = buildClientSchema(freeEsimSchema);
 var HAnalyticsSchema = buildClientSchema(analyticsSpec);
 var HRoleSchema = buildClientSchema(roleSchemaSpec);
 var HPermissionSchema = buildClientSchema(permissionSchemaSpec);
-var HTagSchema = buildClientSchema(tagModelSpec);
+var HTagSchema = buildClientSchema(tagSchemaSpec);
 var HTrafficPolicySchema = buildClientSchema(trafficPolicySpec);
 var HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
 var HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
