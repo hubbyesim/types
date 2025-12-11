@@ -1202,6 +1202,8 @@ var packageTemplateSchemaSpec = markAsSchemaSpec({
     nullable: true,
     optional: true
   },
+  tier: zod.z.number().nullable().optional(),
+  // 1, 2, 3
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: zod.z.string().nullable(),
