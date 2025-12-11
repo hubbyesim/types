@@ -1161,6 +1161,45 @@ declare const partnerSchemaSpec: {
             nullable: boolean;
             optional: boolean;
         };
+        brevo: {
+            _type: "object";
+            of: {
+                list_ids: z.ZodArray<z.ZodNumber, "many">;
+                campaign_mode: z.ZodBoolean;
+            };
+            nullable: boolean;
+            optional: boolean;
+        };
+        upgrade_offer: {
+            _type: "object";
+            of: {
+                enabled: z.ZodBoolean;
+                discount_percentage: z.ZodNumber;
+            };
+            nullable: boolean;
+            optional: boolean;
+        };
+        emit_events: {
+            _type: "object";
+            of: {
+                topup: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+                redemption: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+                activation: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+                depletion: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            };
+            nullable: boolean;
+            optional: boolean;
+        };
+        visual_identity_options: {
+            _type: "object";
+            of: {
+                hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+                source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+                own_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            };
+            nullable: boolean;
+            optional: boolean;
+        };
         account_manager: {
             _type: "docRef";
             collection: string;
@@ -3445,6 +3484,55 @@ declare const HPartnerSchema: z.ZodObject<{
                 own_branding?: boolean | undefined;
             } | undefined;
         }>;
+        brevo: z.ZodObject<{
+            list_ids: z.ZodArray<z.ZodNumber, "many">;
+            campaign_mode: z.ZodBoolean;
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            list_ids: number[];
+            campaign_mode: boolean;
+        }, {
+            list_ids: number[];
+            campaign_mode: boolean;
+        }>;
+        upgrade_offer: z.ZodObject<{
+            enabled: z.ZodBoolean;
+            discount_percentage: z.ZodNumber;
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            enabled: boolean;
+            discount_percentage: number;
+        }, {
+            enabled: boolean;
+            discount_percentage: number;
+        }>;
+        emit_events: z.ZodObject<{
+            topup: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            redemption: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            activation: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            depletion: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            topup: boolean;
+            redemption: boolean;
+            activation: boolean;
+            depletion: boolean;
+        }, {
+            topup?: boolean | undefined;
+            redemption?: boolean | undefined;
+            activation?: boolean | undefined;
+            depletion?: boolean | undefined;
+        }>;
+        visual_identity_options: z.ZodObject<{
+            hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            own_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        }, {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        }>;
         account_manager: z.ZodString;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy: {
@@ -3508,6 +3596,25 @@ declare const HPartnerSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
         };
+        visual_identity_options: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
+            enabled: boolean;
+            discount_percentage: number;
+        };
+        emit_events: {
+            topup: boolean;
+            redemption: boolean;
+            activation: boolean;
+            depletion: boolean;
+        };
         account_manager: string;
     }, {
         package_strategy: {
@@ -3570,6 +3677,25 @@ declare const HPartnerSchema: z.ZodObject<{
                 source_partner_branding?: boolean | undefined;
                 own_branding?: boolean | undefined;
             } | undefined;
+        };
+        visual_identity_options: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
+            enabled: boolean;
+            discount_percentage: number;
+        };
+        emit_events: {
+            topup?: boolean | undefined;
+            redemption?: boolean | undefined;
+            activation?: boolean | undefined;
+            depletion?: boolean | undefined;
         };
         account_manager: string;
     }>;
@@ -3804,6 +3930,25 @@ declare const HPartnerSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
         };
+        visual_identity_options: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
+            enabled: boolean;
+            discount_percentage: number;
+        };
+        emit_events: {
+            topup: boolean;
+            redemption: boolean;
+            activation: boolean;
+            depletion: boolean;
+        };
         account_manager: string;
     };
     tags: {
@@ -3991,6 +4136,25 @@ declare const HPartnerSchema: z.ZodObject<{
                 source_partner_branding?: boolean | undefined;
                 own_branding?: boolean | undefined;
             } | undefined;
+        };
+        visual_identity_options: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
+            enabled: boolean;
+            discount_percentage: number;
+        };
+        emit_events: {
+            topup?: boolean | undefined;
+            redemption?: boolean | undefined;
+            activation?: boolean | undefined;
+            depletion?: boolean | undefined;
         };
         account_manager: string;
     };
@@ -5081,6 +5245,55 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 own_branding?: boolean | undefined;
             } | undefined;
         }>;
+        brevo: z.ZodObject<{
+            list_ids: z.ZodArray<z.ZodNumber, "many">;
+            campaign_mode: z.ZodBoolean;
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            list_ids: number[];
+            campaign_mode: boolean;
+        }, {
+            list_ids: number[];
+            campaign_mode: boolean;
+        }>;
+        upgrade_offer: z.ZodObject<{
+            enabled: z.ZodBoolean;
+            discount_percentage: z.ZodNumber;
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            enabled: boolean;
+            discount_percentage: number;
+        }, {
+            enabled: boolean;
+            discount_percentage: number;
+        }>;
+        emit_events: z.ZodObject<{
+            topup: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            redemption: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            activation: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            depletion: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            topup: boolean;
+            redemption: boolean;
+            activation: boolean;
+            depletion: boolean;
+        }, {
+            topup?: boolean | undefined;
+            redemption?: boolean | undefined;
+            activation?: boolean | undefined;
+            depletion?: boolean | undefined;
+        }>;
+        visual_identity_options: z.ZodObject<{
+            hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            own_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        }, {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        }>;
         account_manager: z.ZodString;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy: {
@@ -5144,6 +5357,25 @@ declare const HPartnerAppSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
         };
+        visual_identity_options: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
+            enabled: boolean;
+            discount_percentage: number;
+        };
+        emit_events: {
+            topup: boolean;
+            redemption: boolean;
+            activation: boolean;
+            depletion: boolean;
+        };
         account_manager: string;
     }, {
         package_strategy: {
@@ -5206,6 +5438,25 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 source_partner_branding?: boolean | undefined;
                 own_branding?: boolean | undefined;
             } | undefined;
+        };
+        visual_identity_options: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
+            enabled: boolean;
+            discount_percentage: number;
+        };
+        emit_events: {
+            topup?: boolean | undefined;
+            redemption?: boolean | undefined;
+            activation?: boolean | undefined;
+            depletion?: boolean | undefined;
         };
         account_manager: string;
     }>;
@@ -5440,6 +5691,25 @@ declare const HPartnerAppSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
         };
+        visual_identity_options: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
+            enabled: boolean;
+            discount_percentage: number;
+        };
+        emit_events: {
+            topup: boolean;
+            redemption: boolean;
+            activation: boolean;
+            depletion: boolean;
+        };
         account_manager: string;
     };
     tags: {
@@ -5627,6 +5897,25 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 source_partner_branding?: boolean | undefined;
                 own_branding?: boolean | undefined;
             } | undefined;
+        };
+        visual_identity_options: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
+            enabled: boolean;
+            discount_percentage: number;
+        };
+        emit_events: {
+            topup?: boolean | undefined;
+            redemption?: boolean | undefined;
+            activation?: boolean | undefined;
+            depletion?: boolean | undefined;
         };
         account_manager: string;
     };
@@ -5922,16 +6211,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         enabled: boolean;
         discount_percentage: number;
     }>>>;
-    account_manager: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-        _type: z.ZodLiteral<"docRef">;
-        collection: z.ZodLiteral<"users">;
-    }, "strip", z.ZodTypeAny, {
-        _type: "docRef";
-        collection: "users";
-    }, {
-        _type: "docRef";
-        collection: "users";
-    }>>>;
+    account_manager: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     package_strategy?: {
         name: string;
@@ -6000,16 +6280,6 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         source_partner_branding: boolean;
         own_branding: boolean;
     } | null | undefined;
-    account_manager?: {
-        _type: "docRef";
-        collection: "users";
-    } | null | undefined;
-    emit_events?: {
-        topup: boolean;
-        redemption: boolean;
-        activation: boolean;
-        depletion: boolean;
-    } | null | undefined;
     brevo?: {
         list_ids: number[];
         campaign_mode: boolean;
@@ -6018,6 +6288,13 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         enabled: boolean;
         discount_percentage: number;
     } | null | undefined;
+    emit_events?: {
+        topup: boolean;
+        redemption: boolean;
+        activation: boolean;
+        depletion: boolean;
+    } | null | undefined;
+    account_manager?: string | null | undefined;
 }, {
     package_strategy?: {
         name: string;
@@ -6086,16 +6363,6 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         source_partner_branding?: boolean | undefined;
         own_branding?: boolean | undefined;
     } | null | undefined;
-    account_manager?: {
-        _type: "docRef";
-        collection: "users";
-    } | null | undefined;
-    emit_events?: {
-        topup?: boolean | undefined;
-        redemption?: boolean | undefined;
-        activation?: boolean | undefined;
-        depletion?: boolean | undefined;
-    } | null | undefined;
     brevo?: {
         list_ids: number[];
         campaign_mode: boolean;
@@ -6104,6 +6371,13 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         enabled: boolean;
         discount_percentage: number;
     } | null | undefined;
+    emit_events?: {
+        topup?: boolean | undefined;
+        redemption?: boolean | undefined;
+        activation?: boolean | undefined;
+        depletion?: boolean | undefined;
+    } | null | undefined;
+    account_manager?: string | null | undefined;
 }>;
 declare const HVisualIdentitySchema: z.ZodObject<{
     primary_color: z.ZodString;
@@ -8606,6 +8880,55 @@ declare const partnerAppSchema: z.ZodObject<{
                 own_branding?: boolean | undefined;
             } | undefined;
         }>;
+        brevo: z.ZodObject<{
+            list_ids: z.ZodArray<z.ZodNumber, "many">;
+            campaign_mode: z.ZodBoolean;
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            list_ids: number[];
+            campaign_mode: boolean;
+        }, {
+            list_ids: number[];
+            campaign_mode: boolean;
+        }>;
+        upgrade_offer: z.ZodObject<{
+            enabled: z.ZodBoolean;
+            discount_percentage: z.ZodNumber;
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            enabled: boolean;
+            discount_percentage: number;
+        }, {
+            enabled: boolean;
+            discount_percentage: number;
+        }>;
+        emit_events: z.ZodObject<{
+            topup: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            redemption: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            activation: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            depletion: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            topup: boolean;
+            redemption: boolean;
+            activation: boolean;
+            depletion: boolean;
+        }, {
+            topup?: boolean | undefined;
+            redemption?: boolean | undefined;
+            activation?: boolean | undefined;
+            depletion?: boolean | undefined;
+        }>;
+        visual_identity_options: z.ZodObject<{
+            hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            own_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        }, {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        }>;
         account_manager: z.ZodString;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy: {
@@ -8669,6 +8992,25 @@ declare const partnerAppSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
         };
+        visual_identity_options: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
+            enabled: boolean;
+            discount_percentage: number;
+        };
+        emit_events: {
+            topup: boolean;
+            redemption: boolean;
+            activation: boolean;
+            depletion: boolean;
+        };
         account_manager: string;
     }, {
         package_strategy: {
@@ -8731,6 +9073,25 @@ declare const partnerAppSchema: z.ZodObject<{
                 source_partner_branding?: boolean | undefined;
                 own_branding?: boolean | undefined;
             } | undefined;
+        };
+        visual_identity_options: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
+            enabled: boolean;
+            discount_percentage: number;
+        };
+        emit_events: {
+            topup?: boolean | undefined;
+            redemption?: boolean | undefined;
+            activation?: boolean | undefined;
+            depletion?: boolean | undefined;
         };
         account_manager: string;
     }>;
@@ -8965,6 +9326,25 @@ declare const partnerAppSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
         };
+        visual_identity_options: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
+            enabled: boolean;
+            discount_percentage: number;
+        };
+        emit_events: {
+            topup: boolean;
+            redemption: boolean;
+            activation: boolean;
+            depletion: boolean;
+        };
         account_manager: string;
     };
     tags: {
@@ -9152,6 +9532,25 @@ declare const partnerAppSchema: z.ZodObject<{
                 source_partner_branding?: boolean | undefined;
                 own_branding?: boolean | undefined;
             } | undefined;
+        };
+        visual_identity_options: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
+            enabled: boolean;
+            discount_percentage: number;
+        };
+        emit_events: {
+            topup?: boolean | undefined;
+            redemption?: boolean | undefined;
+            activation?: boolean | undefined;
+            depletion?: boolean | undefined;
         };
         account_manager: string;
     };

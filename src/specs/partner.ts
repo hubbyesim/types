@@ -228,10 +228,7 @@ export const platformSettingsSchema = z.object({
         enabled: z.boolean(),
         discount_percentage: z.number().min(0).max(100),
     }).nullable().optional(),
-    account_manager: z.object({ 
-        _type: z.literal('docRef'), 
-        collection: z.literal(USER_COLLECTION) 
-    }).nullable().optional()
+    account_manager: z.string().nullable().optional()
 });
 
 // ===== Exportable schema specs =====
@@ -348,6 +345,40 @@ export const platformSettingsSchemaSpec = markAsSchemaSpec({
     agent_signup_settings: {
         _type: 'object' as const,
         of: agentSignupSettingsSchema.shape,
+        nullable: true,
+        optional: true
+    },
+    brevo: {
+        _type: 'object' as const,
+        of: {
+            list_ids: z.array(z.number()),
+            campaign_mode: z.boolean()
+        },
+        nullable: true,
+        optional: true
+    },
+    upgrade_offer: {
+        _type: 'object' as const,
+        of: {
+            enabled: z.boolean(),
+            discount_percentage: z.number().min(0).max(100)
+        },
+        nullable: true,
+        optional: true
+    },
+    emit_events: {
+        _type: 'object' as const,
+        of: emitEventSchema.shape,
+        nullable: true,
+        optional: true
+    },
+    visual_identity_options: {
+        _type: 'object' as const,
+        of: {
+            hubby_branding: z.boolean().optional().default(true),
+            source_partner_branding: z.boolean().optional().default(false),
+            own_branding: z.boolean().optional().default(false)
+        },
         nullable: true,
         optional: true
     },
