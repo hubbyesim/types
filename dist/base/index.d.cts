@@ -5342,6 +5342,7 @@ declare const HReviewSubmissionSchema: z.ZodObject<{
 declare const HDestinationSchema: z.ZodObject<{
     id: z.ZodString;
     type: z.ZodString;
+    tier: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     iso3s: z.ZodArray<z.ZodString, "many">;
     name: z.ZodString;
     i18n_name: z.ZodRecord<z.ZodString, z.ZodString>;
@@ -5363,6 +5364,7 @@ declare const HDestinationSchema: z.ZodObject<{
     i18n_name: Record<string, string>;
     iso3s: string[];
     sort_order: number;
+    tier?: number | null | undefined;
 }, {
     id: string;
     name: string;
@@ -5375,6 +5377,7 @@ declare const HDestinationSchema: z.ZodObject<{
     i18n_name: Record<string, string>;
     iso3s: string[];
     sort_order: number;
+    tier?: number | null | undefined;
 }>;
 declare const HDestinationBundleSchema: z.ZodObject<{
     id: z.ZodString;

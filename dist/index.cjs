@@ -1146,6 +1146,8 @@ var destinationSchemaSpec = markAsSchemaSpec({
   id: zod.z.string(),
   type: zod.z.string(),
   // "country" or region names like "Europe", "Asia", "Middle East"
+  tier: zod.z.number().nullable().optional(),
+  // 1, 2, 3
   iso3s: zod.z.array(zod.z.string()),
   name: zod.z.string(),
   i18n_name: zod.z.record(zod.z.string()),
