@@ -1004,11 +1004,7 @@ var partnerSchemaSpec = markAsSchemaSpec({
     nullable: true
   },
   // Platform settings
-  platform_settings: {
-    _type: "object",
-    of: platformSettingsSchema.shape,
-    nullable: true
-  },
+  platform_settings: platformSettingsSchemaSpec,
   // Tags
   tags: {
     _type: "array",

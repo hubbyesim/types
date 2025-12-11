@@ -420,11 +420,7 @@ export const partnerSchemaSpec = markAsSchemaSpec({
     },
 
     // Platform settings
-    platform_settings: {
-        _type: 'object' as const,
-        of: platformSettingsSchema.shape,
-        nullable: true
-    },
+    platform_settings: platformSettingsSchemaSpec,
 
     // Tags
     tags: {

@@ -861,7 +861,7 @@ var financialPropertiesSchemaSpec = markAsSchemaSpec({
     nullable: true
   }
 });
-markAsSchemaSpec({
+var platformSettingsSchemaSpec = markAsSchemaSpec({
   package_strategy: {
     _type: "object",
     of: packageStrategySchema.shape,
@@ -965,11 +965,7 @@ var partnerSchemaSpec = markAsSchemaSpec({
     nullable: true
   },
   // Platform settings
-  platform_settings: {
-    _type: "object",
-    of: platformSettingsSchema.shape,
-    nullable: true
-  },
+  platform_settings: platformSettingsSchemaSpec,
   // Tags
   tags: {
     _type: "array",
