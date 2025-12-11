@@ -1202,6 +1202,7 @@ var packageTemplateSchemaSpec = markAsSchemaSpec({
     nullable: true,
     optional: true
   },
+  size_in_gigabytes: zod.z.number(),
   tier: zod.z.number().nullable().optional(),
   // 1, 2, 3
   created_at: timestampRequired,

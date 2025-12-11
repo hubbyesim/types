@@ -1212,6 +1212,7 @@ var packageTemplateSchemaSpec = markAsSchemaSpec({
     nullable: true,
     optional: true
   },
+  size_in_gigabytes: z.number(),
   tier: z.number().nullable().optional(),
   // 1, 2, 3
   created_at: timestampRequired,

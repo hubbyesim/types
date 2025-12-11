@@ -5469,6 +5469,7 @@ declare const HPackageTemplateSchema: z.ZodObject<{
     external_id: z.ZodString;
     supported_countries: z.ZodArray<z.ZodString, "many">;
     provider_specific_data: z.ZodRecord<z.ZodString, z.ZodAny>;
+    size_in_gigabytes: z.ZodNumber;
     tier: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -5483,6 +5484,7 @@ declare const HPackageTemplateSchema: z.ZodObject<{
     type: string;
     external_id: string;
     provider: string;
+    size_in_gigabytes: number;
     purchase_price: number;
     supported_countries: string[];
     provider_specific_data: Record<string, any>;
@@ -5496,6 +5498,7 @@ declare const HPackageTemplateSchema: z.ZodObject<{
     type: string;
     external_id: string;
     provider: string;
+    size_in_gigabytes: number;
     purchase_price: number;
     supported_countries: string[];
     provider_specific_data: Record<string, any>;
