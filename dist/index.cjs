@@ -1016,6 +1016,12 @@ var partnerSchemaSpec = markAsSchemaSpec({
     nullable: true,
     optional: true
   },
+  tag_references: {
+    _type: "array",
+    of: { _type: "docRef", collection: TAG_COLLECTION },
+    nullable: true,
+    optional: true
+  },
   // Metadata
   data: {
     _type: "object",

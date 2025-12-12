@@ -162,6 +162,7 @@ var BOOKING_COLLECTION = "bookings";
 var ROLE_COLLECTION = "roles";
 var PERMISSION_COLLECTION = "permissions";
 var TRAFFIC_POLICY_COLLECTION = "traffic_policies";
+var TAG_COLLECTION = "tags";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: true };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
@@ -973,6 +974,12 @@ var partnerSchemaSpec = markAsSchemaSpec({
   tag_slugs: {
     _type: "array",
     of: z.string(),
+    nullable: true,
+    optional: true
+  },
+  tag_references: {
+    _type: "array",
+    of: { _type: "docRef", collection: TAG_COLLECTION },
     nullable: true,
     optional: true
   },
