@@ -8,7 +8,8 @@ import {
     PRICE_LIST_COLLECTION,
     tagModelSpec,
     timestampRequired,
-    timestampNullableOptional
+    timestampNullableOptional,
+    TAG_COLLECTION
 } from './common';
 
 // ===== Helper schemas for nested structures =====
@@ -227,7 +228,8 @@ export const platformSettingsSchema = z.object({
     upgrade_offer: z.object({
         enabled: z.boolean(),
         discount_percentage: z.number().min(0).max(100),
-    }).nullable().optional()
+    }).nullable().optional(),
+    account_manager: z.string().nullable().optional()
 });
 
 // ===== Exportable schema specs =====
@@ -346,7 +348,48 @@ export const platformSettingsSchemaSpec = markAsSchemaSpec({
         of: agentSignupSettingsSchema.shape,
         nullable: true,
         optional: true
-    }
+    },
+    brevo: {
+        _type: 'object' as const,
+        of: {
+            list_ids: z.array(z.number()),
+            campaign_mode: z.boolean()
+        },
+        nullable: true,
+        optional: true
+    },
+    upgrade_offer: {
+        _type: 'object' as const,
+        of: {
+            enabled: z.boolean(),
+            discount_percentage: z.number().min(0).max(100)
+        },
+        nullable: true,
+        optional: true
+    },
+    emit_events: {
+        _type: 'object' as const,
+        of: emitEventSchema.shape,
+        nullable: true,
+        optional: true
+    },
+    visual_identity_options: {
+        _type: 'object' as const,
+        of: {
+            hubby_branding: z.boolean().optional().default(true),
+            source_partner_branding: z.boolean().optional().default(false),
+            own_branding: z.boolean().optional().default(false)
+        },
+        nullable: true,
+        optional: true
+    },
+    account_manager: { 
+        _type: 'docRef' as const, 
+        collection: USER_COLLECTION, 
+        nullable: true, 
+        optional: true 
+    },
+    sales_partner: z.string().nullable().optional()
 });
 
 // Webhook settings schema
@@ -410,11 +453,7 @@ export const partnerSchemaSpec = markAsSchemaSpec({
     },
 
     // Platform settings
-    platform_settings: {
-        _type: 'object' as const,
-        of: platformSettingsSchema.shape,
-        nullable: true
-    },
+    platform_settings: platformSettingsSchemaSpec,
 
     // Tags
     tags: {
@@ -428,6 +467,13 @@ export const partnerSchemaSpec = markAsSchemaSpec({
     tag_slugs: {
         _type: 'array' as const,
         of: z.string(),
+        nullable: true,
+        optional: true
+    },
+
+    tag_references: {
+        _type: 'array' as const,
+        of: { _type: 'docRef' as const, collection: TAG_COLLECTION },
         nullable: true,
         optional: true
     },

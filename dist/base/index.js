@@ -162,6 +162,7 @@ var BOOKING_COLLECTION = "bookings";
 var ROLE_COLLECTION = "roles";
 var PERMISSION_COLLECTION = "permissions";
 var TRAFFIC_POLICY_COLLECTION = "traffic_policies";
+var TAG_COLLECTION = "tags";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: true };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
@@ -177,7 +178,9 @@ var tagModelSpec = {
   slug: z.string(),
   name: z.string(),
   description: z.string().nullable().optional(),
-  color: z.string().nullable().optional()
+  color: z.string().nullable().optional(),
+  type: z.string().nullable().optional()
+  // can be 'partner', 'booking' etc...
 };
 
 // src/specs/user.ts
@@ -789,7 +792,8 @@ var platformSettingsSchema = z.object({
   upgrade_offer: z.object({
     enabled: z.boolean(),
     discount_percentage: z.number().min(0).max(100)
-  }).nullable().optional()
+  }).nullable().optional(),
+  account_manager: z.string().nullable().optional()
 });
 markAsSchemaSpec({
   destination: z.string(),
@@ -857,7 +861,7 @@ var financialPropertiesSchemaSpec = markAsSchemaSpec({
     nullable: true
   }
 });
-markAsSchemaSpec({
+var platformSettingsSchemaSpec = markAsSchemaSpec({
   package_strategy: {
     _type: "object",
     of: packageStrategySchema.shape,
@@ -900,7 +904,48 @@ markAsSchemaSpec({
     of: agentSignupSettingsSchema.shape,
     nullable: true,
     optional: true
-  }
+  },
+  brevo: {
+    _type: "object",
+    of: {
+      list_ids: z.array(z.number()),
+      campaign_mode: z.boolean()
+    },
+    nullable: true,
+    optional: true
+  },
+  upgrade_offer: {
+    _type: "object",
+    of: {
+      enabled: z.boolean(),
+      discount_percentage: z.number().min(0).max(100)
+    },
+    nullable: true,
+    optional: true
+  },
+  emit_events: {
+    _type: "object",
+    of: emitEventSchema.shape,
+    nullable: true,
+    optional: true
+  },
+  visual_identity_options: {
+    _type: "object",
+    of: {
+      hubby_branding: z.boolean().optional().default(true),
+      source_partner_branding: z.boolean().optional().default(false),
+      own_branding: z.boolean().optional().default(false)
+    },
+    nullable: true,
+    optional: true
+  },
+  account_manager: {
+    _type: "docRef",
+    collection: USER_COLLECTION,
+    nullable: true,
+    optional: true
+  },
+  sales_partner: z.string().nullable().optional()
 });
 var webhookSettingsSchema = z.object({
   url: z.string().url().nullable().optional(),
@@ -955,11 +1000,7 @@ var partnerSchemaSpec = markAsSchemaSpec({
     nullable: true
   },
   // Platform settings
-  platform_settings: {
-    _type: "object",
-    of: platformSettingsSchema.shape,
-    nullable: true
-  },
+  platform_settings: platformSettingsSchemaSpec,
   // Tags
   tags: {
     _type: "array",
@@ -971,6 +1012,12 @@ var partnerSchemaSpec = markAsSchemaSpec({
   tag_slugs: {
     _type: "array",
     of: z.string(),
+    nullable: true,
+    optional: true
+  },
+  tag_references: {
+    _type: "array",
+    of: { _type: "docRef", collection: TAG_COLLECTION },
     nullable: true,
     optional: true
   },
@@ -1150,7 +1197,7 @@ var destinationSchemaSpec = markAsSchemaSpec({
 var destinationBundleSchemaSpec = markAsSchemaSpec({
   id: z.string(),
   parent_document_id: z.string(),
-  type: z.enum(["unlimited", "data-limited", "starter"]),
+  type: z.enum(["unlimited", "data-limited", "time-limited", "starter"]),
   label: z.string().nullable().optional(),
   //'5 Days' or '5GB'
   provider: z.enum(["telna", "bondio"]),
@@ -1163,6 +1210,7 @@ var destinationBundleSchemaSpec = markAsSchemaSpec({
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
   //All unlimited packages will have a traffic policy, but this only refers to telna bundles
   traffic_policy: { _type: "docRef", collection: TRAFFIC_POLICY_COLLECTION, nullable: true },
+  throttling: z.number().optional().nullable(),
   b2c_price: z.number(),
   b2b_price: z.number(),
   partner_b2c_price: {
@@ -1220,6 +1268,9 @@ var loginRequestSchemaSpec = markAsSchemaSpec({
   expires_at: timestampRequired
 });
 
+// src/specs/tag.ts
+var tagSchemaSpec = markAsSchemaSpec(tagModelSpec);
+
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
 var HBookingSchema = buildClientSchema(bookingSchemaSpec);
@@ -1244,7 +1295,7 @@ var HFreeEsimSchema = buildClientSchema(freeEsimSchema);
 var HAnalyticsSchema = buildClientSchema(analyticsSpec);
 var HRoleSchema = buildClientSchema(roleSchemaSpec);
 var HPermissionSchema = buildClientSchema(permissionSchemaSpec);
-var HTagSchema = buildClientSchema(tagModelSpec);
+var HTagSchema = buildClientSchema(tagSchemaSpec);
 var HTrafficPolicySchema = buildClientSchema(trafficPolicySpec);
 var HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
 var HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
