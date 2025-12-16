@@ -24,6 +24,7 @@ export const REVIEW_SUBMISSION_COLLECTION = '/companies/hubby/review_submissions
 export const DESTINATION_COLLECTION = 'destinations';
 export const DESTINATION_OFFER_COLLECTION = 'offers';
 export const USER_TOUCHPOINTS_COLLECTION = 'user_touchpoints';
+export const STORE_REVIEW_COLLECTION = 'store_reviews';
 export const TAG_COLLECTION = 'tags';
 
 
