@@ -1025,25 +1025,19 @@ declare const partnerSchemaSpec: {
         nullable: boolean;
     };
     platform_settings: {
-        _type: "object";
-        of: {
-            package_strategy: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        package_strategy: {
+            _type: "object";
+            of: {
                 name: z.ZodString;
                 iso3_white_list: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
                 parameters: z.ZodAny;
-                supported_package_types: z.ZodOptional<z.ZodEnum<["data-limited", "unlimited"]>>;
-            }, "strip", z.ZodTypeAny, {
-                name: string;
-                parameters?: any;
-                iso3_white_list?: string[] | undefined;
-                supported_package_types?: "data-limited" | "unlimited" | undefined;
-            }, {
-                name: string;
-                parameters?: any;
-                iso3_white_list?: string[] | undefined;
-                supported_package_types?: "data-limited" | "unlimited" | undefined;
-            }>>>;
-            free_esim: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            };
+            nullable: boolean;
+            optional: boolean;
+        };
+        free_esim: {
+            _type: "object";
+            of: {
                 enabled: z.ZodBoolean;
                 package_specification: z.ZodObject<{
                     size: z.ZodString;
@@ -1068,178 +1062,83 @@ declare const partnerSchemaSpec: {
                 booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
                 allowance: z.ZodNumber;
                 total_allowance: z.ZodNumber;
-            }, "strip", z.ZodTypeAny, {
-                package_specification: {
-                    destination: string;
-                    size: string;
-                    package_duration: number;
-                    package_type: string;
-                    type?: string | null | undefined;
-                };
-                enabled: boolean;
-                booking_id_verification: boolean;
-                allowance: number;
-                total_allowance: number;
-                booking_id_verification_pattern?: string | null | undefined;
-            }, {
-                package_specification: {
-                    destination: string;
-                    size: string;
-                    package_duration: number;
-                    package_type: string;
-                    type?: string | null | undefined;
-                };
-                enabled: boolean;
-                allowance: number;
-                total_allowance: number;
-                booking_id_verification?: boolean | undefined;
-                booking_id_verification_pattern?: string | null | undefined;
-            }>>>;
-            booking_defaults: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            };
+            nullable: boolean;
+            optional: boolean;
+        };
+        booking_defaults: {
+            _type: "object";
+            of: {
                 locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR"]>;
-            }, "strip", z.ZodTypeAny, {
-                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
-            }, {
-                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
-            }>>>;
-            booking_confirmation: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            };
+            nullable: boolean;
+            optional: boolean;
+        };
+        booking_confirmation: {
+            _type: "object";
+            of: {
                 brevo_template_id: z.ZodNumber;
                 send_booking_confirmation: z.ZodBoolean;
-            }, "strip", z.ZodTypeAny, {
-                brevo_template_id: number;
-                send_booking_confirmation: boolean;
-            }, {
-                brevo_template_id: number;
-                send_booking_confirmation: boolean;
-            }>>>;
-            emit_events: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-                topup: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-                redemption: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-                activation: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-                depletion: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-            }, "strip", z.ZodTypeAny, {
-                topup: boolean;
-                redemption: boolean;
-                activation: boolean;
-                depletion: boolean;
-            }, {
-                topup?: boolean | undefined;
-                redemption?: boolean | undefined;
-                activation?: boolean | undefined;
-                depletion?: boolean | undefined;
-            }>>>;
-            schedules: z.ZodOptional<z.ZodArray<z.ZodObject<{
-                days: z.ZodNumber;
-                email: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-                    brevo_template_id: z.ZodNumber;
-                    subject: z.ZodOptional<z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodString>, Record<string, string>, Record<string, string>>>;
-                    preview_text: z.ZodOptional<z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodString>, Record<string, string>, Record<string, string>>>;
-                }, "strip", z.ZodTypeAny, {
-                    brevo_template_id: number;
-                    subject?: Record<string, string> | undefined;
-                    preview_text?: Record<string, string> | undefined;
-                }, {
-                    brevo_template_id: number;
-                    subject?: Record<string, string> | undefined;
-                    preview_text?: Record<string, string> | undefined;
-                }>>>;
-                push: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-                    title: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
-                    body: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
-                    target: z.ZodString;
-                }, "strip", z.ZodTypeAny, {
-                    target: string;
-                    title?: Record<string, string> | undefined;
-                    body?: Record<string, string> | undefined;
-                }, {
-                    target: string;
-                    title?: Record<string, string> | undefined;
-                    body?: Record<string, string> | undefined;
-                }>>>;
-                hour: z.ZodNumber;
-                key: z.ZodString;
-                method: z.ZodEnum<["email", "sms", "whatsapp", "push"]>;
-                moment: z.ZodEnum<["departure_date", "return_date", "immediate"]>;
-                filter: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-                    type: z.ZodEnum<["iso3", "gender", "percentage", "age"]>;
-                    value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
-                    comparison: z.ZodEnum<["equal", "not_equal", "greater_than", "less_than", "greater_than_or_equal", "less_than_or_equal"]>;
-                }, "strip", z.ZodTypeAny, {
-                    value: string | number;
-                    type: "gender" | "iso3" | "percentage" | "age";
-                    comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-                }, {
-                    value: string | number;
-                    type: "gender" | "iso3" | "percentage" | "age";
-                    comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-                }>>>;
-            }, "strip", z.ZodTypeAny, {
-                key: string;
-                method: "email" | "push" | "sms" | "whatsapp";
-                days: number;
-                hour: number;
-                moment: "departure_date" | "return_date" | "immediate";
-                email?: {
-                    brevo_template_id: number;
-                    subject?: Record<string, string> | undefined;
-                    preview_text?: Record<string, string> | undefined;
-                } | null | undefined;
-                push?: {
-                    target: string;
-                    title?: Record<string, string> | undefined;
-                    body?: Record<string, string> | undefined;
-                } | null | undefined;
-                filter?: {
-                    value: string | number;
-                    type: "gender" | "iso3" | "percentage" | "age";
-                    comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-                } | null | undefined;
-            }, {
-                key: string;
-                method: "email" | "push" | "sms" | "whatsapp";
-                days: number;
-                hour: number;
-                moment: "departure_date" | "return_date" | "immediate";
-                email?: {
-                    brevo_template_id: number;
-                    subject?: Record<string, string> | undefined;
-                    preview_text?: Record<string, string> | undefined;
-                } | null | undefined;
-                push?: {
-                    target: string;
-                    title?: Record<string, string> | undefined;
-                    body?: Record<string, string> | undefined;
-                } | null | undefined;
-                filter?: {
-                    value: string | number;
-                    type: "gender" | "iso3" | "percentage" | "age";
-                    comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
-                } | null | undefined;
-            }>, "many">>;
-            brevo: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-                list_ids: z.ZodArray<z.ZodNumber, "many">;
-                campaign_mode: z.ZodBoolean;
-            }, "strip", z.ZodTypeAny, {
-                list_ids: number[];
-                campaign_mode: boolean;
-            }, {
-                list_ids: number[];
-                campaign_mode: boolean;
-            }>>>;
-            visual_identity_options: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-                hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-                source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-                own_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-            }, "strip", z.ZodTypeAny, {
-                hubby_branding: boolean;
-                source_partner_branding: boolean;
-                own_branding: boolean;
-            }, {
-                hubby_branding?: boolean | undefined;
-                source_partner_branding?: boolean | undefined;
-                own_branding?: boolean | undefined;
-            }>>>;
-            agent_signup_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            };
+            nullable: boolean;
+            optional: boolean;
+        };
+        schedules: {
+            _type: "array";
+            of: {
+                _type: "object";
+                of: {
+                    days: z.ZodNumber;
+                    email: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+                        brevo_template_id: z.ZodNumber;
+                        subject: z.ZodOptional<z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodString>, Record<string, string>, Record<string, string>>>;
+                        preview_text: z.ZodOptional<z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodString>, Record<string, string>, Record<string, string>>>;
+                    }, "strip", z.ZodTypeAny, {
+                        brevo_template_id: number;
+                        subject?: Record<string, string> | undefined;
+                        preview_text?: Record<string, string> | undefined;
+                    }, {
+                        brevo_template_id: number;
+                        subject?: Record<string, string> | undefined;
+                        preview_text?: Record<string, string> | undefined;
+                    }>>>;
+                    push: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+                        title: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+                        body: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
+                        target: z.ZodString;
+                    }, "strip", z.ZodTypeAny, {
+                        target: string;
+                        title?: Record<string, string> | undefined;
+                        body?: Record<string, string> | undefined;
+                    }, {
+                        target: string;
+                        title?: Record<string, string> | undefined;
+                        body?: Record<string, string> | undefined;
+                    }>>>;
+                    hour: z.ZodNumber;
+                    key: z.ZodString;
+                    method: z.ZodEnum<["email", "sms", "whatsapp", "push"]>;
+                    moment: z.ZodEnum<["departure_date", "return_date", "immediate"]>;
+                    filter: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+                        type: z.ZodEnum<["iso3", "gender", "percentage", "age"]>;
+                        value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
+                        comparison: z.ZodEnum<["equal", "not_equal", "greater_than", "less_than", "greater_than_or_equal", "less_than_or_equal"]>;
+                    }, "strip", z.ZodTypeAny, {
+                        value: string | number;
+                        type: "gender" | "iso3" | "percentage" | "age";
+                        comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+                    }, {
+                        value: string | number;
+                        type: "gender" | "iso3" | "percentage" | "age";
+                        comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
+                    }>>>;
+                };
+            };
+            optional: boolean;
+        };
+        agent_signup_settings: {
+            _type: "object";
+            of: {
                 slack_channel: z.ZodOptional<z.ZodNullable<z.ZodString>>;
                 welcome_email_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
                 password_reset_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
@@ -1259,43 +1158,55 @@ declare const partnerSchemaSpec: {
                     source_partner_branding?: boolean | undefined;
                     own_branding?: boolean | undefined;
                 }>>;
-            }, "strip", z.ZodTypeAny, {
-                visual_identity_options: {
-                    hubby_branding: boolean;
-                    source_partner_branding: boolean;
-                    own_branding: boolean;
-                };
-                enable_complimentary_booking: boolean;
-                slack_channel?: string | null | undefined;
-                welcome_email_template?: number | null | undefined;
-                password_reset_template?: number | null | undefined;
-                partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
-                complimentary_booking_partner_id?: string | null | undefined;
-            }, {
-                visual_identity_options?: {
-                    hubby_branding?: boolean | undefined;
-                    source_partner_branding?: boolean | undefined;
-                    own_branding?: boolean | undefined;
-                } | undefined;
-                slack_channel?: string | null | undefined;
-                welcome_email_template?: number | null | undefined;
-                password_reset_template?: number | null | undefined;
-                partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
-                enable_complimentary_booking?: boolean | undefined;
-                complimentary_booking_partner_id?: string | null | undefined;
-            }>>>;
-            upgrade_offer: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            };
+            nullable: boolean;
+            optional: boolean;
+        };
+        brevo: {
+            _type: "object";
+            of: {
+                list_ids: z.ZodArray<z.ZodNumber, "many">;
+                campaign_mode: z.ZodBoolean;
+            };
+            nullable: boolean;
+            optional: boolean;
+        };
+        upgrade_offer: {
+            _type: "object";
+            of: {
                 enabled: z.ZodBoolean;
                 discount_percentage: z.ZodNumber;
-            }, "strip", z.ZodTypeAny, {
-                enabled: boolean;
-                discount_percentage: number;
-            }, {
-                enabled: boolean;
-                discount_percentage: number;
-            }>>>;
+            };
+            nullable: boolean;
+            optional: boolean;
         };
-        nullable: boolean;
+        emit_events: {
+            _type: "object";
+            of: {
+                topup: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+                redemption: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+                activation: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+                depletion: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            };
+            nullable: boolean;
+            optional: boolean;
+        };
+        visual_identity_options: {
+            _type: "object";
+            of: {
+                hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+                source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+                own_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            };
+            nullable: boolean;
+            optional: boolean;
+        };
+        account_manager: {
+            _type: "docRef";
+            collection: string;
+            nullable: boolean;
+            optional: boolean;
+        };
     };
     tags: {
         _type: "array";
@@ -3403,23 +3314,20 @@ declare const HPartnerSchema: z.ZodObject<{
         } | undefined;
     }>;
     platform_settings: z.ZodObject<{
-        package_strategy: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        package_strategy: z.ZodObject<{
             name: z.ZodString;
             iso3_white_list: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             parameters: z.ZodAny;
-            supported_package_types: z.ZodOptional<z.ZodEnum<["data-limited", "unlimited"]>>;
-        }, "strip", z.ZodTypeAny, {
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
             name: string;
             parameters?: any;
             iso3_white_list?: string[] | undefined;
-            supported_package_types?: "data-limited" | "unlimited" | undefined;
         }, {
             name: string;
             parameters?: any;
             iso3_white_list?: string[] | undefined;
-            supported_package_types?: "data-limited" | "unlimited" | undefined;
-        }>>>;
-        free_esim: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        }>;
+        free_esim: z.ZodObject<{
             enabled: z.ZodBoolean;
             package_specification: z.ZodObject<{
                 size: z.ZodString;
@@ -3444,7 +3352,7 @@ declare const HPartnerSchema: z.ZodObject<{
             booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             allowance: z.ZodNumber;
             total_allowance: z.ZodNumber;
-        }, "strip", z.ZodTypeAny, {
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
             package_specification: {
                 destination: string;
                 size: string;
@@ -3470,41 +3378,25 @@ declare const HPartnerSchema: z.ZodObject<{
             total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
-        }>>>;
-        booking_defaults: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        }>;
+        booking_defaults: z.ZodObject<{
             locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR"]>;
-        }, "strip", z.ZodTypeAny, {
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
         }, {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
-        }>>>;
-        booking_confirmation: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        }>;
+        booking_confirmation: z.ZodObject<{
             brevo_template_id: z.ZodNumber;
             send_booking_confirmation: z.ZodBoolean;
-        }, "strip", z.ZodTypeAny, {
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
             brevo_template_id: number;
             send_booking_confirmation: boolean;
         }, {
             brevo_template_id: number;
             send_booking_confirmation: boolean;
-        }>>>;
-        emit_events: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-            topup: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-            redemption: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-            activation: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-            depletion: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-        }, "strip", z.ZodTypeAny, {
-            topup: boolean;
-            redemption: boolean;
-            activation: boolean;
-            depletion: boolean;
-        }, {
-            topup?: boolean | undefined;
-            redemption?: boolean | undefined;
-            activation?: boolean | undefined;
-            depletion?: boolean | undefined;
-        }>>>;
-        schedules: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        }>;
+        schedules: z.ZodArray<z.ZodObject<{
             days: z.ZodNumber;
             email: z.ZodOptional<z.ZodNullable<z.ZodObject<{
                 brevo_template_id: z.ZodNumber;
@@ -3549,7 +3441,7 @@ declare const HPartnerSchema: z.ZodObject<{
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             }>>>;
-        }, "strip", z.ZodTypeAny, {
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
             key: string;
             method: "email" | "push" | "sms" | "whatsapp";
             days: number;
@@ -3591,31 +3483,8 @@ declare const HPartnerSchema: z.ZodObject<{
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
-        }>, "many">>;
-        brevo: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-            list_ids: z.ZodArray<z.ZodNumber, "many">;
-            campaign_mode: z.ZodBoolean;
-        }, "strip", z.ZodTypeAny, {
-            list_ids: number[];
-            campaign_mode: boolean;
-        }, {
-            list_ids: number[];
-            campaign_mode: boolean;
-        }>>>;
-        visual_identity_options: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-            hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-            source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-            own_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-        }, "strip", z.ZodTypeAny, {
-            hubby_branding: boolean;
-            source_partner_branding: boolean;
-            own_branding: boolean;
-        }, {
-            hubby_branding?: boolean | undefined;
-            source_partner_branding?: boolean | undefined;
-            own_branding?: boolean | undefined;
-        }>>>;
-        agent_signup_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        }>, "many">;
+        agent_signup_settings: z.ZodObject<{
             slack_channel: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             welcome_email_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
             password_reset_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
@@ -3635,49 +3504,88 @@ declare const HPartnerSchema: z.ZodObject<{
                 source_partner_branding?: boolean | undefined;
                 own_branding?: boolean | undefined;
             }>>;
-        }, "strip", z.ZodTypeAny, {
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            enable_complimentary_booking: boolean;
             visual_identity_options: {
                 hubby_branding: boolean;
                 source_partner_branding: boolean;
                 own_branding: boolean;
             };
-            enable_complimentary_booking: boolean;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
         }, {
-            visual_identity_options?: {
-                hubby_branding?: boolean | undefined;
-                source_partner_branding?: boolean | undefined;
-                own_branding?: boolean | undefined;
-            } | undefined;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
-        }>>>;
-        upgrade_offer: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            visual_identity_options?: {
+                hubby_branding?: boolean | undefined;
+                source_partner_branding?: boolean | undefined;
+                own_branding?: boolean | undefined;
+            } | undefined;
+        }>;
+        brevo: z.ZodObject<{
+            list_ids: z.ZodArray<z.ZodNumber, "many">;
+            campaign_mode: z.ZodBoolean;
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            list_ids: number[];
+            campaign_mode: boolean;
+        }, {
+            list_ids: number[];
+            campaign_mode: boolean;
+        }>;
+        upgrade_offer: z.ZodObject<{
             enabled: z.ZodBoolean;
             discount_percentage: z.ZodNumber;
-        }, "strip", z.ZodTypeAny, {
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
             enabled: boolean;
             discount_percentage: number;
         }, {
             enabled: boolean;
             discount_percentage: number;
-        }>>>;
+        }>;
+        emit_events: z.ZodObject<{
+            topup: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            redemption: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            activation: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            depletion: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            topup: boolean;
+            redemption: boolean;
+            activation: boolean;
+            depletion: boolean;
+        }, {
+            topup?: boolean | undefined;
+            redemption?: boolean | undefined;
+            activation?: boolean | undefined;
+            depletion?: boolean | undefined;
+        }>;
+        visual_identity_options: z.ZodObject<{
+            hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            own_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        }, {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        }>;
+        account_manager: z.ZodString;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
-        package_strategy?: {
+        package_strategy: {
             name: string;
             parameters?: any;
             iso3_white_list?: string[] | undefined;
-            supported_package_types?: "data-limited" | "unlimited" | undefined;
-        } | null | undefined;
-        free_esim?: {
+        };
+        free_esim: {
             package_specification: {
                 destination: string;
                 size: string;
@@ -3690,21 +3598,15 @@ declare const HPartnerSchema: z.ZodObject<{
             allowance: number;
             total_allowance: number;
             booking_id_verification_pattern?: string | null | undefined;
-        } | null | undefined;
-        booking_defaults?: {
+        };
+        booking_defaults: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
-        } | null | undefined;
-        booking_confirmation?: {
+        };
+        booking_confirmation: {
             brevo_template_id: number;
             send_booking_confirmation: boolean;
-        } | null | undefined;
-        emit_events?: {
-            topup: boolean;
-            redemption: boolean;
-            activation: boolean;
-            depletion: boolean;
-        } | null | undefined;
-        schedules?: {
+        };
+        schedules: {
             key: string;
             method: "email" | "push" | "sms" | "whatsapp";
             days: number;
@@ -3725,41 +3627,47 @@ declare const HPartnerSchema: z.ZodObject<{
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
-        }[] | undefined;
-        brevo?: {
-            list_ids: number[];
-            campaign_mode: boolean;
-        } | null | undefined;
-        visual_identity_options?: {
-            hubby_branding: boolean;
-            source_partner_branding: boolean;
-            own_branding: boolean;
-        } | null | undefined;
-        agent_signup_settings?: {
+        }[];
+        agent_signup_settings: {
+            enable_complimentary_booking: boolean;
             visual_identity_options: {
                 hubby_branding: boolean;
                 source_partner_branding: boolean;
                 own_branding: boolean;
             };
-            enable_complimentary_booking: boolean;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
-        } | null | undefined;
-        upgrade_offer?: {
+        };
+        visual_identity_options: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
             enabled: boolean;
             discount_percentage: number;
-        } | null | undefined;
+        };
+        emit_events: {
+            topup: boolean;
+            redemption: boolean;
+            activation: boolean;
+            depletion: boolean;
+        };
+        account_manager: string;
     }, {
-        package_strategy?: {
+        package_strategy: {
             name: string;
             parameters?: any;
             iso3_white_list?: string[] | undefined;
-            supported_package_types?: "data-limited" | "unlimited" | undefined;
-        } | null | undefined;
-        free_esim?: {
+        };
+        free_esim: {
             package_specification: {
                 destination: string;
                 size: string;
@@ -3772,21 +3680,15 @@ declare const HPartnerSchema: z.ZodObject<{
             total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
-        } | null | undefined;
-        booking_defaults?: {
+        };
+        booking_defaults: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
-        } | null | undefined;
-        booking_confirmation?: {
+        };
+        booking_confirmation: {
             brevo_template_id: number;
             send_booking_confirmation: boolean;
-        } | null | undefined;
-        emit_events?: {
-            topup?: boolean | undefined;
-            redemption?: boolean | undefined;
-            activation?: boolean | undefined;
-            depletion?: boolean | undefined;
-        } | null | undefined;
-        schedules?: {
+        };
+        schedules: {
             key: string;
             method: "email" | "push" | "sms" | "whatsapp";
             days: number;
@@ -3807,33 +3709,40 @@ declare const HPartnerSchema: z.ZodObject<{
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
-        }[] | undefined;
-        brevo?: {
-            list_ids: number[];
-            campaign_mode: boolean;
-        } | null | undefined;
-        visual_identity_options?: {
-            hubby_branding?: boolean | undefined;
-            source_partner_branding?: boolean | undefined;
-            own_branding?: boolean | undefined;
-        } | null | undefined;
-        agent_signup_settings?: {
-            visual_identity_options?: {
-                hubby_branding?: boolean | undefined;
-                source_partner_branding?: boolean | undefined;
-                own_branding?: boolean | undefined;
-            } | undefined;
+        }[];
+        agent_signup_settings: {
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
-        } | null | undefined;
-        upgrade_offer?: {
+            visual_identity_options?: {
+                hubby_branding?: boolean | undefined;
+                source_partner_branding?: boolean | undefined;
+                own_branding?: boolean | undefined;
+            } | undefined;
+        };
+        visual_identity_options: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
             enabled: boolean;
             discount_percentage: number;
-        } | null | undefined;
+        };
+        emit_events: {
+            topup?: boolean | undefined;
+            redemption?: boolean | undefined;
+            activation?: boolean | undefined;
+            depletion?: boolean | undefined;
+        };
+        account_manager: string;
     }>;
     tags: z.ZodArray<z.ZodObject<{
         slug: z.ZodString;
@@ -4009,13 +3918,12 @@ declare const HPartnerSchema: z.ZodObject<{
         } | undefined;
     };
     platform_settings: {
-        package_strategy?: {
+        package_strategy: {
             name: string;
             parameters?: any;
             iso3_white_list?: string[] | undefined;
-            supported_package_types?: "data-limited" | "unlimited" | undefined;
-        } | null | undefined;
-        free_esim?: {
+        };
+        free_esim: {
             package_specification: {
                 destination: string;
                 size: string;
@@ -4028,21 +3936,15 @@ declare const HPartnerSchema: z.ZodObject<{
             allowance: number;
             total_allowance: number;
             booking_id_verification_pattern?: string | null | undefined;
-        } | null | undefined;
-        booking_defaults?: {
+        };
+        booking_defaults: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
-        } | null | undefined;
-        booking_confirmation?: {
+        };
+        booking_confirmation: {
             brevo_template_id: number;
             send_booking_confirmation: boolean;
-        } | null | undefined;
-        emit_events?: {
-            topup: boolean;
-            redemption: boolean;
-            activation: boolean;
-            depletion: boolean;
-        } | null | undefined;
-        schedules?: {
+        };
+        schedules: {
             key: string;
             method: "email" | "push" | "sms" | "whatsapp";
             days: number;
@@ -4063,33 +3965,40 @@ declare const HPartnerSchema: z.ZodObject<{
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
-        }[] | undefined;
-        brevo?: {
-            list_ids: number[];
-            campaign_mode: boolean;
-        } | null | undefined;
-        visual_identity_options?: {
-            hubby_branding: boolean;
-            source_partner_branding: boolean;
-            own_branding: boolean;
-        } | null | undefined;
-        agent_signup_settings?: {
+        }[];
+        agent_signup_settings: {
+            enable_complimentary_booking: boolean;
             visual_identity_options: {
                 hubby_branding: boolean;
                 source_partner_branding: boolean;
                 own_branding: boolean;
             };
-            enable_complimentary_booking: boolean;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
-        } | null | undefined;
-        upgrade_offer?: {
+        };
+        visual_identity_options: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
             enabled: boolean;
             discount_percentage: number;
-        } | null | undefined;
+        };
+        emit_events: {
+            topup: boolean;
+            redemption: boolean;
+            activation: boolean;
+            depletion: boolean;
+        };
+        account_manager: string;
     };
     tags: {
         name: string;
@@ -4218,13 +4127,12 @@ declare const HPartnerSchema: z.ZodObject<{
         } | undefined;
     };
     platform_settings: {
-        package_strategy?: {
+        package_strategy: {
             name: string;
             parameters?: any;
             iso3_white_list?: string[] | undefined;
-            supported_package_types?: "data-limited" | "unlimited" | undefined;
-        } | null | undefined;
-        free_esim?: {
+        };
+        free_esim: {
             package_specification: {
                 destination: string;
                 size: string;
@@ -4237,21 +4145,15 @@ declare const HPartnerSchema: z.ZodObject<{
             total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
-        } | null | undefined;
-        booking_defaults?: {
+        };
+        booking_defaults: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
-        } | null | undefined;
-        booking_confirmation?: {
+        };
+        booking_confirmation: {
             brevo_template_id: number;
             send_booking_confirmation: boolean;
-        } | null | undefined;
-        emit_events?: {
-            topup?: boolean | undefined;
-            redemption?: boolean | undefined;
-            activation?: boolean | undefined;
-            depletion?: boolean | undefined;
-        } | null | undefined;
-        schedules?: {
+        };
+        schedules: {
             key: string;
             method: "email" | "push" | "sms" | "whatsapp";
             days: number;
@@ -4272,33 +4174,40 @@ declare const HPartnerSchema: z.ZodObject<{
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
-        }[] | undefined;
-        brevo?: {
-            list_ids: number[];
-            campaign_mode: boolean;
-        } | null | undefined;
-        visual_identity_options?: {
-            hubby_branding?: boolean | undefined;
-            source_partner_branding?: boolean | undefined;
-            own_branding?: boolean | undefined;
-        } | null | undefined;
-        agent_signup_settings?: {
-            visual_identity_options?: {
-                hubby_branding?: boolean | undefined;
-                source_partner_branding?: boolean | undefined;
-                own_branding?: boolean | undefined;
-            } | undefined;
+        }[];
+        agent_signup_settings: {
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
-        } | null | undefined;
-        upgrade_offer?: {
+            visual_identity_options?: {
+                hubby_branding?: boolean | undefined;
+                source_partner_branding?: boolean | undefined;
+                own_branding?: boolean | undefined;
+            } | undefined;
+        };
+        visual_identity_options: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
             enabled: boolean;
             discount_percentage: number;
-        } | null | undefined;
+        };
+        emit_events: {
+            topup?: boolean | undefined;
+            redemption?: boolean | undefined;
+            activation?: boolean | undefined;
+            depletion?: boolean | undefined;
+        };
+        account_manager: string;
     };
     tags: {
         name: string;
@@ -5174,23 +5083,20 @@ declare const HPartnerAppSchema: z.ZodObject<{
         } | undefined;
     }>;
     platform_settings: z.ZodObject<{
-        package_strategy: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        package_strategy: z.ZodObject<{
             name: z.ZodString;
             iso3_white_list: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             parameters: z.ZodAny;
-            supported_package_types: z.ZodOptional<z.ZodEnum<["data-limited", "unlimited"]>>;
-        }, "strip", z.ZodTypeAny, {
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
             name: string;
             parameters?: any;
             iso3_white_list?: string[] | undefined;
-            supported_package_types?: "data-limited" | "unlimited" | undefined;
         }, {
             name: string;
             parameters?: any;
             iso3_white_list?: string[] | undefined;
-            supported_package_types?: "data-limited" | "unlimited" | undefined;
-        }>>>;
-        free_esim: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        }>;
+        free_esim: z.ZodObject<{
             enabled: z.ZodBoolean;
             package_specification: z.ZodObject<{
                 size: z.ZodString;
@@ -5215,7 +5121,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             allowance: z.ZodNumber;
             total_allowance: z.ZodNumber;
-        }, "strip", z.ZodTypeAny, {
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
             package_specification: {
                 destination: string;
                 size: string;
@@ -5241,41 +5147,25 @@ declare const HPartnerAppSchema: z.ZodObject<{
             total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
-        }>>>;
-        booking_defaults: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        }>;
+        booking_defaults: z.ZodObject<{
             locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR"]>;
-        }, "strip", z.ZodTypeAny, {
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
         }, {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
-        }>>>;
-        booking_confirmation: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        }>;
+        booking_confirmation: z.ZodObject<{
             brevo_template_id: z.ZodNumber;
             send_booking_confirmation: z.ZodBoolean;
-        }, "strip", z.ZodTypeAny, {
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
             brevo_template_id: number;
             send_booking_confirmation: boolean;
         }, {
             brevo_template_id: number;
             send_booking_confirmation: boolean;
-        }>>>;
-        emit_events: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-            topup: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-            redemption: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-            activation: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-            depletion: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-        }, "strip", z.ZodTypeAny, {
-            topup: boolean;
-            redemption: boolean;
-            activation: boolean;
-            depletion: boolean;
-        }, {
-            topup?: boolean | undefined;
-            redemption?: boolean | undefined;
-            activation?: boolean | undefined;
-            depletion?: boolean | undefined;
-        }>>>;
-        schedules: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        }>;
+        schedules: z.ZodArray<z.ZodObject<{
             days: z.ZodNumber;
             email: z.ZodOptional<z.ZodNullable<z.ZodObject<{
                 brevo_template_id: z.ZodNumber;
@@ -5320,7 +5210,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             }>>>;
-        }, "strip", z.ZodTypeAny, {
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
             key: string;
             method: "email" | "push" | "sms" | "whatsapp";
             days: number;
@@ -5362,31 +5252,8 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
-        }>, "many">>;
-        brevo: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-            list_ids: z.ZodArray<z.ZodNumber, "many">;
-            campaign_mode: z.ZodBoolean;
-        }, "strip", z.ZodTypeAny, {
-            list_ids: number[];
-            campaign_mode: boolean;
-        }, {
-            list_ids: number[];
-            campaign_mode: boolean;
-        }>>>;
-        visual_identity_options: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-            hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-            source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-            own_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-        }, "strip", z.ZodTypeAny, {
-            hubby_branding: boolean;
-            source_partner_branding: boolean;
-            own_branding: boolean;
-        }, {
-            hubby_branding?: boolean | undefined;
-            source_partner_branding?: boolean | undefined;
-            own_branding?: boolean | undefined;
-        }>>>;
-        agent_signup_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        }>, "many">;
+        agent_signup_settings: z.ZodObject<{
             slack_channel: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             welcome_email_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
             password_reset_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
@@ -5406,49 +5273,88 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 source_partner_branding?: boolean | undefined;
                 own_branding?: boolean | undefined;
             }>>;
-        }, "strip", z.ZodTypeAny, {
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            enable_complimentary_booking: boolean;
             visual_identity_options: {
                 hubby_branding: boolean;
                 source_partner_branding: boolean;
                 own_branding: boolean;
             };
-            enable_complimentary_booking: boolean;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
         }, {
-            visual_identity_options?: {
-                hubby_branding?: boolean | undefined;
-                source_partner_branding?: boolean | undefined;
-                own_branding?: boolean | undefined;
-            } | undefined;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
-        }>>>;
-        upgrade_offer: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            visual_identity_options?: {
+                hubby_branding?: boolean | undefined;
+                source_partner_branding?: boolean | undefined;
+                own_branding?: boolean | undefined;
+            } | undefined;
+        }>;
+        brevo: z.ZodObject<{
+            list_ids: z.ZodArray<z.ZodNumber, "many">;
+            campaign_mode: z.ZodBoolean;
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            list_ids: number[];
+            campaign_mode: boolean;
+        }, {
+            list_ids: number[];
+            campaign_mode: boolean;
+        }>;
+        upgrade_offer: z.ZodObject<{
             enabled: z.ZodBoolean;
             discount_percentage: z.ZodNumber;
-        }, "strip", z.ZodTypeAny, {
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
             enabled: boolean;
             discount_percentage: number;
         }, {
             enabled: boolean;
             discount_percentage: number;
-        }>>>;
+        }>;
+        emit_events: z.ZodObject<{
+            topup: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            redemption: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            activation: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            depletion: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            topup: boolean;
+            redemption: boolean;
+            activation: boolean;
+            depletion: boolean;
+        }, {
+            topup?: boolean | undefined;
+            redemption?: boolean | undefined;
+            activation?: boolean | undefined;
+            depletion?: boolean | undefined;
+        }>;
+        visual_identity_options: z.ZodObject<{
+            hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            own_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        }, {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        }>;
+        account_manager: z.ZodString;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
-        package_strategy?: {
+        package_strategy: {
             name: string;
             parameters?: any;
             iso3_white_list?: string[] | undefined;
-            supported_package_types?: "data-limited" | "unlimited" | undefined;
-        } | null | undefined;
-        free_esim?: {
+        };
+        free_esim: {
             package_specification: {
                 destination: string;
                 size: string;
@@ -5461,21 +5367,15 @@ declare const HPartnerAppSchema: z.ZodObject<{
             allowance: number;
             total_allowance: number;
             booking_id_verification_pattern?: string | null | undefined;
-        } | null | undefined;
-        booking_defaults?: {
+        };
+        booking_defaults: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
-        } | null | undefined;
-        booking_confirmation?: {
+        };
+        booking_confirmation: {
             brevo_template_id: number;
             send_booking_confirmation: boolean;
-        } | null | undefined;
-        emit_events?: {
-            topup: boolean;
-            redemption: boolean;
-            activation: boolean;
-            depletion: boolean;
-        } | null | undefined;
-        schedules?: {
+        };
+        schedules: {
             key: string;
             method: "email" | "push" | "sms" | "whatsapp";
             days: number;
@@ -5496,41 +5396,47 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
-        }[] | undefined;
-        brevo?: {
-            list_ids: number[];
-            campaign_mode: boolean;
-        } | null | undefined;
-        visual_identity_options?: {
-            hubby_branding: boolean;
-            source_partner_branding: boolean;
-            own_branding: boolean;
-        } | null | undefined;
-        agent_signup_settings?: {
+        }[];
+        agent_signup_settings: {
+            enable_complimentary_booking: boolean;
             visual_identity_options: {
                 hubby_branding: boolean;
                 source_partner_branding: boolean;
                 own_branding: boolean;
             };
-            enable_complimentary_booking: boolean;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
-        } | null | undefined;
-        upgrade_offer?: {
+        };
+        visual_identity_options: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
             enabled: boolean;
             discount_percentage: number;
-        } | null | undefined;
+        };
+        emit_events: {
+            topup: boolean;
+            redemption: boolean;
+            activation: boolean;
+            depletion: boolean;
+        };
+        account_manager: string;
     }, {
-        package_strategy?: {
+        package_strategy: {
             name: string;
             parameters?: any;
             iso3_white_list?: string[] | undefined;
-            supported_package_types?: "data-limited" | "unlimited" | undefined;
-        } | null | undefined;
-        free_esim?: {
+        };
+        free_esim: {
             package_specification: {
                 destination: string;
                 size: string;
@@ -5543,21 +5449,15 @@ declare const HPartnerAppSchema: z.ZodObject<{
             total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
-        } | null | undefined;
-        booking_defaults?: {
+        };
+        booking_defaults: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
-        } | null | undefined;
-        booking_confirmation?: {
+        };
+        booking_confirmation: {
             brevo_template_id: number;
             send_booking_confirmation: boolean;
-        } | null | undefined;
-        emit_events?: {
-            topup?: boolean | undefined;
-            redemption?: boolean | undefined;
-            activation?: boolean | undefined;
-            depletion?: boolean | undefined;
-        } | null | undefined;
-        schedules?: {
+        };
+        schedules: {
             key: string;
             method: "email" | "push" | "sms" | "whatsapp";
             days: number;
@@ -5578,33 +5478,40 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
-        }[] | undefined;
-        brevo?: {
-            list_ids: number[];
-            campaign_mode: boolean;
-        } | null | undefined;
-        visual_identity_options?: {
-            hubby_branding?: boolean | undefined;
-            source_partner_branding?: boolean | undefined;
-            own_branding?: boolean | undefined;
-        } | null | undefined;
-        agent_signup_settings?: {
-            visual_identity_options?: {
-                hubby_branding?: boolean | undefined;
-                source_partner_branding?: boolean | undefined;
-                own_branding?: boolean | undefined;
-            } | undefined;
+        }[];
+        agent_signup_settings: {
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
-        } | null | undefined;
-        upgrade_offer?: {
+            visual_identity_options?: {
+                hubby_branding?: boolean | undefined;
+                source_partner_branding?: boolean | undefined;
+                own_branding?: boolean | undefined;
+            } | undefined;
+        };
+        visual_identity_options: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
             enabled: boolean;
             discount_percentage: number;
-        } | null | undefined;
+        };
+        emit_events: {
+            topup?: boolean | undefined;
+            redemption?: boolean | undefined;
+            activation?: boolean | undefined;
+            depletion?: boolean | undefined;
+        };
+        account_manager: string;
     }>;
     tags: z.ZodArray<z.ZodObject<{
         slug: z.ZodString;
@@ -5780,13 +5687,12 @@ declare const HPartnerAppSchema: z.ZodObject<{
         } | undefined;
     };
     platform_settings: {
-        package_strategy?: {
+        package_strategy: {
             name: string;
             parameters?: any;
             iso3_white_list?: string[] | undefined;
-            supported_package_types?: "data-limited" | "unlimited" | undefined;
-        } | null | undefined;
-        free_esim?: {
+        };
+        free_esim: {
             package_specification: {
                 destination: string;
                 size: string;
@@ -5799,21 +5705,15 @@ declare const HPartnerAppSchema: z.ZodObject<{
             allowance: number;
             total_allowance: number;
             booking_id_verification_pattern?: string | null | undefined;
-        } | null | undefined;
-        booking_defaults?: {
+        };
+        booking_defaults: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
-        } | null | undefined;
-        booking_confirmation?: {
+        };
+        booking_confirmation: {
             brevo_template_id: number;
             send_booking_confirmation: boolean;
-        } | null | undefined;
-        emit_events?: {
-            topup: boolean;
-            redemption: boolean;
-            activation: boolean;
-            depletion: boolean;
-        } | null | undefined;
-        schedules?: {
+        };
+        schedules: {
             key: string;
             method: "email" | "push" | "sms" | "whatsapp";
             days: number;
@@ -5834,33 +5734,40 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
-        }[] | undefined;
-        brevo?: {
-            list_ids: number[];
-            campaign_mode: boolean;
-        } | null | undefined;
-        visual_identity_options?: {
-            hubby_branding: boolean;
-            source_partner_branding: boolean;
-            own_branding: boolean;
-        } | null | undefined;
-        agent_signup_settings?: {
+        }[];
+        agent_signup_settings: {
+            enable_complimentary_booking: boolean;
             visual_identity_options: {
                 hubby_branding: boolean;
                 source_partner_branding: boolean;
                 own_branding: boolean;
             };
-            enable_complimentary_booking: boolean;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
-        } | null | undefined;
-        upgrade_offer?: {
+        };
+        visual_identity_options: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
             enabled: boolean;
             discount_percentage: number;
-        } | null | undefined;
+        };
+        emit_events: {
+            topup: boolean;
+            redemption: boolean;
+            activation: boolean;
+            depletion: boolean;
+        };
+        account_manager: string;
     };
     tags: {
         name: string;
@@ -5989,13 +5896,12 @@ declare const HPartnerAppSchema: z.ZodObject<{
         } | undefined;
     };
     platform_settings: {
-        package_strategy?: {
+        package_strategy: {
             name: string;
             parameters?: any;
             iso3_white_list?: string[] | undefined;
-            supported_package_types?: "data-limited" | "unlimited" | undefined;
-        } | null | undefined;
-        free_esim?: {
+        };
+        free_esim: {
             package_specification: {
                 destination: string;
                 size: string;
@@ -6008,21 +5914,15 @@ declare const HPartnerAppSchema: z.ZodObject<{
             total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
-        } | null | undefined;
-        booking_defaults?: {
+        };
+        booking_defaults: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
-        } | null | undefined;
-        booking_confirmation?: {
+        };
+        booking_confirmation: {
             brevo_template_id: number;
             send_booking_confirmation: boolean;
-        } | null | undefined;
-        emit_events?: {
-            topup?: boolean | undefined;
-            redemption?: boolean | undefined;
-            activation?: boolean | undefined;
-            depletion?: boolean | undefined;
-        } | null | undefined;
-        schedules?: {
+        };
+        schedules: {
             key: string;
             method: "email" | "push" | "sms" | "whatsapp";
             days: number;
@@ -6043,33 +5943,40 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
-        }[] | undefined;
-        brevo?: {
-            list_ids: number[];
-            campaign_mode: boolean;
-        } | null | undefined;
-        visual_identity_options?: {
-            hubby_branding?: boolean | undefined;
-            source_partner_branding?: boolean | undefined;
-            own_branding?: boolean | undefined;
-        } | null | undefined;
-        agent_signup_settings?: {
-            visual_identity_options?: {
-                hubby_branding?: boolean | undefined;
-                source_partner_branding?: boolean | undefined;
-                own_branding?: boolean | undefined;
-            } | undefined;
+        }[];
+        agent_signup_settings: {
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
-        } | null | undefined;
-        upgrade_offer?: {
+            visual_identity_options?: {
+                hubby_branding?: boolean | undefined;
+                source_partner_branding?: boolean | undefined;
+                own_branding?: boolean | undefined;
+            } | undefined;
+        };
+        visual_identity_options: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
             enabled: boolean;
             discount_percentage: number;
-        } | null | undefined;
+        };
+        emit_events: {
+            topup?: boolean | undefined;
+            redemption?: boolean | undefined;
+            activation?: boolean | undefined;
+            depletion?: boolean | undefined;
+        };
+        account_manager: string;
     };
     tags: {
         name: string;
@@ -6331,29 +6238,29 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             own_branding?: boolean | undefined;
         }>>;
     }, "strip", z.ZodTypeAny, {
+        enable_complimentary_booking: boolean;
         visual_identity_options: {
             hubby_branding: boolean;
             source_partner_branding: boolean;
             own_branding: boolean;
         };
-        enable_complimentary_booking: boolean;
         slack_channel?: string | null | undefined;
         welcome_email_template?: number | null | undefined;
         password_reset_template?: number | null | undefined;
         partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
         complimentary_booking_partner_id?: string | null | undefined;
     }, {
-        visual_identity_options?: {
-            hubby_branding?: boolean | undefined;
-            source_partner_branding?: boolean | undefined;
-            own_branding?: boolean | undefined;
-        } | undefined;
         slack_channel?: string | null | undefined;
         welcome_email_template?: number | null | undefined;
         password_reset_template?: number | null | undefined;
         partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
         enable_complimentary_booking?: boolean | undefined;
         complimentary_booking_partner_id?: string | null | undefined;
+        visual_identity_options?: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        } | undefined;
     }>>>;
     upgrade_offer: z.ZodOptional<z.ZodNullable<z.ZodObject<{
         enabled: z.ZodBoolean;
@@ -6365,6 +6272,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         enabled: boolean;
         discount_percentage: number;
     }>>>;
+    account_manager: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     package_strategy?: {
         name: string;
@@ -6393,12 +6301,6 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         brevo_template_id: number;
         send_booking_confirmation: boolean;
     } | null | undefined;
-    emit_events?: {
-        topup: boolean;
-        redemption: boolean;
-        activation: boolean;
-        depletion: boolean;
-    } | null | undefined;
     schedules?: {
         key: string;
         method: "email" | "push" | "sms" | "whatsapp";
@@ -6421,32 +6323,39 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
         } | null | undefined;
     }[] | undefined;
-    brevo?: {
-        list_ids: number[];
-        campaign_mode: boolean;
-    } | null | undefined;
-    visual_identity_options?: {
-        hubby_branding: boolean;
-        source_partner_branding: boolean;
-        own_branding: boolean;
-    } | null | undefined;
     agent_signup_settings?: {
+        enable_complimentary_booking: boolean;
         visual_identity_options: {
             hubby_branding: boolean;
             source_partner_branding: boolean;
             own_branding: boolean;
         };
-        enable_complimentary_booking: boolean;
         slack_channel?: string | null | undefined;
         welcome_email_template?: number | null | undefined;
         password_reset_template?: number | null | undefined;
         partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
         complimentary_booking_partner_id?: string | null | undefined;
     } | null | undefined;
+    visual_identity_options?: {
+        hubby_branding: boolean;
+        source_partner_branding: boolean;
+        own_branding: boolean;
+    } | null | undefined;
+    brevo?: {
+        list_ids: number[];
+        campaign_mode: boolean;
+    } | null | undefined;
     upgrade_offer?: {
         enabled: boolean;
         discount_percentage: number;
     } | null | undefined;
+    emit_events?: {
+        topup: boolean;
+        redemption: boolean;
+        activation: boolean;
+        depletion: boolean;
+    } | null | undefined;
+    account_manager?: string | null | undefined;
 }, {
     package_strategy?: {
         name: string;
@@ -6475,12 +6384,6 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         brevo_template_id: number;
         send_booking_confirmation: boolean;
     } | null | undefined;
-    emit_events?: {
-        topup?: boolean | undefined;
-        redemption?: boolean | undefined;
-        activation?: boolean | undefined;
-        depletion?: boolean | undefined;
-    } | null | undefined;
     schedules?: {
         key: string;
         method: "email" | "push" | "sms" | "whatsapp";
@@ -6503,32 +6406,39 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
         } | null | undefined;
     }[] | undefined;
-    brevo?: {
-        list_ids: number[];
-        campaign_mode: boolean;
-    } | null | undefined;
-    visual_identity_options?: {
-        hubby_branding?: boolean | undefined;
-        source_partner_branding?: boolean | undefined;
-        own_branding?: boolean | undefined;
-    } | null | undefined;
     agent_signup_settings?: {
-        visual_identity_options?: {
-            hubby_branding?: boolean | undefined;
-            source_partner_branding?: boolean | undefined;
-            own_branding?: boolean | undefined;
-        } | undefined;
         slack_channel?: string | null | undefined;
         welcome_email_template?: number | null | undefined;
         password_reset_template?: number | null | undefined;
         partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
         enable_complimentary_booking?: boolean | undefined;
         complimentary_booking_partner_id?: string | null | undefined;
+        visual_identity_options?: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        } | undefined;
+    } | null | undefined;
+    visual_identity_options?: {
+        hubby_branding?: boolean | undefined;
+        source_partner_branding?: boolean | undefined;
+        own_branding?: boolean | undefined;
+    } | null | undefined;
+    brevo?: {
+        list_ids: number[];
+        campaign_mode: boolean;
     } | null | undefined;
     upgrade_offer?: {
         enabled: boolean;
         discount_percentage: number;
     } | null | undefined;
+    emit_events?: {
+        topup?: boolean | undefined;
+        redemption?: boolean | undefined;
+        activation?: boolean | undefined;
+        depletion?: boolean | undefined;
+    } | null | undefined;
+    account_manager?: string | null | undefined;
 }>;
 declare const HVisualIdentitySchema: z.ZodObject<{
     primary_color: z.ZodString;
@@ -8829,23 +8739,20 @@ declare const partnerAppSchema: z.ZodObject<{
         } | undefined;
     }>;
     platform_settings: z.ZodObject<{
-        package_strategy: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        package_strategy: z.ZodObject<{
             name: z.ZodString;
             iso3_white_list: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             parameters: z.ZodAny;
-            supported_package_types: z.ZodOptional<z.ZodEnum<["data-limited", "unlimited"]>>;
-        }, "strip", z.ZodTypeAny, {
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
             name: string;
             parameters?: any;
             iso3_white_list?: string[] | undefined;
-            supported_package_types?: "data-limited" | "unlimited" | undefined;
         }, {
             name: string;
             parameters?: any;
             iso3_white_list?: string[] | undefined;
-            supported_package_types?: "data-limited" | "unlimited" | undefined;
-        }>>>;
-        free_esim: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        }>;
+        free_esim: z.ZodObject<{
             enabled: z.ZodBoolean;
             package_specification: z.ZodObject<{
                 size: z.ZodString;
@@ -8870,7 +8777,7 @@ declare const partnerAppSchema: z.ZodObject<{
             booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             allowance: z.ZodNumber;
             total_allowance: z.ZodNumber;
-        }, "strip", z.ZodTypeAny, {
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
             package_specification: {
                 destination: string;
                 size: string;
@@ -8896,41 +8803,25 @@ declare const partnerAppSchema: z.ZodObject<{
             total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
-        }>>>;
-        booking_defaults: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        }>;
+        booking_defaults: z.ZodObject<{
             locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR"]>;
-        }, "strip", z.ZodTypeAny, {
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
         }, {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
-        }>>>;
-        booking_confirmation: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        }>;
+        booking_confirmation: z.ZodObject<{
             brevo_template_id: z.ZodNumber;
             send_booking_confirmation: z.ZodBoolean;
-        }, "strip", z.ZodTypeAny, {
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
             brevo_template_id: number;
             send_booking_confirmation: boolean;
         }, {
             brevo_template_id: number;
             send_booking_confirmation: boolean;
-        }>>>;
-        emit_events: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-            topup: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-            redemption: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-            activation: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-            depletion: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-        }, "strip", z.ZodTypeAny, {
-            topup: boolean;
-            redemption: boolean;
-            activation: boolean;
-            depletion: boolean;
-        }, {
-            topup?: boolean | undefined;
-            redemption?: boolean | undefined;
-            activation?: boolean | undefined;
-            depletion?: boolean | undefined;
-        }>>>;
-        schedules: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        }>;
+        schedules: z.ZodArray<z.ZodObject<{
             days: z.ZodNumber;
             email: z.ZodOptional<z.ZodNullable<z.ZodObject<{
                 brevo_template_id: z.ZodNumber;
@@ -8975,7 +8866,7 @@ declare const partnerAppSchema: z.ZodObject<{
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             }>>>;
-        }, "strip", z.ZodTypeAny, {
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
             key: string;
             method: "email" | "push" | "sms" | "whatsapp";
             days: number;
@@ -9017,31 +8908,8 @@ declare const partnerAppSchema: z.ZodObject<{
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
-        }>, "many">>;
-        brevo: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-            list_ids: z.ZodArray<z.ZodNumber, "many">;
-            campaign_mode: z.ZodBoolean;
-        }, "strip", z.ZodTypeAny, {
-            list_ids: number[];
-            campaign_mode: boolean;
-        }, {
-            list_ids: number[];
-            campaign_mode: boolean;
-        }>>>;
-        visual_identity_options: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-            hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-            source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-            own_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-        }, "strip", z.ZodTypeAny, {
-            hubby_branding: boolean;
-            source_partner_branding: boolean;
-            own_branding: boolean;
-        }, {
-            hubby_branding?: boolean | undefined;
-            source_partner_branding?: boolean | undefined;
-            own_branding?: boolean | undefined;
-        }>>>;
-        agent_signup_settings: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        }>, "many">;
+        agent_signup_settings: z.ZodObject<{
             slack_channel: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             welcome_email_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
             password_reset_template: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
@@ -9061,49 +8929,88 @@ declare const partnerAppSchema: z.ZodObject<{
                 source_partner_branding?: boolean | undefined;
                 own_branding?: boolean | undefined;
             }>>;
-        }, "strip", z.ZodTypeAny, {
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            enable_complimentary_booking: boolean;
             visual_identity_options: {
                 hubby_branding: boolean;
                 source_partner_branding: boolean;
                 own_branding: boolean;
             };
-            enable_complimentary_booking: boolean;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
         }, {
-            visual_identity_options?: {
-                hubby_branding?: boolean | undefined;
-                source_partner_branding?: boolean | undefined;
-                own_branding?: boolean | undefined;
-            } | undefined;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
-        }>>>;
-        upgrade_offer: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            visual_identity_options?: {
+                hubby_branding?: boolean | undefined;
+                source_partner_branding?: boolean | undefined;
+                own_branding?: boolean | undefined;
+            } | undefined;
+        }>;
+        brevo: z.ZodObject<{
+            list_ids: z.ZodArray<z.ZodNumber, "many">;
+            campaign_mode: z.ZodBoolean;
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            list_ids: number[];
+            campaign_mode: boolean;
+        }, {
+            list_ids: number[];
+            campaign_mode: boolean;
+        }>;
+        upgrade_offer: z.ZodObject<{
             enabled: z.ZodBoolean;
             discount_percentage: z.ZodNumber;
-        }, "strip", z.ZodTypeAny, {
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
             enabled: boolean;
             discount_percentage: number;
         }, {
             enabled: boolean;
             discount_percentage: number;
-        }>>>;
+        }>;
+        emit_events: z.ZodObject<{
+            topup: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            redemption: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            activation: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            depletion: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            topup: boolean;
+            redemption: boolean;
+            activation: boolean;
+            depletion: boolean;
+        }, {
+            topup?: boolean | undefined;
+            redemption?: boolean | undefined;
+            activation?: boolean | undefined;
+            depletion?: boolean | undefined;
+        }>;
+        visual_identity_options: z.ZodObject<{
+            hubby_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            source_partner_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+            own_branding: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        }, z.UnknownKeysParam, z.ZodTypeAny, {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        }, {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        }>;
+        account_manager: z.ZodString;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
-        package_strategy?: {
+        package_strategy: {
             name: string;
             parameters?: any;
             iso3_white_list?: string[] | undefined;
-            supported_package_types?: "data-limited" | "unlimited" | undefined;
-        } | null | undefined;
-        free_esim?: {
+        };
+        free_esim: {
             package_specification: {
                 destination: string;
                 size: string;
@@ -9116,21 +9023,15 @@ declare const partnerAppSchema: z.ZodObject<{
             allowance: number;
             total_allowance: number;
             booking_id_verification_pattern?: string | null | undefined;
-        } | null | undefined;
-        booking_defaults?: {
+        };
+        booking_defaults: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
-        } | null | undefined;
-        booking_confirmation?: {
+        };
+        booking_confirmation: {
             brevo_template_id: number;
             send_booking_confirmation: boolean;
-        } | null | undefined;
-        emit_events?: {
-            topup: boolean;
-            redemption: boolean;
-            activation: boolean;
-            depletion: boolean;
-        } | null | undefined;
-        schedules?: {
+        };
+        schedules: {
             key: string;
             method: "email" | "push" | "sms" | "whatsapp";
             days: number;
@@ -9151,41 +9052,47 @@ declare const partnerAppSchema: z.ZodObject<{
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
-        }[] | undefined;
-        brevo?: {
-            list_ids: number[];
-            campaign_mode: boolean;
-        } | null | undefined;
-        visual_identity_options?: {
-            hubby_branding: boolean;
-            source_partner_branding: boolean;
-            own_branding: boolean;
-        } | null | undefined;
-        agent_signup_settings?: {
+        }[];
+        agent_signup_settings: {
+            enable_complimentary_booking: boolean;
             visual_identity_options: {
                 hubby_branding: boolean;
                 source_partner_branding: boolean;
                 own_branding: boolean;
             };
-            enable_complimentary_booking: boolean;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
-        } | null | undefined;
-        upgrade_offer?: {
+        };
+        visual_identity_options: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
             enabled: boolean;
             discount_percentage: number;
-        } | null | undefined;
+        };
+        emit_events: {
+            topup: boolean;
+            redemption: boolean;
+            activation: boolean;
+            depletion: boolean;
+        };
+        account_manager: string;
     }, {
-        package_strategy?: {
+        package_strategy: {
             name: string;
             parameters?: any;
             iso3_white_list?: string[] | undefined;
-            supported_package_types?: "data-limited" | "unlimited" | undefined;
-        } | null | undefined;
-        free_esim?: {
+        };
+        free_esim: {
             package_specification: {
                 destination: string;
                 size: string;
@@ -9198,21 +9105,15 @@ declare const partnerAppSchema: z.ZodObject<{
             total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
-        } | null | undefined;
-        booking_defaults?: {
+        };
+        booking_defaults: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
-        } | null | undefined;
-        booking_confirmation?: {
+        };
+        booking_confirmation: {
             brevo_template_id: number;
             send_booking_confirmation: boolean;
-        } | null | undefined;
-        emit_events?: {
-            topup?: boolean | undefined;
-            redemption?: boolean | undefined;
-            activation?: boolean | undefined;
-            depletion?: boolean | undefined;
-        } | null | undefined;
-        schedules?: {
+        };
+        schedules: {
             key: string;
             method: "email" | "push" | "sms" | "whatsapp";
             days: number;
@@ -9233,33 +9134,40 @@ declare const partnerAppSchema: z.ZodObject<{
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
-        }[] | undefined;
-        brevo?: {
-            list_ids: number[];
-            campaign_mode: boolean;
-        } | null | undefined;
-        visual_identity_options?: {
-            hubby_branding?: boolean | undefined;
-            source_partner_branding?: boolean | undefined;
-            own_branding?: boolean | undefined;
-        } | null | undefined;
-        agent_signup_settings?: {
-            visual_identity_options?: {
-                hubby_branding?: boolean | undefined;
-                source_partner_branding?: boolean | undefined;
-                own_branding?: boolean | undefined;
-            } | undefined;
+        }[];
+        agent_signup_settings: {
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
-        } | null | undefined;
-        upgrade_offer?: {
+            visual_identity_options?: {
+                hubby_branding?: boolean | undefined;
+                source_partner_branding?: boolean | undefined;
+                own_branding?: boolean | undefined;
+            } | undefined;
+        };
+        visual_identity_options: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
             enabled: boolean;
             discount_percentage: number;
-        } | null | undefined;
+        };
+        emit_events: {
+            topup?: boolean | undefined;
+            redemption?: boolean | undefined;
+            activation?: boolean | undefined;
+            depletion?: boolean | undefined;
+        };
+        account_manager: string;
     }>;
     tags: z.ZodArray<z.ZodObject<{
         slug: z.ZodString;
@@ -9435,13 +9343,12 @@ declare const partnerAppSchema: z.ZodObject<{
         } | undefined;
     };
     platform_settings: {
-        package_strategy?: {
+        package_strategy: {
             name: string;
             parameters?: any;
             iso3_white_list?: string[] | undefined;
-            supported_package_types?: "data-limited" | "unlimited" | undefined;
-        } | null | undefined;
-        free_esim?: {
+        };
+        free_esim: {
             package_specification: {
                 destination: string;
                 size: string;
@@ -9454,21 +9361,15 @@ declare const partnerAppSchema: z.ZodObject<{
             allowance: number;
             total_allowance: number;
             booking_id_verification_pattern?: string | null | undefined;
-        } | null | undefined;
-        booking_defaults?: {
+        };
+        booking_defaults: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
-        } | null | undefined;
-        booking_confirmation?: {
+        };
+        booking_confirmation: {
             brevo_template_id: number;
             send_booking_confirmation: boolean;
-        } | null | undefined;
-        emit_events?: {
-            topup: boolean;
-            redemption: boolean;
-            activation: boolean;
-            depletion: boolean;
-        } | null | undefined;
-        schedules?: {
+        };
+        schedules: {
             key: string;
             method: "email" | "push" | "sms" | "whatsapp";
             days: number;
@@ -9489,33 +9390,40 @@ declare const partnerAppSchema: z.ZodObject<{
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
-        }[] | undefined;
-        brevo?: {
-            list_ids: number[];
-            campaign_mode: boolean;
-        } | null | undefined;
-        visual_identity_options?: {
-            hubby_branding: boolean;
-            source_partner_branding: boolean;
-            own_branding: boolean;
-        } | null | undefined;
-        agent_signup_settings?: {
+        }[];
+        agent_signup_settings: {
+            enable_complimentary_booking: boolean;
             visual_identity_options: {
                 hubby_branding: boolean;
                 source_partner_branding: boolean;
                 own_branding: boolean;
             };
-            enable_complimentary_booking: boolean;
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
-        } | null | undefined;
-        upgrade_offer?: {
+        };
+        visual_identity_options: {
+            hubby_branding: boolean;
+            source_partner_branding: boolean;
+            own_branding: boolean;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
             enabled: boolean;
             discount_percentage: number;
-        } | null | undefined;
+        };
+        emit_events: {
+            topup: boolean;
+            redemption: boolean;
+            activation: boolean;
+            depletion: boolean;
+        };
+        account_manager: string;
     };
     tags: {
         name: string;
@@ -9644,13 +9552,12 @@ declare const partnerAppSchema: z.ZodObject<{
         } | undefined;
     };
     platform_settings: {
-        package_strategy?: {
+        package_strategy: {
             name: string;
             parameters?: any;
             iso3_white_list?: string[] | undefined;
-            supported_package_types?: "data-limited" | "unlimited" | undefined;
-        } | null | undefined;
-        free_esim?: {
+        };
+        free_esim: {
             package_specification: {
                 destination: string;
                 size: string;
@@ -9663,21 +9570,15 @@ declare const partnerAppSchema: z.ZodObject<{
             total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
-        } | null | undefined;
-        booking_defaults?: {
+        };
+        booking_defaults: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
-        } | null | undefined;
-        booking_confirmation?: {
+        };
+        booking_confirmation: {
             brevo_template_id: number;
             send_booking_confirmation: boolean;
-        } | null | undefined;
-        emit_events?: {
-            topup?: boolean | undefined;
-            redemption?: boolean | undefined;
-            activation?: boolean | undefined;
-            depletion?: boolean | undefined;
-        } | null | undefined;
-        schedules?: {
+        };
+        schedules: {
             key: string;
             method: "email" | "push" | "sms" | "whatsapp";
             days: number;
@@ -9698,33 +9599,40 @@ declare const partnerAppSchema: z.ZodObject<{
                 type: "gender" | "iso3" | "percentage" | "age";
                 comparison: "equal" | "not_equal" | "greater_than" | "less_than" | "greater_than_or_equal" | "less_than_or_equal";
             } | null | undefined;
-        }[] | undefined;
-        brevo?: {
-            list_ids: number[];
-            campaign_mode: boolean;
-        } | null | undefined;
-        visual_identity_options?: {
-            hubby_branding?: boolean | undefined;
-            source_partner_branding?: boolean | undefined;
-            own_branding?: boolean | undefined;
-        } | null | undefined;
-        agent_signup_settings?: {
-            visual_identity_options?: {
-                hubby_branding?: boolean | undefined;
-                source_partner_branding?: boolean | undefined;
-                own_branding?: boolean | undefined;
-            } | undefined;
+        }[];
+        agent_signup_settings: {
             slack_channel?: string | null | undefined;
             welcome_email_template?: number | null | undefined;
             password_reset_template?: number | null | undefined;
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
-        } | null | undefined;
-        upgrade_offer?: {
+            visual_identity_options?: {
+                hubby_branding?: boolean | undefined;
+                source_partner_branding?: boolean | undefined;
+                own_branding?: boolean | undefined;
+            } | undefined;
+        };
+        visual_identity_options: {
+            hubby_branding?: boolean | undefined;
+            source_partner_branding?: boolean | undefined;
+            own_branding?: boolean | undefined;
+        };
+        brevo: {
+            list_ids: number[];
+            campaign_mode: boolean;
+        };
+        upgrade_offer: {
             enabled: boolean;
             discount_percentage: number;
-        } | null | undefined;
+        };
+        emit_events: {
+            topup?: boolean | undefined;
+            redemption?: boolean | undefined;
+            activation?: boolean | undefined;
+            depletion?: boolean | undefined;
+        };
+        account_manager: string;
     };
     tags: {
         name: string;

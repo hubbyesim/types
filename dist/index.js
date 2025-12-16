@@ -829,7 +829,8 @@ var platformSettingsSchema = z.object({
   upgrade_offer: z.object({
     enabled: z.boolean(),
     discount_percentage: z.number().min(0).max(100)
-  }).nullable().optional()
+  }).nullable().optional(),
+  account_manager: z.string().nullable().optional()
 });
 var packagePriceSchemaSpec = markAsSchemaSpec({
   destination: z.string(),
@@ -940,6 +941,46 @@ var platformSettingsSchemaSpec = markAsSchemaSpec({
     of: agentSignupSettingsSchema.shape,
     nullable: true,
     optional: true
+  },
+  brevo: {
+    _type: "object",
+    of: {
+      list_ids: z.array(z.number()),
+      campaign_mode: z.boolean()
+    },
+    nullable: true,
+    optional: true
+  },
+  upgrade_offer: {
+    _type: "object",
+    of: {
+      enabled: z.boolean(),
+      discount_percentage: z.number().min(0).max(100)
+    },
+    nullable: true,
+    optional: true
+  },
+  emit_events: {
+    _type: "object",
+    of: emitEventSchema.shape,
+    nullable: true,
+    optional: true
+  },
+  visual_identity_options: {
+    _type: "object",
+    of: {
+      hubby_branding: z.boolean().optional().default(true),
+      source_partner_branding: z.boolean().optional().default(false),
+      own_branding: z.boolean().optional().default(false)
+    },
+    nullable: true,
+    optional: true
+  },
+  account_manager: {
+    _type: "docRef",
+    collection: USER_COLLECTION,
+    nullable: true,
+    optional: true
   }
 });
 var webhookSettingsSchema = z.object({
@@ -995,11 +1036,7 @@ var partnerSchemaSpec = markAsSchemaSpec({
     nullable: true
   },
   // Platform settings
-  platform_settings: {
-    _type: "object",
-    of: platformSettingsSchema.shape,
-    nullable: true
-  },
+  platform_settings: platformSettingsSchemaSpec,
   // Tags
   tags: {
     _type: "array",

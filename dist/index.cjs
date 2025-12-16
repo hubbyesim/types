@@ -831,7 +831,8 @@ var platformSettingsSchema = zod.z.object({
   upgrade_offer: zod.z.object({
     enabled: zod.z.boolean(),
     discount_percentage: zod.z.number().min(0).max(100)
-  }).nullable().optional()
+  }).nullable().optional(),
+  account_manager: zod.z.string().nullable().optional()
 });
 var packagePriceSchemaSpec = markAsSchemaSpec({
   destination: zod.z.string(),
@@ -942,6 +943,46 @@ var platformSettingsSchemaSpec = markAsSchemaSpec({
     of: agentSignupSettingsSchema.shape,
     nullable: true,
     optional: true
+  },
+  brevo: {
+    _type: "object",
+    of: {
+      list_ids: zod.z.array(zod.z.number()),
+      campaign_mode: zod.z.boolean()
+    },
+    nullable: true,
+    optional: true
+  },
+  upgrade_offer: {
+    _type: "object",
+    of: {
+      enabled: zod.z.boolean(),
+      discount_percentage: zod.z.number().min(0).max(100)
+    },
+    nullable: true,
+    optional: true
+  },
+  emit_events: {
+    _type: "object",
+    of: emitEventSchema.shape,
+    nullable: true,
+    optional: true
+  },
+  visual_identity_options: {
+    _type: "object",
+    of: {
+      hubby_branding: zod.z.boolean().optional().default(true),
+      source_partner_branding: zod.z.boolean().optional().default(false),
+      own_branding: zod.z.boolean().optional().default(false)
+    },
+    nullable: true,
+    optional: true
+  },
+  account_manager: {
+    _type: "docRef",
+    collection: USER_COLLECTION,
+    nullable: true,
+    optional: true
   }
 });
 var webhookSettingsSchema = zod.z.object({
@@ -997,11 +1038,7 @@ var partnerSchemaSpec = markAsSchemaSpec({
     nullable: true
   },
   // Platform settings
-  platform_settings: {
-    _type: "object",
-    of: platformSettingsSchema.shape,
-    nullable: true
-  },
+  platform_settings: platformSettingsSchemaSpec,
   // Tags
   tags: {
     _type: "array",
