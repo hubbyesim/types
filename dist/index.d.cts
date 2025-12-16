@@ -1207,6 +1207,7 @@ declare const partnerSchemaSpec: {
             nullable: boolean;
             optional: boolean;
         };
+        sales_partner: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     };
     tags: {
         _type: "array";
@@ -3580,6 +3581,7 @@ declare const HPartnerSchema: z.ZodObject<{
             own_branding?: boolean | undefined;
         }>;
         account_manager: z.ZodString;
+        sales_partner: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy: {
             name: string;
@@ -3662,6 +3664,7 @@ declare const HPartnerSchema: z.ZodObject<{
             depletion: boolean;
         };
         account_manager: string;
+        sales_partner?: string | null | undefined;
     }, {
         package_strategy: {
             name: string;
@@ -3744,6 +3747,7 @@ declare const HPartnerSchema: z.ZodObject<{
             depletion?: boolean | undefined;
         };
         account_manager: string;
+        sales_partner?: string | null | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
         slug: z.ZodString;
@@ -4000,6 +4004,7 @@ declare const HPartnerSchema: z.ZodObject<{
             depletion: boolean;
         };
         account_manager: string;
+        sales_partner?: string | null | undefined;
     };
     tags: {
         name: string;
@@ -4209,6 +4214,7 @@ declare const HPartnerSchema: z.ZodObject<{
             depletion?: boolean | undefined;
         };
         account_manager: string;
+        sales_partner?: string | null | undefined;
     };
     tags: {
         name: string;
@@ -5349,6 +5355,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             own_branding?: boolean | undefined;
         }>;
         account_manager: z.ZodString;
+        sales_partner: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy: {
             name: string;
@@ -5431,6 +5438,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             depletion: boolean;
         };
         account_manager: string;
+        sales_partner?: string | null | undefined;
     }, {
         package_strategy: {
             name: string;
@@ -5513,6 +5521,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             depletion?: boolean | undefined;
         };
         account_manager: string;
+        sales_partner?: string | null | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
         slug: z.ZodString;
@@ -5769,6 +5778,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             depletion: boolean;
         };
         account_manager: string;
+        sales_partner?: string | null | undefined;
     };
     tags: {
         name: string;
@@ -5978,6 +5988,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             depletion?: boolean | undefined;
         };
         account_manager: string;
+        sales_partner?: string | null | undefined;
     };
     tags: {
         name: string;
@@ -9008,6 +9019,7 @@ declare const partnerAppSchema: z.ZodObject<{
             own_branding?: boolean | undefined;
         }>;
         account_manager: z.ZodString;
+        sales_partner: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy: {
             name: string;
@@ -9090,6 +9102,7 @@ declare const partnerAppSchema: z.ZodObject<{
             depletion: boolean;
         };
         account_manager: string;
+        sales_partner?: string | null | undefined;
     }, {
         package_strategy: {
             name: string;
@@ -9172,6 +9185,7 @@ declare const partnerAppSchema: z.ZodObject<{
             depletion?: boolean | undefined;
         };
         account_manager: string;
+        sales_partner?: string | null | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
         slug: z.ZodString;
@@ -9428,6 +9442,7 @@ declare const partnerAppSchema: z.ZodObject<{
             depletion: boolean;
         };
         account_manager: string;
+        sales_partner?: string | null | undefined;
     };
     tags: {
         name: string;
@@ -9637,6 +9652,7 @@ declare const partnerAppSchema: z.ZodObject<{
             depletion?: boolean | undefined;
         };
         account_manager: string;
+        sales_partner?: string | null | undefined;
     };
     tags: {
         name: string;

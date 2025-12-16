@@ -388,7 +388,8 @@ export const platformSettingsSchemaSpec = markAsSchemaSpec({
         collection: USER_COLLECTION, 
         nullable: true, 
         optional: true 
-    }
+    },
+    sales_partner: z.string().nullable().optional()
 });
 
 // Webhook settings schema

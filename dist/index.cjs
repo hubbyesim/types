@@ -983,7 +983,8 @@ var platformSettingsSchemaSpec = markAsSchemaSpec({
     collection: USER_COLLECTION,
     nullable: true,
     optional: true
-  }
+  },
+  sales_partner: zod.z.string().nullable().optional()
 });
 var webhookSettingsSchema = zod.z.object({
   url: zod.z.string().url().nullable().optional(),
