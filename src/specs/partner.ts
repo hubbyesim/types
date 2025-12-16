@@ -417,8 +417,16 @@ export const partnerSchemaSpec = markAsSchemaSpec({
         nullable: true
     },
 
-    // Tags
+    // Tags (references to tag collection)
     tags: {
+        _type: 'array' as const,
+        of: { _type: 'docRef' as const, collection: TAG_COLLECTION },
+        nullable: true,
+        optional: true
+    },
+
+    // Tags data (actual tag objects)
+    tags_data: {
         _type: 'array' as const,
         of: tagModelSpec,
         nullable: true,
@@ -426,16 +434,9 @@ export const partnerSchemaSpec = markAsSchemaSpec({
     },
 
     // Tag slugs
-    tag_slugs: {
+    tags_slugs: {
         _type: 'array' as const,
         of: z.string(),
-        nullable: true,
-        optional: true
-    },
-
-    tag_references: {
-        _type: 'array' as const,
-        of: { _type: 'docRef' as const, collection: TAG_COLLECTION },
         nullable: true,
         optional: true
     },

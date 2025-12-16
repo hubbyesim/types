@@ -1300,6 +1300,15 @@ declare const partnerSchemaSpec: {
     tags: {
         _type: "array";
         of: {
+            _type: "docRef";
+            collection: string;
+        };
+        nullable: boolean;
+        optional: boolean;
+    };
+    tags_data: {
+        _type: "array";
+        of: {
             slug: z.ZodString;
             name: z.ZodString;
             description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -1332,18 +1341,9 @@ declare const partnerSchemaSpec: {
         nullable: boolean;
         optional: boolean;
     };
-    tag_slugs: {
+    tags_slugs: {
         _type: "array";
         of: z.ZodString;
-        nullable: boolean;
-        optional: boolean;
-    };
-    tag_references: {
-        _type: "array";
-        of: {
-            _type: "docRef";
-            collection: string;
-        };
         nullable: boolean;
         optional: boolean;
     };
@@ -3835,7 +3835,8 @@ declare const HPartnerSchema: z.ZodObject<{
             discount_percentage: number;
         } | null | undefined;
     }>;
-    tags: z.ZodArray<z.ZodObject<{
+    tags: z.ZodArray<z.ZodString, "many">;
+    tags_data: z.ZodArray<z.ZodObject<{
         slug: z.ZodString;
         name: z.ZodString;
         description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -3869,8 +3870,7 @@ declare const HPartnerSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }>, "many">;
-    tag_slugs: z.ZodArray<z.ZodString, "many">;
-    tag_references: z.ZodArray<z.ZodString, "many">;
+    tags_slugs: z.ZodArray<z.ZodString, "many">;
     data: z.ZodObject<{
         source: z.ZodString;
         manual: z.ZodBoolean;
@@ -4091,7 +4091,8 @@ declare const HPartnerSchema: z.ZodObject<{
             discount_percentage: number;
         } | null | undefined;
     };
-    tags: {
+    tags: string[];
+    tags_data: {
         name: string;
         created_at: Date;
         updated_at: Date;
@@ -4103,8 +4104,7 @@ declare const HPartnerSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
-    tag_slugs: string[];
-    tag_references: string[];
+    tags_slugs: string[];
     webhook_settings: {
         enabled: boolean;
         events: {
@@ -4300,7 +4300,8 @@ declare const HPartnerSchema: z.ZodObject<{
             discount_percentage: number;
         } | null | undefined;
     };
-    tags: {
+    tags: string[];
+    tags_data: {
         name: string;
         created_at: Date;
         updated_at: Date;
@@ -4312,8 +4313,7 @@ declare const HPartnerSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
-    tag_slugs: string[];
-    tag_references: string[];
+    tags_slugs: string[];
     webhook_settings: {
         enabled?: boolean | undefined;
         url?: string | null | undefined;
@@ -5606,7 +5606,8 @@ declare const HPartnerAppSchema: z.ZodObject<{
             discount_percentage: number;
         } | null | undefined;
     }>;
-    tags: z.ZodArray<z.ZodObject<{
+    tags: z.ZodArray<z.ZodString, "many">;
+    tags_data: z.ZodArray<z.ZodObject<{
         slug: z.ZodString;
         name: z.ZodString;
         description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -5640,8 +5641,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }>, "many">;
-    tag_slugs: z.ZodArray<z.ZodString, "many">;
-    tag_references: z.ZodArray<z.ZodString, "many">;
+    tags_slugs: z.ZodArray<z.ZodString, "many">;
     data: z.ZodObject<{
         source: z.ZodString;
         manual: z.ZodBoolean;
@@ -5862,7 +5862,8 @@ declare const HPartnerAppSchema: z.ZodObject<{
             discount_percentage: number;
         } | null | undefined;
     };
-    tags: {
+    tags: string[];
+    tags_data: {
         name: string;
         created_at: Date;
         updated_at: Date;
@@ -5874,8 +5875,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
-    tag_slugs: string[];
-    tag_references: string[];
+    tags_slugs: string[];
     webhook_settings: {
         enabled: boolean;
         events: {
@@ -6071,7 +6071,8 @@ declare const HPartnerAppSchema: z.ZodObject<{
             discount_percentage: number;
         } | null | undefined;
     };
-    tags: {
+    tags: string[];
+    tags_data: {
         name: string;
         created_at: Date;
         updated_at: Date;
@@ -6083,8 +6084,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
-    tag_slugs: string[];
-    tag_references: string[];
+    tags_slugs: string[];
     webhook_settings: {
         enabled?: boolean | undefined;
         url?: string | null | undefined;
@@ -9261,7 +9261,8 @@ declare const partnerAppSchema: z.ZodObject<{
             discount_percentage: number;
         } | null | undefined;
     }>;
-    tags: z.ZodArray<z.ZodObject<{
+    tags: z.ZodArray<z.ZodString, "many">;
+    tags_data: z.ZodArray<z.ZodObject<{
         slug: z.ZodString;
         name: z.ZodString;
         description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -9295,8 +9296,7 @@ declare const partnerAppSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }>, "many">;
-    tag_slugs: z.ZodArray<z.ZodString, "many">;
-    tag_references: z.ZodArray<z.ZodString, "many">;
+    tags_slugs: z.ZodArray<z.ZodString, "many">;
     data: z.ZodObject<{
         source: z.ZodString;
         manual: z.ZodBoolean;
@@ -9517,7 +9517,8 @@ declare const partnerAppSchema: z.ZodObject<{
             discount_percentage: number;
         } | null | undefined;
     };
-    tags: {
+    tags: string[];
+    tags_data: {
         name: string;
         created_at: Date;
         updated_at: Date;
@@ -9529,8 +9530,7 @@ declare const partnerAppSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
-    tag_slugs: string[];
-    tag_references: string[];
+    tags_slugs: string[];
     webhook_settings: {
         enabled: boolean;
         events: {
@@ -9726,7 +9726,8 @@ declare const partnerAppSchema: z.ZodObject<{
             discount_percentage: number;
         } | null | undefined;
     };
-    tags: {
+    tags: string[];
+    tags_data: {
         name: string;
         created_at: Date;
         updated_at: Date;
@@ -9738,8 +9739,7 @@ declare const partnerAppSchema: z.ZodObject<{
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
-    tag_slugs: string[];
-    tag_references: string[];
+    tags_slugs: string[];
     webhook_settings: {
         enabled?: boolean | undefined;
         url?: string | null | undefined;

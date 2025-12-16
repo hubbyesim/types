@@ -963,23 +963,24 @@ var partnerSchemaSpec = markAsSchemaSpec({
     of: platformSettingsSchema.shape,
     nullable: true
   },
-  // Tags
+  // Tags (references to tag collection)
   tags: {
+    _type: "array",
+    of: { _type: "docRef", collection: TAG_COLLECTION },
+    nullable: true,
+    optional: true
+  },
+  // Tags data (actual tag objects)
+  tags_data: {
     _type: "array",
     of: tagModelSpec,
     nullable: true,
     optional: true
   },
   // Tag slugs
-  tag_slugs: {
+  tags_slugs: {
     _type: "array",
     of: z.string(),
-    nullable: true,
-    optional: true
-  },
-  tag_references: {
-    _type: "array",
-    of: { _type: "docRef", collection: TAG_COLLECTION },
     nullable: true,
     optional: true
   },
