@@ -1207,7 +1207,7 @@ var destinationSchemaSpec = markAsSchemaSpec({
 var destinationBundleSchemaSpec = markAsSchemaSpec({
   id: zod.z.string(),
   parent_document_id: zod.z.string(),
-  type: zod.z.enum(["unlimited", "data-limited", "starter"]),
+  type: zod.z.enum(["unlimited", "data-limited", "time-limited", "starter"]),
   label: zod.z.string().nullable().optional(),
   //'5 Days' or '5GB'
   provider: zod.z.enum(["telna", "bondio"]),
@@ -1220,6 +1220,7 @@ var destinationBundleSchemaSpec = markAsSchemaSpec({
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
   //All unlimited packages will have a traffic policy, but this only refers to telna bundles
   traffic_policy: { _type: "docRef", collection: TRAFFIC_POLICY_COLLECTION, nullable: true },
+  throttling: zod.z.number().optional().nullable(),
   b2c_price: zod.z.number(),
   b2b_price: zod.z.number(),
   partner_b2c_price: {

@@ -1590,7 +1590,7 @@ declare const destinationSchemaSpec: {
 declare const destinationBundleSchemaSpec: {
     id: z.ZodString;
     parent_document_id: z.ZodString;
-    type: z.ZodEnum<["unlimited", "data-limited", "starter"]>;
+    type: z.ZodEnum<["unlimited", "data-limited", "time-limited", "starter"]>;
     label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     provider: z.ZodEnum<["telna", "bondio"]>;
     duration_in_days: z.ZodNumber;
@@ -1613,6 +1613,7 @@ declare const destinationBundleSchemaSpec: {
         collection: string;
         nullable: boolean;
     };
+    throttling: z.ZodNullable<z.ZodOptional<z.ZodNumber>>;
     b2c_price: z.ZodNumber;
     b2b_price: z.ZodNumber;
     partner_b2c_price: {
@@ -7132,7 +7133,7 @@ declare const HDestinationSchema: z.ZodObject<{
 declare const HDestinationBundleSchema: z.ZodObject<{
     id: z.ZodString;
     parent_document_id: z.ZodString;
-    type: z.ZodEnum<["unlimited", "data-limited", "starter"]>;
+    type: z.ZodEnum<["unlimited", "data-limited", "time-limited", "starter"]>;
     label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     provider: z.ZodEnum<["telna", "bondio"]>;
     duration_in_days: z.ZodNumber;
@@ -7143,6 +7144,7 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     package_template: z.ZodString;
     partner: z.ZodString;
     traffic_policy: z.ZodString;
+    throttling: z.ZodNullable<z.ZodOptional<z.ZodNumber>>;
     b2c_price: z.ZodNumber;
     b2b_price: z.ZodNumber;
     partner_b2c_price: z.ZodRecord<z.ZodString, z.ZodNumber>;
@@ -7163,7 +7165,7 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: "data-limited" | "starter" | "unlimited";
+    type: "data-limited" | "time-limited" | "starter" | "unlimited";
     is_active: boolean;
     traffic_policy: string;
     provider: "telna" | "bondio";
@@ -7183,6 +7185,7 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     deleted_at: Date;
     deleted_by: string | null;
     label?: string | null | undefined;
+    throttling?: number | null | undefined;
 }, {
     id: string;
     partner: string;
@@ -7190,7 +7193,7 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: "data-limited" | "starter" | "unlimited";
+    type: "data-limited" | "time-limited" | "starter" | "unlimited";
     traffic_policy: string;
     provider: "telna" | "bondio";
     parent_document_id: string;
@@ -7209,6 +7212,7 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     is_active?: boolean | undefined;
     label?: string | null | undefined;
     priority?: number | undefined;
+    throttling?: number | null | undefined;
     is_visible?: boolean | undefined;
 }>;
 declare const HPackageTemplateSchema: z.ZodObject<{
@@ -9703,7 +9707,7 @@ declare const destinationAppSchema: z.ZodObject<{
 declare const destinationBundleAppSchema: z.ZodObject<{
     id: z.ZodString;
     parent_document_id: z.ZodString;
-    type: z.ZodEnum<["unlimited", "data-limited", "starter"]>;
+    type: z.ZodEnum<["unlimited", "data-limited", "time-limited", "starter"]>;
     label: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     provider: z.ZodEnum<["telna", "bondio"]>;
     duration_in_days: z.ZodNumber;
@@ -9714,6 +9718,7 @@ declare const destinationBundleAppSchema: z.ZodObject<{
     package_template: z.ZodString;
     partner: z.ZodString;
     traffic_policy: z.ZodString;
+    throttling: z.ZodNullable<z.ZodOptional<z.ZodNumber>>;
     b2c_price: z.ZodNumber;
     b2b_price: z.ZodNumber;
     partner_b2c_price: z.ZodRecord<z.ZodString, z.ZodNumber>;
@@ -9734,7 +9739,7 @@ declare const destinationBundleAppSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: "data-limited" | "starter" | "unlimited";
+    type: "data-limited" | "time-limited" | "starter" | "unlimited";
     is_active: boolean;
     traffic_policy: string;
     provider: "telna" | "bondio";
@@ -9754,6 +9759,7 @@ declare const destinationBundleAppSchema: z.ZodObject<{
     deleted_at: Date;
     deleted_by: string | null;
     label?: string | null | undefined;
+    throttling?: number | null | undefined;
 }, {
     id: string;
     partner: string;
@@ -9761,7 +9767,7 @@ declare const destinationBundleAppSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    type: "data-limited" | "starter" | "unlimited";
+    type: "data-limited" | "time-limited" | "starter" | "unlimited";
     traffic_policy: string;
     provider: "telna" | "bondio";
     parent_document_id: string;
@@ -9780,6 +9786,7 @@ declare const destinationBundleAppSchema: z.ZodObject<{
     is_active?: boolean | undefined;
     label?: string | null | undefined;
     priority?: number | undefined;
+    throttling?: number | null | undefined;
     is_visible?: boolean | undefined;
 }>;
 declare const packageTemplateAppSchema: z.ZodObject<{
