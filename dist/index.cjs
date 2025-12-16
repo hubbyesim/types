@@ -1155,6 +1155,8 @@ var destinationSchemaSpec = markAsSchemaSpec({
   id: zod.z.string(),
   type: zod.z.string(),
   // "country" or region names like "Europe", "Asia", "Middle East"
+  tier: zod.z.number().nullable().optional(),
+  // 1, 2, 3
   iso3s: zod.z.array(zod.z.string()),
   name: zod.z.string(),
   i18n_name: zod.z.record(zod.z.string()),
@@ -1221,6 +1223,9 @@ var packageTemplateSchemaSpec = markAsSchemaSpec({
     nullable: true,
     optional: true
   },
+  size_in_gigabytes: zod.z.number(),
+  tier: zod.z.number().nullable().optional(),
+  // 1, 2, 3
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: zod.z.string().nullable(),

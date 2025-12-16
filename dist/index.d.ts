@@ -1657,6 +1657,7 @@ declare const reviewSubmissionSchemaSpec: {
 declare const destinationSchemaSpec: {
     id: z.ZodString;
     type: z.ZodString;
+    tier: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     iso3s: z.ZodArray<z.ZodString, "many">;
     name: z.ZodString;
     i18n_name: z.ZodRecord<z.ZodString, z.ZodString>;
@@ -1751,6 +1752,8 @@ declare const packageTemplateSchemaSpec: {
         nullable: boolean;
         optional: boolean;
     };
+    size_in_gigabytes: z.ZodNumber;
+    tier: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     created_at: {
         _type: "timestamp";
         nullable: boolean;
@@ -7179,6 +7182,7 @@ declare const HReviewSubmissionSchema: z.ZodObject<{
 declare const HDestinationSchema: z.ZodObject<{
     id: z.ZodString;
     type: z.ZodString;
+    tier: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     iso3s: z.ZodArray<z.ZodString, "many">;
     name: z.ZodString;
     i18n_name: z.ZodRecord<z.ZodString, z.ZodString>;
@@ -7200,6 +7204,7 @@ declare const HDestinationSchema: z.ZodObject<{
     i18n_name: Record<string, string>;
     iso3s: string[];
     sort_order: number;
+    tier?: number | null | undefined;
 }, {
     id: string;
     name: string;
@@ -7212,6 +7217,7 @@ declare const HDestinationSchema: z.ZodObject<{
     i18n_name: Record<string, string>;
     iso3s: string[];
     sort_order: number;
+    tier?: number | null | undefined;
 }>;
 declare const HDestinationBundleSchema: z.ZodObject<{
     id: z.ZodString;
@@ -7303,6 +7309,8 @@ declare const HPackageTemplateSchema: z.ZodObject<{
     external_id: z.ZodString;
     supported_countries: z.ZodArray<z.ZodString, "many">;
     provider_specific_data: z.ZodRecord<z.ZodString, z.ZodAny>;
+    size_in_gigabytes: z.ZodNumber;
+    tier: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodNullable<z.ZodString>;
@@ -7316,9 +7324,11 @@ declare const HPackageTemplateSchema: z.ZodObject<{
     type: string;
     external_id: string;
     provider: string;
+    size_in_gigabytes: number;
     purchase_price: number;
     supported_countries: string[];
     provider_specific_data: Record<string, any>;
+    tier?: number | null | undefined;
 }, {
     id: string;
     created_at: Date;
@@ -7328,9 +7338,11 @@ declare const HPackageTemplateSchema: z.ZodObject<{
     type: string;
     external_id: string;
     provider: string;
+    size_in_gigabytes: number;
     purchase_price: number;
     supported_countries: string[];
     provider_specific_data: Record<string, any>;
+    tier?: number | null | undefined;
 }>;
 declare const HUserTouchpointsSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -9743,6 +9755,7 @@ declare const partnerAppSchema: z.ZodObject<{
 declare const destinationAppSchema: z.ZodObject<{
     id: z.ZodString;
     type: z.ZodString;
+    tier: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     iso3s: z.ZodArray<z.ZodString, "many">;
     name: z.ZodString;
     i18n_name: z.ZodRecord<z.ZodString, z.ZodString>;
@@ -9764,6 +9777,7 @@ declare const destinationAppSchema: z.ZodObject<{
     i18n_name: Record<string, string>;
     iso3s: string[];
     sort_order: number;
+    tier?: number | null | undefined;
 }, {
     id: string;
     name: string;
@@ -9776,6 +9790,7 @@ declare const destinationAppSchema: z.ZodObject<{
     i18n_name: Record<string, string>;
     iso3s: string[];
     sort_order: number;
+    tier?: number | null | undefined;
 }>;
 declare const destinationBundleAppSchema: z.ZodObject<{
     id: z.ZodString;
@@ -9867,6 +9882,8 @@ declare const packageTemplateAppSchema: z.ZodObject<{
     external_id: z.ZodString;
     supported_countries: z.ZodArray<z.ZodString, "many">;
     provider_specific_data: z.ZodRecord<z.ZodString, z.ZodAny>;
+    size_in_gigabytes: z.ZodNumber;
+    tier: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodNullable<z.ZodString>;
@@ -9880,9 +9897,11 @@ declare const packageTemplateAppSchema: z.ZodObject<{
     type: string;
     external_id: string;
     provider: string;
+    size_in_gigabytes: number;
     purchase_price: number;
     supported_countries: string[];
     provider_specific_data: Record<string, any>;
+    tier?: number | null | undefined;
 }, {
     id: string;
     created_at: Date;
@@ -9892,9 +9911,11 @@ declare const packageTemplateAppSchema: z.ZodObject<{
     type: string;
     external_id: string;
     provider: string;
+    size_in_gigabytes: number;
     purchase_price: number;
     supported_countries: string[];
     provider_specific_data: Record<string, any>;
+    tier?: number | null | undefined;
 }>;
 declare const promoPackageSpecificationAppSchema: z.ZodObject<{
     destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;

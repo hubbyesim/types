@@ -12,6 +12,7 @@ import {
 export const destinationSchemaSpec = markAsSchemaSpec({
     id: z.string(),
     type: z.string(), // "country" or region names like "Europe", "Asia", "Middle East"
+    tier: z.number().nullable().optional(), // 1, 2, 3
     iso3s: z.array(z.string()),
     name: z.string(),
     i18n_name: z.record(z.string()),
