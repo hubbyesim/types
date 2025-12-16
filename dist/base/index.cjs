@@ -164,6 +164,7 @@ var BOOKING_COLLECTION = "bookings";
 var ROLE_COLLECTION = "roles";
 var PERMISSION_COLLECTION = "permissions";
 var TRAFFIC_POLICY_COLLECTION = "traffic_policies";
+var TAG_COLLECTION = "tags";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: true };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
@@ -179,7 +180,9 @@ var tagModelSpec = {
   slug: zod.z.string(),
   name: zod.z.string(),
   description: zod.z.string().nullable().optional(),
-  color: zod.z.string().nullable().optional()
+  color: zod.z.string().nullable().optional(),
+  type: zod.z.string().nullable().optional()
+  // can be 'partner', 'booking' etc...
 };
 
 // src/specs/user.ts
@@ -1013,6 +1016,12 @@ var partnerSchemaSpec = markAsSchemaSpec({
     nullable: true,
     optional: true
   },
+  tag_references: {
+    _type: "array",
+    of: { _type: "docRef", collection: TAG_COLLECTION },
+    nullable: true,
+    optional: true
+  },
   // Metadata
   data: {
     _type: "object",
@@ -1171,6 +1180,8 @@ var destinationSchemaSpec = markAsSchemaSpec({
   id: zod.z.string(),
   type: zod.z.string(),
   // "country" or region names like "Europe", "Asia", "Middle East"
+  tier: zod.z.number().nullable().optional(),
+  // 1, 2, 3
   iso3s: zod.z.array(zod.z.string()),
   name: zod.z.string(),
   i18n_name: zod.z.record(zod.z.string()),
@@ -1237,6 +1248,9 @@ var packageTemplateSchemaSpec = markAsSchemaSpec({
     nullable: true,
     optional: true
   },
+  size_in_gigabytes: zod.z.number(),
+  tier: zod.z.number().nullable().optional(),
+  // 1, 2, 3
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: zod.z.string().nullable(),
@@ -1250,6 +1264,9 @@ var loginRequestSchemaSpec = markAsSchemaSpec({
   created_at: timestampRequired,
   expires_at: timestampRequired
 });
+
+// src/specs/tag.ts
+var tagSchemaSpec = markAsSchemaSpec(tagModelSpec);
 
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
@@ -1275,7 +1292,7 @@ var HFreeEsimSchema = buildClientSchema(freeEsimSchema);
 var HAnalyticsSchema = buildClientSchema(analyticsSpec);
 var HRoleSchema = buildClientSchema(roleSchemaSpec);
 var HPermissionSchema = buildClientSchema(permissionSchemaSpec);
-var HTagSchema = buildClientSchema(tagModelSpec);
+var HTagSchema = buildClientSchema(tagSchemaSpec);
 var HTrafficPolicySchema = buildClientSchema(trafficPolicySpec);
 var HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
 var HBondioPackageSchema = buildClientSchema(bondioPackageSchema);

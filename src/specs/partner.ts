@@ -8,7 +8,8 @@ import {
     PRICE_LIST_COLLECTION,
     tagModelSpec,
     timestampRequired,
-    timestampNullableOptional
+    timestampNullableOptional,
+    TAG_COLLECTION
 } from './common';
 
 // ===== Helper schemas for nested structures =====
@@ -465,6 +466,13 @@ export const partnerSchemaSpec = markAsSchemaSpec({
     tag_slugs: {
         _type: 'array' as const,
         of: z.string(),
+        nullable: true,
+        optional: true
+    },
+
+    tag_references: {
+        _type: 'array' as const,
+        of: { _type: 'docRef' as const, collection: TAG_COLLECTION },
         nullable: true,
         optional: true
     },

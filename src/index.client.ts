@@ -11,7 +11,7 @@ import {
   bookingStatusSchema,
   communicationOptionsSchema
 } from './specs/booking';
-import { hubbyModelSpec, tagModelSpec } from './specs/common';
+import { hubbyModelSpec } from './specs/common';
 import { SUPPORTED_LOCALES as LOCALES } from './constants';
 import { countrySchemaSpec } from './specs/country';
 import { currencySchemaSpec } from './specs/currency';
@@ -56,6 +56,7 @@ import {
 import { destinationSchemaSpec, destinationBundleSchemaSpec } from './specs/destination';
 import { packageTemplateSchemaSpec } from './specs/package_template';
 import { loginRequestSchemaSpec } from './specs/login_request';
+import { tagSchemaSpec } from './specs/tag';
 
 
 /** ZOD SCHEMAS */
@@ -82,7 +83,7 @@ export const HFreeEsimSchema = buildClientSchema(freeEsimSchema);
 export const HAnalyticsSchema = buildClientSchema(analyticsSpec);
 export const HRoleSchema = buildClientSchema(roleSchemaSpec);
 export const HPermissionSchema = buildClientSchema(permissionSchemaSpec);
-export const HTagSchema = buildClientSchema(tagModelSpec);
+export const HTagSchema = buildClientSchema(tagSchemaSpec);
 export const HTrafficPolicySchema = buildClientSchema(trafficPolicySpec);
 export const HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
 export const HBondioPackageSchema = buildClientSchema(bondioPackageSchema);

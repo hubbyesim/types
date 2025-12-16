@@ -191,6 +191,7 @@ var REVIEW_SUBMISSION_COLLECTION = "/companies/hubby/review_submissions";
 var DESTINATION_COLLECTION = "destinations";
 var DESTINATION_OFFER_COLLECTION = "offers";
 var USER_TOUCHPOINTS_COLLECTION = "user_touchpoints";
+var TAG_COLLECTION = "tags";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: true };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
@@ -206,7 +207,9 @@ var tagModelSpec = {
   slug: zod.z.string(),
   name: zod.z.string(),
   description: zod.z.string().nullable().optional(),
-  color: zod.z.string().nullable().optional()
+  color: zod.z.string().nullable().optional(),
+  type: zod.z.string().nullable().optional()
+  // can be 'partner', 'booking' etc...
 };
 
 // src/specs/user.ts
@@ -1050,6 +1053,12 @@ var partnerSchemaSpec = markAsSchemaSpec({
     nullable: true,
     optional: true
   },
+  tag_references: {
+    _type: "array",
+    of: { _type: "docRef", collection: TAG_COLLECTION },
+    nullable: true,
+    optional: true
+  },
   // Metadata
   data: {
     _type: "object",
@@ -1183,6 +1192,8 @@ var destinationSchemaSpec = markAsSchemaSpec({
   id: zod.z.string(),
   type: zod.z.string(),
   // "country" or region names like "Europe", "Asia", "Middle East"
+  tier: zod.z.number().nullable().optional(),
+  // 1, 2, 3
   iso3s: zod.z.array(zod.z.string()),
   name: zod.z.string(),
   i18n_name: zod.z.record(zod.z.string()),
@@ -1249,6 +1260,9 @@ var packageTemplateSchemaSpec = markAsSchemaSpec({
     nullable: true,
     optional: true
   },
+  size_in_gigabytes: zod.z.number(),
+  tier: zod.z.number().nullable().optional(),
+  // 1, 2, 3
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: zod.z.string().nullable(),
@@ -1262,6 +1276,9 @@ var loginRequestSchemaSpec = markAsSchemaSpec({
   created_at: timestampRequired,
   expires_at: timestampRequired
 });
+
+// src/specs/tag.ts
+var tagSchemaSpec = markAsSchemaSpec(tagModelSpec);
 function createConvertJSToFirestore(db) {
   return function convertJSToFirestore2(input, spec) {
     if (input === void 0 || input === null)
@@ -1547,7 +1564,7 @@ var HFreeEsimSchema = buildClientSchema(freeEsimSchema);
 var HAnalyticsSchema = buildClientSchema(analyticsSpec);
 var HRoleSchema = buildClientSchema(roleSchemaSpec);
 var HPermissionSchema = buildClientSchema(permissionSchemaSpec);
-var HTagSchema = buildClientSchema(tagModelSpec);
+var HTagSchema = buildClientSchema(tagSchemaSpec);
 var HTrafficPolicySchema = buildClientSchema(trafficPolicySpec);
 var HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
 var HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
@@ -1614,7 +1631,7 @@ var PackagePriceSchema = buildServerSchema(packagePriceSchemaSpec);
 var PlatformSettingsSchema = buildServerSchema(platformSettingsSchemaSpec);
 var ScheduleSchema = buildServerSchema(scheduleSchema);
 var AnalyticsSchema = buildServerSchema(analyticsSpec);
-var TagSchema = buildServerSchema(tagModelSpec);
+var TagSchema = buildServerSchema(tagSchemaSpec);
 var TelnaPackageSchema = buildServerSchema(telnaPackageSchema);
 var BondioPackageSchema = buildServerSchema(bondioPackageSchema);
 var TrafficPolicySchema = buildServerSchema(trafficPolicySpec);
@@ -1787,6 +1804,7 @@ exports.RewardStrategySchema = RewardStrategySchema;
 exports.SUPPORTED_LOCALES = SUPPORTED_LOCALES2;
 exports.ScheduleFilterSchema = ScheduleFilterSchema;
 exports.ScheduleSchema = ScheduleSchema;
+exports.TAG_COLLECTION = TAG_COLLECTION;
 exports.TRAFFIC_POLICY_COLLECTION = TRAFFIC_POLICY_COLLECTION;
 exports.TagSchema = TagSchema;
 exports.TelnaPackageSchema = TelnaPackageSchema;
@@ -1833,6 +1851,7 @@ exports.promoCodeToFirestore = promoCodeToFirestore;
 exports.promoPackageSpecificationAppSchema = promoPackageSpecificationAppSchema;
 exports.reviewSchemaSpec = reviewSchemaSpec;
 exports.reviewSubmissionSchemaSpec = reviewSubmissionSchemaSpec;
+exports.tagSchemaSpec = tagSchemaSpec;
 exports.userFromFirestore = userFromFirestore;
 exports.userSchemaSpec = userSchemaSpec;
 exports.userToFirestore = userToFirestore;
