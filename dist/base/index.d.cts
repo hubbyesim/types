@@ -176,7 +176,7 @@ declare const HBookingSchema: z.ZodObject<{
     first_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     last_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     full_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    pax: z.ZodNumber;
+    pax: z.ZodNullable<z.ZodOptional<z.ZodNumber>>;
     email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     booking_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -275,7 +275,6 @@ declare const HBookingSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    pax: number;
     data: {
         source: string;
         manual: boolean;
@@ -310,6 +309,7 @@ declare const HBookingSchema: z.ZodObject<{
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
+    pax?: number | null | undefined;
     phone?: string | null | undefined;
     booking_id?: string | null | undefined;
     flight_number?: string | undefined;
@@ -332,7 +332,6 @@ declare const HBookingSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    pax: number;
     data: {
         source: string;
         manual: boolean;
@@ -367,6 +366,7 @@ declare const HBookingSchema: z.ZodObject<{
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
+    pax?: number | null | undefined;
     phone?: string | null | undefined;
     booking_id?: string | null | undefined;
     flight_number?: string | undefined;
@@ -2019,6 +2019,7 @@ declare const HPartnerSchema: z.ZodObject<{
         name: z.ZodString;
         description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         color: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         created_at: z.ZodEffects<z.ZodDate, Date, Date>;
         updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -2032,6 +2033,7 @@ declare const HPartnerSchema: z.ZodObject<{
         updated_by: string;
         slug: string;
         id?: string | null | undefined;
+        type?: string | null | undefined;
         description?: string | null | undefined;
         color?: string | null | undefined;
     }, {
@@ -2042,10 +2044,12 @@ declare const HPartnerSchema: z.ZodObject<{
         updated_by: string;
         slug: string;
         id?: string | null | undefined;
+        type?: string | null | undefined;
         description?: string | null | undefined;
         color?: string | null | undefined;
     }>, "many">;
     tag_slugs: z.ZodArray<z.ZodString, "many">;
+    tag_references: z.ZodArray<z.ZodString, "many">;
     data: z.ZodObject<{
         source: z.ZodString;
         manual: z.ZodBoolean;
@@ -2274,10 +2278,12 @@ declare const HPartnerSchema: z.ZodObject<{
         updated_by: string;
         slug: string;
         id?: string | null | undefined;
+        type?: string | null | undefined;
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
     tag_slugs: string[];
+    tag_references: string[];
     webhook_settings: {
         enabled: boolean;
         events: {
@@ -2481,10 +2487,12 @@ declare const HPartnerSchema: z.ZodObject<{
         updated_by: string;
         slug: string;
         id?: string | null | undefined;
+        type?: string | null | undefined;
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
     tag_slugs: string[];
+    tag_references: string[];
     webhook_settings: {
         enabled?: boolean | undefined;
         url?: string | null | undefined;
@@ -3782,6 +3790,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         name: z.ZodString;
         description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         color: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         created_at: z.ZodEffects<z.ZodDate, Date, Date>;
         updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -3795,6 +3804,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         updated_by: string;
         slug: string;
         id?: string | null | undefined;
+        type?: string | null | undefined;
         description?: string | null | undefined;
         color?: string | null | undefined;
     }, {
@@ -3805,10 +3815,12 @@ declare const HPartnerAppSchema: z.ZodObject<{
         updated_by: string;
         slug: string;
         id?: string | null | undefined;
+        type?: string | null | undefined;
         description?: string | null | undefined;
         color?: string | null | undefined;
     }>, "many">;
     tag_slugs: z.ZodArray<z.ZodString, "many">;
+    tag_references: z.ZodArray<z.ZodString, "many">;
     data: z.ZodObject<{
         source: z.ZodString;
         manual: z.ZodBoolean;
@@ -4037,10 +4049,12 @@ declare const HPartnerAppSchema: z.ZodObject<{
         updated_by: string;
         slug: string;
         id?: string | null | undefined;
+        type?: string | null | undefined;
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
     tag_slugs: string[];
+    tag_references: string[];
     webhook_settings: {
         enabled: boolean;
         events: {
@@ -4244,10 +4258,12 @@ declare const HPartnerAppSchema: z.ZodObject<{
         updated_by: string;
         slug: string;
         id?: string | null | undefined;
+        type?: string | null | undefined;
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
     tag_slugs: string[];
+    tag_references: string[];
     webhook_settings: {
         enabled?: boolean | undefined;
         url?: string | null | undefined;
@@ -5065,6 +5081,7 @@ declare const HTagSchema: z.ZodObject<{
     name: z.ZodString;
     description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     color: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -5078,6 +5095,7 @@ declare const HTagSchema: z.ZodObject<{
     updated_by: string;
     slug: string;
     id?: string | null | undefined;
+    type?: string | null | undefined;
     description?: string | null | undefined;
     color?: string | null | undefined;
 }, {
@@ -5088,6 +5106,7 @@ declare const HTagSchema: z.ZodObject<{
     updated_by: string;
     slug: string;
     id?: string | null | undefined;
+    type?: string | null | undefined;
     description?: string | null | undefined;
     color?: string | null | undefined;
 }>;
@@ -5342,6 +5361,7 @@ declare const HReviewSubmissionSchema: z.ZodObject<{
 declare const HDestinationSchema: z.ZodObject<{
     id: z.ZodString;
     type: z.ZodString;
+    tier: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     iso3s: z.ZodArray<z.ZodString, "many">;
     name: z.ZodString;
     i18n_name: z.ZodRecord<z.ZodString, z.ZodString>;
@@ -5363,6 +5383,7 @@ declare const HDestinationSchema: z.ZodObject<{
     i18n_name: Record<string, string>;
     iso3s: string[];
     sort_order: number;
+    tier?: number | null | undefined;
 }, {
     id: string;
     name: string;
@@ -5375,6 +5396,7 @@ declare const HDestinationSchema: z.ZodObject<{
     i18n_name: Record<string, string>;
     iso3s: string[];
     sort_order: number;
+    tier?: number | null | undefined;
 }>;
 declare const HDestinationBundleSchema: z.ZodObject<{
     id: z.ZodString;
@@ -5466,6 +5488,8 @@ declare const HPackageTemplateSchema: z.ZodObject<{
     external_id: z.ZodString;
     supported_countries: z.ZodArray<z.ZodString, "many">;
     provider_specific_data: z.ZodRecord<z.ZodString, z.ZodAny>;
+    size_in_gigabytes: z.ZodNumber;
+    tier: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodNullable<z.ZodString>;
@@ -5479,9 +5503,11 @@ declare const HPackageTemplateSchema: z.ZodObject<{
     type: string;
     external_id: string;
     provider: string;
+    size_in_gigabytes: number;
     purchase_price: number;
     supported_countries: string[];
     provider_specific_data: Record<string, any>;
+    tier?: number | null | undefined;
 }, {
     id: string;
     created_at: Date;
@@ -5491,9 +5517,11 @@ declare const HPackageTemplateSchema: z.ZodObject<{
     type: string;
     external_id: string;
     provider: string;
+    size_in_gigabytes: number;
     purchase_price: number;
     supported_countries: string[];
     provider_specific_data: Record<string, any>;
+    tier?: number | null | undefined;
 }>;
 declare const HUserTouchpointsSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;

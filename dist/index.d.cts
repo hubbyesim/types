@@ -1,3 +1,4 @@
+import * as zod from 'zod';
 import { z } from 'zod';
 import { Firestore, Timestamp, DocumentReference } from 'firebase-admin/firestore';
 
@@ -123,7 +124,7 @@ declare const bookingSchemaSpec: {
     first_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     last_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     full_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    pax: z.ZodNumber;
+    pax: z.ZodNullable<z.ZodOptional<z.ZodNumber>>;
     email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     booking_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -1303,6 +1304,7 @@ declare const partnerSchemaSpec: {
             name: z.ZodString;
             description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             color: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             created_at: {
                 _type: "timestamp";
@@ -1333,6 +1335,15 @@ declare const partnerSchemaSpec: {
     tag_slugs: {
         _type: "array";
         of: z.ZodString;
+        nullable: boolean;
+        optional: boolean;
+    };
+    tag_references: {
+        _type: "array";
+        of: {
+            _type: "docRef";
+            collection: string;
+        };
         nullable: boolean;
         optional: boolean;
     };
@@ -1646,6 +1657,7 @@ declare const reviewSubmissionSchemaSpec: {
 declare const destinationSchemaSpec: {
     id: z.ZodString;
     type: z.ZodString;
+    tier: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     iso3s: z.ZodArray<z.ZodString, "many">;
     name: z.ZodString;
     i18n_name: z.ZodRecord<z.ZodString, z.ZodString>;
@@ -1740,6 +1752,8 @@ declare const packageTemplateSchemaSpec: {
         nullable: boolean;
         optional: boolean;
     };
+    size_in_gigabytes: z.ZodNumber;
+    tier: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     created_at: {
         _type: "timestamp";
         nullable: boolean;
@@ -1771,6 +1785,37 @@ declare const loginRequestSchemaSpec: {
     };
     expires_at: {
         _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+};
+
+declare const tagSchemaSpec: {
+    slug: zod.ZodString;
+    name: zod.ZodString;
+    description: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    color: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    type: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    id: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    created_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    updated_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    created_by: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+        optional: boolean;
+    };
+    updated_by: {
+        _type: "docRef";
+        collection: string;
         nullable: boolean;
         optional: boolean;
     };
@@ -1952,7 +1997,7 @@ declare const HBookingSchema: z.ZodObject<{
     first_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     last_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     full_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    pax: z.ZodNumber;
+    pax: z.ZodNullable<z.ZodOptional<z.ZodNumber>>;
     email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     booking_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -2051,7 +2096,6 @@ declare const HBookingSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    pax: number;
     data: {
         source: string;
         manual: boolean;
@@ -2086,6 +2130,7 @@ declare const HBookingSchema: z.ZodObject<{
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
+    pax?: number | null | undefined;
     phone?: string | null | undefined;
     booking_id?: string | null | undefined;
     flight_number?: string | undefined;
@@ -2108,7 +2153,6 @@ declare const HBookingSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    pax: number;
     data: {
         source: string;
         manual: boolean;
@@ -2143,6 +2187,7 @@ declare const HBookingSchema: z.ZodObject<{
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
+    pax?: number | null | undefined;
     phone?: string | null | undefined;
     booking_id?: string | null | undefined;
     flight_number?: string | undefined;
@@ -3795,6 +3840,7 @@ declare const HPartnerSchema: z.ZodObject<{
         name: z.ZodString;
         description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         color: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         created_at: z.ZodEffects<z.ZodDate, Date, Date>;
         updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -3808,6 +3854,7 @@ declare const HPartnerSchema: z.ZodObject<{
         updated_by: string;
         slug: string;
         id?: string | null | undefined;
+        type?: string | null | undefined;
         description?: string | null | undefined;
         color?: string | null | undefined;
     }, {
@@ -3818,10 +3865,12 @@ declare const HPartnerSchema: z.ZodObject<{
         updated_by: string;
         slug: string;
         id?: string | null | undefined;
+        type?: string | null | undefined;
         description?: string | null | undefined;
         color?: string | null | undefined;
     }>, "many">;
     tag_slugs: z.ZodArray<z.ZodString, "many">;
+    tag_references: z.ZodArray<z.ZodString, "many">;
     data: z.ZodObject<{
         source: z.ZodString;
         manual: z.ZodBoolean;
@@ -4050,10 +4099,12 @@ declare const HPartnerSchema: z.ZodObject<{
         updated_by: string;
         slug: string;
         id?: string | null | undefined;
+        type?: string | null | undefined;
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
     tag_slugs: string[];
+    tag_references: string[];
     webhook_settings: {
         enabled: boolean;
         events: {
@@ -4257,10 +4308,12 @@ declare const HPartnerSchema: z.ZodObject<{
         updated_by: string;
         slug: string;
         id?: string | null | undefined;
+        type?: string | null | undefined;
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
     tag_slugs: string[];
+    tag_references: string[];
     webhook_settings: {
         enabled?: boolean | undefined;
         url?: string | null | undefined;
@@ -5558,6 +5611,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         name: z.ZodString;
         description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         color: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         created_at: z.ZodEffects<z.ZodDate, Date, Date>;
         updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -5571,6 +5625,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         updated_by: string;
         slug: string;
         id?: string | null | undefined;
+        type?: string | null | undefined;
         description?: string | null | undefined;
         color?: string | null | undefined;
     }, {
@@ -5581,10 +5636,12 @@ declare const HPartnerAppSchema: z.ZodObject<{
         updated_by: string;
         slug: string;
         id?: string | null | undefined;
+        type?: string | null | undefined;
         description?: string | null | undefined;
         color?: string | null | undefined;
     }>, "many">;
     tag_slugs: z.ZodArray<z.ZodString, "many">;
+    tag_references: z.ZodArray<z.ZodString, "many">;
     data: z.ZodObject<{
         source: z.ZodString;
         manual: z.ZodBoolean;
@@ -5813,10 +5870,12 @@ declare const HPartnerAppSchema: z.ZodObject<{
         updated_by: string;
         slug: string;
         id?: string | null | undefined;
+        type?: string | null | undefined;
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
     tag_slugs: string[];
+    tag_references: string[];
     webhook_settings: {
         enabled: boolean;
         events: {
@@ -6020,10 +6079,12 @@ declare const HPartnerAppSchema: z.ZodObject<{
         updated_by: string;
         slug: string;
         id?: string | null | undefined;
+        type?: string | null | undefined;
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
     tag_slugs: string[];
+    tag_references: string[];
     webhook_settings: {
         enabled?: boolean | undefined;
         url?: string | null | undefined;
@@ -6841,6 +6902,7 @@ declare const HTagSchema: z.ZodObject<{
     name: z.ZodString;
     description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     color: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -6854,6 +6916,7 @@ declare const HTagSchema: z.ZodObject<{
     updated_by: string;
     slug: string;
     id?: string | null | undefined;
+    type?: string | null | undefined;
     description?: string | null | undefined;
     color?: string | null | undefined;
 }, {
@@ -6864,6 +6927,7 @@ declare const HTagSchema: z.ZodObject<{
     updated_by: string;
     slug: string;
     id?: string | null | undefined;
+    type?: string | null | undefined;
     description?: string | null | undefined;
     color?: string | null | undefined;
 }>;
@@ -7118,6 +7182,7 @@ declare const HReviewSubmissionSchema: z.ZodObject<{
 declare const HDestinationSchema: z.ZodObject<{
     id: z.ZodString;
     type: z.ZodString;
+    tier: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     iso3s: z.ZodArray<z.ZodString, "many">;
     name: z.ZodString;
     i18n_name: z.ZodRecord<z.ZodString, z.ZodString>;
@@ -7139,6 +7204,7 @@ declare const HDestinationSchema: z.ZodObject<{
     i18n_name: Record<string, string>;
     iso3s: string[];
     sort_order: number;
+    tier?: number | null | undefined;
 }, {
     id: string;
     name: string;
@@ -7151,6 +7217,7 @@ declare const HDestinationSchema: z.ZodObject<{
     i18n_name: Record<string, string>;
     iso3s: string[];
     sort_order: number;
+    tier?: number | null | undefined;
 }>;
 declare const HDestinationBundleSchema: z.ZodObject<{
     id: z.ZodString;
@@ -7242,6 +7309,8 @@ declare const HPackageTemplateSchema: z.ZodObject<{
     external_id: z.ZodString;
     supported_countries: z.ZodArray<z.ZodString, "many">;
     provider_specific_data: z.ZodRecord<z.ZodString, z.ZodAny>;
+    size_in_gigabytes: z.ZodNumber;
+    tier: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodNullable<z.ZodString>;
@@ -7255,9 +7324,11 @@ declare const HPackageTemplateSchema: z.ZodObject<{
     type: string;
     external_id: string;
     provider: string;
+    size_in_gigabytes: number;
     purchase_price: number;
     supported_countries: string[];
     provider_specific_data: Record<string, any>;
+    tier?: number | null | undefined;
 }, {
     id: string;
     created_at: Date;
@@ -7267,9 +7338,11 @@ declare const HPackageTemplateSchema: z.ZodObject<{
     type: string;
     external_id: string;
     provider: string;
+    size_in_gigabytes: number;
     purchase_price: number;
     supported_countries: string[];
     provider_specific_data: Record<string, any>;
+    tier?: number | null | undefined;
 }>;
 declare const HUserTouchpointsSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -7705,6 +7778,7 @@ declare const REVIEW_SUBMISSION_COLLECTION = "/companies/hubby/review_submission
 declare const DESTINATION_COLLECTION = "destinations";
 declare const DESTINATION_OFFER_COLLECTION = "offers";
 declare const USER_TOUCHPOINTS_COLLECTION = "user_touchpoints";
+declare const TAG_COLLECTION = "tags";
 
 /** ZOD SCHEMAS */
 declare const UserSchema: z.ZodTypeAny;
@@ -8101,7 +8175,7 @@ declare const bookingAppSchema: z.ZodObject<{
     first_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     last_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     full_name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    pax: z.ZodNumber;
+    pax: z.ZodNullable<z.ZodOptional<z.ZodNumber>>;
     email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     booking_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -8200,7 +8274,6 @@ declare const bookingAppSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    pax: number;
     data: {
         source: string;
         manual: boolean;
@@ -8235,6 +8308,7 @@ declare const bookingAppSchema: z.ZodObject<{
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
+    pax?: number | null | undefined;
     phone?: string | null | undefined;
     booking_id?: string | null | undefined;
     flight_number?: string | undefined;
@@ -8257,7 +8331,6 @@ declare const bookingAppSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    pax: number;
     data: {
         source: string;
         manual: boolean;
@@ -8292,6 +8365,7 @@ declare const bookingAppSchema: z.ZodObject<{
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     full_name?: string | null | undefined;
+    pax?: number | null | undefined;
     phone?: string | null | undefined;
     booking_id?: string | null | undefined;
     flight_number?: string | undefined;
@@ -9192,6 +9266,7 @@ declare const partnerAppSchema: z.ZodObject<{
         name: z.ZodString;
         description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         color: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         created_at: z.ZodEffects<z.ZodDate, Date, Date>;
         updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -9205,6 +9280,7 @@ declare const partnerAppSchema: z.ZodObject<{
         updated_by: string;
         slug: string;
         id?: string | null | undefined;
+        type?: string | null | undefined;
         description?: string | null | undefined;
         color?: string | null | undefined;
     }, {
@@ -9215,10 +9291,12 @@ declare const partnerAppSchema: z.ZodObject<{
         updated_by: string;
         slug: string;
         id?: string | null | undefined;
+        type?: string | null | undefined;
         description?: string | null | undefined;
         color?: string | null | undefined;
     }>, "many">;
     tag_slugs: z.ZodArray<z.ZodString, "many">;
+    tag_references: z.ZodArray<z.ZodString, "many">;
     data: z.ZodObject<{
         source: z.ZodString;
         manual: z.ZodBoolean;
@@ -9447,10 +9525,12 @@ declare const partnerAppSchema: z.ZodObject<{
         updated_by: string;
         slug: string;
         id?: string | null | undefined;
+        type?: string | null | undefined;
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
     tag_slugs: string[];
+    tag_references: string[];
     webhook_settings: {
         enabled: boolean;
         events: {
@@ -9654,10 +9734,12 @@ declare const partnerAppSchema: z.ZodObject<{
         updated_by: string;
         slug: string;
         id?: string | null | undefined;
+        type?: string | null | undefined;
         description?: string | null | undefined;
         color?: string | null | undefined;
     }[];
     tag_slugs: string[];
+    tag_references: string[];
     webhook_settings: {
         enabled?: boolean | undefined;
         url?: string | null | undefined;
@@ -9673,6 +9755,7 @@ declare const partnerAppSchema: z.ZodObject<{
 declare const destinationAppSchema: z.ZodObject<{
     id: z.ZodString;
     type: z.ZodString;
+    tier: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     iso3s: z.ZodArray<z.ZodString, "many">;
     name: z.ZodString;
     i18n_name: z.ZodRecord<z.ZodString, z.ZodString>;
@@ -9694,6 +9777,7 @@ declare const destinationAppSchema: z.ZodObject<{
     i18n_name: Record<string, string>;
     iso3s: string[];
     sort_order: number;
+    tier?: number | null | undefined;
 }, {
     id: string;
     name: string;
@@ -9706,6 +9790,7 @@ declare const destinationAppSchema: z.ZodObject<{
     i18n_name: Record<string, string>;
     iso3s: string[];
     sort_order: number;
+    tier?: number | null | undefined;
 }>;
 declare const destinationBundleAppSchema: z.ZodObject<{
     id: z.ZodString;
@@ -9797,6 +9882,8 @@ declare const packageTemplateAppSchema: z.ZodObject<{
     external_id: z.ZodString;
     supported_countries: z.ZodArray<z.ZodString, "many">;
     provider_specific_data: z.ZodRecord<z.ZodString, z.ZodAny>;
+    size_in_gigabytes: z.ZodNumber;
+    tier: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodNullable<z.ZodString>;
@@ -9810,9 +9897,11 @@ declare const packageTemplateAppSchema: z.ZodObject<{
     type: string;
     external_id: string;
     provider: string;
+    size_in_gigabytes: number;
     purchase_price: number;
     supported_countries: string[];
     provider_specific_data: Record<string, any>;
+    tier?: number | null | undefined;
 }, {
     id: string;
     created_at: Date;
@@ -9822,9 +9911,11 @@ declare const packageTemplateAppSchema: z.ZodObject<{
     type: string;
     external_id: string;
     provider: string;
+    size_in_gigabytes: number;
     purchase_price: number;
     supported_countries: string[];
     provider_specific_data: Record<string, any>;
+    tier?: number | null | undefined;
 }>;
 declare const promoPackageSpecificationAppSchema: z.ZodObject<{
     destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
@@ -9860,4 +9951,4 @@ declare const promoPackageSpecificationAppSchema: z.ZodObject<{
 type SupportedLocales = typeof SUPPORTED_LOCALES$1[number];
 declare const SUPPORTED_LOCALES: readonly ["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR"];
 
-export { API_LOG_COLLECTION, Address, AddressSchema, Analytics, AnalyticsSchema, ApiLog, ApiLogApiRequest, ApiLogApiResponse, ApiLogSchema, BOOKING_COLLECTION, BankingDetails, BankingDetailsSchema, BaseReward, BaseRewardSchema, BondioPackage, BondioPackageSchema, Booking, BookingApiRequest, BookingApiResponse, BookingSchema, BookingStatus, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannel, CommunicationChannelSchema, CommunicationOptions, CommunicationOptionsSchema, Country, CountrySchema, Currency, CurrencySchema, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, Destination, DestinationBundle, DestinationBundleSchema, DestinationSchema, ESIM, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBaseReward, HBaseRewardSchema, HBondioPackage, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HDestination, HDestinationBundle, HDestinationBundleSchema, HDestinationSchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HLoginRequest, HLoginRequestSchema, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPackageTemplate, HPackageTemplateSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HReview, HReviewSchema, HReviewSubmission, HReviewSubmissionSchema, HRewardMultipliers, HRewardMultipliersSchema, HRewardPackageType, HRewardPackageTypeSchema, HRewardStrategy, HRewardStrategySchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HUserTouchpoints, HUserTouchpointsSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModel, HubbyModelApp, HubbyModelFirestore, HubbyModelSchema, LoginRequest, LoginRequestSchema, MESSAGE_COLLECTION, Message, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, Package, PackagePrice, PackagePriceSchema, PackageSchema, PackageSpecification, PackageTemplate, PackageTemplateSchema, Partner, PartnerApiRequest, PartnerApiResponse, PartnerContact, PartnerContactSchema, PartnerData, PartnerDataSchema, PartnerPackageSpecification, PartnerPackageSpecificationSchema, PartnerSchema, Payment, PaymentSchema, PlatformSettings, PlatformSettingsSchema, PriceList, PriceListApiRequest, PriceListApiResponse, PriceListSchema, PromoCode, PromoCodeSchema, PromoPackageSpecificationSchema, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, ROLE_COLLECTION, Registration, RegistrationSchema, Review, ReviewSchema, ReviewSubmission, ReviewSubmissionSchema, RewardMultipliers, RewardMultipliersSchema, RewardPackageType, RewardPackageTypeSchema, RewardStrategy, RewardStrategySchema, SUPPORTED_LOCALES, Schedule, ScheduleFilter, ScheduleFilterSchema, ScheduleSchema, SupportedLocales, TRAFFIC_POLICY_COLLECTION, Tag, TagSchema, TelnaPackage, TelnaPackageSchema, TrafficPolicy, TrafficPolicySchema, USER_COLLECTION, USER_TOUCHPOINTS_COLLECTION, User, UserFirestore, UserFirestoreSchema, UserSchema, UserTouchpoints, UserTouchpointsSchema, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerSchema, VisualIdentityBannerStrategy, VisualIdentityBanners, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, apiLogSchemaSpec, bookingAppSchema, bookingSchemaSpec, countrySchemaSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, currencySchemaSpec, destinationAppSchema, destinationBundleAppSchema, destinationBundleSchemaSpec, destinationSchemaSpec, esimSchemaSpec, loginRequestSchemaSpec, messageSchemaSpec, packageSchemaSpec, packageTemplateAppSchema, packageTemplateSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, paymentSchemaSpec, priceListFromFirestore, priceListSchemaSpec, priceListToFirestore, promoCodeFromFirestore, promoCodeSchemaSpec, promoCodeToFirestore, promoPackageSpecificationAppSchema, reviewSchemaSpec, reviewSubmissionSchemaSpec, userFromFirestore, userSchemaSpec, userToFirestore, userTouchpointsFromFirestore, userTouchpointsSchemaSpec, userTouchpointsToFirestore };
+export { API_LOG_COLLECTION, Address, AddressSchema, Analytics, AnalyticsSchema, ApiLog, ApiLogApiRequest, ApiLogApiResponse, ApiLogSchema, BOOKING_COLLECTION, BankingDetails, BankingDetailsSchema, BaseReward, BaseRewardSchema, BondioPackage, BondioPackageSchema, Booking, BookingApiRequest, BookingApiResponse, BookingSchema, BookingStatus, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannel, CommunicationChannelSchema, CommunicationOptions, CommunicationOptionsSchema, Country, CountrySchema, Currency, CurrencySchema, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, Destination, DestinationBundle, DestinationBundleSchema, DestinationSchema, ESIM, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBaseReward, HBaseRewardSchema, HBondioPackage, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HDestination, HDestinationBundle, HDestinationBundleSchema, HDestinationSchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HLoginRequest, HLoginRequestSchema, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPackageTemplate, HPackageTemplateSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HReview, HReviewSchema, HReviewSubmission, HReviewSubmissionSchema, HRewardMultipliers, HRewardMultipliersSchema, HRewardPackageType, HRewardPackageTypeSchema, HRewardStrategy, HRewardStrategySchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HUserTouchpoints, HUserTouchpointsSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModel, HubbyModelApp, HubbyModelFirestore, HubbyModelSchema, LoginRequest, LoginRequestSchema, MESSAGE_COLLECTION, Message, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, Package, PackagePrice, PackagePriceSchema, PackageSchema, PackageSpecification, PackageTemplate, PackageTemplateSchema, Partner, PartnerApiRequest, PartnerApiResponse, PartnerContact, PartnerContactSchema, PartnerData, PartnerDataSchema, PartnerPackageSpecification, PartnerPackageSpecificationSchema, PartnerSchema, Payment, PaymentSchema, PlatformSettings, PlatformSettingsSchema, PriceList, PriceListApiRequest, PriceListApiResponse, PriceListSchema, PromoCode, PromoCodeSchema, PromoPackageSpecificationSchema, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, ROLE_COLLECTION, Registration, RegistrationSchema, Review, ReviewSchema, ReviewSubmission, ReviewSubmissionSchema, RewardMultipliers, RewardMultipliersSchema, RewardPackageType, RewardPackageTypeSchema, RewardStrategy, RewardStrategySchema, SUPPORTED_LOCALES, Schedule, ScheduleFilter, ScheduleFilterSchema, ScheduleSchema, SupportedLocales, TAG_COLLECTION, TRAFFIC_POLICY_COLLECTION, Tag, TagSchema, TelnaPackage, TelnaPackageSchema, TrafficPolicy, TrafficPolicySchema, USER_COLLECTION, USER_TOUCHPOINTS_COLLECTION, User, UserFirestore, UserFirestoreSchema, UserSchema, UserTouchpoints, UserTouchpointsSchema, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerSchema, VisualIdentityBannerStrategy, VisualIdentityBanners, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, apiLogSchemaSpec, bookingAppSchema, bookingSchemaSpec, countrySchemaSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, currencySchemaSpec, destinationAppSchema, destinationBundleAppSchema, destinationBundleSchemaSpec, destinationSchemaSpec, esimSchemaSpec, loginRequestSchemaSpec, messageSchemaSpec, packageSchemaSpec, packageTemplateAppSchema, packageTemplateSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, paymentSchemaSpec, priceListFromFirestore, priceListSchemaSpec, priceListToFirestore, promoCodeFromFirestore, promoCodeSchemaSpec, promoCodeToFirestore, promoPackageSpecificationAppSchema, reviewSchemaSpec, reviewSubmissionSchemaSpec, tagSchemaSpec, userFromFirestore, userSchemaSpec, userToFirestore, userTouchpointsFromFirestore, userTouchpointsSchemaSpec, userTouchpointsToFirestore };
