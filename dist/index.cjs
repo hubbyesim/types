@@ -878,6 +878,7 @@ var financialPropertiesSchemaSpec = markAsSchemaSpec({
       user: {
         _type: "object",
         of: {
+          lifetime_discount_percentage: zod.z.number().optional().nullable(),
           modification_percentage: zod.z.number(),
           default_price_list: { _type: "docRef", collection: PRICE_LIST_COLLECTION, nullable: true },
           custom_prices: {

@@ -1271,6 +1271,7 @@ declare const HPartnerSchema: z.ZodObject<{
                 }[];
             }>;
             user: z.ZodObject<{
+                lifetime_discount_percentage: z.ZodNullable<z.ZodOptional<z.ZodNumber>>;
                 modification_percentage: z.ZodNumber;
                 default_price_list: z.ZodString;
                 custom_prices: z.ZodArray<z.ZodObject<{
@@ -1302,6 +1303,7 @@ declare const HPartnerSchema: z.ZodObject<{
                     package: string;
                     label: string;
                 }[];
+                lifetime_discount_percentage?: number | null | undefined;
             }, {
                 modification_percentage: number;
                 default_price_list: string;
@@ -1312,6 +1314,7 @@ declare const HPartnerSchema: z.ZodObject<{
                     package: string;
                     label: string;
                 }[];
+                lifetime_discount_percentage?: number | null | undefined;
             }>;
         }, z.UnknownKeysParam, z.ZodTypeAny, {
             partner: {
@@ -1336,6 +1339,7 @@ declare const HPartnerSchema: z.ZodObject<{
                     package: string;
                     label: string;
                 }[];
+                lifetime_discount_percentage?: number | null | undefined;
             };
         }, {
             partner: {
@@ -1360,6 +1364,7 @@ declare const HPartnerSchema: z.ZodObject<{
                     package: string;
                     label: string;
                 }[];
+                lifetime_discount_percentage?: number | null | undefined;
             };
         }>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
@@ -1392,6 +1397,7 @@ declare const HPartnerSchema: z.ZodObject<{
                     package: string;
                     label: string;
                 }[];
+                lifetime_discount_percentage?: number | null | undefined;
             };
         };
         commission_fee?: number | null | undefined;
@@ -1426,6 +1432,7 @@ declare const HPartnerSchema: z.ZodObject<{
                     package: string;
                     label: string;
                 }[];
+                lifetime_discount_percentage?: number | null | undefined;
             };
         };
         commission_fee?: number | null | undefined;
@@ -2155,6 +2162,7 @@ declare const HPartnerSchema: z.ZodObject<{
                     package: string;
                     label: string;
                 }[];
+                lifetime_discount_percentage?: number | null | undefined;
             };
         };
         commission_fee?: number | null | undefined;
@@ -2365,6 +2373,7 @@ declare const HPartnerSchema: z.ZodObject<{
                     package: string;
                     label: string;
                 }[];
+                lifetime_discount_percentage?: number | null | undefined;
             };
         };
         commission_fee?: number | null | undefined;
@@ -2662,6 +2671,7 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
             }[];
         }>;
         user: z.ZodObject<{
+            lifetime_discount_percentage: z.ZodNullable<z.ZodOptional<z.ZodNumber>>;
             modification_percentage: z.ZodNumber;
             default_price_list: z.ZodString;
             custom_prices: z.ZodArray<z.ZodObject<{
@@ -2693,6 +2703,7 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
                 package: string;
                 label: string;
             }[];
+            lifetime_discount_percentage?: number | null | undefined;
         }, {
             modification_percentage: number;
             default_price_list: string;
@@ -2703,6 +2714,7 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
                 package: string;
                 label: string;
             }[];
+            lifetime_discount_percentage?: number | null | undefined;
         }>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         partner: {
@@ -2727,6 +2739,7 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
                 package: string;
                 label: string;
             }[];
+            lifetime_discount_percentage?: number | null | undefined;
         };
     }, {
         partner: {
@@ -2751,6 +2764,7 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
                 package: string;
                 label: string;
             }[];
+            lifetime_discount_percentage?: number | null | undefined;
         };
     }>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
@@ -2783,6 +2797,7 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
                 package: string;
                 label: string;
             }[];
+            lifetime_discount_percentage?: number | null | undefined;
         };
     };
     commission_fee?: number | null | undefined;
@@ -2817,6 +2832,7 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
                 package: string;
                 label: string;
             }[];
+            lifetime_discount_percentage?: number | null | undefined;
         };
     };
     commission_fee?: number | null | undefined;
@@ -3045,6 +3061,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 }[];
             }>;
             user: z.ZodObject<{
+                lifetime_discount_percentage: z.ZodNullable<z.ZodOptional<z.ZodNumber>>;
                 modification_percentage: z.ZodNumber;
                 default_price_list: z.ZodString;
                 custom_prices: z.ZodArray<z.ZodObject<{
@@ -3076,6 +3093,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
                     package: string;
                     label: string;
                 }[];
+                lifetime_discount_percentage?: number | null | undefined;
             }, {
                 modification_percentage: number;
                 default_price_list: string;
@@ -3086,6 +3104,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
                     package: string;
                     label: string;
                 }[];
+                lifetime_discount_percentage?: number | null | undefined;
             }>;
         }, z.UnknownKeysParam, z.ZodTypeAny, {
             partner: {
@@ -3110,6 +3129,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
                     package: string;
                     label: string;
                 }[];
+                lifetime_discount_percentage?: number | null | undefined;
             };
         }, {
             partner: {
@@ -3134,6 +3154,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
                     package: string;
                     label: string;
                 }[];
+                lifetime_discount_percentage?: number | null | undefined;
             };
         }>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
@@ -3166,6 +3187,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
                     package: string;
                     label: string;
                 }[];
+                lifetime_discount_percentage?: number | null | undefined;
             };
         };
         commission_fee?: number | null | undefined;
@@ -3200,6 +3222,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
                     package: string;
                     label: string;
                 }[];
+                lifetime_discount_percentage?: number | null | undefined;
             };
         };
         commission_fee?: number | null | undefined;
@@ -3929,6 +3952,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
                     package: string;
                     label: string;
                 }[];
+                lifetime_discount_percentage?: number | null | undefined;
             };
         };
         commission_fee?: number | null | undefined;
@@ -4139,6 +4163,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
                     package: string;
                     label: string;
                 }[];
+                lifetime_discount_percentage?: number | null | undefined;
             };
         };
         commission_fee?: number | null | undefined;

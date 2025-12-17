@@ -281,6 +281,7 @@ export const financialPropertiesSchemaSpec = markAsSchemaSpec({
             user: {
                 _type: 'object' as const,
                 of: {
+                    lifetime_discount_percentage: z.number().optional().nullable(),
                     modification_percentage: z.number(),
                     default_price_list: { _type: 'docRef' as const, collection: PRICE_LIST_COLLECTION, nullable: true },
                     custom_prices: {
