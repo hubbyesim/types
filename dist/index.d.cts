@@ -1145,6 +1145,7 @@ declare const partnerSchemaSpec: {
                 partner_type: z.ZodOptional<z.ZodNullable<z.ZodEnum<["wholesale", "reseller", "platform", "agent"]>>>;
                 enable_complimentary_booking: z.ZodDefault<z.ZodBoolean>;
                 complimentary_booking_partner_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+                is_sales_agent: z.ZodDefault<z.ZodOptional<z.ZodNullable<z.ZodBoolean>>>;
                 visual_identity_options: z.ZodDefault<z.ZodObject<{
                     hubby_branding: z.ZodDefault<z.ZodBoolean>;
                     source_partner_branding: z.ZodDefault<z.ZodBoolean>;
@@ -3508,6 +3509,7 @@ declare const HPartnerSchema: z.ZodObject<{
             partner_type: z.ZodOptional<z.ZodNullable<z.ZodEnum<["wholesale", "reseller", "platform", "agent"]>>>;
             enable_complimentary_booking: z.ZodDefault<z.ZodBoolean>;
             complimentary_booking_partner_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            is_sales_agent: z.ZodDefault<z.ZodOptional<z.ZodNullable<z.ZodBoolean>>>;
             visual_identity_options: z.ZodDefault<z.ZodObject<{
                 hubby_branding: z.ZodDefault<z.ZodBoolean>;
                 source_partner_branding: z.ZodDefault<z.ZodBoolean>;
@@ -3523,6 +3525,7 @@ declare const HPartnerSchema: z.ZodObject<{
             }>>;
         }, z.UnknownKeysParam, z.ZodTypeAny, {
             enable_complimentary_booking: boolean;
+            is_sales_agent: boolean | null;
             visual_identity_options: {
                 hubby_branding: boolean;
                 source_partner_branding: boolean;
@@ -3540,6 +3543,7 @@ declare const HPartnerSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
+            is_sales_agent?: boolean | null | undefined;
             visual_identity_options?: {
                 hubby_branding?: boolean | undefined;
                 source_partner_branding?: boolean | undefined;
@@ -3648,6 +3652,7 @@ declare const HPartnerSchema: z.ZodObject<{
         }[];
         agent_signup_settings: {
             enable_complimentary_booking: boolean;
+            is_sales_agent: boolean | null;
             visual_identity_options: {
                 hubby_branding: boolean;
                 source_partner_branding: boolean;
@@ -3736,6 +3741,7 @@ declare const HPartnerSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
+            is_sales_agent?: boolean | null | undefined;
             visual_identity_options?: {
                 hubby_branding?: boolean | undefined;
                 source_partner_branding?: boolean | undefined;
@@ -3988,6 +3994,7 @@ declare const HPartnerSchema: z.ZodObject<{
         }[];
         agent_signup_settings: {
             enable_complimentary_booking: boolean;
+            is_sales_agent: boolean | null;
             visual_identity_options: {
                 hubby_branding: boolean;
                 source_partner_branding: boolean;
@@ -4203,6 +4210,7 @@ declare const HPartnerSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
+            is_sales_agent?: boolean | null | undefined;
             visual_identity_options?: {
                 hubby_branding?: boolean | undefined;
                 source_partner_branding?: boolean | undefined;
@@ -5282,6 +5290,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             partner_type: z.ZodOptional<z.ZodNullable<z.ZodEnum<["wholesale", "reseller", "platform", "agent"]>>>;
             enable_complimentary_booking: z.ZodDefault<z.ZodBoolean>;
             complimentary_booking_partner_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            is_sales_agent: z.ZodDefault<z.ZodOptional<z.ZodNullable<z.ZodBoolean>>>;
             visual_identity_options: z.ZodDefault<z.ZodObject<{
                 hubby_branding: z.ZodDefault<z.ZodBoolean>;
                 source_partner_branding: z.ZodDefault<z.ZodBoolean>;
@@ -5297,6 +5306,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             }>>;
         }, z.UnknownKeysParam, z.ZodTypeAny, {
             enable_complimentary_booking: boolean;
+            is_sales_agent: boolean | null;
             visual_identity_options: {
                 hubby_branding: boolean;
                 source_partner_branding: boolean;
@@ -5314,6 +5324,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
+            is_sales_agent?: boolean | null | undefined;
             visual_identity_options?: {
                 hubby_branding?: boolean | undefined;
                 source_partner_branding?: boolean | undefined;
@@ -5422,6 +5433,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         }[];
         agent_signup_settings: {
             enable_complimentary_booking: boolean;
+            is_sales_agent: boolean | null;
             visual_identity_options: {
                 hubby_branding: boolean;
                 source_partner_branding: boolean;
@@ -5510,6 +5522,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
+            is_sales_agent?: boolean | null | undefined;
             visual_identity_options?: {
                 hubby_branding?: boolean | undefined;
                 source_partner_branding?: boolean | undefined;
@@ -5762,6 +5775,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         }[];
         agent_signup_settings: {
             enable_complimentary_booking: boolean;
+            is_sales_agent: boolean | null;
             visual_identity_options: {
                 hubby_branding: boolean;
                 source_partner_branding: boolean;
@@ -5977,6 +5991,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
+            is_sales_agent?: boolean | null | undefined;
             visual_identity_options?: {
                 hubby_branding?: boolean | undefined;
                 source_partner_branding?: boolean | undefined;
@@ -6251,6 +6266,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         partner_type: z.ZodOptional<z.ZodNullable<z.ZodEnum<["wholesale", "reseller", "platform", "agent"]>>>;
         enable_complimentary_booking: z.ZodDefault<z.ZodBoolean>;
         complimentary_booking_partner_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        is_sales_agent: z.ZodDefault<z.ZodOptional<z.ZodNullable<z.ZodBoolean>>>;
         visual_identity_options: z.ZodDefault<z.ZodObject<{
             hubby_branding: z.ZodDefault<z.ZodBoolean>;
             source_partner_branding: z.ZodDefault<z.ZodBoolean>;
@@ -6266,6 +6282,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         }>>;
     }, "strip", z.ZodTypeAny, {
         enable_complimentary_booking: boolean;
+        is_sales_agent: boolean | null;
         visual_identity_options: {
             hubby_branding: boolean;
             source_partner_branding: boolean;
@@ -6283,6 +6300,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
         enable_complimentary_booking?: boolean | undefined;
         complimentary_booking_partner_id?: string | null | undefined;
+        is_sales_agent?: boolean | null | undefined;
         visual_identity_options?: {
             hubby_branding?: boolean | undefined;
             source_partner_branding?: boolean | undefined;
@@ -6352,6 +6370,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
     }[] | undefined;
     agent_signup_settings?: {
         enable_complimentary_booking: boolean;
+        is_sales_agent: boolean | null;
         visual_identity_options: {
             hubby_branding: boolean;
             source_partner_branding: boolean;
@@ -6440,6 +6459,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
         enable_complimentary_booking?: boolean | undefined;
         complimentary_booking_partner_id?: string | null | undefined;
+        is_sales_agent?: boolean | null | undefined;
         visual_identity_options?: {
             hubby_branding?: boolean | undefined;
             source_partner_branding?: boolean | undefined;
@@ -8955,6 +8975,7 @@ declare const partnerAppSchema: z.ZodObject<{
             partner_type: z.ZodOptional<z.ZodNullable<z.ZodEnum<["wholesale", "reseller", "platform", "agent"]>>>;
             enable_complimentary_booking: z.ZodDefault<z.ZodBoolean>;
             complimentary_booking_partner_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            is_sales_agent: z.ZodDefault<z.ZodOptional<z.ZodNullable<z.ZodBoolean>>>;
             visual_identity_options: z.ZodDefault<z.ZodObject<{
                 hubby_branding: z.ZodDefault<z.ZodBoolean>;
                 source_partner_branding: z.ZodDefault<z.ZodBoolean>;
@@ -8970,6 +8991,7 @@ declare const partnerAppSchema: z.ZodObject<{
             }>>;
         }, z.UnknownKeysParam, z.ZodTypeAny, {
             enable_complimentary_booking: boolean;
+            is_sales_agent: boolean | null;
             visual_identity_options: {
                 hubby_branding: boolean;
                 source_partner_branding: boolean;
@@ -8987,6 +9009,7 @@ declare const partnerAppSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
+            is_sales_agent?: boolean | null | undefined;
             visual_identity_options?: {
                 hubby_branding?: boolean | undefined;
                 source_partner_branding?: boolean | undefined;
@@ -9095,6 +9118,7 @@ declare const partnerAppSchema: z.ZodObject<{
         }[];
         agent_signup_settings: {
             enable_complimentary_booking: boolean;
+            is_sales_agent: boolean | null;
             visual_identity_options: {
                 hubby_branding: boolean;
                 source_partner_branding: boolean;
@@ -9183,6 +9207,7 @@ declare const partnerAppSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
+            is_sales_agent?: boolean | null | undefined;
             visual_identity_options?: {
                 hubby_branding?: boolean | undefined;
                 source_partner_branding?: boolean | undefined;
@@ -9435,6 +9460,7 @@ declare const partnerAppSchema: z.ZodObject<{
         }[];
         agent_signup_settings: {
             enable_complimentary_booking: boolean;
+            is_sales_agent: boolean | null;
             visual_identity_options: {
                 hubby_branding: boolean;
                 source_partner_branding: boolean;
@@ -9650,6 +9676,7 @@ declare const partnerAppSchema: z.ZodObject<{
             partner_type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
             enable_complimentary_booking?: boolean | undefined;
             complimentary_booking_partner_id?: string | null | undefined;
+            is_sales_agent?: boolean | null | undefined;
             visual_identity_options?: {
                 hubby_branding?: boolean | undefined;
                 source_partner_branding?: boolean | undefined;
