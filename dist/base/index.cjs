@@ -758,6 +758,7 @@ var agentSignupSettingsSchema = zod.z.object({
   partner_type: zod.z.enum(["wholesale", "reseller", "platform", "agent"]).nullable().optional(),
   enable_complimentary_booking: zod.z.boolean().default(true),
   complimentary_booking_partner_id: zod.z.string().nullable().optional(),
+  is_sales_agent: zod.z.boolean().nullable().optional().default(false),
   visual_identity_options: zod.z.object({
     hubby_branding: zod.z.boolean().default(true),
     source_partner_branding: zod.z.boolean().default(false),

@@ -793,6 +793,7 @@ var agentSignupSettingsSchema = z.object({
   partner_type: z.enum(["wholesale", "reseller", "platform", "agent"]).nullable().optional(),
   enable_complimentary_booking: z.boolean().default(true),
   complimentary_booking_partner_id: z.string().nullable().optional(),
+  is_sales_agent: z.boolean().nullable().optional().default(false),
   visual_identity_options: z.object({
     hubby_branding: z.boolean().default(true),
     source_partner_branding: z.boolean().default(false),
