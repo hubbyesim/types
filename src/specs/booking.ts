@@ -4,6 +4,8 @@ import {
     PROMO_CODE_COLLECTION,
     USER_COLLECTION,
     ESIM_COLLECTION,
+    TAG_COLLECTION,
+    tagModelSpec,
     timestampNullable,
     timestampRequired
 } from './common';
@@ -123,6 +125,31 @@ export const bookingSchemaSpec = markAsSchemaSpec({
         nullable: true,
         optional: true
     },
+    
+    // Tags (references to tag collection)
+    tags: {
+        _type: 'array' as const,
+        of: { _type: 'docRef' as const, collection: TAG_COLLECTION },
+        nullable: true,
+        optional: true
+    },
+
+    // Tags data (actual tag objects)
+    tags_data: {
+        _type: 'array' as const,
+        of: tagModelSpec,
+        nullable: true,
+        optional: true
+    },
+
+    // Tag slugs
+    tags_slugs: {
+        _type: 'array' as const,
+        of: z.string(),
+        nullable: true,
+        optional: true
+    },
+    
     hubby_foreign_identifiers: z.object({
         messaging_contact_id: z.string().nullable()
     }).nullable().optional()
