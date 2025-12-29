@@ -6,7 +6,8 @@ import {
     PARTNER_COLLECTION,
     PAYMENT_COLLECTION,
     timestampNullable,
-    timestampRequired
+    timestampRequired,
+    DESTINATION_COLLECTION
 } from './common';
 
 
@@ -52,6 +53,7 @@ export const esimSchemaSpec = markAsSchemaSpec({
 
     // Reference fields
     country: { _type: 'docRef' as const, collection: COUNTRY_COLLECTION, nullable: true },
+    destination: { _type: 'docRef' as const, collection: DESTINATION_COLLECTION, nullable: true },
     partner: { _type: 'docRef' as const, collection: PARTNER_COLLECTION, nullable: true },
 
     // Timestamp fields

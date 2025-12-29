@@ -162,6 +162,7 @@ var BOOKING_COLLECTION = "bookings";
 var ROLE_COLLECTION = "roles";
 var PERMISSION_COLLECTION = "permissions";
 var TRAFFIC_POLICY_COLLECTION = "traffic_policies";
+var DESTINATION_COLLECTION = "destinations";
 var TAG_COLLECTION = "tags";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: true };
@@ -487,6 +488,7 @@ var esimSchemaSpec = markAsSchemaSpec({
   apn: z.string().nullable(),
   // Reference fields
   country: { _type: "docRef", collection: COUNTRY_COLLECTION, nullable: true },
+  destination: { _type: "docRef", collection: DESTINATION_COLLECTION, nullable: true },
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
   // Timestamp fields
   time_assigned: timestampNullable,

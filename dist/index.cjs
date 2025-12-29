@@ -516,6 +516,7 @@ var esimSchemaSpec = markAsSchemaSpec({
   apn: zod.z.string().nullable(),
   // Reference fields
   country: { _type: "docRef", collection: COUNTRY_COLLECTION, nullable: true },
+  destination: { _type: "docRef", collection: DESTINATION_COLLECTION, nullable: true },
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
   // Timestamp fields
   time_assigned: timestampNullable,

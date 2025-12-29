@@ -367,6 +367,11 @@ declare const esimSchemaSpec: {
         collection: string;
         nullable: boolean;
     };
+    destination: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+    };
     partner: {
         _type: "docRef";
         collection: string;
@@ -2275,6 +2280,7 @@ declare const HESIMSchema: z.ZodObject<{
     payment: z.ZodNullable<z.ZodString>;
     apn: z.ZodNullable<z.ZodString>;
     country: z.ZodString;
+    destination: z.ZodString;
     partner: z.ZodString;
     time_assigned: z.ZodEffects<z.ZodDate, Date, Date>;
     last_updated: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -2289,6 +2295,7 @@ declare const HESIMSchema: z.ZodObject<{
     updated_by: string | null;
     type: "promo" | "balance" | "code" | "api" | "external" | "payment";
     status: string | null;
+    destination: string;
     apn: string | null;
     imsi: number;
     qr: string;
@@ -2325,6 +2332,7 @@ declare const HESIMSchema: z.ZodObject<{
     updated_by: string | null;
     type: "promo" | "balance" | "code" | "api" | "external" | "payment";
     status: string | null;
+    destination: string;
     apn: string | null;
     imsi: number;
     qr: string;
