@@ -2181,6 +2181,7 @@ declare const HCountrySchema: z.ZodObject<{
     created_by: z.ZodString;
     updated_by: z.ZodString;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
+    click_count: number | null;
     created_at: Date;
     updated_at: Date;
     created_by: string;
@@ -2189,7 +2190,6 @@ declare const HCountrySchema: z.ZodObject<{
     bokun_id: number | null;
     LTE: boolean | null;
     apn: string | null;
-    click_count: number | null;
     global_network: string | null;
     global_price: number | null;
     hubby: number | null;
@@ -2202,6 +2202,7 @@ declare const HCountrySchema: z.ZodObject<{
     tier: number | null;
     id?: string | null | undefined;
 }, {
+    click_count: number | null;
     created_at: Date;
     updated_at: Date;
     created_by: string;
@@ -2210,7 +2211,6 @@ declare const HCountrySchema: z.ZodObject<{
     bokun_id: number | null;
     LTE: boolean | null;
     apn: string | null;
-    click_count: number | null;
     global_network: string | null;
     global_price: number | null;
     hubby: number | null;
@@ -2630,6 +2630,7 @@ declare const HPackageSchema: z.ZodObject<{
         created_by: z.ZodString;
         updated_by: z.ZodString;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
+        click_count: number | null;
         created_at: Date;
         updated_at: Date;
         created_by: string;
@@ -2638,7 +2639,6 @@ declare const HPackageSchema: z.ZodObject<{
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
-        click_count: number | null;
         global_network: string | null;
         global_price: number | null;
         hubby: number | null;
@@ -2651,6 +2651,7 @@ declare const HPackageSchema: z.ZodObject<{
         tier: number | null;
         id?: string | null | undefined;
     }, {
+        click_count: number | null;
         created_at: Date;
         updated_at: Date;
         created_by: string;
@@ -2659,7 +2660,6 @@ declare const HPackageSchema: z.ZodObject<{
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
-        click_count: number | null;
         global_network: string | null;
         global_price: number | null;
         hubby: number | null;
@@ -2703,6 +2703,7 @@ declare const HPackageSchema: z.ZodObject<{
         imsi: number;
     } | null;
     country_data: {
+        click_count: number | null;
         created_at: Date;
         updated_at: Date;
         created_by: string;
@@ -2711,7 +2712,6 @@ declare const HPackageSchema: z.ZodObject<{
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
-        click_count: number | null;
         global_network: string | null;
         global_price: number | null;
         hubby: number | null;
@@ -2752,6 +2752,7 @@ declare const HPackageSchema: z.ZodObject<{
         imsi: number;
     } | null;
     country_data: {
+        click_count: number | null;
         created_at: Date;
         updated_at: Date;
         created_by: string;
@@ -2760,7 +2761,6 @@ declare const HPackageSchema: z.ZodObject<{
         bokun_id: number | null;
         LTE: boolean | null;
         apn: string | null;
-        click_count: number | null;
         global_network: string | null;
         global_price: number | null;
         hubby: number | null;
@@ -7622,28 +7622,28 @@ type HPermission = z.infer<typeof HPermissionSchema>;
 
 declare const liveActivityStatusSchema: z.ZodEnum<["created", "active", "ended", "dismissed", "failed"]>;
 declare const liveActivityEventSchema: z.ZodEnum<["start", "update", "end"]>;
-declare const liveActivityReasonSchema: z.ZodEnum<["expired", "data_exhausted", "no_packages", "manual"]>;
+declare const liveActivityReasonSchema: z.ZodEnum<["expired", "data_exhausted", "no_packages", "manual", "recreated"]>;
 declare const lastUpdateSchema: z.ZodOptional<z.ZodNullable<z.ZodObject<{
     event: z.ZodEnum<["start", "update", "end"]>;
     totalDataGb: z.ZodOptional<z.ZodNumber>;
     dataLeftGb: z.ZodOptional<z.ZodNumber>;
     apnsId: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     statusCode: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    reason: z.ZodOptional<z.ZodEnum<["expired", "data_exhausted", "no_packages", "manual"]>>;
+    reason: z.ZodOptional<z.ZodEnum<["expired", "data_exhausted", "no_packages", "manual", "recreated"]>>;
 }, "strip", z.ZodTypeAny, {
     event: "start" | "update" | "end";
     totalDataGb?: number | undefined;
     dataLeftGb?: number | undefined;
     apnsId?: string | null | undefined;
     statusCode?: number | null | undefined;
-    reason?: "expired" | "data_exhausted" | "no_packages" | "manual" | undefined;
+    reason?: "expired" | "data_exhausted" | "no_packages" | "manual" | "recreated" | undefined;
 }, {
     event: "start" | "update" | "end";
     totalDataGb?: number | undefined;
     dataLeftGb?: number | undefined;
     apnsId?: string | null | undefined;
     statusCode?: number | null | undefined;
-    reason?: "expired" | "data_exhausted" | "no_packages" | "manual" | undefined;
+    reason?: "expired" | "data_exhausted" | "no_packages" | "manual" | "recreated" | undefined;
 }>>>;
 declare const liveActivitySchemaSpec: {
     id: z.ZodString;
@@ -7652,8 +7652,6 @@ declare const liveActivitySchemaSpec: {
     message: z.ZodString;
     total_data_gb: z.ZodNullable<z.ZodString>;
     data_left_gb: z.ZodNullable<z.ZodString>;
-    time_left: z.ZodNullable<z.ZodString>;
-    time_total: z.ZodNullable<z.ZodString>;
     user_id: z.ZodString;
     push_to_start_token: z.ZodString;
     push_to_update_token: z.ZodNullable<z.ZodString>;
@@ -7669,27 +7667,45 @@ declare const liveActivitySchemaSpec: {
         dataLeftGb: z.ZodOptional<z.ZodNumber>;
         apnsId: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         statusCode: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-        reason: z.ZodOptional<z.ZodEnum<["expired", "data_exhausted", "no_packages", "manual"]>>;
+        reason: z.ZodOptional<z.ZodEnum<["expired", "data_exhausted", "no_packages", "manual", "recreated"]>>;
     }, "strip", z.ZodTypeAny, {
         event: "start" | "update" | "end";
         totalDataGb?: number | undefined;
         dataLeftGb?: number | undefined;
         apnsId?: string | null | undefined;
         statusCode?: number | null | undefined;
-        reason?: "expired" | "data_exhausted" | "no_packages" | "manual" | undefined;
+        reason?: "expired" | "data_exhausted" | "no_packages" | "manual" | "recreated" | undefined;
     }, {
         event: "start" | "update" | "end";
         totalDataGb?: number | undefined;
         dataLeftGb?: number | undefined;
         apnsId?: string | null | undefined;
         statusCode?: number | null | undefined;
-        reason?: "expired" | "data_exhausted" | "no_packages" | "manual" | undefined;
+        reason?: "expired" | "data_exhausted" | "no_packages" | "manual" | "recreated" | undefined;
     }>>>;
     ended_at: {
         _type: "timestamp";
         nullable: boolean;
         optional: boolean;
     };
+    started_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    dismissed_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    recreated_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    recreation_count: z.ZodDefault<z.ZodNumber>;
+    click_count: z.ZodDefault<z.ZodNumber>;
+    click_timestamps: z.ZodDefault<z.ZodArray<z.ZodDate, "many">>;
     created_at: {
         _type: "timestamp";
         nullable: boolean;
