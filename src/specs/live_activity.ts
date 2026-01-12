@@ -3,6 +3,7 @@ import { markAsSchemaSpec } from '../common';
 import {
     timestampNullable,
     timestampRequired,
+    dateSchema,
 } from './common';
 
 // Live activity status schema
@@ -44,7 +45,7 @@ export const liveActivitySchemaSpec = markAsSchemaSpec({
     recreated_at: timestampNullable,
     recreation_count: z.number().default(0),
     click_count: z.number().default(0),
-    click_timestamps: z.array(z.date()).default([]),
+    click_timestamps: z.array(dateSchema).default([]),
     created_at: timestampRequired,
     updated_at: timestampNullable,
     created_by: z.string().nullable(),

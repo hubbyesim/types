@@ -196,6 +196,15 @@ var TAG_COLLECTION = "tags";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: true };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
+var dateSchema = zod.z.preprocess((val) => {
+  if (val instanceof Date)
+    return val;
+  if (typeof val === "string" || typeof val === "number") {
+    const date = new Date(val);
+    return isNaN(date.getTime()) ? void 0 : date;
+  }
+  return val;
+}, zod.z.date());
 var hubbyModelSpec = {
   id: zod.z.string().nullable().optional(),
   created_at: timestampRequired,
@@ -1318,7 +1327,7 @@ var liveActivitySchemaSpec = markAsSchemaSpec({
   recreated_at: timestampNullable,
   recreation_count: zod.z.number().default(0),
   click_count: zod.z.number().default(0),
-  click_timestamps: zod.z.array(zod.z.date()).default([]),
+  click_timestamps: zod.z.array(dateSchema).default([]),
   created_at: timestampRequired,
   updated_at: timestampNullable,
   created_by: zod.z.string().nullable(),
@@ -1620,6 +1629,7 @@ var HDestinationBundleSchema = buildClientSchema(destinationBundleSchemaSpec);
 var HPackageTemplateSchema = buildClientSchema(packageTemplateSchemaSpec);
 var HUserTouchpointsSchema = buildClientSchema(userTouchpointsSchemaSpec);
 var HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
+var HLiveActivitySchema = buildClientSchema(liveActivitySchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1783,6 +1793,7 @@ exports.HDestinationSchema = HDestinationSchema;
 exports.HESIMSchema = HESIMSchema;
 exports.HFinancialPropertiesSchema = HFinancialPropertiesSchema;
 exports.HFreeEsimSchema = HFreeEsimSchema;
+exports.HLiveActivitySchema = HLiveActivitySchema;
 exports.HLoginRequestSchema = HLoginRequestSchema;
 exports.HMessageSchema = HMessageSchema;
 exports.HPackagePriceSchema = HPackagePriceSchema;

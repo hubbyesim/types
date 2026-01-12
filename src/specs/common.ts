@@ -36,6 +36,16 @@ export const timestampNullableOptional = { _type: 'timestamp' as const, nullable
 export const timestampNullable = { _type: 'timestamp' as const, nullable: true, optional: true };
 export const timestampRequired = { _type: 'timestamp' as const, nullable: false, optional: false };
 
+// Preprocessed date schema for use in arrays (handles string/number inputs)
+export const dateSchema = z.preprocess((val) => {
+    if (val instanceof Date) return val;
+    if (typeof val === 'string' || typeof val === 'number') {
+        const date = new Date(val);
+        return isNaN(date.getTime()) ? undefined : date;
+    }
+    return val;
+}, z.date());
+
 export const hubbyModelSpec = {
     id: z.string().nullable().optional(),
     created_at: timestampRequired,

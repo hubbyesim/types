@@ -5665,6 +5665,114 @@ declare const HLoginRequestSchema: z.ZodObject<{
     user: string;
     id?: string | null | undefined;
 }>;
+declare const HLiveActivitySchema: z.ZodObject<{
+    id: z.ZodString;
+    esim_id: z.ZodString;
+    title: z.ZodString;
+    message: z.ZodString;
+    total_data_gb: z.ZodNullable<z.ZodString>;
+    data_left_gb: z.ZodNullable<z.ZodString>;
+    user_id: z.ZodString;
+    push_to_start_token: z.ZodString;
+    push_to_update_token: z.ZodNullable<z.ZodString>;
+    status: z.ZodEnum<["created", "active", "ended", "dismissed", "failed"]>;
+    last_update_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    last_update: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        event: z.ZodEnum<["start", "update", "end"]>;
+        totalDataGb: z.ZodOptional<z.ZodNumber>;
+        dataLeftGb: z.ZodOptional<z.ZodNumber>;
+        apnsId: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        statusCode: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        reason: z.ZodOptional<z.ZodEnum<["expired", "data_exhausted", "no_packages", "manual", "recreated"]>>;
+    }, "strip", z.ZodTypeAny, {
+        event: "start" | "update" | "end";
+        totalDataGb?: number | undefined;
+        dataLeftGb?: number | undefined;
+        apnsId?: string | null | undefined;
+        statusCode?: number | null | undefined;
+        reason?: "manual" | "expired" | "data_exhausted" | "no_packages" | "recreated" | undefined;
+    }, {
+        event: "start" | "update" | "end";
+        totalDataGb?: number | undefined;
+        dataLeftGb?: number | undefined;
+        apnsId?: string | null | undefined;
+        statusCode?: number | null | undefined;
+        reason?: "manual" | "expired" | "data_exhausted" | "no_packages" | "recreated" | undefined;
+    }>>>;
+    ended_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    started_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    dismissed_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    recreated_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    recreation_count: z.ZodDefault<z.ZodNumber>;
+    click_count: z.ZodDefault<z.ZodNumber>;
+    click_timestamps: z.ZodDefault<z.ZodArray<z.ZodEffects<z.ZodDate, Date, unknown>, "many">>;
+    created_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    created_by: z.ZodNullable<z.ZodString>;
+    updated_by: z.ZodNullable<z.ZodString>;
+}, z.UnknownKeysParam, z.ZodTypeAny, {
+    id: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    updated_by: string | null;
+    push_to_start_token: string;
+    message: string;
+    status: "failed" | "created" | "active" | "ended" | "dismissed";
+    title: string;
+    click_count: number;
+    user_id: string;
+    esim_id: string;
+    total_data_gb: string | null;
+    data_left_gb: string | null;
+    push_to_update_token: string | null;
+    last_update_at: Date;
+    ended_at: Date;
+    started_at: Date;
+    dismissed_at: Date;
+    recreated_at: Date;
+    recreation_count: number;
+    click_timestamps: Date[];
+    last_update?: {
+        event: "start" | "update" | "end";
+        totalDataGb?: number | undefined;
+        dataLeftGb?: number | undefined;
+        apnsId?: string | null | undefined;
+        statusCode?: number | null | undefined;
+        reason?: "manual" | "expired" | "data_exhausted" | "no_packages" | "recreated" | undefined;
+    } | null | undefined;
+}, {
+    id: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    updated_by: string | null;
+    push_to_start_token: string;
+    message: string;
+    status: "failed" | "created" | "active" | "ended" | "dismissed";
+    title: string;
+    user_id: string;
+    esim_id: string;
+    total_data_gb: string | null;
+    data_left_gb: string | null;
+    push_to_update_token: string | null;
+    last_update_at: Date;
+    ended_at: Date;
+    started_at: Date;
+    dismissed_at: Date;
+    recreated_at: Date;
+    click_count?: number | undefined;
+    last_update?: {
+        event: "start" | "update" | "end";
+        totalDataGb?: number | undefined;
+        dataLeftGb?: number | undefined;
+        apnsId?: string | null | undefined;
+        statusCode?: number | null | undefined;
+        reason?: "manual" | "expired" | "data_exhausted" | "no_packages" | "recreated" | undefined;
+    } | null | undefined;
+    recreation_count?: number | undefined;
+    click_timestamps?: unknown[] | undefined;
+}>;
 declare const HAddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     city: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -5918,6 +6026,7 @@ type HDestinationBundle = z.infer<typeof HDestinationBundleSchema>;
 type HPackageTemplate = z.infer<typeof HPackageTemplateSchema>;
 type HUserTouchpoints = z.infer<typeof HUserTouchpointsSchema>;
 type HLoginRequest = z.infer<typeof HLoginRequestSchema>;
+type HLiveActivity = z.infer<typeof HLiveActivitySchema>;
 type HAddress = z.infer<typeof HAddressSchema>;
 type HRegistration = z.infer<typeof HRegistrationSchema>;
 type HBankingDetails = z.infer<typeof HBankingDetailsSchema>;
@@ -5942,4 +6051,4 @@ declare const SUPPORTED_LOCALES: readonly ["en-US", "en-EU", "en-GB", "en-CA", "
 type HRole = z.infer<typeof HRoleSchema>;
 type HPermission = z.infer<typeof HPermissionSchema>;
 
-export { HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBaseReward, HBaseRewardSchema, HBondioPackage, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HDestination, HDestinationBundle, HDestinationBundleSchema, HDestinationSchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HLoginRequest, HLoginRequestSchema, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPackageTemplate, HPackageTemplateSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HReview, HReviewSchema, HReviewSubmission, HReviewSubmissionSchema, HRewardMultipliers, HRewardMultipliersSchema, HRewardPackageType, HRewardPackageTypeSchema, HRewardStrategy, HRewardStrategySchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HUserTouchpoints, HUserTouchpointsSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelApp, HubbyModelSchema, SUPPORTED_LOCALES, SupportedLocales };
+export { HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBaseReward, HBaseRewardSchema, HBondioPackage, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HDestination, HDestinationBundle, HDestinationBundleSchema, HDestinationSchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HLiveActivity, HLiveActivitySchema, HLoginRequest, HLoginRequestSchema, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPackageTemplate, HPackageTemplateSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HReview, HReviewSchema, HReviewSubmission, HReviewSubmissionSchema, HRewardMultipliers, HRewardMultipliersSchema, HRewardPackageType, HRewardPackageTypeSchema, HRewardStrategy, HRewardStrategySchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HUserTouchpoints, HUserTouchpointsSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelApp, HubbyModelSchema, SUPPORTED_LOCALES, SupportedLocales };
