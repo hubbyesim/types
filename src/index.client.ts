@@ -57,6 +57,7 @@ import { destinationSchemaSpec, destinationBundleSchemaSpec } from './specs/dest
 import { packageTemplateSchemaSpec } from './specs/package_template';
 import { loginRequestSchemaSpec } from './specs/login_request';
 import { tagSchemaSpec } from './specs/tag';
+import { liveActivitySchemaSpec } from './specs/live_activity';
 
 
 /** ZOD SCHEMAS */
@@ -94,6 +95,7 @@ export const HDestinationBundleSchema = buildClientSchema(destinationBundleSchem
 export const HPackageTemplateSchema = buildClientSchema(packageTemplateSchemaSpec);
 export const HUserTouchpointsSchema = buildClientSchema(userTouchpointsSchemaSpec);
 export const HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
+export const HLiveActivitySchema = buildClientSchema(liveActivitySchemaSpec);
 // Additional lower-level schemas
 export const HAddressSchema = addressSchema;
 export const HRegistrationSchema = registrationSchema;
@@ -136,6 +138,7 @@ export type HDestinationBundle = z.infer<typeof HDestinationBundleSchema>;
 export type HPackageTemplate = z.infer<typeof HPackageTemplateSchema>;
 export type HUserTouchpoints = z.infer<typeof HUserTouchpointsSchema>;
 export type HLoginRequest = z.infer<typeof HLoginRequestSchema>;
+export type HLiveActivity = z.infer<typeof HLiveActivitySchema>;
 // Additional lower-level types
 export type HAddress = z.infer<typeof HAddressSchema>;
 export type HRegistration = z.infer<typeof HRegistrationSchema>;

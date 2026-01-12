@@ -1276,6 +1276,42 @@ var loginRequestSchemaSpec = markAsSchemaSpec({
 
 // src/specs/tag.ts
 var tagSchemaSpec = markAsSchemaSpec(tagModelSpec);
+var liveActivityStatusSchema = zod.z.enum(["created", "active", "ended", "dismissed", "failed"]);
+var liveActivityEventSchema = zod.z.enum(["start", "update", "end"]);
+var liveActivityReasonSchema = zod.z.enum(["expired", "data_exhausted", "no_packages", "manual", "recreated"]);
+var lastUpdateSchema = zod.z.object({
+  event: liveActivityEventSchema,
+  totalDataGb: zod.z.number().optional(),
+  dataLeftGb: zod.z.number().optional(),
+  apnsId: zod.z.string().nullable().optional(),
+  statusCode: zod.z.number().nullable().optional(),
+  reason: liveActivityReasonSchema.optional()
+}).nullable().optional();
+var liveActivitySchemaSpec = markAsSchemaSpec({
+  id: zod.z.string(),
+  esim_id: zod.z.string(),
+  title: zod.z.string(),
+  message: zod.z.string(),
+  total_data_gb: zod.z.string().nullable(),
+  data_left_gb: zod.z.string().nullable(),
+  user_id: zod.z.string(),
+  push_to_start_token: zod.z.string(),
+  push_to_update_token: zod.z.string().nullable(),
+  status: liveActivityStatusSchema,
+  last_update_at: timestampNullable,
+  last_update: lastUpdateSchema,
+  ended_at: timestampNullable,
+  started_at: timestampNullable,
+  dismissed_at: timestampNullable,
+  recreated_at: timestampNullable,
+  recreation_count: zod.z.number().default(0),
+  click_count: zod.z.number().default(0),
+  click_timestamps: zod.z.array(zod.z.date()).default([]),
+  created_at: timestampRequired,
+  updated_at: timestampNullable,
+  created_by: zod.z.string().nullable(),
+  updated_by: zod.z.string().nullable()
+});
 
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
@@ -1312,6 +1348,7 @@ var HDestinationBundleSchema = buildClientSchema(destinationBundleSchemaSpec);
 var HPackageTemplateSchema = buildClientSchema(packageTemplateSchemaSpec);
 var HUserTouchpointsSchema = buildClientSchema(userTouchpointsSchemaSpec);
 var HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
+var HLiveActivitySchema = buildClientSchema(liveActivitySchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1347,6 +1384,7 @@ exports.HDestinationSchema = HDestinationSchema;
 exports.HESIMSchema = HESIMSchema;
 exports.HFinancialPropertiesSchema = HFinancialPropertiesSchema;
 exports.HFreeEsimSchema = HFreeEsimSchema;
+exports.HLiveActivitySchema = HLiveActivitySchema;
 exports.HLoginRequestSchema = HLoginRequestSchema;
 exports.HMessageSchema = HMessageSchema;
 exports.HPackagePriceSchema = HPackagePriceSchema;
