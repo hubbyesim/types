@@ -1841,7 +1841,7 @@ declare const liveActivitySchemaSpec: {
     };
     recreation_count: z.ZodDefault<z.ZodNumber>;
     click_count: z.ZodDefault<z.ZodNumber>;
-    click_timestamps: z.ZodDefault<z.ZodArray<z.ZodDate, "many">>;
+    click_timestamps: z.ZodDefault<z.ZodArray<z.ZodEffects<z.ZodDate, Date, unknown>, "many">>;
     created_at: {
         _type: "timestamp";
         nullable: boolean;
@@ -7561,7 +7561,7 @@ declare const HLiveActivitySchema: z.ZodObject<{
     recreated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     recreation_count: z.ZodDefault<z.ZodNumber>;
     click_count: z.ZodDefault<z.ZodNumber>;
-    click_timestamps: z.ZodDefault<z.ZodArray<z.ZodDate, "many">>;
+    click_timestamps: z.ZodDefault<z.ZodArray<z.ZodEffects<z.ZodDate, Date, unknown>, "many">>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodNullable<z.ZodString>;
@@ -7627,7 +7627,7 @@ declare const HLiveActivitySchema: z.ZodObject<{
         reason?: "manual" | "expired" | "data_exhausted" | "no_packages" | "recreated" | undefined;
     } | null | undefined;
     recreation_count?: number | undefined;
-    click_timestamps?: Date[] | undefined;
+    click_timestamps?: unknown[] | undefined;
 }>;
 declare const HAddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodNullable<z.ZodString>>;

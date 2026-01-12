@@ -194,6 +194,15 @@ var TAG_COLLECTION = "tags";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: true };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
+var dateSchema = z.preprocess((val) => {
+  if (val instanceof Date)
+    return val;
+  if (typeof val === "string" || typeof val === "number") {
+    const date = new Date(val);
+    return isNaN(date.getTime()) ? void 0 : date;
+  }
+  return val;
+}, z.date());
 var hubbyModelSpec = {
   id: z.string().nullable().optional(),
   created_at: timestampRequired,
@@ -1316,7 +1325,7 @@ var liveActivitySchemaSpec = markAsSchemaSpec({
   recreated_at: timestampNullable,
   recreation_count: z.number().default(0),
   click_count: z.number().default(0),
-  click_timestamps: z.array(z.date()).default([]),
+  click_timestamps: z.array(dateSchema).default([]),
   created_at: timestampRequired,
   updated_at: timestampNullable,
   created_by: z.string().nullable(),
