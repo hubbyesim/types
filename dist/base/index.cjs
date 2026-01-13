@@ -699,13 +699,22 @@ var visualIdentityBannersSchema = zod.z.object({
   strategy: zod.z.enum(["fixed", "rotating", "destination", "time_of_day"]),
   banners: zod.z.array(visualIdentityBannerSchema).nullable().optional()
 });
-var visualIdentitySchema = zod.z.object({
+var visualIdentityCustomBrandingSchema = zod.z.object({
   primary_color: zod.z.string(),
   secondary_color: zod.z.string(),
   logo: zod.z.string(),
   font: zod.z.string().nullable().optional(),
   top_banner: visualIdentityBannersSchema.optional(),
   mid_banner: visualIdentityBannersSchema.optional()
+});
+var visualIdentitySchema = zod.z.object({
+  primary_color: zod.z.string(),
+  secondary_color: zod.z.string(),
+  logo: zod.z.string(),
+  font: zod.z.string().nullable().optional(),
+  top_banner: visualIdentityBannersSchema.optional(),
+  mid_banner: visualIdentityBannersSchema.optional(),
+  custom_branding: zod.z.record(visualIdentityCustomBrandingSchema).optional()
 });
 var partnerContactSchema = zod.z.object({
   name: zod.z.string().nullable().optional(),
