@@ -241,56 +241,6 @@ declare const bookingSchemaSpec: {
         nullable: boolean;
         optional: boolean;
     };
-    tags: {
-        _type: "array";
-        of: {
-            _type: "docRef";
-            collection: string;
-        };
-        nullable: boolean;
-        optional: boolean;
-    };
-    tags_data: {
-        _type: "array";
-        of: {
-            slug: z.ZodString;
-            name: z.ZodString;
-            description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-            color: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-            type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-            id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-            created_at: {
-                _type: "timestamp";
-                nullable: boolean;
-                optional: boolean;
-            };
-            updated_at: {
-                _type: "timestamp";
-                nullable: boolean;
-                optional: boolean;
-            };
-            created_by: {
-                _type: "docRef";
-                collection: string;
-                nullable: boolean;
-                optional: boolean;
-            };
-            updated_by: {
-                _type: "docRef";
-                collection: string;
-                nullable: boolean;
-                optional: boolean;
-            };
-        };
-        nullable: boolean;
-        optional: boolean;
-    };
-    tags_slugs: {
-        _type: "array";
-        of: z.ZodString;
-        nullable: boolean;
-        optional: boolean;
-    };
     hubby_foreign_identifiers: z.ZodOptional<z.ZodNullable<z.ZodObject<{
         messaging_contact_id: z.ZodNullable<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
@@ -2132,42 +2082,6 @@ declare const HBookingSchema: z.ZodObject<{
     promo_codes: z.ZodArray<z.ZodString, "many">;
     users: z.ZodArray<z.ZodString, "many">;
     esims: z.ZodArray<z.ZodString, "many">;
-    tags: z.ZodArray<z.ZodString, "many">;
-    tags_data: z.ZodArray<z.ZodObject<{
-        slug: z.ZodString;
-        name: z.ZodString;
-        description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        color: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        created_at: z.ZodEffects<z.ZodDate, Date, Date>;
-        updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
-        created_by: z.ZodString;
-        updated_by: z.ZodString;
-    }, z.UnknownKeysParam, z.ZodTypeAny, {
-        name: string;
-        created_at: Date;
-        updated_at: Date;
-        created_by: string;
-        updated_by: string;
-        slug: string;
-        id?: string | null | undefined;
-        type?: string | null | undefined;
-        description?: string | null | undefined;
-        color?: string | null | undefined;
-    }, {
-        name: string;
-        created_at: Date;
-        updated_at: Date;
-        created_by: string;
-        updated_by: string;
-        slug: string;
-        id?: string | null | undefined;
-        type?: string | null | undefined;
-        description?: string | null | undefined;
-        color?: string | null | undefined;
-    }>, "many">;
-    tags_slugs: z.ZodArray<z.ZodString, "many">;
     hubby_foreign_identifiers: z.ZodOptional<z.ZodNullable<z.ZodObject<{
         messaging_contact_id: z.ZodNullable<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
@@ -2207,20 +2121,6 @@ declare const HBookingSchema: z.ZodObject<{
     promo_codes: string[];
     users: string[];
     esims: string[];
-    tags: string[];
-    tags_data: {
-        name: string;
-        created_at: Date;
-        updated_at: Date;
-        created_by: string;
-        updated_by: string;
-        slug: string;
-        id?: string | null | undefined;
-        type?: string | null | undefined;
-        description?: string | null | undefined;
-        color?: string | null | undefined;
-    }[];
-    tags_slugs: string[];
     id?: string | undefined;
     email?: string | null | undefined;
     gender?: "M" | "F" | "O" | undefined;
@@ -2278,20 +2178,6 @@ declare const HBookingSchema: z.ZodObject<{
     promo_codes: string[];
     users: string[];
     esims: string[];
-    tags: string[];
-    tags_data: {
-        name: string;
-        created_at: Date;
-        updated_at: Date;
-        created_by: string;
-        updated_by: string;
-        slug: string;
-        id?: string | null | undefined;
-        type?: string | null | undefined;
-        description?: string | null | undefined;
-        color?: string | null | undefined;
-    }[];
-    tags_slugs: string[];
     id?: string | undefined;
     email?: string | null | undefined;
     gender?: "M" | "F" | "O" | undefined;
@@ -4033,20 +3919,6 @@ declare const HPartnerSchema: z.ZodObject<{
         manual: boolean;
     };
     users: string[];
-    tags: string[];
-    tags_data: {
-        name: string;
-        created_at: Date;
-        updated_at: Date;
-        created_by: string;
-        updated_by: string;
-        slug: string;
-        id?: string | null | undefined;
-        type?: string | null | undefined;
-        description?: string | null | undefined;
-        color?: string | null | undefined;
-    }[];
-    tags_slugs: string[];
     contact: {
         email: string | null;
         name?: string | null | undefined;
@@ -4219,6 +4091,20 @@ declare const HPartnerSchema: z.ZodObject<{
             discount_percentage: number;
         } | null | undefined;
     };
+    tags: string[];
+    tags_data: {
+        name: string;
+        created_at: Date;
+        updated_at: Date;
+        created_by: string;
+        updated_by: string;
+        slug: string;
+        id?: string | null | undefined;
+        type?: string | null | undefined;
+        description?: string | null | undefined;
+        color?: string | null | undefined;
+    }[];
+    tags_slugs: string[];
     webhook_settings: {
         enabled: boolean;
         events: {
@@ -4242,20 +4128,6 @@ declare const HPartnerSchema: z.ZodObject<{
         manual: boolean;
     };
     users: string[];
-    tags: string[];
-    tags_data: {
-        name: string;
-        created_at: Date;
-        updated_at: Date;
-        created_by: string;
-        updated_by: string;
-        slug: string;
-        id?: string | null | undefined;
-        type?: string | null | undefined;
-        description?: string | null | undefined;
-        color?: string | null | undefined;
-    }[];
-    tags_slugs: string[];
     contact: {
         email: string | null;
         name?: string | null | undefined;
@@ -4428,6 +4300,20 @@ declare const HPartnerSchema: z.ZodObject<{
             discount_percentage: number;
         } | null | undefined;
     };
+    tags: string[];
+    tags_data: {
+        name: string;
+        created_at: Date;
+        updated_at: Date;
+        created_by: string;
+        updated_by: string;
+        slug: string;
+        id?: string | null | undefined;
+        type?: string | null | undefined;
+        description?: string | null | undefined;
+        color?: string | null | undefined;
+    }[];
+    tags_slugs: string[];
     webhook_settings: {
         enabled?: boolean | undefined;
         url?: string | null | undefined;
@@ -5804,20 +5690,6 @@ declare const HPartnerAppSchema: z.ZodObject<{
         manual: boolean;
     };
     users: string[];
-    tags: string[];
-    tags_data: {
-        name: string;
-        created_at: Date;
-        updated_at: Date;
-        created_by: string;
-        updated_by: string;
-        slug: string;
-        id?: string | null | undefined;
-        type?: string | null | undefined;
-        description?: string | null | undefined;
-        color?: string | null | undefined;
-    }[];
-    tags_slugs: string[];
     contact: {
         email: string | null;
         name?: string | null | undefined;
@@ -5990,6 +5862,20 @@ declare const HPartnerAppSchema: z.ZodObject<{
             discount_percentage: number;
         } | null | undefined;
     };
+    tags: string[];
+    tags_data: {
+        name: string;
+        created_at: Date;
+        updated_at: Date;
+        created_by: string;
+        updated_by: string;
+        slug: string;
+        id?: string | null | undefined;
+        type?: string | null | undefined;
+        description?: string | null | undefined;
+        color?: string | null | undefined;
+    }[];
+    tags_slugs: string[];
     webhook_settings: {
         enabled: boolean;
         events: {
@@ -6013,20 +5899,6 @@ declare const HPartnerAppSchema: z.ZodObject<{
         manual: boolean;
     };
     users: string[];
-    tags: string[];
-    tags_data: {
-        name: string;
-        created_at: Date;
-        updated_at: Date;
-        created_by: string;
-        updated_by: string;
-        slug: string;
-        id?: string | null | undefined;
-        type?: string | null | undefined;
-        description?: string | null | undefined;
-        color?: string | null | undefined;
-    }[];
-    tags_slugs: string[];
     contact: {
         email: string | null;
         name?: string | null | undefined;
@@ -6199,6 +6071,20 @@ declare const HPartnerAppSchema: z.ZodObject<{
             discount_percentage: number;
         } | null | undefined;
     };
+    tags: string[];
+    tags_data: {
+        name: string;
+        created_at: Date;
+        updated_at: Date;
+        created_by: string;
+        updated_by: string;
+        slug: string;
+        id?: string | null | undefined;
+        type?: string | null | undefined;
+        description?: string | null | undefined;
+        color?: string | null | undefined;
+    }[];
+    tags_slugs: string[];
     webhook_settings: {
         enabled?: boolean | undefined;
         url?: string | null | undefined;
@@ -7062,8 +6948,8 @@ declare const HTrafficPolicySchema: z.ZodObject<{
     created_by: string;
     updated_by: string;
     external_id: string;
-    description: string;
     provider: string;
+    description: string;
     id?: string | null | undefined;
 }, {
     name: string;
@@ -7072,8 +6958,8 @@ declare const HTrafficPolicySchema: z.ZodObject<{
     created_by: string;
     updated_by: string;
     external_id: string;
-    description: string;
     provider: string;
+    description: string;
     id?: string | null | undefined;
 }>;
 declare const HTelnaPackageSchema: z.ZodObject<{
@@ -8374,42 +8260,6 @@ declare const bookingAppSchema: z.ZodObject<{
     promo_codes: z.ZodArray<z.ZodString, "many">;
     users: z.ZodArray<z.ZodString, "many">;
     esims: z.ZodArray<z.ZodString, "many">;
-    tags: z.ZodArray<z.ZodString, "many">;
-    tags_data: z.ZodArray<z.ZodObject<{
-        slug: z.ZodString;
-        name: z.ZodString;
-        description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        color: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        created_at: z.ZodEffects<z.ZodDate, Date, Date>;
-        updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
-        created_by: z.ZodString;
-        updated_by: z.ZodString;
-    }, z.UnknownKeysParam, z.ZodTypeAny, {
-        name: string;
-        created_at: Date;
-        updated_at: Date;
-        created_by: string;
-        updated_by: string;
-        slug: string;
-        id?: string | null | undefined;
-        type?: string | null | undefined;
-        description?: string | null | undefined;
-        color?: string | null | undefined;
-    }, {
-        name: string;
-        created_at: Date;
-        updated_at: Date;
-        created_by: string;
-        updated_by: string;
-        slug: string;
-        id?: string | null | undefined;
-        type?: string | null | undefined;
-        description?: string | null | undefined;
-        color?: string | null | undefined;
-    }>, "many">;
-    tags_slugs: z.ZodArray<z.ZodString, "many">;
     hubby_foreign_identifiers: z.ZodOptional<z.ZodNullable<z.ZodObject<{
         messaging_contact_id: z.ZodNullable<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
@@ -8449,20 +8299,6 @@ declare const bookingAppSchema: z.ZodObject<{
     promo_codes: string[];
     users: string[];
     esims: string[];
-    tags: string[];
-    tags_data: {
-        name: string;
-        created_at: Date;
-        updated_at: Date;
-        created_by: string;
-        updated_by: string;
-        slug: string;
-        id?: string | null | undefined;
-        type?: string | null | undefined;
-        description?: string | null | undefined;
-        color?: string | null | undefined;
-    }[];
-    tags_slugs: string[];
     id?: string | undefined;
     email?: string | null | undefined;
     gender?: "M" | "F" | "O" | undefined;
@@ -8520,20 +8356,6 @@ declare const bookingAppSchema: z.ZodObject<{
     promo_codes: string[];
     users: string[];
     esims: string[];
-    tags: string[];
-    tags_data: {
-        name: string;
-        created_at: Date;
-        updated_at: Date;
-        created_by: string;
-        updated_by: string;
-        slug: string;
-        id?: string | null | undefined;
-        type?: string | null | undefined;
-        description?: string | null | undefined;
-        color?: string | null | undefined;
-    }[];
-    tags_slugs: string[];
     id?: string | undefined;
     email?: string | null | undefined;
     gender?: "M" | "F" | "O" | undefined;
@@ -9523,20 +9345,6 @@ declare const partnerAppSchema: z.ZodObject<{
         manual: boolean;
     };
     users: string[];
-    tags: string[];
-    tags_data: {
-        name: string;
-        created_at: Date;
-        updated_at: Date;
-        created_by: string;
-        updated_by: string;
-        slug: string;
-        id?: string | null | undefined;
-        type?: string | null | undefined;
-        description?: string | null | undefined;
-        color?: string | null | undefined;
-    }[];
-    tags_slugs: string[];
     contact: {
         email: string | null;
         name?: string | null | undefined;
@@ -9709,6 +9517,20 @@ declare const partnerAppSchema: z.ZodObject<{
             discount_percentage: number;
         } | null | undefined;
     };
+    tags: string[];
+    tags_data: {
+        name: string;
+        created_at: Date;
+        updated_at: Date;
+        created_by: string;
+        updated_by: string;
+        slug: string;
+        id?: string | null | undefined;
+        type?: string | null | undefined;
+        description?: string | null | undefined;
+        color?: string | null | undefined;
+    }[];
+    tags_slugs: string[];
     webhook_settings: {
         enabled: boolean;
         events: {
@@ -9732,20 +9554,6 @@ declare const partnerAppSchema: z.ZodObject<{
         manual: boolean;
     };
     users: string[];
-    tags: string[];
-    tags_data: {
-        name: string;
-        created_at: Date;
-        updated_at: Date;
-        created_by: string;
-        updated_by: string;
-        slug: string;
-        id?: string | null | undefined;
-        type?: string | null | undefined;
-        description?: string | null | undefined;
-        color?: string | null | undefined;
-    }[];
-    tags_slugs: string[];
     contact: {
         email: string | null;
         name?: string | null | undefined;
@@ -9918,6 +9726,20 @@ declare const partnerAppSchema: z.ZodObject<{
             discount_percentage: number;
         } | null | undefined;
     };
+    tags: string[];
+    tags_data: {
+        name: string;
+        created_at: Date;
+        updated_at: Date;
+        created_by: string;
+        updated_by: string;
+        slug: string;
+        id?: string | null | undefined;
+        type?: string | null | undefined;
+        description?: string | null | undefined;
+        color?: string | null | undefined;
+    }[];
+    tags_slugs: string[];
     webhook_settings: {
         enabled?: boolean | undefined;
         url?: string | null | undefined;
