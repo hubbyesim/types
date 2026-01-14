@@ -5773,6 +5773,52 @@ declare const HLiveActivitySchema: z.ZodObject<{
     recreation_count?: number | undefined;
     click_timestamps?: unknown[] | undefined;
 }>;
+declare const HScheduledJobSchema: z.ZodObject<{
+    id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    job_type: z.ZodString;
+    execute_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    status: z.ZodEnum<["pending", "completed", "failed"]>;
+    task_data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+    retry_count: z.ZodNumber;
+    max_retries: z.ZodNumber;
+    error: z.ZodNullable<z.ZodString>;
+    scheduled_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    last_retry_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    created_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    created_by: z.ZodNullable<z.ZodString>;
+    updated_by: z.ZodNullable<z.ZodString>;
+}, z.UnknownKeysParam, z.ZodTypeAny, {
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    updated_by: string | null;
+    status: "pending" | "completed" | "failed";
+    job_type: string;
+    execute_at: Date;
+    task_data: Record<string, unknown>;
+    retry_count: number;
+    max_retries: number;
+    error: string | null;
+    scheduled_at: Date;
+    last_retry_at: Date;
+    id?: string | null | undefined;
+}, {
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    updated_by: string | null;
+    status: "pending" | "completed" | "failed";
+    job_type: string;
+    execute_at: Date;
+    task_data: Record<string, unknown>;
+    retry_count: number;
+    max_retries: number;
+    error: string | null;
+    scheduled_at: Date;
+    last_retry_at: Date;
+    id?: string | null | undefined;
+}>;
 declare const HAddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     city: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -6002,6 +6048,7 @@ declare const HRewardMultipliersSchema: z.ZodOptional<z.ZodObject<{
     completion_based?: number | undefined;
 }>>;
 declare const HRewardPackageTypeSchema: z.ZodEnum<["data-limited", "starter"]>;
+declare const HJobStatusSchema: z.ZodEnum<["pending", "completed", "failed"]>;
 type HAnalytics = z.infer<typeof HAnalyticsSchema>;
 type HUser = z.infer<typeof HUserSchema>;
 type HBooking = z.infer<typeof HBookingSchema>;
@@ -6027,6 +6074,7 @@ type HPackageTemplate = z.infer<typeof HPackageTemplateSchema>;
 type HUserTouchpoints = z.infer<typeof HUserTouchpointsSchema>;
 type HLoginRequest = z.infer<typeof HLoginRequestSchema>;
 type HLiveActivity = z.infer<typeof HLiveActivitySchema>;
+type HScheduledJob = z.infer<typeof HScheduledJobSchema>;
 type HAddress = z.infer<typeof HAddressSchema>;
 type HRegistration = z.infer<typeof HRegistrationSchema>;
 type HBankingDetails = z.infer<typeof HBankingDetailsSchema>;
@@ -6044,6 +6092,7 @@ type HRewardStrategy = z.infer<typeof HRewardStrategySchema>;
 type HBaseReward = z.infer<typeof HBaseRewardSchema>;
 type HRewardMultipliers = z.infer<typeof HRewardMultipliersSchema>;
 type HRewardPackageType = z.infer<typeof HRewardPackageTypeSchema>;
+type HJobStatus = z.infer<typeof HJobStatusSchema>;
 type HHubbyModel = z.infer<typeof HubbyModelSchema>;
 type HubbyModelApp = HHubbyModel;
 type SupportedLocales = typeof SUPPORTED_LOCALES[number];
@@ -6051,4 +6100,4 @@ declare const SUPPORTED_LOCALES: readonly ["en-US", "en-EU", "en-GB", "en-CA", "
 type HRole = z.infer<typeof HRoleSchema>;
 type HPermission = z.infer<typeof HPermissionSchema>;
 
-export { HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBaseReward, HBaseRewardSchema, HBondioPackage, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HDestination, HDestinationBundle, HDestinationBundleSchema, HDestinationSchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HLiveActivity, HLiveActivitySchema, HLoginRequest, HLoginRequestSchema, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPackageTemplate, HPackageTemplateSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HReview, HReviewSchema, HReviewSubmission, HReviewSubmissionSchema, HRewardMultipliers, HRewardMultipliersSchema, HRewardPackageType, HRewardPackageTypeSchema, HRewardStrategy, HRewardStrategySchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HUserTouchpoints, HUserTouchpointsSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelApp, HubbyModelSchema, SUPPORTED_LOCALES, SupportedLocales };
+export { HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBaseReward, HBaseRewardSchema, HBondioPackage, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HDestination, HDestinationBundle, HDestinationBundleSchema, HDestinationSchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HJobStatus, HJobStatusSchema, HLiveActivity, HLiveActivitySchema, HLoginRequest, HLoginRequestSchema, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPackageTemplate, HPackageTemplateSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HReview, HReviewSchema, HReviewSubmission, HReviewSubmissionSchema, HRewardMultipliers, HRewardMultipliersSchema, HRewardPackageType, HRewardPackageTypeSchema, HRewardStrategy, HRewardStrategySchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HScheduledJob, HScheduledJobSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HUserTouchpoints, HUserTouchpointsSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelApp, HubbyModelSchema, SUPPORTED_LOCALES, SupportedLocales };

@@ -1856,6 +1856,44 @@ declare const liveActivitySchemaSpec: {
     updated_by: z.ZodNullable<z.ZodString>;
 };
 
+declare const jobStatusSchema: z.ZodEnum<["pending", "completed", "failed"]>;
+declare const scheduledJobSchemaSpec: {
+    id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    job_type: z.ZodString;
+    execute_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    status: z.ZodEnum<["pending", "completed", "failed"]>;
+    task_data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+    retry_count: z.ZodNumber;
+    max_retries: z.ZodNumber;
+    error: z.ZodNullable<z.ZodString>;
+    scheduled_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    last_retry_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    created_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    updated_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    created_by: z.ZodNullable<z.ZodString>;
+    updated_by: z.ZodNullable<z.ZodString>;
+};
+
 /** ZOD SCHEMAS */
 declare const HUserSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -7629,6 +7667,52 @@ declare const HLiveActivitySchema: z.ZodObject<{
     recreation_count?: number | undefined;
     click_timestamps?: unknown[] | undefined;
 }>;
+declare const HScheduledJobSchema: z.ZodObject<{
+    id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    job_type: z.ZodString;
+    execute_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    status: z.ZodEnum<["pending", "completed", "failed"]>;
+    task_data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+    retry_count: z.ZodNumber;
+    max_retries: z.ZodNumber;
+    error: z.ZodNullable<z.ZodString>;
+    scheduled_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    last_retry_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    created_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    created_by: z.ZodNullable<z.ZodString>;
+    updated_by: z.ZodNullable<z.ZodString>;
+}, z.UnknownKeysParam, z.ZodTypeAny, {
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    updated_by: string | null;
+    status: "pending" | "completed" | "failed";
+    job_type: string;
+    execute_at: Date;
+    task_data: Record<string, unknown>;
+    retry_count: number;
+    max_retries: number;
+    error: string | null;
+    scheduled_at: Date;
+    last_retry_at: Date;
+    id?: string | null | undefined;
+}, {
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    updated_by: string | null;
+    status: "pending" | "completed" | "failed";
+    job_type: string;
+    execute_at: Date;
+    task_data: Record<string, unknown>;
+    retry_count: number;
+    max_retries: number;
+    error: string | null;
+    scheduled_at: Date;
+    last_retry_at: Date;
+    id?: string | null | undefined;
+}>;
 declare const HAddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     city: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -7858,6 +7942,7 @@ declare const HRewardMultipliersSchema: z.ZodOptional<z.ZodObject<{
     completion_based?: number | undefined;
 }>>;
 declare const HRewardPackageTypeSchema: z.ZodEnum<["data-limited", "starter"]>;
+declare const HJobStatusSchema: z.ZodEnum<["pending", "completed", "failed"]>;
 type HAnalytics = z.infer<typeof HAnalyticsSchema>;
 type HUser = z.infer<typeof HUserSchema>;
 type HBooking = z.infer<typeof HBookingSchema>;
@@ -7883,6 +7968,7 @@ type HPackageTemplate = z.infer<typeof HPackageTemplateSchema>;
 type HUserTouchpoints = z.infer<typeof HUserTouchpointsSchema>;
 type HLoginRequest = z.infer<typeof HLoginRequestSchema>;
 type HLiveActivity = z.infer<typeof HLiveActivitySchema>;
+type HScheduledJob = z.infer<typeof HScheduledJobSchema>;
 type HAddress = z.infer<typeof HAddressSchema>;
 type HRegistration = z.infer<typeof HRegistrationSchema>;
 type HBankingDetails = z.infer<typeof HBankingDetailsSchema>;
@@ -7900,6 +7986,7 @@ type HRewardStrategy = z.infer<typeof HRewardStrategySchema>;
 type HBaseReward = z.infer<typeof HBaseRewardSchema>;
 type HRewardMultipliers = z.infer<typeof HRewardMultipliersSchema>;
 type HRewardPackageType = z.infer<typeof HRewardPackageTypeSchema>;
+type HJobStatus = z.infer<typeof HJobStatusSchema>;
 type HHubbyModel = z.infer<typeof HubbyModelSchema>;
 type HubbyModelApp = HHubbyModel;
 type HRole = z.infer<typeof HRoleSchema>;
@@ -7992,6 +8079,7 @@ declare const DESTINATION_OFFER_COLLECTION = "offers";
 declare const USER_TOUCHPOINTS_COLLECTION = "user_touchpoints";
 declare const LIVE_ACTIVITY_COLLECTION = "live_activities";
 declare const TAG_COLLECTION = "tags";
+declare const SCHEDULED_JOB_COLLECTION = "scheduled_jobs";
 
 /** ZOD SCHEMAS */
 declare const UserSchema: z.ZodTypeAny;
@@ -8024,6 +8112,7 @@ declare const PackageTemplateSchema: z.ZodTypeAny;
 declare const UserTouchpointsSchema: z.ZodTypeAny;
 declare const LoginRequestSchema: z.ZodTypeAny;
 declare const LiveActivitySchema: z.ZodTypeAny;
+declare const ScheduledJobSchema: z.ZodTypeAny;
 declare const AddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     city: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -8298,6 +8387,7 @@ declare const RewardMultipliersSchema: z.ZodOptional<z.ZodObject<{
     completion_based?: number | undefined;
 }>>;
 declare const RewardPackageTypeSchema: z.ZodEnum<["data-limited", "starter"]>;
+declare const JobStatusSchema: z.ZodEnum<["pending", "completed", "failed"]>;
 type User = z.infer<typeof UserSchema>;
 type UserFirestore = z.infer<typeof UserFirestoreSchema>;
 type Booking = z.infer<typeof BookingSchema>;
@@ -8324,10 +8414,12 @@ type PackageTemplate = z.infer<typeof PackageTemplateSchema>;
 type UserTouchpoints = z.infer<typeof UserTouchpointsSchema>;
 type LoginRequest = z.infer<typeof LoginRequestSchema>;
 type LiveActivity = z.infer<typeof LiveActivitySchema>;
+type ScheduledJob = z.infer<typeof ScheduledJobSchema>;
 type LiveActivityStatus = z.infer<typeof liveActivityStatusSchema>;
 type LiveActivityEvent = z.infer<typeof liveActivityEventSchema>;
 type LiveActivityReason = z.infer<typeof liveActivityReasonSchema>;
 type LastUpdate = z.infer<typeof lastUpdateSchema>;
+type JobStatus = z.infer<typeof JobStatusSchema>;
 type Address = z.infer<typeof AddressSchema>;
 type Registration = z.infer<typeof RegistrationSchema>;
 type BankingDetails = z.infer<typeof BankingDetailsSchema>;
@@ -10192,4 +10284,4 @@ declare const promoPackageSpecificationAppSchema: z.ZodObject<{
 type SupportedLocales = typeof SUPPORTED_LOCALES$1[number];
 declare const SUPPORTED_LOCALES: readonly ["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR"];
 
-export { API_LOG_COLLECTION, Address, AddressSchema, Analytics, AnalyticsSchema, ApiLog, ApiLogApiRequest, ApiLogApiResponse, ApiLogSchema, BOOKING_COLLECTION, BankingDetails, BankingDetailsSchema, BaseReward, BaseRewardSchema, BondioPackage, BondioPackageSchema, Booking, BookingApiRequest, BookingApiResponse, BookingSchema, BookingStatus, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannel, CommunicationChannelSchema, CommunicationOptions, CommunicationOptionsSchema, Country, CountrySchema, Currency, CurrencySchema, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, Destination, DestinationBundle, DestinationBundleSchema, DestinationSchema, ESIM, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBaseReward, HBaseRewardSchema, HBondioPackage, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HDestination, HDestinationBundle, HDestinationBundleSchema, HDestinationSchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HLiveActivity, HLiveActivitySchema, HLoginRequest, HLoginRequestSchema, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPackageTemplate, HPackageTemplateSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HReview, HReviewSchema, HReviewSubmission, HReviewSubmissionSchema, HRewardMultipliers, HRewardMultipliersSchema, HRewardPackageType, HRewardPackageTypeSchema, HRewardStrategy, HRewardStrategySchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HUserTouchpoints, HUserTouchpointsSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModel, HubbyModelApp, HubbyModelFirestore, HubbyModelSchema, LIVE_ACTIVITY_COLLECTION, LastUpdate, LiveActivity, LiveActivityEvent, LiveActivityReason, LiveActivitySchema, LiveActivityStatus, LoginRequest, LoginRequestSchema, MESSAGE_COLLECTION, Message, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, Package, PackagePrice, PackagePriceSchema, PackageSchema, PackageSpecification, PackageTemplate, PackageTemplateSchema, Partner, PartnerApiRequest, PartnerApiResponse, PartnerContact, PartnerContactSchema, PartnerData, PartnerDataSchema, PartnerPackageSpecification, PartnerPackageSpecificationSchema, PartnerSchema, Payment, PaymentSchema, PlatformSettings, PlatformSettingsSchema, PriceList, PriceListApiRequest, PriceListApiResponse, PriceListSchema, PromoCode, PromoCodeSchema, PromoPackageSpecificationSchema, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, ROLE_COLLECTION, Registration, RegistrationSchema, Review, ReviewSchema, ReviewSubmission, ReviewSubmissionSchema, RewardMultipliers, RewardMultipliersSchema, RewardPackageType, RewardPackageTypeSchema, RewardStrategy, RewardStrategySchema, SUPPORTED_LOCALES, Schedule, ScheduleFilter, ScheduleFilterSchema, ScheduleSchema, SupportedLocales, TAG_COLLECTION, TRAFFIC_POLICY_COLLECTION, Tag, TagSchema, TelnaPackage, TelnaPackageSchema, TrafficPolicy, TrafficPolicySchema, USER_COLLECTION, USER_TOUCHPOINTS_COLLECTION, User, UserFirestore, UserFirestoreSchema, UserSchema, UserTouchpoints, UserTouchpointsSchema, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerSchema, VisualIdentityBannerStrategy, VisualIdentityBanners, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, apiLogSchemaSpec, bookingAppSchema, bookingSchemaSpec, countrySchemaSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, currencySchemaSpec, destinationAppSchema, destinationBundleAppSchema, destinationBundleSchemaSpec, destinationSchemaSpec, esimSchemaSpec, lastUpdateSchema, liveActivityEventSchema, liveActivityReasonSchema, liveActivitySchemaSpec, liveActivityStatusSchema, loginRequestSchemaSpec, messageSchemaSpec, packageSchemaSpec, packageTemplateAppSchema, packageTemplateSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, paymentSchemaSpec, priceListFromFirestore, priceListSchemaSpec, priceListToFirestore, promoCodeFromFirestore, promoCodeSchemaSpec, promoCodeToFirestore, promoPackageSpecificationAppSchema, reviewSchemaSpec, reviewSubmissionSchemaSpec, tagSchemaSpec, userFromFirestore, userSchemaSpec, userToFirestore, userTouchpointsFromFirestore, userTouchpointsSchemaSpec, userTouchpointsToFirestore };
+export { API_LOG_COLLECTION, Address, AddressSchema, Analytics, AnalyticsSchema, ApiLog, ApiLogApiRequest, ApiLogApiResponse, ApiLogSchema, BOOKING_COLLECTION, BankingDetails, BankingDetailsSchema, BaseReward, BaseRewardSchema, BondioPackage, BondioPackageSchema, Booking, BookingApiRequest, BookingApiResponse, BookingSchema, BookingStatus, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannel, CommunicationChannelSchema, CommunicationOptions, CommunicationOptionsSchema, Country, CountrySchema, Currency, CurrencySchema, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, Destination, DestinationBundle, DestinationBundleSchema, DestinationSchema, ESIM, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBaseReward, HBaseRewardSchema, HBondioPackage, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HDestination, HDestinationBundle, HDestinationBundleSchema, HDestinationSchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HJobStatus, HJobStatusSchema, HLiveActivity, HLiveActivitySchema, HLoginRequest, HLoginRequestSchema, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPackageTemplate, HPackageTemplateSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HReview, HReviewSchema, HReviewSubmission, HReviewSubmissionSchema, HRewardMultipliers, HRewardMultipliersSchema, HRewardPackageType, HRewardPackageTypeSchema, HRewardStrategy, HRewardStrategySchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HScheduledJob, HScheduledJobSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HUserTouchpoints, HUserTouchpointsSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModel, HubbyModelApp, HubbyModelFirestore, HubbyModelSchema, JobStatus, JobStatusSchema, LIVE_ACTIVITY_COLLECTION, LastUpdate, LiveActivity, LiveActivityEvent, LiveActivityReason, LiveActivitySchema, LiveActivityStatus, LoginRequest, LoginRequestSchema, MESSAGE_COLLECTION, Message, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, Package, PackagePrice, PackagePriceSchema, PackageSchema, PackageSpecification, PackageTemplate, PackageTemplateSchema, Partner, PartnerApiRequest, PartnerApiResponse, PartnerContact, PartnerContactSchema, PartnerData, PartnerDataSchema, PartnerPackageSpecification, PartnerPackageSpecificationSchema, PartnerSchema, Payment, PaymentSchema, PlatformSettings, PlatformSettingsSchema, PriceList, PriceListApiRequest, PriceListApiResponse, PriceListSchema, PromoCode, PromoCodeSchema, PromoPackageSpecificationSchema, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, ROLE_COLLECTION, Registration, RegistrationSchema, Review, ReviewSchema, ReviewSubmission, ReviewSubmissionSchema, RewardMultipliers, RewardMultipliersSchema, RewardPackageType, RewardPackageTypeSchema, RewardStrategy, RewardStrategySchema, SCHEDULED_JOB_COLLECTION, SUPPORTED_LOCALES, Schedule, ScheduleFilter, ScheduleFilterSchema, ScheduleSchema, ScheduledJob, ScheduledJobSchema, SupportedLocales, TAG_COLLECTION, TRAFFIC_POLICY_COLLECTION, Tag, TagSchema, TelnaPackage, TelnaPackageSchema, TrafficPolicy, TrafficPolicySchema, USER_COLLECTION, USER_TOUCHPOINTS_COLLECTION, User, UserFirestore, UserFirestoreSchema, UserSchema, UserTouchpoints, UserTouchpointsSchema, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerSchema, VisualIdentityBannerStrategy, VisualIdentityBanners, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, apiLogSchemaSpec, bookingAppSchema, bookingSchemaSpec, countrySchemaSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, currencySchemaSpec, destinationAppSchema, destinationBundleAppSchema, destinationBundleSchemaSpec, destinationSchemaSpec, esimSchemaSpec, jobStatusSchema, lastUpdateSchema, liveActivityEventSchema, liveActivityReasonSchema, liveActivitySchemaSpec, liveActivityStatusSchema, loginRequestSchemaSpec, messageSchemaSpec, packageSchemaSpec, packageTemplateAppSchema, packageTemplateSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, paymentSchemaSpec, priceListFromFirestore, priceListSchemaSpec, priceListToFirestore, promoCodeFromFirestore, promoCodeSchemaSpec, promoCodeToFirestore, promoPackageSpecificationAppSchema, reviewSchemaSpec, reviewSubmissionSchemaSpec, scheduledJobSchemaSpec, tagSchemaSpec, userFromFirestore, userSchemaSpec, userToFirestore, userTouchpointsFromFirestore, userTouchpointsSchemaSpec, userTouchpointsToFirestore };
