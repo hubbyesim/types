@@ -27,6 +27,7 @@ export const USER_TOUCHPOINTS_COLLECTION = 'user_touchpoints';
 export const LIVE_ACTIVITY_COLLECTION = 'live_activities';
 export const STORE_REVIEW_COLLECTION = 'store_reviews';
 export const TAG_COLLECTION = 'tags';
+export const SCHEDULED_JOB_COLLECTION = 'scheduled_jobs';
 
 
 export const packageTypes = ['data-limited', 'time-limited', 'starter', 'unlimited'];

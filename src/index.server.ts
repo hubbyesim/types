@@ -58,6 +58,7 @@ import {
     liveActivityReasonSchema,
     lastUpdateSchema
 } from './specs/live_activity';
+import { scheduledJobSchemaSpec, jobStatusSchema } from './specs/scheduled_job';
 import { z } from 'zod';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 
@@ -92,7 +93,9 @@ export {
     liveActivityStatusSchema,
     liveActivityEventSchema,
     liveActivityReasonSchema,
-    lastUpdateSchema
+    lastUpdateSchema,
+    scheduledJobSchemaSpec,
+    jobStatusSchema
 };
 
 
@@ -127,6 +130,7 @@ export const PackageTemplateSchema = buildServerSchema(packageTemplateSchemaSpec
 export const UserTouchpointsSchema = buildServerSchema(userTouchpointsSchemaSpec);
 export const LoginRequestSchema = buildServerSchema(loginRequestSchemaSpec);
 export const LiveActivitySchema = buildServerSchema(liveActivitySchemaSpec);
+export const ScheduledJobSchema = buildServerSchema(scheduledJobSchemaSpec);
 
 // Additional lower-level schemas
 export const AddressSchema = addressSchema;
@@ -146,6 +150,7 @@ export const RewardStrategySchema = rewardStrategySchema;
 export const BaseRewardSchema = baseRewardSchema;
 export const RewardMultipliersSchema = rewardMultipliersSchema;
 export const RewardPackageTypeSchema = rewardPackageTypeSchema;
+export const JobStatusSchema = jobStatusSchema;
 
 export type User = z.infer<typeof UserSchema>;
 export type UserFirestore = z.infer<typeof UserFirestoreSchema>;
@@ -173,10 +178,12 @@ export type PackageTemplate = z.infer<typeof PackageTemplateSchema>;
 export type UserTouchpoints = z.infer<typeof UserTouchpointsSchema>;
 export type LoginRequest = z.infer<typeof LoginRequestSchema>;
 export type LiveActivity = z.infer<typeof LiveActivitySchema>;
+export type ScheduledJob = z.infer<typeof ScheduledJobSchema>;
 export type LiveActivityStatus = z.infer<typeof liveActivityStatusSchema>;
 export type LiveActivityEvent = z.infer<typeof liveActivityEventSchema>;
 export type LiveActivityReason = z.infer<typeof liveActivityReasonSchema>;
 export type LastUpdate = z.infer<typeof lastUpdateSchema>;
+export type JobStatus = z.infer<typeof JobStatusSchema>;
 
 // Additional lower-level types
 export type Address = z.infer<typeof AddressSchema>;
@@ -284,5 +291,5 @@ export { createModelConverters } from './utils/modelConverterFactory';
 export { createConvertJSToFirestore, createConvertFirestoreToJS } from './utils/firestoreTransformUtils';
 export { FirebaseService, createFirebaseService } from './services/firebase';
 
-export { USER_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, BOOKING_COLLECTION, ROLE_COLLECTION, PERMISSION_COLLECTION, TRAFFIC_POLICY_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, COUNTRY_COLLECTION, ESIM_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, MESSAGE_COLLECTION, CURRENCY_COLLECTION, API_LOG_COLLECTION, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, USER_TOUCHPOINTS_COLLECTION, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, TAG_COLLECTION, LIVE_ACTIVITY_COLLECTION } from './specs/common';
+export { USER_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, BOOKING_COLLECTION, ROLE_COLLECTION, PERMISSION_COLLECTION, TRAFFIC_POLICY_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, COUNTRY_COLLECTION, ESIM_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, MESSAGE_COLLECTION, CURRENCY_COLLECTION, API_LOG_COLLECTION, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, USER_TOUCHPOINTS_COLLECTION, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, TAG_COLLECTION, LIVE_ACTIVITY_COLLECTION, SCHEDULED_JOB_COLLECTION } from './specs/common';
 

@@ -193,6 +193,7 @@ var DESTINATION_OFFER_COLLECTION = "offers";
 var USER_TOUCHPOINTS_COLLECTION = "user_touchpoints";
 var LIVE_ACTIVITY_COLLECTION = "live_activities";
 var TAG_COLLECTION = "tags";
+var SCHEDULED_JOB_COLLECTION = "scheduled_jobs";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: true };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
@@ -1333,6 +1334,23 @@ var liveActivitySchemaSpec = markAsSchemaSpec({
   created_by: zod.z.string().nullable(),
   updated_by: zod.z.string().nullable()
 });
+var jobStatusSchema = zod.z.enum(["pending", "completed", "failed"]);
+var scheduledJobSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string().nullable().optional(),
+  job_type: zod.z.string(),
+  execute_at: timestampRequired,
+  status: jobStatusSchema,
+  task_data: zod.z.record(zod.z.unknown()),
+  retry_count: zod.z.number(),
+  max_retries: zod.z.number(),
+  error: zod.z.string().nullable(),
+  scheduled_at: timestampNullable,
+  last_retry_at: timestampNullable,
+  created_at: timestampRequired,
+  updated_at: timestampRequired,
+  created_by: zod.z.string().nullable(),
+  updated_by: zod.z.string().nullable()
+});
 function createConvertJSToFirestore(db) {
   return function convertJSToFirestore2(input, spec) {
     if (input === void 0 || input === null)
@@ -1630,6 +1648,7 @@ var HPackageTemplateSchema = buildClientSchema(packageTemplateSchemaSpec);
 var HUserTouchpointsSchema = buildClientSchema(userTouchpointsSchemaSpec);
 var HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 var HLiveActivitySchema = buildClientSchema(liveActivitySchemaSpec);
+var HScheduledJobSchema = buildClientSchema(scheduledJobSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1646,6 +1665,7 @@ var HRewardStrategySchema = rewardStrategySchema;
 var HBaseRewardSchema = baseRewardSchema;
 var HRewardMultipliersSchema = rewardMultipliersSchema;
 var HRewardPackageTypeSchema = rewardPackageTypeSchema;
+var HJobStatusSchema = jobStatusSchema;
 
 // src/utils/modelConverterFactory.ts
 function createModelConverters(db, modelSchemaSpec) {
@@ -1698,6 +1718,7 @@ var PackageTemplateSchema = buildServerSchema(packageTemplateSchemaSpec);
 var UserTouchpointsSchema = buildServerSchema(userTouchpointsSchemaSpec);
 var LoginRequestSchema = buildServerSchema(loginRequestSchemaSpec);
 var LiveActivitySchema = buildServerSchema(liveActivitySchemaSpec);
+var ScheduledJobSchema = buildServerSchema(scheduledJobSchemaSpec);
 var AddressSchema = addressSchema;
 var RegistrationSchema = registrationSchema;
 var BankingDetailsSchema = bankingDetailsSchema;
@@ -1715,6 +1736,7 @@ var RewardStrategySchema = rewardStrategySchema;
 var BaseRewardSchema = baseRewardSchema;
 var RewardMultipliersSchema = rewardMultipliersSchema;
 var RewardPackageTypeSchema = rewardPackageTypeSchema;
+var JobStatusSchema = jobStatusSchema;
 var partnerFromFirestore = (partner) => {
   return convertFirestoreToJS(partner, partnerSchemaSpec);
 };
@@ -1793,6 +1815,7 @@ exports.HDestinationSchema = HDestinationSchema;
 exports.HESIMSchema = HESIMSchema;
 exports.HFinancialPropertiesSchema = HFinancialPropertiesSchema;
 exports.HFreeEsimSchema = HFreeEsimSchema;
+exports.HJobStatusSchema = HJobStatusSchema;
 exports.HLiveActivitySchema = HLiveActivitySchema;
 exports.HLoginRequestSchema = HLoginRequestSchema;
 exports.HMessageSchema = HMessageSchema;
@@ -1819,6 +1842,7 @@ exports.HRewardPackageTypeSchema = HRewardPackageTypeSchema;
 exports.HRewardStrategySchema = HRewardStrategySchema;
 exports.HRoleSchema = HRoleSchema;
 exports.HScheduleFilterSchema = HScheduleFilterSchema;
+exports.HScheduledJobSchema = HScheduledJobSchema;
 exports.HTagSchema = HTagSchema;
 exports.HTelnaPackageSchema = HTelnaPackageSchema;
 exports.HTrafficPolicySchema = HTrafficPolicySchema;
@@ -1827,6 +1851,7 @@ exports.HUserTouchpointsSchema = HUserTouchpointsSchema;
 exports.HVisualIdentityBannerSchema = HVisualIdentityBannerSchema;
 exports.HVisualIdentitySchema = HVisualIdentitySchema;
 exports.HubbyModelSchema = HubbyModelSchema;
+exports.JobStatusSchema = JobStatusSchema;
 exports.LIVE_ACTIVITY_COLLECTION = LIVE_ACTIVITY_COLLECTION;
 exports.LiveActivitySchema = LiveActivitySchema;
 exports.LoginRequestSchema = LoginRequestSchema;
@@ -1860,9 +1885,11 @@ exports.ReviewSubmissionSchema = ReviewSubmissionSchema;
 exports.RewardMultipliersSchema = RewardMultipliersSchema;
 exports.RewardPackageTypeSchema = RewardPackageTypeSchema;
 exports.RewardStrategySchema = RewardStrategySchema;
+exports.SCHEDULED_JOB_COLLECTION = SCHEDULED_JOB_COLLECTION;
 exports.SUPPORTED_LOCALES = SUPPORTED_LOCALES2;
 exports.ScheduleFilterSchema = ScheduleFilterSchema;
 exports.ScheduleSchema = ScheduleSchema;
+exports.ScheduledJobSchema = ScheduledJobSchema;
 exports.TAG_COLLECTION = TAG_COLLECTION;
 exports.TRAFFIC_POLICY_COLLECTION = TRAFFIC_POLICY_COLLECTION;
 exports.TagSchema = TagSchema;
@@ -1891,6 +1918,7 @@ exports.destinationBundleAppSchema = destinationBundleAppSchema;
 exports.destinationBundleSchemaSpec = destinationBundleSchemaSpec;
 exports.destinationSchemaSpec = destinationSchemaSpec;
 exports.esimSchemaSpec = esimSchemaSpec;
+exports.jobStatusSchema = jobStatusSchema;
 exports.lastUpdateSchema = lastUpdateSchema;
 exports.liveActivityEventSchema = liveActivityEventSchema;
 exports.liveActivityReasonSchema = liveActivityReasonSchema;
@@ -1915,6 +1943,7 @@ exports.promoCodeToFirestore = promoCodeToFirestore;
 exports.promoPackageSpecificationAppSchema = promoPackageSpecificationAppSchema;
 exports.reviewSchemaSpec = reviewSchemaSpec;
 exports.reviewSubmissionSchemaSpec = reviewSubmissionSchemaSpec;
+exports.scheduledJobSchemaSpec = scheduledJobSchemaSpec;
 exports.tagSchemaSpec = tagSchemaSpec;
 exports.userFromFirestore = userFromFirestore;
 exports.userSchemaSpec = userSchemaSpec;

@@ -1319,6 +1319,23 @@ var liveActivitySchemaSpec = markAsSchemaSpec({
   created_by: z.string().nullable(),
   updated_by: z.string().nullable()
 });
+var jobStatusSchema = z.enum(["pending", "completed", "failed"]);
+var scheduledJobSchemaSpec = markAsSchemaSpec({
+  id: z.string().nullable().optional(),
+  job_type: z.string(),
+  execute_at: timestampRequired,
+  status: jobStatusSchema,
+  task_data: z.record(z.unknown()),
+  retry_count: z.number(),
+  max_retries: z.number(),
+  error: z.string().nullable(),
+  scheduled_at: timestampNullable,
+  last_retry_at: timestampNullable,
+  created_at: timestampRequired,
+  updated_at: timestampRequired,
+  created_by: z.string().nullable(),
+  updated_by: z.string().nullable()
+});
 
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
@@ -1356,6 +1373,7 @@ var HPackageTemplateSchema = buildClientSchema(packageTemplateSchemaSpec);
 var HUserTouchpointsSchema = buildClientSchema(userTouchpointsSchemaSpec);
 var HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 var HLiveActivitySchema = buildClientSchema(liveActivitySchemaSpec);
+var HScheduledJobSchema = buildClientSchema(scheduledJobSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1372,8 +1390,9 @@ var HRewardStrategySchema = rewardStrategySchema;
 var HBaseRewardSchema = baseRewardSchema;
 var HRewardMultipliersSchema = rewardMultipliersSchema;
 var HRewardPackageTypeSchema = rewardPackageTypeSchema;
+var HJobStatusSchema = jobStatusSchema;
 var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
-export { HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBaseRewardSchema, HBondioPackageSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HDestinationBundleSchema, HDestinationSchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HLiveActivitySchema, HLoginRequestSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPackageTemplateSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HReviewSchema, HReviewSubmissionSchema, HRewardMultipliersSchema, HRewardPackageTypeSchema, HRewardStrategySchema, HRoleSchema, HScheduleFilterSchema, HTagSchema, HTelnaPackageSchema, HTrafficPolicySchema, HUserSchema, HUserTouchpointsSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES };
+export { HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBaseRewardSchema, HBondioPackageSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HDestinationBundleSchema, HDestinationSchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HJobStatusSchema, HLiveActivitySchema, HLoginRequestSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPackageTemplateSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HReviewSchema, HReviewSubmissionSchema, HRewardMultipliersSchema, HRewardPackageTypeSchema, HRewardStrategySchema, HRoleSchema, HScheduleFilterSchema, HScheduledJobSchema, HTagSchema, HTelnaPackageSchema, HTrafficPolicySchema, HUserSchema, HUserTouchpointsSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES };
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.js.map
