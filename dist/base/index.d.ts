@@ -181,6 +181,8 @@ declare const HBookingSchema: z.ZodObject<{
     phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     booking_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     flight_number: z.ZodOptional<z.ZodString>;
+    departure_location: z.ZodOptional<z.ZodString>;
+    brand: z.ZodOptional<z.ZodString>;
     gender: z.ZodOptional<z.ZodEnum<["M", "F", "O"]>>;
     sent_messages: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
     locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR", "hu-HU"]>;
@@ -313,6 +315,8 @@ declare const HBookingSchema: z.ZodObject<{
     phone?: string | null | undefined;
     booking_id?: string | null | undefined;
     flight_number?: string | undefined;
+    departure_location?: string | undefined;
+    brand?: string | undefined;
     sent_messages?: Record<string, any> | undefined;
     is_processed_for_esim_restoration?: boolean | null | undefined;
     is_pseudonymized?: boolean | null | undefined;
@@ -370,6 +374,8 @@ declare const HBookingSchema: z.ZodObject<{
     phone?: string | null | undefined;
     booking_id?: string | null | undefined;
     flight_number?: string | undefined;
+    departure_location?: string | undefined;
+    brand?: string | undefined;
     sent_messages?: Record<string, any> | undefined;
     is_processed_for_esim_restoration?: boolean | null | undefined;
     is_pseudonymized?: boolean | null | undefined;
