@@ -372,7 +372,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
   booking_id: zod.z.string().nullable().optional(),
   flight_number: zod.z.string().optional(),
   departure_location: zod.z.string().optional(),
-  brand: zod.z.string().optional(),
+  brand: zod.z.string().nullable().optional(),
   gender: zod.z.enum(["M", "F", "O"]).optional(),
   sent_messages: zod.z.record(zod.z.any()).optional(),
   locale: supportedLocalesSchema,
