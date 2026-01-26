@@ -250,6 +250,7 @@ declare const bookingSchemaSpec: {
     }, {
         messaging_contact_id: string | null;
     }>>>;
+    custom_branding: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 };
 
 declare const countrySchemaSpec: {
@@ -2166,6 +2167,7 @@ declare const HBookingSchema: z.ZodObject<{
     }, {
         messaging_contact_id: string | null;
     }>>>;
+    custom_branding: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
     partner: string;
@@ -2225,6 +2227,7 @@ declare const HBookingSchema: z.ZodObject<{
     hubby_foreign_identifiers?: {
         messaging_contact_id: string | null;
     } | null | undefined;
+    custom_branding?: string | null | undefined;
 }, {
     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
     partner: string;
@@ -2284,6 +2287,7 @@ declare const HBookingSchema: z.ZodObject<{
     hubby_foreign_identifiers?: {
         messaging_contact_id: string | null;
     } | null | undefined;
+    custom_branding?: string | null | undefined;
 }>;
 declare const HCountrySchema: z.ZodObject<{
     bokun_id: z.ZodNullable<z.ZodNumber>;
@@ -8588,6 +8592,7 @@ declare const bookingAppSchema: z.ZodObject<{
     }, {
         messaging_contact_id: string | null;
     }>>>;
+    custom_branding: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
     partner: string;
@@ -8647,6 +8652,7 @@ declare const bookingAppSchema: z.ZodObject<{
     hubby_foreign_identifiers?: {
         messaging_contact_id: string | null;
     } | null | undefined;
+    custom_branding?: string | null | undefined;
 }, {
     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
     partner: string;
@@ -8706,6 +8712,7 @@ declare const bookingAppSchema: z.ZodObject<{
     hubby_foreign_identifiers?: {
         messaging_contact_id: string | null;
     } | null | undefined;
+    custom_branding?: string | null | undefined;
 }>;
 declare const partnerAppSchema: z.ZodObject<{
     id: z.ZodString;

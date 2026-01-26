@@ -1,4 +1,4 @@
-import { z, ZodLazy } from 'zod';
+import { z } from 'zod';
 import { markAsSchemaSpec } from '../common';
 import { supportedLocalesSchema, SUPPORTED_LOCALES, SupportedLocales } from '../constants';
 import {
@@ -105,14 +105,25 @@ export const visualIdentityBannersSchema = z.object({
     banners: z.array(visualIdentityBannerSchema).nullable().optional()
 });
 
+// Visual identity custom branding schema
+export const visualIdentityCustomBrandingSchema = z.object({
+    primary_color: z.string(),
+    secondary_color: z.string(),
+    logo: z.string(),
+    font: z.string().nullable().optional(),
+    top_banner: visualIdentityBannersSchema.optional(),
+    mid_banner: visualIdentityBannersSchema.optional(),
+});
+
 export const visualIdentitySchema = z.object({
     primary_color: z.string(),
     secondary_color: z.string(),
     logo: z.string(),
     font: z.string().nullable().optional(),
     top_banner: visualIdentityBannersSchema.optional(),
-    mid_banner: visualIdentityBannersSchema.optional()
-});
+    mid_banner: visualIdentityBannersSchema.optional(),
+    custom_branding: z.record(visualIdentityCustomBrandingSchema).optional()
+}) as z.ZodObject<any>;
 
 // Partner contact schema
 export const partnerContactSchema = z.object({

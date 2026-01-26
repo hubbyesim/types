@@ -127,6 +127,7 @@ export const bookingSchemaSpec = markAsSchemaSpec({
     },
     hubby_foreign_identifiers: z.object({
         messaging_contact_id: z.string().nullable()
-    }).nullable().optional()
+    }).nullable().optional(),
+    custom_branding: z.string().nullable().optional() // Optional custom branding key that references partner->visual_identity->custom_branding->{key}
 });
 

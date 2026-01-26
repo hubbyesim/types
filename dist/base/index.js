@@ -423,7 +423,8 @@ var bookingSchemaSpec = markAsSchemaSpec({
   },
   hubby_foreign_identifiers: z.object({
     messaging_contact_id: z.string().nullable()
-  }).nullable().optional()
+  }).nullable().optional(),
+  custom_branding: z.string().nullable().optional()
 });
 var countrySchemaSpec = markAsSchemaSpec({
   ...hubbyModelSpec,
@@ -700,13 +701,22 @@ var visualIdentityBannersSchema = z.object({
   strategy: z.enum(["fixed", "rotating", "destination", "time_of_day"]),
   banners: z.array(visualIdentityBannerSchema).nullable().optional()
 });
-var visualIdentitySchema = z.object({
+var visualIdentityCustomBrandingSchema = z.object({
   primary_color: z.string(),
   secondary_color: z.string(),
   logo: z.string(),
   font: z.string().nullable().optional(),
   top_banner: visualIdentityBannersSchema.optional(),
   mid_banner: visualIdentityBannersSchema.optional()
+});
+var visualIdentitySchema = z.object({
+  primary_color: z.string(),
+  secondary_color: z.string(),
+  logo: z.string(),
+  font: z.string().nullable().optional(),
+  top_banner: visualIdentityBannersSchema.optional(),
+  mid_banner: visualIdentityBannersSchema.optional(),
+  custom_branding: z.record(visualIdentityCustomBrandingSchema).optional()
 });
 var partnerContactSchema = z.object({
   name: z.string().nullable().optional(),
