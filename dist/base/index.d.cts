@@ -181,9 +181,11 @@ declare const HBookingSchema: z.ZodObject<{
     phone: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     booking_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     flight_number: z.ZodOptional<z.ZodString>;
+    departure_location: z.ZodOptional<z.ZodString>;
+    brand: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     gender: z.ZodOptional<z.ZodEnum<["M", "F", "O"]>>;
     sent_messages: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
-    locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR"]>;
+    locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR", "hu-HU"]>;
     status: z.ZodNullable<z.ZodOptional<z.ZodEnum<["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED", "UNPAID", "EXPIRED"]>>>;
     data: z.ZodObject<{
         source: z.ZodString;
@@ -270,7 +272,7 @@ declare const HBookingSchema: z.ZodObject<{
     }>>>;
     custom_branding: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
-    locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+    locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
     partner: string;
     created_at: Date;
     updated_at: Date;
@@ -314,6 +316,8 @@ declare const HBookingSchema: z.ZodObject<{
     phone?: string | null | undefined;
     booking_id?: string | null | undefined;
     flight_number?: string | undefined;
+    departure_location?: string | undefined;
+    brand?: string | null | undefined;
     sent_messages?: Record<string, any> | undefined;
     is_processed_for_esim_restoration?: boolean | null | undefined;
     is_pseudonymized?: boolean | null | undefined;
@@ -328,7 +332,7 @@ declare const HBookingSchema: z.ZodObject<{
     } | null | undefined;
     custom_branding?: string | null | undefined;
 }, {
-    locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+    locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
     partner: string;
     created_at: Date;
     updated_at: Date;
@@ -372,6 +376,8 @@ declare const HBookingSchema: z.ZodObject<{
     phone?: string | null | undefined;
     booking_id?: string | null | undefined;
     flight_number?: string | undefined;
+    departure_location?: string | undefined;
+    brand?: string | null | undefined;
     sent_messages?: Record<string, any> | undefined;
     is_processed_for_esim_restoration?: boolean | null | undefined;
     is_pseudonymized?: boolean | null | undefined;
@@ -1445,11 +1451,154 @@ declare const HPartnerSchema: z.ZodObject<{
         commission_percentage?: number | null | undefined;
     }>;
     visual_identity: z.ZodObject<{
-        [x: string]: any;
+        primary_color: z.ZodString;
+        secondary_color: z.ZodString;
+        logo: z.ZodString;
+        font: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        top_banner: z.ZodOptional<z.ZodObject<{
+            strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
+            banners: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
+                action: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+                image_url: z.ZodString;
+                alt: z.ZodString;
+                click_url: z.ZodString;
+                locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR", "hu-HU"]>;
+                properties: z.ZodRecord<z.ZodString, z.ZodString>;
+            }, "strip", z.ZodTypeAny, {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }, {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }>, "many">>>;
+        }, "strip", z.ZodTypeAny, {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        }, {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        }>>;
+        mid_banner: z.ZodOptional<z.ZodObject<{
+            strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
+            banners: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
+                action: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+                image_url: z.ZodString;
+                alt: z.ZodString;
+                click_url: z.ZodString;
+                locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR", "hu-HU"]>;
+                properties: z.ZodRecord<z.ZodString, z.ZodString>;
+            }, "strip", z.ZodTypeAny, {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }, {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }>, "many">>>;
+        }, "strip", z.ZodTypeAny, {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        }, {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        }>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
-        [x: string]: any;
+        primary_color: string;
+        secondary_color: string;
+        logo: string;
+        font?: string | null | undefined;
+        top_banner?: {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        } | undefined;
+        mid_banner?: {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        } | undefined;
     }, {
-        [x: string]: any;
+        primary_color: string;
+        secondary_color: string;
+        logo: string;
+        font?: string | null | undefined;
+        top_banner?: {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        } | undefined;
+        mid_banner?: {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        } | undefined;
     }>;
     platform_settings: z.ZodObject<{
         package_strategy: z.ZodObject<{
@@ -1518,11 +1667,11 @@ declare const HPartnerSchema: z.ZodObject<{
             booking_id_verification_pattern?: string | null | undefined;
         }>;
         booking_defaults: z.ZodObject<{
-            locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR"]>;
+            locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR", "hu-HU"]>;
         }, z.UnknownKeysParam, z.ZodTypeAny, {
-            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
         }, {
-            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
         }>;
         booking_confirmation: z.ZodObject<{
             brevo_template_id: z.ZodNumber;
@@ -1742,7 +1891,7 @@ declare const HPartnerSchema: z.ZodObject<{
             booking_id_verification_pattern?: string | null | undefined;
         };
         booking_defaults: {
-            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
         };
         booking_confirmation: {
             brevo_template_id: number;
@@ -1826,7 +1975,7 @@ declare const HPartnerSchema: z.ZodObject<{
             booking_id_verification_pattern?: string | null | undefined;
         };
         booking_defaults: {
-            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
         };
         booking_confirmation: {
             brevo_template_id: number;
@@ -2037,7 +2186,32 @@ declare const HPartnerSchema: z.ZodObject<{
         commission_percentage?: number | null | undefined;
     };
     visual_identity: {
-        [x: string]: any;
+        primary_color: string;
+        secondary_color: string;
+        logo: string;
+        font?: string | null | undefined;
+        top_banner?: {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        } | undefined;
+        mid_banner?: {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        } | undefined;
     };
     platform_settings: {
         package_strategy: {
@@ -2060,7 +2234,7 @@ declare const HPartnerSchema: z.ZodObject<{
             booking_id_verification_pattern?: string | null | undefined;
         };
         booking_defaults: {
-            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
         };
         booking_confirmation: {
             brevo_template_id: number;
@@ -2224,7 +2398,32 @@ declare const HPartnerSchema: z.ZodObject<{
         commission_percentage?: number | null | undefined;
     };
     visual_identity: {
-        [x: string]: any;
+        primary_color: string;
+        secondary_color: string;
+        logo: string;
+        font?: string | null | undefined;
+        top_banner?: {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        } | undefined;
+        mid_banner?: {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        } | undefined;
     };
     platform_settings: {
         package_strategy: {
@@ -2247,7 +2446,7 @@ declare const HPartnerSchema: z.ZodObject<{
             booking_id_verification_pattern?: string | null | undefined;
         };
         booking_defaults: {
-            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
         };
         booking_confirmation: {
             brevo_template_id: number;
@@ -3049,11 +3248,154 @@ declare const HPartnerAppSchema: z.ZodObject<{
         commission_percentage?: number | null | undefined;
     }>;
     visual_identity: z.ZodObject<{
-        [x: string]: any;
+        primary_color: z.ZodString;
+        secondary_color: z.ZodString;
+        logo: z.ZodString;
+        font: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        top_banner: z.ZodOptional<z.ZodObject<{
+            strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
+            banners: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
+                action: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+                image_url: z.ZodString;
+                alt: z.ZodString;
+                click_url: z.ZodString;
+                locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR", "hu-HU"]>;
+                properties: z.ZodRecord<z.ZodString, z.ZodString>;
+            }, "strip", z.ZodTypeAny, {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }, {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }>, "many">>>;
+        }, "strip", z.ZodTypeAny, {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        }, {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        }>>;
+        mid_banner: z.ZodOptional<z.ZodObject<{
+            strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
+            banners: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
+                action: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+                image_url: z.ZodString;
+                alt: z.ZodString;
+                click_url: z.ZodString;
+                locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR", "hu-HU"]>;
+                properties: z.ZodRecord<z.ZodString, z.ZodString>;
+            }, "strip", z.ZodTypeAny, {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }, {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }>, "many">>>;
+        }, "strip", z.ZodTypeAny, {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        }, {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        }>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
-        [x: string]: any;
+        primary_color: string;
+        secondary_color: string;
+        logo: string;
+        font?: string | null | undefined;
+        top_banner?: {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        } | undefined;
+        mid_banner?: {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        } | undefined;
     }, {
-        [x: string]: any;
+        primary_color: string;
+        secondary_color: string;
+        logo: string;
+        font?: string | null | undefined;
+        top_banner?: {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        } | undefined;
+        mid_banner?: {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        } | undefined;
     }>;
     platform_settings: z.ZodObject<{
         package_strategy: z.ZodObject<{
@@ -3122,11 +3464,11 @@ declare const HPartnerAppSchema: z.ZodObject<{
             booking_id_verification_pattern?: string | null | undefined;
         }>;
         booking_defaults: z.ZodObject<{
-            locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR"]>;
+            locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR", "hu-HU"]>;
         }, z.UnknownKeysParam, z.ZodTypeAny, {
-            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
         }, {
-            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
         }>;
         booking_confirmation: z.ZodObject<{
             brevo_template_id: z.ZodNumber;
@@ -3346,7 +3688,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             booking_id_verification_pattern?: string | null | undefined;
         };
         booking_defaults: {
-            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
         };
         booking_confirmation: {
             brevo_template_id: number;
@@ -3430,7 +3772,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             booking_id_verification_pattern?: string | null | undefined;
         };
         booking_defaults: {
-            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
         };
         booking_confirmation: {
             brevo_template_id: number;
@@ -3641,7 +3983,32 @@ declare const HPartnerAppSchema: z.ZodObject<{
         commission_percentage?: number | null | undefined;
     };
     visual_identity: {
-        [x: string]: any;
+        primary_color: string;
+        secondary_color: string;
+        logo: string;
+        font?: string | null | undefined;
+        top_banner?: {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        } | undefined;
+        mid_banner?: {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        } | undefined;
     };
     platform_settings: {
         package_strategy: {
@@ -3664,7 +4031,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             booking_id_verification_pattern?: string | null | undefined;
         };
         booking_defaults: {
-            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
         };
         booking_confirmation: {
             brevo_template_id: number;
@@ -3828,7 +4195,32 @@ declare const HPartnerAppSchema: z.ZodObject<{
         commission_percentage?: number | null | undefined;
     };
     visual_identity: {
-        [x: string]: any;
+        primary_color: string;
+        secondary_color: string;
+        logo: string;
+        font?: string | null | undefined;
+        top_banner?: {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        } | undefined;
+        mid_banner?: {
+            strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+            banners?: {
+                locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+                image_url: string;
+                alt: string;
+                click_url: string;
+                properties: Record<string, string>;
+                action?: string | null | undefined;
+            }[] | null | undefined;
+        } | undefined;
     };
     platform_settings: {
         package_strategy: {
@@ -3851,7 +4243,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             booking_id_verification_pattern?: string | null | undefined;
         };
         booking_defaults: {
-            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
         };
         booking_confirmation: {
             brevo_template_id: number;
@@ -4011,11 +4403,11 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         booking_id_verification_pattern?: string | null | undefined;
     }>>>;
     booking_defaults: z.ZodOptional<z.ZodNullable<z.ZodObject<{
-        locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR"]>;
+        locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR", "hu-HU"]>;
     }, "strip", z.ZodTypeAny, {
-        locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+        locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
     }, {
-        locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+        locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
     }>>>;
     booking_confirmation: z.ZodOptional<z.ZodNullable<z.ZodObject<{
         brevo_template_id: z.ZodNumber;
@@ -4235,7 +4627,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         booking_id_verification_pattern?: string | null | undefined;
     } | null | undefined;
     booking_defaults?: {
-        locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+        locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
     } | null | undefined;
     booking_confirmation?: {
         brevo_template_id: number;
@@ -4319,7 +4711,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         booking_id_verification_pattern?: string | null | undefined;
     } | null | undefined;
     booking_defaults?: {
-        locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+        locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
     } | null | undefined;
     booking_confirmation?: {
         brevo_template_id: number;
@@ -4382,10 +4774,155 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
     } | null | undefined;
     account_manager?: string | null | undefined;
 }>;
-declare const HVisualIdentitySchema: z.ZodObject<any, z.UnknownKeysParam, z.ZodTypeAny, {
-    [x: string]: any;
+declare const HVisualIdentitySchema: z.ZodObject<{
+    primary_color: z.ZodString;
+    secondary_color: z.ZodString;
+    logo: z.ZodString;
+    font: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    top_banner: z.ZodOptional<z.ZodObject<{
+        strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
+        banners: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
+            action: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            image_url: z.ZodString;
+            alt: z.ZodString;
+            click_url: z.ZodString;
+            locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR", "hu-HU"]>;
+            properties: z.ZodRecord<z.ZodString, z.ZodString>;
+        }, "strip", z.ZodTypeAny, {
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+            action?: string | null | undefined;
+        }, {
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+            action?: string | null | undefined;
+        }>, "many">>>;
+    }, "strip", z.ZodTypeAny, {
+        strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+        banners?: {
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+            action?: string | null | undefined;
+        }[] | null | undefined;
+    }, {
+        strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+        banners?: {
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+            action?: string | null | undefined;
+        }[] | null | undefined;
+    }>>;
+    mid_banner: z.ZodOptional<z.ZodObject<{
+        strategy: z.ZodEnum<["fixed", "rotating", "destination", "time_of_day"]>;
+        banners: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
+            action: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            image_url: z.ZodString;
+            alt: z.ZodString;
+            click_url: z.ZodString;
+            locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR", "hu-HU"]>;
+            properties: z.ZodRecord<z.ZodString, z.ZodString>;
+        }, "strip", z.ZodTypeAny, {
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+            action?: string | null | undefined;
+        }, {
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+            action?: string | null | undefined;
+        }>, "many">>>;
+    }, "strip", z.ZodTypeAny, {
+        strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+        banners?: {
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+            action?: string | null | undefined;
+        }[] | null | undefined;
+    }, {
+        strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+        banners?: {
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+            action?: string | null | undefined;
+        }[] | null | undefined;
+    }>>;
+}, "strip", z.ZodTypeAny, {
+    primary_color: string;
+    secondary_color: string;
+    logo: string;
+    font?: string | null | undefined;
+    top_banner?: {
+        strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+        banners?: {
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+            action?: string | null | undefined;
+        }[] | null | undefined;
+    } | undefined;
+    mid_banner?: {
+        strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+        banners?: {
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+            action?: string | null | undefined;
+        }[] | null | undefined;
+    } | undefined;
 }, {
-    [x: string]: any;
+    primary_color: string;
+    secondary_color: string;
+    logo: string;
+    font?: string | null | undefined;
+    top_banner?: {
+        strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+        banners?: {
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+            action?: string | null | undefined;
+        }[] | null | undefined;
+    } | undefined;
+    mid_banner?: {
+        strategy: "destination" | "fixed" | "rotating" | "time_of_day";
+        banners?: {
+            locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
+            image_url: string;
+            alt: string;
+            click_url: string;
+            properties: Record<string, string>;
+            action?: string | null | undefined;
+        }[] | null | undefined;
+    } | undefined;
 }>;
 declare const HPricingStrategySchema: z.ZodObject<{
     strategy: z.ZodEnum<["split", "bundle"]>;
@@ -5245,6 +5782,52 @@ declare const HLiveActivitySchema: z.ZodObject<{
     recreation_count?: number | undefined;
     click_timestamps?: unknown[] | undefined;
 }>;
+declare const HScheduledJobSchema: z.ZodObject<{
+    id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    job_type: z.ZodString;
+    execute_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    status: z.ZodEnum<["pending", "completed", "failed"]>;
+    task_data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+    retry_count: z.ZodNumber;
+    max_retries: z.ZodNumber;
+    error: z.ZodNullable<z.ZodString>;
+    scheduled_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    last_retry_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    created_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    created_by: z.ZodNullable<z.ZodString>;
+    updated_by: z.ZodNullable<z.ZodString>;
+}, z.UnknownKeysParam, z.ZodTypeAny, {
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    updated_by: string | null;
+    status: "pending" | "completed" | "failed";
+    job_type: string;
+    execute_at: Date;
+    task_data: Record<string, unknown>;
+    retry_count: number;
+    max_retries: number;
+    error: string | null;
+    scheduled_at: Date;
+    last_retry_at: Date;
+    id?: string | null | undefined;
+}, {
+    created_at: Date;
+    updated_at: Date;
+    created_by: string | null;
+    updated_by: string | null;
+    status: "pending" | "completed" | "failed";
+    job_type: string;
+    execute_at: Date;
+    task_data: Record<string, unknown>;
+    retry_count: number;
+    max_retries: number;
+    error: string | null;
+    scheduled_at: Date;
+    last_retry_at: Date;
+    id?: string | null | undefined;
+}>;
 declare const HAddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     city: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -5345,17 +5928,17 @@ declare const HVisualIdentityBannerSchema: z.ZodObject<{
     image_url: z.ZodString;
     alt: z.ZodString;
     click_url: z.ZodString;
-    locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR"]>;
+    locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR", "hu-HU"]>;
     properties: z.ZodRecord<z.ZodString, z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+    locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
     image_url: string;
     alt: string;
     click_url: string;
     properties: Record<string, string>;
     action?: string | null | undefined;
 }, {
-    locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR";
+    locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
     image_url: string;
     alt: string;
     click_url: string;
@@ -5474,6 +6057,7 @@ declare const HRewardMultipliersSchema: z.ZodOptional<z.ZodObject<{
     completion_based?: number | undefined;
 }>>;
 declare const HRewardPackageTypeSchema: z.ZodEnum<["data-limited", "starter"]>;
+declare const HJobStatusSchema: z.ZodEnum<["pending", "completed", "failed"]>;
 type HAnalytics = z.infer<typeof HAnalyticsSchema>;
 type HUser = z.infer<typeof HUserSchema>;
 type HBooking = z.infer<typeof HBookingSchema>;
@@ -5499,6 +6083,7 @@ type HPackageTemplate = z.infer<typeof HPackageTemplateSchema>;
 type HUserTouchpoints = z.infer<typeof HUserTouchpointsSchema>;
 type HLoginRequest = z.infer<typeof HLoginRequestSchema>;
 type HLiveActivity = z.infer<typeof HLiveActivitySchema>;
+type HScheduledJob = z.infer<typeof HScheduledJobSchema>;
 type HAddress = z.infer<typeof HAddressSchema>;
 type HRegistration = z.infer<typeof HRegistrationSchema>;
 type HBankingDetails = z.infer<typeof HBankingDetailsSchema>;
@@ -5516,11 +6101,12 @@ type HRewardStrategy = z.infer<typeof HRewardStrategySchema>;
 type HBaseReward = z.infer<typeof HBaseRewardSchema>;
 type HRewardMultipliers = z.infer<typeof HRewardMultipliersSchema>;
 type HRewardPackageType = z.infer<typeof HRewardPackageTypeSchema>;
+type HJobStatus = z.infer<typeof HJobStatusSchema>;
 type HHubbyModel = z.infer<typeof HubbyModelSchema>;
 type HubbyModelApp = HHubbyModel;
 type SupportedLocales = typeof SUPPORTED_LOCALES[number];
-declare const SUPPORTED_LOCALES: readonly ["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR"];
+declare const SUPPORTED_LOCALES: readonly ["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR", "hu-HU"];
 type HRole = z.infer<typeof HRoleSchema>;
 type HPermission = z.infer<typeof HPermissionSchema>;
 
-export { HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBaseReward, HBaseRewardSchema, HBondioPackage, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HDestination, HDestinationBundle, HDestinationBundleSchema, HDestinationSchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HLiveActivity, HLiveActivitySchema, HLoginRequest, HLoginRequestSchema, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPackageTemplate, HPackageTemplateSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HReview, HReviewSchema, HReviewSubmission, HReviewSubmissionSchema, HRewardMultipliers, HRewardMultipliersSchema, HRewardPackageType, HRewardPackageTypeSchema, HRewardStrategy, HRewardStrategySchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HUserTouchpoints, HUserTouchpointsSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelApp, HubbyModelSchema, SUPPORTED_LOCALES, SupportedLocales };
+export { HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBaseReward, HBaseRewardSchema, HBondioPackage, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HDestination, HDestinationBundle, HDestinationBundleSchema, HDestinationSchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HJobStatus, HJobStatusSchema, HLiveActivity, HLiveActivitySchema, HLoginRequest, HLoginRequestSchema, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPackageTemplate, HPackageTemplateSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HReview, HReviewSchema, HReviewSubmission, HReviewSubmissionSchema, HRewardMultipliers, HRewardMultipliersSchema, HRewardPackageType, HRewardPackageTypeSchema, HRewardStrategy, HRewardStrategySchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HScheduledJob, HScheduledJobSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HUserTouchpoints, HUserTouchpointsSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelApp, HubbyModelSchema, SUPPORTED_LOCALES, SupportedLocales };

@@ -58,6 +58,7 @@ import { packageTemplateSchemaSpec } from './specs/package_template';
 import { loginRequestSchemaSpec } from './specs/login_request';
 import { tagSchemaSpec } from './specs/tag';
 import { liveActivitySchemaSpec } from './specs/live_activity';
+import { scheduledJobSchemaSpec, jobStatusSchema } from './specs/scheduled_job';
 
 
 /** ZOD SCHEMAS */
@@ -96,6 +97,7 @@ export const HPackageTemplateSchema = buildClientSchema(packageTemplateSchemaSpe
 export const HUserTouchpointsSchema = buildClientSchema(userTouchpointsSchemaSpec);
 export const HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 export const HLiveActivitySchema = buildClientSchema(liveActivitySchemaSpec);
+export const HScheduledJobSchema = buildClientSchema(scheduledJobSchemaSpec);
 // Additional lower-level schemas
 export const HAddressSchema = addressSchema;
 export const HRegistrationSchema = registrationSchema;
@@ -113,6 +115,7 @@ export const HRewardStrategySchema = rewardStrategySchema;
 export const HBaseRewardSchema = baseRewardSchema;
 export const HRewardMultipliersSchema = rewardMultipliersSchema;
 export const HRewardPackageTypeSchema = rewardPackageTypeSchema;
+export const HJobStatusSchema = jobStatusSchema;
 
 export type HAnalytics = z.infer<typeof HAnalyticsSchema>;
 export type HUser = z.infer<typeof HUserSchema>;
@@ -139,6 +142,7 @@ export type HPackageTemplate = z.infer<typeof HPackageTemplateSchema>;
 export type HUserTouchpoints = z.infer<typeof HUserTouchpointsSchema>;
 export type HLoginRequest = z.infer<typeof HLoginRequestSchema>;
 export type HLiveActivity = z.infer<typeof HLiveActivitySchema>;
+export type HScheduledJob = z.infer<typeof HScheduledJobSchema>;
 // Additional lower-level types
 export type HAddress = z.infer<typeof HAddressSchema>;
 export type HRegistration = z.infer<typeof HRegistrationSchema>;
@@ -157,6 +161,7 @@ export type HRewardStrategy = z.infer<typeof HRewardStrategySchema>;
 export type HBaseReward = z.infer<typeof HBaseRewardSchema>;
 export type HRewardMultipliers = z.infer<typeof HRewardMultipliersSchema>;
 export type HRewardPackageType = z.infer<typeof HRewardPackageTypeSchema>;
+export type HJobStatus = z.infer<typeof HJobStatusSchema>;
 export type HHubbyModel = z.infer<typeof HubbyModelSchema>;
 
 export type HubbyModelApp = HHubbyModel;

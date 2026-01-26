@@ -73,6 +73,8 @@ export const bookingSchemaSpec = markAsSchemaSpec({
     phone: z.string().nullable().optional(),
     booking_id: z.string().nullable().optional(),
     flight_number: z.string().optional(),
+    departure_location: z.string().optional(),
+    brand: z.string().nullable().optional(),
     gender: z.enum(['M', 'F', 'O']).optional(),
     sent_messages: z.record(z.any()).optional(),
     locale: supportedLocalesSchema,

@@ -283,7 +283,8 @@ var SUPPORTED_LOCALES = [
   "de-BE",
   "en-AU",
   "da-DK",
-  "ko-KR"
+  "ko-KR",
+  "hu-HU"
 ];
 var supportedLocalesSchema = zod.z.enum(SUPPORTED_LOCALES);
 var packageSpecificationSchema = zod.z.object({
@@ -370,6 +371,8 @@ var bookingSchemaSpec = markAsSchemaSpec({
   phone: zod.z.string().nullable().optional(),
   booking_id: zod.z.string().nullable().optional(),
   flight_number: zod.z.string().optional(),
+  departure_location: zod.z.string().optional(),
+  brand: zod.z.string().nullable().optional(),
   gender: zod.z.enum(["M", "F", "O"]).optional(),
   sent_messages: zod.z.record(zod.z.any()).optional(),
   locale: supportedLocalesSchema,
@@ -1331,6 +1334,23 @@ var liveActivitySchemaSpec = markAsSchemaSpec({
   created_by: zod.z.string().nullable(),
   updated_by: zod.z.string().nullable()
 });
+var jobStatusSchema = zod.z.enum(["pending", "completed", "failed"]);
+var scheduledJobSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string().nullable().optional(),
+  job_type: zod.z.string(),
+  execute_at: timestampRequired,
+  status: jobStatusSchema,
+  task_data: zod.z.record(zod.z.unknown()),
+  retry_count: zod.z.number(),
+  max_retries: zod.z.number(),
+  error: zod.z.string().nullable(),
+  scheduled_at: timestampNullable,
+  last_retry_at: timestampNullable,
+  created_at: timestampRequired,
+  updated_at: timestampRequired,
+  created_by: zod.z.string().nullable(),
+  updated_by: zod.z.string().nullable()
+});
 
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
@@ -1368,6 +1388,7 @@ var HPackageTemplateSchema = buildClientSchema(packageTemplateSchemaSpec);
 var HUserTouchpointsSchema = buildClientSchema(userTouchpointsSchemaSpec);
 var HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 var HLiveActivitySchema = buildClientSchema(liveActivitySchemaSpec);
+var HScheduledJobSchema = buildClientSchema(scheduledJobSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1384,6 +1405,7 @@ var HRewardStrategySchema = rewardStrategySchema;
 var HBaseRewardSchema = baseRewardSchema;
 var HRewardMultipliersSchema = rewardMultipliersSchema;
 var HRewardPackageTypeSchema = rewardPackageTypeSchema;
+var HJobStatusSchema = jobStatusSchema;
 var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
 exports.HAddressSchema = HAddressSchema;
@@ -1403,6 +1425,7 @@ exports.HDestinationSchema = HDestinationSchema;
 exports.HESIMSchema = HESIMSchema;
 exports.HFinancialPropertiesSchema = HFinancialPropertiesSchema;
 exports.HFreeEsimSchema = HFreeEsimSchema;
+exports.HJobStatusSchema = HJobStatusSchema;
 exports.HLiveActivitySchema = HLiveActivitySchema;
 exports.HLoginRequestSchema = HLoginRequestSchema;
 exports.HMessageSchema = HMessageSchema;
@@ -1429,6 +1452,7 @@ exports.HRewardPackageTypeSchema = HRewardPackageTypeSchema;
 exports.HRewardStrategySchema = HRewardStrategySchema;
 exports.HRoleSchema = HRoleSchema;
 exports.HScheduleFilterSchema = HScheduleFilterSchema;
+exports.HScheduledJobSchema = HScheduledJobSchema;
 exports.HTagSchema = HTagSchema;
 exports.HTelnaPackageSchema = HTelnaPackageSchema;
 exports.HTrafficPolicySchema = HTrafficPolicySchema;
