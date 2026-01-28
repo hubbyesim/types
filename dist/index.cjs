@@ -859,7 +859,8 @@ var platformSettingsSchema = zod.z.object({
     enabled: zod.z.boolean(),
     discount_percentage: zod.z.number().min(0).max(100)
   }).nullable().optional(),
-  account_manager: zod.z.string().nullable().optional()
+  account_manager: zod.z.string().nullable().optional(),
+  external_sales_partner: zod.z.string().nullable().optional()
 });
 var packagePriceSchemaSpec = markAsSchemaSpec({
   destination: zod.z.string(),
@@ -1012,7 +1013,8 @@ var platformSettingsSchemaSpec = markAsSchemaSpec({
     nullable: true,
     optional: true
   },
-  sales_partner: zod.z.string().nullable().optional()
+  sales_partner: zod.z.string().nullable().optional(),
+  external_sales_partner: zod.z.string().nullable().optional()
 });
 var webhookSettingsSchema = zod.z.object({
   url: zod.z.string().url().nullable().optional(),
