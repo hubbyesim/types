@@ -1,26 +1,33 @@
-import { buildClientSchema } from './builders/client';
+import { buildClientSchema } from "./builders/client";
 import {
   userSchemaSpec,
   apiKeySpec,
   apiKeysSpec,
-  apiKeysObjectSpec
-} from './specs/user';
+  apiKeysObjectSpec,
+} from "./specs/user";
 import {
   bookingSchemaSpec,
   communicationChannelSchema,
   bookingStatusSchema,
-  communicationOptionsSchema
-} from './specs/booking';
-import { hubbyModelSpec } from './specs/common';
-import { SUPPORTED_LOCALES as LOCALES } from './constants';
-import { countrySchemaSpec } from './specs/country';
-import { currencySchemaSpec } from './specs/currency';
-import { esimSchemaSpec } from './specs/esim';
-import { paymentSchemaSpec } from './specs/payment';
-import { messageSchemaSpec } from './specs/message';
-import { trafficPolicySpec } from './specs/traffic_policy';
-import { bondioPackageSchema, packageSchemaSpec, telnaPackageSchema } from './specs/package';
-import { promoCodeSchemaSpec, packageSpecificationSchema as promoPackageSpecificationSchema } from './specs/promocode';
+  communicationOptionsSchema,
+} from "./specs/booking";
+import { hubbyModelSpec } from "./specs/common";
+import { SUPPORTED_LOCALES as LOCALES } from "./constants";
+import { countrySchemaSpec } from "./specs/country";
+import { currencySchemaSpec } from "./specs/currency";
+import { esimSchemaSpec } from "./specs/esim";
+import { paymentSchemaSpec } from "./specs/payment";
+import { messageSchemaSpec } from "./specs/message";
+import { trafficPolicySpec } from "./specs/traffic_policy";
+import {
+  bondioPackageSchema,
+  packageSchemaSpec,
+  telnaPackageSchema,
+} from "./specs/package";
+import {
+  promoCodeSchemaSpec,
+  packageSpecificationSchema as promoPackageSpecificationSchema,
+} from "./specs/promocode";
 import {
   partnerSchemaSpec,
   priceListSchemaSpec,
@@ -29,6 +36,7 @@ import {
   bankingDetailsSchema,
   packageSpecificationSchema as partnerPackageSpecificationSchema,
   visualIdentityBannerSchema,
+  visualIdentityBannersSchema,
   scheduleFilterSchema,
   partnerContactSchema,
   partnerDataSchema,
@@ -38,28 +46,30 @@ import {
   visualIdentitySchema,
   pricingStrategySchema,
   freeEsimSchema,
-} from './specs/partner';
-import { analyticsSpec } from './specs/analytics';
-import { apiLogSchemaSpec } from './specs/apiLogs';
-import { userTouchpointsSchemaSpec } from './specs/userTouchpoints';
-import { z } from 'zod';
-import { roleSchemaSpec } from './specs/role';
-import { permissionSchemaSpec } from './specs/permission';
-import { 
-  reviewSchemaSpec, 
+} from "./specs/partner";
+import { analyticsSpec } from "./specs/analytics";
+import { apiLogSchemaSpec } from "./specs/apiLogs";
+import { userTouchpointsSchemaSpec } from "./specs/userTouchpoints";
+import { z } from "zod";
+import { roleSchemaSpec } from "./specs/role";
+import { permissionSchemaSpec } from "./specs/permission";
+import {
+  reviewSchemaSpec,
   reviewSubmissionSchemaSpec,
   rewardStrategySchema,
   baseRewardSchema,
   rewardMultipliersSchema,
-  rewardPackageTypeSchema
-} from './specs/review';
-import { destinationSchemaSpec, destinationBundleSchemaSpec } from './specs/destination';
-import { packageTemplateSchemaSpec } from './specs/package_template';
-import { loginRequestSchemaSpec } from './specs/login_request';
-import { tagSchemaSpec } from './specs/tag';
-import { liveActivitySchemaSpec } from './specs/live_activity';
-import { scheduledJobSchemaSpec, jobStatusSchema } from './specs/scheduled_job';
-
+  rewardPackageTypeSchema,
+} from "./specs/review";
+import {
+  destinationSchemaSpec,
+  destinationBundleSchemaSpec,
+} from "./specs/destination";
+import { packageTemplateSchemaSpec } from "./specs/package_template";
+import { loginRequestSchemaSpec } from "./specs/login_request";
+import { tagSchemaSpec } from "./specs/tag";
+import { liveActivitySchemaSpec } from "./specs/live_activity";
+import { scheduledJobSchemaSpec, jobStatusSchema } from "./specs/scheduled_job";
 
 /** ZOD SCHEMAS */
 export const HUserSchema = buildClientSchema(userSchemaSpec);
@@ -73,12 +83,16 @@ export const HPackageSchema = buildClientSchema(packageSchemaSpec);
 export const HPromoCodeSchema = buildClientSchema(promoCodeSchemaSpec);
 export const HPartnerSchema = buildClientSchema(partnerSchemaSpec);
 export const HPriceListSchema = buildClientSchema(priceListSchemaSpec);
-export const HFinancialPropertiesSchema = buildClientSchema(financialPropertiesSchema);
+export const HFinancialPropertiesSchema = buildClientSchema(
+  financialPropertiesSchema,
+);
 export const HApiLogSchema = buildClientSchema(apiLogSchemaSpec);
 export const HPackagePriceSchema = buildClientSchema(packagePriceSchema);
 export const HubbyModelSchema = buildClientSchema(hubbyModelSpec);
 export const HPartnerAppSchema = buildClientSchema(partnerSchemaSpec);
-export const HPlatformSettingsSchema = buildClientSchema(platformSettingsSchema);
+export const HPlatformSettingsSchema = buildClientSchema(
+  platformSettingsSchema,
+);
 export const HVisualIdentitySchema = buildClientSchema(visualIdentitySchema);
 export const HPricingStrategySchema = buildClientSchema(pricingStrategySchema);
 export const HFreeEsimSchema = buildClientSchema(freeEsimSchema);
@@ -90,11 +104,19 @@ export const HTrafficPolicySchema = buildClientSchema(trafficPolicySpec);
 export const HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
 export const HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
 export const HReviewSchema = buildClientSchema(reviewSchemaSpec);
-export const HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
+export const HReviewSubmissionSchema = buildClientSchema(
+  reviewSubmissionSchemaSpec,
+);
 export const HDestinationSchema = buildClientSchema(destinationSchemaSpec);
-export const HDestinationBundleSchema = buildClientSchema(destinationBundleSchemaSpec);
-export const HPackageTemplateSchema = buildClientSchema(packageTemplateSchemaSpec);
-export const HUserTouchpointsSchema = buildClientSchema(userTouchpointsSchemaSpec);
+export const HDestinationBundleSchema = buildClientSchema(
+  destinationBundleSchemaSpec,
+);
+export const HPackageTemplateSchema = buildClientSchema(
+  packageTemplateSchemaSpec,
+);
+export const HUserTouchpointsSchema = buildClientSchema(
+  userTouchpointsSchemaSpec,
+);
 export const HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 export const HLiveActivitySchema = buildClientSchema(liveActivitySchemaSpec);
 export const HScheduledJobSchema = buildClientSchema(scheduledJobSchemaSpec);
@@ -102,9 +124,11 @@ export const HScheduledJobSchema = buildClientSchema(scheduledJobSchemaSpec);
 export const HAddressSchema = addressSchema;
 export const HRegistrationSchema = registrationSchema;
 export const HBankingDetailsSchema = bankingDetailsSchema;
-export const HPartnerPackageSpecificationSchema = partnerPackageSpecificationSchema;
+export const HPartnerPackageSpecificationSchema =
+  partnerPackageSpecificationSchema;
 export const HPromoPackageSpecificationSchema = promoPackageSpecificationSchema;
 export const HVisualIdentityBannerSchema = visualIdentityBannerSchema;
+export const HVisualIdentityBannersSchema = visualIdentityBannersSchema;
 export const HScheduleFilterSchema = scheduleFilterSchema;
 export const HPartnerContactSchema = partnerContactSchema;
 export const HPartnerDataSchema = partnerDataSchema;
@@ -147,9 +171,16 @@ export type HScheduledJob = z.infer<typeof HScheduledJobSchema>;
 export type HAddress = z.infer<typeof HAddressSchema>;
 export type HRegistration = z.infer<typeof HRegistrationSchema>;
 export type HBankingDetails = z.infer<typeof HBankingDetailsSchema>;
-export type HPartnerPackageSpecification = z.infer<typeof HPartnerPackageSpecificationSchema>;
-export type HPromoPackageSpecification = z.infer<typeof HPromoPackageSpecificationSchema>;
+export type HPartnerPackageSpecification = z.infer<
+  typeof HPartnerPackageSpecificationSchema
+>;
+export type HPromoPackageSpecification = z.infer<
+  typeof HPromoPackageSpecificationSchema
+>;
 export type HVisualIdentityBanner = z.infer<typeof HVisualIdentityBannerSchema>;
+export type HVisualIdentityBanners = z.infer<
+  typeof HVisualIdentityBannersSchema
+>;
 export type HFinancialProperties = z.infer<typeof HFinancialPropertiesSchema>;
 export type HScheduleFilter = z.infer<typeof HScheduleFilterSchema>;
 export type HPartnerContact = z.infer<typeof HPartnerContactSchema>;
@@ -166,8 +197,8 @@ export type HHubbyModel = z.infer<typeof HubbyModelSchema>;
 
 export type HubbyModelApp = HHubbyModel;
 
-export type SupportedLocales = typeof SUPPORTED_LOCALES[number];
+export type SupportedLocales = (typeof SUPPORTED_LOCALES)[number];
 export const SUPPORTED_LOCALES = LOCALES;
 
 export type HRole = z.infer<typeof HRoleSchema>;
-export type HPermission = z.infer<typeof HPermissionSchema>; 
+export type HPermission = z.infer<typeof HPermissionSchema>;
