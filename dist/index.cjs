@@ -1638,12 +1638,16 @@ var HPackageSchema = buildClientSchema(packageSchemaSpec);
 var HPromoCodeSchema = buildClientSchema(promoCodeSchemaSpec);
 var HPartnerSchema = buildClientSchema(partnerSchemaSpec);
 var HPriceListSchema = buildClientSchema(priceListSchemaSpec);
-var HFinancialPropertiesSchema = buildClientSchema(financialPropertiesSchemaSpec);
+var HFinancialPropertiesSchema = buildClientSchema(
+  financialPropertiesSchemaSpec
+);
 var HApiLogSchema = buildClientSchema(apiLogSchemaSpec);
 var HPackagePriceSchema = buildClientSchema(packagePriceSchema);
 var HubbyModelSchema = buildClientSchema(hubbyModelSpec);
 var HPartnerAppSchema = buildClientSchema(partnerSchemaSpec);
-var HPlatformSettingsSchema = buildClientSchema(platformSettingsSchema);
+var HPlatformSettingsSchema = buildClientSchema(
+  platformSettingsSchema
+);
 var HVisualIdentitySchema = buildClientSchema(visualIdentitySchema);
 var HPricingStrategySchema = buildClientSchema(pricingStrategySchema);
 var HFreeEsimSchema = buildClientSchema(freeEsimSchema);
@@ -1655,11 +1659,19 @@ var HTrafficPolicySchema = buildClientSchema(trafficPolicySpec);
 var HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
 var HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
 var HReviewSchema = buildClientSchema(reviewSchemaSpec);
-var HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
+var HReviewSubmissionSchema = buildClientSchema(
+  reviewSubmissionSchemaSpec
+);
 var HDestinationSchema = buildClientSchema(destinationSchemaSpec);
-var HDestinationBundleSchema = buildClientSchema(destinationBundleSchemaSpec);
-var HPackageTemplateSchema = buildClientSchema(packageTemplateSchemaSpec);
-var HUserTouchpointsSchema = buildClientSchema(userTouchpointsSchemaSpec);
+var HDestinationBundleSchema = buildClientSchema(
+  destinationBundleSchemaSpec
+);
+var HPackageTemplateSchema = buildClientSchema(
+  packageTemplateSchemaSpec
+);
+var HUserTouchpointsSchema = buildClientSchema(
+  userTouchpointsSchemaSpec
+);
 var HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 var HLiveActivitySchema = buildClientSchema(liveActivitySchemaSpec);
 var HScheduledJobSchema = buildClientSchema(scheduledJobSchemaSpec);
@@ -1669,6 +1681,7 @@ var HBankingDetailsSchema = bankingDetailsSchema;
 var HPartnerPackageSpecificationSchema = packageSpecificationSchema2;
 var HPromoPackageSpecificationSchema = packageSpecificationSchema;
 var HVisualIdentityBannerSchema = visualIdentityBannerSchema;
+var HVisualIdentityBannersSchema = visualIdentityBannersSchema;
 var HScheduleFilterSchema = scheduleFilterSchema;
 var HPartnerContactSchema = partnerContactSchema;
 var HPartnerDataSchema = partnerDataSchema;
@@ -1863,6 +1876,7 @@ exports.HTrafficPolicySchema = HTrafficPolicySchema;
 exports.HUserSchema = HUserSchema;
 exports.HUserTouchpointsSchema = HUserTouchpointsSchema;
 exports.HVisualIdentityBannerSchema = HVisualIdentityBannerSchema;
+exports.HVisualIdentityBannersSchema = HVisualIdentityBannersSchema;
 exports.HVisualIdentitySchema = HVisualIdentitySchema;
 exports.HubbyModelSchema = HubbyModelSchema;
 exports.JobStatusSchema = JobStatusSchema;

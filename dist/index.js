@@ -1636,12 +1636,16 @@ var HPackageSchema = buildClientSchema(packageSchemaSpec);
 var HPromoCodeSchema = buildClientSchema(promoCodeSchemaSpec);
 var HPartnerSchema = buildClientSchema(partnerSchemaSpec);
 var HPriceListSchema = buildClientSchema(priceListSchemaSpec);
-var HFinancialPropertiesSchema = buildClientSchema(financialPropertiesSchemaSpec);
+var HFinancialPropertiesSchema = buildClientSchema(
+  financialPropertiesSchemaSpec
+);
 var HApiLogSchema = buildClientSchema(apiLogSchemaSpec);
 var HPackagePriceSchema = buildClientSchema(packagePriceSchema);
 var HubbyModelSchema = buildClientSchema(hubbyModelSpec);
 var HPartnerAppSchema = buildClientSchema(partnerSchemaSpec);
-var HPlatformSettingsSchema = buildClientSchema(platformSettingsSchema);
+var HPlatformSettingsSchema = buildClientSchema(
+  platformSettingsSchema
+);
 var HVisualIdentitySchema = buildClientSchema(visualIdentitySchema);
 var HPricingStrategySchema = buildClientSchema(pricingStrategySchema);
 var HFreeEsimSchema = buildClientSchema(freeEsimSchema);
@@ -1653,11 +1657,19 @@ var HTrafficPolicySchema = buildClientSchema(trafficPolicySpec);
 var HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
 var HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
 var HReviewSchema = buildClientSchema(reviewSchemaSpec);
-var HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
+var HReviewSubmissionSchema = buildClientSchema(
+  reviewSubmissionSchemaSpec
+);
 var HDestinationSchema = buildClientSchema(destinationSchemaSpec);
-var HDestinationBundleSchema = buildClientSchema(destinationBundleSchemaSpec);
-var HPackageTemplateSchema = buildClientSchema(packageTemplateSchemaSpec);
-var HUserTouchpointsSchema = buildClientSchema(userTouchpointsSchemaSpec);
+var HDestinationBundleSchema = buildClientSchema(
+  destinationBundleSchemaSpec
+);
+var HPackageTemplateSchema = buildClientSchema(
+  packageTemplateSchemaSpec
+);
+var HUserTouchpointsSchema = buildClientSchema(
+  userTouchpointsSchemaSpec
+);
 var HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 var HLiveActivitySchema = buildClientSchema(liveActivitySchemaSpec);
 var HScheduledJobSchema = buildClientSchema(scheduledJobSchemaSpec);
@@ -1667,6 +1679,7 @@ var HBankingDetailsSchema = bankingDetailsSchema;
 var HPartnerPackageSpecificationSchema = packageSpecificationSchema2;
 var HPromoPackageSpecificationSchema = packageSpecificationSchema;
 var HVisualIdentityBannerSchema = visualIdentityBannerSchema;
+var HVisualIdentityBannersSchema = visualIdentityBannersSchema;
 var HScheduleFilterSchema = scheduleFilterSchema;
 var HPartnerContactSchema = partnerContactSchema;
 var HPartnerDataSchema = partnerDataSchema;
@@ -1787,6 +1800,6 @@ var packageTemplateAppSchema = buildClientSchema(packageTemplateSchemaSpec);
 var promoPackageSpecificationAppSchema = buildClientSchema(packageSpecificationSchema);
 var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
-export { API_LOG_COLLECTION, AddressSchema, AnalyticsSchema, ApiLogSchema, BOOKING_COLLECTION, BankingDetailsSchema, BaseRewardSchema, BondioPackageSchema, BookingSchema, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannelSchema, CommunicationOptionsSchema, CountrySchema, CurrencySchema, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, DestinationBundleSchema, DestinationSchema, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBaseRewardSchema, HBondioPackageSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HDestinationBundleSchema, HDestinationSchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HJobStatusSchema, HLiveActivitySchema, HLoginRequestSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPackageTemplateSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HReviewSchema, HReviewSubmissionSchema, HRewardMultipliersSchema, HRewardPackageTypeSchema, HRewardStrategySchema, HRoleSchema, HScheduleFilterSchema, HScheduledJobSchema, HTagSchema, HTelnaPackageSchema, HTrafficPolicySchema, HUserSchema, HUserTouchpointsSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema, JobStatusSchema, LIVE_ACTIVITY_COLLECTION, LiveActivitySchema, LoginRequestSchema, MESSAGE_COLLECTION, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, PackagePriceSchema, PackageSchema, PackageTemplateSchema, PartnerContactSchema, PartnerDataSchema, PartnerPackageSpecificationSchema, PartnerSchema, PaymentSchema, PlatformSettingsSchema, PriceListSchema, PromoCodeSchema, PromoPackageSpecificationSchema, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, ROLE_COLLECTION, RegistrationSchema, ReviewSchema, ReviewSubmissionSchema, RewardMultipliersSchema, RewardPackageTypeSchema, RewardStrategySchema, SCHEDULED_JOB_COLLECTION, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES, ScheduleFilterSchema, ScheduleSchema, ScheduledJobSchema, TAG_COLLECTION, TRAFFIC_POLICY_COLLECTION, TagSchema, TelnaPackageSchema, TrafficPolicySchema, USER_COLLECTION, USER_TOUCHPOINTS_COLLECTION, UserFirestoreSchema, UserSchema, UserTouchpointsSchema, VisualIdentityBannerSchema, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, apiLogSchemaSpec, bookingAppSchema, bookingSchemaSpec, countrySchemaSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, currencySchemaSpec, destinationAppSchema, destinationBundleAppSchema, destinationBundleSchemaSpec, destinationSchemaSpec, esimSchemaSpec, jobStatusSchema, lastUpdateSchema, liveActivityEventSchema, liveActivityReasonSchema, liveActivitySchemaSpec, liveActivityStatusSchema, loginRequestSchemaSpec, messageSchemaSpec, packageSchemaSpec, packageTemplateAppSchema, packageTemplateSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, paymentSchemaSpec, priceListFromFirestore, priceListSchemaSpec, priceListToFirestore, promoCodeFromFirestore, promoCodeSchemaSpec, promoCodeToFirestore, promoPackageSpecificationAppSchema, reviewSchemaSpec, reviewSubmissionSchemaSpec, scheduledJobSchemaSpec, tagSchemaSpec, userFromFirestore, userSchemaSpec, userToFirestore, userTouchpointsFromFirestore, userTouchpointsSchemaSpec, userTouchpointsToFirestore };
+export { API_LOG_COLLECTION, AddressSchema, AnalyticsSchema, ApiLogSchema, BOOKING_COLLECTION, BankingDetailsSchema, BaseRewardSchema, BondioPackageSchema, BookingSchema, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannelSchema, CommunicationOptionsSchema, CountrySchema, CurrencySchema, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, DestinationBundleSchema, DestinationSchema, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBaseRewardSchema, HBondioPackageSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HDestinationBundleSchema, HDestinationSchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HJobStatusSchema, HLiveActivitySchema, HLoginRequestSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPackageTemplateSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HReviewSchema, HReviewSubmissionSchema, HRewardMultipliersSchema, HRewardPackageTypeSchema, HRewardStrategySchema, HRoleSchema, HScheduleFilterSchema, HScheduledJobSchema, HTagSchema, HTelnaPackageSchema, HTrafficPolicySchema, HUserSchema, HUserTouchpointsSchema, HVisualIdentityBannerSchema, HVisualIdentityBannersSchema, HVisualIdentitySchema, HubbyModelSchema, JobStatusSchema, LIVE_ACTIVITY_COLLECTION, LiveActivitySchema, LoginRequestSchema, MESSAGE_COLLECTION, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, PackagePriceSchema, PackageSchema, PackageTemplateSchema, PartnerContactSchema, PartnerDataSchema, PartnerPackageSpecificationSchema, PartnerSchema, PaymentSchema, PlatformSettingsSchema, PriceListSchema, PromoCodeSchema, PromoPackageSpecificationSchema, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, ROLE_COLLECTION, RegistrationSchema, ReviewSchema, ReviewSubmissionSchema, RewardMultipliersSchema, RewardPackageTypeSchema, RewardStrategySchema, SCHEDULED_JOB_COLLECTION, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES, ScheduleFilterSchema, ScheduleSchema, ScheduledJobSchema, TAG_COLLECTION, TRAFFIC_POLICY_COLLECTION, TagSchema, TelnaPackageSchema, TrafficPolicySchema, USER_COLLECTION, USER_TOUCHPOINTS_COLLECTION, UserFirestoreSchema, UserSchema, UserTouchpointsSchema, VisualIdentityBannerSchema, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, apiLogSchemaSpec, bookingAppSchema, bookingSchemaSpec, countrySchemaSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, currencySchemaSpec, destinationAppSchema, destinationBundleAppSchema, destinationBundleSchemaSpec, destinationSchemaSpec, esimSchemaSpec, jobStatusSchema, lastUpdateSchema, liveActivityEventSchema, liveActivityReasonSchema, liveActivitySchemaSpec, liveActivityStatusSchema, loginRequestSchemaSpec, messageSchemaSpec, packageSchemaSpec, packageTemplateAppSchema, packageTemplateSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, paymentSchemaSpec, priceListFromFirestore, priceListSchemaSpec, priceListToFirestore, promoCodeFromFirestore, promoCodeSchemaSpec, promoCodeToFirestore, promoPackageSpecificationAppSchema, reviewSchemaSpec, reviewSubmissionSchemaSpec, scheduledJobSchemaSpec, tagSchemaSpec, userFromFirestore, userSchemaSpec, userToFirestore, userTouchpointsFromFirestore, userTouchpointsSchemaSpec, userTouchpointsToFirestore };
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.js.map
