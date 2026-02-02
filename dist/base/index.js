@@ -819,7 +819,8 @@ var platformSettingsSchema = z.object({
     enabled: z.boolean(),
     discount_percentage: z.number().min(0).max(100)
   }).nullable().optional(),
-  account_manager: z.string().nullable().optional()
+  account_manager: z.string().nullable().optional(),
+  external_sales_partner_manager: z.string().nullable().optional()
 });
 markAsSchemaSpec({
   destination: z.string(),
@@ -972,7 +973,8 @@ var platformSettingsSchemaSpec = markAsSchemaSpec({
     nullable: true,
     optional: true
   },
-  sales_partner: z.string().nullable().optional()
+  sales_partner: z.string().nullable().optional(),
+  external_sales_partner_manager: z.string().nullable().optional()
 });
 var webhookSettingsSchema = z.object({
   url: z.string().url().nullable().optional(),

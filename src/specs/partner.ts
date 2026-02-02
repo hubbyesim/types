@@ -241,7 +241,8 @@ export const platformSettingsSchema = z.object({
         enabled: z.boolean(),
         discount_percentage: z.number().min(0).max(100),
     }).nullable().optional(),
-    account_manager: z.string().nullable().optional()
+    account_manager: z.string().nullable().optional(),
+    external_sales_partner_manager: z.string().nullable().optional()
 });
 
 // ===== Exportable schema specs =====
@@ -402,7 +403,8 @@ export const platformSettingsSchemaSpec = markAsSchemaSpec({
         nullable: true, 
         optional: true 
     },
-    sales_partner: z.string().nullable().optional()
+    sales_partner: z.string().nullable().optional(),
+    external_sales_partner_manager: z.string().nullable().optional()
 });
 
 // Webhook settings schema
