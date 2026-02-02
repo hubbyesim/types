@@ -1727,7 +1727,7 @@ declare const HPartnerSchema: z.ZodObject<{
         }>;
         account_manager: z.ZodString;
         sales_partner: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        external_sales_partner: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        external_sales_partner_manager: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy: {
             name: string;
@@ -1812,7 +1812,7 @@ declare const HPartnerSchema: z.ZodObject<{
         };
         account_manager: string;
         sales_partner?: string | null | undefined;
-        external_sales_partner?: string | null | undefined;
+        external_sales_partner_manager?: string | null | undefined;
     }, {
         package_strategy: {
             name: string;
@@ -1897,7 +1897,7 @@ declare const HPartnerSchema: z.ZodObject<{
         };
         account_manager: string;
         sales_partner?: string | null | undefined;
-        external_sales_partner?: string | null | undefined;
+        external_sales_partner_manager?: string | null | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
         slug: z.ZodString;
@@ -2132,7 +2132,7 @@ declare const HPartnerSchema: z.ZodObject<{
         };
         account_manager: string;
         sales_partner?: string | null | undefined;
-        external_sales_partner?: string | null | undefined;
+        external_sales_partner_manager?: string | null | undefined;
     };
     tags: {
         name: string;
@@ -2320,7 +2320,7 @@ declare const HPartnerSchema: z.ZodObject<{
         };
         account_manager: string;
         sales_partner?: string | null | undefined;
-        external_sales_partner?: string | null | undefined;
+        external_sales_partner_manager?: string | null | undefined;
     };
     tags: {
         name: string;
@@ -3336,7 +3336,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         }>;
         account_manager: z.ZodString;
         sales_partner: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        external_sales_partner: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        external_sales_partner_manager: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy: {
             name: string;
@@ -3421,7 +3421,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         };
         account_manager: string;
         sales_partner?: string | null | undefined;
-        external_sales_partner?: string | null | undefined;
+        external_sales_partner_manager?: string | null | undefined;
     }, {
         package_strategy: {
             name: string;
@@ -3506,7 +3506,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         };
         account_manager: string;
         sales_partner?: string | null | undefined;
-        external_sales_partner?: string | null | undefined;
+        external_sales_partner_manager?: string | null | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
         slug: z.ZodString;
@@ -3741,7 +3741,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         };
         account_manager: string;
         sales_partner?: string | null | undefined;
-        external_sales_partner?: string | null | undefined;
+        external_sales_partner_manager?: string | null | undefined;
     };
     tags: {
         name: string;
@@ -3929,7 +3929,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         };
         account_manager: string;
         sales_partner?: string | null | undefined;
-        external_sales_partner?: string | null | undefined;
+        external_sales_partner_manager?: string | null | undefined;
     };
     tags: {
         name: string;
@@ -4229,7 +4229,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         discount_percentage: number;
     }>>>;
     account_manager: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    external_sales_partner: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    external_sales_partner_manager: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     package_strategy?: {
         name: string;
@@ -4314,7 +4314,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         depletion: boolean;
     } | null | undefined;
     account_manager?: string | null | undefined;
-    external_sales_partner?: string | null | undefined;
+    external_sales_partner_manager?: string | null | undefined;
 }, {
     package_strategy?: {
         name: string;
@@ -4399,7 +4399,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         depletion?: boolean | undefined;
     } | null | undefined;
     account_manager?: string | null | undefined;
-    external_sales_partner?: string | null | undefined;
+    external_sales_partner_manager?: string | null | undefined;
 }>;
 declare const HVisualIdentitySchema: z.ZodObject<any, z.UnknownKeysParam, z.ZodTypeAny, {
     [x: string]: any;
