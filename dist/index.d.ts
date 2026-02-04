@@ -103,6 +103,7 @@ declare const userSchemaSpec: {
     created_by: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     updated_by: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     push_to_start_token: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    custom_branding: z.ZodOptional<z.ZodNullable<z.ZodAny>>;
 };
 
 declare const bookingSchemaSpec: {
@@ -390,6 +391,7 @@ declare const esimSchemaSpec: {
         nullable: boolean;
         optional: boolean;
     };
+    custom_branding: z.ZodOptional<z.ZodNullable<z.ZodAny>>;
 };
 
 declare const paymentSchemaSpec: {
@@ -494,6 +496,7 @@ declare const paymentSchemaSpec: {
         affiliateId?: string | null | undefined;
         partner_name?: string | undefined;
     }>>;
+    custom_branding: z.ZodOptional<z.ZodNullable<z.ZodAny>>;
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     created_at: {
         _type: "timestamp";
@@ -1873,6 +1876,7 @@ declare const HUserSchema: z.ZodObject<{
     created_by: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     updated_by: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     push_to_start_token: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    custom_branding: z.ZodOptional<z.ZodNullable<z.ZodAny>>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     name: string | null;
     email: string | null;
@@ -1920,6 +1924,7 @@ declare const HUserSchema: z.ZodObject<{
     created_by?: string | null | undefined;
     updated_by?: string | null | undefined;
     push_to_start_token?: string | null | undefined;
+    custom_branding?: any;
 }, {
     name: string | null;
     email: string | null;
@@ -1967,6 +1972,7 @@ declare const HUserSchema: z.ZodObject<{
     created_by?: string | null | undefined;
     updated_by?: string | null | undefined;
     push_to_start_token?: string | null | undefined;
+    custom_branding?: any;
 }>;
 declare const HBookingSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
@@ -2109,6 +2115,7 @@ declare const HBookingSchema: z.ZodObject<{
     id?: string | undefined;
     email?: string | null | undefined;
     gender?: "M" | "F" | "O" | undefined;
+    custom_branding?: string | null | undefined;
     status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED" | null | undefined;
     external_id?: string | null | undefined;
     title?: string | null | undefined;
@@ -2133,7 +2140,6 @@ declare const HBookingSchema: z.ZodObject<{
     hubby_foreign_identifiers?: {
         messaging_contact_id: string | null;
     } | null | undefined;
-    custom_branding?: string | null | undefined;
 }, {
     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
     partner: string;
@@ -2169,6 +2175,7 @@ declare const HBookingSchema: z.ZodObject<{
     id?: string | undefined;
     email?: string | null | undefined;
     gender?: "M" | "F" | "O" | undefined;
+    custom_branding?: string | null | undefined;
     status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED" | null | undefined;
     external_id?: string | null | undefined;
     title?: string | null | undefined;
@@ -2193,7 +2200,6 @@ declare const HBookingSchema: z.ZodObject<{
     hubby_foreign_identifiers?: {
         messaging_contact_id: string | null;
     } | null | undefined;
-    custom_branding?: string | null | undefined;
 }>;
 declare const HCountrySchema: z.ZodObject<{
     bokun_id: z.ZodNullable<z.ZodNumber>;
@@ -2340,6 +2346,7 @@ declare const HESIMSchema: z.ZodObject<{
     partner: z.ZodString;
     time_assigned: z.ZodEffects<z.ZodDate, Date, Date>;
     last_updated: z.ZodEffects<z.ZodDate, Date, Date>;
+    custom_branding: z.ZodOptional<z.ZodNullable<z.ZodAny>>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     id: string;
     name: string;
@@ -2369,6 +2376,7 @@ declare const HESIMSchema: z.ZodObject<{
     country: string;
     time_assigned: Date;
     last_updated: Date;
+    custom_branding?: any;
     coverage_label?: string | null | undefined;
     uuid?: string | null | undefined;
     status_history?: {
@@ -2406,6 +2414,7 @@ declare const HESIMSchema: z.ZodObject<{
     country: string;
     time_assigned: Date;
     last_updated: Date;
+    custom_branding?: any;
     coverage_label?: string | null | undefined;
     uuid?: string | null | undefined;
     status_history?: {
@@ -2503,6 +2512,7 @@ declare const HPaymentSchema: z.ZodObject<{
         affiliateId?: string | null | undefined;
         partner_name?: string | undefined;
     }>>;
+    custom_branding: z.ZodOptional<z.ZodNullable<z.ZodAny>>;
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -2521,6 +2531,7 @@ declare const HPaymentSchema: z.ZodObject<{
     customer: string;
     topup: boolean;
     id?: string | null | undefined;
+    custom_branding?: any;
     status?: "pending" | "processing" | "completed" | "failed" | undefined;
     package_specifications?: {
         destination?: string | undefined;
@@ -2566,6 +2577,7 @@ declare const HPaymentSchema: z.ZodObject<{
     customer: string;
     topup: boolean;
     id?: string | null | undefined;
+    custom_branding?: any;
     status?: "pending" | "processing" | "completed" | "failed" | undefined;
     package_specifications?: {
         destination?: string | undefined;
@@ -8061,6 +8073,7 @@ declare const bookingAppSchema: z.ZodObject<{
     id?: string | undefined;
     email?: string | null | undefined;
     gender?: "M" | "F" | "O" | undefined;
+    custom_branding?: string | null | undefined;
     status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED" | null | undefined;
     external_id?: string | null | undefined;
     title?: string | null | undefined;
@@ -8085,7 +8098,6 @@ declare const bookingAppSchema: z.ZodObject<{
     hubby_foreign_identifiers?: {
         messaging_contact_id: string | null;
     } | null | undefined;
-    custom_branding?: string | null | undefined;
 }, {
     locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU";
     partner: string;
@@ -8121,6 +8133,7 @@ declare const bookingAppSchema: z.ZodObject<{
     id?: string | undefined;
     email?: string | null | undefined;
     gender?: "M" | "F" | "O" | undefined;
+    custom_branding?: string | null | undefined;
     status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "UNPAID" | "EXPIRED" | null | undefined;
     external_id?: string | null | undefined;
     title?: string | null | undefined;
@@ -8145,7 +8158,6 @@ declare const bookingAppSchema: z.ZodObject<{
     hubby_foreign_identifiers?: {
         messaging_contact_id: string | null;
     } | null | undefined;
-    custom_branding?: string | null | undefined;
 }>;
 declare const partnerAppSchema: z.ZodObject<{
     id: z.ZodString;

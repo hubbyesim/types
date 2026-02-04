@@ -284,7 +284,8 @@ var userSchemaSpec = markAsSchemaSpec({
   updated_at: timestampNullableOptional,
   created_by: zod.z.string().nullable().optional(),
   updated_by: zod.z.string().nullable().optional(),
-  push_to_start_token: zod.z.string().nullable().optional()
+  push_to_start_token: zod.z.string().nullable().optional(),
+  custom_branding: zod.z.any().nullable().optional()
 });
 var SUPPORTED_LOCALES = [
   "en-US",
@@ -536,7 +537,8 @@ var esimSchemaSpec = markAsSchemaSpec({
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
   // Timestamp fields
   time_assigned: timestampNullable,
-  last_updated: timestampNullable
+  last_updated: timestampNullable,
+  custom_branding: zod.z.any().nullable().optional()
 });
 var paymentSchemaSpec = markAsSchemaSpec({
   ...hubbyModelSpec,
@@ -586,7 +588,8 @@ var paymentSchemaSpec = markAsSchemaSpec({
     affiliateId: zod.z.string().nullable().optional(),
     partner_name: zod.z.string().optional(),
     locale: zod.z.string().optional()
-  }).optional()
+  }).optional(),
+  custom_branding: zod.z.any().nullable().optional()
 });
 var analyticsSpec = markAsSchemaSpec({
   ...hubbyModelSpec,

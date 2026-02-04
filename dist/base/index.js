@@ -254,7 +254,8 @@ var userSchemaSpec = markAsSchemaSpec({
   updated_at: timestampNullableOptional,
   created_by: z.string().nullable().optional(),
   updated_by: z.string().nullable().optional(),
-  push_to_start_token: z.string().nullable().optional()
+  push_to_start_token: z.string().nullable().optional(),
+  custom_branding: z.any().nullable().optional()
 });
 var SUPPORTED_LOCALES = [
   "en-US",
@@ -506,7 +507,8 @@ var esimSchemaSpec = markAsSchemaSpec({
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
   // Timestamp fields
   time_assigned: timestampNullable,
-  last_updated: timestampNullable
+  last_updated: timestampNullable,
+  custom_branding: z.any().nullable().optional()
 });
 var paymentSchemaSpec = markAsSchemaSpec({
   ...hubbyModelSpec,
@@ -556,7 +558,8 @@ var paymentSchemaSpec = markAsSchemaSpec({
     affiliateId: z.string().nullable().optional(),
     partner_name: z.string().optional(),
     locale: z.string().optional()
-  }).optional()
+  }).optional(),
+  custom_branding: z.any().nullable().optional()
 });
 var messageSchemaSpec = markAsSchemaSpec({
   id: z.string(),
