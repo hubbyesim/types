@@ -877,7 +877,7 @@ var financialPropertiesSchemaSpec = markAsSchemaSpec({
   income_per_gb: zod.z.number().nullable(),
   commission_fee: zod.z.number().nullable().optional(),
   commission_percentage: zod.z.number().nullable().optional(),
-  payment_method: zod.z.enum(["invoice", "direct"]),
+  payment_method: zod.z.enum(["invoice", "direct", "not-to-invoice", "only-pay-out-commission"]),
   requires_card: zod.z.boolean().nullable(),
   next_invoice: timestampNullableOptional,
   last_invoice: timestampNullableOptional,

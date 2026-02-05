@@ -859,7 +859,7 @@ declare const partnerSchemaSpec: {
         income_per_gb: z.ZodNullable<z.ZodNumber>;
         commission_fee: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
         commission_percentage: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-        payment_method: z.ZodEnum<["invoice", "direct"]>;
+        payment_method: z.ZodEnum<["invoice", "direct", "not-to-invoice", "only-pay-out-commission"]>;
         requires_card: z.ZodNullable<z.ZodBoolean>;
         next_invoice: {
             _type: "timestamp";
@@ -3046,7 +3046,7 @@ declare const HPartnerSchema: z.ZodObject<{
         income_per_gb: z.ZodNullable<z.ZodNumber>;
         commission_fee: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
         commission_percentage: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-        payment_method: z.ZodEnum<["invoice", "direct"]>;
+        payment_method: z.ZodEnum<["invoice", "direct", "not-to-invoice", "only-pay-out-commission"]>;
         requires_card: z.ZodNullable<z.ZodBoolean>;
         next_invoice: z.ZodEffects<z.ZodDate, Date, Date>;
         last_invoice: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -3197,7 +3197,7 @@ declare const HPartnerSchema: z.ZodObject<{
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         administration_fee: number | null;
         income_per_gb: number | null;
-        payment_method: "direct" | "invoice";
+        payment_method: "direct" | "invoice" | "not-to-invoice" | "only-pay-out-commission";
         requires_card: boolean | null;
         next_invoice: Date;
         last_invoice: Date;
@@ -3232,7 +3232,7 @@ declare const HPartnerSchema: z.ZodObject<{
     }, {
         administration_fee: number | null;
         income_per_gb: number | null;
-        payment_method: "direct" | "invoice";
+        payment_method: "direct" | "invoice" | "not-to-invoice" | "only-pay-out-commission";
         requires_card: boolean | null;
         next_invoice: Date;
         last_invoice: Date;
@@ -3827,7 +3827,7 @@ declare const HPartnerSchema: z.ZodObject<{
     financial_properties: {
         administration_fee: number | null;
         income_per_gb: number | null;
-        payment_method: "direct" | "invoice";
+        payment_method: "direct" | "invoice" | "not-to-invoice" | "only-pay-out-commission";
         requires_card: boolean | null;
         next_invoice: Date;
         last_invoice: Date;
@@ -4015,7 +4015,7 @@ declare const HPartnerSchema: z.ZodObject<{
     financial_properties: {
         administration_fee: number | null;
         income_per_gb: number | null;
-        payment_method: "direct" | "invoice";
+        payment_method: "direct" | "invoice" | "not-to-invoice" | "only-pay-out-commission";
         requires_card: boolean | null;
         next_invoice: Date;
         last_invoice: Date;
@@ -4265,7 +4265,7 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
     income_per_gb: z.ZodNullable<z.ZodNumber>;
     commission_fee: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     commission_percentage: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-    payment_method: z.ZodEnum<["invoice", "direct"]>;
+    payment_method: z.ZodEnum<["invoice", "direct", "not-to-invoice", "only-pay-out-commission"]>;
     requires_card: z.ZodNullable<z.ZodBoolean>;
     next_invoice: z.ZodEffects<z.ZodDate, Date, Date>;
     last_invoice: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -4416,7 +4416,7 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     administration_fee: number | null;
     income_per_gb: number | null;
-    payment_method: "direct" | "invoice";
+    payment_method: "direct" | "invoice" | "not-to-invoice" | "only-pay-out-commission";
     requires_card: boolean | null;
     next_invoice: Date;
     last_invoice: Date;
@@ -4451,7 +4451,7 @@ declare const HFinancialPropertiesSchema: z.ZodObject<{
 }, {
     administration_fee: number | null;
     income_per_gb: number | null;
-    payment_method: "direct" | "invoice";
+    payment_method: "direct" | "invoice" | "not-to-invoice" | "only-pay-out-commission";
     requires_card: boolean | null;
     next_invoice: Date;
     last_invoice: Date;
@@ -4655,7 +4655,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         income_per_gb: z.ZodNullable<z.ZodNumber>;
         commission_fee: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
         commission_percentage: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-        payment_method: z.ZodEnum<["invoice", "direct"]>;
+        payment_method: z.ZodEnum<["invoice", "direct", "not-to-invoice", "only-pay-out-commission"]>;
         requires_card: z.ZodNullable<z.ZodBoolean>;
         next_invoice: z.ZodEffects<z.ZodDate, Date, Date>;
         last_invoice: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -4806,7 +4806,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         administration_fee: number | null;
         income_per_gb: number | null;
-        payment_method: "direct" | "invoice";
+        payment_method: "direct" | "invoice" | "not-to-invoice" | "only-pay-out-commission";
         requires_card: boolean | null;
         next_invoice: Date;
         last_invoice: Date;
@@ -4841,7 +4841,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     }, {
         administration_fee: number | null;
         income_per_gb: number | null;
-        payment_method: "direct" | "invoice";
+        payment_method: "direct" | "invoice" | "not-to-invoice" | "only-pay-out-commission";
         requires_card: boolean | null;
         next_invoice: Date;
         last_invoice: Date;
@@ -5436,7 +5436,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     financial_properties: {
         administration_fee: number | null;
         income_per_gb: number | null;
-        payment_method: "direct" | "invoice";
+        payment_method: "direct" | "invoice" | "not-to-invoice" | "only-pay-out-commission";
         requires_card: boolean | null;
         next_invoice: Date;
         last_invoice: Date;
@@ -5624,7 +5624,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     financial_properties: {
         administration_fee: number | null;
         income_per_gb: number | null;
-        payment_method: "direct" | "invoice";
+        payment_method: "direct" | "invoice" | "not-to-invoice" | "only-pay-out-commission";
         requires_card: boolean | null;
         next_invoice: Date;
         last_invoice: Date;
@@ -8243,7 +8243,7 @@ declare const partnerAppSchema: z.ZodObject<{
         income_per_gb: z.ZodNullable<z.ZodNumber>;
         commission_fee: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
         commission_percentage: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
-        payment_method: z.ZodEnum<["invoice", "direct"]>;
+        payment_method: z.ZodEnum<["invoice", "direct", "not-to-invoice", "only-pay-out-commission"]>;
         requires_card: z.ZodNullable<z.ZodBoolean>;
         next_invoice: z.ZodEffects<z.ZodDate, Date, Date>;
         last_invoice: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -8394,7 +8394,7 @@ declare const partnerAppSchema: z.ZodObject<{
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         administration_fee: number | null;
         income_per_gb: number | null;
-        payment_method: "direct" | "invoice";
+        payment_method: "direct" | "invoice" | "not-to-invoice" | "only-pay-out-commission";
         requires_card: boolean | null;
         next_invoice: Date;
         last_invoice: Date;
@@ -8429,7 +8429,7 @@ declare const partnerAppSchema: z.ZodObject<{
     }, {
         administration_fee: number | null;
         income_per_gb: number | null;
-        payment_method: "direct" | "invoice";
+        payment_method: "direct" | "invoice" | "not-to-invoice" | "only-pay-out-commission";
         requires_card: boolean | null;
         next_invoice: Date;
         last_invoice: Date;
@@ -9024,7 +9024,7 @@ declare const partnerAppSchema: z.ZodObject<{
     financial_properties: {
         administration_fee: number | null;
         income_per_gb: number | null;
-        payment_method: "direct" | "invoice";
+        payment_method: "direct" | "invoice" | "not-to-invoice" | "only-pay-out-commission";
         requires_card: boolean | null;
         next_invoice: Date;
         last_invoice: Date;
@@ -9212,7 +9212,7 @@ declare const partnerAppSchema: z.ZodObject<{
     financial_properties: {
         administration_fee: number | null;
         income_per_gb: number | null;
-        payment_method: "direct" | "invoice";
+        payment_method: "direct" | "invoice" | "not-to-invoice" | "only-pay-out-commission";
         requires_card: boolean | null;
         next_invoice: Date;
         last_invoice: Date;
