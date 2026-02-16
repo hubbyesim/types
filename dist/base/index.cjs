@@ -1242,6 +1242,8 @@ var destinationBundleSchemaSpec = markAsSchemaSpec({
   size_in_gigabytes: zod.z.number(),
   package_template: { _type: "docRef", collection: PACKAGE_TEMPLATE_COLLECTION, nullable: true },
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
+  //All unlimited packages will have a traffic policy, but this only refers to telna bundles
+  traffic_policy: { _type: "docRef", collection: TRAFFIC_POLICY_COLLECTION, nullable: true },
   throttling: zod.z.number().optional().nullable(),
   b2c_price: zod.z.number(),
   b2b_price: zod.z.number(),
