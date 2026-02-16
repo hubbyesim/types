@@ -1543,11 +1543,6 @@ declare const destinationBundleSchemaSpec: {
         collection: string;
         nullable: boolean;
     };
-    traffic_policy: {
-        _type: "docRef";
-        collection: string;
-        nullable: boolean;
-    };
     throttling: z.ZodNullable<z.ZodOptional<z.ZodNumber>>;
     b2c_price: z.ZodNumber;
     b2b_price: z.ZodNumber;
@@ -6773,7 +6768,6 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     size_in_gigabytes: z.ZodNumber;
     package_template: z.ZodString;
     partner: z.ZodString;
-    traffic_policy: z.ZodString;
     throttling: z.ZodNullable<z.ZodOptional<z.ZodNumber>>;
     b2c_price: z.ZodNumber;
     b2b_price: z.ZodNumber;
@@ -6797,7 +6791,6 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     updated_by: string | null;
     type: "data-limited" | "time-limited" | "starter" | "unlimited";
     is_active: boolean;
-    traffic_policy: string;
     provider: "telna" | "bondio";
     priority: number;
     parent_document_id: string;
@@ -6824,7 +6817,6 @@ declare const HDestinationBundleSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     type: "data-limited" | "time-limited" | "starter" | "unlimited";
-    traffic_policy: string;
     provider: "telna" | "bondio";
     parent_document_id: string;
     duration_in_days: number;
@@ -9413,7 +9405,6 @@ declare const destinationBundleAppSchema: z.ZodObject<{
     size_in_gigabytes: z.ZodNumber;
     package_template: z.ZodString;
     partner: z.ZodString;
-    traffic_policy: z.ZodString;
     throttling: z.ZodNullable<z.ZodOptional<z.ZodNumber>>;
     b2c_price: z.ZodNumber;
     b2b_price: z.ZodNumber;
@@ -9437,7 +9428,6 @@ declare const destinationBundleAppSchema: z.ZodObject<{
     updated_by: string | null;
     type: "data-limited" | "time-limited" | "starter" | "unlimited";
     is_active: boolean;
-    traffic_policy: string;
     provider: "telna" | "bondio";
     priority: number;
     parent_document_id: string;
@@ -9464,7 +9454,6 @@ declare const destinationBundleAppSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     type: "data-limited" | "time-limited" | "starter" | "unlimited";
-    traffic_policy: string;
     provider: "telna" | "bondio";
     parent_document_id: string;
     duration_in_days: number;
