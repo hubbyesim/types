@@ -283,7 +283,11 @@ var SUPPORTED_LOCALES = [
   "en-AU",
   "da-DK",
   "ko-KR",
-  "hu-HU"
+  "hu-HU",
+  "nn-NO",
+  "pt-PT",
+  "pt-BR",
+  "en-NZ"
 ];
 var supportedLocalesSchema = z.enum(SUPPORTED_LOCALES);
 var packageSpecificationSchema = z.object({
