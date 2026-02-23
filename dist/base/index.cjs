@@ -385,8 +385,8 @@ var bookingSchemaSpec = markAsSchemaSpec({
   data: {
     _type: "object",
     of: {
-      source: zod.z.string(),
-      manual: zod.z.boolean(),
+      source: zod.z.string().nullable().optional(),
+      manual: zod.z.boolean().nullable().optional(),
       action: zod.z.string().nullable().optional()
     },
     nullable: true,

@@ -139,8 +139,8 @@ declare const bookingSchemaSpec: {
     data: {
         _type: "object";
         of: {
-            source: z.ZodString;
-            manual: z.ZodBoolean;
+            source: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            manual: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
             action: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         };
         nullable: boolean;
@@ -1997,16 +1997,16 @@ declare const HBookingSchema: z.ZodObject<{
     locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR", "hu-HU", "nn-NO", "pt-PT", "pt-BR", "en-NZ"]>;
     status: z.ZodNullable<z.ZodOptional<z.ZodEnum<["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED", "UNPAID", "EXPIRED"]>>>;
     data: z.ZodObject<{
-        source: z.ZodString;
-        manual: z.ZodBoolean;
+        source: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        manual: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
         action: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
-        source: string;
-        manual: boolean;
+        source?: string | null | undefined;
+        manual?: boolean | null | undefined;
         action?: string | null | undefined;
     }, {
-        source: string;
-        manual: boolean;
+        source?: string | null | undefined;
+        manual?: boolean | null | undefined;
         action?: string | null | undefined;
     }>;
     communication_options: z.ZodObject<{
@@ -2088,8 +2088,8 @@ declare const HBookingSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     data: {
-        source: string;
-        manual: boolean;
+        source?: string | null | undefined;
+        manual?: boolean | null | undefined;
         action?: string | null | undefined;
     };
     communication_options: {
@@ -2148,8 +2148,8 @@ declare const HBookingSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     data: {
-        source: string;
-        manual: boolean;
+        source?: string | null | undefined;
+        manual?: boolean | null | undefined;
         action?: string | null | undefined;
     };
     communication_options: {
@@ -7955,16 +7955,16 @@ declare const bookingAppSchema: z.ZodObject<{
     locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR", "hu-HU", "nn-NO", "pt-PT", "pt-BR", "en-NZ"]>;
     status: z.ZodNullable<z.ZodOptional<z.ZodEnum<["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED", "UNPAID", "EXPIRED"]>>>;
     data: z.ZodObject<{
-        source: z.ZodString;
-        manual: z.ZodBoolean;
+        source: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        manual: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
         action: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
-        source: string;
-        manual: boolean;
+        source?: string | null | undefined;
+        manual?: boolean | null | undefined;
         action?: string | null | undefined;
     }, {
-        source: string;
-        manual: boolean;
+        source?: string | null | undefined;
+        manual?: boolean | null | undefined;
         action?: string | null | undefined;
     }>;
     communication_options: z.ZodObject<{
@@ -8046,8 +8046,8 @@ declare const bookingAppSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     data: {
-        source: string;
-        manual: boolean;
+        source?: string | null | undefined;
+        manual?: boolean | null | undefined;
         action?: string | null | undefined;
     };
     communication_options: {
@@ -8106,8 +8106,8 @@ declare const bookingAppSchema: z.ZodObject<{
     created_by: string | null;
     updated_by: string | null;
     data: {
-        source: string;
-        manual: boolean;
+        source?: string | null | undefined;
+        manual?: boolean | null | undefined;
         action?: string | null | undefined;
     };
     communication_options: {
