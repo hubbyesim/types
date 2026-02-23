@@ -27,6 +27,10 @@ export const SUPPORTED_LOCALES = [
   "da-DK",
   "ko-KR",
   "hu-HU",
+  "nn-NO", 
+  "pt-PT", 
+  "pt-BR", 
+  "en-NZ",
 ] as const;
 
 // Define the type using TypeScript's typeof and indexing

@@ -313,7 +313,11 @@ var SUPPORTED_LOCALES = [
   "en-AU",
   "da-DK",
   "ko-KR",
-  "hu-HU"
+  "hu-HU",
+  "nn-NO",
+  "pt-PT",
+  "pt-BR",
+  "en-NZ"
 ];
 var supportedLocalesSchema = zod.z.enum(SUPPORTED_LOCALES);
 var packageSpecificationSchema = zod.z.object({
@@ -409,8 +413,8 @@ var bookingSchemaSpec = markAsSchemaSpec({
   data: {
     _type: "object",
     of: {
-      source: zod.z.string(),
-      manual: zod.z.boolean(),
+      source: zod.z.string().nullable().optional(),
+      manual: zod.z.boolean().nullable().optional(),
       action: zod.z.string().nullable().optional()
     },
     nullable: true,

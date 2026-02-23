@@ -283,7 +283,11 @@ var SUPPORTED_LOCALES = [
   "en-AU",
   "da-DK",
   "ko-KR",
-  "hu-HU"
+  "hu-HU",
+  "nn-NO",
+  "pt-PT",
+  "pt-BR",
+  "en-NZ"
 ];
 var supportedLocalesSchema = z.enum(SUPPORTED_LOCALES);
 var packageSpecificationSchema = z.object({
@@ -379,8 +383,8 @@ var bookingSchemaSpec = markAsSchemaSpec({
   data: {
     _type: "object",
     of: {
-      source: z.string(),
-      manual: z.boolean(),
+      source: z.string().nullable().optional(),
+      manual: z.boolean().nullable().optional(),
       action: z.string().nullable().optional()
     },
     nullable: true,
