@@ -312,7 +312,7 @@ var SUPPORTED_LOCALES = [
   "da-DK",
   "ko-KR",
   "hu-HU",
-  "nn-NO",
+  "no-NO",
   "pt-PT",
   "pt-BR",
   "en-NZ"
