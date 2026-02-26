@@ -1806,6 +1806,80 @@ declare const scheduledJobSchemaSpec: {
     updated_by: z.ZodNullable<z.ZodString>;
 };
 
+declare const autoInstallationEventsSchemaSpec: {
+    auto_install_initiated: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    auto_install_completed: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    auto_install_failed: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    manual_install_selected: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    device_model: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    os_name: z.ZodOptional<z.ZodNullable<z.ZodEnum<["iOS", "Android"]>>>;
+    os_version: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    app_version: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    unique_device_identifier: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    esim_country_code: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    package_type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    package_size: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    provider: z.ZodOptional<z.ZodNullable<z.ZodEnum<["telna", "bondio"]>>>;
+    error_code: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    user: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+        optional: boolean;
+    };
+    partner: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+        optional: boolean;
+    };
+    promo_code: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+        optional: boolean;
+    };
+    id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    created_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    updated_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    created_by: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+        optional: boolean;
+    };
+    updated_by: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+        optional: boolean;
+    };
+};
+
 /** ZOD SCHEMAS */
 declare const HUserSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -7125,6 +7199,76 @@ declare const HScheduledJobSchema: z.ZodObject<{
     last_retry_at: Date;
     id?: string | null | undefined;
 }>;
+declare const HAutoInstallationEventsSchema: z.ZodObject<{
+    auto_install_initiated: z.ZodEffects<z.ZodDate, Date, Date>;
+    auto_install_completed: z.ZodEffects<z.ZodDate, Date, Date>;
+    auto_install_failed: z.ZodEffects<z.ZodDate, Date, Date>;
+    manual_install_selected: z.ZodEffects<z.ZodDate, Date, Date>;
+    device_model: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    os_name: z.ZodOptional<z.ZodNullable<z.ZodEnum<["iOS", "Android"]>>>;
+    os_version: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    app_version: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    unique_device_identifier: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    esim_country_code: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    package_type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    package_size: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    provider: z.ZodOptional<z.ZodNullable<z.ZodEnum<["telna", "bondio"]>>>;
+    error_code: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    user: z.ZodString;
+    partner: z.ZodString;
+    promo_code: z.ZodString;
+    id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    created_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    created_by: z.ZodString;
+    updated_by: z.ZodString;
+}, z.UnknownKeysParam, z.ZodTypeAny, {
+    partner: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: string;
+    updated_by: string;
+    user: string;
+    promo_code: string;
+    auto_install_initiated: Date;
+    auto_install_completed: Date;
+    auto_install_failed: Date;
+    manual_install_selected: Date;
+    id?: string | null | undefined;
+    app_version?: string | null | undefined;
+    package_type?: string | null | undefined;
+    provider?: "telna" | "bondio" | null | undefined;
+    package_size?: string | null | undefined;
+    unique_device_identifier?: string | null | undefined;
+    device_model?: string | null | undefined;
+    os_name?: "iOS" | "Android" | null | undefined;
+    os_version?: string | null | undefined;
+    esim_country_code?: string | null | undefined;
+    error_code?: string | null | undefined;
+}, {
+    partner: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: string;
+    updated_by: string;
+    user: string;
+    promo_code: string;
+    auto_install_initiated: Date;
+    auto_install_completed: Date;
+    auto_install_failed: Date;
+    manual_install_selected: Date;
+    id?: string | null | undefined;
+    app_version?: string | null | undefined;
+    package_type?: string | null | undefined;
+    provider?: "telna" | "bondio" | null | undefined;
+    package_size?: string | null | undefined;
+    unique_device_identifier?: string | null | undefined;
+    device_model?: string | null | undefined;
+    os_name?: "iOS" | "Android" | null | undefined;
+    os_version?: string | null | undefined;
+    esim_country_code?: string | null | undefined;
+    error_code?: string | null | undefined;
+}>;
 declare const HAddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     city: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -7426,6 +7570,7 @@ type HUserTouchpoints = z.infer<typeof HUserTouchpointsSchema>;
 type HLoginRequest = z.infer<typeof HLoginRequestSchema>;
 type HLiveActivity = z.infer<typeof HLiveActivitySchema>;
 type HScheduledJob = z.infer<typeof HScheduledJobSchema>;
+type HAutoInstallationEvents = z.infer<typeof HAutoInstallationEventsSchema>;
 type HAddress = z.infer<typeof HAddressSchema>;
 type HRegistration = z.infer<typeof HRegistrationSchema>;
 type HBankingDetails = z.infer<typeof HBankingDetailsSchema>;
@@ -7537,6 +7682,7 @@ declare const USER_TOUCHPOINTS_COLLECTION = "user_touchpoints";
 declare const LIVE_ACTIVITY_COLLECTION = "live_activities";
 declare const TAG_COLLECTION = "tags";
 declare const SCHEDULED_JOB_COLLECTION = "scheduled_jobs";
+declare const AUTO_INSTALLATION_EVENTS_COLLECTION = "auto_installation_events";
 
 /** ZOD SCHEMAS */
 declare const UserSchema: z.ZodTypeAny;
@@ -7570,6 +7716,7 @@ declare const UserTouchpointsSchema: z.ZodTypeAny;
 declare const LoginRequestSchema: z.ZodTypeAny;
 declare const LiveActivitySchema: z.ZodTypeAny;
 declare const ScheduledJobSchema: z.ZodTypeAny;
+declare const AutoInstallationEventsSchema: z.ZodTypeAny;
 declare const AddressSchema: z.ZodObject<{
     street: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     city: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -7872,6 +8019,7 @@ type UserTouchpoints = z.infer<typeof UserTouchpointsSchema>;
 type LoginRequest = z.infer<typeof LoginRequestSchema>;
 type LiveActivity = z.infer<typeof LiveActivitySchema>;
 type ScheduledJob = z.infer<typeof ScheduledJobSchema>;
+type AutoInstallationEvents = z.infer<typeof AutoInstallationEventsSchema>;
 type LiveActivityStatus = z.infer<typeof liveActivityStatusSchema>;
 type LiveActivityEvent = z.infer<typeof liveActivityEventSchema>;
 type LiveActivityReason = z.infer<typeof liveActivityReasonSchema>;
@@ -9562,4 +9710,4 @@ declare const promoPackageSpecificationAppSchema: z.ZodObject<{
 type SupportedLocales = typeof SUPPORTED_LOCALES$1[number];
 declare const SUPPORTED_LOCALES: readonly ["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR", "hu-HU", "no-NO", "pt-PT", "pt-BR", "en-NZ"];
 
-export { API_LOG_COLLECTION, Address, AddressSchema, Analytics, AnalyticsSchema, ApiLog, ApiLogApiRequest, ApiLogApiResponse, ApiLogSchema, BOOKING_COLLECTION, BankingDetails, BankingDetailsSchema, BaseReward, BaseRewardSchema, BondioPackage, BondioPackageSchema, Booking, BookingApiRequest, BookingApiResponse, BookingSchema, BookingStatus, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannel, CommunicationChannelSchema, CommunicationOptions, CommunicationOptionsSchema, Country, CountrySchema, Currency, CurrencySchema, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, Destination, DestinationBundle, DestinationBundleSchema, DestinationSchema, ESIM, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HBankingDetails, HBankingDetailsSchema, HBaseReward, HBaseRewardSchema, HBondioPackage, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HDestination, HDestinationBundle, HDestinationBundleSchema, HDestinationSchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HJobStatus, HJobStatusSchema, HLiveActivity, HLiveActivitySchema, HLoginRequest, HLoginRequestSchema, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPackageTemplate, HPackageTemplateSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HReview, HReviewSchema, HReviewSubmission, HReviewSubmissionSchema, HRewardMultipliers, HRewardMultipliersSchema, HRewardPackageType, HRewardPackageTypeSchema, HRewardStrategy, HRewardStrategySchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HScheduledJob, HScheduledJobSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HUserTouchpoints, HUserTouchpointsSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentityBannersSchema, HVisualIdentitySchema, HubbyModel, HubbyModelApp, HubbyModelFirestore, HubbyModelSchema, JobStatus, JobStatusSchema, LIVE_ACTIVITY_COLLECTION, LastUpdate, LiveActivity, LiveActivityEvent, LiveActivityReason, LiveActivitySchema, LiveActivityStatus, LoginRequest, LoginRequestSchema, MESSAGE_COLLECTION, Message, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, Package, PackagePrice, PackagePriceSchema, PackageSchema, PackageSpecification, PackageTemplate, PackageTemplateSchema, Partner, PartnerApiRequest, PartnerApiResponse, PartnerContact, PartnerContactSchema, PartnerData, PartnerDataSchema, PartnerPackageSpecification, PartnerPackageSpecificationSchema, PartnerSchema, Payment, PaymentSchema, PlatformSettings, PlatformSettingsSchema, PriceList, PriceListApiRequest, PriceListApiResponse, PriceListSchema, PromoCode, PromoCodeSchema, PromoPackageSpecificationSchema, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, ROLE_COLLECTION, Registration, RegistrationSchema, Review, ReviewSchema, ReviewSubmission, ReviewSubmissionSchema, RewardMultipliers, RewardMultipliersSchema, RewardPackageType, RewardPackageTypeSchema, RewardStrategy, RewardStrategySchema, SCHEDULED_JOB_COLLECTION, SUPPORTED_LOCALES, Schedule, ScheduleFilter, ScheduleFilterSchema, ScheduleSchema, ScheduledJob, ScheduledJobSchema, SupportedLocales, TAG_COLLECTION, TRAFFIC_POLICY_COLLECTION, Tag, TagSchema, TelnaPackage, TelnaPackageSchema, TrafficPolicy, TrafficPolicySchema, USER_COLLECTION, USER_TOUCHPOINTS_COLLECTION, User, UserFirestore, UserFirestoreSchema, UserSchema, UserTouchpoints, UserTouchpointsSchema, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerSchema, VisualIdentityBannerStrategy, VisualIdentityBanners, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, apiLogSchemaSpec, bookingAppSchema, bookingSchemaSpec, countrySchemaSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, currencySchemaSpec, destinationAppSchema, destinationBundleAppSchema, destinationBundleSchemaSpec, destinationSchemaSpec, esimSchemaSpec, jobStatusSchema, lastUpdateSchema, liveActivityEventSchema, liveActivityReasonSchema, liveActivitySchemaSpec, liveActivityStatusSchema, loginRequestSchemaSpec, messageSchemaSpec, packageSchemaSpec, packageTemplateAppSchema, packageTemplateSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, paymentSchemaSpec, priceListFromFirestore, priceListSchemaSpec, priceListToFirestore, promoCodeFromFirestore, promoCodeSchemaSpec, promoCodeToFirestore, promoPackageSpecificationAppSchema, reviewSchemaSpec, reviewSubmissionSchemaSpec, scheduledJobSchemaSpec, tagSchemaSpec, userFromFirestore, userSchemaSpec, userToFirestore, userTouchpointsFromFirestore, userTouchpointsSchemaSpec, userTouchpointsToFirestore };
+export { API_LOG_COLLECTION, AUTO_INSTALLATION_EVENTS_COLLECTION, Address, AddressSchema, Analytics, AnalyticsSchema, ApiLog, ApiLogApiRequest, ApiLogApiResponse, ApiLogSchema, AutoInstallationEvents, AutoInstallationEventsSchema, BOOKING_COLLECTION, BankingDetails, BankingDetailsSchema, BaseReward, BaseRewardSchema, BondioPackage, BondioPackageSchema, Booking, BookingApiRequest, BookingApiResponse, BookingSchema, BookingStatus, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannel, CommunicationChannelSchema, CommunicationOptions, CommunicationOptionsSchema, Country, CountrySchema, Currency, CurrencySchema, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, Destination, DestinationBundle, DestinationBundleSchema, DestinationSchema, ESIM, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HAutoInstallationEvents, HAutoInstallationEventsSchema, HBankingDetails, HBankingDetailsSchema, HBaseReward, HBaseRewardSchema, HBondioPackage, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HDestination, HDestinationBundle, HDestinationBundleSchema, HDestinationSchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HJobStatus, HJobStatusSchema, HLiveActivity, HLiveActivitySchema, HLoginRequest, HLoginRequestSchema, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageSchema, HPackageTemplate, HPackageTemplateSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HReview, HReviewSchema, HReviewSubmission, HReviewSubmissionSchema, HRewardMultipliers, HRewardMultipliersSchema, HRewardPackageType, HRewardPackageTypeSchema, HRewardStrategy, HRewardStrategySchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HScheduledJob, HScheduledJobSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HUserTouchpoints, HUserTouchpointsSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentityBannersSchema, HVisualIdentitySchema, HubbyModel, HubbyModelApp, HubbyModelFirestore, HubbyModelSchema, JobStatus, JobStatusSchema, LIVE_ACTIVITY_COLLECTION, LastUpdate, LiveActivity, LiveActivityEvent, LiveActivityReason, LiveActivitySchema, LiveActivityStatus, LoginRequest, LoginRequestSchema, MESSAGE_COLLECTION, Message, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, Package, PackagePrice, PackagePriceSchema, PackageSchema, PackageSpecification, PackageTemplate, PackageTemplateSchema, Partner, PartnerApiRequest, PartnerApiResponse, PartnerContact, PartnerContactSchema, PartnerData, PartnerDataSchema, PartnerPackageSpecification, PartnerPackageSpecificationSchema, PartnerSchema, Payment, PaymentSchema, PlatformSettings, PlatformSettingsSchema, PriceList, PriceListApiRequest, PriceListApiResponse, PriceListSchema, PromoCode, PromoCodeSchema, PromoPackageSpecificationSchema, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, ROLE_COLLECTION, Registration, RegistrationSchema, Review, ReviewSchema, ReviewSubmission, ReviewSubmissionSchema, RewardMultipliers, RewardMultipliersSchema, RewardPackageType, RewardPackageTypeSchema, RewardStrategy, RewardStrategySchema, SCHEDULED_JOB_COLLECTION, SUPPORTED_LOCALES, Schedule, ScheduleFilter, ScheduleFilterSchema, ScheduleSchema, ScheduledJob, ScheduledJobSchema, SupportedLocales, TAG_COLLECTION, TRAFFIC_POLICY_COLLECTION, Tag, TagSchema, TelnaPackage, TelnaPackageSchema, TrafficPolicy, TrafficPolicySchema, USER_COLLECTION, USER_TOUCHPOINTS_COLLECTION, User, UserFirestore, UserFirestoreSchema, UserSchema, UserTouchpoints, UserTouchpointsSchema, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerSchema, VisualIdentityBannerStrategy, VisualIdentityBanners, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, apiLogSchemaSpec, autoInstallationEventsSchemaSpec, bookingAppSchema, bookingSchemaSpec, countrySchemaSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, currencySchemaSpec, destinationAppSchema, destinationBundleAppSchema, destinationBundleSchemaSpec, destinationSchemaSpec, esimSchemaSpec, jobStatusSchema, lastUpdateSchema, liveActivityEventSchema, liveActivityReasonSchema, liveActivitySchemaSpec, liveActivityStatusSchema, loginRequestSchemaSpec, messageSchemaSpec, packageSchemaSpec, packageTemplateAppSchema, packageTemplateSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, paymentSchemaSpec, priceListFromFirestore, priceListSchemaSpec, priceListToFirestore, promoCodeFromFirestore, promoCodeSchemaSpec, promoCodeToFirestore, promoPackageSpecificationAppSchema, reviewSchemaSpec, reviewSubmissionSchemaSpec, scheduledJobSchemaSpec, tagSchemaSpec, userFromFirestore, userSchemaSpec, userToFirestore, userTouchpointsFromFirestore, userTouchpointsSchemaSpec, userTouchpointsToFirestore };

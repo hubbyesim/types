@@ -59,6 +59,7 @@ import {
     lastUpdateSchema
 } from './specs/live_activity';
 import { scheduledJobSchemaSpec, jobStatusSchema } from './specs/scheduled_job';
+import { autoInstallationEventsSchemaSpec } from './specs/auto_installation_events';
 import { z } from 'zod';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 
@@ -95,7 +96,8 @@ export {
     liveActivityReasonSchema,
     lastUpdateSchema,
     scheduledJobSchemaSpec,
-    jobStatusSchema
+    jobStatusSchema,
+    autoInstallationEventsSchemaSpec
 };
 
 
@@ -131,6 +133,7 @@ export const UserTouchpointsSchema = buildServerSchema(userTouchpointsSchemaSpec
 export const LoginRequestSchema = buildServerSchema(loginRequestSchemaSpec);
 export const LiveActivitySchema = buildServerSchema(liveActivitySchemaSpec);
 export const ScheduledJobSchema = buildServerSchema(scheduledJobSchemaSpec);
+export const AutoInstallationEventsSchema = buildServerSchema(autoInstallationEventsSchemaSpec);
 
 // Additional lower-level schemas
 export const AddressSchema = addressSchema;
@@ -179,6 +182,7 @@ export type UserTouchpoints = z.infer<typeof UserTouchpointsSchema>;
 export type LoginRequest = z.infer<typeof LoginRequestSchema>;
 export type LiveActivity = z.infer<typeof LiveActivitySchema>;
 export type ScheduledJob = z.infer<typeof ScheduledJobSchema>;
+export type AutoInstallationEvents = z.infer<typeof AutoInstallationEventsSchema>;
 export type LiveActivityStatus = z.infer<typeof liveActivityStatusSchema>;
 export type LiveActivityEvent = z.infer<typeof liveActivityEventSchema>;
 export type LiveActivityReason = z.infer<typeof liveActivityReasonSchema>;
@@ -291,5 +295,5 @@ export { createModelConverters } from './utils/modelConverterFactory';
 export { createConvertJSToFirestore, createConvertFirestoreToJS } from './utils/firestoreTransformUtils';
 export { FirebaseService, createFirebaseService } from './services/firebase';
 
-export { USER_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, BOOKING_COLLECTION, ROLE_COLLECTION, PERMISSION_COLLECTION, TRAFFIC_POLICY_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, COUNTRY_COLLECTION, ESIM_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, MESSAGE_COLLECTION, CURRENCY_COLLECTION, API_LOG_COLLECTION, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, USER_TOUCHPOINTS_COLLECTION, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, TAG_COLLECTION, LIVE_ACTIVITY_COLLECTION, SCHEDULED_JOB_COLLECTION } from './specs/common';
+export { USER_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, BOOKING_COLLECTION, ROLE_COLLECTION, PERMISSION_COLLECTION, TRAFFIC_POLICY_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, COUNTRY_COLLECTION, ESIM_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, MESSAGE_COLLECTION, CURRENCY_COLLECTION, API_LOG_COLLECTION, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, USER_TOUCHPOINTS_COLLECTION, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, TAG_COLLECTION, LIVE_ACTIVITY_COLLECTION, SCHEDULED_JOB_COLLECTION, AUTO_INSTALLATION_EVENTS_COLLECTION } from './specs/common';
 
