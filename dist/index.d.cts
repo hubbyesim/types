@@ -104,6 +104,7 @@ declare const userSchemaSpec: {
     updated_by: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     push_to_start_token: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     custom_branding: z.ZodOptional<z.ZodNullable<z.ZodAny>>;
+    messaging_contact_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 };
 
 declare const bookingSchemaSpec: {
@@ -1877,6 +1878,7 @@ declare const HUserSchema: z.ZodObject<{
     updated_by: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     push_to_start_token: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     custom_branding: z.ZodOptional<z.ZodNullable<z.ZodAny>>;
+    messaging_contact_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     name: string | null;
     email: string | null;
@@ -1925,6 +1927,7 @@ declare const HUserSchema: z.ZodObject<{
     updated_by?: string | null | undefined;
     push_to_start_token?: string | null | undefined;
     custom_branding?: any;
+    messaging_contact_id?: string | null | undefined;
 }, {
     name: string | null;
     email: string | null;
@@ -1973,6 +1976,7 @@ declare const HUserSchema: z.ZodObject<{
     updated_by?: string | null | undefined;
     push_to_start_token?: string | null | undefined;
     custom_branding?: any;
+    messaging_contact_id?: string | null | undefined;
 }>;
 declare const HBookingSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;

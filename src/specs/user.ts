@@ -67,4 +67,5 @@ export const userSchemaSpec = markAsSchemaSpec({
     updated_by: z.string().nullable().optional(),
     push_to_start_token: z.string().nullable().optional(),
     custom_branding: z.any().nullable().optional(),
+    messaging_contact_id: z.string().nullable().optional(),
 });

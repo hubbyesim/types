@@ -257,7 +257,8 @@ var userSchemaSpec = markAsSchemaSpec({
   created_by: zod.z.string().nullable().optional(),
   updated_by: zod.z.string().nullable().optional(),
   push_to_start_token: zod.z.string().nullable().optional(),
-  custom_branding: zod.z.any().nullable().optional()
+  custom_branding: zod.z.any().nullable().optional(),
+  messaging_contact_id: zod.z.string().nullable().optional()
 });
 var SUPPORTED_LOCALES = [
   "en-US",
