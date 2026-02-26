@@ -1373,6 +1373,7 @@ var autoInstallationEventsSchemaSpec = markAsSchemaSpec({
   app_version: z.string().nullable().optional(),
   unique_device_identifier: z.string().nullable().optional(),
   // Installation context
+  installation_method: z.enum(["auto", "manual"]).nullable().optional(),
   esim_country_code: z.string().nullable().optional(),
   package_type: z.string().nullable().optional(),
   package_size: z.string().nullable().optional(),

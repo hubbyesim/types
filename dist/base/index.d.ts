@@ -5329,6 +5329,7 @@ declare const HAutoInstallationEventsSchema: z.ZodObject<{
     os_version: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     app_version: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     unique_device_identifier: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    installation_method: z.ZodOptional<z.ZodNullable<z.ZodEnum<["auto", "manual"]>>>;
     esim_country_code: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     package_type: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     package_size: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -5363,6 +5364,7 @@ declare const HAutoInstallationEventsSchema: z.ZodObject<{
     device_model?: string | null | undefined;
     os_name?: "iOS" | "Android" | null | undefined;
     os_version?: string | null | undefined;
+    installation_method?: "manual" | "auto" | null | undefined;
     esim_country_code?: string | null | undefined;
     error_code?: string | null | undefined;
 }, {
@@ -5386,6 +5388,7 @@ declare const HAutoInstallationEventsSchema: z.ZodObject<{
     device_model?: string | null | undefined;
     os_name?: "iOS" | "Android" | null | undefined;
     os_version?: string | null | undefined;
+    installation_method?: "manual" | "auto" | null | undefined;
     esim_country_code?: string | null | undefined;
     error_code?: string | null | undefined;
 }>;
