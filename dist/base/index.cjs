@@ -1362,6 +1362,32 @@ var scheduledJobSchemaSpec = markAsSchemaSpec({
   created_by: zod.z.string().nullable(),
   updated_by: zod.z.string().nullable()
 });
+var autoInstallationEventsSchemaSpec = markAsSchemaSpec({
+  ...hubbyModelSpec,
+  // Event timestamps
+  auto_install_initiated: timestampNullableOptional,
+  auto_install_completed: timestampNullableOptional,
+  auto_install_failed: timestampNullableOptional,
+  manual_install_selected: timestampNullableOptional,
+  // Device & environment info
+  device_model: zod.z.string().nullable().optional(),
+  os_name: zod.z.enum(["iOS", "Android"]).nullable().optional(),
+  os_version: zod.z.string().nullable().optional(),
+  app_version: zod.z.string().nullable().optional(),
+  unique_device_identifier: zod.z.string().nullable().optional(),
+  // Installation context
+  installation_method: zod.z.enum(["auto", "manual"]).nullable().optional(),
+  esim_country_code: zod.z.string().nullable().optional(),
+  package_type: zod.z.string().nullable().optional(),
+  package_size: zod.z.string().nullable().optional(),
+  // Esim provider
+  provider: zod.z.enum(["telna", "bondio"]).nullable().optional(),
+  error_code: zod.z.string().nullable().optional(),
+  // References
+  user: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true, optional: true },
+  promo_code: { _type: "docRef", collection: PROMO_CODE_COLLECTION, nullable: true, optional: true }
+});
 
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
@@ -1412,6 +1438,7 @@ var HUserTouchpointsSchema = buildClientSchema(
 var HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 var HLiveActivitySchema = buildClientSchema(liveActivitySchemaSpec);
 var HScheduledJobSchema = buildClientSchema(scheduledJobSchemaSpec);
+var HAutoInstallationEventsSchema = buildClientSchema(autoInstallationEventsSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1435,6 +1462,7 @@ var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 exports.HAddressSchema = HAddressSchema;
 exports.HAnalyticsSchema = HAnalyticsSchema;
 exports.HApiLogSchema = HApiLogSchema;
+exports.HAutoInstallationEventsSchema = HAutoInstallationEventsSchema;
 exports.HBankingDetailsSchema = HBankingDetailsSchema;
 exports.HBaseRewardSchema = HBaseRewardSchema;
 exports.HBondioPackageSchema = HBondioPackageSchema;

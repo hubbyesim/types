@@ -28,6 +28,7 @@ export const LIVE_ACTIVITY_COLLECTION = 'live_activities';
 export const STORE_REVIEW_COLLECTION = 'store_reviews';
 export const TAG_COLLECTION = 'tags';
 export const SCHEDULED_JOB_COLLECTION = 'scheduled_jobs';
+export const AUTO_INSTALLATION_EVENTS_COLLECTION = 'auto_installation_events';
 
 
 export const packageTypes = ['data-limited', 'time-limited', 'starter', 'unlimited'];

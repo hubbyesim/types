@@ -194,6 +194,7 @@ var USER_TOUCHPOINTS_COLLECTION = "user_touchpoints";
 var LIVE_ACTIVITY_COLLECTION = "live_activities";
 var TAG_COLLECTION = "tags";
 var SCHEDULED_JOB_COLLECTION = "scheduled_jobs";
+var AUTO_INSTALLATION_EVENTS_COLLECTION = "auto_installation_events";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: true };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
@@ -1375,6 +1376,32 @@ var scheduledJobSchemaSpec = markAsSchemaSpec({
   created_by: zod.z.string().nullable(),
   updated_by: zod.z.string().nullable()
 });
+var autoInstallationEventsSchemaSpec = markAsSchemaSpec({
+  ...hubbyModelSpec,
+  // Event timestamps
+  auto_install_initiated: timestampNullableOptional,
+  auto_install_completed: timestampNullableOptional,
+  auto_install_failed: timestampNullableOptional,
+  manual_install_selected: timestampNullableOptional,
+  // Device & environment info
+  device_model: zod.z.string().nullable().optional(),
+  os_name: zod.z.enum(["iOS", "Android"]).nullable().optional(),
+  os_version: zod.z.string().nullable().optional(),
+  app_version: zod.z.string().nullable().optional(),
+  unique_device_identifier: zod.z.string().nullable().optional(),
+  // Installation context
+  installation_method: zod.z.enum(["auto", "manual"]).nullable().optional(),
+  esim_country_code: zod.z.string().nullable().optional(),
+  package_type: zod.z.string().nullable().optional(),
+  package_size: zod.z.string().nullable().optional(),
+  // Esim provider
+  provider: zod.z.enum(["telna", "bondio"]).nullable().optional(),
+  error_code: zod.z.string().nullable().optional(),
+  // References
+  user: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true, optional: true },
+  promo_code: { _type: "docRef", collection: PROMO_CODE_COLLECTION, nullable: true, optional: true }
+});
 function createConvertJSToFirestore(db) {
   return function convertJSToFirestore2(input, spec) {
     if (input === void 0 || input === null)
@@ -1685,6 +1712,7 @@ var HUserTouchpointsSchema = buildClientSchema(
 var HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 var HLiveActivitySchema = buildClientSchema(liveActivitySchemaSpec);
 var HScheduledJobSchema = buildClientSchema(scheduledJobSchemaSpec);
+var HAutoInstallationEventsSchema = buildClientSchema(autoInstallationEventsSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1756,6 +1784,7 @@ var UserTouchpointsSchema = buildServerSchema(userTouchpointsSchemaSpec);
 var LoginRequestSchema = buildServerSchema(loginRequestSchemaSpec);
 var LiveActivitySchema = buildServerSchema(liveActivitySchemaSpec);
 var ScheduledJobSchema = buildServerSchema(scheduledJobSchemaSpec);
+var AutoInstallationEventsSchema = buildServerSchema(autoInstallationEventsSchemaSpec);
 var AddressSchema = addressSchema;
 var RegistrationSchema = registrationSchema;
 var BankingDetailsSchema = bankingDetailsSchema;
@@ -1813,9 +1842,11 @@ var promoPackageSpecificationAppSchema = buildClientSchema(packageSpecificationS
 var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
 exports.API_LOG_COLLECTION = API_LOG_COLLECTION;
+exports.AUTO_INSTALLATION_EVENTS_COLLECTION = AUTO_INSTALLATION_EVENTS_COLLECTION;
 exports.AddressSchema = AddressSchema;
 exports.AnalyticsSchema = AnalyticsSchema;
 exports.ApiLogSchema = ApiLogSchema;
+exports.AutoInstallationEventsSchema = AutoInstallationEventsSchema;
 exports.BOOKING_COLLECTION = BOOKING_COLLECTION;
 exports.BankingDetailsSchema = BankingDetailsSchema;
 exports.BaseRewardSchema = BaseRewardSchema;
@@ -1838,6 +1869,7 @@ exports.FirebaseService = FirebaseService;
 exports.HAddressSchema = HAddressSchema;
 exports.HAnalyticsSchema = HAnalyticsSchema;
 exports.HApiLogSchema = HApiLogSchema;
+exports.HAutoInstallationEventsSchema = HAutoInstallationEventsSchema;
 exports.HBankingDetailsSchema = HBankingDetailsSchema;
 exports.HBaseRewardSchema = HBaseRewardSchema;
 exports.HBondioPackageSchema = HBondioPackageSchema;
@@ -1943,6 +1975,7 @@ exports.VisualIdentityBannersSchema = VisualIdentityBannersSchema;
 exports.VisualIdentitySchema = VisualIdentitySchema;
 exports.analyticsSpec = analyticsSpec;
 exports.apiLogSchemaSpec = apiLogSchemaSpec;
+exports.autoInstallationEventsSchemaSpec = autoInstallationEventsSchemaSpec;
 exports.bookingAppSchema = bookingAppSchema;
 exports.bookingSchemaSpec = bookingSchemaSpec;
 exports.countrySchemaSpec = countrySchemaSpec;

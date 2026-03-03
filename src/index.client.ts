@@ -70,6 +70,7 @@ import { loginRequestSchemaSpec } from "./specs/login_request";
 import { tagSchemaSpec } from "./specs/tag";
 import { liveActivitySchemaSpec } from "./specs/live_activity";
 import { scheduledJobSchemaSpec, jobStatusSchema } from "./specs/scheduled_job";
+import { autoInstallationEventsSchemaSpec } from "./specs/auto_installation_events";
 
 /** ZOD SCHEMAS */
 export const HUserSchema = buildClientSchema(userSchemaSpec);
@@ -120,6 +121,7 @@ export const HUserTouchpointsSchema = buildClientSchema(
 export const HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 export const HLiveActivitySchema = buildClientSchema(liveActivitySchemaSpec);
 export const HScheduledJobSchema = buildClientSchema(scheduledJobSchemaSpec);
+export const HAutoInstallationEventsSchema = buildClientSchema(autoInstallationEventsSchemaSpec);
 // Additional lower-level schemas
 export const HAddressSchema = addressSchema;
 export const HRegistrationSchema = registrationSchema;
@@ -167,6 +169,7 @@ export type HUserTouchpoints = z.infer<typeof HUserTouchpointsSchema>;
 export type HLoginRequest = z.infer<typeof HLoginRequestSchema>;
 export type HLiveActivity = z.infer<typeof HLiveActivitySchema>;
 export type HScheduledJob = z.infer<typeof HScheduledJobSchema>;
+export type HAutoInstallationEvents = z.infer<typeof HAutoInstallationEventsSchema>;
 // Additional lower-level types
 export type HAddress = z.infer<typeof HAddressSchema>;
 export type HRegistration = z.infer<typeof HRegistrationSchema>;
