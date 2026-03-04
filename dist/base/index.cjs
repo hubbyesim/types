@@ -1282,6 +1282,7 @@ var packageTemplateSchemaSpec = markAsSchemaSpec({
   type: zod.z.string(),
   purchase_price: zod.z.number(),
   external_id: zod.z.string(),
+  destination_id: zod.z.string().min(1, "destination_id is required and must be an ISO2 or ISO3 country code"),
   supported_countries: zod.z.array(zod.z.string()),
   // iso3 codes
   provider_specific_data: {
