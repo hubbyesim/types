@@ -171,7 +171,7 @@ var PARTNER_COLLECTION = "/companies/hubby/partners";
 var USER_COLLECTION = "users";
 var PROFILE_COLLECTION = "/companies/hubby/profiles";
 var PACKAGE_COLLECTION = "/companies/hubby/packages";
-var PACKAGE_TEMPLATE_COLLECTION = "/companies/hubby/package_templates";
+var PACKAGE_TEMPLATE_COLLECTION = "/package_templates";
 var PROMO_CODE_COLLECTION = "/companies/hubby/promo_codes";
 var COUNTRY_COLLECTION = "countries";
 var ESIM_COLLECTION = "esims";
@@ -1295,6 +1295,7 @@ var packageTemplateSchemaSpec = markAsSchemaSpec({
   type: z.string(),
   purchase_price: z.number(),
   external_id: z.string(),
+  destination_id: z.string().min(1, "destination_id is required and must be an ISO2 or ISO3 country code"),
   supported_countries: z.array(z.string()),
   // iso3 codes
   provider_specific_data: {

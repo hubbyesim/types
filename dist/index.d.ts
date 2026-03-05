@@ -1593,6 +1593,7 @@ declare const packageTemplateSchemaSpec: {
     type: z.ZodString;
     purchase_price: z.ZodNumber;
     external_id: z.ZodString;
+    destination_id: z.ZodString;
     supported_countries: z.ZodArray<z.ZodString, "many">;
     provider_specific_data: {
         _type: "record";
@@ -6930,6 +6931,7 @@ declare const HPackageTemplateSchema: z.ZodObject<{
     type: z.ZodString;
     purchase_price: z.ZodNumber;
     external_id: z.ZodString;
+    destination_id: z.ZodString;
     supported_countries: z.ZodArray<z.ZodString, "many">;
     provider_specific_data: z.ZodRecord<z.ZodString, z.ZodAny>;
     size_in_gigabytes: z.ZodNumber;
@@ -6949,6 +6951,7 @@ declare const HPackageTemplateSchema: z.ZodObject<{
     provider: string;
     size_in_gigabytes: number;
     purchase_price: number;
+    destination_id: string;
     supported_countries: string[];
     provider_specific_data: Record<string, any>;
     tier?: number | null | undefined;
@@ -6963,6 +6966,7 @@ declare const HPackageTemplateSchema: z.ZodObject<{
     provider: string;
     size_in_gigabytes: number;
     purchase_price: number;
+    destination_id: string;
     supported_countries: string[];
     provider_specific_data: Record<string, any>;
     tier?: number | null | undefined;
@@ -9647,6 +9651,7 @@ declare const packageTemplateAppSchema: z.ZodObject<{
     type: z.ZodString;
     purchase_price: z.ZodNumber;
     external_id: z.ZodString;
+    destination_id: z.ZodString;
     supported_countries: z.ZodArray<z.ZodString, "many">;
     provider_specific_data: z.ZodRecord<z.ZodString, z.ZodAny>;
     size_in_gigabytes: z.ZodNumber;
@@ -9666,6 +9671,7 @@ declare const packageTemplateAppSchema: z.ZodObject<{
     provider: string;
     size_in_gigabytes: number;
     purchase_price: number;
+    destination_id: string;
     supported_countries: string[];
     provider_specific_data: Record<string, any>;
     tier?: number | null | undefined;
@@ -9680,6 +9686,7 @@ declare const packageTemplateAppSchema: z.ZodObject<{
     provider: string;
     size_in_gigabytes: number;
     purchase_price: number;
+    destination_id: string;
     supported_countries: string[];
     provider_specific_data: Record<string, any>;
     tier?: number | null | undefined;
