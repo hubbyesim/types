@@ -319,7 +319,8 @@ var SUPPORTED_LOCALES = [
   "no-NO",
   "pt-PT",
   "pt-BR",
-  "en-NZ"
+  "en-NZ",
+  "zh-CN"
 ];
 var supportedLocalesSchema = zod.z.enum(SUPPORTED_LOCALES);
 var packageSpecificationSchema = zod.z.object({
