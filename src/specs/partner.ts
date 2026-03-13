@@ -1,4 +1,4 @@
-import { z, ZodLazy } from 'zod';
+import { z } from 'zod';
 import { markAsSchemaSpec } from '../common';
 import { supportedLocalesSchema, SUPPORTED_LOCALES, SupportedLocales } from '../constants';
 import {
@@ -105,6 +105,16 @@ export const visualIdentityBannersSchema = z.object({
     banners: z.array(visualIdentityBannerSchema).nullable().optional()
 });
 
+// Visual identity custom branding schema
+export const visualIdentityCustomBrandingSchema = z.object({
+    primary_color: z.string(),
+    secondary_color: z.string(),
+    logo: z.string(),
+    font: z.string().nullable().optional(),
+    top_banner: visualIdentityBannersSchema.optional(),
+    mid_banner: visualIdentityBannersSchema.optional(),
+});
+
 export const visualIdentitySchema = z.object({
     primary_color: z.string(),
     secondary_color: z.string(),
@@ -112,8 +122,9 @@ export const visualIdentitySchema = z.object({
     logo: z.string(),
     font: z.string().nullable().optional(),
     top_banner: visualIdentityBannersSchema.optional(),
-    mid_banner: visualIdentityBannersSchema.optional()
-});
+    mid_banner: visualIdentityBannersSchema.optional(),
+    custom_branding: z.record(visualIdentityCustomBrandingSchema).optional()
+}) as z.ZodObject<any>;
 
 // Partner contact schema
 export const partnerContactSchema = z.object({
@@ -231,7 +242,8 @@ export const platformSettingsSchema = z.object({
         enabled: z.boolean(),
         discount_percentage: z.number().min(0).max(100),
     }).nullable().optional(),
-    account_manager: z.string().nullable().optional()
+    account_manager: z.string().nullable().optional(),
+    external_sales_partner_manager: z.string().nullable().optional()
 });
 
 // ===== Exportable schema specs =====
@@ -251,7 +263,7 @@ export const financialPropertiesSchemaSpec = markAsSchemaSpec({
     income_per_gb: z.number().nullable(),
     commission_fee: z.number().nullable().optional(),
     commission_percentage: z.number().nullable().optional(),
-    payment_method: z.enum(['invoice', 'direct']),
+    payment_method: z.enum(['invoice', 'direct','not-to-invoice', 'only-pay-out-commission']),
     requires_card: z.boolean().nullable(),
     next_invoice: timestampNullableOptional,
     last_invoice: timestampNullableOptional,
@@ -392,7 +404,8 @@ export const platformSettingsSchemaSpec = markAsSchemaSpec({
         nullable: true, 
         optional: true 
     },
-    sales_partner: z.string().nullable().optional()
+    sales_partner: z.string().nullable().optional(),
+    external_sales_partner_manager: z.string().nullable().optional()
 });
 
 // Webhook settings schema

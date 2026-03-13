@@ -171,7 +171,7 @@ var PARTNER_COLLECTION = "/companies/hubby/partners";
 var USER_COLLECTION = "users";
 var PROFILE_COLLECTION = "/companies/hubby/profiles";
 var PACKAGE_COLLECTION = "/companies/hubby/packages";
-var PACKAGE_TEMPLATE_COLLECTION = "/companies/hubby/package_templates";
+var PACKAGE_TEMPLATE_COLLECTION = "/package_templates";
 var PROMO_CODE_COLLECTION = "/companies/hubby/promo_codes";
 var COUNTRY_COLLECTION = "countries";
 var ESIM_COLLECTION = "esims";
@@ -192,6 +192,7 @@ var USER_TOUCHPOINTS_COLLECTION = "user_touchpoints";
 var LIVE_ACTIVITY_COLLECTION = "live_activities";
 var TAG_COLLECTION = "tags";
 var SCHEDULED_JOB_COLLECTION = "scheduled_jobs";
+var AUTO_INSTALLATION_EVENTS_COLLECTION = "auto_installation_events";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: true };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
@@ -282,7 +283,9 @@ var userSchemaSpec = markAsSchemaSpec({
   updated_at: timestampNullableOptional,
   created_by: z.string().nullable().optional(),
   updated_by: z.string().nullable().optional(),
-  push_to_start_token: z.string().nullable().optional()
+  push_to_start_token: z.string().nullable().optional(),
+  custom_branding: z.any().nullable().optional(),
+  messaging_contact_id: z.string().nullable().optional()
 });
 var SUPPORTED_LOCALES = [
   "en-US",
@@ -310,7 +313,12 @@ var SUPPORTED_LOCALES = [
   "en-AU",
   "da-DK",
   "ko-KR",
-  "hu-HU"
+  "hu-HU",
+  "no-NO",
+  "pt-PT",
+  "pt-BR",
+  "en-NZ",
+  "zh-CN"
 ];
 var supportedLocalesSchema = z.enum(SUPPORTED_LOCALES);
 var packageSpecificationSchema = z.object({
@@ -397,6 +405,8 @@ var bookingSchemaSpec = markAsSchemaSpec({
   phone: z.string().nullable().optional(),
   booking_id: z.string().nullable().optional(),
   flight_number: z.string().optional(),
+  departure_location: z.string().optional(),
+  brand: z.string().nullable().optional(),
   gender: z.enum(["M", "F", "O"]).optional(),
   sent_messages: z.record(z.any()).optional(),
   locale: supportedLocalesSchema,
@@ -404,8 +414,8 @@ var bookingSchemaSpec = markAsSchemaSpec({
   data: {
     _type: "object",
     of: {
-      source: z.string(),
-      manual: z.boolean(),
+      source: z.string().nullable().optional(),
+      manual: z.boolean().nullable().optional(),
       action: z.string().nullable().optional()
     },
     nullable: true,
@@ -449,7 +459,9 @@ var bookingSchemaSpec = markAsSchemaSpec({
   },
   hubby_foreign_identifiers: z.object({
     messaging_contact_id: z.string().nullable()
-  }).nullable().optional()
+  }).nullable().optional(),
+  custom_branding: z.string().nullable().optional()
+  // Optional custom branding key that references partner->visual_identity->custom_branding->{key}
 });
 var countrySchemaSpec = markAsSchemaSpec({
   ...hubbyModelSpec,
@@ -530,7 +542,8 @@ var esimSchemaSpec = markAsSchemaSpec({
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
   // Timestamp fields
   time_assigned: timestampNullable,
-  last_updated: timestampNullable
+  last_updated: timestampNullable,
+  custom_branding: z.any().nullable().optional()
 });
 var paymentSchemaSpec = markAsSchemaSpec({
   ...hubbyModelSpec,
@@ -580,7 +593,8 @@ var paymentSchemaSpec = markAsSchemaSpec({
     affiliateId: z.string().nullable().optional(),
     partner_name: z.string().optional(),
     locale: z.string().optional()
-  }).optional()
+  }).optional(),
+  custom_branding: z.any().nullable().optional()
 });
 var analyticsSpec = markAsSchemaSpec({
   ...hubbyModelSpec,
@@ -736,6 +750,14 @@ var visualIdentityBannersSchema = z.object({
   strategy: z.enum(["fixed", "rotating", "destination", "time_of_day"]),
   banners: z.array(visualIdentityBannerSchema).nullable().optional()
 });
+var visualIdentityCustomBrandingSchema = z.object({
+  primary_color: z.string(),
+  secondary_color: z.string(),
+  logo: z.string(),
+  font: z.string().nullable().optional(),
+  top_banner: visualIdentityBannersSchema.optional(),
+  mid_banner: visualIdentityBannersSchema.optional()
+});
 var visualIdentitySchema = z.object({
   primary_color: z.string(),
   secondary_color: z.string(),
@@ -743,7 +765,8 @@ var visualIdentitySchema = z.object({
   logo: z.string(),
   font: z.string().nullable().optional(),
   top_banner: visualIdentityBannersSchema.optional(),
-  mid_banner: visualIdentityBannersSchema.optional()
+  mid_banner: visualIdentityBannersSchema.optional(),
+  custom_branding: z.record(visualIdentityCustomBrandingSchema).optional()
 });
 var partnerContactSchema = z.object({
   name: z.string().nullable().optional(),
@@ -845,7 +868,8 @@ var platformSettingsSchema = z.object({
     enabled: z.boolean(),
     discount_percentage: z.number().min(0).max(100)
   }).nullable().optional(),
-  account_manager: z.string().nullable().optional()
+  account_manager: z.string().nullable().optional(),
+  external_sales_partner_manager: z.string().nullable().optional()
 });
 var packagePriceSchemaSpec = markAsSchemaSpec({
   destination: z.string(),
@@ -859,7 +883,7 @@ var financialPropertiesSchemaSpec = markAsSchemaSpec({
   income_per_gb: z.number().nullable(),
   commission_fee: z.number().nullable().optional(),
   commission_percentage: z.number().nullable().optional(),
-  payment_method: z.enum(["invoice", "direct"]),
+  payment_method: z.enum(["invoice", "direct", "not-to-invoice", "only-pay-out-commission"]),
   requires_card: z.boolean().nullable(),
   next_invoice: timestampNullableOptional,
   last_invoice: timestampNullableOptional,
@@ -998,7 +1022,8 @@ var platformSettingsSchemaSpec = markAsSchemaSpec({
     nullable: true,
     optional: true
   },
-  sales_partner: z.string().nullable().optional()
+  sales_partner: z.string().nullable().optional(),
+  external_sales_partner_manager: z.string().nullable().optional()
 });
 var webhookSettingsSchema = z.object({
   url: z.string().url().nullable().optional(),
@@ -1272,6 +1297,7 @@ var packageTemplateSchemaSpec = markAsSchemaSpec({
   type: z.string(),
   purchase_price: z.number(),
   external_id: z.string(),
+  destination_id: z.string().min(1, "destination_id is required and must be an ISO2 or ISO3 country code"),
   supported_countries: z.array(z.string()),
   // iso3 codes
   provider_specific_data: {
@@ -1351,6 +1377,32 @@ var scheduledJobSchemaSpec = markAsSchemaSpec({
   updated_at: timestampRequired,
   created_by: z.string().nullable(),
   updated_by: z.string().nullable()
+});
+var autoInstallationEventsSchemaSpec = markAsSchemaSpec({
+  ...hubbyModelSpec,
+  // Event timestamps
+  auto_install_initiated: timestampNullableOptional,
+  auto_install_completed: timestampNullableOptional,
+  auto_install_failed: timestampNullableOptional,
+  manual_install_selected: timestampNullableOptional,
+  // Device & environment info
+  device_model: z.string().nullable().optional(),
+  os_name: z.enum(["iOS", "Android"]).nullable().optional(),
+  os_version: z.string().nullable().optional(),
+  app_version: z.string().nullable().optional(),
+  unique_device_identifier: z.string().nullable().optional(),
+  // Installation context
+  installation_method: z.enum(["auto", "manual"]).nullable().optional(),
+  esim_country_code: z.string().nullable().optional(),
+  package_type: z.string().nullable().optional(),
+  package_size: z.string().nullable().optional(),
+  // Esim provider
+  provider: z.enum(["telna", "bondio"]).nullable().optional(),
+  error_code: z.string().nullable().optional(),
+  // References
+  user: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true, optional: true },
+  promo_code: { _type: "docRef", collection: PROMO_CODE_COLLECTION, nullable: true, optional: true }
 });
 function createConvertJSToFirestore(db) {
   return function convertJSToFirestore2(input, spec) {
@@ -1625,12 +1677,16 @@ var HPackageSchema = buildClientSchema(packageSchemaSpec);
 var HPromoCodeSchema = buildClientSchema(promoCodeSchemaSpec);
 var HPartnerSchema = buildClientSchema(partnerSchemaSpec);
 var HPriceListSchema = buildClientSchema(priceListSchemaSpec);
-var HFinancialPropertiesSchema = buildClientSchema(financialPropertiesSchemaSpec);
+var HFinancialPropertiesSchema = buildClientSchema(
+  financialPropertiesSchemaSpec
+);
 var HApiLogSchema = buildClientSchema(apiLogSchemaSpec);
 var HPackagePriceSchema = buildClientSchema(packagePriceSchema);
 var HubbyModelSchema = buildClientSchema(hubbyModelSpec);
 var HPartnerAppSchema = buildClientSchema(partnerSchemaSpec);
-var HPlatformSettingsSchema = buildClientSchema(platformSettingsSchema);
+var HPlatformSettingsSchema = buildClientSchema(
+  platformSettingsSchema
+);
 var HVisualIdentitySchema = buildClientSchema(visualIdentitySchema);
 var HPricingStrategySchema = buildClientSchema(pricingStrategySchema);
 var HFreeEsimSchema = buildClientSchema(freeEsimSchema);
@@ -1642,20 +1698,30 @@ var HTrafficPolicySchema = buildClientSchema(trafficPolicySpec);
 var HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
 var HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
 var HReviewSchema = buildClientSchema(reviewSchemaSpec);
-var HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
+var HReviewSubmissionSchema = buildClientSchema(
+  reviewSubmissionSchemaSpec
+);
 var HDestinationSchema = buildClientSchema(destinationSchemaSpec);
-var HDestinationBundleSchema = buildClientSchema(destinationBundleSchemaSpec);
-var HPackageTemplateSchema = buildClientSchema(packageTemplateSchemaSpec);
-var HUserTouchpointsSchema = buildClientSchema(userTouchpointsSchemaSpec);
+var HDestinationBundleSchema = buildClientSchema(
+  destinationBundleSchemaSpec
+);
+var HPackageTemplateSchema = buildClientSchema(
+  packageTemplateSchemaSpec
+);
+var HUserTouchpointsSchema = buildClientSchema(
+  userTouchpointsSchemaSpec
+);
 var HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 var HLiveActivitySchema = buildClientSchema(liveActivitySchemaSpec);
 var HScheduledJobSchema = buildClientSchema(scheduledJobSchemaSpec);
+var HAutoInstallationEventsSchema = buildClientSchema(autoInstallationEventsSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
 var HPartnerPackageSpecificationSchema = packageSpecificationSchema2;
 var HPromoPackageSpecificationSchema = packageSpecificationSchema;
 var HVisualIdentityBannerSchema = visualIdentityBannerSchema;
+var HVisualIdentityBannersSchema = visualIdentityBannersSchema;
 var HScheduleFilterSchema = scheduleFilterSchema;
 var HPartnerContactSchema = partnerContactSchema;
 var HPartnerDataSchema = partnerDataSchema;
@@ -1720,6 +1786,7 @@ var UserTouchpointsSchema = buildServerSchema(userTouchpointsSchemaSpec);
 var LoginRequestSchema = buildServerSchema(loginRequestSchemaSpec);
 var LiveActivitySchema = buildServerSchema(liveActivitySchemaSpec);
 var ScheduledJobSchema = buildServerSchema(scheduledJobSchemaSpec);
+var AutoInstallationEventsSchema = buildServerSchema(autoInstallationEventsSchemaSpec);
 var AddressSchema = addressSchema;
 var RegistrationSchema = registrationSchema;
 var BankingDetailsSchema = bankingDetailsSchema;
@@ -1776,6 +1843,6 @@ var packageTemplateAppSchema = buildClientSchema(packageTemplateSchemaSpec);
 var promoPackageSpecificationAppSchema = buildClientSchema(packageSpecificationSchema);
 var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
-export { API_LOG_COLLECTION, AddressSchema, AnalyticsSchema, ApiLogSchema, BOOKING_COLLECTION, BankingDetailsSchema, BaseRewardSchema, BondioPackageSchema, BookingSchema, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannelSchema, CommunicationOptionsSchema, CountrySchema, CurrencySchema, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, DestinationBundleSchema, DestinationSchema, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddressSchema, HAnalyticsSchema, HApiLogSchema, HBankingDetailsSchema, HBaseRewardSchema, HBondioPackageSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HDestinationBundleSchema, HDestinationSchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HJobStatusSchema, HLiveActivitySchema, HLoginRequestSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPackageTemplateSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HReviewSchema, HReviewSubmissionSchema, HRewardMultipliersSchema, HRewardPackageTypeSchema, HRewardStrategySchema, HRoleSchema, HScheduleFilterSchema, HScheduledJobSchema, HTagSchema, HTelnaPackageSchema, HTrafficPolicySchema, HUserSchema, HUserTouchpointsSchema, HVisualIdentityBannerSchema, HVisualIdentitySchema, HubbyModelSchema, JobStatusSchema, LIVE_ACTIVITY_COLLECTION, LiveActivitySchema, LoginRequestSchema, MESSAGE_COLLECTION, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, PackagePriceSchema, PackageSchema, PackageTemplateSchema, PartnerContactSchema, PartnerDataSchema, PartnerPackageSpecificationSchema, PartnerSchema, PaymentSchema, PlatformSettingsSchema, PriceListSchema, PromoCodeSchema, PromoPackageSpecificationSchema, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, ROLE_COLLECTION, RegistrationSchema, ReviewSchema, ReviewSubmissionSchema, RewardMultipliersSchema, RewardPackageTypeSchema, RewardStrategySchema, SCHEDULED_JOB_COLLECTION, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES, ScheduleFilterSchema, ScheduleSchema, ScheduledJobSchema, TAG_COLLECTION, TRAFFIC_POLICY_COLLECTION, TagSchema, TelnaPackageSchema, TrafficPolicySchema, USER_COLLECTION, USER_TOUCHPOINTS_COLLECTION, UserFirestoreSchema, UserSchema, UserTouchpointsSchema, VisualIdentityBannerSchema, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, apiLogSchemaSpec, bookingAppSchema, bookingSchemaSpec, countrySchemaSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, currencySchemaSpec, destinationAppSchema, destinationBundleAppSchema, destinationBundleSchemaSpec, destinationSchemaSpec, esimSchemaSpec, jobStatusSchema, lastUpdateSchema, liveActivityEventSchema, liveActivityReasonSchema, liveActivitySchemaSpec, liveActivityStatusSchema, loginRequestSchemaSpec, messageSchemaSpec, packageSchemaSpec, packageTemplateAppSchema, packageTemplateSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, paymentSchemaSpec, priceListFromFirestore, priceListSchemaSpec, priceListToFirestore, promoCodeFromFirestore, promoCodeSchemaSpec, promoCodeToFirestore, promoPackageSpecificationAppSchema, reviewSchemaSpec, reviewSubmissionSchemaSpec, scheduledJobSchemaSpec, tagSchemaSpec, userFromFirestore, userSchemaSpec, userToFirestore, userTouchpointsFromFirestore, userTouchpointsSchemaSpec, userTouchpointsToFirestore };
+export { API_LOG_COLLECTION, AUTO_INSTALLATION_EVENTS_COLLECTION, AddressSchema, AnalyticsSchema, ApiLogSchema, AutoInstallationEventsSchema, BOOKING_COLLECTION, BankingDetailsSchema, BaseRewardSchema, BondioPackageSchema, BookingSchema, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannelSchema, CommunicationOptionsSchema, CountrySchema, CurrencySchema, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, DestinationBundleSchema, DestinationSchema, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddressSchema, HAnalyticsSchema, HApiLogSchema, HAutoInstallationEventsSchema, HBankingDetailsSchema, HBaseRewardSchema, HBondioPackageSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HDestinationBundleSchema, HDestinationSchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HJobStatusSchema, HLiveActivitySchema, HLoginRequestSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPackageTemplateSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HReviewSchema, HReviewSubmissionSchema, HRewardMultipliersSchema, HRewardPackageTypeSchema, HRewardStrategySchema, HRoleSchema, HScheduleFilterSchema, HScheduledJobSchema, HTagSchema, HTelnaPackageSchema, HTrafficPolicySchema, HUserSchema, HUserTouchpointsSchema, HVisualIdentityBannerSchema, HVisualIdentityBannersSchema, HVisualIdentitySchema, HubbyModelSchema, JobStatusSchema, LIVE_ACTIVITY_COLLECTION, LiveActivitySchema, LoginRequestSchema, MESSAGE_COLLECTION, MessageSchema, PACKAGE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, PackagePriceSchema, PackageSchema, PackageTemplateSchema, PartnerContactSchema, PartnerDataSchema, PartnerPackageSpecificationSchema, PartnerSchema, PaymentSchema, PlatformSettingsSchema, PriceListSchema, PromoCodeSchema, PromoPackageSpecificationSchema, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, ROLE_COLLECTION, RegistrationSchema, ReviewSchema, ReviewSubmissionSchema, RewardMultipliersSchema, RewardPackageTypeSchema, RewardStrategySchema, SCHEDULED_JOB_COLLECTION, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES, ScheduleFilterSchema, ScheduleSchema, ScheduledJobSchema, TAG_COLLECTION, TRAFFIC_POLICY_COLLECTION, TagSchema, TelnaPackageSchema, TrafficPolicySchema, USER_COLLECTION, USER_TOUCHPOINTS_COLLECTION, UserFirestoreSchema, UserSchema, UserTouchpointsSchema, VisualIdentityBannerSchema, VisualIdentityBannersSchema, VisualIdentitySchema, analyticsSpec, apiLogSchemaSpec, autoInstallationEventsSchemaSpec, bookingAppSchema, bookingSchemaSpec, countrySchemaSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, currencySchemaSpec, destinationAppSchema, destinationBundleAppSchema, destinationBundleSchemaSpec, destinationSchemaSpec, esimSchemaSpec, jobStatusSchema, lastUpdateSchema, liveActivityEventSchema, liveActivityReasonSchema, liveActivitySchemaSpec, liveActivityStatusSchema, loginRequestSchemaSpec, messageSchemaSpec, packageSchemaSpec, packageTemplateAppSchema, packageTemplateSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, paymentSchemaSpec, priceListFromFirestore, priceListSchemaSpec, priceListToFirestore, promoCodeFromFirestore, promoCodeSchemaSpec, promoCodeToFirestore, promoPackageSpecificationAppSchema, reviewSchemaSpec, reviewSubmissionSchemaSpec, scheduledJobSchemaSpec, tagSchemaSpec, userFromFirestore, userSchemaSpec, userToFirestore, userTouchpointsFromFirestore, userTouchpointsSchemaSpec, userTouchpointsToFirestore };
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.js.map

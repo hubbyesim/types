@@ -6,7 +6,7 @@ export const PARTNER_COLLECTION = '/companies/hubby/partners';
 export const USER_COLLECTION = 'users';
 export const PROFILE_COLLECTION = '/companies/hubby/profiles';
 export const PACKAGE_COLLECTION = '/companies/hubby/packages';
-export const PACKAGE_TEMPLATE_COLLECTION = '/companies/hubby/package_templates';
+export const PACKAGE_TEMPLATE_COLLECTION = '/package_templates';
 export const PROMO_CODE_COLLECTION = '/companies/hubby/promo_codes';
 export const COUNTRY_COLLECTION = 'countries';
 export const ESIM_COLLECTION = 'esims';
@@ -28,6 +28,7 @@ export const LIVE_ACTIVITY_COLLECTION = 'live_activities';
 export const STORE_REVIEW_COLLECTION = 'store_reviews';
 export const TAG_COLLECTION = 'tags';
 export const SCHEDULED_JOB_COLLECTION = 'scheduled_jobs';
+export const AUTO_INSTALLATION_EVENTS_COLLECTION = 'auto_installation_events';
 
 
 export const packageTypes = ['data-limited', 'time-limited', 'starter', 'unlimited'];

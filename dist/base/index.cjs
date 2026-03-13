@@ -155,7 +155,7 @@ function buildClientSchema(spec, path = []) {
 var PARTNER_COLLECTION = "/companies/hubby/partners";
 var USER_COLLECTION = "users";
 var PACKAGE_COLLECTION = "/companies/hubby/packages";
-var PACKAGE_TEMPLATE_COLLECTION = "/companies/hubby/package_templates";
+var PACKAGE_TEMPLATE_COLLECTION = "/package_templates";
 var PROMO_CODE_COLLECTION = "/companies/hubby/promo_codes";
 var COUNTRY_COLLECTION = "countries";
 var ESIM_COLLECTION = "esims";
@@ -256,7 +256,9 @@ var userSchemaSpec = markAsSchemaSpec({
   updated_at: timestampNullableOptional,
   created_by: zod.z.string().nullable().optional(),
   updated_by: zod.z.string().nullable().optional(),
-  push_to_start_token: zod.z.string().nullable().optional()
+  push_to_start_token: zod.z.string().nullable().optional(),
+  custom_branding: zod.z.any().nullable().optional(),
+  messaging_contact_id: zod.z.string().nullable().optional()
 });
 var SUPPORTED_LOCALES = [
   "en-US",
@@ -284,7 +286,12 @@ var SUPPORTED_LOCALES = [
   "en-AU",
   "da-DK",
   "ko-KR",
-  "hu-HU"
+  "hu-HU",
+  "no-NO",
+  "pt-PT",
+  "pt-BR",
+  "en-NZ",
+  "zh-CN"
 ];
 var supportedLocalesSchema = zod.z.enum(SUPPORTED_LOCALES);
 var packageSpecificationSchema = zod.z.object({
@@ -371,6 +378,8 @@ var bookingSchemaSpec = markAsSchemaSpec({
   phone: zod.z.string().nullable().optional(),
   booking_id: zod.z.string().nullable().optional(),
   flight_number: zod.z.string().optional(),
+  departure_location: zod.z.string().optional(),
+  brand: zod.z.string().nullable().optional(),
   gender: zod.z.enum(["M", "F", "O"]).optional(),
   sent_messages: zod.z.record(zod.z.any()).optional(),
   locale: supportedLocalesSchema,
@@ -378,8 +387,8 @@ var bookingSchemaSpec = markAsSchemaSpec({
   data: {
     _type: "object",
     of: {
-      source: zod.z.string(),
-      manual: zod.z.boolean(),
+      source: zod.z.string().nullable().optional(),
+      manual: zod.z.boolean().nullable().optional(),
       action: zod.z.string().nullable().optional()
     },
     nullable: true,
@@ -423,7 +432,9 @@ var bookingSchemaSpec = markAsSchemaSpec({
   },
   hubby_foreign_identifiers: zod.z.object({
     messaging_contact_id: zod.z.string().nullable()
-  }).nullable().optional()
+  }).nullable().optional(),
+  custom_branding: zod.z.string().nullable().optional()
+  // Optional custom branding key that references partner->visual_identity->custom_branding->{key}
 });
 var countrySchemaSpec = markAsSchemaSpec({
   ...hubbyModelSpec,
@@ -504,7 +515,8 @@ var esimSchemaSpec = markAsSchemaSpec({
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true },
   // Timestamp fields
   time_assigned: timestampNullable,
-  last_updated: timestampNullable
+  last_updated: timestampNullable,
+  custom_branding: zod.z.any().nullable().optional()
 });
 var paymentSchemaSpec = markAsSchemaSpec({
   ...hubbyModelSpec,
@@ -554,7 +566,8 @@ var paymentSchemaSpec = markAsSchemaSpec({
     affiliateId: zod.z.string().nullable().optional(),
     partner_name: zod.z.string().optional(),
     locale: zod.z.string().optional()
-  }).optional()
+  }).optional(),
+  custom_branding: zod.z.any().nullable().optional()
 });
 var messageSchemaSpec = markAsSchemaSpec({
   id: zod.z.string(),
@@ -700,6 +713,14 @@ var visualIdentityBannersSchema = zod.z.object({
   strategy: zod.z.enum(["fixed", "rotating", "destination", "time_of_day"]),
   banners: zod.z.array(visualIdentityBannerSchema).nullable().optional()
 });
+var visualIdentityCustomBrandingSchema = zod.z.object({
+  primary_color: zod.z.string(),
+  secondary_color: zod.z.string(),
+  logo: zod.z.string(),
+  font: zod.z.string().nullable().optional(),
+  top_banner: visualIdentityBannersSchema.optional(),
+  mid_banner: visualIdentityBannersSchema.optional()
+});
 var visualIdentitySchema = zod.z.object({
   primary_color: zod.z.string(),
   secondary_color: zod.z.string(),
@@ -707,7 +728,8 @@ var visualIdentitySchema = zod.z.object({
   logo: zod.z.string(),
   font: zod.z.string().nullable().optional(),
   top_banner: visualIdentityBannersSchema.optional(),
-  mid_banner: visualIdentityBannersSchema.optional()
+  mid_banner: visualIdentityBannersSchema.optional(),
+  custom_branding: zod.z.record(visualIdentityCustomBrandingSchema).optional()
 });
 var partnerContactSchema = zod.z.object({
   name: zod.z.string().nullable().optional(),
@@ -809,7 +831,8 @@ var platformSettingsSchema = zod.z.object({
     enabled: zod.z.boolean(),
     discount_percentage: zod.z.number().min(0).max(100)
   }).nullable().optional(),
-  account_manager: zod.z.string().nullable().optional()
+  account_manager: zod.z.string().nullable().optional(),
+  external_sales_partner_manager: zod.z.string().nullable().optional()
 });
 markAsSchemaSpec({
   destination: zod.z.string(),
@@ -823,7 +846,7 @@ var financialPropertiesSchemaSpec = markAsSchemaSpec({
   income_per_gb: zod.z.number().nullable(),
   commission_fee: zod.z.number().nullable().optional(),
   commission_percentage: zod.z.number().nullable().optional(),
-  payment_method: zod.z.enum(["invoice", "direct"]),
+  payment_method: zod.z.enum(["invoice", "direct", "not-to-invoice", "only-pay-out-commission"]),
   requires_card: zod.z.boolean().nullable(),
   next_invoice: timestampNullableOptional,
   last_invoice: timestampNullableOptional,
@@ -962,7 +985,8 @@ var platformSettingsSchemaSpec = markAsSchemaSpec({
     nullable: true,
     optional: true
   },
-  sales_partner: zod.z.string().nullable().optional()
+  sales_partner: zod.z.string().nullable().optional(),
+  external_sales_partner_manager: zod.z.string().nullable().optional()
 });
 var webhookSettingsSchema = zod.z.object({
   url: zod.z.string().url().nullable().optional(),
@@ -1261,6 +1285,7 @@ var packageTemplateSchemaSpec = markAsSchemaSpec({
   type: zod.z.string(),
   purchase_price: zod.z.number(),
   external_id: zod.z.string(),
+  destination_id: zod.z.string().min(1, "destination_id is required and must be an ISO2 or ISO3 country code"),
   supported_countries: zod.z.array(zod.z.string()),
   // iso3 codes
   provider_specific_data: {
@@ -1341,6 +1366,32 @@ var scheduledJobSchemaSpec = markAsSchemaSpec({
   created_by: zod.z.string().nullable(),
   updated_by: zod.z.string().nullable()
 });
+var autoInstallationEventsSchemaSpec = markAsSchemaSpec({
+  ...hubbyModelSpec,
+  // Event timestamps
+  auto_install_initiated: timestampNullableOptional,
+  auto_install_completed: timestampNullableOptional,
+  auto_install_failed: timestampNullableOptional,
+  manual_install_selected: timestampNullableOptional,
+  // Device & environment info
+  device_model: zod.z.string().nullable().optional(),
+  os_name: zod.z.enum(["iOS", "Android"]).nullable().optional(),
+  os_version: zod.z.string().nullable().optional(),
+  app_version: zod.z.string().nullable().optional(),
+  unique_device_identifier: zod.z.string().nullable().optional(),
+  // Installation context
+  installation_method: zod.z.enum(["auto", "manual"]).nullable().optional(),
+  esim_country_code: zod.z.string().nullable().optional(),
+  package_type: zod.z.string().nullable().optional(),
+  package_size: zod.z.string().nullable().optional(),
+  // Esim provider
+  provider: zod.z.enum(["telna", "bondio"]).nullable().optional(),
+  error_code: zod.z.string().nullable().optional(),
+  // References
+  user: { _type: "docRef", collection: USER_COLLECTION, nullable: true, optional: true },
+  partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true, optional: true },
+  promo_code: { _type: "docRef", collection: PROMO_CODE_COLLECTION, nullable: true, optional: true }
+});
 
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
@@ -1354,12 +1405,16 @@ var HPackageSchema = buildClientSchema(packageSchemaSpec);
 var HPromoCodeSchema = buildClientSchema(promoCodeSchemaSpec);
 var HPartnerSchema = buildClientSchema(partnerSchemaSpec);
 var HPriceListSchema = buildClientSchema(priceListSchemaSpec);
-var HFinancialPropertiesSchema = buildClientSchema(financialPropertiesSchemaSpec);
+var HFinancialPropertiesSchema = buildClientSchema(
+  financialPropertiesSchemaSpec
+);
 var HApiLogSchema = buildClientSchema(apiLogSchemaSpec);
 var HPackagePriceSchema = buildClientSchema(packagePriceSchema);
 var HubbyModelSchema = buildClientSchema(hubbyModelSpec);
 var HPartnerAppSchema = buildClientSchema(partnerSchemaSpec);
-var HPlatformSettingsSchema = buildClientSchema(platformSettingsSchema);
+var HPlatformSettingsSchema = buildClientSchema(
+  platformSettingsSchema
+);
 var HVisualIdentitySchema = buildClientSchema(visualIdentitySchema);
 var HPricingStrategySchema = buildClientSchema(pricingStrategySchema);
 var HFreeEsimSchema = buildClientSchema(freeEsimSchema);
@@ -1371,20 +1426,30 @@ var HTrafficPolicySchema = buildClientSchema(trafficPolicySpec);
 var HTelnaPackageSchema = buildClientSchema(telnaPackageSchema);
 var HBondioPackageSchema = buildClientSchema(bondioPackageSchema);
 var HReviewSchema = buildClientSchema(reviewSchemaSpec);
-var HReviewSubmissionSchema = buildClientSchema(reviewSubmissionSchemaSpec);
+var HReviewSubmissionSchema = buildClientSchema(
+  reviewSubmissionSchemaSpec
+);
 var HDestinationSchema = buildClientSchema(destinationSchemaSpec);
-var HDestinationBundleSchema = buildClientSchema(destinationBundleSchemaSpec);
-var HPackageTemplateSchema = buildClientSchema(packageTemplateSchemaSpec);
-var HUserTouchpointsSchema = buildClientSchema(userTouchpointsSchemaSpec);
+var HDestinationBundleSchema = buildClientSchema(
+  destinationBundleSchemaSpec
+);
+var HPackageTemplateSchema = buildClientSchema(
+  packageTemplateSchemaSpec
+);
+var HUserTouchpointsSchema = buildClientSchema(
+  userTouchpointsSchemaSpec
+);
 var HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 var HLiveActivitySchema = buildClientSchema(liveActivitySchemaSpec);
 var HScheduledJobSchema = buildClientSchema(scheduledJobSchemaSpec);
+var HAutoInstallationEventsSchema = buildClientSchema(autoInstallationEventsSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
 var HPartnerPackageSpecificationSchema = packageSpecificationSchema2;
 var HPromoPackageSpecificationSchema = packageSpecificationSchema;
 var HVisualIdentityBannerSchema = visualIdentityBannerSchema;
+var HVisualIdentityBannersSchema = visualIdentityBannersSchema;
 var HScheduleFilterSchema = scheduleFilterSchema;
 var HPartnerContactSchema = partnerContactSchema;
 var HPartnerDataSchema = partnerDataSchema;
@@ -1401,6 +1466,7 @@ var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 exports.HAddressSchema = HAddressSchema;
 exports.HAnalyticsSchema = HAnalyticsSchema;
 exports.HApiLogSchema = HApiLogSchema;
+exports.HAutoInstallationEventsSchema = HAutoInstallationEventsSchema;
 exports.HBankingDetailsSchema = HBankingDetailsSchema;
 exports.HBaseRewardSchema = HBaseRewardSchema;
 exports.HBondioPackageSchema = HBondioPackageSchema;
@@ -1449,6 +1515,7 @@ exports.HTrafficPolicySchema = HTrafficPolicySchema;
 exports.HUserSchema = HUserSchema;
 exports.HUserTouchpointsSchema = HUserTouchpointsSchema;
 exports.HVisualIdentityBannerSchema = HVisualIdentityBannerSchema;
+exports.HVisualIdentityBannersSchema = HVisualIdentityBannersSchema;
 exports.HVisualIdentitySchema = HVisualIdentitySchema;
 exports.HubbyModelSchema = HubbyModelSchema;
 exports.SUPPORTED_LOCALES = SUPPORTED_LOCALES2;

@@ -57,4 +57,6 @@ export const paymentSchemaSpec = markAsSchemaSpec({
         partner_name: z.string().optional(),
         locale: z.string().optional(),
     }).optional(),
+
+    custom_branding: z.any().nullable().optional(),
 });

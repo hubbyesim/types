@@ -58,5 +58,7 @@ export const esimSchemaSpec = markAsSchemaSpec({
 
     // Timestamp fields
     time_assigned: timestampNullable,
-    last_updated: timestampNullable
+    last_updated: timestampNullable,
+
+    custom_branding: z.any().nullable().optional()
 });
