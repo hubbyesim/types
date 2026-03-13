@@ -741,6 +741,7 @@ var visualIdentityBannersSchema = zod.z.object({
 var visualIdentitySchema = zod.z.object({
   primary_color: zod.z.string(),
   secondary_color: zod.z.string(),
+  background_color: zod.z.string(),
   logo: zod.z.string(),
   font: zod.z.string().nullable().optional(),
   top_banner: visualIdentityBannersSchema.optional(),
@@ -1012,6 +1013,7 @@ var webhookSettingsSchema = zod.z.object({
 var partnerSchemaSpec = markAsSchemaSpec({
   // Base model fields
   id: zod.z.string(),
+  uuid: zod.z.string(),
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: zod.z.string().nullable(),

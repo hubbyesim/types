@@ -1140,6 +1140,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
 }>;
 declare const HPartnerSchema: z.ZodObject<{
     id: z.ZodString;
+    uuid: z.ZodString;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodNullable<z.ZodString>;
@@ -1444,6 +1445,7 @@ declare const HPartnerSchema: z.ZodObject<{
     visual_identity: z.ZodObject<{
         primary_color: z.ZodString;
         secondary_color: z.ZodString;
+        background_color: z.ZodString;
         logo: z.ZodString;
         font: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         top_banner: z.ZodOptional<z.ZodObject<{
@@ -1539,6 +1541,7 @@ declare const HPartnerSchema: z.ZodObject<{
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         primary_color: string;
         secondary_color: string;
+        background_color: string;
         logo: string;
         font?: string | null | undefined;
         top_banner?: {
@@ -1566,6 +1569,7 @@ declare const HPartnerSchema: z.ZodObject<{
     }, {
         primary_color: string;
         secondary_color: string;
+        background_color: string;
         logo: string;
         font?: string | null | undefined;
         top_banner?: {
@@ -2114,6 +2118,7 @@ declare const HPartnerSchema: z.ZodObject<{
         manual: boolean;
     };
     users: string[];
+    uuid: string;
     contact: {
         email: string | null;
         name?: string | null | undefined;
@@ -2179,6 +2184,7 @@ declare const HPartnerSchema: z.ZodObject<{
     visual_identity: {
         primary_color: string;
         secondary_color: string;
+        background_color: string;
         logo: string;
         font?: string | null | undefined;
         top_banner?: {
@@ -2326,6 +2332,7 @@ declare const HPartnerSchema: z.ZodObject<{
         manual: boolean;
     };
     users: string[];
+    uuid: string;
     contact: {
         email: string | null;
         name?: string | null | undefined;
@@ -2391,6 +2398,7 @@ declare const HPartnerSchema: z.ZodObject<{
     visual_identity: {
         primary_color: string;
         secondary_color: string;
+        background_color: string;
         logo: string;
         font?: string | null | undefined;
         top_banner?: {
@@ -2937,6 +2945,7 @@ declare const HubbyModelSchema: z.ZodObject<{
 }>;
 declare const HPartnerAppSchema: z.ZodObject<{
     id: z.ZodString;
+    uuid: z.ZodString;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodNullable<z.ZodString>;
@@ -3241,6 +3250,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     visual_identity: z.ZodObject<{
         primary_color: z.ZodString;
         secondary_color: z.ZodString;
+        background_color: z.ZodString;
         logo: z.ZodString;
         font: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         top_banner: z.ZodOptional<z.ZodObject<{
@@ -3336,6 +3346,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         primary_color: string;
         secondary_color: string;
+        background_color: string;
         logo: string;
         font?: string | null | undefined;
         top_banner?: {
@@ -3363,6 +3374,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     }, {
         primary_color: string;
         secondary_color: string;
+        background_color: string;
         logo: string;
         font?: string | null | undefined;
         top_banner?: {
@@ -3911,6 +3923,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         manual: boolean;
     };
     users: string[];
+    uuid: string;
     contact: {
         email: string | null;
         name?: string | null | undefined;
@@ -3976,6 +3989,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     visual_identity: {
         primary_color: string;
         secondary_color: string;
+        background_color: string;
         logo: string;
         font?: string | null | undefined;
         top_banner?: {
@@ -4123,6 +4137,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         manual: boolean;
     };
     users: string[];
+    uuid: string;
     contact: {
         email: string | null;
         name?: string | null | undefined;
@@ -4188,6 +4203,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     visual_identity: {
         primary_color: string;
         secondary_color: string;
+        background_color: string;
         logo: string;
         font?: string | null | undefined;
         top_banner?: {
@@ -4768,6 +4784,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
 declare const HVisualIdentitySchema: z.ZodObject<{
     primary_color: z.ZodString;
     secondary_color: z.ZodString;
+    background_color: z.ZodString;
     logo: z.ZodString;
     font: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     top_banner: z.ZodOptional<z.ZodObject<{
@@ -4863,6 +4880,7 @@ declare const HVisualIdentitySchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     primary_color: string;
     secondary_color: string;
+    background_color: string;
     logo: string;
     font?: string | null | undefined;
     top_banner?: {
@@ -4890,6 +4908,7 @@ declare const HVisualIdentitySchema: z.ZodObject<{
 }, {
     primary_color: string;
     secondary_color: string;
+    background_color: string;
     logo: string;
     font?: string | null | undefined;
     top_banner?: {
