@@ -29,6 +29,7 @@ export const STORE_REVIEW_COLLECTION = 'store_reviews';
 export const TAG_COLLECTION = 'tags';
 export const SCHEDULED_JOB_COLLECTION = 'scheduled_jobs';
 export const AUTO_INSTALLATION_EVENTS_COLLECTION = 'auto_installation_events';
+export const APP_FLOW_FEEDBACK_COLLECTION = 'app_flow_feedbacks';
 
 
 export const packageTypes = ['data-limited', 'time-limited', 'starter', 'unlimited'];
