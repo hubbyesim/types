@@ -348,7 +348,7 @@ var SUPPORTED_LOCALES = [
 ];
 var supportedLocalesSchema = zod.z.enum(SUPPORTED_LOCALES);
 var packageSpecificationSchema = zod.z.object({
-  external_user_id: zod.z.string().min(1),
+  external_user_id: zod.z.string().nullable().optional(),
   destination: zod.z.string().optional().or(zod.z.array(zod.z.string())),
   iso3: zod.z.string().optional(),
   size: zod.z.string().optional(),

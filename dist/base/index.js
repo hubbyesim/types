@@ -317,7 +317,7 @@ var SUPPORTED_LOCALES = [
 ];
 var supportedLocalesSchema = z.enum(SUPPORTED_LOCALES);
 var packageSpecificationSchema = z.object({
-  external_user_id: z.string().min(1),
+  external_user_id: z.string().nullable().optional(),
   destination: z.string().optional().or(z.array(z.string())),
   iso3: z.string().optional(),
   size: z.string().optional(),

@@ -297,7 +297,7 @@ declare const HBookingSchema: z.ZodObject<{
     is_pseudonymized: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     import_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     package_specifications: z.ZodArray<z.ZodObject<{
-        external_user_id: z.ZodString;
+        external_user_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
         iso3: z.ZodOptional<z.ZodString>;
         size: z.ZodOptional<z.ZodString>;
@@ -308,7 +308,7 @@ declare const HBookingSchema: z.ZodObject<{
         package_type: z.ZodOptional<z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>>;
         traffic_policy: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        external_user_id: string;
+        external_user_id?: string | null | undefined;
         size?: string | undefined;
         iso3?: string | undefined;
         destination?: string | string[] | undefined;
@@ -319,7 +319,7 @@ declare const HBookingSchema: z.ZodObject<{
         iata_code?: string | undefined;
         traffic_policy?: string | undefined;
     }, {
-        external_user_id: string;
+        external_user_id?: string | null | undefined;
         size?: string | undefined;
         iso3?: string | undefined;
         destination?: string | string[] | undefined;
@@ -375,7 +375,7 @@ declare const HBookingSchema: z.ZodObject<{
         channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
     };
     package_specifications: {
-        external_user_id: string;
+        external_user_id?: string | null | undefined;
         size?: string | undefined;
         iso3?: string | undefined;
         destination?: string | string[] | undefined;
@@ -437,7 +437,7 @@ declare const HBookingSchema: z.ZodObject<{
         channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
     };
     package_specifications: {
-        external_user_id: string;
+        external_user_id?: string | null | undefined;
         size?: string | undefined;
         iso3?: string | undefined;
         destination?: string | string[] | undefined;
@@ -1125,7 +1125,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
     usage: z.ZodArray<z.ZodString, "many">;
     uuid_usage: z.ZodArray<z.ZodString, "many">;
     package_specification: z.ZodOptional<z.ZodObject<{
-        external_user_id: z.ZodString;
+        external_user_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
         iso3: z.ZodOptional<z.ZodString>;
         size: z.ZodOptional<z.ZodString>;
@@ -1136,7 +1136,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
         package_type: z.ZodOptional<z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>>;
         traffic_policy: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        external_user_id: string;
+        external_user_id?: string | null | undefined;
         size?: string | undefined;
         iso3?: string | undefined;
         destination?: string | string[] | undefined;
@@ -1147,7 +1147,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
         iata_code?: string | undefined;
         traffic_policy?: string | undefined;
     }, {
-        external_user_id: string;
+        external_user_id?: string | null | undefined;
         size?: string | undefined;
         iso3?: string | undefined;
         destination?: string | string[] | undefined;
@@ -1194,7 +1194,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
     external_user_id?: string | null | undefined;
     uuid?: string | null | undefined;
     package_specification?: {
-        external_user_id: string;
+        external_user_id?: string | null | undefined;
         size?: string | undefined;
         iso3?: string | undefined;
         destination?: string | string[] | undefined;
@@ -1234,7 +1234,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
     external_user_id?: string | null | undefined;
     uuid?: string | null | undefined;
     package_specification?: {
-        external_user_id: string;
+        external_user_id?: string | null | undefined;
         size?: string | undefined;
         iso3?: string | undefined;
         destination?: string | string[] | undefined;
@@ -5561,7 +5561,7 @@ declare const HPartnerPackageSpecificationSchema: z.ZodObject<{
     destination?: string | null | undefined;
 }>;
 declare const HPromoPackageSpecificationSchema: z.ZodObject<{
-    external_user_id: z.ZodString;
+    external_user_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
     iso3: z.ZodOptional<z.ZodString>;
     size: z.ZodOptional<z.ZodString>;
@@ -5572,7 +5572,7 @@ declare const HPromoPackageSpecificationSchema: z.ZodObject<{
     package_type: z.ZodOptional<z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>>;
     traffic_policy: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    external_user_id: string;
+    external_user_id?: string | null | undefined;
     size?: string | undefined;
     iso3?: string | undefined;
     destination?: string | string[] | undefined;
@@ -5583,7 +5583,7 @@ declare const HPromoPackageSpecificationSchema: z.ZodObject<{
     iata_code?: string | undefined;
     traffic_policy?: string | undefined;
 }, {
-    external_user_id: string;
+    external_user_id?: string | null | undefined;
     size?: string | undefined;
     iso3?: string | undefined;
     destination?: string | string[] | undefined;
