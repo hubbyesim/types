@@ -1048,7 +1048,7 @@ var partnerSchemaSpec = markAsSchemaSpec({
   type: zod.z.enum(["wholesale", "reseller", "platform", "agent"]).nullable().optional(),
   is_active: zod.z.boolean().nullable().optional(),
   external_id: zod.z.string().nullable().optional(),
-  gender: zod.z.enum(["classic", "universal"]).optional(),
+  esim_type: zod.z.enum(["classic", "universal"]).optional(),
   // Complex nested objects
   contact: {
     _type: "object",
