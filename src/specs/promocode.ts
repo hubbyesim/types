@@ -12,6 +12,7 @@ import {
 
 // Define package specification schema for use in promo code
 export const packageSpecificationSchema = z.object({
+    external_user_id: z.string().min(1),
     destination: z.string().optional().or(z.array(z.string())),
     iso3: z.string().optional(),
     size: z.string().optional(),

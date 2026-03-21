@@ -39,6 +39,7 @@ describe("PromoCode Schema", () => {
             usage: ["user1", "user2"],
             uuid_usage: ["uuid1", "uuid2"],
             package_specification: {
+                external_user_id: "partner-user-1",
                 destination: "Netherlands",
                 size: "5GB",
                 package_id: "pkg-123",

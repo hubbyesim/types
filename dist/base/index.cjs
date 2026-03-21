@@ -319,6 +319,7 @@ var SUPPORTED_LOCALES = [
 ];
 var supportedLocalesSchema = zod.z.enum(SUPPORTED_LOCALES);
 var packageSpecificationSchema = zod.z.object({
+  external_user_id: zod.z.string().min(1),
   destination: zod.z.string().optional().or(zod.z.array(zod.z.string())),
   iso3: zod.z.string().optional(),
   size: zod.z.string().optional(),
@@ -390,6 +391,7 @@ var financialInsightsSchema = zod.z.object({
 var bookingSchemaSpec = markAsSchemaSpec({
   id: zod.z.string().optional(),
   external_id: zod.z.string().nullable().optional(),
+  external_user_id: zod.z.string().nullable().optional(),
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: zod.z.string().nullable(),
