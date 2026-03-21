@@ -70,3 +70,5 @@ export const userSchemaSpec = markAsSchemaSpec({
     custom_branding: z.any().nullable().optional(),
     messaging_contact_id: z.string().nullable().optional(),
 });
+
+export { packageQueueSchemaSpec, packageQueuePackageSpecificationSchema } from './package_queue';

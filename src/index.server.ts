@@ -1,6 +1,7 @@
 import { buildServerSchema } from './builders/server';
 import {
     userSchemaSpec,
+    packageQueueSchemaSpec,
 } from './specs/user';
 import {
     bookingSchemaSpec,
@@ -65,7 +66,7 @@ import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 
 
 import { convertFirestoreToJS, convertJSToFirestore } from './utils/firestoreTransformUtils';
-import { HPackage, HPartner, HPriceList, HPromoCode, HUserTouchpoints } from './index.client';
+import { HPackage, HPackageQueue, HPartner, HPriceList, HPromoCode, HUserTouchpoints } from './index.client';
 import { buildClientSchema } from './builders/client';
 
 export {
@@ -73,6 +74,7 @@ export {
     analyticsSpec,
     packageSchemaSpec,
     userSchemaSpec,
+    packageQueueSchemaSpec,
     bookingSchemaSpec,
     countrySchemaSpec,
     currencySchemaSpec,
@@ -104,6 +106,7 @@ export {
 /** ZOD SCHEMAS */
 export const UserSchema = buildServerSchema(userSchemaSpec);
 export const UserFirestoreSchema = buildServerSchema(userSchemaSpec);
+export const PackageQueueSchema = buildServerSchema(packageQueueSchemaSpec);
 export const BookingSchema = buildServerSchema(bookingSchemaSpec);
 export const CountrySchema = buildServerSchema(countrySchemaSpec);
 export const CurrencySchema = buildServerSchema(currencySchemaSpec);
@@ -157,6 +160,7 @@ export const JobStatusSchema = jobStatusSchema;
 
 export type User = z.infer<typeof UserSchema>;
 export type UserFirestore = z.infer<typeof UserFirestoreSchema>;
+export type PackageQueue = z.infer<typeof PackageQueueSchema>;
 export type Booking = z.infer<typeof BookingSchema>;
 export type Country = z.infer<typeof CountrySchema>;
 export type Currency = z.infer<typeof CurrencySchema>;
@@ -255,6 +259,14 @@ export const userFromFirestore = (user: UserFirestore): User => {
     return convertFirestoreToJS(user, userSchemaSpec);
 }
 
+export const packageQueueFromFirestore = (doc: PackageQueue): HPackageQueue => {
+    return convertFirestoreToJS(doc, packageQueueSchemaSpec);
+}
+
+export const packageQueueToFirestore = (doc: HPackageQueue): PackageQueue => {
+    return convertJSToFirestore(doc, packageQueueSchemaSpec);
+}
+
 export const priceListFromFirestore = (priceList: PriceList): HPriceList => {
     return convertFirestoreToJS(priceList, priceListSchemaSpec);
 }
@@ -295,5 +307,5 @@ export { createModelConverters } from './utils/modelConverterFactory';
 export { createConvertJSToFirestore, createConvertFirestoreToJS } from './utils/firestoreTransformUtils';
 export { FirebaseService, createFirebaseService } from './services/firebase';
 
-export { USER_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, BOOKING_COLLECTION, ROLE_COLLECTION, PERMISSION_COLLECTION, TRAFFIC_POLICY_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, COUNTRY_COLLECTION, ESIM_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, MESSAGE_COLLECTION, CURRENCY_COLLECTION, API_LOG_COLLECTION, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, USER_TOUCHPOINTS_COLLECTION, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, TAG_COLLECTION, LIVE_ACTIVITY_COLLECTION, SCHEDULED_JOB_COLLECTION, AUTO_INSTALLATION_EVENTS_COLLECTION } from './specs/common';
+export { USER_COLLECTION, PACKAGE_QUEUE_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, BOOKING_COLLECTION, ROLE_COLLECTION, PERMISSION_COLLECTION, TRAFFIC_POLICY_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, COUNTRY_COLLECTION, ESIM_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, MESSAGE_COLLECTION, CURRENCY_COLLECTION, API_LOG_COLLECTION, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, USER_TOUCHPOINTS_COLLECTION, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, TAG_COLLECTION, LIVE_ACTIVITY_COLLECTION, SCHEDULED_JOB_COLLECTION, AUTO_INSTALLATION_EVENTS_COLLECTION } from './specs/common';
 

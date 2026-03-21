@@ -159,6 +159,7 @@ var PACKAGE_TEMPLATE_COLLECTION = "/package_templates";
 var PROMO_CODE_COLLECTION = "/companies/hubby/promo_codes";
 var COUNTRY_COLLECTION = "countries";
 var ESIM_COLLECTION = "esims";
+var PAYMENT_COLLECTION = "payments";
 var PRICE_LIST_COLLECTION = "price_lists";
 var BOOKING_COLLECTION = "bookings";
 var ROLE_COLLECTION = "roles";
@@ -194,6 +195,28 @@ var tagModelSpec = {
   type: zod.z.string().nullable().optional()
   // can be 'partner', 'booking' etc...
 };
+var packageQueuePackageSpecificationSchema = zod.z.object({
+  size: zod.z.string().optional(),
+  iso3: zod.z.string().optional(),
+  destination: zod.z.string().optional(),
+  package_type: zod.z.enum(["data-limited", "time-limited", "starter", "unlimited"]).optional(),
+  package_duration: zod.z.number().optional()
+});
+var packageQueueSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string(),
+  uuid: zod.z.string(),
+  booking: { _type: "docRef", collection: BOOKING_COLLECTION, nullable: true },
+  payment: { _type: "docRef", collection: PAYMENT_COLLECTION, nullable: true },
+  bundle: zod.z.string().nullable().optional(),
+  esim: { _type: "docRef", collection: ESIM_COLLECTION, nullable: true },
+  package_specification: packageQueuePackageSpecificationSchema,
+  origin: zod.z.enum(["booking", "payment"]),
+  showed_at: timestampNullable,
+  redeemed_at: timestampNullable,
+  declined_at: timestampNullable,
+  created_at: timestampRequired,
+  updated_at: timestampRequired
+});
 
 // src/specs/user.ts
 var apiKeySpec = {
@@ -1396,6 +1419,7 @@ var autoInstallationEventsSchemaSpec = markAsSchemaSpec({
 
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
+var HPackageQueueSchema = buildClientSchema(packageQueueSchemaSpec);
 var HBookingSchema = buildClientSchema(bookingSchemaSpec);
 var HCountrySchema = buildClientSchema(countrySchemaSpec);
 var HCurrencySchema = buildClientSchema(currencySchemaSpec);
@@ -1487,6 +1511,7 @@ exports.HLiveActivitySchema = HLiveActivitySchema;
 exports.HLoginRequestSchema = HLoginRequestSchema;
 exports.HMessageSchema = HMessageSchema;
 exports.HPackagePriceSchema = HPackagePriceSchema;
+exports.HPackageQueueSchema = HPackageQueueSchema;
 exports.HPackageSchema = HPackageSchema;
 exports.HPackageTemplateSchema = HPackageTemplateSchema;
 exports.HPartnerAppSchema = HPartnerAppSchema;

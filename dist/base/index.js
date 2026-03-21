@@ -157,6 +157,7 @@ var PACKAGE_TEMPLATE_COLLECTION = "/package_templates";
 var PROMO_CODE_COLLECTION = "/companies/hubby/promo_codes";
 var COUNTRY_COLLECTION = "countries";
 var ESIM_COLLECTION = "esims";
+var PAYMENT_COLLECTION = "payments";
 var PRICE_LIST_COLLECTION = "price_lists";
 var BOOKING_COLLECTION = "bookings";
 var ROLE_COLLECTION = "roles";
@@ -192,6 +193,28 @@ var tagModelSpec = {
   type: z.string().nullable().optional()
   // can be 'partner', 'booking' etc...
 };
+var packageQueuePackageSpecificationSchema = z.object({
+  size: z.string().optional(),
+  iso3: z.string().optional(),
+  destination: z.string().optional(),
+  package_type: z.enum(["data-limited", "time-limited", "starter", "unlimited"]).optional(),
+  package_duration: z.number().optional()
+});
+var packageQueueSchemaSpec = markAsSchemaSpec({
+  id: z.string(),
+  uuid: z.string(),
+  booking: { _type: "docRef", collection: BOOKING_COLLECTION, nullable: true },
+  payment: { _type: "docRef", collection: PAYMENT_COLLECTION, nullable: true },
+  bundle: z.string().nullable().optional(),
+  esim: { _type: "docRef", collection: ESIM_COLLECTION, nullable: true },
+  package_specification: packageQueuePackageSpecificationSchema,
+  origin: z.enum(["booking", "payment"]),
+  showed_at: timestampNullable,
+  redeemed_at: timestampNullable,
+  declined_at: timestampNullable,
+  created_at: timestampRequired,
+  updated_at: timestampRequired
+});
 
 // src/specs/user.ts
 var apiKeySpec = {
@@ -1394,6 +1417,7 @@ var autoInstallationEventsSchemaSpec = markAsSchemaSpec({
 
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
+var HPackageQueueSchema = buildClientSchema(packageQueueSchemaSpec);
 var HBookingSchema = buildClientSchema(bookingSchemaSpec);
 var HCountrySchema = buildClientSchema(countrySchemaSpec);
 var HCurrencySchema = buildClientSchema(currencySchemaSpec);
@@ -1462,6 +1486,6 @@ var HRewardPackageTypeSchema = rewardPackageTypeSchema;
 var HJobStatusSchema = jobStatusSchema;
 var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
-export { HAddressSchema, HAnalyticsSchema, HApiLogSchema, HAutoInstallationEventsSchema, HBankingDetailsSchema, HBaseRewardSchema, HBondioPackageSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HDestinationBundleSchema, HDestinationSchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HJobStatusSchema, HLiveActivitySchema, HLoginRequestSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPackageTemplateSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HReviewSchema, HReviewSubmissionSchema, HRewardMultipliersSchema, HRewardPackageTypeSchema, HRewardStrategySchema, HRoleSchema, HScheduleFilterSchema, HScheduledJobSchema, HTagSchema, HTelnaPackageSchema, HTrafficPolicySchema, HUserSchema, HUserTouchpointsSchema, HVisualIdentityBannerSchema, HVisualIdentityBannersSchema, HVisualIdentitySchema, HubbyModelSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES };
+export { HAddressSchema, HAnalyticsSchema, HApiLogSchema, HAutoInstallationEventsSchema, HBankingDetailsSchema, HBaseRewardSchema, HBondioPackageSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HDestinationBundleSchema, HDestinationSchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HJobStatusSchema, HLiveActivitySchema, HLoginRequestSchema, HMessageSchema, HPackagePriceSchema, HPackageQueueSchema, HPackageSchema, HPackageTemplateSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HReviewSchema, HReviewSubmissionSchema, HRewardMultipliersSchema, HRewardPackageTypeSchema, HRewardStrategySchema, HRoleSchema, HScheduleFilterSchema, HScheduledJobSchema, HTagSchema, HTelnaPackageSchema, HTrafficPolicySchema, HUserSchema, HUserTouchpointsSchema, HVisualIdentityBannerSchema, HVisualIdentityBannersSchema, HVisualIdentitySchema, HubbyModelSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES };
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.js.map

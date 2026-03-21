@@ -4,6 +4,7 @@ import { markAsSchemaSpec } from '../common';
 // Collection paths
 export const PARTNER_COLLECTION = '/companies/hubby/partners';
 export const USER_COLLECTION = 'users';
+export const PACKAGE_QUEUE_COLLECTION = 'package_queues';
 export const PROFILE_COLLECTION = '/companies/hubby/profiles';
 export const PACKAGE_COLLECTION = '/companies/hubby/packages';
 export const PACKAGE_TEMPLATE_COLLECTION = '/package_templates';

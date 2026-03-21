@@ -171,6 +171,7 @@ var buildServerSchema = (spec, path = []) => {
 };
 var PARTNER_COLLECTION = "/companies/hubby/partners";
 var USER_COLLECTION = "users";
+var PACKAGE_QUEUE_COLLECTION = "package_queues";
 var PROFILE_COLLECTION = "/companies/hubby/profiles";
 var PACKAGE_COLLECTION = "/companies/hubby/packages";
 var PACKAGE_TEMPLATE_COLLECTION = "/package_templates";
@@ -223,6 +224,28 @@ var tagModelSpec = {
   type: zod.z.string().nullable().optional()
   // can be 'partner', 'booking' etc...
 };
+var packageQueuePackageSpecificationSchema = zod.z.object({
+  size: zod.z.string().optional(),
+  iso3: zod.z.string().optional(),
+  destination: zod.z.string().optional(),
+  package_type: zod.z.enum(["data-limited", "time-limited", "starter", "unlimited"]).optional(),
+  package_duration: zod.z.number().optional()
+});
+var packageQueueSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string(),
+  uuid: zod.z.string(),
+  booking: { _type: "docRef", collection: BOOKING_COLLECTION, nullable: true },
+  payment: { _type: "docRef", collection: PAYMENT_COLLECTION, nullable: true },
+  bundle: zod.z.string().nullable().optional(),
+  esim: { _type: "docRef", collection: ESIM_COLLECTION, nullable: true },
+  package_specification: packageQueuePackageSpecificationSchema,
+  origin: zod.z.enum(["booking", "payment"]),
+  showed_at: timestampNullable,
+  redeemed_at: timestampNullable,
+  declined_at: timestampNullable,
+  created_at: timestampRequired,
+  updated_at: timestampRequired
+});
 
 // src/specs/user.ts
 var apiKeySpec = {
@@ -1670,6 +1693,7 @@ var permissionSchemaSpec = markAsSchemaSpec({
 
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
+var HPackageQueueSchema = buildClientSchema(packageQueueSchemaSpec);
 var HBookingSchema = buildClientSchema(bookingSchemaSpec);
 var HCountrySchema = buildClientSchema(countrySchemaSpec);
 var HCurrencySchema = buildClientSchema(currencySchemaSpec);
@@ -1760,6 +1784,7 @@ function createModelConverters(db, modelSchemaSpec) {
 // src/index.server.ts
 var UserSchema = buildServerSchema(userSchemaSpec);
 var UserFirestoreSchema = buildServerSchema(userSchemaSpec);
+var PackageQueueSchema = buildServerSchema(packageQueueSchemaSpec);
 var BookingSchema = buildServerSchema(bookingSchemaSpec);
 var CountrySchema = buildServerSchema(countrySchemaSpec);
 var CurrencySchema = buildServerSchema(currencySchemaSpec);
@@ -1819,6 +1844,12 @@ var userToFirestore = (user) => {
 };
 var userFromFirestore = (user) => {
   return convertFirestoreToJS(user, userSchemaSpec);
+};
+var packageQueueFromFirestore = (doc) => {
+  return convertFirestoreToJS(doc, packageQueueSchemaSpec);
+};
+var packageQueueToFirestore = (doc) => {
+  return convertJSToFirestore(doc, packageQueueSchemaSpec);
 };
 var priceListFromFirestore = (priceList) => {
   return convertFirestoreToJS(priceList, priceListSchemaSpec);
@@ -1894,6 +1925,7 @@ exports.HLiveActivitySchema = HLiveActivitySchema;
 exports.HLoginRequestSchema = HLoginRequestSchema;
 exports.HMessageSchema = HMessageSchema;
 exports.HPackagePriceSchema = HPackagePriceSchema;
+exports.HPackageQueueSchema = HPackageQueueSchema;
 exports.HPackageSchema = HPackageSchema;
 exports.HPackageTemplateSchema = HPackageTemplateSchema;
 exports.HPartnerAppSchema = HPartnerAppSchema;
@@ -1933,6 +1965,7 @@ exports.LoginRequestSchema = LoginRequestSchema;
 exports.MESSAGE_COLLECTION = MESSAGE_COLLECTION;
 exports.MessageSchema = MessageSchema;
 exports.PACKAGE_COLLECTION = PACKAGE_COLLECTION;
+exports.PACKAGE_QUEUE_COLLECTION = PACKAGE_QUEUE_COLLECTION;
 exports.PARTNER_COLLECTION = PARTNER_COLLECTION;
 exports.PAYMENT_COLLECTION = PAYMENT_COLLECTION;
 exports.PERMISSION_COLLECTION = PERMISSION_COLLECTION;
@@ -1940,6 +1973,7 @@ exports.PRICE_LIST_COLLECTION = PRICE_LIST_COLLECTION;
 exports.PROFILE_COLLECTION = PROFILE_COLLECTION;
 exports.PROMO_CODE_COLLECTION = PROMO_CODE_COLLECTION;
 exports.PackagePriceSchema = PackagePriceSchema;
+exports.PackageQueueSchema = PackageQueueSchema;
 exports.PackageSchema = PackageSchema;
 exports.PackageTemplateSchema = PackageTemplateSchema;
 exports.PartnerContactSchema = PartnerContactSchema;
@@ -2002,6 +2036,9 @@ exports.liveActivitySchemaSpec = liveActivitySchemaSpec;
 exports.liveActivityStatusSchema = liveActivityStatusSchema;
 exports.loginRequestSchemaSpec = loginRequestSchemaSpec;
 exports.messageSchemaSpec = messageSchemaSpec;
+exports.packageQueueFromFirestore = packageQueueFromFirestore;
+exports.packageQueueSchemaSpec = packageQueueSchemaSpec;
+exports.packageQueueToFirestore = packageQueueToFirestore;
 exports.packageSchemaSpec = packageSchemaSpec;
 exports.packageTemplateAppSchema = packageTemplateAppSchema;
 exports.packageTemplateSchemaSpec = packageTemplateSchemaSpec;
