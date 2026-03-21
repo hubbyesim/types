@@ -4,6 +4,7 @@ import { Firestore, Timestamp, DocumentReference } from 'firebase-admin/firestor
 
 declare const userSchemaSpec: {
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    external_user_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     name: z.ZodNullable<z.ZodString>;
     email: z.ZodNullable<z.ZodString>;
     stripe_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -160,7 +161,7 @@ declare const bookingSchemaSpec: {
     is_processed_for_esim_restoration: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     is_pseudonymized: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     import_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    package_specifications: z.ZodArray<z.ZodObject<{
+    package_specifications: z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodObject<{
         destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
         iso3: z.ZodOptional<z.ZodString>;
         size: z.ZodOptional<z.ZodString>;
@@ -190,7 +191,27 @@ declare const bookingSchemaSpec: {
         package_duration?: number | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         traffic_policy?: string | undefined;
-    }>, "many">;
+    }>>, Record<string, {
+        destination?: string | string[] | undefined;
+        iso3?: string | undefined;
+        size?: string | undefined;
+        package_id?: string | undefined;
+        bundle_id?: string | undefined;
+        iata_code?: string | undefined;
+        package_duration?: number | undefined;
+        package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
+        traffic_policy?: string | undefined;
+    }>, Record<string, {
+        destination?: string | string[] | undefined;
+        iso3?: string | undefined;
+        size?: string | undefined;
+        package_id?: string | undefined;
+        bundle_id?: string | undefined;
+        iata_code?: string | undefined;
+        package_duration?: number | undefined;
+        package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
+        traffic_policy?: string | undefined;
+    }>>;
     departure_date: {
         _type: "timestamp";
         nullable: boolean;
@@ -746,6 +767,7 @@ declare const promoCodeSchemaSpec: {
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         traffic_policy?: string | undefined;
     }>>;
+    external_user_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     valid_from: {
         _type: "timestamp";
         nullable: boolean;
@@ -801,6 +823,7 @@ declare const partnerSchemaSpec: {
     type: z.ZodOptional<z.ZodNullable<z.ZodEnum<["wholesale", "reseller", "platform", "agent"]>>>;
     is_active: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    gender: z.ZodOptional<z.ZodEnum<["classic", "universal"]>>;
     contact: {
         _type: "object";
         of: {
@@ -1886,6 +1909,7 @@ declare const autoInstallationEventsSchemaSpec: {
 /** ZOD SCHEMAS */
 declare const HUserSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    external_user_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     name: z.ZodNullable<z.ZodString>;
     email: z.ZodNullable<z.ZodString>;
     stripe_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -1975,6 +1999,7 @@ declare const HUserSchema: z.ZodObject<{
     created_at: Date;
     updated_at: Date;
     id?: string | null | undefined;
+    external_user_id?: string | null | undefined;
     stripe_id?: string | null | undefined;
     referral?: string | null | undefined;
     fcm?: string | undefined;
@@ -2024,6 +2049,7 @@ declare const HUserSchema: z.ZodObject<{
     created_at: Date;
     updated_at: Date;
     id?: string | null | undefined;
+    external_user_id?: string | null | undefined;
     stripe_id?: string | null | undefined;
     referral?: string | null | undefined;
     fcm?: string | undefined;
@@ -2102,7 +2128,7 @@ declare const HBookingSchema: z.ZodObject<{
     is_processed_for_esim_restoration: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     is_pseudonymized: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     import_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    package_specifications: z.ZodArray<z.ZodObject<{
+    package_specifications: z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodObject<{
         destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
         iso3: z.ZodOptional<z.ZodString>;
         size: z.ZodOptional<z.ZodString>;
@@ -2132,7 +2158,27 @@ declare const HBookingSchema: z.ZodObject<{
         package_duration?: number | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         traffic_policy?: string | undefined;
-    }>, "many">;
+    }>>, Record<string, {
+        destination?: string | string[] | undefined;
+        iso3?: string | undefined;
+        size?: string | undefined;
+        package_id?: string | undefined;
+        bundle_id?: string | undefined;
+        iata_code?: string | undefined;
+        package_duration?: number | undefined;
+        package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
+        traffic_policy?: string | undefined;
+    }>, Record<string, {
+        destination?: string | string[] | undefined;
+        iso3?: string | undefined;
+        size?: string | undefined;
+        package_id?: string | undefined;
+        bundle_id?: string | undefined;
+        iata_code?: string | undefined;
+        package_duration?: number | undefined;
+        package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
+        traffic_policy?: string | undefined;
+    }>>;
     departure_date: z.ZodEffects<z.ZodDate, Date, Date>;
     return_date: z.ZodEffects<z.ZodDate, Date, Date>;
     partner: z.ZodString;
@@ -2176,7 +2222,7 @@ declare const HBookingSchema: z.ZodObject<{
         should_send_message: boolean;
         channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
     };
-    package_specifications: {
+    package_specifications: Record<string, {
         destination?: string | string[] | undefined;
         iso3?: string | undefined;
         size?: string | undefined;
@@ -2186,7 +2232,7 @@ declare const HBookingSchema: z.ZodObject<{
         package_duration?: number | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         traffic_policy?: string | undefined;
-    }[];
+    }>;
     departure_date: Date;
     return_date: Date;
     promo_codes: string[];
@@ -2236,7 +2282,7 @@ declare const HBookingSchema: z.ZodObject<{
         should_send_message: boolean;
         channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
     };
-    package_specifications: {
+    package_specifications: Record<string, {
         destination?: string | string[] | undefined;
         iso3?: string | undefined;
         size?: string | undefined;
@@ -2246,7 +2292,7 @@ declare const HBookingSchema: z.ZodObject<{
         package_duration?: number | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         traffic_policy?: string | undefined;
-    }[];
+    }>;
     departure_date: Date;
     return_date: Date;
     promo_codes: string[];
@@ -2954,6 +3000,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         traffic_policy?: string | undefined;
     }>>;
+    external_user_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     valid_from: z.ZodEffects<z.ZodDate, Date, Date>;
     valid_to: z.ZodEffects<z.ZodDate, Date, Date>;
     partner: z.ZodString;
@@ -2986,6 +3033,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
     uuid_usage: string[];
     valid_from: Date;
     valid_to: Date;
+    external_user_id?: string | null | undefined;
     countries?: string[] | undefined;
     uuid?: string | null | undefined;
     package_size?: string | undefined;
@@ -3024,6 +3072,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
     uuid_usage: string[];
     valid_from: Date;
     valid_to: Date;
+    external_user_id?: string | null | undefined;
     countries?: string[] | undefined;
     uuid?: string | null | undefined;
     package_size?: string | undefined;
@@ -3052,6 +3101,7 @@ declare const HPartnerSchema: z.ZodObject<{
     type: z.ZodOptional<z.ZodNullable<z.ZodEnum<["wholesale", "reseller", "platform", "agent"]>>>;
     is_active: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    gender: z.ZodOptional<z.ZodEnum<["classic", "universal"]>>;
     contact: z.ZodObject<{
         name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         email: z.ZodNullable<z.ZodString>;
@@ -4051,6 +4101,7 @@ declare const HPartnerSchema: z.ZodObject<{
         url?: string | null | undefined;
         api_key?: string | null | undefined;
     };
+    gender?: "classic" | "universal" | undefined;
     type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
     is_active?: boolean | null | undefined;
     external_id?: string | null | undefined;
@@ -4239,6 +4290,7 @@ declare const HPartnerSchema: z.ZodObject<{
             promocode_redemption?: boolean | undefined;
         } | undefined;
     };
+    gender?: "classic" | "universal" | undefined;
     type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
     is_active?: boolean | null | undefined;
     external_id?: string | null | undefined;
@@ -4661,6 +4713,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     type: z.ZodOptional<z.ZodNullable<z.ZodEnum<["wholesale", "reseller", "platform", "agent"]>>>;
     is_active: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    gender: z.ZodOptional<z.ZodEnum<["classic", "universal"]>>;
     contact: z.ZodObject<{
         name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         email: z.ZodNullable<z.ZodString>;
@@ -5660,6 +5713,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
         url?: string | null | undefined;
         api_key?: string | null | undefined;
     };
+    gender?: "classic" | "universal" | undefined;
     type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
     is_active?: boolean | null | undefined;
     external_id?: string | null | undefined;
@@ -5848,6 +5902,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             promocode_redemption?: boolean | undefined;
         } | undefined;
     };
+    gender?: "classic" | "universal" | undefined;
     type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
     is_active?: boolean | null | undefined;
     external_id?: string | null | undefined;
@@ -8140,7 +8195,7 @@ declare const bookingAppSchema: z.ZodObject<{
     is_processed_for_esim_restoration: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     is_pseudonymized: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     import_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    package_specifications: z.ZodArray<z.ZodObject<{
+    package_specifications: z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodObject<{
         destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
         iso3: z.ZodOptional<z.ZodString>;
         size: z.ZodOptional<z.ZodString>;
@@ -8170,7 +8225,27 @@ declare const bookingAppSchema: z.ZodObject<{
         package_duration?: number | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         traffic_policy?: string | undefined;
-    }>, "many">;
+    }>>, Record<string, {
+        destination?: string | string[] | undefined;
+        iso3?: string | undefined;
+        size?: string | undefined;
+        package_id?: string | undefined;
+        bundle_id?: string | undefined;
+        iata_code?: string | undefined;
+        package_duration?: number | undefined;
+        package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
+        traffic_policy?: string | undefined;
+    }>, Record<string, {
+        destination?: string | string[] | undefined;
+        iso3?: string | undefined;
+        size?: string | undefined;
+        package_id?: string | undefined;
+        bundle_id?: string | undefined;
+        iata_code?: string | undefined;
+        package_duration?: number | undefined;
+        package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
+        traffic_policy?: string | undefined;
+    }>>;
     departure_date: z.ZodEffects<z.ZodDate, Date, Date>;
     return_date: z.ZodEffects<z.ZodDate, Date, Date>;
     partner: z.ZodString;
@@ -8214,7 +8289,7 @@ declare const bookingAppSchema: z.ZodObject<{
         should_send_message: boolean;
         channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
     };
-    package_specifications: {
+    package_specifications: Record<string, {
         destination?: string | string[] | undefined;
         iso3?: string | undefined;
         size?: string | undefined;
@@ -8224,7 +8299,7 @@ declare const bookingAppSchema: z.ZodObject<{
         package_duration?: number | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         traffic_policy?: string | undefined;
-    }[];
+    }>;
     departure_date: Date;
     return_date: Date;
     promo_codes: string[];
@@ -8274,7 +8349,7 @@ declare const bookingAppSchema: z.ZodObject<{
         should_send_message: boolean;
         channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
     };
-    package_specifications: {
+    package_specifications: Record<string, {
         destination?: string | string[] | undefined;
         iso3?: string | undefined;
         size?: string | undefined;
@@ -8284,7 +8359,7 @@ declare const bookingAppSchema: z.ZodObject<{
         package_duration?: number | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         traffic_policy?: string | undefined;
-    }[];
+    }>;
     departure_date: Date;
     return_date: Date;
     promo_codes: string[];
@@ -8329,6 +8404,7 @@ declare const partnerAppSchema: z.ZodObject<{
     type: z.ZodOptional<z.ZodNullable<z.ZodEnum<["wholesale", "reseller", "platform", "agent"]>>>;
     is_active: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    gender: z.ZodOptional<z.ZodEnum<["classic", "universal"]>>;
     contact: z.ZodObject<{
         name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         email: z.ZodNullable<z.ZodString>;
@@ -9328,6 +9404,7 @@ declare const partnerAppSchema: z.ZodObject<{
         url?: string | null | undefined;
         api_key?: string | null | undefined;
     };
+    gender?: "classic" | "universal" | undefined;
     type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
     is_active?: boolean | null | undefined;
     external_id?: string | null | undefined;
@@ -9516,6 +9593,7 @@ declare const partnerAppSchema: z.ZodObject<{
             promocode_redemption?: boolean | undefined;
         } | undefined;
     };
+    gender?: "classic" | "universal" | undefined;
     type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
     is_active?: boolean | null | undefined;
     external_id?: string | null | undefined;

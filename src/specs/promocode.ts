@@ -43,6 +43,7 @@ export const promoCodeSchemaSpec = markAsSchemaSpec({
     usage: z.array(z.string()),
     uuid_usage: z.array(z.string()),
     package_specification: packageSpecificationSchema.optional(),
+    external_user_id: z.string().nullable().optional(),
     valid_from: timestampRequired,
     valid_to: timestampRequired,
 

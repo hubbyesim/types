@@ -217,6 +217,7 @@ var apiKeysObjectSpec = {
 };
 var userSchemaSpec = markAsSchemaSpec({
   id: z.string().nullable().optional(),
+  external_user_id: z.string().nullable().optional(),
   name: z.string().nullable(),
   email: z.string().email().nullable(),
   stripe_id: z.string().nullable().optional(),
@@ -321,6 +322,7 @@ var promoCodeSchemaSpec = markAsSchemaSpec({
   usage: z.array(z.string()),
   uuid_usage: z.array(z.string()),
   package_specification: packageSpecificationSchema.optional(),
+  external_user_id: z.string().nullable().optional(),
   valid_from: timestampRequired,
   valid_to: timestampRequired,
   // Reference fields
@@ -405,7 +407,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
   is_processed_for_esim_restoration: z.boolean().optional().nullable(),
   is_pseudonymized: z.boolean().optional().nullable(),
   import_id: z.string().nullable().optional(),
-  package_specifications: z.array(packageSpecificationSchema).min(1),
+  package_specifications: z.record(z.string(), packageSpecificationSchema).refine((m) => Object.keys(m).length >= 1),
   departure_date: timestampRequired,
   return_date: timestampNullable,
   partner: { _type: "docRef", collection: PARTNER_COLLECTION },
@@ -1005,6 +1007,7 @@ var partnerSchemaSpec = markAsSchemaSpec({
   type: z.enum(["wholesale", "reseller", "platform", "agent"]).nullable().optional(),
   is_active: z.boolean().nullable().optional(),
   external_id: z.string().nullable().optional(),
+  gender: z.enum(["classic", "universal"]).optional(),
   // Complex nested objects
   contact: {
     _type: "object",
