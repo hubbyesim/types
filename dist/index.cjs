@@ -461,7 +461,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
   is_processed_for_esim_restoration: zod.z.boolean().optional().nullable(),
   is_pseudonymized: zod.z.boolean().optional().nullable(),
   import_id: zod.z.string().nullable().optional(),
-  package_specifications: zod.z.record(zod.z.string(), packageSpecificationSchema).refine((m) => Object.keys(m).length >= 1),
+  package_specifications: zod.z.array(packageSpecificationSchema).min(1),
   departure_date: timestampRequired,
   return_date: timestampNullable,
   partner: { _type: "docRef", collection: PARTNER_COLLECTION },

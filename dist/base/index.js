@@ -430,7 +430,7 @@ var bookingSchemaSpec = markAsSchemaSpec({
   is_processed_for_esim_restoration: z.boolean().optional().nullable(),
   is_pseudonymized: z.boolean().optional().nullable(),
   import_id: z.string().nullable().optional(),
-  package_specifications: z.record(z.string(), packageSpecificationSchema).refine((m) => Object.keys(m).length >= 1),
+  package_specifications: z.array(packageSpecificationSchema).min(1),
   departure_date: timestampRequired,
   return_date: timestampNullable,
   partner: { _type: "docRef", collection: PARTNER_COLLECTION },

@@ -227,7 +227,7 @@ declare const bookingSchemaSpec: {
     is_processed_for_esim_restoration: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     is_pseudonymized: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     import_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    package_specifications: z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodObject<{
+    package_specifications: z.ZodArray<z.ZodObject<{
         destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
         iso3: z.ZodOptional<z.ZodString>;
         size: z.ZodOptional<z.ZodString>;
@@ -257,27 +257,7 @@ declare const bookingSchemaSpec: {
         bundle_id?: string | undefined;
         iata_code?: string | undefined;
         traffic_policy?: string | undefined;
-    }>>, Record<string, {
-        size?: string | undefined;
-        iso3?: string | undefined;
-        destination?: string | string[] | undefined;
-        package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
-        package_duration?: number | undefined;
-        package_id?: string | undefined;
-        bundle_id?: string | undefined;
-        iata_code?: string | undefined;
-        traffic_policy?: string | undefined;
-    }>, Record<string, {
-        size?: string | undefined;
-        iso3?: string | undefined;
-        destination?: string | string[] | undefined;
-        package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
-        package_duration?: number | undefined;
-        package_id?: string | undefined;
-        bundle_id?: string | undefined;
-        iata_code?: string | undefined;
-        traffic_policy?: string | undefined;
-    }>>;
+    }>, "many">;
     departure_date: {
         _type: "timestamp";
         nullable: boolean;
@@ -2267,7 +2247,7 @@ declare const HBookingSchema: z.ZodObject<{
     is_processed_for_esim_restoration: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     is_pseudonymized: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     import_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    package_specifications: z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodObject<{
+    package_specifications: z.ZodArray<z.ZodObject<{
         destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
         iso3: z.ZodOptional<z.ZodString>;
         size: z.ZodOptional<z.ZodString>;
@@ -2297,27 +2277,7 @@ declare const HBookingSchema: z.ZodObject<{
         bundle_id?: string | undefined;
         iata_code?: string | undefined;
         traffic_policy?: string | undefined;
-    }>>, Record<string, {
-        size?: string | undefined;
-        iso3?: string | undefined;
-        destination?: string | string[] | undefined;
-        package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
-        package_duration?: number | undefined;
-        package_id?: string | undefined;
-        bundle_id?: string | undefined;
-        iata_code?: string | undefined;
-        traffic_policy?: string | undefined;
-    }>, Record<string, {
-        size?: string | undefined;
-        iso3?: string | undefined;
-        destination?: string | string[] | undefined;
-        package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
-        package_duration?: number | undefined;
-        package_id?: string | undefined;
-        bundle_id?: string | undefined;
-        iata_code?: string | undefined;
-        traffic_policy?: string | undefined;
-    }>>;
+    }>, "many">;
     departure_date: z.ZodEffects<z.ZodDate, Date, Date>;
     return_date: z.ZodEffects<z.ZodDate, Date, Date>;
     partner: z.ZodString;
@@ -2362,7 +2322,7 @@ declare const HBookingSchema: z.ZodObject<{
         should_send_message: boolean;
         channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
     };
-    package_specifications: Record<string, {
+    package_specifications: {
         size?: string | undefined;
         iso3?: string | undefined;
         destination?: string | string[] | undefined;
@@ -2372,7 +2332,7 @@ declare const HBookingSchema: z.ZodObject<{
         bundle_id?: string | undefined;
         iata_code?: string | undefined;
         traffic_policy?: string | undefined;
-    }>;
+    }[];
     departure_date: Date;
     return_date: Date;
     promo_codes: string[];
@@ -2422,7 +2382,7 @@ declare const HBookingSchema: z.ZodObject<{
         should_send_message: boolean;
         channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
     };
-    package_specifications: Record<string, {
+    package_specifications: {
         size?: string | undefined;
         iso3?: string | undefined;
         destination?: string | string[] | undefined;
@@ -2432,7 +2392,7 @@ declare const HBookingSchema: z.ZodObject<{
         bundle_id?: string | undefined;
         iata_code?: string | undefined;
         traffic_policy?: string | undefined;
-    }>;
+    }[];
     departure_date: Date;
     return_date: Date;
     promo_codes: string[];
@@ -8340,7 +8300,7 @@ declare const bookingAppSchema: z.ZodObject<{
     is_processed_for_esim_restoration: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     is_pseudonymized: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     import_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    package_specifications: z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodObject<{
+    package_specifications: z.ZodArray<z.ZodObject<{
         destination: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodArray<z.ZodString, "many">]>;
         iso3: z.ZodOptional<z.ZodString>;
         size: z.ZodOptional<z.ZodString>;
@@ -8370,27 +8330,7 @@ declare const bookingAppSchema: z.ZodObject<{
         bundle_id?: string | undefined;
         iata_code?: string | undefined;
         traffic_policy?: string | undefined;
-    }>>, Record<string, {
-        size?: string | undefined;
-        iso3?: string | undefined;
-        destination?: string | string[] | undefined;
-        package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
-        package_duration?: number | undefined;
-        package_id?: string | undefined;
-        bundle_id?: string | undefined;
-        iata_code?: string | undefined;
-        traffic_policy?: string | undefined;
-    }>, Record<string, {
-        size?: string | undefined;
-        iso3?: string | undefined;
-        destination?: string | string[] | undefined;
-        package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
-        package_duration?: number | undefined;
-        package_id?: string | undefined;
-        bundle_id?: string | undefined;
-        iata_code?: string | undefined;
-        traffic_policy?: string | undefined;
-    }>>;
+    }>, "many">;
     departure_date: z.ZodEffects<z.ZodDate, Date, Date>;
     return_date: z.ZodEffects<z.ZodDate, Date, Date>;
     partner: z.ZodString;
@@ -8435,7 +8375,7 @@ declare const bookingAppSchema: z.ZodObject<{
         should_send_message: boolean;
         channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
     };
-    package_specifications: Record<string, {
+    package_specifications: {
         size?: string | undefined;
         iso3?: string | undefined;
         destination?: string | string[] | undefined;
@@ -8445,7 +8385,7 @@ declare const bookingAppSchema: z.ZodObject<{
         bundle_id?: string | undefined;
         iata_code?: string | undefined;
         traffic_policy?: string | undefined;
-    }>;
+    }[];
     departure_date: Date;
     return_date: Date;
     promo_codes: string[];
@@ -8495,7 +8435,7 @@ declare const bookingAppSchema: z.ZodObject<{
         should_send_message: boolean;
         channels: ("EMAIL" | "WHATSAPP" | "PUSH_NOTIFICATION" | "SMS")[];
     };
-    package_specifications: Record<string, {
+    package_specifications: {
         size?: string | undefined;
         iso3?: string | undefined;
         destination?: string | string[] | undefined;
@@ -8505,7 +8445,7 @@ declare const bookingAppSchema: z.ZodObject<{
         bundle_id?: string | undefined;
         iata_code?: string | undefined;
         traffic_policy?: string | undefined;
-    }>;
+    }[];
     departure_date: Date;
     return_date: Date;
     promo_codes: string[];
