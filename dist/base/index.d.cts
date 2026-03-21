@@ -1195,7 +1195,7 @@ declare const HPartnerSchema: z.ZodObject<{
     type: z.ZodOptional<z.ZodNullable<z.ZodEnum<["wholesale", "reseller", "platform", "agent"]>>>;
     is_active: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    gender: z.ZodOptional<z.ZodEnum<["classic", "universal"]>>;
+    esim_type: z.ZodOptional<z.ZodEnum<["classic", "universal"]>>;
     contact: z.ZodObject<{
         name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         email: z.ZodNullable<z.ZodString>;
@@ -2195,10 +2195,10 @@ declare const HPartnerSchema: z.ZodObject<{
         url?: string | null | undefined;
         api_key?: string | null | undefined;
     };
-    gender?: "classic" | "universal" | undefined;
     type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
     is_active?: boolean | null | undefined;
     external_id?: string | null | undefined;
+    esim_type?: "classic" | "universal" | undefined;
 }, {
     id: string;
     name: string;
@@ -2384,10 +2384,10 @@ declare const HPartnerSchema: z.ZodObject<{
             promocode_redemption?: boolean | undefined;
         } | undefined;
     };
-    gender?: "classic" | "universal" | undefined;
     type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
     is_active?: boolean | null | undefined;
     external_id?: string | null | undefined;
+    esim_type?: "classic" | "universal" | undefined;
 }>;
 declare const HPriceListSchema: z.ZodObject<{
     id: z.ZodString;
@@ -2807,7 +2807,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     type: z.ZodOptional<z.ZodNullable<z.ZodEnum<["wholesale", "reseller", "platform", "agent"]>>>;
     is_active: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     external_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    gender: z.ZodOptional<z.ZodEnum<["classic", "universal"]>>;
+    esim_type: z.ZodOptional<z.ZodEnum<["classic", "universal"]>>;
     contact: z.ZodObject<{
         name: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         email: z.ZodNullable<z.ZodString>;
@@ -3807,10 +3807,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
         url?: string | null | undefined;
         api_key?: string | null | undefined;
     };
-    gender?: "classic" | "universal" | undefined;
     type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
     is_active?: boolean | null | undefined;
     external_id?: string | null | undefined;
+    esim_type?: "classic" | "universal" | undefined;
 }, {
     id: string;
     name: string;
@@ -3996,10 +3996,10 @@ declare const HPartnerAppSchema: z.ZodObject<{
             promocode_redemption?: boolean | undefined;
         } | undefined;
     };
-    gender?: "classic" | "universal" | undefined;
     type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
     is_active?: boolean | null | undefined;
     external_id?: string | null | undefined;
+    esim_type?: "classic" | "universal" | undefined;
 }>;
 declare const HPlatformSettingsSchema: z.ZodObject<{
     package_strategy: z.ZodOptional<z.ZodNullable<z.ZodObject<{
