@@ -61,12 +61,13 @@ import {
 } from './specs/live_activity';
 import { scheduledJobSchemaSpec, jobStatusSchema } from './specs/scheduled_job';
 import { autoInstallationEventsSchemaSpec } from './specs/auto_installation_events';
+import { webappRedirectTokenSchemaSpec } from './specs/webapp_redirect_token';
 import { z } from 'zod';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 
 
 import { convertFirestoreToJS, convertJSToFirestore } from './utils/firestoreTransformUtils';
-import { HPackage, HPackageQueue, HPartner, HPriceList, HPromoCode, HUserTouchpoints } from './index.client';
+import { HPackage, HPackageQueue, HPartner, HPriceList, HPromoCode, HUserTouchpoints, HWebappRedirectToken } from './index.client';
 import { buildClientSchema } from './builders/client';
 
 export {
@@ -99,7 +100,8 @@ export {
     lastUpdateSchema,
     scheduledJobSchemaSpec,
     jobStatusSchema,
-    autoInstallationEventsSchemaSpec
+    autoInstallationEventsSchemaSpec,
+    webappRedirectTokenSchemaSpec
 };
 
 
@@ -137,6 +139,7 @@ export const LoginRequestSchema = buildServerSchema(loginRequestSchemaSpec);
 export const LiveActivitySchema = buildServerSchema(liveActivitySchemaSpec);
 export const ScheduledJobSchema = buildServerSchema(scheduledJobSchemaSpec);
 export const AutoInstallationEventsSchema = buildServerSchema(autoInstallationEventsSchemaSpec);
+export const WebappRedirectTokenSchema = buildServerSchema(webappRedirectTokenSchemaSpec);
 
 // Additional lower-level schemas
 export const AddressSchema = addressSchema;
@@ -187,6 +190,7 @@ export type LoginRequest = z.infer<typeof LoginRequestSchema>;
 export type LiveActivity = z.infer<typeof LiveActivitySchema>;
 export type ScheduledJob = z.infer<typeof ScheduledJobSchema>;
 export type AutoInstallationEvents = z.infer<typeof AutoInstallationEventsSchema>;
+export type WebappRedirectToken = z.infer<typeof WebappRedirectTokenSchema>;
 export type LiveActivityStatus = z.infer<typeof liveActivityStatusSchema>;
 export type LiveActivityEvent = z.infer<typeof liveActivityEventSchema>;
 export type LiveActivityReason = z.infer<typeof liveActivityReasonSchema>;
@@ -292,6 +296,14 @@ export const userTouchpointsToFirestore = (userTouchpoints: HUserTouchpoints): U
 }
 
 
+export const webappRedirectTokenFromFirestore = (doc: WebappRedirectToken): HWebappRedirectToken => {
+    return convertFirestoreToJS(doc, webappRedirectTokenSchemaSpec);
+}
+
+export const webappRedirectTokenToFirestore = (doc: HWebappRedirectToken): WebappRedirectToken => {
+    return convertJSToFirestore(doc, webappRedirectTokenSchemaSpec);
+}
+
 export const bookingAppSchema = buildClientSchema(bookingSchemaSpec);
 export const partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 export const destinationAppSchema = buildClientSchema(destinationSchemaSpec);
@@ -307,5 +319,5 @@ export { createModelConverters } from './utils/modelConverterFactory';
 export { createConvertJSToFirestore, createConvertFirestoreToJS } from './utils/firestoreTransformUtils';
 export { FirebaseService, createFirebaseService } from './services/firebase';
 
-export { USER_COLLECTION, PACKAGE_QUEUE_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, BOOKING_COLLECTION, ROLE_COLLECTION, PERMISSION_COLLECTION, TRAFFIC_POLICY_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, COUNTRY_COLLECTION, ESIM_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, MESSAGE_COLLECTION, CURRENCY_COLLECTION, API_LOG_COLLECTION, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, USER_TOUCHPOINTS_COLLECTION, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, TAG_COLLECTION, LIVE_ACTIVITY_COLLECTION, SCHEDULED_JOB_COLLECTION, AUTO_INSTALLATION_EVENTS_COLLECTION } from './specs/common';
+export { USER_COLLECTION, PACKAGE_QUEUE_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, BOOKING_COLLECTION, ROLE_COLLECTION, PERMISSION_COLLECTION, TRAFFIC_POLICY_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, COUNTRY_COLLECTION, ESIM_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, MESSAGE_COLLECTION, CURRENCY_COLLECTION, API_LOG_COLLECTION, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, USER_TOUCHPOINTS_COLLECTION, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, TAG_COLLECTION, LIVE_ACTIVITY_COLLECTION, SCHEDULED_JOB_COLLECTION, AUTO_INSTALLATION_EVENTS_COLLECTION, WEBAPP_REDIRECT_TOKEN_COLLECTION } from './specs/common';
 

@@ -72,6 +72,7 @@ import { tagSchemaSpec } from "./specs/tag";
 import { liveActivitySchemaSpec } from "./specs/live_activity";
 import { scheduledJobSchemaSpec, jobStatusSchema } from "./specs/scheduled_job";
 import { autoInstallationEventsSchemaSpec } from "./specs/auto_installation_events";
+import { webappRedirectTokenSchemaSpec } from "./specs/webapp_redirect_token";
 
 /** ZOD SCHEMAS */
 export const HUserSchema = buildClientSchema(userSchemaSpec);
@@ -124,6 +125,7 @@ export const HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 export const HLiveActivitySchema = buildClientSchema(liveActivitySchemaSpec);
 export const HScheduledJobSchema = buildClientSchema(scheduledJobSchemaSpec);
 export const HAutoInstallationEventsSchema = buildClientSchema(autoInstallationEventsSchemaSpec);
+export const HWebappRedirectTokenSchema = buildClientSchema(webappRedirectTokenSchemaSpec);
 // Additional lower-level schemas
 export const HAddressSchema = addressSchema;
 export const HRegistrationSchema = registrationSchema;
@@ -173,6 +175,7 @@ export type HLoginRequest = z.infer<typeof HLoginRequestSchema>;
 export type HLiveActivity = z.infer<typeof HLiveActivitySchema>;
 export type HScheduledJob = z.infer<typeof HScheduledJobSchema>;
 export type HAutoInstallationEvents = z.infer<typeof HAutoInstallationEventsSchema>;
+export type HWebappRedirectToken = z.infer<typeof HWebappRedirectTokenSchema>;
 // Additional lower-level types
 export type HAddress = z.infer<typeof HAddressSchema>;
 export type HRegistration = z.infer<typeof HRegistrationSchema>;
