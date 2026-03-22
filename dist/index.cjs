@@ -154,17 +154,10 @@ var buildServerSchema = (spec, path = []) => {
       refSchema = refSchema.optional();
     return refSchema;
   }
-  if (typeof spec === "object" && !("_type" in spec)) {
-    const shape = {};
-    for (const [key, val] of Object.entries(spec)) {
-      shape[key] = buildServerSchema(val, [...path, key]);
-    }
-    return zod.z.object(shape);
-  }
   if (typeof spec === "object" && "_type" in spec && spec._type === "object" && "of" in spec) {
     return wrapObjectSchema(spec, path, buildServerSchema);
   }
-  if (isSchemaSpec(spec) || typeof spec === "object" && "_type" in spec && spec._type === "object") {
+  if (isSchemaSpec(spec) || typeof spec === "object" && spec !== null) {
     return wrapPlainObjectSchema(spec, path, buildServerSchema);
   }
   throw new Error(`Unknown or malformed spec at "${pathString}": ${JSON.stringify(spec)}`);
@@ -1779,6 +1772,7 @@ var HBaseRewardSchema = baseRewardSchema;
 var HRewardMultipliersSchema = rewardMultipliersSchema;
 var HRewardPackageTypeSchema = rewardPackageTypeSchema;
 var HJobStatusSchema = jobStatusSchema;
+var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
 // src/utils/modelConverterFactory.ts
 function createModelConverters(db, modelSchemaSpec) {
@@ -1901,7 +1895,6 @@ var destinationAppSchema = buildClientSchema(destinationSchemaSpec);
 var destinationBundleAppSchema = buildClientSchema(destinationBundleSchemaSpec);
 var packageTemplateAppSchema = buildClientSchema(packageTemplateSchemaSpec);
 var promoPackageSpecificationAppSchema = buildClientSchema(packageSpecificationSchema);
-var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
 exports.API_LOG_COLLECTION = API_LOG_COLLECTION;
 exports.AUTO_INSTALLATION_EVENTS_COLLECTION = AUTO_INSTALLATION_EVENTS_COLLECTION;

@@ -82,7 +82,7 @@ describe("PromoCode Schema", () => {
         expect(roundtripClientObj.allowance_user).toBe(clientPromoCode.allowance_user);
         expect(roundtripClientObj.allowance_total).toBe(clientPromoCode.allowance_total);
         expect(roundtripClientObj.type).toBe(clientPromoCode.type);
-        expect(roundtripClientObj.package_specification.destination).toBe(clientPromoCode.package_specification.destination);
+        expect(roundtripClientObj.package_specification?.destination).toBe(clientPromoCode.package_specification?.destination);
         expect(roundtripClientObj.partner).toBe(clientPromoCode.partner);
         expect(roundtripClientObj.country).toBe(clientPromoCode.country);
         expect(roundtripClientObj.discount).toBe(clientPromoCode.discount);

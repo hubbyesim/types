@@ -37,7 +37,6 @@ import {
 } from './specs/partner';
 
 import { hubbyModelSpec } from './specs/common';
-import { SUPPORTED_LOCALES as LOCALES } from './constants';
 import { apiLogSchemaSpec } from './specs/apiLogs';
 import { userTouchpointsSchemaSpec } from './specs/userTouchpoints';
 import { 
@@ -310,9 +309,7 @@ export const destinationAppSchema = buildClientSchema(destinationSchemaSpec);
 export const destinationBundleAppSchema = buildClientSchema(destinationBundleSchemaSpec);
 export const packageTemplateAppSchema = buildClientSchema(packageTemplateSchemaSpec);
 export const promoPackageSpecificationAppSchema = buildClientSchema(promoPackageSpecificationSchema);
-// Export the type and constant
-export type SupportedLocales = typeof LOCALES[number];
-export const SUPPORTED_LOCALES = LOCALES;
+// SupportedLocales and SUPPORTED_LOCALES are already exported via './index.client'
 
 // Dependency Injection exports
 export { createModelConverters } from './utils/modelConverterFactory';
