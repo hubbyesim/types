@@ -1432,7 +1432,7 @@ var webappRedirectTokenSchemaSpec = markAsSchemaSpec({
   id: zod.z.string().nullable().optional(),
   token: zod.z.string(),
   external_user_id: zod.z.string(),
-  partner_id: zod.z.string(),
+  partner_id: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true, optional: true },
   consumed: zod.z.boolean(),
   consumed_at: timestampNullable,
   expires_at: timestampRequired,

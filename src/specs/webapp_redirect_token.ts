@@ -10,7 +10,7 @@ export const webappRedirectTokenSchemaSpec = markAsSchemaSpec({
     id: z.string().nullable().optional(),
     token: z.string(),
     external_user_id: z.string(),
-    partner_id: z.string(),
+    partner_id: { _type: 'docRef' as const, collection: PARTNER_COLLECTION, nullable: true, optional: true },
     consumed: z.boolean(),
     consumed_at: timestampNullable,
     expires_at: timestampRequired,

@@ -1968,7 +1968,12 @@ declare const webappRedirectTokenSchemaSpec: {
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     token: z.ZodString;
     external_user_id: z.ZodString;
-    partner_id: z.ZodString;
+    partner_id: {
+        _type: "docRef";
+        collection: string;
+        nullable: boolean;
+        optional: boolean;
+    };
     consumed: z.ZodBoolean;
     consumed_at: {
         _type: "timestamp";
