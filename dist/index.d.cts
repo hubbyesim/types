@@ -172,6 +172,13 @@ declare const userSchemaSpec: {
     push_to_start_token: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     custom_branding: z.ZodOptional<z.ZodNullable<z.ZodAny>>;
     messaging_contact_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    has_universal_esim: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
+    current_universal_esim: {
+        _type: "docRef";
+        collection: string;
+        optional: boolean;
+        nullable: boolean;
+    };
 };
 
 declare const bookingSchemaSpec: {
@@ -2032,6 +2039,8 @@ declare const HUserSchema: z.ZodObject<{
     push_to_start_token: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     custom_branding: z.ZodOptional<z.ZodNullable<z.ZodAny>>;
     messaging_contact_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    has_universal_esim: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
+    current_universal_esim: z.ZodString;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     name: string | null;
     email: string | null;
@@ -2051,6 +2060,7 @@ declare const HUserSchema: z.ZodObject<{
     last_seen: Date;
     created_at: Date;
     updated_at: Date;
+    current_universal_esim: string;
     id?: string | null | undefined;
     external_user_id?: string | null | undefined;
     stripe_id?: string | null | undefined;
@@ -2082,6 +2092,7 @@ declare const HUserSchema: z.ZodObject<{
     push_to_start_token?: string | null | undefined;
     custom_branding?: any;
     messaging_contact_id?: string | null | undefined;
+    has_universal_esim?: boolean | null | undefined;
 }, {
     name: string | null;
     email: string | null;
@@ -2101,6 +2112,7 @@ declare const HUserSchema: z.ZodObject<{
     last_seen: Date;
     created_at: Date;
     updated_at: Date;
+    current_universal_esim: string;
     id?: string | null | undefined;
     external_user_id?: string | null | undefined;
     stripe_id?: string | null | undefined;
@@ -2132,6 +2144,7 @@ declare const HUserSchema: z.ZodObject<{
     push_to_start_token?: string | null | undefined;
     custom_branding?: any;
     messaging_contact_id?: string | null | undefined;
+    has_universal_esim?: boolean | null | undefined;
 }>;
 declare const HPackageQueueSchema: z.ZodObject<{
     id: z.ZodString;

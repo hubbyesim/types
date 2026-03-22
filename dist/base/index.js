@@ -280,7 +280,9 @@ var userSchemaSpec = markAsSchemaSpec({
   updated_by: z.string().nullable().optional(),
   push_to_start_token: z.string().nullable().optional(),
   custom_branding: z.any().nullable().optional(),
-  messaging_contact_id: z.string().nullable().optional()
+  messaging_contact_id: z.string().nullable().optional(),
+  has_universal_esim: z.boolean().nullable().optional(),
+  current_universal_esim: { _type: "docRef", collection: ESIM_COLLECTION, optional: true, nullable: true }
 });
 var SUPPORTED_LOCALES = [
   "en-US",

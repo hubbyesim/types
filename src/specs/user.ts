@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { PARTNER_COLLECTION, PROFILE_COLLECTION, timestampNullableOptional, timestampRequired, timestampNullable, ROLE_COLLECTION, PERMISSION_COLLECTION } from './common';
+import { PARTNER_COLLECTION, PROFILE_COLLECTION, ESIM_COLLECTION, timestampNullableOptional, timestampRequired, timestampNullable, ROLE_COLLECTION, PERMISSION_COLLECTION } from './common';
 import { markAsSchemaSpec } from '../common'
 
 export const apiKeySpec = {
@@ -69,6 +69,8 @@ export const userSchemaSpec = markAsSchemaSpec({
     push_to_start_token: z.string().nullable().optional(),
     custom_branding: z.any().nullable().optional(),
     messaging_contact_id: z.string().nullable().optional(),
+    has_universal_esim: z.boolean().nullable().optional(),
+    current_universal_esim: {_type: 'docRef' as const, collection: ESIM_COLLECTION, optional: true, nullable: true},
 });
 
 export { packageQueueSchemaSpec, packageQueuePackageSpecificationSchema } from './package_queue';
