@@ -196,6 +196,7 @@ var LIVE_ACTIVITY_COLLECTION = "live_activities";
 var TAG_COLLECTION = "tags";
 var SCHEDULED_JOB_COLLECTION = "scheduled_jobs";
 var AUTO_INSTALLATION_EVENTS_COLLECTION = "auto_installation_events";
+var WEBAPP_REDIRECT_TOKEN_COLLECTION = "webapp_redirect_tokens";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: true };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
@@ -1434,6 +1435,19 @@ var autoInstallationEventsSchemaSpec = markAsSchemaSpec({
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true, optional: true },
   promo_code: { _type: "docRef", collection: PROMO_CODE_COLLECTION, nullable: true, optional: true }
 });
+var webappRedirectTokenSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string().nullable().optional(),
+  token: zod.z.string(),
+  external_user_id: zod.z.string(),
+  partner_id: zod.z.string(),
+  consumed: zod.z.boolean(),
+  consumed_at: timestampNullable,
+  expires_at: timestampRequired,
+  created_at: timestampRequired,
+  updated_at: timestampRequired,
+  created_by: { _type: "docRef", collection: "users", nullable: true, optional: true },
+  updated_by: { _type: "docRef", collection: "users", nullable: true, optional: true }
+});
 function createConvertJSToFirestore(db) {
   return function convertJSToFirestore2(input, spec) {
     if (input === void 0 || input === null)
@@ -1746,6 +1760,7 @@ var HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 var HLiveActivitySchema = buildClientSchema(liveActivitySchemaSpec);
 var HScheduledJobSchema = buildClientSchema(scheduledJobSchemaSpec);
 var HAutoInstallationEventsSchema = buildClientSchema(autoInstallationEventsSchemaSpec);
+var HWebappRedirectTokenSchema = buildClientSchema(webappRedirectTokenSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1819,6 +1834,7 @@ var LoginRequestSchema = buildServerSchema(loginRequestSchemaSpec);
 var LiveActivitySchema = buildServerSchema(liveActivitySchemaSpec);
 var ScheduledJobSchema = buildServerSchema(scheduledJobSchemaSpec);
 var AutoInstallationEventsSchema = buildServerSchema(autoInstallationEventsSchemaSpec);
+var WebappRedirectTokenSchema = buildServerSchema(webappRedirectTokenSchemaSpec);
 var AddressSchema = addressSchema;
 var RegistrationSchema = registrationSchema;
 var BankingDetailsSchema = bankingDetailsSchema;
@@ -1872,6 +1888,12 @@ var userTouchpointsFromFirestore = (userTouchpoints) => {
 };
 var userTouchpointsToFirestore = (userTouchpoints) => {
   return convertJSToFirestore(userTouchpoints, userTouchpointsSchemaSpec);
+};
+var webappRedirectTokenFromFirestore = (doc) => {
+  return convertFirestoreToJS(doc, webappRedirectTokenSchemaSpec);
+};
+var webappRedirectTokenToFirestore = (doc) => {
+  return convertJSToFirestore(doc, webappRedirectTokenSchemaSpec);
 };
 var bookingAppSchema = buildClientSchema(bookingSchemaSpec);
 var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
@@ -1961,6 +1983,7 @@ exports.HUserTouchpointsSchema = HUserTouchpointsSchema;
 exports.HVisualIdentityBannerSchema = HVisualIdentityBannerSchema;
 exports.HVisualIdentityBannersSchema = HVisualIdentityBannersSchema;
 exports.HVisualIdentitySchema = HVisualIdentitySchema;
+exports.HWebappRedirectTokenSchema = HWebappRedirectTokenSchema;
 exports.HubbyModelSchema = HubbyModelSchema;
 exports.JobStatusSchema = JobStatusSchema;
 exports.LIVE_ACTIVITY_COLLECTION = LIVE_ACTIVITY_COLLECTION;
@@ -2016,6 +2039,8 @@ exports.UserTouchpointsSchema = UserTouchpointsSchema;
 exports.VisualIdentityBannerSchema = VisualIdentityBannerSchema;
 exports.VisualIdentityBannersSchema = VisualIdentityBannersSchema;
 exports.VisualIdentitySchema = VisualIdentitySchema;
+exports.WEBAPP_REDIRECT_TOKEN_COLLECTION = WEBAPP_REDIRECT_TOKEN_COLLECTION;
+exports.WebappRedirectTokenSchema = WebappRedirectTokenSchema;
 exports.analyticsSpec = analyticsSpec;
 exports.apiLogSchemaSpec = apiLogSchemaSpec;
 exports.autoInstallationEventsSchemaSpec = autoInstallationEventsSchemaSpec;
@@ -2068,5 +2093,8 @@ exports.userToFirestore = userToFirestore;
 exports.userTouchpointsFromFirestore = userTouchpointsFromFirestore;
 exports.userTouchpointsSchemaSpec = userTouchpointsSchemaSpec;
 exports.userTouchpointsToFirestore = userTouchpointsToFirestore;
+exports.webappRedirectTokenFromFirestore = webappRedirectTokenFromFirestore;
+exports.webappRedirectTokenSchemaSpec = webappRedirectTokenSchemaSpec;
+exports.webappRedirectTokenToFirestore = webappRedirectTokenToFirestore;
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.cjs.map

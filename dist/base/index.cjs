@@ -1420,6 +1420,19 @@ var autoInstallationEventsSchemaSpec = markAsSchemaSpec({
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true, optional: true },
   promo_code: { _type: "docRef", collection: PROMO_CODE_COLLECTION, nullable: true, optional: true }
 });
+var webappRedirectTokenSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string().nullable().optional(),
+  token: zod.z.string(),
+  external_user_id: zod.z.string(),
+  partner_id: zod.z.string(),
+  consumed: zod.z.boolean(),
+  consumed_at: timestampNullable,
+  expires_at: timestampRequired,
+  created_at: timestampRequired,
+  updated_at: timestampRequired,
+  created_by: { _type: "docRef", collection: "users", nullable: true, optional: true },
+  updated_by: { _type: "docRef", collection: "users", nullable: true, optional: true }
+});
 
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
@@ -1472,6 +1485,7 @@ var HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 var HLiveActivitySchema = buildClientSchema(liveActivitySchemaSpec);
 var HScheduledJobSchema = buildClientSchema(scheduledJobSchemaSpec);
 var HAutoInstallationEventsSchema = buildClientSchema(autoInstallationEventsSchemaSpec);
+var HWebappRedirectTokenSchema = buildClientSchema(webappRedirectTokenSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1547,6 +1561,7 @@ exports.HUserTouchpointsSchema = HUserTouchpointsSchema;
 exports.HVisualIdentityBannerSchema = HVisualIdentityBannerSchema;
 exports.HVisualIdentityBannersSchema = HVisualIdentityBannersSchema;
 exports.HVisualIdentitySchema = HVisualIdentitySchema;
+exports.HWebappRedirectTokenSchema = HWebappRedirectTokenSchema;
 exports.HubbyModelSchema = HubbyModelSchema;
 exports.SUPPORTED_LOCALES = SUPPORTED_LOCALES2;
 //# sourceMappingURL=out.js.map
