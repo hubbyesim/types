@@ -27,18 +27,21 @@ declare const packageQueueSchemaSpec: {
         destination: z.ZodOptional<z.ZodString>;
         package_type: z.ZodOptional<z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>>;
         package_duration: z.ZodOptional<z.ZodNumber>;
+        traffic_policy: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         size?: string | undefined;
         iso3?: string | undefined;
         destination?: string | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         package_duration?: number | undefined;
+        traffic_policy?: string | undefined;
     }, {
         size?: string | undefined;
         iso3?: string | undefined;
         destination?: string | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         package_duration?: number | undefined;
+        traffic_policy?: string | undefined;
     }>;
     origin: z.ZodEnum<["booking", "payment"]>;
     showed_at: {
@@ -253,10 +256,10 @@ declare const bookingSchemaSpec: {
         destination?: string | string[] | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         package_duration?: number | undefined;
+        traffic_policy?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
         iata_code?: string | undefined;
-        traffic_policy?: string | undefined;
     }, {
         external_user_id?: string | null | undefined;
         size?: string | undefined;
@@ -264,10 +267,10 @@ declare const bookingSchemaSpec: {
         destination?: string | string[] | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         package_duration?: number | undefined;
+        traffic_policy?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
         iata_code?: string | undefined;
-        traffic_policy?: string | undefined;
     }>, "many">;
     departure_date: {
         _type: "timestamp";
@@ -811,10 +814,10 @@ declare const promoCodeSchemaSpec: {
         destination?: string | string[] | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         package_duration?: number | undefined;
+        traffic_policy?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
         iata_code?: string | undefined;
-        traffic_policy?: string | undefined;
     }, {
         external_user_id?: string | null | undefined;
         size?: string | undefined;
@@ -822,10 +825,10 @@ declare const promoCodeSchemaSpec: {
         destination?: string | string[] | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         package_duration?: number | undefined;
+        traffic_policy?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
         iata_code?: string | undefined;
-        traffic_policy?: string | undefined;
     }>>;
     external_user_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     valid_from: {
@@ -2202,18 +2205,21 @@ declare const HPackageQueueSchema: z.ZodObject<{
         destination: z.ZodOptional<z.ZodString>;
         package_type: z.ZodOptional<z.ZodEnum<["data-limited", "time-limited", "starter", "unlimited"]>>;
         package_duration: z.ZodOptional<z.ZodNumber>;
+        traffic_policy: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         size?: string | undefined;
         iso3?: string | undefined;
         destination?: string | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         package_duration?: number | undefined;
+        traffic_policy?: string | undefined;
     }, {
         size?: string | undefined;
         iso3?: string | undefined;
         destination?: string | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         package_duration?: number | undefined;
+        traffic_policy?: string | undefined;
     }>;
     origin: z.ZodEnum<["booking", "payment"]>;
     showed_at: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -2235,6 +2241,7 @@ declare const HPackageQueueSchema: z.ZodObject<{
         destination?: string | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         package_duration?: number | undefined;
+        traffic_policy?: string | undefined;
     };
     origin: "booking" | "payment";
     showed_at: Date;
@@ -2255,6 +2262,7 @@ declare const HPackageQueueSchema: z.ZodObject<{
         destination?: string | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         package_duration?: number | undefined;
+        traffic_policy?: string | undefined;
     };
     origin: "booking" | "payment";
     showed_at: Date;
@@ -2329,10 +2337,10 @@ declare const HBookingSchema: z.ZodObject<{
         destination?: string | string[] | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         package_duration?: number | undefined;
+        traffic_policy?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
         iata_code?: string | undefined;
-        traffic_policy?: string | undefined;
     }, {
         external_user_id?: string | null | undefined;
         size?: string | undefined;
@@ -2340,10 +2348,10 @@ declare const HBookingSchema: z.ZodObject<{
         destination?: string | string[] | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         package_duration?: number | undefined;
+        traffic_policy?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
         iata_code?: string | undefined;
-        traffic_policy?: string | undefined;
     }>, "many">;
     departure_date: z.ZodEffects<z.ZodDate, Date, Date>;
     return_date: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -2396,10 +2404,10 @@ declare const HBookingSchema: z.ZodObject<{
         destination?: string | string[] | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         package_duration?: number | undefined;
+        traffic_policy?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
         iata_code?: string | undefined;
-        traffic_policy?: string | undefined;
     }[];
     departure_date: Date;
     return_date: Date;
@@ -2458,10 +2466,10 @@ declare const HBookingSchema: z.ZodObject<{
         destination?: string | string[] | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         package_duration?: number | undefined;
+        traffic_policy?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
         iata_code?: string | undefined;
-        traffic_policy?: string | undefined;
     }[];
     departure_date: Date;
     return_date: Date;
@@ -3033,8 +3041,8 @@ declare const HPackageSchema: z.ZodObject<{
     updated_by: string;
     type: "data-limited" | "time-limited" | "starter" | "unlimited" | null;
     is_active: boolean;
-    external_id: string;
     traffic_policy: string;
+    external_id: string;
     price: number;
     provider: string;
     coverage_label: string | null;
@@ -3082,8 +3090,8 @@ declare const HPackageSchema: z.ZodObject<{
     updated_by: string;
     type: "data-limited" | "time-limited" | "starter" | "unlimited" | null;
     is_active: boolean;
-    external_id: string;
     traffic_policy: string;
+    external_id: string;
     price: number;
     provider: string;
     coverage_label: string | null;
@@ -3157,10 +3165,10 @@ declare const HPromoCodeSchema: z.ZodObject<{
         destination?: string | string[] | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         package_duration?: number | undefined;
+        traffic_policy?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
         iata_code?: string | undefined;
-        traffic_policy?: string | undefined;
     }, {
         external_user_id?: string | null | undefined;
         size?: string | undefined;
@@ -3168,10 +3176,10 @@ declare const HPromoCodeSchema: z.ZodObject<{
         destination?: string | string[] | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         package_duration?: number | undefined;
+        traffic_policy?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
         iata_code?: string | undefined;
-        traffic_policy?: string | undefined;
     }>>;
     external_user_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     valid_from: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -3215,10 +3223,10 @@ declare const HPromoCodeSchema: z.ZodObject<{
         destination?: string | string[] | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         package_duration?: number | undefined;
+        traffic_policy?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
         iata_code?: string | undefined;
-        traffic_policy?: string | undefined;
     } | undefined;
     countries?: string[] | undefined;
     package_size?: string | undefined;
@@ -3255,10 +3263,10 @@ declare const HPromoCodeSchema: z.ZodObject<{
         destination?: string | string[] | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         package_duration?: number | undefined;
+        traffic_policy?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
         iata_code?: string | undefined;
-        traffic_policy?: string | undefined;
     } | undefined;
     countries?: string[] | undefined;
     package_size?: string | undefined;
@@ -7630,10 +7638,10 @@ declare const HPromoPackageSpecificationSchema: z.ZodObject<{
     destination?: string | string[] | undefined;
     package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
     package_duration?: number | undefined;
+    traffic_policy?: string | undefined;
     package_id?: string | undefined;
     bundle_id?: string | undefined;
     iata_code?: string | undefined;
-    traffic_policy?: string | undefined;
 }, {
     external_user_id?: string | null | undefined;
     size?: string | undefined;
@@ -7641,10 +7649,10 @@ declare const HPromoPackageSpecificationSchema: z.ZodObject<{
     destination?: string | string[] | undefined;
     package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
     package_duration?: number | undefined;
+    traffic_policy?: string | undefined;
     package_id?: string | undefined;
     bundle_id?: string | undefined;
     iata_code?: string | undefined;
-    traffic_policy?: string | undefined;
 }>;
 declare const HVisualIdentityBannerSchema: z.ZodObject<{
     action: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -8089,10 +8097,10 @@ declare const PromoPackageSpecificationSchema: z.ZodObject<{
     destination?: string | string[] | undefined;
     package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
     package_duration?: number | undefined;
+    traffic_policy?: string | undefined;
     package_id?: string | undefined;
     bundle_id?: string | undefined;
     iata_code?: string | undefined;
-    traffic_policy?: string | undefined;
 }, {
     external_user_id?: string | null | undefined;
     size?: string | undefined;
@@ -8100,10 +8108,10 @@ declare const PromoPackageSpecificationSchema: z.ZodObject<{
     destination?: string | string[] | undefined;
     package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
     package_duration?: number | undefined;
+    traffic_policy?: string | undefined;
     package_id?: string | undefined;
     bundle_id?: string | undefined;
     iata_code?: string | undefined;
-    traffic_policy?: string | undefined;
 }>;
 declare const VisualIdentityBannerSchema: z.ZodObject<{
     action: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -8446,10 +8454,10 @@ declare const bookingAppSchema: z.ZodObject<{
         destination?: string | string[] | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         package_duration?: number | undefined;
+        traffic_policy?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
         iata_code?: string | undefined;
-        traffic_policy?: string | undefined;
     }, {
         external_user_id?: string | null | undefined;
         size?: string | undefined;
@@ -8457,10 +8465,10 @@ declare const bookingAppSchema: z.ZodObject<{
         destination?: string | string[] | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         package_duration?: number | undefined;
+        traffic_policy?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
         iata_code?: string | undefined;
-        traffic_policy?: string | undefined;
     }>, "many">;
     departure_date: z.ZodEffects<z.ZodDate, Date, Date>;
     return_date: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -8513,10 +8521,10 @@ declare const bookingAppSchema: z.ZodObject<{
         destination?: string | string[] | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         package_duration?: number | undefined;
+        traffic_policy?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
         iata_code?: string | undefined;
-        traffic_policy?: string | undefined;
     }[];
     departure_date: Date;
     return_date: Date;
@@ -8575,10 +8583,10 @@ declare const bookingAppSchema: z.ZodObject<{
         destination?: string | string[] | undefined;
         package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
         package_duration?: number | undefined;
+        traffic_policy?: string | undefined;
         package_id?: string | undefined;
         bundle_id?: string | undefined;
         iata_code?: string | undefined;
-        traffic_policy?: string | undefined;
     }[];
     departure_date: Date;
     return_date: Date;
@@ -10007,10 +10015,10 @@ declare const promoPackageSpecificationAppSchema: z.ZodObject<{
     destination?: string | string[] | undefined;
     package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
     package_duration?: number | undefined;
+    traffic_policy?: string | undefined;
     package_id?: string | undefined;
     bundle_id?: string | undefined;
     iata_code?: string | undefined;
-    traffic_policy?: string | undefined;
 }, {
     external_user_id?: string | null | undefined;
     size?: string | undefined;
@@ -10018,10 +10026,10 @@ declare const promoPackageSpecificationAppSchema: z.ZodObject<{
     destination?: string | string[] | undefined;
     package_type?: "data-limited" | "time-limited" | "starter" | "unlimited" | undefined;
     package_duration?: number | undefined;
+    traffic_policy?: string | undefined;
     package_id?: string | undefined;
     bundle_id?: string | undefined;
     iata_code?: string | undefined;
-    traffic_policy?: string | undefined;
 }>;
 
 export { API_LOG_COLLECTION, AUTO_INSTALLATION_EVENTS_COLLECTION, Address, AddressSchema, Analytics, AnalyticsSchema, ApiLog, ApiLogApiRequest, ApiLogApiResponse, ApiLogSchema, AutoInstallationEvents, AutoInstallationEventsSchema, BOOKING_COLLECTION, BankingDetails, BankingDetailsSchema, BaseReward, BaseRewardSchema, BondioPackage, BondioPackageSchema, Booking, BookingApiRequest, BookingApiResponse, BookingSchema, BookingStatus, BookingStatusSchema, COUNTRY_COLLECTION, CURRENCY_COLLECTION, CommunicationChannel, CommunicationChannelSchema, CommunicationOptions, CommunicationOptionsSchema, Country, CountrySchema, Currency, CurrencySchema, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, Destination, DestinationBundle, DestinationBundleSchema, DestinationSchema, ESIM, ESIMSchema, ESIM_COLLECTION, FirebaseService, HAddress, HAddressSchema, HAnalytics, HAnalyticsSchema, HApiLog, HApiLogSchema, HAutoInstallationEvents, HAutoInstallationEventsSchema, HBankingDetails, HBankingDetailsSchema, HBaseReward, HBaseRewardSchema, HBondioPackage, HBondioPackageSchema, HBooking, HBookingSchema, HBookingStatus, HBookingStatusSchema, HCommunicationChannel, HCommunicationChannelSchema, HCommunicationOptions, HCommunicationOptionsSchema, HCountry, HCountrySchema, HCurrency, HCurrencySchema, HDestination, HDestinationBundle, HDestinationBundleSchema, HDestinationSchema, HESIM, HESIMSchema, HFinancialProperties, HFinancialPropertiesSchema, HFreeEsimSchema, HHubbyModel, HJobStatus, HJobStatusSchema, HLiveActivity, HLiveActivitySchema, HLoginRequest, HLoginRequestSchema, HMessage, HMessageSchema, HPackage, HPackagePriceSchema, HPackageQueue, HPackageQueueSchema, HPackageSchema, HPackageTemplate, HPackageTemplateSchema, HPartner, HPartnerAppSchema, HPartnerContact, HPartnerContactSchema, HPartnerData, HPartnerDataSchema, HPartnerPackageSpecification, HPartnerPackageSpecificationSchema, HPartnerSchema, HPayment, HPaymentSchema, HPermission, HPermissionSchema, HPlatformSettingsSchema, HPriceList, HPriceListSchema, HPricingStrategySchema, HPromoCode, HPromoCodeSchema, HPromoPackageSpecification, HPromoPackageSpecificationSchema, HRegistration, HRegistrationSchema, HReview, HReviewSchema, HReviewSubmission, HReviewSubmissionSchema, HRewardMultipliers, HRewardMultipliersSchema, HRewardPackageType, HRewardPackageTypeSchema, HRewardStrategy, HRewardStrategySchema, HRole, HRoleSchema, HScheduleFilter, HScheduleFilterSchema, HScheduledJob, HScheduledJobSchema, HTag, HTagSchema, HTelnaPackage, HTelnaPackageSchema, HTrafficPolicy, HTrafficPolicySchema, HUser, HUserSchema, HUserTouchpoints, HUserTouchpointsSchema, HVisualIdentityBanner, HVisualIdentityBannerSchema, HVisualIdentityBannersSchema, HVisualIdentitySchema, HWebappRedirectToken, HWebappRedirectTokenSchema, HubbyModel, HubbyModelApp, HubbyModelFirestore, HubbyModelSchema, JobStatus, JobStatusSchema, LIVE_ACTIVITY_COLLECTION, LastUpdate, LiveActivity, LiveActivityEvent, LiveActivityReason, LiveActivitySchema, LiveActivityStatus, LoginRequest, LoginRequestSchema, MESSAGE_COLLECTION, Message, MessageSchema, PACKAGE_COLLECTION, PACKAGE_QUEUE_COLLECTION, PARTNER_COLLECTION, PAYMENT_COLLECTION, PERMISSION_COLLECTION, PRICE_LIST_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, Package, PackagePrice, PackagePriceSchema, PackageQueue, PackageQueueSchema, PackageSchema, PackageSpecification, PackageTemplate, PackageTemplateSchema, Partner, PartnerApiRequest, PartnerApiResponse, PartnerContact, PartnerContactSchema, PartnerData, PartnerDataSchema, PartnerPackageSpecification, PartnerPackageSpecificationSchema, PartnerSchema, Payment, PaymentSchema, PlatformSettings, PlatformSettingsSchema, PriceList, PriceListApiRequest, PriceListApiResponse, PriceListSchema, PromoCode, PromoCodeSchema, PromoPackageSpecificationSchema, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, ROLE_COLLECTION, Registration, RegistrationSchema, Review, ReviewSchema, ReviewSubmission, ReviewSubmissionSchema, RewardMultipliers, RewardMultipliersSchema, RewardPackageType, RewardPackageTypeSchema, RewardStrategy, RewardStrategySchema, SCHEDULED_JOB_COLLECTION, SUPPORTED_LOCALES, Schedule, ScheduleFilter, ScheduleFilterSchema, ScheduleSchema, ScheduledJob, ScheduledJobSchema, SupportedLocales, TAG_COLLECTION, TRAFFIC_POLICY_COLLECTION, Tag, TagSchema, TelnaPackage, TelnaPackageSchema, TrafficPolicy, TrafficPolicySchema, USER_COLLECTION, USER_TOUCHPOINTS_COLLECTION, User, UserFirestore, UserFirestoreSchema, UserSchema, UserTouchpoints, UserTouchpointsSchema, VisualIdentity, VisualIdentityBanner, VisualIdentityBannerSchema, VisualIdentityBannerStrategy, VisualIdentityBanners, VisualIdentityBannersSchema, VisualIdentitySchema, WEBAPP_REDIRECT_TOKEN_COLLECTION, WebappRedirectToken, WebappRedirectTokenSchema, analyticsSpec, apiLogSchemaSpec, autoInstallationEventsSchemaSpec, bookingAppSchema, bookingSchemaSpec, countrySchemaSpec, createConvertFirestoreToJS, createConvertJSToFirestore, createFirebaseService, createModelConverters, currencySchemaSpec, destinationAppSchema, destinationBundleAppSchema, destinationBundleSchemaSpec, destinationSchemaSpec, esimSchemaSpec, jobStatusSchema, lastUpdateSchema, liveActivityEventSchema, liveActivityReasonSchema, liveActivitySchemaSpec, liveActivityStatusSchema, loginRequestSchemaSpec, messageSchemaSpec, packageQueueFromFirestore, packageQueueSchemaSpec, packageQueueToFirestore, packageSchemaSpec, packageTemplateAppSchema, packageTemplateSchemaSpec, partnerAppSchema, partnerFromFirestore, partnerSchemaSpec, partnerToFirestore, paymentSchemaSpec, priceListFromFirestore, priceListSchemaSpec, priceListToFirestore, promoCodeFromFirestore, promoCodeSchemaSpec, promoCodeToFirestore, promoPackageSpecificationAppSchema, reviewSchemaSpec, reviewSubmissionSchemaSpec, scheduledJobSchemaSpec, tagSchemaSpec, userFromFirestore, userSchemaSpec, userToFirestore, userTouchpointsFromFirestore, userTouchpointsSchemaSpec, userTouchpointsToFirestore, webappRedirectTokenFromFirestore, webappRedirectTokenSchemaSpec, webappRedirectTokenToFirestore };

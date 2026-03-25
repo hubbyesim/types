@@ -14,6 +14,7 @@ export const packageQueuePackageSpecificationSchema = z.object({
     destination: z.string().optional(),
     package_type: z.enum(['data-limited', 'time-limited', 'starter', 'unlimited']).optional(),
     package_duration: z.number().optional(),
+    traffic_policy: z.string().optional(),
 });
 
 export const packageQueueSchemaSpec = markAsSchemaSpec({

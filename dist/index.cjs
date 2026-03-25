@@ -223,7 +223,8 @@ var packageQueuePackageSpecificationSchema = zod.z.object({
   iso3: zod.z.string().optional(),
   destination: zod.z.string().optional(),
   package_type: zod.z.enum(["data-limited", "time-limited", "starter", "unlimited"]).optional(),
-  package_duration: zod.z.number().optional()
+  package_duration: zod.z.number().optional(),
+  traffic_policy: zod.z.string().optional()
 });
 var packageQueueSchemaSpec = markAsSchemaSpec({
   id: zod.z.string(),
