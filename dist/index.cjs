@@ -596,7 +596,9 @@ var paymentSchemaSpec = markAsSchemaSpec({
     partner_name: zod.z.string().optional(),
     locale: zod.z.string().optional()
   }).optional(),
-  custom_branding: zod.z.any().nullable().optional()
+  custom_branding: zod.z.any().nullable().optional(),
+  customer_currency: zod.z.string().optional(),
+  amount_customer_currency: zod.z.number().optional()
 });
 var analyticsSpec = markAsSchemaSpec({
   ...hubbyModelSpec,

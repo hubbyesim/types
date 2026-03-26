@@ -59,4 +59,6 @@ export const paymentSchemaSpec = markAsSchemaSpec({
     }).optional(),
 
     custom_branding: z.any().nullable().optional(),
+    customer_currency: z.string().optional(),
+    amount_customer_currency: z.number().optional(),
 });

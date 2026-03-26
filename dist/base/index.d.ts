@@ -710,6 +710,8 @@ declare const HPaymentSchema: z.ZodObject<{
         partner_name?: string | undefined;
     }>>;
     custom_branding: z.ZodOptional<z.ZodNullable<z.ZodAny>>;
+    customer_currency: z.ZodOptional<z.ZodString>;
+    amount_customer_currency: z.ZodOptional<z.ZodNumber>;
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -761,6 +763,8 @@ declare const HPaymentSchema: z.ZodObject<{
         affiliateId?: string | null | undefined;
         partner_name?: string | undefined;
     } | undefined;
+    customer_currency?: string | undefined;
+    amount_customer_currency?: number | undefined;
 }, {
     source: "platform" | "app" | "webapp";
     partner: string;
@@ -807,6 +811,8 @@ declare const HPaymentSchema: z.ZodObject<{
         affiliateId?: string | null | undefined;
         partner_name?: string | undefined;
     } | undefined;
+    customer_currency?: string | undefined;
+    amount_customer_currency?: number | undefined;
 }>;
 declare const HMessageSchema: z.ZodObject<{
     id: z.ZodString;
