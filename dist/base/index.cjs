@@ -556,7 +556,8 @@ var paymentSchemaSpec = markAsSchemaSpec({
     booking_id: zod.z.string().nullable().optional(),
     discount_amount: zod.z.string().optional(),
     is_special_offer: zod.z.boolean().optional(),
-    special_offer_discount: zod.z.number().optional()
+    special_offer_discount: zod.z.number().optional(),
+    monetization_discount_percent: zod.z.number().optional()
   }).optional(),
   webapp_platform_payment_properties: zod.z.object({
     promo_codes: zod.z.array(zod.z.string()).optional(),
