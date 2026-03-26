@@ -308,6 +308,7 @@ var packageSpecificationSchema = zod.z.object({
 var promoCodeSchemaSpec = markAsSchemaSpec({
   id: zod.z.string(),
   redeemed_at: timestampNullableOptional,
+  special_offer_redeemed_at: timestampNullableOptional,
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: zod.z.string().nullable(),

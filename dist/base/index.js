@@ -306,6 +306,7 @@ var packageSpecificationSchema = z.object({
 var promoCodeSchemaSpec = markAsSchemaSpec({
   id: z.string(),
   redeemed_at: timestampNullableOptional,
+  special_offer_redeemed_at: timestampNullableOptional,
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: z.string().nullable(),

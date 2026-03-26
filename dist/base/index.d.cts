@@ -1038,6 +1038,7 @@ declare const HPackageSchema: z.ZodObject<{
 declare const HPromoCodeSchema: z.ZodObject<{
     id: z.ZodString;
     redeemed_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    special_offer_redeemed_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodNullable<z.ZodString>;
@@ -1106,6 +1107,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
     country: string;
     package: string;
     redeemed_at: Date;
+    special_offer_redeemed_at: Date;
     claimed_at: Date;
     allowance_user: number;
     allowance_total: number;
@@ -1144,6 +1146,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
     country: string;
     package: string;
     redeemed_at: Date;
+    special_offer_redeemed_at: Date;
     claimed_at: Date;
     allowance_user: number;
     allowance_total: number;
