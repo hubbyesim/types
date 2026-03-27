@@ -835,7 +835,9 @@ var platformSettingsSchema = zod.z.object({
     discount_percentage: zod.z.number().min(0).max(100)
   }).nullable().optional(),
   account_manager: zod.z.string().nullable().optional(),
-  external_sales_partner_manager: zod.z.string().nullable().optional()
+  external_sales_partner_manager: zod.z.string().nullable().optional(),
+  use_new_design: zod.z.boolean().optional().default(false),
+  require_phone_verification: zod.z.boolean().optional().default(false)
 });
 markAsSchemaSpec({
   destination: zod.z.string(),
@@ -989,7 +991,9 @@ var platformSettingsSchemaSpec = markAsSchemaSpec({
     optional: true
   },
   sales_partner: zod.z.string().nullable().optional(),
-  external_sales_partner_manager: zod.z.string().nullable().optional()
+  external_sales_partner_manager: zod.z.string().nullable().optional(),
+  use_new_design: zod.z.boolean().optional().default(false),
+  require_phone_verification: zod.z.boolean().optional().default(false)
 });
 var webhookSettingsSchema = zod.z.object({
   url: zod.z.string().url().nullable().optional(),

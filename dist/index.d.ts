@@ -1138,6 +1138,8 @@ declare const partnerSchemaSpec: {
         };
         sales_partner: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         external_sales_partner_manager: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        use_new_design: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        require_phone_verification: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
     };
     tags: {
         _type: "array";
@@ -3647,6 +3649,8 @@ declare const HPartnerSchema: z.ZodObject<{
         account_manager: z.ZodString;
         sales_partner: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         external_sales_partner_manager: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        use_new_design: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        require_phone_verification: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy: {
             name: string;
@@ -3730,6 +3734,8 @@ declare const HPartnerSchema: z.ZodObject<{
             depletion: boolean;
         };
         account_manager: string;
+        use_new_design: boolean;
+        require_phone_verification: boolean;
         sales_partner?: string | null | undefined;
         external_sales_partner_manager?: string | null | undefined;
     }, {
@@ -3817,6 +3823,8 @@ declare const HPartnerSchema: z.ZodObject<{
         account_manager: string;
         sales_partner?: string | null | undefined;
         external_sales_partner_manager?: string | null | undefined;
+        use_new_design?: boolean | undefined;
+        require_phone_verification?: boolean | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
         slug: z.ZodString;
@@ -4050,6 +4058,8 @@ declare const HPartnerSchema: z.ZodObject<{
             depletion: boolean;
         };
         account_manager: string;
+        use_new_design: boolean;
+        require_phone_verification: boolean;
         sales_partner?: string | null | undefined;
         external_sales_partner_manager?: string | null | undefined;
     };
@@ -4240,6 +4250,8 @@ declare const HPartnerSchema: z.ZodObject<{
         account_manager: string;
         sales_partner?: string | null | undefined;
         external_sales_partner_manager?: string | null | undefined;
+        use_new_design?: boolean | undefined;
+        require_phone_verification?: boolean | undefined;
     };
     tags: {
         name: string;
@@ -5256,6 +5268,8 @@ declare const HPartnerAppSchema: z.ZodObject<{
         account_manager: z.ZodString;
         sales_partner: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         external_sales_partner_manager: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        use_new_design: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        require_phone_verification: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy: {
             name: string;
@@ -5339,6 +5353,8 @@ declare const HPartnerAppSchema: z.ZodObject<{
             depletion: boolean;
         };
         account_manager: string;
+        use_new_design: boolean;
+        require_phone_verification: boolean;
         sales_partner?: string | null | undefined;
         external_sales_partner_manager?: string | null | undefined;
     }, {
@@ -5426,6 +5442,8 @@ declare const HPartnerAppSchema: z.ZodObject<{
         account_manager: string;
         sales_partner?: string | null | undefined;
         external_sales_partner_manager?: string | null | undefined;
+        use_new_design?: boolean | undefined;
+        require_phone_verification?: boolean | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
         slug: z.ZodString;
@@ -5659,6 +5677,8 @@ declare const HPartnerAppSchema: z.ZodObject<{
             depletion: boolean;
         };
         account_manager: string;
+        use_new_design: boolean;
+        require_phone_verification: boolean;
         sales_partner?: string | null | undefined;
         external_sales_partner_manager?: string | null | undefined;
     };
@@ -5849,6 +5869,8 @@ declare const HPartnerAppSchema: z.ZodObject<{
         account_manager: string;
         sales_partner?: string | null | undefined;
         external_sales_partner_manager?: string | null | undefined;
+        use_new_design?: boolean | undefined;
+        require_phone_verification?: boolean | undefined;
     };
     tags: {
         name: string;
@@ -6149,7 +6171,11 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
     }>>>;
     account_manager: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     external_sales_partner_manager: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    use_new_design: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+    require_phone_verification: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
 }, "strip", z.ZodTypeAny, {
+    use_new_design: boolean;
+    require_phone_verification: boolean;
     package_strategy?: {
         name: string;
         parameters?: any;
@@ -6319,6 +6345,8 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
     } | null | undefined;
     account_manager?: string | null | undefined;
     external_sales_partner_manager?: string | null | undefined;
+    use_new_design?: boolean | undefined;
+    require_phone_verification?: boolean | undefined;
 }>;
 declare const HVisualIdentitySchema: z.ZodObject<any, z.UnknownKeysParam, z.ZodTypeAny, {
     [x: string]: any;
@@ -8924,6 +8952,8 @@ declare const partnerAppSchema: z.ZodObject<{
         account_manager: z.ZodString;
         sales_partner: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         external_sales_partner_manager: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        use_new_design: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        require_phone_verification: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
     }, z.UnknownKeysParam, z.ZodTypeAny, {
         package_strategy: {
             name: string;
@@ -9007,6 +9037,8 @@ declare const partnerAppSchema: z.ZodObject<{
             depletion: boolean;
         };
         account_manager: string;
+        use_new_design: boolean;
+        require_phone_verification: boolean;
         sales_partner?: string | null | undefined;
         external_sales_partner_manager?: string | null | undefined;
     }, {
@@ -9094,6 +9126,8 @@ declare const partnerAppSchema: z.ZodObject<{
         account_manager: string;
         sales_partner?: string | null | undefined;
         external_sales_partner_manager?: string | null | undefined;
+        use_new_design?: boolean | undefined;
+        require_phone_verification?: boolean | undefined;
     }>;
     tags: z.ZodArray<z.ZodObject<{
         slug: z.ZodString;
@@ -9327,6 +9361,8 @@ declare const partnerAppSchema: z.ZodObject<{
             depletion: boolean;
         };
         account_manager: string;
+        use_new_design: boolean;
+        require_phone_verification: boolean;
         sales_partner?: string | null | undefined;
         external_sales_partner_manager?: string | null | undefined;
     };
@@ -9517,6 +9553,8 @@ declare const partnerAppSchema: z.ZodObject<{
         account_manager: string;
         sales_partner?: string | null | undefined;
         external_sales_partner_manager?: string | null | undefined;
+        use_new_design?: boolean | undefined;
+        require_phone_verification?: boolean | undefined;
     };
     tags: {
         name: string;
