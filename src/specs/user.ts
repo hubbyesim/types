@@ -46,6 +46,7 @@ export const userSchemaSpec = markAsSchemaSpec({
     phone_model: z.string().nullable().optional(),
     phone_os: z.string().nullable().optional(),
     phone_os_version: z.string().nullable().optional(),
+    phone_number: z.string().nullable().optional(),
     ios: z.boolean().nullable().optional(),
     has_card_saved: z.boolean().nullable().optional(),
     admin: z.boolean().nullable().optional(),

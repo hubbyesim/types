@@ -22,6 +22,7 @@ declare const userSchemaSpec: {
     phone_model: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phone_os: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phone_os_version: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     ios: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     has_card_saved: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     admin: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
@@ -1914,6 +1915,7 @@ declare const HUserSchema: z.ZodObject<{
     phone_model: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phone_os: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phone_os_version: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     ios: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     has_card_saved: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     admin: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
@@ -2002,6 +2004,7 @@ declare const HUserSchema: z.ZodObject<{
     phone_model?: string | null | undefined;
     phone_os?: string | null | undefined;
     phone_os_version?: string | null | undefined;
+    phone_number?: string | null | undefined;
     has_card_saved?: boolean | null | undefined;
     admin?: boolean | null | undefined;
     profileRef?: string | null | undefined;
@@ -2051,6 +2054,7 @@ declare const HUserSchema: z.ZodObject<{
     phone_model?: string | null | undefined;
     phone_os?: string | null | undefined;
     phone_os_version?: string | null | undefined;
+    phone_number?: string | null | undefined;
     has_card_saved?: boolean | null | undefined;
     admin?: boolean | null | undefined;
     profileRef?: string | null | undefined;

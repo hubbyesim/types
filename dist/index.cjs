@@ -266,6 +266,7 @@ var userSchemaSpec = markAsSchemaSpec({
   phone_model: zod.z.string().nullable().optional(),
   phone_os: zod.z.string().nullable().optional(),
   phone_os_version: zod.z.string().nullable().optional(),
+  phone_number: zod.z.string().nullable().optional(),
   ios: zod.z.boolean().nullable().optional(),
   has_card_saved: zod.z.boolean().nullable().optional(),
   admin: zod.z.boolean().nullable().optional(),
