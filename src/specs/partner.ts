@@ -191,6 +191,7 @@ export const freeEsimSchema = z.object({
     booking_id_verification_pattern: z.string().nullable().optional(),
     allowance: z.number(),
     total_allowance: z.number(),
+    use_new_design: z.boolean().optional().default(false)
 });
 
 // Agent signup settings schema
@@ -243,8 +244,7 @@ export const platformSettingsSchema = z.object({
     }).nullable().optional(),
     account_manager: z.string().nullable().optional(),
     external_sales_partner_manager: z.string().nullable().optional(),
-    use_new_design: z.boolean().optional().default(false),
-    require_phone_verification: z.boolean().optional().default(false)
+    require_phone_otp: z.boolean().optional().default(false)
 });
 
 // ===== Exportable schema specs =====
