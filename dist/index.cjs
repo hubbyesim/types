@@ -267,6 +267,7 @@ var userSchemaSpec = markAsSchemaSpec({
   phone_os: zod.z.string().nullable().optional(),
   phone_os_version: zod.z.string().nullable().optional(),
   phone_number: zod.z.string().nullable().optional(),
+  phone_number_verified: timestampNullableOptional,
   ios: zod.z.boolean().nullable().optional(),
   has_card_saved: zod.z.boolean().nullable().optional(),
   admin: zod.z.boolean().nullable().optional(),
@@ -827,7 +828,8 @@ var freeEsimSchema = zod.z.object({
   booking_id_verification: zod.z.boolean().default(false),
   booking_id_verification_pattern: zod.z.string().nullable().optional(),
   allowance: zod.z.number(),
-  total_allowance: zod.z.number()
+  total_allowance: zod.z.number(),
+  require_phone_otp: zod.z.boolean().optional().default(false)
 });
 var agentSignupSettingsSchema = zod.z.object({
   slack_channel: zod.z.string().nullable().optional(),

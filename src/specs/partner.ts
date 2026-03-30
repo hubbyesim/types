@@ -191,6 +191,7 @@ export const freeEsimSchema = z.object({
     booking_id_verification_pattern: z.string().nullable().optional(),
     allowance: z.number(),
     total_allowance: z.number(),
+    require_phone_otp: z.boolean().optional().default(false)
 });
 
 // Agent signup settings schema

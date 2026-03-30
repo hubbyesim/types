@@ -23,6 +23,11 @@ declare const userSchemaSpec: {
     phone_os: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phone_os_version: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    phone_number_verified: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
     ios: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     has_card_saved: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     admin: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
@@ -991,6 +996,7 @@ declare const partnerSchemaSpec: {
                 booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
                 allowance: z.ZodNumber;
                 total_allowance: z.ZodNumber;
+                require_phone_otp: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
             };
             nullable: boolean;
             optional: boolean;
@@ -1916,6 +1922,7 @@ declare const HUserSchema: z.ZodObject<{
     phone_os: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phone_os_version: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    phone_number_verified: z.ZodEffects<z.ZodDate, Date, Date>;
     ios: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     has_card_saved: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     admin: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
@@ -1970,6 +1977,7 @@ declare const HUserSchema: z.ZodObject<{
 }, z.UnknownKeysParam, z.ZodTypeAny, {
     name: string | null;
     email: string | null;
+    phone_number_verified: Date;
     api_keys: {
         keys: Record<string, {
             expires_at: Date;
@@ -2020,6 +2028,7 @@ declare const HUserSchema: z.ZodObject<{
 }, {
     name: string | null;
     email: string | null;
+    phone_number_verified: Date;
     api_keys: {
         keys: Record<string, {
             expires_at: Date;
@@ -3419,6 +3428,7 @@ declare const HPartnerSchema: z.ZodObject<{
             booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             allowance: z.ZodNumber;
             total_allowance: z.ZodNumber;
+            require_phone_otp: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
         }, z.UnknownKeysParam, z.ZodTypeAny, {
             package_specification: {
                 destination: string;
@@ -3431,6 +3441,7 @@ declare const HPartnerSchema: z.ZodObject<{
             booking_id_verification: boolean;
             allowance: number;
             total_allowance: number;
+            require_phone_otp: boolean;
             booking_id_verification_pattern?: string | null | undefined;
         }, {
             package_specification: {
@@ -3445,6 +3456,7 @@ declare const HPartnerSchema: z.ZodObject<{
             total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
+            require_phone_otp?: boolean | undefined;
         }>;
         booking_defaults: z.ZodObject<{
             locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR", "hu-HU", "no-NO", "pt-PT", "pt-BR", "en-NZ", "zh-CN"]>;
@@ -3669,6 +3681,7 @@ declare const HPartnerSchema: z.ZodObject<{
             booking_id_verification: boolean;
             allowance: number;
             total_allowance: number;
+            require_phone_otp: boolean;
             booking_id_verification_pattern?: string | null | undefined;
         };
         booking_defaults: {
@@ -3755,6 +3768,7 @@ declare const HPartnerSchema: z.ZodObject<{
             total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
+            require_phone_otp?: boolean | undefined;
         };
         booking_defaults: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU" | "no-NO" | "pt-BR" | "en-NZ" | "zh-CN";
@@ -3989,6 +4003,7 @@ declare const HPartnerSchema: z.ZodObject<{
             booking_id_verification: boolean;
             allowance: number;
             total_allowance: number;
+            require_phone_otp: boolean;
             booking_id_verification_pattern?: string | null | undefined;
         };
         booking_defaults: {
@@ -4178,6 +4193,7 @@ declare const HPartnerSchema: z.ZodObject<{
             total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
+            require_phone_otp?: boolean | undefined;
         };
         booking_defaults: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU" | "no-NO" | "pt-BR" | "en-NZ" | "zh-CN";
@@ -5028,6 +5044,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             allowance: z.ZodNumber;
             total_allowance: z.ZodNumber;
+            require_phone_otp: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
         }, z.UnknownKeysParam, z.ZodTypeAny, {
             package_specification: {
                 destination: string;
@@ -5040,6 +5057,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             booking_id_verification: boolean;
             allowance: number;
             total_allowance: number;
+            require_phone_otp: boolean;
             booking_id_verification_pattern?: string | null | undefined;
         }, {
             package_specification: {
@@ -5054,6 +5072,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
+            require_phone_otp?: boolean | undefined;
         }>;
         booking_defaults: z.ZodObject<{
             locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR", "hu-HU", "no-NO", "pt-PT", "pt-BR", "en-NZ", "zh-CN"]>;
@@ -5278,6 +5297,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             booking_id_verification: boolean;
             allowance: number;
             total_allowance: number;
+            require_phone_otp: boolean;
             booking_id_verification_pattern?: string | null | undefined;
         };
         booking_defaults: {
@@ -5364,6 +5384,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
+            require_phone_otp?: boolean | undefined;
         };
         booking_defaults: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU" | "no-NO" | "pt-BR" | "en-NZ" | "zh-CN";
@@ -5598,6 +5619,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             booking_id_verification: boolean;
             allowance: number;
             total_allowance: number;
+            require_phone_otp: boolean;
             booking_id_verification_pattern?: string | null | undefined;
         };
         booking_defaults: {
@@ -5787,6 +5809,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
+            require_phone_otp?: boolean | undefined;
         };
         booking_defaults: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU" | "no-NO" | "pt-BR" | "en-NZ" | "zh-CN";
@@ -5922,6 +5945,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         allowance: z.ZodNumber;
         total_allowance: z.ZodNumber;
+        require_phone_otp: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
     }, "strip", z.ZodTypeAny, {
         package_specification: {
             destination: string;
@@ -5934,6 +5958,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         booking_id_verification: boolean;
         allowance: number;
         total_allowance: number;
+        require_phone_otp: boolean;
         booking_id_verification_pattern?: string | null | undefined;
     }, {
         package_specification: {
@@ -5948,6 +5973,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         total_allowance: number;
         booking_id_verification?: boolean | undefined;
         booking_id_verification_pattern?: string | null | undefined;
+        require_phone_otp?: boolean | undefined;
     }>>>;
     booking_defaults: z.ZodOptional<z.ZodNullable<z.ZodObject<{
         locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR", "hu-HU", "no-NO", "pt-PT", "pt-BR", "en-NZ", "zh-CN"]>;
@@ -6172,6 +6198,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         booking_id_verification: boolean;
         allowance: number;
         total_allowance: number;
+        require_phone_otp: boolean;
         booking_id_verification_pattern?: string | null | undefined;
     } | null | undefined;
     booking_defaults?: {
@@ -6258,6 +6285,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         total_allowance: number;
         booking_id_verification?: boolean | undefined;
         booking_id_verification_pattern?: string | null | undefined;
+        require_phone_otp?: boolean | undefined;
     } | null | undefined;
     booking_defaults?: {
         locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU" | "no-NO" | "pt-BR" | "en-NZ" | "zh-CN";
@@ -6441,6 +6469,7 @@ declare const HFreeEsimSchema: z.ZodObject<{
     booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     allowance: z.ZodNumber;
     total_allowance: z.ZodNumber;
+    require_phone_otp: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
 }, "strip", z.ZodTypeAny, {
     package_specification: {
         destination: string;
@@ -6453,6 +6482,7 @@ declare const HFreeEsimSchema: z.ZodObject<{
     booking_id_verification: boolean;
     allowance: number;
     total_allowance: number;
+    require_phone_otp: boolean;
     booking_id_verification_pattern?: string | null | undefined;
 }, {
     package_specification: {
@@ -6467,6 +6497,7 @@ declare const HFreeEsimSchema: z.ZodObject<{
     total_allowance: number;
     booking_id_verification?: boolean | undefined;
     booking_id_verification_pattern?: string | null | undefined;
+    require_phone_otp?: boolean | undefined;
 }>;
 declare const HAnalyticsSchema: z.ZodObject<{
     service: z.ZodString;
@@ -8696,6 +8727,7 @@ declare const partnerAppSchema: z.ZodObject<{
             booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             allowance: z.ZodNumber;
             total_allowance: z.ZodNumber;
+            require_phone_otp: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
         }, z.UnknownKeysParam, z.ZodTypeAny, {
             package_specification: {
                 destination: string;
@@ -8708,6 +8740,7 @@ declare const partnerAppSchema: z.ZodObject<{
             booking_id_verification: boolean;
             allowance: number;
             total_allowance: number;
+            require_phone_otp: boolean;
             booking_id_verification_pattern?: string | null | undefined;
         }, {
             package_specification: {
@@ -8722,6 +8755,7 @@ declare const partnerAppSchema: z.ZodObject<{
             total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
+            require_phone_otp?: boolean | undefined;
         }>;
         booking_defaults: z.ZodObject<{
             locale: z.ZodEnum<["en-US", "en-EU", "en-GB", "en-CA", "nl-NL", "de-DE", "fr-FR", "fr-CA", "it-IT", "es-ES", "cs-CZ", "pl-PL", "pt-PT", "fr-BE", "nl-BE", "de-AT", "de-CH", "fr-CH", "it-CH", "sv-SE", "sk-SK", "de-BE", "en-AU", "da-DK", "ko-KR", "hu-HU", "no-NO", "pt-PT", "pt-BR", "en-NZ", "zh-CN"]>;
@@ -8946,6 +8980,7 @@ declare const partnerAppSchema: z.ZodObject<{
             booking_id_verification: boolean;
             allowance: number;
             total_allowance: number;
+            require_phone_otp: boolean;
             booking_id_verification_pattern?: string | null | undefined;
         };
         booking_defaults: {
@@ -9032,6 +9067,7 @@ declare const partnerAppSchema: z.ZodObject<{
             total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
+            require_phone_otp?: boolean | undefined;
         };
         booking_defaults: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU" | "no-NO" | "pt-BR" | "en-NZ" | "zh-CN";
@@ -9266,6 +9302,7 @@ declare const partnerAppSchema: z.ZodObject<{
             booking_id_verification: boolean;
             allowance: number;
             total_allowance: number;
+            require_phone_otp: boolean;
             booking_id_verification_pattern?: string | null | undefined;
         };
         booking_defaults: {
@@ -9455,6 +9492,7 @@ declare const partnerAppSchema: z.ZodObject<{
             total_allowance: number;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
+            require_phone_otp?: boolean | undefined;
         };
         booking_defaults: {
             locale: "en-US" | "en-EU" | "en-GB" | "en-CA" | "nl-NL" | "de-DE" | "fr-FR" | "fr-CA" | "it-IT" | "es-ES" | "cs-CZ" | "pl-PL" | "pt-PT" | "fr-BE" | "nl-BE" | "de-AT" | "de-CH" | "fr-CH" | "it-CH" | "sv-SE" | "sk-SK" | "de-BE" | "en-AU" | "da-DK" | "ko-KR" | "hu-HU" | "no-NO" | "pt-BR" | "en-NZ" | "zh-CN";
