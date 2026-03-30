@@ -827,7 +827,8 @@ var freeEsimSchema = zod.z.object({
   booking_id_verification_pattern: zod.z.string().nullable().optional(),
   allowance: zod.z.number(),
   total_allowance: zod.z.number(),
-  use_new_design: zod.z.boolean().optional().default(false)
+  use_claim_esim: zod.z.boolean().optional().nullable(),
+  require_phone_verification: zod.z.boolean().optional().nullable()
 });
 var agentSignupSettingsSchema = zod.z.object({
   slack_channel: zod.z.string().nullable().optional(),
@@ -1030,9 +1031,7 @@ var platformSettingsSchemaSpec = markAsSchemaSpec({
     optional: true
   },
   sales_partner: zod.z.string().nullable().optional(),
-  external_sales_partner_manager: zod.z.string().nullable().optional(),
-  use_new_design: zod.z.boolean().optional().default(false),
-  require_phone_verification: zod.z.boolean().optional().default(false)
+  external_sales_partner_manager: zod.z.string().nullable().optional()
 });
 var webhookSettingsSchema = zod.z.object({
   url: zod.z.string().url().nullable().optional(),

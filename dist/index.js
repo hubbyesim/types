@@ -825,7 +825,8 @@ var freeEsimSchema = z.object({
   booking_id_verification_pattern: z.string().nullable().optional(),
   allowance: z.number(),
   total_allowance: z.number(),
-  use_new_design: z.boolean().optional().default(false)
+  use_claim_esim: z.boolean().optional().nullable(),
+  require_phone_verification: z.boolean().optional().nullable()
 });
 var agentSignupSettingsSchema = z.object({
   slack_channel: z.string().nullable().optional(),
@@ -1028,9 +1029,7 @@ var platformSettingsSchemaSpec = markAsSchemaSpec({
     optional: true
   },
   sales_partner: z.string().nullable().optional(),
-  external_sales_partner_manager: z.string().nullable().optional(),
-  use_new_design: z.boolean().optional().default(false),
-  require_phone_verification: z.boolean().optional().default(false)
+  external_sales_partner_manager: z.string().nullable().optional()
 });
 var webhookSettingsSchema = z.object({
   url: z.string().url().nullable().optional(),
