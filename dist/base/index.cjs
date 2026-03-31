@@ -309,6 +309,7 @@ var packageSpecificationSchema = zod.z.object({
 var promoCodeSchemaSpec = markAsSchemaSpec({
   id: zod.z.string(),
   redeemed_at: timestampNullableOptional,
+  special_offer_redeemed_at: timestampNullableOptional,
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: zod.z.string().nullable(),
@@ -557,7 +558,8 @@ var paymentSchemaSpec = markAsSchemaSpec({
     booking_id: zod.z.string().nullable().optional(),
     discount_amount: zod.z.string().optional(),
     is_special_offer: zod.z.boolean().optional(),
-    special_offer_discount: zod.z.number().optional()
+    special_offer_discount: zod.z.number().optional(),
+    monetization_discount_percent: zod.z.number().optional()
   }).optional(),
   webapp_platform_payment_properties: zod.z.object({
     promo_codes: zod.z.array(zod.z.string()).optional(),
@@ -568,7 +570,9 @@ var paymentSchemaSpec = markAsSchemaSpec({
     partner_name: zod.z.string().optional(),
     locale: zod.z.string().optional()
   }).optional(),
-  custom_branding: zod.z.any().nullable().optional()
+  custom_branding: zod.z.any().nullable().optional(),
+  customer_currency: zod.z.string().optional(),
+  amount_customer_currency: zod.z.number().optional()
 });
 var messageSchemaSpec = markAsSchemaSpec({
   id: zod.z.string(),

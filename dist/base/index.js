@@ -307,6 +307,7 @@ var packageSpecificationSchema = z.object({
 var promoCodeSchemaSpec = markAsSchemaSpec({
   id: z.string(),
   redeemed_at: timestampNullableOptional,
+  special_offer_redeemed_at: timestampNullableOptional,
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: z.string().nullable(),
@@ -555,7 +556,8 @@ var paymentSchemaSpec = markAsSchemaSpec({
     booking_id: z.string().nullable().optional(),
     discount_amount: z.string().optional(),
     is_special_offer: z.boolean().optional(),
-    special_offer_discount: z.number().optional()
+    special_offer_discount: z.number().optional(),
+    monetization_discount_percent: z.number().optional()
   }).optional(),
   webapp_platform_payment_properties: z.object({
     promo_codes: z.array(z.string()).optional(),
@@ -566,7 +568,9 @@ var paymentSchemaSpec = markAsSchemaSpec({
     partner_name: z.string().optional(),
     locale: z.string().optional()
   }).optional(),
-  custom_branding: z.any().nullable().optional()
+  custom_branding: z.any().nullable().optional(),
+  customer_currency: z.string().optional(),
+  amount_customer_currency: z.number().optional()
 });
 var messageSchemaSpec = markAsSchemaSpec({
   id: z.string(),

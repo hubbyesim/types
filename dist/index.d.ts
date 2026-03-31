@@ -451,6 +451,7 @@ declare const paymentSchemaSpec: {
         discount_amount: z.ZodOptional<z.ZodString>;
         is_special_offer: z.ZodOptional<z.ZodBoolean>;
         special_offer_discount: z.ZodOptional<z.ZodNumber>;
+        monetization_discount_percent: z.ZodOptional<z.ZodNumber>;
     }, "strip", z.ZodTypeAny, {
         promo?: string | undefined;
         booking_id?: string | null | undefined;
@@ -461,6 +462,7 @@ declare const paymentSchemaSpec: {
         discount_amount?: string | undefined;
         is_special_offer?: boolean | undefined;
         special_offer_discount?: number | undefined;
+        monetization_discount_percent?: number | undefined;
     }, {
         promo?: string | undefined;
         booking_id?: string | null | undefined;
@@ -471,6 +473,7 @@ declare const paymentSchemaSpec: {
         discount_amount?: string | undefined;
         is_special_offer?: boolean | undefined;
         special_offer_discount?: number | undefined;
+        monetization_discount_percent?: number | undefined;
     }>>;
     webapp_platform_payment_properties: z.ZodOptional<z.ZodObject<{
         promo_codes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -498,6 +501,8 @@ declare const paymentSchemaSpec: {
         partner_name?: string | undefined;
     }>>;
     custom_branding: z.ZodOptional<z.ZodNullable<z.ZodAny>>;
+    customer_currency: z.ZodOptional<z.ZodString>;
+    amount_customer_currency: z.ZodOptional<z.ZodNumber>;
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     created_at: {
         _type: "timestamp";
@@ -686,6 +691,11 @@ declare const packageSchemaSpec: {
 declare const promoCodeSchemaSpec: {
     id: z.ZodString;
     redeemed_at: {
+        _type: "timestamp";
+        nullable: boolean;
+        optional: boolean;
+    };
+    special_offer_redeemed_at: {
         _type: "timestamp";
         nullable: boolean;
         optional: boolean;
@@ -2591,6 +2601,7 @@ declare const HPaymentSchema: z.ZodObject<{
         discount_amount: z.ZodOptional<z.ZodString>;
         is_special_offer: z.ZodOptional<z.ZodBoolean>;
         special_offer_discount: z.ZodOptional<z.ZodNumber>;
+        monetization_discount_percent: z.ZodOptional<z.ZodNumber>;
     }, "strip", z.ZodTypeAny, {
         promo?: string | undefined;
         booking_id?: string | null | undefined;
@@ -2601,6 +2612,7 @@ declare const HPaymentSchema: z.ZodObject<{
         discount_amount?: string | undefined;
         is_special_offer?: boolean | undefined;
         special_offer_discount?: number | undefined;
+        monetization_discount_percent?: number | undefined;
     }, {
         promo?: string | undefined;
         booking_id?: string | null | undefined;
@@ -2611,6 +2623,7 @@ declare const HPaymentSchema: z.ZodObject<{
         discount_amount?: string | undefined;
         is_special_offer?: boolean | undefined;
         special_offer_discount?: number | undefined;
+        monetization_discount_percent?: number | undefined;
     }>>;
     webapp_platform_payment_properties: z.ZodOptional<z.ZodObject<{
         promo_codes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -2638,6 +2651,8 @@ declare const HPaymentSchema: z.ZodObject<{
         partner_name?: string | undefined;
     }>>;
     custom_branding: z.ZodOptional<z.ZodNullable<z.ZodAny>>;
+    customer_currency: z.ZodOptional<z.ZodString>;
+    amount_customer_currency: z.ZodOptional<z.ZodNumber>;
     id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
@@ -2679,6 +2694,7 @@ declare const HPaymentSchema: z.ZodObject<{
         discount_amount?: string | undefined;
         is_special_offer?: boolean | undefined;
         special_offer_discount?: number | undefined;
+        monetization_discount_percent?: number | undefined;
     } | undefined;
     webapp_platform_payment_properties?: {
         locale?: string | undefined;
@@ -2689,6 +2705,8 @@ declare const HPaymentSchema: z.ZodObject<{
         affiliateId?: string | null | undefined;
         partner_name?: string | undefined;
     } | undefined;
+    customer_currency?: string | undefined;
+    amount_customer_currency?: number | undefined;
 }, {
     source: "platform" | "app" | "webapp";
     partner: string;
@@ -2725,6 +2743,7 @@ declare const HPaymentSchema: z.ZodObject<{
         discount_amount?: string | undefined;
         is_special_offer?: boolean | undefined;
         special_offer_discount?: number | undefined;
+        monetization_discount_percent?: number | undefined;
     } | undefined;
     webapp_platform_payment_properties?: {
         locale?: string | undefined;
@@ -2735,6 +2754,8 @@ declare const HPaymentSchema: z.ZodObject<{
         affiliateId?: string | null | undefined;
         partner_name?: string | undefined;
     } | undefined;
+    customer_currency?: string | undefined;
+    amount_customer_currency?: number | undefined;
 }>;
 declare const HMessageSchema: z.ZodObject<{
     id: z.ZodString;
@@ -2955,6 +2976,7 @@ declare const HPackageSchema: z.ZodObject<{
 declare const HPromoCodeSchema: z.ZodObject<{
     id: z.ZodString;
     redeemed_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    special_offer_redeemed_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodNullable<z.ZodString>;
@@ -3023,6 +3045,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
     country: string;
     package: string;
     redeemed_at: Date;
+    special_offer_redeemed_at: Date;
     claimed_at: Date;
     allowance_user: number;
     allowance_total: number;
@@ -3061,6 +3084,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
     country: string;
     package: string;
     redeemed_at: Date;
+    special_offer_redeemed_at: Date;
     claimed_at: Date;
     allowance_user: number;
     allowance_total: number;
