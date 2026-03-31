@@ -819,6 +819,7 @@ var freeEsimSchema = zod.z.object({
     package_duration: zod.z.number(),
     type: zod.z.string().nullable().optional()
   }),
+  discount_percentage: zod.z.number().optional().nullable().default(0),
   booking_id_verification: zod.z.boolean().default(false),
   booking_id_verification_pattern: zod.z.string().nullable().optional(),
   allowance: zod.z.number(),

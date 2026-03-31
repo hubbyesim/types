@@ -817,6 +817,7 @@ var freeEsimSchema = z.object({
     package_duration: z.number(),
     type: z.string().nullable().optional()
   }),
+  discount_percentage: z.number().optional().nullable().default(0),
   booking_id_verification: z.boolean().default(false),
   booking_id_verification_pattern: z.string().nullable().optional(),
   allowance: z.number(),

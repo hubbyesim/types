@@ -1084,6 +1084,7 @@ declare const partnerSchemaSpec: {
                     package_duration: number;
                     type?: string | null | undefined;
                 }>;
+                discount_percentage: z.ZodDefault<z.ZodNullable<z.ZodOptional<z.ZodNumber>>>;
                 booking_id_verification: z.ZodDefault<z.ZodBoolean>;
                 booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
                 allowance: z.ZodNumber;
@@ -3713,6 +3714,7 @@ declare const HPartnerSchema: z.ZodObject<{
                 package_duration: number;
                 type?: string | null | undefined;
             }>;
+            discount_percentage: z.ZodDefault<z.ZodNullable<z.ZodOptional<z.ZodNumber>>>;
             booking_id_verification: z.ZodDefault<z.ZodBoolean>;
             booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             allowance: z.ZodNumber;
@@ -3728,6 +3730,7 @@ declare const HPartnerSchema: z.ZodObject<{
                 type?: string | null | undefined;
             };
             enabled: boolean;
+            discount_percentage: number | null;
             booking_id_verification: boolean;
             allowance: number;
             total_allowance: number;
@@ -3745,6 +3748,7 @@ declare const HPartnerSchema: z.ZodObject<{
             enabled: boolean;
             allowance: number;
             total_allowance: number;
+            discount_percentage?: number | null | undefined;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
             use_claim_esim?: boolean | null | undefined;
@@ -3970,6 +3974,7 @@ declare const HPartnerSchema: z.ZodObject<{
                 type?: string | null | undefined;
             };
             enabled: boolean;
+            discount_percentage: number | null;
             booking_id_verification: boolean;
             allowance: number;
             total_allowance: number;
@@ -4059,6 +4064,7 @@ declare const HPartnerSchema: z.ZodObject<{
             enabled: boolean;
             allowance: number;
             total_allowance: number;
+            discount_percentage?: number | null | undefined;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
             use_claim_esim?: boolean | null | undefined;
@@ -4295,6 +4301,7 @@ declare const HPartnerSchema: z.ZodObject<{
                 type?: string | null | undefined;
             };
             enabled: boolean;
+            discount_percentage: number | null;
             booking_id_verification: boolean;
             allowance: number;
             total_allowance: number;
@@ -4489,6 +4496,7 @@ declare const HPartnerSchema: z.ZodObject<{
             enabled: boolean;
             allowance: number;
             total_allowance: number;
+            discount_percentage?: number | null | undefined;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
             use_claim_esim?: boolean | null | undefined;
@@ -5342,6 +5350,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 package_duration: number;
                 type?: string | null | undefined;
             }>;
+            discount_percentage: z.ZodDefault<z.ZodNullable<z.ZodOptional<z.ZodNumber>>>;
             booking_id_verification: z.ZodDefault<z.ZodBoolean>;
             booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             allowance: z.ZodNumber;
@@ -5357,6 +5366,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 type?: string | null | undefined;
             };
             enabled: boolean;
+            discount_percentage: number | null;
             booking_id_verification: boolean;
             allowance: number;
             total_allowance: number;
@@ -5374,6 +5384,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             enabled: boolean;
             allowance: number;
             total_allowance: number;
+            discount_percentage?: number | null | undefined;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
             use_claim_esim?: boolean | null | undefined;
@@ -5599,6 +5610,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 type?: string | null | undefined;
             };
             enabled: boolean;
+            discount_percentage: number | null;
             booking_id_verification: boolean;
             allowance: number;
             total_allowance: number;
@@ -5688,6 +5700,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             enabled: boolean;
             allowance: number;
             total_allowance: number;
+            discount_percentage?: number | null | undefined;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
             use_claim_esim?: boolean | null | undefined;
@@ -5924,6 +5937,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
                 type?: string | null | undefined;
             };
             enabled: boolean;
+            discount_percentage: number | null;
             booking_id_verification: boolean;
             allowance: number;
             total_allowance: number;
@@ -6118,6 +6132,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
             enabled: boolean;
             allowance: number;
             total_allowance: number;
+            discount_percentage?: number | null | undefined;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
             use_claim_esim?: boolean | null | undefined;
@@ -6254,6 +6269,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             package_duration: number;
             type?: string | null | undefined;
         }>;
+        discount_percentage: z.ZodDefault<z.ZodNullable<z.ZodOptional<z.ZodNumber>>>;
         booking_id_verification: z.ZodDefault<z.ZodBoolean>;
         booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         allowance: z.ZodNumber;
@@ -6269,6 +6285,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             type?: string | null | undefined;
         };
         enabled: boolean;
+        discount_percentage: number | null;
         booking_id_verification: boolean;
         allowance: number;
         total_allowance: number;
@@ -6286,6 +6303,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         enabled: boolean;
         allowance: number;
         total_allowance: number;
+        discount_percentage?: number | null | undefined;
         booking_id_verification?: boolean | undefined;
         booking_id_verification_pattern?: string | null | undefined;
         use_claim_esim?: boolean | null | undefined;
@@ -6513,6 +6531,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
             type?: string | null | undefined;
         };
         enabled: boolean;
+        discount_percentage: number | null;
         booking_id_verification: boolean;
         allowance: number;
         total_allowance: number;
@@ -6602,6 +6621,7 @@ declare const HPlatformSettingsSchema: z.ZodObject<{
         enabled: boolean;
         allowance: number;
         total_allowance: number;
+        discount_percentage?: number | null | undefined;
         booking_id_verification?: boolean | undefined;
         booking_id_verification_pattern?: string | null | undefined;
         use_claim_esim?: boolean | null | undefined;
@@ -6786,6 +6806,7 @@ declare const HFreeEsimSchema: z.ZodObject<{
         package_duration: number;
         type?: string | null | undefined;
     }>;
+    discount_percentage: z.ZodDefault<z.ZodNullable<z.ZodOptional<z.ZodNumber>>>;
     booking_id_verification: z.ZodDefault<z.ZodBoolean>;
     booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     allowance: z.ZodNumber;
@@ -6801,6 +6822,7 @@ declare const HFreeEsimSchema: z.ZodObject<{
         type?: string | null | undefined;
     };
     enabled: boolean;
+    discount_percentage: number | null;
     booking_id_verification: boolean;
     allowance: number;
     total_allowance: number;
@@ -6818,6 +6840,7 @@ declare const HFreeEsimSchema: z.ZodObject<{
     enabled: boolean;
     allowance: number;
     total_allowance: number;
+    discount_percentage?: number | null | undefined;
     booking_id_verification?: boolean | undefined;
     booking_id_verification_pattern?: string | null | undefined;
     use_claim_esim?: boolean | null | undefined;
@@ -9158,6 +9181,7 @@ declare const partnerAppSchema: z.ZodObject<{
                 package_duration: number;
                 type?: string | null | undefined;
             }>;
+            discount_percentage: z.ZodDefault<z.ZodNullable<z.ZodOptional<z.ZodNumber>>>;
             booking_id_verification: z.ZodDefault<z.ZodBoolean>;
             booking_id_verification_pattern: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             allowance: z.ZodNumber;
@@ -9173,6 +9197,7 @@ declare const partnerAppSchema: z.ZodObject<{
                 type?: string | null | undefined;
             };
             enabled: boolean;
+            discount_percentage: number | null;
             booking_id_verification: boolean;
             allowance: number;
             total_allowance: number;
@@ -9190,6 +9215,7 @@ declare const partnerAppSchema: z.ZodObject<{
             enabled: boolean;
             allowance: number;
             total_allowance: number;
+            discount_percentage?: number | null | undefined;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
             use_claim_esim?: boolean | null | undefined;
@@ -9415,6 +9441,7 @@ declare const partnerAppSchema: z.ZodObject<{
                 type?: string | null | undefined;
             };
             enabled: boolean;
+            discount_percentage: number | null;
             booking_id_verification: boolean;
             allowance: number;
             total_allowance: number;
@@ -9504,6 +9531,7 @@ declare const partnerAppSchema: z.ZodObject<{
             enabled: boolean;
             allowance: number;
             total_allowance: number;
+            discount_percentage?: number | null | undefined;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
             use_claim_esim?: boolean | null | undefined;
@@ -9740,6 +9768,7 @@ declare const partnerAppSchema: z.ZodObject<{
                 type?: string | null | undefined;
             };
             enabled: boolean;
+            discount_percentage: number | null;
             booking_id_verification: boolean;
             allowance: number;
             total_allowance: number;
@@ -9934,6 +9963,7 @@ declare const partnerAppSchema: z.ZodObject<{
             enabled: boolean;
             allowance: number;
             total_allowance: number;
+            discount_percentage?: number | null | undefined;
             booking_id_verification?: boolean | undefined;
             booking_id_verification_pattern?: string | null | undefined;
             use_claim_esim?: boolean | null | undefined;
