@@ -261,6 +261,8 @@ var userSchemaSpec = markAsSchemaSpec({
   phone_model: z.string().nullable().optional(),
   phone_os: z.string().nullable().optional(),
   phone_os_version: z.string().nullable().optional(),
+  phone_number: z.string().nullable().optional(),
+  phone_number_verified: timestampNullableOptional,
   ios: z.boolean().nullable().optional(),
   has_card_saved: z.boolean().nullable().optional(),
   admin: z.boolean().nullable().optional(),
@@ -758,6 +760,7 @@ var visualIdentityCustomBrandingSchema = z.object({
 var visualIdentitySchema = z.object({
   primary_color: z.string(),
   secondary_color: z.string(),
+  background_color: z.string(),
   logo: z.string(),
   font: z.string().nullable().optional(),
   top_banner: visualIdentityBannersSchema.optional(),
@@ -819,7 +822,7 @@ var freeEsimSchema = z.object({
   allowance: z.number(),
   total_allowance: z.number(),
   use_claim_esim: z.boolean().optional().nullable(),
-  require_phone_verification: z.boolean().optional().nullable()
+  require_phone_otp: z.boolean().optional().nullable()
 });
 var agentSignupSettingsSchema = z.object({
   slack_channel: z.string().nullable().optional(),
@@ -1035,6 +1038,7 @@ var webhookSettingsSchema = z.object({
 var partnerSchemaSpec = markAsSchemaSpec({
   // Base model fields
   id: z.string(),
+  uuid: z.string(),
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: z.string().nullable(),
@@ -1438,6 +1442,19 @@ var appFlowFeedbackSchemaSpec = markAsSchemaSpec({
   iccid: z.string().nullable(),
   locale: z.string().nullable()
 });
+var webappRedirectTokenSchemaSpec = markAsSchemaSpec({
+  id: z.string().nullable().optional(),
+  token: z.string(),
+  external_user_id: z.string(),
+  partner_id: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true, optional: true },
+  consumed: z.boolean(),
+  consumed_at: timestampNullable,
+  expires_at: timestampRequired,
+  created_at: timestampRequired,
+  updated_at: timestampRequired,
+  created_by: { _type: "docRef", collection: "users", nullable: true, optional: true },
+  updated_by: { _type: "docRef", collection: "users", nullable: true, optional: true }
+});
 
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
@@ -1491,6 +1508,7 @@ var HLiveActivitySchema = buildClientSchema(liveActivitySchemaSpec);
 var HScheduledJobSchema = buildClientSchema(scheduledJobSchemaSpec);
 var HAutoInstallationEventsSchema = buildClientSchema(autoInstallationEventsSchemaSpec);
 var HAppFlowFeedbackSchema = buildClientSchema(appFlowFeedbackSchemaSpec);
+var HWebappRedirectTokenSchema = buildClientSchema(webappRedirectTokenSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1511,6 +1529,6 @@ var HRewardPackageTypeSchema = rewardPackageTypeSchema;
 var HJobStatusSchema = jobStatusSchema;
 var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
-export { HAddressSchema, HAnalyticsSchema, HApiLogSchema, HAppFlowFeedbackSchema, HAutoInstallationEventsSchema, HBankingDetailsSchema, HBaseRewardSchema, HBondioPackageSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HDestinationBundleSchema, HDestinationSchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HJobStatusSchema, HLiveActivitySchema, HLoginRequestSchema, HMessageSchema, HPackagePriceSchema, HPackageSchema, HPackageTemplateSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HReviewSchema, HReviewSubmissionSchema, HRewardMultipliersSchema, HRewardPackageTypeSchema, HRewardStrategySchema, HRoleSchema, HScheduleFilterSchema, HScheduledJobSchema, HTagSchema, HTelnaPackageSchema, HTrafficPolicySchema, HUserSchema, HUserTouchpointsSchema, HVisualIdentityBannerSchema, HVisualIdentityBannersSchema, HVisualIdentitySchema, HubbyModelSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES };
+export { HAddressSchema, HAnalyticsSchema, HApiLogSchema, HAppFlowFeedbackSchema, HAutoInstallationEventsSchema, HBankingDetailsSchema, HBaseRewardSchema, HBondioPackageSchema, HBookingSchema, HBookingStatusSchema, HCommunicationChannelSchema, HCommunicationOptionsSchema, HCountrySchema, HCurrencySchema, HDestinationBundleSchema, HDestinationSchema, HESIMSchema, HFinancialPropertiesSchema, HFreeEsimSchema, HJobStatusSchema, HLiveActivitySchema, HLoginRequestSchema, HMessageSchema, HPackagePriceSchema, HPackageQueueSchema, HPackageSchema, HPackageTemplateSchema, HPartnerAppSchema, HPartnerContactSchema, HPartnerDataSchema, HPartnerPackageSpecificationSchema, HPartnerSchema, HPaymentSchema, HPermissionSchema, HPlatformSettingsSchema, HPriceListSchema, HPricingStrategySchema, HPromoCodeSchema, HPromoPackageSpecificationSchema, HRegistrationSchema, HReviewSchema, HReviewSubmissionSchema, HRewardMultipliersSchema, HRewardPackageTypeSchema, HRewardStrategySchema, HRoleSchema, HScheduleFilterSchema, HScheduledJobSchema, HTagSchema, HTelnaPackageSchema, HTrafficPolicySchema, HUserSchema, HUserTouchpointsSchema, HVisualIdentityBannerSchema, HVisualIdentityBannersSchema, HVisualIdentitySchema, HWebappRedirectTokenSchema, HubbyModelSchema, SUPPORTED_LOCALES2 as SUPPORTED_LOCALES };
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.js.map

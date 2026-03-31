@@ -164,7 +164,6 @@ var buildServerSchema = (spec, path = []) => {
 };
 var PARTNER_COLLECTION = "/companies/hubby/partners";
 var USER_COLLECTION = "users";
-var PACKAGE_QUEUE_COLLECTION = "package_queues";
 var PROFILE_COLLECTION = "/companies/hubby/profiles";
 var PACKAGE_COLLECTION = "/companies/hubby/packages";
 var PACKAGE_TEMPLATE_COLLECTION = "/package_templates";
@@ -190,6 +189,7 @@ var TAG_COLLECTION = "tags";
 var SCHEDULED_JOB_COLLECTION = "scheduled_jobs";
 var AUTO_INSTALLATION_EVENTS_COLLECTION = "auto_installation_events";
 var APP_FLOW_FEEDBACK_COLLECTION = "app_flow_feedbacks";
+var WEBAPP_REDIRECT_TOKEN_COLLECTION = "webapp_redirect_tokens";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: true };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
@@ -285,6 +285,8 @@ var userSchemaSpec = markAsSchemaSpec({
   phone_model: zod.z.string().nullable().optional(),
   phone_os: zod.z.string().nullable().optional(),
   phone_os_version: zod.z.string().nullable().optional(),
+  phone_number: zod.z.string().nullable().optional(),
+  phone_number_verified: timestampNullableOptional,
   ios: zod.z.boolean().nullable().optional(),
   has_card_saved: zod.z.boolean().nullable().optional(),
   admin: zod.z.boolean().nullable().optional(),
@@ -792,6 +794,7 @@ var visualIdentityCustomBrandingSchema = zod.z.object({
 var visualIdentitySchema = zod.z.object({
   primary_color: zod.z.string(),
   secondary_color: zod.z.string(),
+  background_color: zod.z.string(),
   logo: zod.z.string(),
   font: zod.z.string().nullable().optional(),
   top_banner: visualIdentityBannersSchema.optional(),
@@ -853,7 +856,7 @@ var freeEsimSchema = zod.z.object({
   allowance: zod.z.number(),
   total_allowance: zod.z.number(),
   use_claim_esim: zod.z.boolean().optional().nullable(),
-  require_phone_verification: zod.z.boolean().optional().nullable()
+  require_phone_otp: zod.z.boolean().optional().nullable()
 });
 var agentSignupSettingsSchema = zod.z.object({
   slack_channel: zod.z.string().nullable().optional(),
@@ -1069,6 +1072,7 @@ var webhookSettingsSchema = zod.z.object({
 var partnerSchemaSpec = markAsSchemaSpec({
   // Base model fields
   id: zod.z.string(),
+  uuid: zod.z.string(),
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: zod.z.string().nullable(),
@@ -1447,6 +1451,19 @@ var appFlowFeedbackSchemaSpec = markAsSchemaSpec({
   iccid: zod.z.string().nullable(),
   locale: zod.z.string().nullable()
 });
+var webappRedirectTokenSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string().nullable().optional(),
+  token: zod.z.string(),
+  external_user_id: zod.z.string(),
+  partner_id: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true, optional: true },
+  consumed: zod.z.boolean(),
+  consumed_at: timestampNullable,
+  expires_at: timestampRequired,
+  created_at: timestampRequired,
+  updated_at: timestampRequired,
+  created_by: { _type: "docRef", collection: "users", nullable: true, optional: true },
+  updated_by: { _type: "docRef", collection: "users", nullable: true, optional: true }
+});
 function createConvertJSToFirestore(db) {
   return function convertJSToFirestore2(input, spec) {
     if (input === void 0 || input === null)
@@ -1760,6 +1777,7 @@ var HLiveActivitySchema = buildClientSchema(liveActivitySchemaSpec);
 var HScheduledJobSchema = buildClientSchema(scheduledJobSchemaSpec);
 var HAutoInstallationEventsSchema = buildClientSchema(autoInstallationEventsSchemaSpec);
 var HAppFlowFeedbackSchema = buildClientSchema(appFlowFeedbackSchemaSpec);
+var HWebappRedirectTokenSchema = buildClientSchema(webappRedirectTokenSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1835,6 +1853,7 @@ var LiveActivitySchema = buildServerSchema(liveActivitySchemaSpec);
 var ScheduledJobSchema = buildServerSchema(scheduledJobSchemaSpec);
 var AutoInstallationEventsSchema = buildServerSchema(autoInstallationEventsSchemaSpec);
 var AppFlowFeedbackSchema = buildServerSchema(appFlowFeedbackSchemaSpec);
+var WebappRedirectTokenSchema = buildServerSchema(webappRedirectTokenSchemaSpec);
 var AddressSchema = addressSchema;
 var RegistrationSchema = registrationSchema;
 var BankingDetailsSchema = bankingDetailsSchema;
@@ -1994,7 +2013,6 @@ exports.LoginRequestSchema = LoginRequestSchema;
 exports.MESSAGE_COLLECTION = MESSAGE_COLLECTION;
 exports.MessageSchema = MessageSchema;
 exports.PACKAGE_COLLECTION = PACKAGE_COLLECTION;
-exports.PACKAGE_QUEUE_COLLECTION = PACKAGE_QUEUE_COLLECTION;
 exports.PARTNER_COLLECTION = PARTNER_COLLECTION;
 exports.PAYMENT_COLLECTION = PAYMENT_COLLECTION;
 exports.PERMISSION_COLLECTION = PERMISSION_COLLECTION;

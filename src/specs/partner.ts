@@ -118,6 +118,7 @@ export const visualIdentityCustomBrandingSchema = z.object({
 export const visualIdentitySchema = z.object({
     primary_color: z.string(),
     secondary_color: z.string(),
+    background_color: z.string(),
     logo: z.string(),
     font: z.string().nullable().optional(),
     top_banner: visualIdentityBannersSchema.optional(),
@@ -192,7 +193,7 @@ export const freeEsimSchema = z.object({
     allowance: z.number(),
     total_allowance: z.number(),
     use_claim_esim: z.boolean().optional().nullable(),
-    require_phone_verification: z.boolean().optional().nullable(),
+    require_phone_otp: z.boolean().optional().nullable()
 });
 
 // Agent signup settings schema
@@ -424,6 +425,7 @@ export const webhookSettingsSchema = z.object({
 export const partnerSchemaSpec = markAsSchemaSpec({
     // Base model fields
     id: z.string(),
+    uuid: z.string(),
     created_at: timestampRequired,
     updated_at: timestampRequired,
     created_by: z.string().nullable(),
