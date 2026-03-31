@@ -164,6 +164,7 @@ var buildServerSchema = (spec, path = []) => {
 };
 var PARTNER_COLLECTION = "/companies/hubby/partners";
 var USER_COLLECTION = "users";
+var PACKAGE_QUEUE_COLLECTION = "package_queues";
 var PROFILE_COLLECTION = "/companies/hubby/profiles";
 var PACKAGE_COLLECTION = "/companies/hubby/packages";
 var PACKAGE_TEMPLATE_COLLECTION = "/package_templates";
@@ -2013,6 +2014,7 @@ exports.LoginRequestSchema = LoginRequestSchema;
 exports.MESSAGE_COLLECTION = MESSAGE_COLLECTION;
 exports.MessageSchema = MessageSchema;
 exports.PACKAGE_COLLECTION = PACKAGE_COLLECTION;
+exports.PACKAGE_QUEUE_COLLECTION = PACKAGE_QUEUE_COLLECTION;
 exports.PARTNER_COLLECTION = PARTNER_COLLECTION;
 exports.PAYMENT_COLLECTION = PAYMENT_COLLECTION;
 exports.PERMISSION_COLLECTION = PERMISSION_COLLECTION;
