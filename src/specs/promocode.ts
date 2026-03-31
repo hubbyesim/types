@@ -28,6 +28,7 @@ export const packageSpecificationSchema = z.object({
 export const promoCodeSchemaSpec = markAsSchemaSpec({
     id: z.string(),
     redeemed_at: timestampNullableOptional,
+    special_offer_redeemed_at: timestampNullableOptional,
     created_at: timestampRequired,
     updated_at: timestampRequired,
     created_by: z.string().nullable(),
