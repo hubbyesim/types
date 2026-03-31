@@ -189,7 +189,7 @@ var LIVE_ACTIVITY_COLLECTION = "live_activities";
 var TAG_COLLECTION = "tags";
 var SCHEDULED_JOB_COLLECTION = "scheduled_jobs";
 var AUTO_INSTALLATION_EVENTS_COLLECTION = "auto_installation_events";
-var WEBAPP_REDIRECT_TOKEN_COLLECTION = "webapp_redirect_tokens";
+var APP_FLOW_FEEDBACK_COLLECTION = "app_flow_feedbacks";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: true };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
@@ -1437,18 +1437,15 @@ var autoInstallationEventsSchemaSpec = markAsSchemaSpec({
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true, optional: true },
   promo_code: { _type: "docRef", collection: PROMO_CODE_COLLECTION, nullable: true, optional: true }
 });
-var webappRedirectTokenSchemaSpec = markAsSchemaSpec({
-  id: zod.z.string().nullable().optional(),
-  token: zod.z.string(),
-  external_user_id: zod.z.string(),
-  partner_id: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true, optional: true },
-  consumed: zod.z.boolean(),
-  consumed_at: timestampNullable,
-  expires_at: timestampRequired,
-  created_at: timestampRequired,
-  updated_at: timestampRequired,
-  created_by: { _type: "docRef", collection: "users", nullable: true, optional: true },
-  updated_by: { _type: "docRef", collection: "users", nullable: true, optional: true }
+var appFlowFeedbackSchemaSpec = markAsSchemaSpec({
+  ...hubbyModelSpec,
+  message: zod.z.string(),
+  type: zod.z.string(),
+  user: { _type: "docRef", collection: USER_COLLECTION, nullable: true },
+  user_touchpoint: { _type: "docRef", collection: USER_TOUCHPOINTS_COLLECTION, nullable: true },
+  promo_code: { _type: "docRef", collection: PROMO_CODE_COLLECTION, nullable: true },
+  iccid: zod.z.string().nullable(),
+  locale: zod.z.string().nullable()
 });
 function createConvertJSToFirestore(db) {
   return function convertJSToFirestore2(input, spec) {
@@ -1762,7 +1759,7 @@ var HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 var HLiveActivitySchema = buildClientSchema(liveActivitySchemaSpec);
 var HScheduledJobSchema = buildClientSchema(scheduledJobSchemaSpec);
 var HAutoInstallationEventsSchema = buildClientSchema(autoInstallationEventsSchemaSpec);
-var HWebappRedirectTokenSchema = buildClientSchema(webappRedirectTokenSchemaSpec);
+var HAppFlowFeedbackSchema = buildClientSchema(appFlowFeedbackSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1837,7 +1834,7 @@ var LoginRequestSchema = buildServerSchema(loginRequestSchemaSpec);
 var LiveActivitySchema = buildServerSchema(liveActivitySchemaSpec);
 var ScheduledJobSchema = buildServerSchema(scheduledJobSchemaSpec);
 var AutoInstallationEventsSchema = buildServerSchema(autoInstallationEventsSchemaSpec);
-var WebappRedirectTokenSchema = buildServerSchema(webappRedirectTokenSchemaSpec);
+var AppFlowFeedbackSchema = buildServerSchema(appFlowFeedbackSchemaSpec);
 var AddressSchema = addressSchema;
 var RegistrationSchema = registrationSchema;
 var BankingDetailsSchema = bankingDetailsSchema;
@@ -1906,10 +1903,12 @@ var packageTemplateAppSchema = buildClientSchema(packageTemplateSchemaSpec);
 var promoPackageSpecificationAppSchema = buildClientSchema(packageSpecificationSchema);
 
 exports.API_LOG_COLLECTION = API_LOG_COLLECTION;
+exports.APP_FLOW_FEEDBACK_COLLECTION = APP_FLOW_FEEDBACK_COLLECTION;
 exports.AUTO_INSTALLATION_EVENTS_COLLECTION = AUTO_INSTALLATION_EVENTS_COLLECTION;
 exports.AddressSchema = AddressSchema;
 exports.AnalyticsSchema = AnalyticsSchema;
 exports.ApiLogSchema = ApiLogSchema;
+exports.AppFlowFeedbackSchema = AppFlowFeedbackSchema;
 exports.AutoInstallationEventsSchema = AutoInstallationEventsSchema;
 exports.BOOKING_COLLECTION = BOOKING_COLLECTION;
 exports.BankingDetailsSchema = BankingDetailsSchema;
@@ -1933,6 +1932,7 @@ exports.FirebaseService = FirebaseService;
 exports.HAddressSchema = HAddressSchema;
 exports.HAnalyticsSchema = HAnalyticsSchema;
 exports.HApiLogSchema = HApiLogSchema;
+exports.HAppFlowFeedbackSchema = HAppFlowFeedbackSchema;
 exports.HAutoInstallationEventsSchema = HAutoInstallationEventsSchema;
 exports.HBankingDetailsSchema = HBankingDetailsSchema;
 exports.HBaseRewardSchema = HBaseRewardSchema;
@@ -2045,6 +2045,7 @@ exports.WEBAPP_REDIRECT_TOKEN_COLLECTION = WEBAPP_REDIRECT_TOKEN_COLLECTION;
 exports.WebappRedirectTokenSchema = WebappRedirectTokenSchema;
 exports.analyticsSpec = analyticsSpec;
 exports.apiLogSchemaSpec = apiLogSchemaSpec;
+exports.appFlowFeedbackSchemaSpec = appFlowFeedbackSchemaSpec;
 exports.autoInstallationEventsSchemaSpec = autoInstallationEventsSchemaSpec;
 exports.bookingAppSchema = bookingAppSchema;
 exports.bookingSchemaSpec = bookingSchemaSpec;

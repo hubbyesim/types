@@ -166,6 +166,7 @@ var ROLE_COLLECTION = "roles";
 var PERMISSION_COLLECTION = "permissions";
 var TRAFFIC_POLICY_COLLECTION = "traffic_policies";
 var DESTINATION_COLLECTION = "destinations";
+var USER_TOUCHPOINTS_COLLECTION = "user_touchpoints";
 var TAG_COLLECTION = "tags";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: true };
@@ -1429,18 +1430,15 @@ var autoInstallationEventsSchemaSpec = markAsSchemaSpec({
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true, optional: true },
   promo_code: { _type: "docRef", collection: PROMO_CODE_COLLECTION, nullable: true, optional: true }
 });
-var webappRedirectTokenSchemaSpec = markAsSchemaSpec({
-  id: zod.z.string().nullable().optional(),
-  token: zod.z.string(),
-  external_user_id: zod.z.string(),
-  partner_id: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true, optional: true },
-  consumed: zod.z.boolean(),
-  consumed_at: timestampNullable,
-  expires_at: timestampRequired,
-  created_at: timestampRequired,
-  updated_at: timestampRequired,
-  created_by: { _type: "docRef", collection: "users", nullable: true, optional: true },
-  updated_by: { _type: "docRef", collection: "users", nullable: true, optional: true }
+var appFlowFeedbackSchemaSpec = markAsSchemaSpec({
+  ...hubbyModelSpec,
+  message: zod.z.string(),
+  type: zod.z.string(),
+  user: { _type: "docRef", collection: USER_COLLECTION, nullable: true },
+  user_touchpoint: { _type: "docRef", collection: USER_TOUCHPOINTS_COLLECTION, nullable: true },
+  promo_code: { _type: "docRef", collection: PROMO_CODE_COLLECTION, nullable: true },
+  iccid: zod.z.string().nullable(),
+  locale: zod.z.string().nullable()
 });
 
 // src/index.client.ts
@@ -1494,7 +1492,7 @@ var HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 var HLiveActivitySchema = buildClientSchema(liveActivitySchemaSpec);
 var HScheduledJobSchema = buildClientSchema(scheduledJobSchemaSpec);
 var HAutoInstallationEventsSchema = buildClientSchema(autoInstallationEventsSchemaSpec);
-var HWebappRedirectTokenSchema = buildClientSchema(webappRedirectTokenSchemaSpec);
+var HAppFlowFeedbackSchema = buildClientSchema(appFlowFeedbackSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1518,6 +1516,7 @@ var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 exports.HAddressSchema = HAddressSchema;
 exports.HAnalyticsSchema = HAnalyticsSchema;
 exports.HApiLogSchema = HApiLogSchema;
+exports.HAppFlowFeedbackSchema = HAppFlowFeedbackSchema;
 exports.HAutoInstallationEventsSchema = HAutoInstallationEventsSchema;
 exports.HBankingDetailsSchema = HBankingDetailsSchema;
 exports.HBaseRewardSchema = HBaseRewardSchema;
