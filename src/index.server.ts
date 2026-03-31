@@ -35,7 +35,7 @@ import {
     platformSettingsSchemaSpec
 } from './specs/partner';
 
-import { hubbyModelSpec, tagModelSpec } from './specs/common';
+import { hubbyModelSpec } from './specs/common';
 import { SUPPORTED_LOCALES as LOCALES } from './constants';
 import { apiLogSchemaSpec } from './specs/apiLogs';
 import { userTouchpointsSchemaSpec } from './specs/userTouchpoints';
@@ -50,6 +50,16 @@ import {
 import { destinationSchemaSpec, destinationBundleSchemaSpec } from './specs/destination';
 import { packageTemplateSchemaSpec } from './specs/package_template';
 import { loginRequestSchemaSpec } from './specs/login_request';
+import { tagSchemaSpec } from './specs/tag';
+import { 
+    liveActivitySchemaSpec,
+    liveActivityStatusSchema,
+    liveActivityEventSchema,
+    liveActivityReasonSchema,
+    lastUpdateSchema
+} from './specs/live_activity';
+import { scheduledJobSchemaSpec, jobStatusSchema } from './specs/scheduled_job';
+import { autoInstallationEventsSchemaSpec } from './specs/auto_installation_events';
 import { z } from 'zod';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 
@@ -78,7 +88,16 @@ export {
     destinationBundleSchemaSpec,
     packageTemplateSchemaSpec,
     userTouchpointsSchemaSpec,
-    loginRequestSchemaSpec
+    loginRequestSchemaSpec,
+    tagSchemaSpec,
+    liveActivitySchemaSpec,
+    liveActivityStatusSchema,
+    liveActivityEventSchema,
+    liveActivityReasonSchema,
+    lastUpdateSchema,
+    scheduledJobSchemaSpec,
+    jobStatusSchema,
+    autoInstallationEventsSchemaSpec
 };
 
 
@@ -101,7 +120,7 @@ export const PackagePriceSchema = buildServerSchema(packagePriceSchemaSpec);
 export const PlatformSettingsSchema = buildServerSchema(platformSettingsSchemaSpec);
 export const ScheduleSchema = buildServerSchema(scheduleSchema);
 export const AnalyticsSchema = buildServerSchema(analyticsSpec);
-export const TagSchema = buildServerSchema(tagModelSpec);
+export const TagSchema = buildServerSchema(tagSchemaSpec);
 export const TelnaPackageSchema = buildServerSchema(telnaPackageSchema);
 export const BondioPackageSchema = buildServerSchema(bondioPackageSchema);
 export const TrafficPolicySchema = buildServerSchema(trafficPolicySpec);
@@ -112,6 +131,9 @@ export const DestinationBundleSchema = buildServerSchema(destinationBundleSchema
 export const PackageTemplateSchema = buildServerSchema(packageTemplateSchemaSpec);
 export const UserTouchpointsSchema = buildServerSchema(userTouchpointsSchemaSpec);
 export const LoginRequestSchema = buildServerSchema(loginRequestSchemaSpec);
+export const LiveActivitySchema = buildServerSchema(liveActivitySchemaSpec);
+export const ScheduledJobSchema = buildServerSchema(scheduledJobSchemaSpec);
+export const AutoInstallationEventsSchema = buildServerSchema(autoInstallationEventsSchemaSpec);
 
 // Additional lower-level schemas
 export const AddressSchema = addressSchema;
@@ -131,6 +153,7 @@ export const RewardStrategySchema = rewardStrategySchema;
 export const BaseRewardSchema = baseRewardSchema;
 export const RewardMultipliersSchema = rewardMultipliersSchema;
 export const RewardPackageTypeSchema = rewardPackageTypeSchema;
+export const JobStatusSchema = jobStatusSchema;
 
 export type User = z.infer<typeof UserSchema>;
 export type UserFirestore = z.infer<typeof UserFirestoreSchema>;
@@ -157,6 +180,14 @@ export type DestinationBundle = z.infer<typeof DestinationBundleSchema>;
 export type PackageTemplate = z.infer<typeof PackageTemplateSchema>;
 export type UserTouchpoints = z.infer<typeof UserTouchpointsSchema>;
 export type LoginRequest = z.infer<typeof LoginRequestSchema>;
+export type LiveActivity = z.infer<typeof LiveActivitySchema>;
+export type ScheduledJob = z.infer<typeof ScheduledJobSchema>;
+export type AutoInstallationEvents = z.infer<typeof AutoInstallationEventsSchema>;
+export type LiveActivityStatus = z.infer<typeof liveActivityStatusSchema>;
+export type LiveActivityEvent = z.infer<typeof liveActivityEventSchema>;
+export type LiveActivityReason = z.infer<typeof liveActivityReasonSchema>;
+export type LastUpdate = z.infer<typeof lastUpdateSchema>;
+export type JobStatus = z.infer<typeof JobStatusSchema>;
 
 // Additional lower-level types
 export type Address = z.infer<typeof AddressSchema>;
@@ -264,5 +295,5 @@ export { createModelConverters } from './utils/modelConverterFactory';
 export { createConvertJSToFirestore, createConvertFirestoreToJS } from './utils/firestoreTransformUtils';
 export { FirebaseService, createFirebaseService } from './services/firebase';
 
-export { USER_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, BOOKING_COLLECTION, ROLE_COLLECTION, PERMISSION_COLLECTION, TRAFFIC_POLICY_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, COUNTRY_COLLECTION, ESIM_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, MESSAGE_COLLECTION, CURRENCY_COLLECTION, API_LOG_COLLECTION, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, USER_TOUCHPOINTS_COLLECTION, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION  } from './specs/common';
+export { USER_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, BOOKING_COLLECTION, ROLE_COLLECTION, PERMISSION_COLLECTION, TRAFFIC_POLICY_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, COUNTRY_COLLECTION, ESIM_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, MESSAGE_COLLECTION, CURRENCY_COLLECTION, API_LOG_COLLECTION, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, USER_TOUCHPOINTS_COLLECTION, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, TAG_COLLECTION, LIVE_ACTIVITY_COLLECTION, SCHEDULED_JOB_COLLECTION, AUTO_INSTALLATION_EVENTS_COLLECTION } from './specs/common';
 

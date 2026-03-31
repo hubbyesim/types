@@ -11,6 +11,7 @@ export const packageTemplateSchemaSpec = markAsSchemaSpec({
     type: z.string(),
     purchase_price: z.number(),
     external_id: z.string(),
+    destination_id: z.string().min(1, 'destination_id is required and must be an ISO2 or ISO3 country code'),
     supported_countries: z.array(z.string()), // iso3 codes
     provider_specific_data: {
         _type: 'record' as const,
@@ -18,6 +19,8 @@ export const packageTemplateSchemaSpec = markAsSchemaSpec({
         nullable: true,
         optional: true
     },
+    size_in_gigabytes: z.number(),
+    tier: z.number().nullable().optional(), // 1, 2, 3
     created_at: timestampRequired,
     updated_at: timestampRequired,
     created_by: z.string().nullable(),

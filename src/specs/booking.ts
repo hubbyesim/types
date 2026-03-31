@@ -73,6 +73,8 @@ export const bookingSchemaSpec = markAsSchemaSpec({
     phone: z.string().nullable().optional(),
     booking_id: z.string().nullable().optional(),
     flight_number: z.string().optional(),
+    departure_location: z.string().optional(),
+    brand: z.string().nullable().optional(),
     gender: z.enum(['M', 'F', 'O']).optional(),
     sent_messages: z.record(z.any()).optional(),
     locale: supportedLocalesSchema,
@@ -80,8 +82,8 @@ export const bookingSchemaSpec = markAsSchemaSpec({
     data: {
         _type: 'object' as const,
         of: {
-            source: z.string(),
-            manual: z.boolean(),
+            source: z.string().nullable().optional(),
+            manual: z.boolean().nullable().optional(),
             action: z.string().nullable().optional()
         },
         nullable: true,
@@ -125,6 +127,7 @@ export const bookingSchemaSpec = markAsSchemaSpec({
     },
     hubby_foreign_identifiers: z.object({
         messaging_contact_id: z.string().nullable()
-    }).nullable().optional()
+    }).nullable().optional(),
+    custom_branding: z.string().nullable().optional() // Optional custom branding key that references partner->visual_identity->custom_branding->{key}
 });
 

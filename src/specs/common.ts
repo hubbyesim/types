@@ -6,7 +6,7 @@ export const PARTNER_COLLECTION = '/companies/hubby/partners';
 export const USER_COLLECTION = 'users';
 export const PROFILE_COLLECTION = '/companies/hubby/profiles';
 export const PACKAGE_COLLECTION = '/companies/hubby/packages';
-export const PACKAGE_TEMPLATE_COLLECTION = '/companies/hubby/package_templates';
+export const PACKAGE_TEMPLATE_COLLECTION = '/package_templates';
 export const PROMO_CODE_COLLECTION = '/companies/hubby/promo_codes';
 export const COUNTRY_COLLECTION = 'countries';
 export const ESIM_COLLECTION = 'esims';
@@ -24,6 +24,11 @@ export const REVIEW_SUBMISSION_COLLECTION = '/companies/hubby/review_submissions
 export const DESTINATION_COLLECTION = 'destinations';
 export const DESTINATION_OFFER_COLLECTION = 'offers';
 export const USER_TOUCHPOINTS_COLLECTION = 'user_touchpoints';
+export const LIVE_ACTIVITY_COLLECTION = 'live_activities';
+export const STORE_REVIEW_COLLECTION = 'store_reviews';
+export const TAG_COLLECTION = 'tags';
+export const SCHEDULED_JOB_COLLECTION = 'scheduled_jobs';
+export const AUTO_INSTALLATION_EVENTS_COLLECTION = 'auto_installation_events';
 
 
 export const packageTypes = ['data-limited', 'time-limited', 'starter', 'unlimited'];
@@ -32,6 +37,16 @@ export const packageTypes = ['data-limited', 'time-limited', 'starter', 'unlimit
 export const timestampNullableOptional = { _type: 'timestamp' as const, nullable: true, optional: true };
 export const timestampNullable = { _type: 'timestamp' as const, nullable: true, optional: true };
 export const timestampRequired = { _type: 'timestamp' as const, nullable: false, optional: false };
+
+// Preprocessed date schema for use in arrays (handles string/number inputs)
+export const dateSchema = z.preprocess((val) => {
+    if (val instanceof Date) return val;
+    if (typeof val === 'string' || typeof val === 'number') {
+        const date = new Date(val);
+        return isNaN(date.getTime()) ? undefined : date;
+    }
+    return val;
+}, z.date());
 
 export const hubbyModelSpec = {
     id: z.string().nullable().optional(),
@@ -47,4 +62,5 @@ export const tagModelSpec = {
     name: z.string(),
     description: z.string().nullable().optional(),
     color: z.string().nullable().optional(),
+    type: z.string().nullable().optional(), // can be 'partner', 'booking' etc...
 }

@@ -1,4 +1,4 @@
-import { z, ZodLazy } from 'zod';
+import { z } from 'zod';
 import { markAsSchemaSpec } from '../common';
 import { supportedLocalesSchema, SUPPORTED_LOCALES, SupportedLocales } from '../constants';
 import {
@@ -8,7 +8,8 @@ import {
     PRICE_LIST_COLLECTION,
     tagModelSpec,
     timestampRequired,
-    timestampNullableOptional
+    timestampNullableOptional,
+    TAG_COLLECTION
 } from './common';
 
 // ===== Helper schemas for nested structures =====
@@ -104,14 +105,25 @@ export const visualIdentityBannersSchema = z.object({
     banners: z.array(visualIdentityBannerSchema).nullable().optional()
 });
 
+// Visual identity custom branding schema
+export const visualIdentityCustomBrandingSchema = z.object({
+    primary_color: z.string(),
+    secondary_color: z.string(),
+    logo: z.string(),
+    font: z.string().nullable().optional(),
+    top_banner: visualIdentityBannersSchema.optional(),
+    mid_banner: visualIdentityBannersSchema.optional(),
+});
+
 export const visualIdentitySchema = z.object({
     primary_color: z.string(),
     secondary_color: z.string(),
     logo: z.string(),
     font: z.string().nullable().optional(),
     top_banner: visualIdentityBannersSchema.optional(),
-    mid_banner: visualIdentityBannersSchema.optional()
-});
+    mid_banner: visualIdentityBannersSchema.optional(),
+    custom_branding: z.record(visualIdentityCustomBrandingSchema).optional()
+}) as z.ZodObject<any>;
 
 // Partner contact schema
 export const partnerContactSchema = z.object({
@@ -189,6 +201,7 @@ export const agentSignupSettingsSchema = z.object({
     partner_type: z.enum(['wholesale', 'reseller', 'platform', 'agent']).nullable().optional(),
     enable_complimentary_booking: z.boolean().default(true),
     complimentary_booking_partner_id: z.string().nullable().optional(),
+    is_sales_agent: z.boolean().nullable().optional().default(false),
     visual_identity_options: z.object({
         hubby_branding: z.boolean().default(true),
         source_partner_branding: z.boolean().default(false),
@@ -227,7 +240,9 @@ export const platformSettingsSchema = z.object({
     upgrade_offer: z.object({
         enabled: z.boolean(),
         discount_percentage: z.number().min(0).max(100),
-    }).nullable().optional()
+    }).nullable().optional(),
+    account_manager: z.string().nullable().optional(),
+    external_sales_partner_manager: z.string().nullable().optional()
 });
 
 // ===== Exportable schema specs =====
@@ -247,7 +262,7 @@ export const financialPropertiesSchemaSpec = markAsSchemaSpec({
     income_per_gb: z.number().nullable(),
     commission_fee: z.number().nullable().optional(),
     commission_percentage: z.number().nullable().optional(),
-    payment_method: z.enum(['invoice', 'direct']),
+    payment_method: z.enum(['invoice', 'direct','not-to-invoice', 'only-pay-out-commission']),
     requires_card: z.boolean().nullable(),
     next_invoice: timestampNullableOptional,
     last_invoice: timestampNullableOptional,
@@ -279,6 +294,7 @@ export const financialPropertiesSchemaSpec = markAsSchemaSpec({
             user: {
                 _type: 'object' as const,
                 of: {
+                    lifetime_discount_percentage: z.number().optional().nullable(),
                     modification_percentage: z.number(),
                     default_price_list: { _type: 'docRef' as const, collection: PRICE_LIST_COLLECTION, nullable: true },
                     custom_prices: {
@@ -346,7 +362,49 @@ export const platformSettingsSchemaSpec = markAsSchemaSpec({
         of: agentSignupSettingsSchema.shape,
         nullable: true,
         optional: true
-    }
+    },
+    brevo: {
+        _type: 'object' as const,
+        of: {
+            list_ids: z.array(z.number()),
+            campaign_mode: z.boolean()
+        },
+        nullable: true,
+        optional: true
+    },
+    upgrade_offer: {
+        _type: 'object' as const,
+        of: {
+            enabled: z.boolean(),
+            discount_percentage: z.number().min(0).max(100)
+        },
+        nullable: true,
+        optional: true
+    },
+    emit_events: {
+        _type: 'object' as const,
+        of: emitEventSchema.shape,
+        nullable: true,
+        optional: true
+    },
+    visual_identity_options: {
+        _type: 'object' as const,
+        of: {
+            hubby_branding: z.boolean().optional().default(true),
+            source_partner_branding: z.boolean().optional().default(false),
+            own_branding: z.boolean().optional().default(false)
+        },
+        nullable: true,
+        optional: true
+    },
+    account_manager: { 
+        _type: 'docRef' as const, 
+        collection: USER_COLLECTION, 
+        nullable: true, 
+        optional: true 
+    },
+    sales_partner: z.string().nullable().optional(),
+    external_sales_partner_manager: z.string().nullable().optional()
 });
 
 // Webhook settings schema
@@ -410,11 +468,7 @@ export const partnerSchemaSpec = markAsSchemaSpec({
     },
 
     // Platform settings
-    platform_settings: {
-        _type: 'object' as const,
-        of: platformSettingsSchema.shape,
-        nullable: true
-    },
+    platform_settings: platformSettingsSchemaSpec,
 
     // Tags
     tags: {
@@ -428,6 +482,13 @@ export const partnerSchemaSpec = markAsSchemaSpec({
     tag_slugs: {
         _type: 'array' as const,
         of: z.string(),
+        nullable: true,
+        optional: true
+    },
+
+    tag_references: {
+        _type: 'array' as const,
+        of: { _type: 'docRef' as const, collection: TAG_COLLECTION },
         nullable: true,
         optional: true
     },
