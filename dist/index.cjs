@@ -795,7 +795,7 @@ var visualIdentityCustomBrandingSchema = zod.z.object({
 var visualIdentitySchema = zod.z.object({
   primary_color: zod.z.string(),
   secondary_color: zod.z.string(),
-  background_color: zod.z.string(),
+  background_color: zod.z.string().nullable().optional(),
   logo: zod.z.string(),
   font: zod.z.string().nullable().optional(),
   top_banner: visualIdentityBannersSchema.optional(),

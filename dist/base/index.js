@@ -760,7 +760,7 @@ var visualIdentityCustomBrandingSchema = z.object({
 var visualIdentitySchema = z.object({
   primary_color: z.string(),
   secondary_color: z.string(),
-  background_color: z.string(),
+  background_color: z.string().nullable().optional(),
   logo: z.string(),
   font: z.string().nullable().optional(),
   top_banner: visualIdentityBannersSchema.optional(),
