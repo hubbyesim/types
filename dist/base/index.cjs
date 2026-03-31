@@ -159,6 +159,7 @@ var PACKAGE_TEMPLATE_COLLECTION = "/package_templates";
 var PROMO_CODE_COLLECTION = "/companies/hubby/promo_codes";
 var COUNTRY_COLLECTION = "countries";
 var ESIM_COLLECTION = "esims";
+var PAYMENT_COLLECTION = "payments";
 var PRICE_LIST_COLLECTION = "price_lists";
 var BOOKING_COLLECTION = "bookings";
 var ROLE_COLLECTION = "roles";
@@ -195,6 +196,29 @@ var tagModelSpec = {
   type: zod.z.string().nullable().optional()
   // can be 'partner', 'booking' etc...
 };
+var packageQueuePackageSpecificationSchema = zod.z.object({
+  size: zod.z.string().optional(),
+  iso3: zod.z.string().optional(),
+  destination: zod.z.string().optional(),
+  package_type: zod.z.enum(["data-limited", "time-limited", "starter", "unlimited"]).optional(),
+  package_duration: zod.z.number().optional(),
+  traffic_policy: zod.z.string().optional()
+});
+var packageQueueSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string(),
+  uuid: zod.z.string(),
+  booking: { _type: "docRef", collection: BOOKING_COLLECTION, nullable: true },
+  payment: { _type: "docRef", collection: PAYMENT_COLLECTION, nullable: true },
+  bundle: zod.z.string().nullable().optional(),
+  esim: { _type: "docRef", collection: ESIM_COLLECTION, nullable: true },
+  package_specification: packageQueuePackageSpecificationSchema,
+  origin: zod.z.enum(["booking", "payment"]),
+  showed_at: timestampNullable,
+  redeemed_at: timestampNullable,
+  declined_at: timestampNullable,
+  created_at: timestampRequired,
+  updated_at: timestampRequired
+});
 
 // src/specs/user.ts
 var apiKeySpec = {
@@ -220,6 +244,7 @@ var apiKeysObjectSpec = {
 };
 var userSchemaSpec = markAsSchemaSpec({
   id: zod.z.string().nullable().optional(),
+  external_user_id: zod.z.string().nullable().optional(),
   name: zod.z.string().nullable(),
   email: zod.z.string().email().nullable(),
   stripe_id: zod.z.string().nullable().optional(),
@@ -259,7 +284,9 @@ var userSchemaSpec = markAsSchemaSpec({
   updated_by: zod.z.string().nullable().optional(),
   push_to_start_token: zod.z.string().nullable().optional(),
   custom_branding: zod.z.any().nullable().optional(),
-  messaging_contact_id: zod.z.string().nullable().optional()
+  messaging_contact_id: zod.z.string().nullable().optional(),
+  has_universal_esim: zod.z.boolean().nullable().optional(),
+  current_universal_esim: { _type: "docRef", collection: ESIM_COLLECTION, optional: true, nullable: true }
 });
 var SUPPORTED_LOCALES = [
   "en-US",
@@ -296,6 +323,7 @@ var SUPPORTED_LOCALES = [
 ];
 var supportedLocalesSchema = zod.z.enum(SUPPORTED_LOCALES);
 var packageSpecificationSchema = zod.z.object({
+  external_user_id: zod.z.string().nullable().optional(),
   destination: zod.z.string().optional().or(zod.z.array(zod.z.string())),
   iso3: zod.z.string().optional(),
   size: zod.z.string().optional(),
@@ -325,6 +353,7 @@ var promoCodeSchemaSpec = markAsSchemaSpec({
   usage: zod.z.array(zod.z.string()),
   uuid_usage: zod.z.array(zod.z.string()),
   package_specification: packageSpecificationSchema.optional(),
+  external_user_id: zod.z.string().nullable().optional(),
   valid_from: timestampRequired,
   valid_to: timestampRequired,
   // Reference fields
@@ -367,6 +396,7 @@ var financialInsightsSchema = zod.z.object({
 var bookingSchemaSpec = markAsSchemaSpec({
   id: zod.z.string().optional(),
   external_id: zod.z.string().nullable().optional(),
+  external_user_id: zod.z.string().nullable().optional(),
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: zod.z.string().nullable(),
@@ -501,6 +531,7 @@ var esimSchemaSpec = markAsSchemaSpec({
   data_used: zod.z.boolean(),
   status: zod.z.string().nullable(),
   status_history: esimStatusHistorySchema,
+  status_updated_at: timestampNullable,
   name: zod.z.string(),
   android_auto: zod.z.boolean(),
   partner_price: zod.z.number().nullable(),
@@ -788,7 +819,9 @@ var freeEsimSchema = zod.z.object({
   booking_id_verification: zod.z.boolean().default(false),
   booking_id_verification_pattern: zod.z.string().nullable().optional(),
   allowance: zod.z.number(),
-  total_allowance: zod.z.number()
+  total_allowance: zod.z.number(),
+  use_claim_esim: zod.z.boolean().optional().nullable(),
+  require_phone_verification: zod.z.boolean().optional().nullable()
 });
 var agentSignupSettingsSchema = zod.z.object({
   slack_channel: zod.z.string().nullable().optional(),
@@ -836,7 +869,8 @@ var platformSettingsSchema = zod.z.object({
     discount_percentage: zod.z.number().min(0).max(100)
   }).nullable().optional(),
   account_manager: zod.z.string().nullable().optional(),
-  external_sales_partner_manager: zod.z.string().nullable().optional()
+  external_sales_partner_manager: zod.z.string().nullable().optional(),
+  require_phone_otp: zod.z.boolean().optional().default(false)
 });
 markAsSchemaSpec({
   destination: zod.z.string(),
@@ -1012,6 +1046,7 @@ var partnerSchemaSpec = markAsSchemaSpec({
   type: zod.z.enum(["wholesale", "reseller", "platform", "agent"]).nullable().optional(),
   is_active: zod.z.boolean().nullable().optional(),
   external_id: zod.z.string().nullable().optional(),
+  esim_type: zod.z.enum(["classic", "universal"]).optional(),
   // Complex nested objects
   contact: {
     _type: "object",
@@ -1408,6 +1443,7 @@ var appFlowFeedbackSchemaSpec = markAsSchemaSpec({
 
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
+var HPackageQueueSchema = buildClientSchema(packageQueueSchemaSpec);
 var HBookingSchema = buildClientSchema(bookingSchemaSpec);
 var HCountrySchema = buildClientSchema(countrySchemaSpec);
 var HCurrencySchema = buildClientSchema(currencySchemaSpec);
@@ -1501,6 +1537,7 @@ exports.HLiveActivitySchema = HLiveActivitySchema;
 exports.HLoginRequestSchema = HLoginRequestSchema;
 exports.HMessageSchema = HMessageSchema;
 exports.HPackagePriceSchema = HPackagePriceSchema;
+exports.HPackageQueueSchema = HPackageQueueSchema;
 exports.HPackageSchema = HPackageSchema;
 exports.HPackageTemplateSchema = HPackageTemplateSchema;
 exports.HPartnerAppSchema = HPartnerAppSchema;
@@ -1532,6 +1569,7 @@ exports.HUserTouchpointsSchema = HUserTouchpointsSchema;
 exports.HVisualIdentityBannerSchema = HVisualIdentityBannerSchema;
 exports.HVisualIdentityBannersSchema = HVisualIdentityBannersSchema;
 exports.HVisualIdentitySchema = HVisualIdentitySchema;
+exports.HWebappRedirectTokenSchema = HWebappRedirectTokenSchema;
 exports.HubbyModelSchema = HubbyModelSchema;
 exports.SUPPORTED_LOCALES = SUPPORTED_LOCALES2;
 //# sourceMappingURL=out.js.map

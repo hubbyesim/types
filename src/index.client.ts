@@ -4,6 +4,7 @@ import {
   apiKeySpec,
   apiKeysSpec,
   apiKeysObjectSpec,
+  packageQueueSchemaSpec,
 } from "./specs/user";
 import {
   bookingSchemaSpec,
@@ -75,6 +76,7 @@ import { appFlowFeedbackSchemaSpec } from "./specs/app_flow_feedback";
 
 /** ZOD SCHEMAS */
 export const HUserSchema = buildClientSchema(userSchemaSpec);
+export const HPackageQueueSchema = buildClientSchema(packageQueueSchemaSpec);
 export const HBookingSchema = buildClientSchema(bookingSchemaSpec);
 export const HCountrySchema = buildClientSchema(countrySchemaSpec);
 export const HCurrencySchema = buildClientSchema(currencySchemaSpec);
@@ -147,6 +149,7 @@ export const HJobStatusSchema = jobStatusSchema;
 
 export type HAnalytics = z.infer<typeof HAnalyticsSchema>;
 export type HUser = z.infer<typeof HUserSchema>;
+export type HPackageQueue = z.infer<typeof HPackageQueueSchema>;
 export type HBooking = z.infer<typeof HBookingSchema>;
 export type HCountry = z.infer<typeof HCountrySchema>;
 export type HCurrency = z.infer<typeof HCurrencySchema>;

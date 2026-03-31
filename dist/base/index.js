@@ -157,6 +157,7 @@ var PACKAGE_TEMPLATE_COLLECTION = "/package_templates";
 var PROMO_CODE_COLLECTION = "/companies/hubby/promo_codes";
 var COUNTRY_COLLECTION = "countries";
 var ESIM_COLLECTION = "esims";
+var PAYMENT_COLLECTION = "payments";
 var PRICE_LIST_COLLECTION = "price_lists";
 var BOOKING_COLLECTION = "bookings";
 var ROLE_COLLECTION = "roles";
@@ -193,6 +194,29 @@ var tagModelSpec = {
   type: z.string().nullable().optional()
   // can be 'partner', 'booking' etc...
 };
+var packageQueuePackageSpecificationSchema = z.object({
+  size: z.string().optional(),
+  iso3: z.string().optional(),
+  destination: z.string().optional(),
+  package_type: z.enum(["data-limited", "time-limited", "starter", "unlimited"]).optional(),
+  package_duration: z.number().optional(),
+  traffic_policy: z.string().optional()
+});
+var packageQueueSchemaSpec = markAsSchemaSpec({
+  id: z.string(),
+  uuid: z.string(),
+  booking: { _type: "docRef", collection: BOOKING_COLLECTION, nullable: true },
+  payment: { _type: "docRef", collection: PAYMENT_COLLECTION, nullable: true },
+  bundle: z.string().nullable().optional(),
+  esim: { _type: "docRef", collection: ESIM_COLLECTION, nullable: true },
+  package_specification: packageQueuePackageSpecificationSchema,
+  origin: z.enum(["booking", "payment"]),
+  showed_at: timestampNullable,
+  redeemed_at: timestampNullable,
+  declined_at: timestampNullable,
+  created_at: timestampRequired,
+  updated_at: timestampRequired
+});
 
 // src/specs/user.ts
 var apiKeySpec = {
@@ -218,6 +242,7 @@ var apiKeysObjectSpec = {
 };
 var userSchemaSpec = markAsSchemaSpec({
   id: z.string().nullable().optional(),
+  external_user_id: z.string().nullable().optional(),
   name: z.string().nullable(),
   email: z.string().email().nullable(),
   stripe_id: z.string().nullable().optional(),
@@ -257,7 +282,9 @@ var userSchemaSpec = markAsSchemaSpec({
   updated_by: z.string().nullable().optional(),
   push_to_start_token: z.string().nullable().optional(),
   custom_branding: z.any().nullable().optional(),
-  messaging_contact_id: z.string().nullable().optional()
+  messaging_contact_id: z.string().nullable().optional(),
+  has_universal_esim: z.boolean().nullable().optional(),
+  current_universal_esim: { _type: "docRef", collection: ESIM_COLLECTION, optional: true, nullable: true }
 });
 var SUPPORTED_LOCALES = [
   "en-US",
@@ -294,6 +321,7 @@ var SUPPORTED_LOCALES = [
 ];
 var supportedLocalesSchema = z.enum(SUPPORTED_LOCALES);
 var packageSpecificationSchema = z.object({
+  external_user_id: z.string().nullable().optional(),
   destination: z.string().optional().or(z.array(z.string())),
   iso3: z.string().optional(),
   size: z.string().optional(),
@@ -323,6 +351,7 @@ var promoCodeSchemaSpec = markAsSchemaSpec({
   usage: z.array(z.string()),
   uuid_usage: z.array(z.string()),
   package_specification: packageSpecificationSchema.optional(),
+  external_user_id: z.string().nullable().optional(),
   valid_from: timestampRequired,
   valid_to: timestampRequired,
   // Reference fields
@@ -365,6 +394,7 @@ var financialInsightsSchema = z.object({
 var bookingSchemaSpec = markAsSchemaSpec({
   id: z.string().optional(),
   external_id: z.string().nullable().optional(),
+  external_user_id: z.string().nullable().optional(),
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: z.string().nullable(),
@@ -499,6 +529,7 @@ var esimSchemaSpec = markAsSchemaSpec({
   data_used: z.boolean(),
   status: z.string().nullable(),
   status_history: esimStatusHistorySchema,
+  status_updated_at: timestampNullable,
   name: z.string(),
   android_auto: z.boolean(),
   partner_price: z.number().nullable(),
@@ -786,7 +817,9 @@ var freeEsimSchema = z.object({
   booking_id_verification: z.boolean().default(false),
   booking_id_verification_pattern: z.string().nullable().optional(),
   allowance: z.number(),
-  total_allowance: z.number()
+  total_allowance: z.number(),
+  use_claim_esim: z.boolean().optional().nullable(),
+  require_phone_verification: z.boolean().optional().nullable()
 });
 var agentSignupSettingsSchema = z.object({
   slack_channel: z.string().nullable().optional(),
@@ -834,7 +867,8 @@ var platformSettingsSchema = z.object({
     discount_percentage: z.number().min(0).max(100)
   }).nullable().optional(),
   account_manager: z.string().nullable().optional(),
-  external_sales_partner_manager: z.string().nullable().optional()
+  external_sales_partner_manager: z.string().nullable().optional(),
+  require_phone_otp: z.boolean().optional().default(false)
 });
 markAsSchemaSpec({
   destination: z.string(),
@@ -1010,6 +1044,7 @@ var partnerSchemaSpec = markAsSchemaSpec({
   type: z.enum(["wholesale", "reseller", "platform", "agent"]).nullable().optional(),
   is_active: z.boolean().nullable().optional(),
   external_id: z.string().nullable().optional(),
+  esim_type: z.enum(["classic", "universal"]).optional(),
   // Complex nested objects
   contact: {
     _type: "object",
@@ -1406,6 +1441,7 @@ var appFlowFeedbackSchemaSpec = markAsSchemaSpec({
 
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
+var HPackageQueueSchema = buildClientSchema(packageQueueSchemaSpec);
 var HBookingSchema = buildClientSchema(bookingSchemaSpec);
 var HCountrySchema = buildClientSchema(countrySchemaSpec);
 var HCurrencySchema = buildClientSchema(currencySchemaSpec);

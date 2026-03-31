@@ -191,6 +191,8 @@ export const freeEsimSchema = z.object({
     booking_id_verification_pattern: z.string().nullable().optional(),
     allowance: z.number(),
     total_allowance: z.number(),
+    use_claim_esim: z.boolean().optional().nullable(),
+    require_phone_verification: z.boolean().optional().nullable(),
 });
 
 // Agent signup settings schema
@@ -242,7 +244,8 @@ export const platformSettingsSchema = z.object({
         discount_percentage: z.number().min(0).max(100),
     }).nullable().optional(),
     account_manager: z.string().nullable().optional(),
-    external_sales_partner_manager: z.string().nullable().optional()
+    external_sales_partner_manager: z.string().nullable().optional(),
+    require_phone_otp: z.boolean().optional().default(false)
 });
 
 // ===== Exportable schema specs =====
@@ -404,7 +407,7 @@ export const platformSettingsSchemaSpec = markAsSchemaSpec({
         optional: true 
     },
     sales_partner: z.string().nullable().optional(),
-    external_sales_partner_manager: z.string().nullable().optional()
+    external_sales_partner_manager: z.string().nullable().optional(),
 });
 
 // Webhook settings schema
@@ -431,6 +434,7 @@ export const partnerSchemaSpec = markAsSchemaSpec({
     type: z.enum(['wholesale', 'reseller', 'platform', 'agent']).nullable().optional(),
     is_active: z.boolean().nullable().optional(),
     external_id: z.string().nullable().optional(),
+    esim_type: z.enum(['classic', 'universal']).optional(),
 
     // Complex nested objects
     contact: {

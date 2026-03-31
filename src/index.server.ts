@@ -1,6 +1,7 @@
 import { buildServerSchema } from './builders/server';
 import {
     userSchemaSpec,
+    packageQueueSchemaSpec,
 } from './specs/user';
 import {
     bookingSchemaSpec,
@@ -36,7 +37,6 @@ import {
 } from './specs/partner';
 
 import { hubbyModelSpec } from './specs/common';
-import { SUPPORTED_LOCALES as LOCALES } from './constants';
 import { apiLogSchemaSpec } from './specs/apiLogs';
 import { userTouchpointsSchemaSpec } from './specs/userTouchpoints';
 import { 
@@ -66,7 +66,7 @@ import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 
 
 import { convertFirestoreToJS, convertJSToFirestore } from './utils/firestoreTransformUtils';
-import { HPackage, HPartner, HPriceList, HPromoCode, HUserTouchpoints } from './index.client';
+import { HPackage, HPackageQueue, HPartner, HPriceList, HPromoCode, HUserTouchpoints, HWebappRedirectToken } from './index.client';
 import { buildClientSchema } from './builders/client';
 
 export {
@@ -74,6 +74,7 @@ export {
     analyticsSpec,
     packageSchemaSpec,
     userSchemaSpec,
+    packageQueueSchemaSpec,
     bookingSchemaSpec,
     countrySchemaSpec,
     currencySchemaSpec,
@@ -106,6 +107,7 @@ export {
 /** ZOD SCHEMAS */
 export const UserSchema = buildServerSchema(userSchemaSpec);
 export const UserFirestoreSchema = buildServerSchema(userSchemaSpec);
+export const PackageQueueSchema = buildServerSchema(packageQueueSchemaSpec);
 export const BookingSchema = buildServerSchema(bookingSchemaSpec);
 export const CountrySchema = buildServerSchema(countrySchemaSpec);
 export const CurrencySchema = buildServerSchema(currencySchemaSpec);
@@ -160,6 +162,7 @@ export const JobStatusSchema = jobStatusSchema;
 
 export type User = z.infer<typeof UserSchema>;
 export type UserFirestore = z.infer<typeof UserFirestoreSchema>;
+export type PackageQueue = z.infer<typeof PackageQueueSchema>;
 export type Booking = z.infer<typeof BookingSchema>;
 export type Country = z.infer<typeof CountrySchema>;
 export type Currency = z.infer<typeof CurrencySchema>;
@@ -259,6 +262,14 @@ export const userFromFirestore = (user: UserFirestore): User => {
     return convertFirestoreToJS(user, userSchemaSpec);
 }
 
+export const packageQueueFromFirestore = (doc: PackageQueue): HPackageQueue => {
+    return convertFirestoreToJS(doc, packageQueueSchemaSpec);
+}
+
+export const packageQueueToFirestore = (doc: HPackageQueue): PackageQueue => {
+    return convertJSToFirestore(doc, packageQueueSchemaSpec);
+}
+
 export const priceListFromFirestore = (priceList: PriceList): HPriceList => {
     return convertFirestoreToJS(priceList, priceListSchemaSpec);
 }
@@ -284,15 +295,21 @@ export const userTouchpointsToFirestore = (userTouchpoints: HUserTouchpoints): U
 }
 
 
+export const webappRedirectTokenFromFirestore = (doc: WebappRedirectToken): HWebappRedirectToken => {
+    return convertFirestoreToJS(doc, webappRedirectTokenSchemaSpec);
+}
+
+export const webappRedirectTokenToFirestore = (doc: HWebappRedirectToken): WebappRedirectToken => {
+    return convertJSToFirestore(doc, webappRedirectTokenSchemaSpec);
+}
+
 export const bookingAppSchema = buildClientSchema(bookingSchemaSpec);
 export const partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 export const destinationAppSchema = buildClientSchema(destinationSchemaSpec);
 export const destinationBundleAppSchema = buildClientSchema(destinationBundleSchemaSpec);
 export const packageTemplateAppSchema = buildClientSchema(packageTemplateSchemaSpec);
 export const promoPackageSpecificationAppSchema = buildClientSchema(promoPackageSpecificationSchema);
-// Export the type and constant
-export type SupportedLocales = typeof LOCALES[number];
-export const SUPPORTED_LOCALES = LOCALES;
+// SupportedLocales and SUPPORTED_LOCALES are already exported via './index.client'
 
 // Dependency Injection exports
 export { createModelConverters } from './utils/modelConverterFactory';
