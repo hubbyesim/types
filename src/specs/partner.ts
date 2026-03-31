@@ -426,7 +426,7 @@ export const webhookSettingsSchema = z.object({
 export const partnerSchemaSpec = markAsSchemaSpec({
     // Base model fields
     id: z.string(),
-    uuid: z.string(),
+    uuid: z.string().nullable().optional(),
     created_at: timestampRequired,
     updated_at: timestampRequired,
     created_by: z.string().nullable(),

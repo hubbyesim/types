@@ -891,7 +891,7 @@ declare const promoCodeSchemaSpec: {
 
 declare const partnerSchemaSpec: {
     id: z.ZodString;
-    uuid: z.ZodString;
+    uuid: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     created_at: {
         _type: "timestamp";
         nullable: boolean;
@@ -3369,7 +3369,7 @@ declare const HPromoCodeSchema: z.ZodObject<{
 }>;
 declare const HPartnerSchema: z.ZodObject<{
     id: z.ZodString;
-    uuid: z.ZodString;
+    uuid: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodNullable<z.ZodString>;
@@ -4215,7 +4215,6 @@ declare const HPartnerSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    uuid: string;
     data: {
         source: string;
         manual: boolean;
@@ -4399,6 +4398,7 @@ declare const HPartnerSchema: z.ZodObject<{
     };
     type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
     is_active?: boolean | null | undefined;
+    uuid?: string | null | undefined;
     external_id?: string | null | undefined;
     esim_type?: "classic" | "universal" | undefined;
 }, {
@@ -4408,7 +4408,6 @@ declare const HPartnerSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    uuid: string;
     data: {
         source: string;
         manual: boolean;
@@ -4592,6 +4591,7 @@ declare const HPartnerSchema: z.ZodObject<{
     };
     type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
     is_active?: boolean | null | undefined;
+    uuid?: string | null | undefined;
     external_id?: string | null | undefined;
     esim_type?: "classic" | "universal" | undefined;
 }>;
@@ -5005,7 +5005,7 @@ declare const HubbyModelSchema: z.ZodObject<{
 }>;
 declare const HPartnerAppSchema: z.ZodObject<{
     id: z.ZodString;
-    uuid: z.ZodString;
+    uuid: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodNullable<z.ZodString>;
@@ -5851,7 +5851,6 @@ declare const HPartnerAppSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    uuid: string;
     data: {
         source: string;
         manual: boolean;
@@ -6035,6 +6034,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     };
     type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
     is_active?: boolean | null | undefined;
+    uuid?: string | null | undefined;
     external_id?: string | null | undefined;
     esim_type?: "classic" | "universal" | undefined;
 }, {
@@ -6044,7 +6044,6 @@ declare const HPartnerAppSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    uuid: string;
     data: {
         source: string;
         manual: boolean;
@@ -6228,6 +6227,7 @@ declare const HPartnerAppSchema: z.ZodObject<{
     };
     type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
     is_active?: boolean | null | undefined;
+    uuid?: string | null | undefined;
     external_id?: string | null | undefined;
     esim_type?: "classic" | "universal" | undefined;
 }>;
@@ -8836,7 +8836,7 @@ declare const bookingAppSchema: z.ZodObject<{
 }>;
 declare const partnerAppSchema: z.ZodObject<{
     id: z.ZodString;
-    uuid: z.ZodString;
+    uuid: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodNullable<z.ZodString>;
@@ -9682,7 +9682,6 @@ declare const partnerAppSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    uuid: string;
     data: {
         source: string;
         manual: boolean;
@@ -9866,6 +9865,7 @@ declare const partnerAppSchema: z.ZodObject<{
     };
     type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
     is_active?: boolean | null | undefined;
+    uuid?: string | null | undefined;
     external_id?: string | null | undefined;
     esim_type?: "classic" | "universal" | undefined;
 }, {
@@ -9875,7 +9875,6 @@ declare const partnerAppSchema: z.ZodObject<{
     updated_at: Date;
     created_by: string | null;
     updated_by: string | null;
-    uuid: string;
     data: {
         source: string;
         manual: boolean;
@@ -10059,6 +10058,7 @@ declare const partnerAppSchema: z.ZodObject<{
     };
     type?: "platform" | "wholesale" | "reseller" | "agent" | null | undefined;
     is_active?: boolean | null | undefined;
+    uuid?: string | null | undefined;
     external_id?: string | null | undefined;
     esim_type?: "classic" | "universal" | undefined;
 }>;

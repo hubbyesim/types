@@ -1074,7 +1074,7 @@ var webhookSettingsSchema = zod.z.object({
 var partnerSchemaSpec = markAsSchemaSpec({
   // Base model fields
   id: zod.z.string(),
-  uuid: zod.z.string(),
+  uuid: zod.z.string().nullable().optional(),
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: zod.z.string().nullable(),
