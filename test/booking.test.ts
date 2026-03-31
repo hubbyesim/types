@@ -54,8 +54,9 @@ describe('Booking schema roundtrip', () => {
             },
             package_specifications: [
                 {
+                    external_user_id: 'ext_user_1',
                     destination: 'Netherlands',
-                }
+                },
             ],
             is_processed_for_esim_restoration: false,
             is_pseudonymized: false,
@@ -139,8 +140,9 @@ describe('Booking schema roundtrip', () => {
             },
             package_specifications: [
                 {
+                    external_user_id: 'ext_user_1',
                     destination: 'Netherlands',
-                }
+                },
             ],
             is_processed_for_esim_restoration: false,
             is_pseudonymized: false,

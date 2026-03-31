@@ -1,6 +1,7 @@
 import { buildServerSchema } from './builders/server';
 import {
     userSchemaSpec,
+    packageQueueSchemaSpec,
 } from './specs/user';
 import {
     bookingSchemaSpec,
@@ -36,7 +37,6 @@ import {
 } from './specs/partner';
 
 import { hubbyModelSpec } from './specs/common';
-import { SUPPORTED_LOCALES as LOCALES } from './constants';
 import { apiLogSchemaSpec } from './specs/apiLogs';
 import { userTouchpointsSchemaSpec } from './specs/userTouchpoints';
 import { 
@@ -60,12 +60,13 @@ import {
 } from './specs/live_activity';
 import { scheduledJobSchemaSpec, jobStatusSchema } from './specs/scheduled_job';
 import { autoInstallationEventsSchemaSpec } from './specs/auto_installation_events';
+import { webappRedirectTokenSchemaSpec } from './specs/webapp_redirect_token';
 import { z } from 'zod';
 import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 
 
 import { convertFirestoreToJS, convertJSToFirestore } from './utils/firestoreTransformUtils';
-import { HPackage, HPartner, HPriceList, HPromoCode, HUserTouchpoints } from './index.client';
+import { HPackage, HPackageQueue, HPartner, HPriceList, HPromoCode, HUserTouchpoints, HWebappRedirectToken } from './index.client';
 import { buildClientSchema } from './builders/client';
 
 export {
@@ -73,6 +74,7 @@ export {
     analyticsSpec,
     packageSchemaSpec,
     userSchemaSpec,
+    packageQueueSchemaSpec,
     bookingSchemaSpec,
     countrySchemaSpec,
     currencySchemaSpec,
@@ -97,13 +99,15 @@ export {
     lastUpdateSchema,
     scheduledJobSchemaSpec,
     jobStatusSchema,
-    autoInstallationEventsSchemaSpec
+    autoInstallationEventsSchemaSpec,
+    webappRedirectTokenSchemaSpec
 };
 
 
 /** ZOD SCHEMAS */
 export const UserSchema = buildServerSchema(userSchemaSpec);
 export const UserFirestoreSchema = buildServerSchema(userSchemaSpec);
+export const PackageQueueSchema = buildServerSchema(packageQueueSchemaSpec);
 export const BookingSchema = buildServerSchema(bookingSchemaSpec);
 export const CountrySchema = buildServerSchema(countrySchemaSpec);
 export const CurrencySchema = buildServerSchema(currencySchemaSpec);
@@ -134,6 +138,7 @@ export const LoginRequestSchema = buildServerSchema(loginRequestSchemaSpec);
 export const LiveActivitySchema = buildServerSchema(liveActivitySchemaSpec);
 export const ScheduledJobSchema = buildServerSchema(scheduledJobSchemaSpec);
 export const AutoInstallationEventsSchema = buildServerSchema(autoInstallationEventsSchemaSpec);
+export const WebappRedirectTokenSchema = buildServerSchema(webappRedirectTokenSchemaSpec);
 
 // Additional lower-level schemas
 export const AddressSchema = addressSchema;
@@ -157,6 +162,7 @@ export const JobStatusSchema = jobStatusSchema;
 
 export type User = z.infer<typeof UserSchema>;
 export type UserFirestore = z.infer<typeof UserFirestoreSchema>;
+export type PackageQueue = z.infer<typeof PackageQueueSchema>;
 export type Booking = z.infer<typeof BookingSchema>;
 export type Country = z.infer<typeof CountrySchema>;
 export type Currency = z.infer<typeof CurrencySchema>;
@@ -183,6 +189,7 @@ export type LoginRequest = z.infer<typeof LoginRequestSchema>;
 export type LiveActivity = z.infer<typeof LiveActivitySchema>;
 export type ScheduledJob = z.infer<typeof ScheduledJobSchema>;
 export type AutoInstallationEvents = z.infer<typeof AutoInstallationEventsSchema>;
+export type WebappRedirectToken = z.infer<typeof WebappRedirectTokenSchema>;
 export type LiveActivityStatus = z.infer<typeof liveActivityStatusSchema>;
 export type LiveActivityEvent = z.infer<typeof liveActivityEventSchema>;
 export type LiveActivityReason = z.infer<typeof liveActivityReasonSchema>;
@@ -255,6 +262,14 @@ export const userFromFirestore = (user: UserFirestore): User => {
     return convertFirestoreToJS(user, userSchemaSpec);
 }
 
+export const packageQueueFromFirestore = (doc: PackageQueue): HPackageQueue => {
+    return convertFirestoreToJS(doc, packageQueueSchemaSpec);
+}
+
+export const packageQueueToFirestore = (doc: HPackageQueue): PackageQueue => {
+    return convertJSToFirestore(doc, packageQueueSchemaSpec);
+}
+
 export const priceListFromFirestore = (priceList: PriceList): HPriceList => {
     return convertFirestoreToJS(priceList, priceListSchemaSpec);
 }
@@ -280,20 +295,26 @@ export const userTouchpointsToFirestore = (userTouchpoints: HUserTouchpoints): U
 }
 
 
+export const webappRedirectTokenFromFirestore = (doc: WebappRedirectToken): HWebappRedirectToken => {
+    return convertFirestoreToJS(doc, webappRedirectTokenSchemaSpec);
+}
+
+export const webappRedirectTokenToFirestore = (doc: HWebappRedirectToken): WebappRedirectToken => {
+    return convertJSToFirestore(doc, webappRedirectTokenSchemaSpec);
+}
+
 export const bookingAppSchema = buildClientSchema(bookingSchemaSpec);
 export const partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 export const destinationAppSchema = buildClientSchema(destinationSchemaSpec);
 export const destinationBundleAppSchema = buildClientSchema(destinationBundleSchemaSpec);
 export const packageTemplateAppSchema = buildClientSchema(packageTemplateSchemaSpec);
 export const promoPackageSpecificationAppSchema = buildClientSchema(promoPackageSpecificationSchema);
-// Export the type and constant
-export type SupportedLocales = typeof LOCALES[number];
-export const SUPPORTED_LOCALES = LOCALES;
+// SupportedLocales and SUPPORTED_LOCALES are already exported via './index.client'
 
 // Dependency Injection exports
 export { createModelConverters } from './utils/modelConverterFactory';
 export { createConvertJSToFirestore, createConvertFirestoreToJS } from './utils/firestoreTransformUtils';
 export { FirebaseService, createFirebaseService } from './services/firebase';
 
-export { USER_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, BOOKING_COLLECTION, ROLE_COLLECTION, PERMISSION_COLLECTION, TRAFFIC_POLICY_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, COUNTRY_COLLECTION, ESIM_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, MESSAGE_COLLECTION, CURRENCY_COLLECTION, API_LOG_COLLECTION, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, USER_TOUCHPOINTS_COLLECTION, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, TAG_COLLECTION, LIVE_ACTIVITY_COLLECTION, SCHEDULED_JOB_COLLECTION, AUTO_INSTALLATION_EVENTS_COLLECTION } from './specs/common';
+export { USER_COLLECTION, PACKAGE_QUEUE_COLLECTION, PACKAGE_COLLECTION, PARTNER_COLLECTION, BOOKING_COLLECTION, ROLE_COLLECTION, PERMISSION_COLLECTION, TRAFFIC_POLICY_COLLECTION, PROFILE_COLLECTION, PROMO_CODE_COLLECTION, COUNTRY_COLLECTION, ESIM_COLLECTION, PAYMENT_COLLECTION, PRICE_LIST_COLLECTION, MESSAGE_COLLECTION, CURRENCY_COLLECTION, API_LOG_COLLECTION, REVIEW_COLLECTION, REVIEW_SUBMISSION_COLLECTION, USER_TOUCHPOINTS_COLLECTION, DESTINATION_COLLECTION, DESTINATION_OFFER_COLLECTION, TAG_COLLECTION, LIVE_ACTIVITY_COLLECTION, SCHEDULED_JOB_COLLECTION, AUTO_INSTALLATION_EVENTS_COLLECTION, WEBAPP_REDIRECT_TOKEN_COLLECTION } from './specs/common';
 
