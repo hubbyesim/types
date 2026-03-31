@@ -39,6 +39,7 @@ describe("PromoCode Schema", () => {
             usage: ["user1", "user2"],
             uuid_usage: ["uuid1", "uuid2"],
             package_specification: {
+                external_user_id: "partner-user-1",
                 destination: "Netherlands",
                 size: "5GB",
                 package_id: "pkg-123",
@@ -81,7 +82,7 @@ describe("PromoCode Schema", () => {
         expect(roundtripClientObj.allowance_user).toBe(clientPromoCode.allowance_user);
         expect(roundtripClientObj.allowance_total).toBe(clientPromoCode.allowance_total);
         expect(roundtripClientObj.type).toBe(clientPromoCode.type);
-        expect(roundtripClientObj.package_specification.destination).toBe(clientPromoCode.package_specification.destination);
+        expect(roundtripClientObj.package_specification?.destination).toBe(clientPromoCode.package_specification?.destination);
         expect(roundtripClientObj.partner).toBe(clientPromoCode.partner);
         expect(roundtripClientObj.country).toBe(clientPromoCode.country);
         expect(roundtripClientObj.discount).toBe(clientPromoCode.discount);

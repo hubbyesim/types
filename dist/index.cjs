@@ -154,23 +154,17 @@ var buildServerSchema = (spec, path = []) => {
       refSchema = refSchema.optional();
     return refSchema;
   }
-  if (typeof spec === "object" && !("_type" in spec)) {
-    const shape = {};
-    for (const [key, val] of Object.entries(spec)) {
-      shape[key] = buildServerSchema(val, [...path, key]);
-    }
-    return zod.z.object(shape);
-  }
   if (typeof spec === "object" && "_type" in spec && spec._type === "object" && "of" in spec) {
     return wrapObjectSchema(spec, path, buildServerSchema);
   }
-  if (isSchemaSpec(spec) || typeof spec === "object" && "_type" in spec && spec._type === "object") {
+  if (isSchemaSpec(spec) || typeof spec === "object" && spec !== null) {
     return wrapPlainObjectSchema(spec, path, buildServerSchema);
   }
   throw new Error(`Unknown or malformed spec at "${pathString}": ${JSON.stringify(spec)}`);
 };
 var PARTNER_COLLECTION = "/companies/hubby/partners";
 var USER_COLLECTION = "users";
+var PACKAGE_QUEUE_COLLECTION = "package_queues";
 var PROFILE_COLLECTION = "/companies/hubby/profiles";
 var PACKAGE_COLLECTION = "/companies/hubby/packages";
 var PACKAGE_TEMPLATE_COLLECTION = "/package_templates";
@@ -195,6 +189,7 @@ var LIVE_ACTIVITY_COLLECTION = "live_activities";
 var TAG_COLLECTION = "tags";
 var SCHEDULED_JOB_COLLECTION = "scheduled_jobs";
 var AUTO_INSTALLATION_EVENTS_COLLECTION = "auto_installation_events";
+var WEBAPP_REDIRECT_TOKEN_COLLECTION = "webapp_redirect_tokens";
 var timestampNullableOptional = { _type: "timestamp", nullable: true, optional: true };
 var timestampNullable = { _type: "timestamp", nullable: true, optional: true };
 var timestampRequired = { _type: "timestamp", nullable: false, optional: false };
@@ -223,6 +218,29 @@ var tagModelSpec = {
   type: zod.z.string().nullable().optional()
   // can be 'partner', 'booking' etc...
 };
+var packageQueuePackageSpecificationSchema = zod.z.object({
+  size: zod.z.string().optional(),
+  iso3: zod.z.string().optional(),
+  destination: zod.z.string().optional(),
+  package_type: zod.z.enum(["data-limited", "time-limited", "starter", "unlimited"]).optional(),
+  package_duration: zod.z.number().optional(),
+  traffic_policy: zod.z.string().optional()
+});
+var packageQueueSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string(),
+  uuid: zod.z.string(),
+  booking: { _type: "docRef", collection: BOOKING_COLLECTION, nullable: true },
+  payment: { _type: "docRef", collection: PAYMENT_COLLECTION, nullable: true },
+  bundle: zod.z.string().nullable().optional(),
+  esim: { _type: "docRef", collection: ESIM_COLLECTION, nullable: true },
+  package_specification: packageQueuePackageSpecificationSchema,
+  origin: zod.z.enum(["booking", "payment"]),
+  showed_at: timestampNullable,
+  redeemed_at: timestampNullable,
+  declined_at: timestampNullable,
+  created_at: timestampRequired,
+  updated_at: timestampRequired
+});
 
 // src/specs/user.ts
 var apiKeySpec = {
@@ -248,6 +266,7 @@ var apiKeysObjectSpec = {
 };
 var userSchemaSpec = markAsSchemaSpec({
   id: zod.z.string().nullable().optional(),
+  external_user_id: zod.z.string().nullable().optional(),
   name: zod.z.string().nullable(),
   email: zod.z.string().email().nullable(),
   stripe_id: zod.z.string().nullable().optional(),
@@ -287,7 +306,9 @@ var userSchemaSpec = markAsSchemaSpec({
   updated_by: zod.z.string().nullable().optional(),
   push_to_start_token: zod.z.string().nullable().optional(),
   custom_branding: zod.z.any().nullable().optional(),
-  messaging_contact_id: zod.z.string().nullable().optional()
+  messaging_contact_id: zod.z.string().nullable().optional(),
+  has_universal_esim: zod.z.boolean().nullable().optional(),
+  current_universal_esim: { _type: "docRef", collection: ESIM_COLLECTION, optional: true, nullable: true }
 });
 var SUPPORTED_LOCALES = [
   "en-US",
@@ -324,6 +345,7 @@ var SUPPORTED_LOCALES = [
 ];
 var supportedLocalesSchema = zod.z.enum(SUPPORTED_LOCALES);
 var packageSpecificationSchema = zod.z.object({
+  external_user_id: zod.z.string().nullable().optional(),
   destination: zod.z.string().optional().or(zod.z.array(zod.z.string())),
   iso3: zod.z.string().optional(),
   size: zod.z.string().optional(),
@@ -353,6 +375,7 @@ var promoCodeSchemaSpec = markAsSchemaSpec({
   usage: zod.z.array(zod.z.string()),
   uuid_usage: zod.z.array(zod.z.string()),
   package_specification: packageSpecificationSchema.optional(),
+  external_user_id: zod.z.string().nullable().optional(),
   valid_from: timestampRequired,
   valid_to: timestampRequired,
   // Reference fields
@@ -395,6 +418,7 @@ var financialInsightsSchema = zod.z.object({
 var bookingSchemaSpec = markAsSchemaSpec({
   id: zod.z.string().optional(),
   external_id: zod.z.string().nullable().optional(),
+  external_user_id: zod.z.string().nullable().optional(),
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: zod.z.string().nullable(),
@@ -1051,6 +1075,7 @@ var partnerSchemaSpec = markAsSchemaSpec({
   type: zod.z.enum(["wholesale", "reseller", "platform", "agent"]).nullable().optional(),
   is_active: zod.z.boolean().nullable().optional(),
   external_id: zod.z.string().nullable().optional(),
+  esim_type: zod.z.enum(["classic", "universal"]).optional(),
   // Complex nested objects
   contact: {
     _type: "object",
@@ -1409,6 +1434,19 @@ var autoInstallationEventsSchemaSpec = markAsSchemaSpec({
   partner: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true, optional: true },
   promo_code: { _type: "docRef", collection: PROMO_CODE_COLLECTION, nullable: true, optional: true }
 });
+var webappRedirectTokenSchemaSpec = markAsSchemaSpec({
+  id: zod.z.string().nullable().optional(),
+  token: zod.z.string(),
+  external_user_id: zod.z.string(),
+  partner_id: { _type: "docRef", collection: PARTNER_COLLECTION, nullable: true, optional: true },
+  consumed: zod.z.boolean(),
+  consumed_at: timestampNullable,
+  expires_at: timestampRequired,
+  created_at: timestampRequired,
+  updated_at: timestampRequired,
+  created_by: { _type: "docRef", collection: "users", nullable: true, optional: true },
+  updated_by: { _type: "docRef", collection: "users", nullable: true, optional: true }
+});
 function createConvertJSToFirestore(db) {
   return function convertJSToFirestore2(input, spec) {
     if (input === void 0 || input === null)
@@ -1672,6 +1710,7 @@ var permissionSchemaSpec = markAsSchemaSpec({
 
 // src/index.client.ts
 var HUserSchema = buildClientSchema(userSchemaSpec);
+var HPackageQueueSchema = buildClientSchema(packageQueueSchemaSpec);
 var HBookingSchema = buildClientSchema(bookingSchemaSpec);
 var HCountrySchema = buildClientSchema(countrySchemaSpec);
 var HCurrencySchema = buildClientSchema(currencySchemaSpec);
@@ -1720,6 +1759,7 @@ var HLoginRequestSchema = buildClientSchema(loginRequestSchemaSpec);
 var HLiveActivitySchema = buildClientSchema(liveActivitySchemaSpec);
 var HScheduledJobSchema = buildClientSchema(scheduledJobSchemaSpec);
 var HAutoInstallationEventsSchema = buildClientSchema(autoInstallationEventsSchemaSpec);
+var HWebappRedirectTokenSchema = buildClientSchema(webappRedirectTokenSchemaSpec);
 var HAddressSchema = addressSchema;
 var HRegistrationSchema = registrationSchema;
 var HBankingDetailsSchema = bankingDetailsSchema;
@@ -1738,6 +1778,7 @@ var HBaseRewardSchema = baseRewardSchema;
 var HRewardMultipliersSchema = rewardMultipliersSchema;
 var HRewardPackageTypeSchema = rewardPackageTypeSchema;
 var HJobStatusSchema = jobStatusSchema;
+var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
 // src/utils/modelConverterFactory.ts
 function createModelConverters(db, modelSchemaSpec) {
@@ -1762,6 +1803,7 @@ function createModelConverters(db, modelSchemaSpec) {
 // src/index.server.ts
 var UserSchema = buildServerSchema(userSchemaSpec);
 var UserFirestoreSchema = buildServerSchema(userSchemaSpec);
+var PackageQueueSchema = buildServerSchema(packageQueueSchemaSpec);
 var BookingSchema = buildServerSchema(bookingSchemaSpec);
 var CountrySchema = buildServerSchema(countrySchemaSpec);
 var CurrencySchema = buildServerSchema(currencySchemaSpec);
@@ -1792,6 +1834,7 @@ var LoginRequestSchema = buildServerSchema(loginRequestSchemaSpec);
 var LiveActivitySchema = buildServerSchema(liveActivitySchemaSpec);
 var ScheduledJobSchema = buildServerSchema(scheduledJobSchemaSpec);
 var AutoInstallationEventsSchema = buildServerSchema(autoInstallationEventsSchemaSpec);
+var WebappRedirectTokenSchema = buildServerSchema(webappRedirectTokenSchemaSpec);
 var AddressSchema = addressSchema;
 var RegistrationSchema = registrationSchema;
 var BankingDetailsSchema = bankingDetailsSchema;
@@ -1822,6 +1865,12 @@ var userToFirestore = (user) => {
 var userFromFirestore = (user) => {
   return convertFirestoreToJS(user, userSchemaSpec);
 };
+var packageQueueFromFirestore = (doc) => {
+  return convertFirestoreToJS(doc, packageQueueSchemaSpec);
+};
+var packageQueueToFirestore = (doc) => {
+  return convertJSToFirestore(doc, packageQueueSchemaSpec);
+};
 var priceListFromFirestore = (priceList) => {
   return convertFirestoreToJS(priceList, priceListSchemaSpec);
 };
@@ -1840,13 +1889,18 @@ var userTouchpointsFromFirestore = (userTouchpoints) => {
 var userTouchpointsToFirestore = (userTouchpoints) => {
   return convertJSToFirestore(userTouchpoints, userTouchpointsSchemaSpec);
 };
+var webappRedirectTokenFromFirestore = (doc) => {
+  return convertFirestoreToJS(doc, webappRedirectTokenSchemaSpec);
+};
+var webappRedirectTokenToFirestore = (doc) => {
+  return convertJSToFirestore(doc, webappRedirectTokenSchemaSpec);
+};
 var bookingAppSchema = buildClientSchema(bookingSchemaSpec);
 var partnerAppSchema = buildClientSchema(partnerSchemaSpec);
 var destinationAppSchema = buildClientSchema(destinationSchemaSpec);
 var destinationBundleAppSchema = buildClientSchema(destinationBundleSchemaSpec);
 var packageTemplateAppSchema = buildClientSchema(packageTemplateSchemaSpec);
 var promoPackageSpecificationAppSchema = buildClientSchema(packageSpecificationSchema);
-var SUPPORTED_LOCALES2 = SUPPORTED_LOCALES;
 
 exports.API_LOG_COLLECTION = API_LOG_COLLECTION;
 exports.AUTO_INSTALLATION_EVENTS_COLLECTION = AUTO_INSTALLATION_EVENTS_COLLECTION;
@@ -1896,6 +1950,7 @@ exports.HLiveActivitySchema = HLiveActivitySchema;
 exports.HLoginRequestSchema = HLoginRequestSchema;
 exports.HMessageSchema = HMessageSchema;
 exports.HPackagePriceSchema = HPackagePriceSchema;
+exports.HPackageQueueSchema = HPackageQueueSchema;
 exports.HPackageSchema = HPackageSchema;
 exports.HPackageTemplateSchema = HPackageTemplateSchema;
 exports.HPartnerAppSchema = HPartnerAppSchema;
@@ -1927,6 +1982,7 @@ exports.HUserTouchpointsSchema = HUserTouchpointsSchema;
 exports.HVisualIdentityBannerSchema = HVisualIdentityBannerSchema;
 exports.HVisualIdentityBannersSchema = HVisualIdentityBannersSchema;
 exports.HVisualIdentitySchema = HVisualIdentitySchema;
+exports.HWebappRedirectTokenSchema = HWebappRedirectTokenSchema;
 exports.HubbyModelSchema = HubbyModelSchema;
 exports.JobStatusSchema = JobStatusSchema;
 exports.LIVE_ACTIVITY_COLLECTION = LIVE_ACTIVITY_COLLECTION;
@@ -1935,6 +1991,7 @@ exports.LoginRequestSchema = LoginRequestSchema;
 exports.MESSAGE_COLLECTION = MESSAGE_COLLECTION;
 exports.MessageSchema = MessageSchema;
 exports.PACKAGE_COLLECTION = PACKAGE_COLLECTION;
+exports.PACKAGE_QUEUE_COLLECTION = PACKAGE_QUEUE_COLLECTION;
 exports.PARTNER_COLLECTION = PARTNER_COLLECTION;
 exports.PAYMENT_COLLECTION = PAYMENT_COLLECTION;
 exports.PERMISSION_COLLECTION = PERMISSION_COLLECTION;
@@ -1942,6 +1999,7 @@ exports.PRICE_LIST_COLLECTION = PRICE_LIST_COLLECTION;
 exports.PROFILE_COLLECTION = PROFILE_COLLECTION;
 exports.PROMO_CODE_COLLECTION = PROMO_CODE_COLLECTION;
 exports.PackagePriceSchema = PackagePriceSchema;
+exports.PackageQueueSchema = PackageQueueSchema;
 exports.PackageSchema = PackageSchema;
 exports.PackageTemplateSchema = PackageTemplateSchema;
 exports.PartnerContactSchema = PartnerContactSchema;
@@ -1980,6 +2038,8 @@ exports.UserTouchpointsSchema = UserTouchpointsSchema;
 exports.VisualIdentityBannerSchema = VisualIdentityBannerSchema;
 exports.VisualIdentityBannersSchema = VisualIdentityBannersSchema;
 exports.VisualIdentitySchema = VisualIdentitySchema;
+exports.WEBAPP_REDIRECT_TOKEN_COLLECTION = WEBAPP_REDIRECT_TOKEN_COLLECTION;
+exports.WebappRedirectTokenSchema = WebappRedirectTokenSchema;
 exports.analyticsSpec = analyticsSpec;
 exports.apiLogSchemaSpec = apiLogSchemaSpec;
 exports.autoInstallationEventsSchemaSpec = autoInstallationEventsSchemaSpec;
@@ -2004,6 +2064,9 @@ exports.liveActivitySchemaSpec = liveActivitySchemaSpec;
 exports.liveActivityStatusSchema = liveActivityStatusSchema;
 exports.loginRequestSchemaSpec = loginRequestSchemaSpec;
 exports.messageSchemaSpec = messageSchemaSpec;
+exports.packageQueueFromFirestore = packageQueueFromFirestore;
+exports.packageQueueSchemaSpec = packageQueueSchemaSpec;
+exports.packageQueueToFirestore = packageQueueToFirestore;
 exports.packageSchemaSpec = packageSchemaSpec;
 exports.packageTemplateAppSchema = packageTemplateAppSchema;
 exports.packageTemplateSchemaSpec = packageTemplateSchemaSpec;
@@ -2029,5 +2092,8 @@ exports.userToFirestore = userToFirestore;
 exports.userTouchpointsFromFirestore = userTouchpointsFromFirestore;
 exports.userTouchpointsSchemaSpec = userTouchpointsSchemaSpec;
 exports.userTouchpointsToFirestore = userTouchpointsToFirestore;
+exports.webappRedirectTokenFromFirestore = webappRedirectTokenFromFirestore;
+exports.webappRedirectTokenSchemaSpec = webappRedirectTokenSchemaSpec;
+exports.webappRedirectTokenToFirestore = webappRedirectTokenToFirestore;
 //# sourceMappingURL=out.js.map
 //# sourceMappingURL=index.cjs.map
