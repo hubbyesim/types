@@ -849,7 +849,9 @@ var freeEsimSchema = z.object({
   booking_id_verification: z.boolean().default(false),
   booking_id_verification_pattern: z.string().nullable().optional(),
   allowance: z.number(),
-  total_allowance: z.number()
+  total_allowance: z.number(),
+  use_claim_esim: z.boolean().optional().nullable(),
+  require_phone_verification: z.boolean().optional().nullable()
 });
 var agentSignupSettingsSchema = z.object({
   slack_channel: z.string().nullable().optional(),
@@ -897,7 +899,8 @@ var platformSettingsSchema = z.object({
     discount_percentage: z.number().min(0).max(100)
   }).nullable().optional(),
   account_manager: z.string().nullable().optional(),
-  external_sales_partner_manager: z.string().nullable().optional()
+  external_sales_partner_manager: z.string().nullable().optional(),
+  require_phone_otp: z.boolean().optional().default(false)
 });
 var packagePriceSchemaSpec = markAsSchemaSpec({
   destination: z.string(),
