@@ -360,7 +360,7 @@ var packageSpecificationSchema = z.object({
 var promoCodeSchemaSpec = markAsSchemaSpec({
   id: z.string(),
   redeemed_at: timestampNullableOptional,
-  special_offer_redeemed_at: timestampNullableOptional,
+  limitedtime_discount_used_at: timestampNullableOptional,
   created_at: timestampRequired,
   updated_at: timestampRequired,
   created_by: z.string().nullable(),
@@ -611,8 +611,9 @@ var paymentSchemaSpec = markAsSchemaSpec({
     balance_used: z.number().optional(),
     booking_id: z.string().nullable().optional(),
     discount_amount: z.string().optional(),
-    is_special_offer: z.boolean().optional(),
-    special_offer_discount: z.number().optional(),
+    limitedtime_discount_promo_code: z.string().optional(),
+    is_limitedtime_discount_offer: z.boolean().optional(),
+    limitedtime_discount_offer_discount: z.number().optional(),
     monetization_discount_percent: z.number().optional()
   }).optional(),
   webapp_platform_payment_properties: z.object({

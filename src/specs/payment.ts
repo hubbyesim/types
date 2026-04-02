@@ -44,8 +44,9 @@ export const paymentSchemaSpec = markAsSchemaSpec({
         balance_used: z.number().optional(),
         booking_id: z.string().nullable().optional(),
         discount_amount: z.string().optional(),
-        is_special_offer: z.boolean().optional(),
-        special_offer_discount: z.number().optional(),
+        limitedtime_discount_promo_code: z.string().optional(),
+        is_limitedtime_discount_offer: z.boolean().optional(),
+        limitedtime_discount_offer_discount: z.number().optional(),
         monetization_discount_percent: z.number().optional(),
     }).optional(),
 
