@@ -26,7 +26,7 @@ export const userTouchpointsSchemaSpec = markAsSchemaSpec({
     activation_initiated_at: timestampNullableOptional,
     topup_initiated_at: timestampNullableOptional,
     topup_checkout_at: timestampNullableOptional,
-    phone_verification_initated_at: timestampNullableOptional,
+    phone_verification_initiated_at: timestampNullableOptional,
     phone_verification_sms_requested_at: timestampNullableOptional,
     phone_verification_code_submitted_at: timestampNullableOptional,
     phone_verification_completed_at: timestampNullableOptional,
