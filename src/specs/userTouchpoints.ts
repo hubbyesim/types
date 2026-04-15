@@ -29,6 +29,7 @@ export const userTouchpointsSchemaSpec = markAsSchemaSpec({
     phone_verification_initated_at: timestampNullableOptional,
     phone_verification_sms_requested_at: timestampNullableOptional,
     phone_verification_code_submitted_at: timestampNullableOptional,
+    phone_verification_completed_at: timestampNullableOptional,
     created_at: timestampRequired,
     updated_at: timestampRequired,
     created_by: { _type: 'docRef' as const, collection: USER_COLLECTION, nullable: true, optional: true },

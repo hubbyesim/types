@@ -31,6 +31,7 @@ describe('UserTouchpoints schema roundtrip', () => {
             phone_verification_initated_at: null,
             phone_verification_sms_requested_at: null,
             phone_verification_code_submitted_at: null,
+            phone_verification_completed_at: null,
             created_at: new Date('2024-01-01T00:00:00Z'),
             updated_at: new Date('2024-01-01T00:00:00Z'),
             // created_by and updated_by are optional and should be omitted for basic test
@@ -42,6 +43,7 @@ describe('UserTouchpoints schema roundtrip', () => {
         expect(result.phone_verification_initated_at).toBeNull();
         expect(result.phone_verification_sms_requested_at).toBeNull();
         expect(result.phone_verification_code_submitted_at).toBeNull();
+        expect(result.phone_verification_completed_at).toBeNull();
         expect(result.created_at).toBeInstanceOf(Date);
         expect(result.updated_at).toBeInstanceOf(Date);
         expect(result.created_by).toBeUndefined();
@@ -54,6 +56,7 @@ describe('UserTouchpoints schema roundtrip', () => {
             phone_verification_initated_at: new Date('2024-01-01T00:00:00Z'),
             phone_verification_sms_requested_at: new Date('2024-01-01T00:01:00Z'),
             phone_verification_code_submitted_at: new Date('2024-01-01T00:02:00Z'),
+            phone_verification_completed_at: new Date('2024-01-01T00:03:00Z'),
             created_at: new Date('2024-01-01T00:00:00Z'),
             updated_at: new Date('2024-01-01T00:00:00Z'),
             // created_by and updated_by are optional
@@ -65,6 +68,7 @@ describe('UserTouchpoints schema roundtrip', () => {
         expect(result.phone_verification_initated_at).toBeInstanceOf(Date);
         expect(result.phone_verification_sms_requested_at).toBeInstanceOf(Date);
         expect(result.phone_verification_code_submitted_at).toBeInstanceOf(Date);
+        expect(result.phone_verification_completed_at).toBeInstanceOf(Date);
         expect(result.created_at).toBeInstanceOf(Date);
         expect(result.updated_at).toBeInstanceOf(Date);
         expect(result.created_by).toBeUndefined();
