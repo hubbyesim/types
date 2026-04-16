@@ -5316,6 +5316,10 @@ declare const HUserTouchpointsSchema: z.ZodObject<{
     activation_initiated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     topup_initiated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     topup_checkout_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    phone_verification_initiated_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    phone_verification_sms_requested_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    phone_verification_code_submitted_at: z.ZodEffects<z.ZodDate, Date, Date>;
+    phone_verification_completed_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_at: z.ZodEffects<z.ZodDate, Date, Date>;
     updated_at: z.ZodEffects<z.ZodDate, Date, Date>;
     created_by: z.ZodString;
@@ -5338,6 +5342,10 @@ declare const HUserTouchpointsSchema: z.ZodObject<{
     activation_initiated_at: Date;
     topup_initiated_at: Date;
     topup_checkout_at: Date;
+    phone_verification_initiated_at: Date;
+    phone_verification_sms_requested_at: Date;
+    phone_verification_code_submitted_at: Date;
+    phone_verification_completed_at: Date;
     id?: string | null | undefined;
     unique_device_identifier?: string | null | undefined;
 }, {
@@ -5358,6 +5366,10 @@ declare const HUserTouchpointsSchema: z.ZodObject<{
     activation_initiated_at: Date;
     topup_initiated_at: Date;
     topup_checkout_at: Date;
+    phone_verification_initiated_at: Date;
+    phone_verification_sms_requested_at: Date;
+    phone_verification_code_submitted_at: Date;
+    phone_verification_completed_at: Date;
     id?: string | null | undefined;
     unique_device_identifier?: string | null | undefined;
 }>;
