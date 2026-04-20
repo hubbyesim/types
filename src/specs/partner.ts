@@ -328,7 +328,6 @@ export const webhookSettingsSchema = z.object({
     enabled: z.boolean().default(false),
     events: z.object({
         promocode_redemption: z.boolean().default(false),
-        promo_code_redeemed: z.boolean().default(false),
         esim_installed: z.boolean().default(false),
         esim_removed: z.boolean().default(false),
         package_activated: z.boolean().default(false),
