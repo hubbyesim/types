@@ -1645,9 +1645,9 @@ declare const HPartnerSchema: z.ZodObject<{
             esim_installed: z.ZodDefault<z.ZodBoolean>;
             esim_removed: z.ZodDefault<z.ZodBoolean>;
             package_activated: z.ZodDefault<z.ZodBoolean>;
-            package_usage_20_percent: z.ZodDefault<z.ZodBoolean>;
             package_usage_50_percent: z.ZodDefault<z.ZodBoolean>;
             package_usage_80_percent: z.ZodDefault<z.ZodBoolean>;
+            package_usage_100_percent: z.ZodDefault<z.ZodBoolean>;
             booking_within_cutoff: z.ZodDefault<z.ZodBoolean>;
             booking_about_to_depart: z.ZodDefault<z.ZodBoolean>;
         }, "strip", z.ZodTypeAny, {
@@ -1655,9 +1655,9 @@ declare const HPartnerSchema: z.ZodObject<{
             esim_installed: boolean;
             esim_removed: boolean;
             package_activated: boolean;
-            package_usage_20_percent: boolean;
             package_usage_50_percent: boolean;
             package_usage_80_percent: boolean;
+            package_usage_100_percent: boolean;
             booking_within_cutoff: boolean;
             booking_about_to_depart: boolean;
         }, {
@@ -1665,9 +1665,9 @@ declare const HPartnerSchema: z.ZodObject<{
             esim_installed?: boolean | undefined;
             esim_removed?: boolean | undefined;
             package_activated?: boolean | undefined;
-            package_usage_20_percent?: boolean | undefined;
             package_usage_50_percent?: boolean | undefined;
             package_usage_80_percent?: boolean | undefined;
+            package_usage_100_percent?: boolean | undefined;
             booking_within_cutoff?: boolean | undefined;
             booking_about_to_depart?: boolean | undefined;
         }>>;
@@ -1678,9 +1678,9 @@ declare const HPartnerSchema: z.ZodObject<{
             esim_installed: boolean;
             esim_removed: boolean;
             package_activated: boolean;
-            package_usage_20_percent: boolean;
             package_usage_50_percent: boolean;
             package_usage_80_percent: boolean;
+            package_usage_100_percent: boolean;
             booking_within_cutoff: boolean;
             booking_about_to_depart: boolean;
         };
@@ -1695,9 +1695,9 @@ declare const HPartnerSchema: z.ZodObject<{
             esim_installed?: boolean | undefined;
             esim_removed?: boolean | undefined;
             package_activated?: boolean | undefined;
-            package_usage_20_percent?: boolean | undefined;
             package_usage_50_percent?: boolean | undefined;
             package_usage_80_percent?: boolean | undefined;
+            package_usage_100_percent?: boolean | undefined;
             booking_within_cutoff?: boolean | undefined;
             booking_about_to_depart?: boolean | undefined;
         } | undefined;
@@ -1874,9 +1874,9 @@ declare const HPartnerSchema: z.ZodObject<{
             esim_installed: boolean;
             esim_removed: boolean;
             package_activated: boolean;
-            package_usage_20_percent: boolean;
             package_usage_50_percent: boolean;
             package_usage_80_percent: boolean;
+            package_usage_100_percent: boolean;
             booking_within_cutoff: boolean;
             booking_about_to_depart: boolean;
         };
@@ -2059,9 +2059,9 @@ declare const HPartnerSchema: z.ZodObject<{
             esim_installed?: boolean | undefined;
             esim_removed?: boolean | undefined;
             package_activated?: boolean | undefined;
-            package_usage_20_percent?: boolean | undefined;
             package_usage_50_percent?: boolean | undefined;
             package_usage_80_percent?: boolean | undefined;
+            package_usage_100_percent?: boolean | undefined;
             booking_within_cutoff?: boolean | undefined;
             booking_about_to_depart?: boolean | undefined;
         } | undefined;
@@ -3208,9 +3208,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
             esim_installed: z.ZodDefault<z.ZodBoolean>;
             esim_removed: z.ZodDefault<z.ZodBoolean>;
             package_activated: z.ZodDefault<z.ZodBoolean>;
-            package_usage_20_percent: z.ZodDefault<z.ZodBoolean>;
             package_usage_50_percent: z.ZodDefault<z.ZodBoolean>;
             package_usage_80_percent: z.ZodDefault<z.ZodBoolean>;
+            package_usage_100_percent: z.ZodDefault<z.ZodBoolean>;
             booking_within_cutoff: z.ZodDefault<z.ZodBoolean>;
             booking_about_to_depart: z.ZodDefault<z.ZodBoolean>;
         }, "strip", z.ZodTypeAny, {
@@ -3218,9 +3218,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
             esim_installed: boolean;
             esim_removed: boolean;
             package_activated: boolean;
-            package_usage_20_percent: boolean;
             package_usage_50_percent: boolean;
             package_usage_80_percent: boolean;
+            package_usage_100_percent: boolean;
             booking_within_cutoff: boolean;
             booking_about_to_depart: boolean;
         }, {
@@ -3228,9 +3228,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
             esim_installed?: boolean | undefined;
             esim_removed?: boolean | undefined;
             package_activated?: boolean | undefined;
-            package_usage_20_percent?: boolean | undefined;
             package_usage_50_percent?: boolean | undefined;
             package_usage_80_percent?: boolean | undefined;
+            package_usage_100_percent?: boolean | undefined;
             booking_within_cutoff?: boolean | undefined;
             booking_about_to_depart?: boolean | undefined;
         }>>;
@@ -3241,9 +3241,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
             esim_installed: boolean;
             esim_removed: boolean;
             package_activated: boolean;
-            package_usage_20_percent: boolean;
             package_usage_50_percent: boolean;
             package_usage_80_percent: boolean;
+            package_usage_100_percent: boolean;
             booking_within_cutoff: boolean;
             booking_about_to_depart: boolean;
         };
@@ -3258,9 +3258,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
             esim_installed?: boolean | undefined;
             esim_removed?: boolean | undefined;
             package_activated?: boolean | undefined;
-            package_usage_20_percent?: boolean | undefined;
             package_usage_50_percent?: boolean | undefined;
             package_usage_80_percent?: boolean | undefined;
+            package_usage_100_percent?: boolean | undefined;
             booking_within_cutoff?: boolean | undefined;
             booking_about_to_depart?: boolean | undefined;
         } | undefined;
@@ -3437,9 +3437,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
             esim_installed: boolean;
             esim_removed: boolean;
             package_activated: boolean;
-            package_usage_20_percent: boolean;
             package_usage_50_percent: boolean;
             package_usage_80_percent: boolean;
+            package_usage_100_percent: boolean;
             booking_within_cutoff: boolean;
             booking_about_to_depart: boolean;
         };
@@ -3622,9 +3622,9 @@ declare const HPartnerAppSchema: z.ZodObject<{
             esim_installed?: boolean | undefined;
             esim_removed?: boolean | undefined;
             package_activated?: boolean | undefined;
-            package_usage_20_percent?: boolean | undefined;
             package_usage_50_percent?: boolean | undefined;
             package_usage_80_percent?: boolean | undefined;
+            package_usage_100_percent?: boolean | undefined;
             booking_within_cutoff?: boolean | undefined;
             booking_about_to_depart?: boolean | undefined;
         } | undefined;

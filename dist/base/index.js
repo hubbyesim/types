@@ -806,9 +806,9 @@ var webhookSettingsSchema = z.object({
     esim_installed: z.boolean().default(false),
     esim_removed: z.boolean().default(false),
     package_activated: z.boolean().default(false),
-    package_usage_20_percent: z.boolean().default(false),
     package_usage_50_percent: z.boolean().default(false),
     package_usage_80_percent: z.boolean().default(false),
+    package_usage_100_percent: z.boolean().default(false),
     booking_within_cutoff: z.boolean().default(false),
     booking_about_to_depart: z.boolean().default(false)
   }).default({})

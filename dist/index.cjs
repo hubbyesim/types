@@ -835,9 +835,9 @@ var webhookSettingsSchema = zod.z.object({
     esim_installed: zod.z.boolean().default(false),
     esim_removed: zod.z.boolean().default(false),
     package_activated: zod.z.boolean().default(false),
-    package_usage_20_percent: zod.z.boolean().default(false),
     package_usage_50_percent: zod.z.boolean().default(false),
     package_usage_80_percent: zod.z.boolean().default(false),
+    package_usage_100_percent: zod.z.boolean().default(false),
     booking_within_cutoff: zod.z.boolean().default(false),
     booking_about_to_depart: zod.z.boolean().default(false)
   }).default({})
