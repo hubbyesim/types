@@ -802,7 +802,15 @@ var webhookSettingsSchema = z.object({
   api_key: z.string().nullable().optional(),
   enabled: z.boolean().default(false),
   events: z.object({
-    promocode_redemption: z.boolean().default(false)
+    promocode_redemption: z.boolean().default(false),
+    esim_installed: z.boolean().default(false),
+    esim_removed: z.boolean().default(false),
+    package_activated: z.boolean().default(false),
+    package_usage_50_percent: z.boolean().default(false),
+    package_usage_80_percent: z.boolean().default(false),
+    package_usage_100_percent: z.boolean().default(false),
+    booking_within_cutoff: z.boolean().default(false),
+    booking_about_to_depart: z.boolean().default(false)
   }).default({})
 });
 var partnerSchemaSpec = markAsSchemaSpec({
